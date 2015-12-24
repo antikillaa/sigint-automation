@@ -25,12 +25,13 @@ class BaseRequest(object):
         if request_type.lower() == 'get':
             resp = requests.get(url, headers=headers, **kwargs)
         elif request_type.lower() == 'put':
-            print data
             resp = requests.put(url, data=data, json=json, headers=headers,
                                 **kwargs)
         elif request_type.lower() == 'post':
             resp = requests.post(url, data=data, json=json,
                                  headers=headers, **kwargs)
+        elif request_type.lower() == 'delete':
+            resp = requests.delete(url, headers=headers, **kwargs)
         else:
             raise TypeError("Unknown request type - {}".format(request_type))
 

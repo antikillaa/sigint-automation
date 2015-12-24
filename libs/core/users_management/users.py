@@ -5,7 +5,6 @@ from libs.backend.requests_builder.delete_user_builder import DeleteUserBuilder
 from libs.backend.requests_builder.signup_builder import SignupRequestBuilder
 from libs.backend.requests_builder.users_list_builder import UsersListBuilder
 from libs.backend.requests_types.base_request import BaseRequest
-from libs.utils.randomizer import random_email
 
 
 class UserManagement(object):
@@ -18,11 +17,11 @@ class UserManagement(object):
         self.__signup_user()
 
     @property
-    def users(self):
+    def users_list(self):
         return self._users
 
-    @users.setter
-    def users(self, user):
+    @users_list.setter
+    def users_list(self, user):
         self._users.append(user)
 
     def get_user(self, user_role):
@@ -35,17 +34,19 @@ class UserManagement(object):
     def delete_user(self, user):
         users_list = BaseRequest(UsersListBuilder(self.context)
                                  ).send_request()['result']
+
         for user_l in users_list:
             if user_l['email'] == user.email:
-                BaseRequest(DeleteUserBuilder(self.context, user_l))
+                BaseRequest(DeleteUserBuilder(self.context, user_l)
+                            ).send_request()
 
     def __create_user(self, user_role):
         response = BaseRequest(CreateUserBuilder(self.context, user_role)
                                ).send_request()['result']
         try:
             password = self.context.config.userdata.get("user.password")
-            self.users = SiginUser(response['email'], password,
-                                   response['roles'])
+            self._users.append(SiginUser(response['email'], password,
+                               response['roles']))
         except KeyError:
             raise AssertionError("Got unexpected response from API")
 
@@ -55,8 +56,7 @@ class UserManagement(object):
         auth_token.token = resp['result']['token']
 
     def __is_exist(self, user_role):
-        for user in self.users:
-            print user.roles
+        for user in self._users:
             if user_role.lower() in user.roles:
                 return user
         return False

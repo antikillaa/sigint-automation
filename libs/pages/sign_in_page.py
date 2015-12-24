@@ -24,7 +24,7 @@ class SignInPage(object):
         self.actions.fill_field("Password", user.password)
         self.context.logger.debug("Form is filled")
         self.actions.click_button("Submit")
-        user.sign_in = True
+        user.is_logined = True
 
 
 class SignInModel(WebFormWithControls):

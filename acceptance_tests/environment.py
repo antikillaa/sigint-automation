@@ -17,7 +17,6 @@ def before_all(context):
     context.users = UserManagement(context)
 
 
-
 def before_feature(context, feature):
     logging.info("Starting verifying feature {}".format(feature.name))
 
@@ -42,6 +41,7 @@ def before_scenario(context, scenario):
 def after_scenario(context, scenario):
     context.driver.close()
 
+
 def after_all(context):
     logging.info("Deleting all created during session user accounts")
-    map(context.users.delete_user, context.users.users)
+    map(context.users.delete_user, context.users.users_list)

@@ -5,7 +5,7 @@ class DeleteUserBuilder(BaseBuilder):
 
     def __init__(self, context, user):
         super(DeleteUserBuilder, self).__init__(context)
-        self.request_type = 'get'
+        self.request_type = 'delete'
         self.user = user
 
     def build_headers(self):
@@ -13,7 +13,7 @@ class DeleteUserBuilder(BaseBuilder):
         return headers
 
     def build_data(self):
-        self.context.logger.info("No data required for current requiest")
+        self.context.logger.info("No data required for current request")
         return None
 
     def build_url(self):
@@ -23,5 +23,5 @@ class DeleteUserBuilder(BaseBuilder):
         return url
 
     def build_json(self):
-        self.context.logger.info("No json required for current requiest")
+        self.context.logger.info("No json required for current request")
         return None
