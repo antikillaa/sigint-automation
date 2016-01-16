@@ -1,5 +1,4 @@
 from abc import ABCMeta, abstractmethod
-
 from libs.backend.auth_token import auth_token
 
 

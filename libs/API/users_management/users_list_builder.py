@@ -1,4 +1,4 @@
-from libs.backend.requests_builder.base_builder import BaseBuilder
+from libs.API.requests_builder.base_builder import BaseBuilder
 
 
 class UsersListBuilder(BaseBuilder):

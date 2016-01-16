@@ -1,10 +1,10 @@
 from helpers.metaclasses import Singleton
+from libs.API.requests_builder import CreateUserBuilder
+from libs.API.requests_builder import DeleteUserBuilder
+from libs.API.requests_builder import SignupRequestBuilder
+from libs.API.requests_builder import UsersListBuilder
+from libs.API.requests_builder.base_request import BaseRequest
 from libs.backend.auth_token import auth_token
-from libs.backend.requests_builder.create_user_builder import CreateUserBuilder
-from libs.backend.requests_builder.delete_user_builder import DeleteUserBuilder
-from libs.backend.requests_builder.signup_builder import SignupRequestBuilder
-from libs.backend.requests_builder.users_list_builder import UsersListBuilder
-from libs.backend.requests_types.base_request import BaseRequest
 
 
 class UserManagement(object):
