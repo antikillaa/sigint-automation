@@ -16,7 +16,7 @@ class RFIController(object):
         self.context = context
         self.request_manager = RequestManager(context)
 
-    def upload_rfi(self, user_type, **kwargs):
+    def create_rfi(self, user_type, **kwargs):
         """
         Analog for API method rfis/upload. Sends request with specified
         user type and **kwargs. If sucessfull, add new rfi to the list of
@@ -29,6 +29,14 @@ class RFIController(object):
         self.context.logger.info("Creating RFI to send to API rfis/upload")
         rfi = RFI(**kwargs)
         self.context.logger.info("Created rfi: {}".format(rfi))
+        self.__upload_rfi(user_type, rfi)
+        self.context.rfis.add_rfi(rfi)
+
+    def update_rfi(self, user_type, rfi):
+        self.context.logger.info("Updating existing rfi")
+        self.__upload_rfi(user_type, rfi)
+
+    def __upload_rfi(self, user_type, rfi):
         rfi_request = UploadRFIHttp(self.context, user_type)
         with FilesFormer(rfi.json, rfi.origin_document, rfi.approved_copy) \
                 as f_former:
@@ -42,5 +50,3 @@ class RFIController(object):
         self.context.logger.info(
                 "Request was sent successfully. Parsing results...")
         rfi.decode_json(response.json()['result'])
-        self.context.rfis.add_rfi(rfi)
-

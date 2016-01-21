@@ -50,7 +50,7 @@ class Former(object):
         if self.parent_former:
             files_dict = self.parent_former.form_data()
         else:
-            files_dict = dict()
+            files_dict = {}
 
         return files_dict
 
@@ -65,14 +65,12 @@ class TempFilesFormer(Former):
     def form_data(self):
         files_dict = self.get_files_from_parent()
         if self.approved:
-            app_tmp = NamedTemporaryFile(mode='wb+')
+            app_tmp = NamedTemporaryFile(mode='wb+', prefix=self.approved)
             app_tmp.write(self.file_type)
             app_tmp.seek(0)
-            return files_dict.update(
-                {self.file_type: (self.file_type, app_tmp,
-                                 'application/octet-stream')})
-        else:
-            return files_dict
+            files_dict.update({self.file_type: (self.approved, app_tmp,
+                                                'application/octet-stream')})
+        return files_dict
 
 
 class JsonFormer(Former):
@@ -100,4 +98,5 @@ class ApprovedFormer(TempFilesFormer):
 class OriginalFormer(TempFilesFormer):
 
     def __init__(self, original, parent_former):
-        super(OriginalFormer, self).__init__(original, parent_former,"original")
+        super(OriginalFormer, self).__init__(
+                original, parent_former, "original")

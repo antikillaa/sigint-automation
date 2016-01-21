@@ -34,19 +34,13 @@ class RFI(dict):
     def __init__(self, state=None, priority=None, ext_id=None, req_source=None,
                  distribution_list=None, task_categories=None, subject=None,
                  search_type=None, req_details=None, goals=None,
-                 origin_doc=None, app_copy=None,created_date=None):
+                 origin_doc=None, app_copy=None, created_date=None):
         super(RFI, self).__init__(
-            createdAt=None,
-            createdBy=None,
             createdDate=created_date or time_stamp(datetime.utcnow()),
             description=req_details,
             distributionList=distribution_list,
             externalRequestNumber=ext_id or random_string(s_len=5),
             goals=goals,
-            id=None,
-            internalRequestNumber=None,
-            modifiedAt=None,
-            modifiedBy=None,
             previousRequests=None,
             priority=priority if priority in RFIData.priorities
             else select_random_item(RFIData.priorities.keys()),
@@ -58,11 +52,17 @@ class RFI(dict):
             state=state or RFIDataStates.PENDING,
             subject=subject or random_string(),
             taskCategories=task_categories,
-            origin_doc=None,
-            app_copy=None,
-            version=None
-
+            id=None,
+            internalRequestNumber=None
         )
+        self.server_data = dict(
+            createdAt=None,
+            createdBy=None,
+            version=None,
+            modifiedBy=None,
+            modifiedAt=None,
+            originalDocument=origin_doc,
+            approvedCopy=app_copy)
         self.due_date = time_stamp(datetime.utcnow() + timedelta(
                 days=RFIData.priorities[self.priority]))
 
@@ -89,6 +89,8 @@ class RFI(dict):
     @priority.setter
     def priority(self, value):
         self['priority'] = value
+        self.due_date = time_stamp(datetime.utcnow() + timedelta(
+                days=RFIData.priorities[self.priority]))
 
     @property
     def search_type(self):
@@ -156,19 +158,19 @@ class RFI(dict):
 
     @property
     def origin_document(self):
-        return self['origin_doc']
+        return self.server_data['originalDocument']
 
     @origin_document.setter
     def origin_document(self, value):
-        self['origin_doc'] = value
+        self.server_data['originalDocument'] = value
 
     @property
     def approved_copy(self):
-        return self['app_copy']
+        return self.server_data['approvedCopy']
 
     @approved_copy.setter
     def approved_copy(self, value):
-        self['app_copy'] = value
+        self.server_data['approvedCopy'] = value
 
     @property
     def created_date(self):
@@ -180,19 +182,19 @@ class RFI(dict):
 
     @property
     def created_at(self):
-        return self['createdAt']
+        return self.server_data['createdAt']
 
     @created_at.setter
     def created_at(self, value):
-        self['createdAt'] = value
+        self.server_data['createdAt'] = value
 
     @property
     def created_by(self):
-        return self['createdBy']
+        return self.server_data['createdBy']
 
     @created_by.setter
     def created_by(self, value):
-        self['createdBy'] = value
+        self.server_data['createdBy'] = value
 
     @property
     def id(self):
@@ -204,19 +206,19 @@ class RFI(dict):
 
     @property
     def modified_at(self):
-        return self['modifiedAt']
+        return self.server_data['modifiedAt']
 
     @modified_at.setter
     def modified_at(self, value):
-        self['modifiedAt'] = value
+        self.server_data['modifiedAt'] = value
 
     @property
     def modified_by(self):
-        return self['modifiedBy']
+        return self.server_data['modifiedBy']
 
     @modified_by.setter
     def modified_by(self, value):
-        self['modifiedBy'] = value
+        self.server_data['modifiedBy'] = value
 
     @property
     def internal_number(self):
@@ -246,6 +248,9 @@ class RFI(dict):
         :return: --
         """
         for key, value in json.iteritems():
+            if key in self.server_data.keys():
+                self.server_data[key] = value
+                continue
             if self[key] is None:
                 self[key] = value
             else:
