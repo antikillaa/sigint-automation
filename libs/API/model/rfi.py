@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
-from libs.API.controllers.rfis_controller.entities.rfi_data import RFIData, \
-    RFIDataStates
-from libs.utils.delete_empty_values import delete_empty
+from libs.API.model.aurelia_entity import AureliaEntity
+from libs.API.model.rfi_data import RFIData, RFIDataStates
 from libs.utils.randomizer import select_random_item, random_string
 from libs.utils.unix_time_stamp import time_stamp
 
@@ -25,7 +24,7 @@ class RFIs(object):
         return self._rfis[-1]
 
 
-class RFI(dict):
+class RFI(AureliaEntity):
     """
     Describes RFI entity as per request. Set of field reflect update request
     body
@@ -229,29 +228,5 @@ class RFI(dict):
         self['internalRequestNumber'] = value
 
     @property
-    @delete_empty
-    def json(self):
-        """
-        :return: dict representation of object attributes
-        """
-        new_dict = dict()
-        for key, value in self.iteritems():
-            new_dict[key] = value
-        return new_dict
-
-    def decode_json(self, json):
-        """
-        Injects received via request json to current object.
-        Error is raised if value from request response doesn't equal to
-        request form
-        :param json: response got from request
-        :return: --
-        """
-        for key, value in json.iteritems():
-            if key in self.server_data.keys():
-                self.server_data[key] = value
-                continue
-            if self[key] is None:
-                self[key] = value
-            else:
-                assert self[key] == value
+    def previous_requests(self):
+        return self['previousRequests']

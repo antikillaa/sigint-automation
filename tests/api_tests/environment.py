@@ -1,9 +1,7 @@
 import logging
-import os
-import sys
-from selenium import webdriver
+
 from libs.API.controllers.auth_manager import AuthManager
-from libs.API.controllers.rfis_controller.entities.rfi import RFIs
+from libs.API.model.rfi import RFIs
 from libs.core.users_management.users import UserManagement
 from libs.logging.logger import CustomLogger
 
