@@ -13,16 +13,19 @@ class Serialiazible(object):
 class AureliaEntity(dict, Serialiazible):
 
     def __init__(self,  **kwargs):
-        super(AureliaEntity, self).__init__( **kwargs)
-        self.server_data =dict()
+        super(AureliaEntity, self).__init__(**kwargs)
+        self.server_data = dict()
 
-    def decode(self, json):
+    @staticmethod
+    def decode(obj, json):
         """
         Decodes json to appropriate object passed as entity_type
         :param json: json to deserialize object from
-        :return: object with type passed as entity_type param
+        :param obj: object target to deserialize json to.
+        Should have type:class:AurliaEntity
+        :return: object with type passed as obj
         """
-        entity = copy.copy(self)
+        entity = copy.copy(obj)
         for key, value in json.iteritems():
             if key in entity.server_data.keys():
                 entity.server_data[key] = value
