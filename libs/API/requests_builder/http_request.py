@@ -10,9 +10,8 @@ class HttpRequest(object):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, context, request_type, user_type=None):
+    def __init__(self, context, request_type):
         self._base = context.config.userdata.get("environment") + "/sigint/api/"
-        self.user_type = user_type
         self.context = context
         self._request_type = request_type
         self._url = self._build_url()
@@ -80,10 +79,11 @@ class HttpRequest(object):
         """
         return {}
 
-    @staticmethod
-    def _build_headers():
+    def _build_headers(self):
         """
+        Forms header for request.
         Override method if request should build headers
-        :return:
+        :return: dict headers
         """
-        return {}
+        headers = {'token': self.context.auth_token}
+        return headers

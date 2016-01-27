@@ -1,64 +1,40 @@
-[INFO] 2016-01-23 13:44:59 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/signup
-[INFO] 2016-01-23 13:44:59 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-01-23 13:44:59 - connectionpool: "POST /sigint/api/auth/signup HTTP/1.1" 200 87
-[INFO] 2016-01-23 13:44:59 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-01-23 13:44:59 - environment: Starting verifying feature Users can create, update, delete RFI records based on permissions
-[INFO] 2016-01-23 13:44:59 - environment: Starting step Send create request as "tasker" user
-[INFO] 2016-01-23 13:44:59 - rfi_steps: Expecting api to create RFI: {'previousRequests': None, 'searchParams': None, 'internalRequestNumber': None, 'description': None, 'goals': None, 'createdDate': 1453545899933, 'requestSource': 'oruDPKHgKV', 'id': None, 'subject': 'aQXJPaQJVy', 'taskCategories': None, 'searchType': 'ST', 'externalRequestNumber': 'QSMjI', 'distributionList': None, 'dueDate': 1453977899934, 'priority': 0, 'state': 'PENDING'}
-[INFO] 2016-01-23 13:44:59 - request_manager: Sending PUT request to URL http://192.168.99.100/sigint/api/admin/user/add
-[INFO] 2016-01-23 13:44:59 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-01-23 13:44:59 - connectionpool: "PUT /sigint/api/admin/user/add HTTP/1.1" 200 261
-[INFO] 2016-01-23 13:44:59 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-01-23 13:44:59 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
-[INFO] 2016-01-23 13:44:59 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-01-23 13:45:00 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
-[INFO] 2016-01-23 13:45:00 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-01-23 13:45:00 - rfi_service: Sending upload request
-[INFO] 2016-01-23 13:45:00 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
-[INFO] 2016-01-23 13:45:00 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-01-23 13:45:00 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 408
-[INFO] 2016-01-23 13:45:00 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-01-23 13:45:00 - rfi_service: Request was sent successfully. Parsing results...
-[INFO] 2016-01-23 13:45:00 - environment: Finishing step Send create request as "tasker" user
-[INFO] 2016-01-23 13:45:00 - environment: Starting step New rfi record is created
-[INFO] 2016-01-23 13:45:00 - environment: Finishing step New rfi record is created
-[INFO] 2016-01-23 13:45:00 - environment: Starting step Send create request as "tasker" user
-[INFO] 2016-01-23 13:45:00 - rfi_steps: Expecting api to create RFI: {'previousRequests': None, 'searchParams': None, 'internalRequestNumber': None, 'description': None, 'goals': None, 'createdDate': 1453545900039, 'requestSource': 'JMvntKKBlv', 'id': None, 'subject': 'bfNMLcBmZc', 'taskCategories': None, 'searchType': 'ST', 'externalRequestNumber': 'hnVoc', 'distributionList': None, 'dueDate': 1453977900039, 'priority': 0, 'state': 'PENDING'}
-[INFO] 2016-01-23 13:45:00 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
-[INFO] 2016-01-23 13:45:00 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-01-23 13:45:00 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
-[INFO] 2016-01-23 13:45:00 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-01-23 13:45:00 - rfi_service: Sending upload request
-[INFO] 2016-01-23 13:45:00 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
-[INFO] 2016-01-23 13:45:00 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-01-23 13:45:00 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 408
-[INFO] 2016-01-23 13:45:00 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-01-23 13:45:00 - rfi_service: Request was sent successfully. Parsing results...
-[INFO] 2016-01-23 13:45:00 - environment: Finishing step Send create request as "tasker" user
-[INFO] 2016-01-23 13:45:00 - environment: Starting step Send update request with files as "tasker" user
-[INFO] 2016-01-23 13:45:00 - rfi_steps: Expecting api to create RFI: {'previousRequests': None, 'searchParams': None, 'internalRequestNumber': None, 'description': None, 'goals': None, 'createdDate': 1453545900094, 'requestSource': 'cIwqSBswuT', 'id': None, 'subject': 'uBqOrwMHWm', 'taskCategories': None, 'searchType': 'S', 'externalRequestNumber': 'lCqGe', 'distributionList': None, 'dueDate': 1453632300094, 'priority': 2, 'state': 'PENDING'}
-[INFO] 2016-01-23 13:45:00 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
-[INFO] 2016-01-23 13:45:00 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-01-23 13:45:00 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
-[INFO] 2016-01-23 13:45:00 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-01-23 13:45:00 - rfi_service: Sending upload request
-[INFO] 2016-01-23 13:45:00 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
-[INFO] 2016-01-23 13:45:00 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-01-23 13:45:00 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 407
-[INFO] 2016-01-23 13:45:00 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-01-23 13:45:00 - rfi_service: Request was sent successfully. Parsing results...
-[INFO] 2016-01-23 13:45:00 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
-[INFO] 2016-01-23 13:45:00 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-01-23 13:45:00 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
-[INFO] 2016-01-23 13:45:00 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-01-23 13:45:00 - rfi_service: Sending upload request
-[INFO] 2016-01-23 13:45:00 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
-[INFO] 2016-01-23 13:45:00 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-01-23 13:45:00 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 703
-[INFO] 2016-01-23 13:45:00 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-01-23 13:45:00 - rfi_service: Request was sent successfully. Parsing results...
-[INFO] 2016-01-23 13:45:00 - environment: Finishing step Send update request with files as "tasker" user
-[INFO] 2016-01-23 13:45:00 - environment: Starting step rfi record has attached files
-[INFO] 2016-01-23 13:45:00 - environment: Finishing step rfi record has attached files
-[INFO] 2016-01-23 13:45:00 - environment: Finished verifying feature Users can create, update, delete RFI records based on permissions
-[INFO] 2016-01-23 13:45:00 - environment: Deleting all created during session user accounts
+[INFO] 2016-01-27 20:18:49 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/signup
+[INFO] 2016-01-27 20:18:49 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-01-27 20:18:49 - connectionpool: "POST /sigint/api/auth/signup HTTP/1.1" 200 87
+[INFO] 2016-01-27 20:18:49 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-01-27 20:18:49 - environment: Starting verifying feature Users can create, update, delete RFI records based on permissions
+[INFO] 2016-01-27 20:18:49 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-01-27 20:18:49 - request_manager: Sending PUT request to URL http://192.168.99.100/sigint/api/admin/user/add
+[INFO] 2016-01-27 20:18:49 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-01-27 20:18:49 - connectionpool: "PUT /sigint/api/admin/user/add HTTP/1.1" 200 261
+[INFO] 2016-01-27 20:18:49 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-01-27 20:18:49 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-01-27 20:18:49 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-01-27 20:18:49 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-01-27 20:18:49 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-01-27 20:18:49 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-01-27 20:18:49 - environment: Starting step I create new RFI with default values
+[INFO] 2016-01-27 20:18:49 - rfi_steps: Expecting api to create RFI: {'externalRequestNumber': 'YUtVR', 'searchType': 'ST', 'priority': 1, 'state': 'PENDING', 'requestSource': 'WlturkWPQt', 'dueDate': 1454174329230, 'iterable': None, 'subject': 'OZxIVtsWAZ'}
+[INFO] 2016-01-27 20:18:49 - rfi_service: Sending upload request {'externalRequestNumber': 'YUtVR', 'searchType': 'ST', 'priority': 1, 'state': 'PENDING', 'requestSource': 'WlturkWPQt', 'dueDate': 1454174329230, 'iterable': None, 'subject': 'OZxIVtsWAZ'}
+[INFO] 2016-01-27 20:18:49 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-01-27 20:18:49 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-01-27 20:18:49 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 380
+[INFO] 2016-01-27 20:18:49 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-01-27 20:18:49 - rfi_service: Request was sent successfully. Parsing results...
+[INFO] 2016-01-27 20:18:49 - environment: Finishing step I create new RFI with default values
+[INFO] 2016-01-27 20:18:49 - environment: Starting step New information request record is created
+[INFO] 2016-01-27 20:18:49 - environment: Finishing step New information request record is created
+[INFO] 2016-01-27 20:18:49 - environment: Starting step I update record with files
+[INFO] 2016-01-27 20:18:49 - rfi_service: Sending upload request {'taskCategories': None, u'internalRequestNumber': u'OA160241', u'searchType': u'ST', u'externalRequestNumber': u'YUtVR', 'distributionList': None, u'dueDate': 1454174329230, u'priority': 1, u'state': u'PENDING', 'goals': None, 'createdDate': None, u'requestSource': u'WlturkWPQt', u'subject': u'OZxIVtsWAZ', u'id': u'56a8f74ce4b0f5505e3f6090', 'iterable': None, 'description': None}
+[INFO] 2016-01-27 20:18:49 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-01-27 20:18:49 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-01-27 20:18:49 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 676
+[INFO] 2016-01-27 20:18:49 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-01-27 20:18:49 - rfi_service: Request was sent successfully. Parsing results...
+[INFO] 2016-01-27 20:18:49 - environment: Finishing step I update record with files
+[INFO] 2016-01-27 20:18:49 - environment: Starting step New information request record is created
+[INFO] 2016-01-27 20:18:49 - environment: Finishing step New information request record is created
+[INFO] 2016-01-27 20:18:49 - environment: Starting step Information request record has attached files
+[INFO] 2016-01-27 20:18:49 - environment: Finishing step Information request record has attached files
+[INFO] 2016-01-27 20:18:49 - environment: Finished verifying feature Users can create, update, delete RFI records based on permissions
+[INFO] 2016-01-27 20:18:49 - environment: Deleting all created during session user accounts

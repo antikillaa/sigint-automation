@@ -16,7 +16,7 @@ class SignupHttpRequest(HttpRequest):
         self.json = json
 
     @staticmethod
-    def build_headers():
+    def _build_headers():
         headers = {'Content-Type': 'application/json'}
         return headers
 
