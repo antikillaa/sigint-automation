@@ -19,5 +19,4 @@ class InformationRequestChecker:
         assert query.subject == response.subject
         assert query.taskCategories == response.taskCategories
         assert query.dueDate == response.dueDate
-        assert response.id
-        assert response.internalRequestNumber
+

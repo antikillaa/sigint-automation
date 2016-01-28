@@ -1,6 +1,6 @@
 class SearchResponse(dict):
 
-    deserialize_object = None
+    entity_manager = None
 
     def __init__(self, context,  **kwargs):
         self.context = context
@@ -12,7 +12,7 @@ class SearchResponse(dict):
         if not self.content:
             return cont
         for item in self.content:
-            obj = self.context.entities.clone(self.deserialize_object, item)
+            obj = self.entity_manager.to_object(**item)
             cont.append(obj)
         return cont
 

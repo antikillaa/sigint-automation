@@ -1,30 +1,43 @@
 from libs.utils.lazy_property import lazyprop
-from datetime import datetime, timedelta
-from libs.API.model.information_request.rfi_data import RFIData
-from libs.utils.unix_time_stamp import time_stamp
+from libs.utils.unix_time_stamp import from_time_stamp
+
+
+
+class RFIs(object):
+
+    def __init__(self):
+        self._rfis = list()
+
+    def add_rfi(self, rfi):
+        for i_rfi in self._rfis:
+            if rfi.id == i_rfi.id:
+                i_rfi.update(rfi)
+                return
+        self._rfis.append(rfi)
+
+    def delete_rfi(self, rfi):
+        if not isinstance(rfi, InformationRequest):
+            raise TypeError("argument must have type RFI")
+        for l_rfi in self._rfis:
+            if l_rfi.id == rfi.id:
+                self._rfis.remove(l_rfi)
+
+    def get_latest(self):
+        return self._rfis[-1]
 
 
 class InformationRequest(dict):
 
-    def __init__(self, iterable=None, **kwargs):
-        super(InformationRequest, self).__init__(iterable=iterable, **kwargs)
-        self.server_data = dict(
-            createdAt=None,
-            createdBy=None,
-            version=None,
-            modifiedBy=None,
-            modifiedAt=None,
-            originalDocument=None,
-            approvedCopy=None)
+    def __init__(self, **kwargs):
+        super(InformationRequest, self).__init__(**kwargs)
 
     @lazyprop
     def dueDate(self):
-        return self['dueDate']
+        return from_time_stamp(self['dueDate'])
 
     @dueDate.setter
     def dueDate(self, value):
-        if value:
-            self['dueDate'] = value
+        self['dueDate'] = value
 
     @lazyprop
     def state(self):
@@ -41,10 +54,7 @@ class InformationRequest(dict):
 
     @priority.setter
     def priority(self, value):
-        if value:
             self['priority'] = value
-            self.dueDate = time_stamp(datetime.utcnow() + timedelta(
-                days=RFIData.priorities[self.priority]))
 
     @lazyprop
     def searchType(self):
@@ -61,7 +71,6 @@ class InformationRequest(dict):
 
     @externalRequestNumber.setter
     def externalRequestNumber(self, value):
-        if value:
             self['externalRequestNumber'] = value
 
     @lazyprop
@@ -79,7 +88,6 @@ class InformationRequest(dict):
 
     @distributionList.setter
     def distributionList(self, value):
-        if value:
             self['distributionList'] = value
 
     @lazyprop
@@ -88,7 +96,6 @@ class InformationRequest(dict):
 
     @taskCategories.setter
     def taskCategories(self, value):
-        if value:
             self['taskCategories'] = value
 
     @lazyprop
@@ -97,7 +104,6 @@ class InformationRequest(dict):
 
     @subject.setter
     def subject(self, value):
-        if value:
             self['subject'] = value
 
     @lazyprop
@@ -106,7 +112,6 @@ class InformationRequest(dict):
 
     @description.setter
     def description(self, value):
-        if value:
             self['description'] = value
 
     @lazyprop
@@ -115,53 +120,47 @@ class InformationRequest(dict):
 
     @goals.setter
     def goals(self, value):
-        if value:
             self['goals'] = value
 
     @lazyprop
     def originalDocument(self):
-        return self.server_data['originalDocument']
+        return self['originalDocument']
 
     @originalDocument.setter
     def originalDocument(self, value):
-        if value:
-            self.server_data['originalDocument'] = value
+            self['originalDocument'] = value
 
     @lazyprop
     def approvedCopy(self):
-        return self.server_data['approvedCopy']
+        return self['approvedCopy']
 
     @approvedCopy.setter
     def approvedCopy(self, value):
-        if value:
-            self.server_data['approvedCopy'] = value
+            self['approvedCopy'] = value
 
     @lazyprop
     def createdDate(self):
-        return self['createdDate']
+        return from_time_stamp(self['createdDate'])
 
     @createdDate.setter
     def createdDate(self, value):
-        if value:
             self['createdDate'] = value
 
     @lazyprop
     def createdAt(self):
-        return self.server_data['createdAt']
+        return from_time_stamp(self['createdAt'])
 
     @createdAt.setter
     def createdAt(self, value):
-        if value:
-            self.server_data['createdAt'] = value
+            self['createdAt'] = value
 
     @lazyprop
     def createdBy(self):
-        return self.server_data['createdBy']
+        return self['createdBy']
 
     @createdBy.setter
     def createdBy(self, value):
-        if value:
-            self.server_data['createdBy'] = value
+            self['createdBy'] = value
 
     @lazyprop
     def id(self):
@@ -169,26 +168,23 @@ class InformationRequest(dict):
 
     @id.setter
     def id(self, value):
-        if value:
             self['id'] = value
 
     @lazyprop
     def modifiedAt(self):
-        return self.server_data['modifiedAt']
+        return from_time_stamp(self['modifiedAt'])
 
     @modifiedAt.setter
     def modifiedAt(self, value):
-        if value:
-            self.server_data['modifiedAt'] = value
+            self['modifiedAt'] = value
 
     @lazyprop
     def modifiedBy(self):
-        return self.server_data['modifiedBy']
+        return self['modifiedBy']
 
     @modifiedBy.setter
     def modifiedBy(self, value):
-        if value:
-            self.server_data['modifiedBy'] = value
+            self['modifiedBy'] = value
 
     @lazyprop
     def internalRequestNumber(self):
@@ -196,7 +192,6 @@ class InformationRequest(dict):
 
     @internalRequestNumber.setter
     def internalRequestNumber(self, value):
-        if value:
             self['internalRequestNumber'] = value
 
     @lazyprop
@@ -205,5 +200,4 @@ class InformationRequest(dict):
 
     @previousRequests.setter
     def previousRequests(self, value):
-        if value:
             self['previousRequests'] = value

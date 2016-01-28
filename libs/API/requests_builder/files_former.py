@@ -11,7 +11,10 @@ json file.
 class Attachments(object):
 
     def __init__(self, files=None, *u_file):
-        self._files = files.form_data() or dict()
+        if files:
+            self._files = files.form_data()
+        else:
+            self._files = dict()
         for u_f in u_file:
             self._files.update(u_f)
 

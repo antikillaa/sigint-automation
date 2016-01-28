@@ -1,16 +1,11 @@
 from behave import *
-from libs.API.model.entities_types import EntitiesTypes
-from libs.API.model.information_request.information_request_checker import \
-    InformationRequestChecker
-from libs.API.model.information_request.information_request_query import InformationRequestQuery
 from libs.API.model.information_request.rfi_search_request import RFISearchRequest
 from libs.API.services.rfi_service import RFIService
 
 
 @when('I create new RFI with default values')
 def create_rfi_with_data(context):
-    rfi = InformationRequestQuery()
-    __send_rfi(context, rfi)
+    __send_rfi(context)
 
 
 @when('I create new RFI with specific values')
@@ -19,8 +14,7 @@ def create_rfi_with_specific_data(context):
     param_dict = dict()
     for name in row.headings:
         param_dict[name] = row[name]
-    rfi = InformationRequestQuery(**param_dict)
-    __send_rfi(context, rfi)
+    __send_rfi(context, **param_dict)
 
 
 @then('I can find RFI using specific search request')
@@ -34,29 +28,27 @@ def find_rfi_with_search_request(context):
     response = rfi_service.search_for_rfi(rfi_search)
 
 
-def __send_rfi(context, rfi):
-    context.logger.info("Expecting api to create RFI: {}".format(rfi))
+def __send_rfi(context, **kwargs):
     rfi_service = RFIService(context)
-    new_rfi = rfi_service.create_rfi(rfi)
-    context.query = rfi
-    context.new = new_rfi
+    new_rfi = rfi_service.create_rfi(**kwargs)
+    assert new_rfi.id
+    assert new_rfi.internalRequestNumber
+    assert new_rfi.createdAt
+    assert new_rfi.createdBy
+    assert new_rfi.modifiedAt
+    context.rfis.add_rfi(new_rfi)
 
 
 @when('I update record with files')
 def send_update_request(context):
     rfi = context.rfis.get_latest()
-    rfi_service = RFIService(context)
-    new_rfi = rfi_service.create_rfi(rfi, approved=True, original=True)
-    context.query = rfi
-    context.new = new_rfi
+    __send_rfi(context, approved=True, original=True, **rfi)
 
 
 @then('New information request record is created')
 def new_rfi_record_is_created(context):
-    InformationRequestChecker.check(context.query, context.new)
-    rfi_obj = context.entities.clone(EntitiesTypes.InformationRequest,
-                                     context.new)
-    context.rfis.add_rfi(rfi_obj)
+    rfi = context.rfis.get_latest()
+    assert rfi
 
 
 @then('Information request record has attached files')

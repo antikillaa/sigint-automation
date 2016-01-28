@@ -1,15 +1,14 @@
-from libs.API.model.entities_types import EntitiesTypes
+from libs.API.model.information_request.information_request_manager import \
+    InformationRequestManager
 from libs.API.model.search_response import SearchResponse
 
 
 class RFISearchResponse(SearchResponse):
 
-    deserialize_object = EntitiesTypes.InformationRequest
+    entity_manager = InformationRequestManager()
 
     def __init__(self, context, **kwargs):
-        super(RFISearchResponse, self).__init__(context,
-                                                kwargs['content'], **kwargs)
-
+        super(RFISearchResponse, self).__init__(context, **kwargs)
 
 
     @property

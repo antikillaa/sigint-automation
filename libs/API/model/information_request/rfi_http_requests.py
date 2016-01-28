@@ -5,7 +5,6 @@ class UploadRFIHttp(HttpRequest):
     """
     Describes /rfis/upload request
     """
-
     def _build_url(self):
         """
         Forms url for request

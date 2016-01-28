@@ -1,10 +1,6 @@
 import logging
-
 from libs.API.controllers.auth_manager import AuthManager
-from libs.API.model.entities import Entities
-from libs.API.model.entities_types import EntitiesTypes
-from libs.API.model.information_request.information_request import InformationRequest
-from libs.API.model.information_request.information_request_query import RFIs
+from libs.API.model.information_request.information_request import RFIs
 from libs.core.users_management.users import UserManagement
 from libs.logging.logger import CustomLogger
 
@@ -19,9 +15,6 @@ def before_all(context):
     context.logger = CustomLogger(context).get_logger()
     context.users = UserManagement(context)
     context.auth_manager = AuthManager(context)
-    context.entities = Entities(context)
-    context.entities.register_object(EntitiesTypes.InformationRequest,
-                                     InformationRequest())
     context.rfis = RFIs()
 
 
