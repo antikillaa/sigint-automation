@@ -7,6 +7,7 @@ Feature: Users can create, update, delete RFI records based on permissions
     Then New information request record is created
 
 
+
   Scenario: Operator user can update RFI with files
     When I signed in as "tasker" user
     And  I create new RFI with default values
