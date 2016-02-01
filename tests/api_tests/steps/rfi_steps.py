@@ -1,6 +1,9 @@
+from datetime import datetime
+
 from behave import *
 from libs.API.model.information_request.rfi_search_request import RFISearchRequest
 from libs.API.services.rfi_service import RFIService
+from settings import date_str_format
 
 
 @when('I create new RFI with default values')
@@ -25,7 +28,17 @@ def find_rfi_with_search_request(context):
         param_dict[name] = row[name]
     rfi_search = RFISearchRequest(**param_dict)
     rfi_service = RFIService(context)
-    response = rfi_service.search_for_rfi(rfi_search)
+    rfi_service.search_for_rfi(rfi_search)
+
+
+@then('I can find RFI using todays max respond time')
+def find_with_today_last_respond_max(context):
+    rfi_search = RFISearchRequest(min_last_respond_date=datetime.utcnow().strftime(date_str_format))
+    rfi_service = RFIService(context)
+    rfi_service.search_for_rfi(rfi_search)
+
+
+
 
 
 def __send_rfi(context, rfi=None, **kwargs):
