@@ -33,17 +33,17 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+debug_log.txt
 logs/debug_log.txt
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
-
+.DS_Store
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
-
 # Unit test / coverage reports
 htmlcov/
 .tox/

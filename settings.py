@@ -1,0 +1,1 @@
+date_str_format = "%Y-%m-%d"

@@ -1,12 +1,8 @@
 import random
 import string
-import exrex as exrex
 
 
-def random_string(s_len=10, reg_exp=None):
-    if reg_exp:
-        rand_string = exrex.getone(reg_exp, limit=int(s_len))
-        return rand_string[2:-1]
+def random_string(s_len=10):
     return ''.join(
         random.choice(string.ascii_letters) for _ in range(int(s_len)))
 
