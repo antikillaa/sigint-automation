@@ -34,7 +34,7 @@ Feature: Users can create, update, delete RFI records based on permissions
          |min_created_date|
          |2015-01-24      |
 
-  @wip
+
   Scenario: Operator can find RFI searching by status
     When I signed in as "tasker" user
     And  I create new RFI with specific values
@@ -44,3 +44,27 @@ Feature: Users can create, update, delete RFI records based on permissions
     Then I can find RFI using specific search request
          |state           |
          |ASSIGNED        |
+
+
+
+  Scenario: Operator can find RFI searching by min due date
+    When I signed in as "tasker" user
+    And  I create new RFI with specific values
+         | createdDate   | priority |
+         | 2015-01-24    | 2        |
+
+    Then I can find RFI using specific search request
+         |min_due_date       |
+         | 2015-01-25        |
+
+
+  @wip
+  Scenario: Operator can find RFI searching by max due date
+    When I signed in as "tasker" user
+    And  I create new RFI with specific values
+         | createdDate   | priority |
+         | 2015-01-24    | 2        |
+
+    Then I can find RFI using specific search request
+         |max_due_date       |
+         | 2015-01-25        |
