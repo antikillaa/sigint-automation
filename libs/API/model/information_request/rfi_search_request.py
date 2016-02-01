@@ -1,4 +1,7 @@
 from libs.API.model.information_request.rfi_data import RFIData
+from libs.API.model.information_request.rfi_search_filters import StateFilter,  RequestSourceFilter, \
+    CreatedByFilter, MinCreatedDateFilter, MaxCreatedDateFilter, MinDueDateFilter, MaxDueDateFilter, \
+    MinLastRespondDateFilter, MaxLastRespondDateFilter, RequestNumberFilter, SubjectFilter, MinPriorityFilter
 from libs.API.model.search_request import SearchRequest
 
 
@@ -12,39 +15,37 @@ class RFISearchRequest(SearchRequest):
                  min_last_respond_date=None, max_last_respond_date=None,
                  request_number=None, subject=None):
 
-        super(RFISearchRequest, self).__init__(
-            sortDirection=sort_direction,
-            sortField=sort_field,
-            states=states,
-            state=state,
-            minPriority=min_priority,
-            requestSource=request_source,
-            createdBy=created_by,
-            minCreatedDate=min_created_date,
-            maxCreatedDate=max_created_date,
-            minDueDate=min_due_date,
-            maxDueDate=max_due_date,
-            minLastRespondDate=min_last_respond_date,
-            maxLastRespondDate=max_last_respond_date,
-            requestNumber=request_number,
-            subject=subject
-
-        )
+        super(RFISearchRequest, self).__init__()
+        self.sortDirection = sort_direction
+        self.sortField = sort_field
+        self.states = states
+        self.state = state
+        self.minPriority = min_priority
+        self.requestSource = request_source
+        self.createdBy = created_by
+        self.minCreatedDate = min_created_date
+        self.maxCreatedDate = max_created_date
+        self.minDueDate = min_due_date
+        self.maxDueDate = max_due_date
+        self.minLastRespondDate = min_last_respond_date
+        self.maxLastRespondDate = max_last_respond_date
+        self.requestNumber = request_number
+        self.subject = subject
 
     @property
-    def sort_direction(self):
+    def sortDirection(self):
         return self['sortDirection']
 
-    @sort_direction.setter
-    def sort_direction(self, value):
+    @sortDirection.setter
+    def sortDirection(self, value):
         self['sortDirection'] = value
 
     @property
-    def sort_field(self):
+    def sortField(self):
         return self['sortField']
 
-    @sort_field.setter
-    def sort_field(self, value):
+    @sortField.setter
+    def sortField(self, value):
         self['sortField'] = value
 
     @property
@@ -53,7 +54,7 @@ class RFISearchRequest(SearchRequest):
 
     @states.setter
     def states(self, value):
-        self['states'].append(value)
+        self['states'] = value
 
     @property
     def state(self):
@@ -61,13 +62,95 @@ class RFISearchRequest(SearchRequest):
 
     @state.setter
     def state(self, value):
-        self['state'] = value
+        self['state'] = StateFilter(value)
 
     @property
-    def min_priority(self):
+    def minPriority(self):
         return self['minPriority']
 
-    @min_priority.setter
-    def min_priority(self, value):
-        self['minPriority'] = value
+    @minPriority.setter
+    def minPriority(self, value):
+        self['minPriority'] = MinPriorityFilter(value)
 
+    @property
+    def requestSource(self):
+        return self['requestSource']
+
+    @requestSource.setter
+    def requestSource(self, value):
+        self['requestSource'] = RequestSourceFilter(value)
+
+    @property
+    def createdBy(self):
+        return self['createdBy']
+
+    @createdBy.setter
+    def createdBy(self, value):
+        self['createdBy'] = CreatedByFilter(value)
+
+    @property
+    def minCreatedDate(self):
+        return self['minCreatedDate']
+
+    @minCreatedDate.setter
+    def minCreatedDate(self, value):
+        self['minCreatedDate'] = MinCreatedDateFilter(value)
+
+    @property
+    def maxCreatedDate(self):
+        return self['maxCreatedDate']
+
+    @maxCreatedDate.setter
+    def maxCreatedDate(self, value):
+        self['maxCreatedDate'] = MaxCreatedDateFilter(value)
+
+    @property
+    def minDueDate(self):
+        return self['minDueDate']
+
+    @minDueDate.setter
+    def minDueDate(self, value):
+        self['minDueDate'] = MinDueDateFilter(value)
+
+    @property
+    def maxDueDate(self):
+        return self['maxDueDate']
+
+    @maxDueDate.setter
+    def maxDueDate(self, value):
+        self['maxDueDate'] = MaxDueDateFilter(value)
+
+
+    @property
+    def minLastRespondDate(self):
+        return self['minLastRespondDate']
+
+    @minLastRespondDate.setter
+    def minLastRespondDate(self, value):
+        self['minLastRespondDate'] = MinLastRespondDateFilter(value)
+
+
+    @property
+    def maxLastRespondDate(self):
+        return self['maxLastRespondDate']
+
+    @maxLastRespondDate.setter
+    def maxLastRespondDate(self, value):
+        self['maxLastRespondDate'] = MaxLastRespondDateFilter(value)
+
+    @property
+    def requestNumber(self):
+        return self['requestNumber']
+
+    @requestNumber.setter
+    def requestNumber(self, value):
+        self['requestNumber'] = RequestNumberFilter(value)
+
+
+    @property
+    def subject(self):
+        return self['subject']
+
+    @subject.setter
+    def subject(self, value):
+        self['subject'] = SubjectFilter(value)

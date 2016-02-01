@@ -64,7 +64,7 @@ class HttpRequest(object):
         self._data = value
 
     @staticmethod
-    def _build_data():
+    def build_data():
         """
         Override method if request should build data
         :return: None
@@ -72,7 +72,7 @@ class HttpRequest(object):
         return {}
 
     @staticmethod
-    def _build_json():
+    def build_json():
         """
         Override method if request should build json
         :return:

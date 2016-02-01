@@ -28,9 +28,9 @@ def find_rfi_with_search_request(context):
     response = rfi_service.search_for_rfi(rfi_search)
 
 
-def __send_rfi(context, **kwargs):
+def __send_rfi(context, rfi=None, **kwargs):
     rfi_service = RFIService(context)
-    new_rfi = rfi_service.create_rfi(**kwargs)
+    new_rfi = rfi_service.create_rfi(rfi, **kwargs)
     assert new_rfi.id
     assert new_rfi.internalRequestNumber
     assert new_rfi.createdAt
@@ -42,7 +42,7 @@ def __send_rfi(context, **kwargs):
 @when('I update record with files')
 def send_update_request(context):
     rfi = context.rfis.get_latest()
-    __send_rfi(context, approved=True, original=True, **rfi)
+    __send_rfi(context, rfi, approved=True, original=True)
 
 
 @then('New information request record is created')

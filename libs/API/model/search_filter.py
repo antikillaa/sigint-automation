@@ -5,10 +5,16 @@ class SearchFilter:
 
     __metaclass__ = ABCMeta
 
-    @abstractmethod
+    def __init__(self, value=None):
+        self._value = value
+
     @property
     def value(self):
-        pass
+        return self._value
+
+    @value.setter
+    def value(self, val):
+        self._value = val
 
     @abstractmethod
     def check(self, obj):

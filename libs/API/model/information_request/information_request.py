@@ -28,6 +28,10 @@ class RFIs(object):
 
 class InformationRequest(dict):
 
+    """
+    Reflects InformationRequest Entity
+    """
+
     def __init__(self, **kwargs):
         super(InformationRequest, self).__init__(**kwargs)
 

@@ -1,1 +1,1 @@
-date_str_format = "%d.%m.%Y"
+date_str_format = "%Y-%m-%d"

@@ -17,4 +17,4 @@ def from_time_stamp(dt):
         return dt
     if isinstance(dt, (str, unicode)):
         return str(dt)
-    return datetime.datetime.fromtimestamp(dt/1000.0).strftime(date_str_format)
+    return datetime.datetime.utcfromtimestamp(dt/1000.0)
