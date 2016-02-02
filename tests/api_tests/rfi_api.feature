@@ -88,13 +88,20 @@ Feature: Users can create, update, delete RFI records based on permissions
          |request_source  |
          |FBI_test        |
 
-  @wip
+
   Scenario: Operator can find RFI searching by status
     When I signed in as "tasker" user
     And  I create new RFI with specific values
          | priority  |
          | 1       |
-
     Then I can find RFI using specific search request
          |min_priority  |
          |1             |
+
+  
+  Scenario: Operator user can delete Draft request
+    When I signed in as "tasker" user
+    And  I create new RFI with specific values
+         | state   |
+         | DRAFT   |
+    Then I can delete rfi

@@ -1,6 +1,4 @@
-from libs.API.model.information_request.information_request_manager import \
-    InformationRequestManager
-from libs.API.model.information_request.rfi_http_requests import UploadRFIHttp, SearchRFIHttp
+from libs.API.model.information_request.rfi_http_requests import UploadRFIHttp, SearchRFIHttp, DeleteRFIHttp
 from libs.API.requests_builder.files_former import Attachments, \
     JsonAttachment, FileAttachment
 from libs.API.requests_builder.request_manager import RequestManager
@@ -11,7 +9,6 @@ class RFIService(object):
     Controller class to manipulate with RFis. Supports all methods that API
     has. Call appropriate method of controller to call API method.
     """
-    manager = InformationRequestManager()
 
     def __init__(self, context):
         self.context = context
@@ -55,4 +52,14 @@ class RFIService(object):
         rfi_search = SearchRFIHttp(self.context)
         rfi_search.build_json(search)
         response = self.request_manager.send_request(rfi_search)
+        return response
+
+    def delete_rfi(self, rfi_id):
+        """
+        Sends delete request for passed rfi_id
+        :param rfi_id: id of RFI to delete
+        :return: response from HTTP API
+        """
+        delete_http = DeleteRFIHttp(self.context, rfi_id)
+        response = self.request_manager.send_request(delete_http)
         return response

@@ -42,3 +42,17 @@ class SearchRFIHttp(HttpRequest):
 
     def __init__(self, context):
         super(SearchRFIHttp, self).__init__(context, 'post')
+
+
+class DeleteRFIHttp(HttpRequest):
+    """
+    Describes /rfis/<rfi_id> delete request
+    """
+
+    def __init__(self, context, rfi_id):
+        self._rfi_id = rfi_id
+        super(DeleteRFIHttp, self).__init__(context, 'delete')
+
+    def _build_url(self):
+        url = self._base +'rfis/{}'.format(self._rfi_id)
+        return url

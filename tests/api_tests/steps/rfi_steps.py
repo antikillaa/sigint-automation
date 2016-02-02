@@ -29,6 +29,18 @@ def find_rfi_with_search_request(context):
     param_dict = dict()
     for name in row.headings:
         param_dict[name] = row[name]
+    __search_rfi(context, **param_dict)
+
+
+
+@then('I can find RFI using todays max respond time')
+def find_with_today_last_respond_max(context):
+    rfi_search = RFISearchRequest(min_last_respond_date=datetime.utcnow().strftime(date_str_format))
+    rfi_service = RFIService(context)
+    rfi_service.search_for_rfi(rfi_search)
+
+
+def __search_rfi(context, **param_dict):
     rfi_search = RFISearchRequest(**param_dict)
     rfi_service = RFIService(context)
     response = rfi_service.search_for_rfi(rfi_search)
@@ -41,13 +53,7 @@ def find_rfi_with_search_request(context):
     RFISearchChecker.check(rfi_search, search_response)
     context.logger.debug("Verification successfully completed")
 
-
-@then('I can find RFI using todays max respond time')
-def find_with_today_last_respond_max(context):
-    rfi_search = RFISearchRequest(min_last_respond_date=datetime.utcnow().strftime(date_str_format))
-    rfi_service = RFIService(context)
-    rfi_service.search_for_rfi(rfi_search)
-
+    return search_response
 
 def __send_rfi(context, rfi=None, approved=None, original=None,  **kwargs):
     rfi_service = RFIService(context)
@@ -92,3 +98,17 @@ def rfi_record_has_attached_files(context):
 @when('I signed in as "{user_type}" user')
 def signed_in_as_user(context, user_type):
     context.auth_token = context.auth_manager.get_token(user_type)
+
+
+@then('I can delete rfi')
+def delete_rfi(context):
+    rfi = context.rfis.get_latest()
+    rfi_service = RFIService(context)
+    response = rfi_service.delete_rfi(rfi.id)
+    if response.status_code is not 200:
+            raise AssertionError("Delete request wasn't performed. Return"
+                                 "code {}".format(response.status_code))
+    search_response = __search_rfi(context)
+    for entity in search_response.found_objects:
+        assert not entity.id == rfi.id
+    context.rfis.delete_rfi(rfi)
