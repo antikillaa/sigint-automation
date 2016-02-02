@@ -1,13 +1,14 @@
 
 Feature: Users can create, update, delete RFI records based on permissions
 
+  @stable
   Scenario: Operator user can create new RFI request
     When I signed in as "tasker" user
     And  I create new RFI with default values
     Then New information request record is created
 
 
-
+  @stable
   Scenario: Operator user can update RFI with files
     When I signed in as "tasker" user
     And  I create new RFI with default values
@@ -70,8 +71,20 @@ Feature: Users can create, update, delete RFI records based on permissions
          | 2015-01-25        |
 
 
-  @wip
+  @not_ready
   Scenario: Operator can find RFI searching by min last respond date
     When I signed in as "tasker" user
     And  I create new RFI with default values
     Then I can find RFI using todays max respond time
+
+  @wip
+  Scenario: Operator can find RFI searching by status
+    When I signed in as "tasker" user
+    And  I create new RFI with specific values
+         | requestSource  |
+         | FBI_test       |
+
+    Then I can find RFI using specific search request
+         |request_source  |
+         |FBI_test        |
+
