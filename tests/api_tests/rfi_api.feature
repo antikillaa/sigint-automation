@@ -77,7 +77,7 @@ Feature: Users can create, update, delete RFI records based on permissions
     And  I create new RFI with default values
     Then I can find RFI using todays max respond time
 
-  @wip
+
   Scenario: Operator can find RFI searching by status
     When I signed in as "tasker" user
     And  I create new RFI with specific values
@@ -88,3 +88,13 @@ Feature: Users can create, update, delete RFI records based on permissions
          |request_source  |
          |FBI_test        |
 
+  @wip
+  Scenario: Operator can find RFI searching by status
+    When I signed in as "tasker" user
+    And  I create new RFI with specific values
+         | priority  |
+         | 1       |
+
+    Then I can find RFI using specific search request
+         |min_priority  |
+         |1             |
