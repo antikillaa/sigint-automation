@@ -1,4 +1,5 @@
-from libs.API.model.information_request.rfi_http_requests import UploadRFIHttp, SearchRFIHttp, DeleteRFIHttp
+from libs.API.model.information_request.rfi_http_requests import UploadRFIHttp, SearchRFIHttp, DeleteRFIHttp, \
+    CancelRFIHttp, DetailsRFIHttp, AssignRFIHttp
 from libs.API.requests_builder.files_former import Attachments, \
     JsonAttachment, FileAttachment
 from libs.API.requests_builder.request_manager import RequestManager
@@ -62,4 +63,29 @@ class RFIService(object):
         """
         delete_http = DeleteRFIHttp(self.context, rfi_id)
         response = self.request_manager.send_request(delete_http)
+        return response
+
+    def cancel_rfi(self, rfi_id):
+        """
+        Sends cancel request for passed rfi_id
+        :param rfi_id: id of RFI to cancel
+        :return: response from HTTP API
+        """
+        cancel_http = CancelRFIHttp(self.context, rfi_id)
+        response = self.request_manager.send_request(cancel_http)
+        return response
+
+    def rfi_details(self, rfi_id):
+        """
+        Gets details of rfi via http request
+        :param rfi_id: rfi id to get details for
+        :return: response on http request
+        """
+        details_http = DetailsRFIHttp(self.context, rfi_id)
+        response = self.request_manager.send_request(details_http)
+        return response
+
+    def assign_rfi(self, rfi_id):
+        assign_http = AssignRFIHttp(self.context, rfi_id)
+        response = self.request_manager.send_request(assign_http)
         return response

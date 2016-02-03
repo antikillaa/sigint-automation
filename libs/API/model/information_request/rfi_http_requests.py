@@ -56,3 +56,47 @@ class DeleteRFIHttp(HttpRequest):
     def _build_url(self):
         url = self._base +'rfis/{}'.format(self._rfi_id)
         return url
+
+
+class CancelRFIHttp(HttpRequest):
+    """
+    Describes /rfis/<rfi_id>/CANCELLED request
+    """
+
+    def __init__(self, context, rfi_id):
+        self.rfi_id = rfi_id
+        super(CancelRFIHttp, self).__init__(context, 'post')
+
+    def _build_url(self):
+        url = self._base + 'rfis/{}/CANCELLED'.format(self.rfi_id)
+        return url
+
+
+class DetailsRFIHttp(HttpRequest):
+    """
+    Describes /rfis/<rfi_id> request
+    Returns rfi details
+    """
+
+    def __init__(self, context, rfi_id):
+        self.rfi_id = rfi_id
+        super(DetailsRFIHttp, self).__init__(context, 'get')
+
+    def _build_url(self):
+        url = self._base + 'rfis/{}'.format(self.rfi_id)
+        return url
+
+
+class AssignRFIHttp(HttpRequest):
+    """
+    Describes /rfis/<rfi_id>/assign request
+    Assign rfi to the user who has sent request
+    """
+
+    def __init__(self, context, rfi_id):
+        self.rfi_id = rfi_id
+        super(AssignRFIHttp, self).__init__(context, 'post')
+
+    def _build_url(self):
+        url = self._base + '/rfis/{}/assign'.format(self.rfi_id)
+        return url

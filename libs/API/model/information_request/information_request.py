@@ -205,3 +205,11 @@ class InformationRequest(dict):
     @previousRequests.setter
     def previousRequests(self, value):
             self['previousRequests'] = value
+
+    @lazyprop
+    def assignedTo(self):
+        return self['assignedTo']
+
+    @assignedTo.setter
+    def assignedTo(self, value):
+        self['assignedTo'] = value
