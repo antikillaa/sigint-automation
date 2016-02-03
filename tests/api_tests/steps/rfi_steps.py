@@ -9,6 +9,44 @@ from libs.API.services.rfi_service import RFIService
 from settings import date_str_format
 
 
+rfi_manager = InformationRequestManager()
+
+
+@then('I expect response code "{code}"')
+def expect_response_code(context, code):
+    if context.request[-1].status_code != int(code):
+        raise AssertionError("Return status code wasn't as expected."
+                             "Actual code: {0}, expected code: {1}"
+                             "".format(context.request[-1].status_code, code))
+
+
+@then('Rfi record is created')
+def rfi_record_is_created(context):
+    rfi_request = context.request[0]
+    response = context.request[-1]
+    response_rfi = rfi_manager.to_response(**response.json()['result'])
+    InformationRequestChecker.check(rfi_request, response_rfi)
+    context.logger.info(
+                "Request was sent successfully. Parsing results...")
+    assert response_rfi.id
+    assert response_rfi.internalRequestNumber
+    assert response_rfi.createdAt
+    assert response_rfi.createdBy
+    assert response_rfi.modifiedAt
+    context.logger.info("Information request record was created successfully")
+    context.rfis.add_rfi(response_rfi)
+
+
+@then('Search result is correct')
+def search_result_is_correct(context):
+    rfi_search = context.request[0]
+    response = context.request[-1]
+    search_response = RFISearchResponse(context, **response.json()['result'])
+    context.logger.debug("Checking results....")
+    RFISearchChecker.check(rfi_search, search_response)
+    context.logger.debug("Verification successfully completed")
+
+
 @when('I create new RFI with default values')
 def create_rfi_with_data(context):
     __send_rfi(context)
@@ -23,7 +61,7 @@ def create_rfi_with_specific_data(context):
     __send_rfi(context, **param_dict)
 
 
-@then('I can find RFI using specific search request')
+@when('I search for RFI with query')
 def find_rfi_with_search_request(context):
     row = context.table.rows[0]
     param_dict = dict()
@@ -32,26 +70,11 @@ def find_rfi_with_search_request(context):
     __search_rfi(context, **param_dict)
 
 
-@then('I can find RFI using todays max respond time')
-def find_with_today_last_respond_max(context):
-    rfi_search = RFISearchRequest(min_last_respond_date=datetime.utcnow().strftime(date_str_format))
-    rfi_service = RFIService(context)
-    rfi_service.search_for_rfi(rfi_search)
-
-
 def __search_rfi(context, **param_dict):
     rfi_search = RFISearchRequest(**param_dict)
     rfi_service = RFIService(context)
     response = rfi_service.search_for_rfi(rfi_search)
-    if response.status_code is not 200:
-            raise AssertionError("Search request wasn't performed. Return"
-                                 "code {}".format(response.status_code))
-    search_response = RFISearchResponse(context, **response.json()['result'])
-    context.logger.info("Found objects: {}".format(search_response.found_objects))
-    context.logger.debug("Checking results....")
-    RFISearchChecker.check(rfi_search, search_response)
-    context.logger.debug("Verification successfully completed")
-    return search_response
+    context.request = rfi_search, response
 
 
 def __send_rfi(context, rfi=None, approved=None, original=None,  **kwargs):
@@ -59,20 +82,7 @@ def __send_rfi(context, rfi=None, approved=None, original=None,  **kwargs):
     rfi_manager = InformationRequestManager()
     rfi_request = rfi_manager.to_request(rfi, **kwargs)
     response = rfi_service.create_rfi(rfi_request, approved=approved, original=original)
-    if response.status_code is not 200:
-                raise AssertionError("Upload information_request request was "
-                                     "unsuccessful. Return code: {}".format(response.status_code))
-    response_rfi = rfi_manager.to_response(**response.json()['result'])
-    InformationRequestChecker.check(rfi_request, response_rfi)
-    context.logger.info(
-                "Request was sent successfully. Parsing results...")
-    assert response_rfi.id
-    assert response_rfi.internalRequestNumber
-    assert response_rfi.createdAt
-    assert response_rfi.createdBy
-    assert response_rfi.modifiedAt
-    context.logger.info("Information request record was created successfully")
-    context.rfis.add_rfi(response_rfi)
+    context.request = rfi_request, response
 
 
 @when('I update record with files')
@@ -81,17 +91,13 @@ def send_update_request(context):
     __send_rfi(context, rfi, approved=True, original=True)
 
 
-@then('New information request record is created')
-def new_rfi_record_is_created(context):
-    rfi = context.rfis.get_latest()
-    assert rfi
-
-
-@then('Information request record has attached files')
+@then('Record has attached files')
 def rfi_record_has_attached_files(context):
-    rfi = context.rfis.get_latest()
-    assert rfi.approvedCopy['filename'] == 'approved'
-    assert rfi.originalDocument['filename'] == 'original'
+    response = context.request[-1]
+    response_rfi = rfi_manager.to_response(**response.json()['result'])
+    assert response_rfi.approvedCopy['filename'] == 'approved'
+    assert response_rfi.originalDocument['filename'] == 'original'
+    context.rfis.add_rfi(response_rfi)
 
 
 @when('I signed in as "{user_type}" user')
@@ -99,15 +105,19 @@ def signed_in_as_user(context, user_type):
     context.auth_token = context.auth_manager.get_token(user_type)
 
 
-@then('I can delete rfi')
+@when('I delete rfi')
 def delete_rfi(context):
     rfi = context.rfis.get_latest()
     rfi_service = RFIService(context)
     response = rfi_service.delete_rfi(rfi.id)
-    if response.status_code is not 200:
-            raise AssertionError("Delete request wasn't performed. Return"
-                                 "code {}".format(response.status_code))
-    search_response = __search_rfi(context)
+    context.request = rfi, response
+
+
+@then("RFI record is deleted")
+def rfi_is_deleted(context):
+    rfi = context.request[0]
+    __search_rfi(context)
+    search_response = RFISearchResponse(context, **context.request[-1].json()['result'])
     for entity in search_response.found_objects:
         assert not entity.id == rfi.id
     context.rfis.delete_rfi(rfi)
@@ -118,50 +128,52 @@ def cancel_rfi(context):
     rfi = context.rfis.get_latest()
     rfi_service = RFIService(context)
     response = rfi_service.cancel_rfi(rfi.id)
-    if response.status_code is not 200:
-        raise AssertionError("Cancel request wasn't perfromed. Return"
-                             "code {}".format(response.status_code))
-    rfi.state = 'CANCELLED'
-    context.rfis.add_rfi(rfi)
+    context.request = rfi, response
 
 
 @then('RFI has status "{status}"')
 def rfi_has_status(context, status):
-    rfi = context.rfis.get_latest()
-    rfi_details_http = details_page_rfi(context)
+    rfi = context.request[0]
+    response = context.request[-1]
+    details_page_rfi(context)
+    rfi_details_http = rfi_manager.to_object(**response.json()['result'])
     assert rfi_details_http.state == status.upper()
-    assert rfi.state == status.upper()
+    rfi.state = status.upper()
+    context.rfis.add_rfi(rfi)
 
 
-@then('I can get details of rfi')
-def details_page_rfi(context):
-    rfi = context.rfis.get_latest()
-    rfi_manager = InformationRequestManager()
-    rfi_service = RFIService(context)
-    response = rfi_service.rfi_details(rfi.id)
-    if response.status_code is not 200:
-        raise AssertionError("Details request wasn't performed. Return"
-                             "code {}".format(response.status_code))
-
+@then('Details of rfi are correct')
+def details_rfi_correct(context):
+    rfi = context.request[0]
+    response = context.request[-1]
     response_rfi = rfi_manager.to_object(**response.json()['result'])
     InformationRequestChecker.check(rfi, response_rfi)
-    return response_rfi
 
 
-@then('I can take ownership of rfi')
-def take_ownership_of_report(context):
+@when('I get details of rfi')
+def details_page_rfi(context):
     rfi = context.rfis.get_latest()
     rfi_service = RFIService(context)
-    response = rfi_service.assign_rfi(rfi.id)
-    if response.status_code is not 200:
-        raise AssertionError("Assign request wasn't performed. Return"
-                             "code {}".format(response.status_code))
-    rfi_manager = InformationRequestManager()
-    rfi.state = 'ASSIGNED'
+    response = rfi_service.rfi_details(rfi.id)
+    context.request = rfi, response
+
+@then("RFI assigned to analyst")
+def rfi_assigned_to_analyst(context):
+    rfi = context.request[0]
+    response = context.request[-1]
     response_rfi = rfi_manager.to_object(**response.json()['result'])
     assert response_rfi.assignedTo
     InformationRequestChecker.check(rfi, response_rfi)
     context.rfis.add_rfi(response_rfi)
+
+
+@when('I take ownership of rfi')
+def take_ownership_of_report(context):
+    rfi = context.rfis.get_latest()
+    rfi_service = RFIService(context)
+    response = rfi_service.assign_rfi(rfi.id)
+    context.request = rfi, response
+
 
 
 @then('I cannot create new rfi with error code "{code}"')
