@@ -101,3 +101,17 @@ Feature: Users can create, update, delete RFI records based on permissions
          | state   |
          | DRAFT   |
     Then I can delete rfi
+
+  @stable
+  Scenario: Operator can cancel request
+    When I signed in as "tasker" user
+    And I create new RFI with default values
+    And I cancel RFI
+    Then RFI has status "Cancelled"
+
+
+  @stable
+  Scenario: Operator user can open details page of RFI
+    When I signed in as "tasker" user
+    And I create new RFI with default values
+    Then I can get details of rfi

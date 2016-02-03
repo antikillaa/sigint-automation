@@ -32,7 +32,6 @@ def find_rfi_with_search_request(context):
     __search_rfi(context, **param_dict)
 
 
-
 @then('I can find RFI using todays max respond time')
 def find_with_today_last_respond_max(context):
     rfi_search = RFISearchRequest(min_last_respond_date=datetime.utcnow().strftime(date_str_format))
@@ -52,8 +51,8 @@ def __search_rfi(context, **param_dict):
     context.logger.debug("Checking results....")
     RFISearchChecker.check(rfi_search, search_response)
     context.logger.debug("Verification successfully completed")
-
     return search_response
+
 
 def __send_rfi(context, rfi=None, approved=None, original=None,  **kwargs):
     rfi_service = RFIService(context)
@@ -112,3 +111,38 @@ def delete_rfi(context):
     for entity in search_response.found_objects:
         assert not entity.id == rfi.id
     context.rfis.delete_rfi(rfi)
+
+
+@when('I cancel rfi')
+def cancel_rfi(context):
+    rfi = context.rfis.get_latest()
+    rfi_service = RFIService(context)
+    response = rfi_service.cancel_rfi(rfi.id)
+    if response.status_code is not 200:
+        raise AssertionError("Cancel request wasn't perfromed. Return"
+                             "code {}".format(response.status_code))
+    rfi.state = 'CANCELLED'
+    context.rfis.add_rfi(rfi)
+
+
+@then('RFI has status "{status}"')
+def rfi_has_status(context, status):
+    rfi = context.rfis.get_latest()
+    rfi_details_http = details_page_rfi(context)
+    assert rfi_details_http.state == status.upper()
+    assert rfi.state == status.upper()
+
+
+@then('I can get details of rfi')
+def details_page_rfi(context):
+    rfi = context.rfis.get_latest()
+    rfi_manager = InformationRequestManager()
+    rfi_service = RFIService(context)
+    response = rfi_service.rfi_details(rfi.id)
+    if response.status_code is not 200:
+        raise AssertionError("Details request wasn't performed. Return"
+                             "code {}".format(response.status_code))
+
+    response_rfi = rfi_manager.to_object(**response.json()['result'])
+    InformationRequestChecker.check(rfi, response_rfi)
+    return response_rfi
