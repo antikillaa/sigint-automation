@@ -85,3 +85,18 @@ class DetailsRFIHttp(HttpRequest):
     def _build_url(self):
         url = self._base + 'rfis/{}'.format(self.rfi_id)
         return url
+
+
+class AssignRFIHttp(HttpRequest):
+    """
+    Describes /rfis/<rfi_id>/assign request
+    Assign rfi to the user who has sent request
+    """
+
+    def __init__(self, context, rfi_id):
+        self.rfi_id = rfi_id
+        super(AssignRFIHttp, self).__init__(context, 'post')
+
+    def _build_url(self):
+        url = self._base + '/rfis/{}/assign'.format(self.rfi_id)
+        return url

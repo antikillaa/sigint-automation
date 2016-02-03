@@ -1,5 +1,5 @@
 from libs.API.model.information_request.rfi_http_requests import UploadRFIHttp, SearchRFIHttp, DeleteRFIHttp, \
-    CancelRFIHttp, DetailsRFIHttp
+    CancelRFIHttp, DetailsRFIHttp, AssignRFIHttp
 from libs.API.requests_builder.files_former import Attachments, \
     JsonAttachment, FileAttachment
 from libs.API.requests_builder.request_manager import RequestManager
@@ -83,4 +83,9 @@ class RFIService(object):
         """
         details_http = DetailsRFIHttp(self.context, rfi_id)
         response = self.request_manager.send_request(details_http)
+        return response
+
+    def assign_rfi(self, rfi_id):
+        assign_http = AssignRFIHttp(self.context, rfi_id)
+        response = self.request_manager.send_request(assign_http)
         return response

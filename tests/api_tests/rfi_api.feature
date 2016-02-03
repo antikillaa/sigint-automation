@@ -115,3 +115,11 @@ Feature: Users can create, update, delete RFI records based on permissions
     When I signed in as "tasker" user
     And I create new RFI with default values
     Then I can get details of rfi
+
+
+  @stable
+  Scenario: Analyst user can assign RFI to himself
+    When I signed in as "tasker" user
+    And I create new RFI with default values
+    And I signed in as "analyst" user
+    Then I can take ownership of rfi

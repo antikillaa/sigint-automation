@@ -146,3 +146,19 @@ def details_page_rfi(context):
     response_rfi = rfi_manager.to_object(**response.json()['result'])
     InformationRequestChecker.check(rfi, response_rfi)
     return response_rfi
+
+
+@then('I can take ownership of rfi')
+def take_ownership_of_report(context):
+    rfi = context.rfis.get_latest()
+    rfi_service = RFIService(context)
+    response = rfi_service.assign_rfi(rfi.id)
+    if response.status_code is not 200:
+        raise AssertionError("Assign request wasn't performed. Return"
+                             "code {}".format(response.status_code))
+    rfi_manager = InformationRequestManager()
+    rfi.state = 'ASSIGNED'
+    response_rfi = rfi_manager.to_object(**response.json()['result'])
+    assert response_rfi.assignedTo
+    InformationRequestChecker.check(rfi, response_rfi)
+    context.rfis.add_rfi(response_rfi)
