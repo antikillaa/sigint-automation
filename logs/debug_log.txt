@@ -1,41 +1,83 @@
-[INFO] 2016-02-03 16:03:57 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/signup
-[INFO] 2016-02-03 16:03:57 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-02-03 16:03:57 - connectionpool: "POST /sigint/api/auth/signup HTTP/1.1" 200 87
-[INFO] 2016-02-03 16:03:57 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-02-03 16:03:57 - environment: Starting verifying feature Users can create, update, delete RFI records based on permissions
-[INFO] 2016-02-03 16:03:57 - environment: Starting step I signed in as "tasker" user
-[INFO] 2016-02-03 16:03:57 - request_manager: Sending PUT request to URL http://192.168.99.100/sigint/api/admin/user/add
-[INFO] 2016-02-03 16:03:57 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-02-03 16:03:57 - connectionpool: "PUT /sigint/api/admin/user/add HTTP/1.1" 200 263
-[INFO] 2016-02-03 16:03:57 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-02-03 16:03:57 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
-[INFO] 2016-02-03 16:03:57 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-02-03 16:03:57 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
-[INFO] 2016-02-03 16:03:57 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-02-03 16:03:57 - environment: Finishing step I signed in as "tasker" user
-[INFO] 2016-02-03 16:03:57 - environment: Starting step I create new RFI with default values
-[INFO] 2016-02-03 16:03:57 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
-[INFO] 2016-02-03 16:03:57 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-02-03 16:03:57 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 407
-[INFO] 2016-02-03 16:03:57 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-02-03 16:03:57 - rfi_steps: Request was sent successfully. Parsing results...
-[INFO] 2016-02-03 16:03:57 - rfi_steps: Information request record was created successfully
-[INFO] 2016-02-03 16:03:57 - environment: Finishing step I create new RFI with default values
-[INFO] 2016-02-03 16:03:57 - environment: Starting step I signed in as "analyst" user
-[INFO] 2016-02-03 16:03:57 - request_manager: Sending PUT request to URL http://192.168.99.100/sigint/api/admin/user/add
-[INFO] 2016-02-03 16:03:57 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-02-03 16:03:57 - connectionpool: "PUT /sigint/api/admin/user/add HTTP/1.1" 200 262
-[INFO] 2016-02-03 16:03:57 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-02-03 16:03:57 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
-[INFO] 2016-02-03 16:03:57 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-02-03 16:03:57 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
-[INFO] 2016-02-03 16:03:57 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-02-03 16:03:57 - environment: Finishing step I signed in as "analyst" user
-[INFO] 2016-02-03 16:03:57 - environment: Starting step I can take ownership of rfi
-[INFO] 2016-02-03 16:03:57 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api//rfis/56b1fabde4b096013bd2ff73/assign
-[INFO] 2016-02-03 16:03:57 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-02-03 16:03:58 - connectionpool: "POST /sigint/api//rfis/56b1fabde4b096013bd2ff73/assign HTTP/1.1" 200 448
-[INFO] 2016-02-03 16:03:58 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-02-03 16:03:58 - environment: Finishing step I can take ownership of rfi
-[INFO] 2016-02-03 16:03:58 - environment: Finished verifying feature Users can create, update, delete RFI records based on permissions
-[INFO] 2016-02-03 16:03:58 - environment: Deleting all created during session user accounts
+[INFO] 2016-02-03 16:58:51 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/signup
+[INFO] 2016-02-03 16:58:51 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-03 16:58:51 - connectionpool: "POST /sigint/api/auth/signup HTTP/1.1" 200 87
+[INFO] 2016-02-03 16:58:51 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-03 16:58:51 - environment: Starting verifying feature Users can create, update, delete RFI records based on permissions
+[INFO] 2016-02-03 16:58:51 - environment: Starting step I signed in as "user" user
+[INFO] 2016-02-03 16:58:51 - request_manager: Sending PUT request to URL http://192.168.99.100/sigint/api/admin/user/add
+[INFO] 2016-02-03 16:58:51 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-03 16:58:51 - connectionpool: "PUT /sigint/api/admin/user/add HTTP/1.1" 200 261
+[INFO] 2016-02-03 16:58:51 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-03 16:58:51 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-03 16:58:51 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-03 16:58:51 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-03 16:58:51 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-03 16:58:51 - environment: Finishing step I signed in as "user" user
+[INFO] 2016-02-03 16:58:51 - environment: Starting step I cannot create new rfi with error code "403"
+[INFO] 2016-02-03 16:58:51 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-03 16:58:51 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-03 16:58:51 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 403 48
+[INFO] 2016-02-03 16:58:51 - request_manager: Got response on request: <Response [403]>
+[ERROR] 2016-02-03 16:58:51 - request_manager: Got error on request: <Response [403]>
+[DEBUG] 2016-02-03 16:58:51 - request_manager: Actual response code is 403
+[DEBUG] 2016-02-03 16:58:51 - rfi_steps: got expected error code 403
+[INFO] 2016-02-03 16:58:51 - environment: Finishing step I cannot create new rfi with error code "403"
+[INFO] 2016-02-03 16:58:51 - environment: Starting step I signed in as "admin" user
+[INFO] 2016-02-03 16:58:51 - request_manager: Sending PUT request to URL http://192.168.99.100/sigint/api/admin/user/add
+[INFO] 2016-02-03 16:58:51 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-03 16:58:51 - connectionpool: "PUT /sigint/api/admin/user/add HTTP/1.1" 200 260
+[INFO] 2016-02-03 16:58:51 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-03 16:58:51 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-03 16:58:51 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-03 16:58:51 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-03 16:58:51 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-03 16:58:51 - environment: Finishing step I signed in as "admin" user
+[INFO] 2016-02-03 16:58:51 - environment: Starting step I cannot create new rfi with error code "403"
+[INFO] 2016-02-03 16:58:51 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-03 16:58:51 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-03 16:58:51 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 403 48
+[INFO] 2016-02-03 16:58:51 - request_manager: Got response on request: <Response [403]>
+[ERROR] 2016-02-03 16:58:51 - request_manager: Got error on request: <Response [403]>
+[DEBUG] 2016-02-03 16:58:51 - request_manager: Actual response code is 403
+[DEBUG] 2016-02-03 16:58:51 - rfi_steps: got expected error code 403
+[INFO] 2016-02-03 16:58:51 - environment: Finishing step I cannot create new rfi with error code "403"
+[INFO] 2016-02-03 16:58:51 - environment: Starting step I signed in as "analyst" user
+[INFO] 2016-02-03 16:58:51 - request_manager: Sending PUT request to URL http://192.168.99.100/sigint/api/admin/user/add
+[INFO] 2016-02-03 16:58:51 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-03 16:58:51 - connectionpool: "PUT /sigint/api/admin/user/add HTTP/1.1" 200 262
+[INFO] 2016-02-03 16:58:51 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-03 16:58:51 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-03 16:58:51 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-03 16:58:51 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-03 16:58:51 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-03 16:58:51 - environment: Finishing step I signed in as "analyst" user
+[INFO] 2016-02-03 16:58:51 - environment: Starting step I cannot create new rfi with error code "403"
+[INFO] 2016-02-03 16:58:51 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-03 16:58:51 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-03 16:58:51 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 403 48
+[INFO] 2016-02-03 16:58:51 - request_manager: Got response on request: <Response [403]>
+[ERROR] 2016-02-03 16:58:51 - request_manager: Got error on request: <Response [403]>
+[DEBUG] 2016-02-03 16:58:51 - request_manager: Actual response code is 403
+[DEBUG] 2016-02-03 16:58:51 - rfi_steps: got expected error code 403
+[INFO] 2016-02-03 16:58:51 - environment: Finishing step I cannot create new rfi with error code "403"
+[INFO] 2016-02-03 16:58:51 - environment: Starting step I signed in as "approver" user
+[INFO] 2016-02-03 16:58:51 - request_manager: Sending PUT request to URL http://192.168.99.100/sigint/api/admin/user/add
+[INFO] 2016-02-03 16:58:51 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-03 16:58:51 - connectionpool: "PUT /sigint/api/admin/user/add HTTP/1.1" 200 263
+[INFO] 2016-02-03 16:58:51 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-03 16:58:51 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-03 16:58:51 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-03 16:58:51 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-03 16:58:51 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-03 16:58:51 - environment: Finishing step I signed in as "approver" user
+[INFO] 2016-02-03 16:58:51 - environment: Starting step I cannot create new rfi with error code "403"
+[INFO] 2016-02-03 16:58:51 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-03 16:58:51 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-03 16:58:51 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 403 48
+[INFO] 2016-02-03 16:58:51 - request_manager: Got response on request: <Response [403]>
+[ERROR] 2016-02-03 16:58:51 - request_manager: Got error on request: <Response [403]>
+[DEBUG] 2016-02-03 16:58:51 - request_manager: Actual response code is 403
+[DEBUG] 2016-02-03 16:58:51 - rfi_steps: got expected error code 403
+[INFO] 2016-02-03 16:58:51 - environment: Finishing step I cannot create new rfi with error code "403"
+[INFO] 2016-02-03 16:58:51 - environment: Finished verifying feature Users can create, update, delete RFI records based on permissions
+[INFO] 2016-02-03 16:58:51 - environment: Deleting all created during session user accounts

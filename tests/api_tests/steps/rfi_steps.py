@@ -162,3 +162,14 @@ def take_ownership_of_report(context):
     assert response_rfi.assignedTo
     InformationRequestChecker.check(rfi, response_rfi)
     context.rfis.add_rfi(response_rfi)
+
+
+@then('I cannot create new rfi with error code "{code}"')
+def i_cannot_create_rfi(context, code):
+    try:
+        __send_rfi(context)
+    except AssertionError as e:
+        if code in e.message:
+            context.logger.debug('got expected error code {}'.format(code))
+        else:
+            raise AssertionError("Expected error code {} was not met".format(code))

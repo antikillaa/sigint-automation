@@ -123,3 +123,16 @@ Feature: Users can create, update, delete RFI records based on permissions
     And I create new RFI with default values
     And I signed in as "analyst" user
     Then I can take ownership of rfi
+
+
+  @stable
+  Scenario: Operator, Analyst, Report Admin, Admin cannot create RFI
+    When I signed in as "user" user
+    Then I cannot create new rfi with error code "403"
+    When I signed in as "admin" user
+    Then I cannot create new rfi with error code "403"
+    When I signed in as "analyst" user
+    Then I cannot create new rfi with error code "403"
+    When I signed in as "approver" user
+    Then I cannot create new rfi with error code "403"
+
