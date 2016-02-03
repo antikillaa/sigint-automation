@@ -1,4 +1,3 @@
-from datetime import datetime
 from behave import *
 from libs.API.model.information_request.information_request_checker import InformationRequestChecker
 from libs.API.model.information_request.information_request_manager import InformationRequestManager
@@ -6,7 +5,6 @@ from libs.API.model.information_request.rfi_search_checker import RFISearchCheck
 from libs.API.model.information_request.rfi_search_request import RFISearchRequest
 from libs.API.model.information_request.rfi_search_response import RFISearchResponse
 from libs.API.services.rfi_service import RFIService
-from settings import date_str_format
 
 
 rfi_manager = InformationRequestManager()
