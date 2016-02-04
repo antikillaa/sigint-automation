@@ -123,7 +123,7 @@ Feature: Users can create, update, delete RFI records based on permissions
     Then I expect response code "200"
     And RFI record is deleted
 
-  @wip
+  @stable
   Scenario: Operator can cancel request
     When I signed in as "tasker" user
     And I create new RFI with default values
@@ -192,3 +192,68 @@ Feature: Users can create, update, delete RFI records based on permissions
     When I signed in as "analyst" user
     And  I cancel RFI
     Then I expect response code "403"
+
+
+  @stable
+  Scenario: Operator, Analyst, Report admin cannot delete RFI
+    When I signed in as "tasker" user
+    And  I create new RFI with specific values
+         | state   |
+         | DRAFT   |
+    Then I expect response code "200"
+    And  Rfi record is created
+    When I signed in as "user" user
+    And I delete rfi
+    Then I expect response code "403"
+    When I signed in as "admin" user
+    Then I expect response code "403"
+    When I signed in as "approver" user
+    Then I expect response code "403"
+    When I signed in as "analyst" user
+    Then I expect response code "403"
+
+
+  @bug
+  Scenario: Operator user cannot delete non-draft request
+    When I signed in as "tasker" user
+    And I create new RFI with default values
+    Then I expect response code "200"
+    And  Rfi record is created
+    When I delete rfi
+    Then I expect response code "403"
+
+
+  @stable
+  Scenario: Only Analyst user can assign RFI to himself
+    When I signed in as "tasker" user
+    And I create new RFI with default values
+    Then I expect response code "200"
+    And  Rfi record is created
+    When I signed in as "tasker" user
+    And I take ownership of rfi
+    Then I expect response code "403"
+    When I signed in as "user" user
+    And I take ownership of rfi
+    Then I expect response code "403"
+    When I signed in as "admin" user
+    And I take ownership of rfi
+    Then I expect response code "403"
+    When I signed in as "approver" user
+    And I take ownership of rfi
+    Then I expect response code "403"
+
+
+
+  @wip
+  Scenario: Analyst user can assign RFI only from status Pending
+    When I signed in as "tasker" user
+    And  I create new RFI with specific values
+         | state   |
+         | DRAFT   |
+    Then I expect response code "200"
+    And  Rfi record is created
+    When I signed in as "analyst" user
+    And I take ownership of rfi
+    Then I expect response code "403"
+    
+
