@@ -244,7 +244,7 @@ Feature: Users can create, update, delete RFI records based on permissions
 
 
 
-  @wip
+  @bug
   Scenario: Analyst user can assign RFI only from status Pending
     When I signed in as "tasker" user
     And  I create new RFI with specific values

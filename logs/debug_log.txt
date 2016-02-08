@@ -1,47 +1,611 @@
-[INFO] 2016-02-04 11:45:10 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/signup
-[INFO] 2016-02-04 11:45:10 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-02-04 11:45:10 - connectionpool: "POST /sigint/api/auth/signup HTTP/1.1" 200 87
-[INFO] 2016-02-04 11:45:10 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-02-04 11:45:10 - environment: Starting verifying feature Users can create, update, delete RFI records based on permissions
-[INFO] 2016-02-04 11:45:10 - environment: Starting step I signed in as "tasker" user
-[INFO] 2016-02-04 11:45:10 - request_manager: Sending PUT request to URL http://192.168.99.100/sigint/api/admin/user/add
-[INFO] 2016-02-04 11:45:10 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-02-04 11:45:10 - connectionpool: "PUT /sigint/api/admin/user/add HTTP/1.1" 200 261
-[INFO] 2016-02-04 11:45:10 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-02-04 11:45:10 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
-[INFO] 2016-02-04 11:45:10 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-02-04 11:45:10 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
-[INFO] 2016-02-04 11:45:10 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-02-04 11:45:10 - environment: Finishing step I signed in as "tasker" user
-[INFO] 2016-02-04 11:45:10 - environment: Starting step I create new RFI with specific values
-[INFO] 2016-02-04 11:45:10 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
-[INFO] 2016-02-04 11:45:10 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-02-04 11:45:10 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 405
-[INFO] 2016-02-04 11:45:10 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-02-04 11:45:10 - environment: Finishing step I create new RFI with specific values
-[INFO] 2016-02-04 11:45:10 - environment: Starting step I expect response code "200"
-[INFO] 2016-02-04 11:45:10 - environment: Finishing step I expect response code "200"
-[INFO] 2016-02-04 11:45:10 - environment: Starting step Rfi record is created
-[INFO] 2016-02-04 11:45:10 - rfi_steps: Request was sent successfully. Parsing results...
-[INFO] 2016-02-04 11:45:10 - rfi_steps: Information request record was created successfully
-[INFO] 2016-02-04 11:45:10 - environment: Finishing step Rfi record is created
-[INFO] 2016-02-04 11:45:10 - environment: Starting step I signed in as "analyst" user
-[INFO] 2016-02-04 11:45:10 - request_manager: Sending PUT request to URL http://192.168.99.100/sigint/api/admin/user/add
-[INFO] 2016-02-04 11:45:10 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-02-04 11:45:10 - connectionpool: "PUT /sigint/api/admin/user/add HTTP/1.1" 200 262
-[INFO] 2016-02-04 11:45:10 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-02-04 11:45:10 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
-[INFO] 2016-02-04 11:45:10 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-02-04 11:45:10 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
-[INFO] 2016-02-04 11:45:10 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-02-04 11:45:10 - environment: Finishing step I signed in as "analyst" user
-[INFO] 2016-02-04 11:45:10 - environment: Starting step I take ownership of rfi
-[INFO] 2016-02-04 11:45:10 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api//rfis/56b30f96e4b096013bd30404/assign
-[INFO] 2016-02-04 11:45:10 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
-[DEBUG] 2016-02-04 11:45:10 - connectionpool: "POST /sigint/api//rfis/56b30f96e4b096013bd30404/assign HTTP/1.1" 200 448
-[INFO] 2016-02-04 11:45:10 - request_manager: Got response on request: <Response [200]>
-[INFO] 2016-02-04 11:45:10 - environment: Finishing step I take ownership of rfi
-[INFO] 2016-02-04 11:45:10 - environment: Starting step I expect response code "403"
-[INFO] 2016-02-04 11:45:10 - environment: Finishing step I expect response code "403"
-[INFO] 2016-02-04 11:45:10 - environment: Finished verifying feature Users can create, update, delete RFI records based on permissions
-[INFO] 2016-02-04 11:45:10 - environment: Deleting all created during session user accounts
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/signup
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/auth/signup HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Starting verifying feature Users can create, update, delete RFI records based on permissions
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending PUT request to URL http://192.168.99.100/sigint/api/admin/user/add
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "PUT /sigint/api/admin/user/add HTTP/1.1" 200 261
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I create new RFI with default values
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 407
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I create new RFI with default values
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:24 - environment: Starting step Rfi record is created
+[INFO] 2016-02-08 14:49:24 - rfi_steps: Request was sent successfully. Parsing results...
+[INFO] 2016-02-08 14:49:24 - rfi_steps: Information request record was created successfully
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step Rfi record is created
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I create new RFI with default values
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 407
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I create new RFI with default values
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:24 - environment: Starting step Rfi record is created
+[INFO] 2016-02-08 14:49:24 - rfi_steps: Request was sent successfully. Parsing results...
+[INFO] 2016-02-08 14:49:24 - rfi_steps: Information request record was created successfully
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step Rfi record is created
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I update record with files
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 703
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I update record with files
+[INFO] 2016-02-08 14:49:24 - environment: Starting step Record has attached files
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step Record has attached files
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 407
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:24 - environment: Starting step Rfi record is created
+[INFO] 2016-02-08 14:49:24 - rfi_steps: Request was sent successfully. Parsing results...
+[INFO] 2016-02-08 14:49:24 - rfi_steps: Information request record was created successfully
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step Rfi record is created
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I search for RFI with query
+[INFO] 2016-02-08 14:49:24 - rfi_service: Start searching rfis by search request: {'maxDueDate': <libs.API.model.information_request.rfi_search_filters.MaxDueDateFilter object at 0x10807f450>, 'maxCreatedDate': <libs.API.model.information_request.rfi_search_filters.MaxCreatedDateFilter object at 0x10807f510>, 'minLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MinLastRespondDateFilter object at 0x10807f050>, 'pageSize': 50, 'minPriority': <libs.API.model.information_request.rfi_search_filters.MinPriorityFilter object at 0x108063a50>, 'sortField': 'createdAt', 'minDueDate': <libs.API.model.information_request.rfi_search_filters.MinDueDateFilter object at 0x10807f4d0>, 'state': <libs.API.model.information_request.rfi_search_filters.StateFilter object at 0x108063410>, 'maxLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MaxLastRespondDateFilter object at 0x10807f390>, 'states': ['PENDING', 'ASSIGNED', 'RESPONDED', 'CANCELLED'], 'sortDirection': False, 'createdBy': <libs.API.model.information_request.rfi_search_filters.CreatedByFilter object at 0x10807fb10>, 'requestNumber': <libs.API.model.information_request.rfi_search_filters.RequestNumberFilter object at 0x10807fe10>, 'requestSource': <libs.API.model.information_request.rfi_search_filters.RequestSourceFilter object at 0x10807fc10>, 'page': 0, 'minCreatedDate': <libs.API.model.information_request.rfi_search_filters.MinCreatedDateFilter object at 0x10807f690>, 'subject': <libs.API.model.information_request.rfi_search_filters.SubjectFilter object at 0x10807f090>}
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/search
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/rfis/search HTTP/1.1" 200 20116
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I search for RFI with query
+[INFO] 2016-02-08 14:49:24 - environment: Starting step Search result is correct
+[DEBUG] 2016-02-08 14:49:24 - rfi_steps: Checking results....
+[DEBUG] 2016-02-08 14:49:24 - rfi_steps: Verification successfully completed
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step Search result is correct
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 408
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:24 - environment: Starting step Rfi record is created
+[INFO] 2016-02-08 14:49:24 - rfi_steps: Request was sent successfully. Parsing results...
+[INFO] 2016-02-08 14:49:24 - rfi_steps: Information request record was created successfully
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step Rfi record is created
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I search for RFI with query
+[INFO] 2016-02-08 14:49:24 - rfi_service: Start searching rfis by search request: {'maxDueDate': <libs.API.model.information_request.rfi_search_filters.MaxDueDateFilter object at 0x10807fb90>, 'maxCreatedDate': <libs.API.model.information_request.rfi_search_filters.MaxCreatedDateFilter object at 0x10807fc50>, 'minLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MinLastRespondDateFilter object at 0x10807fbd0>, 'pageSize': 50, 'minPriority': <libs.API.model.information_request.rfi_search_filters.MinPriorityFilter object at 0x1080631d0>, 'sortField': 'createdAt', 'minDueDate': <libs.API.model.information_request.rfi_search_filters.MinDueDateFilter object at 0x10807fb50>, 'state': <libs.API.model.information_request.rfi_search_filters.StateFilter object at 0x108063210>, 'maxLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MaxLastRespondDateFilter object at 0x10807f710>, 'states': ['PENDING', 'ASSIGNED', 'RESPONDED', 'CANCELLED'], 'sortDirection': False, 'createdBy': <libs.API.model.information_request.rfi_search_filters.CreatedByFilter object at 0x10807f790>, 'requestNumber': <libs.API.model.information_request.rfi_search_filters.RequestNumberFilter object at 0x10807f450>, 'requestSource': <libs.API.model.information_request.rfi_search_filters.RequestSourceFilter object at 0x10807fed0>, 'page': 0, 'minCreatedDate': <libs.API.model.information_request.rfi_search_filters.MinCreatedDateFilter object at 0x10807ff10>, 'subject': <libs.API.model.information_request.rfi_search_filters.SubjectFilter object at 0x10807f4d0>}
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/search
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/rfis/search HTTP/1.1" 200 22230
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I search for RFI with query
+[INFO] 2016-02-08 14:49:24 - environment: Starting step Search result is correct
+[DEBUG] 2016-02-08 14:49:24 - rfi_steps: Checking results....
+[DEBUG] 2016-02-08 14:49:24 - rfi_steps: Verification successfully completed
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step Search result is correct
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 409
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:24 - environment: Starting step Rfi record is created
+[INFO] 2016-02-08 14:49:24 - rfi_steps: Request was sent successfully. Parsing results...
+[INFO] 2016-02-08 14:49:24 - rfi_steps: Information request record was created successfully
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step Rfi record is created
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I search for RFI with query
+[INFO] 2016-02-08 14:49:24 - rfi_service: Start searching rfis by search request: {'maxDueDate': <libs.API.model.information_request.rfi_search_filters.MaxDueDateFilter object at 0x10807fc10>, 'maxCreatedDate': <libs.API.model.information_request.rfi_search_filters.MaxCreatedDateFilter object at 0x10807fe10>, 'minLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MinLastRespondDateFilter object at 0x10807f190>, 'pageSize': 50, 'minPriority': <libs.API.model.information_request.rfi_search_filters.MinPriorityFilter object at 0x108063f90>, 'sortField': 'createdAt', 'minDueDate': <libs.API.model.information_request.rfi_search_filters.MinDueDateFilter object at 0x10807f610>, 'state': <libs.API.model.information_request.rfi_search_filters.StateFilter object at 0x1080637d0>, 'maxLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MaxLastRespondDateFilter object at 0x10807ff90>, 'states': ['PENDING', 'ASSIGNED', 'RESPONDED', 'CANCELLED'], 'sortDirection': False, 'createdBy': <libs.API.model.information_request.rfi_search_filters.CreatedByFilter object at 0x10807fb10>, 'requestNumber': <libs.API.model.information_request.rfi_search_filters.RequestNumberFilter object at 0x10807fb90>, 'requestSource': <libs.API.model.information_request.rfi_search_filters.RequestSourceFilter object at 0x10807fdd0>, 'page': 0, 'minCreatedDate': <libs.API.model.information_request.rfi_search_filters.MinCreatedDateFilter object at 0x10807ff50>, 'subject': <libs.API.model.information_request.rfi_search_filters.SubjectFilter object at 0x10807fb50>}
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/search
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/rfis/search HTTP/1.1" 200 9915
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I search for RFI with query
+[INFO] 2016-02-08 14:49:24 - environment: Starting step Search result is correct
+[DEBUG] 2016-02-08 14:49:24 - rfi_steps: Checking results....
+[DEBUG] 2016-02-08 14:49:24 - rfi_steps: Verification successfully completed
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step Search result is correct
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 407
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:24 - environment: Starting step Rfi record is created
+[INFO] 2016-02-08 14:49:24 - rfi_steps: Request was sent successfully. Parsing results...
+[INFO] 2016-02-08 14:49:24 - rfi_steps: Information request record was created successfully
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step Rfi record is created
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I search for RFI with query
+[INFO] 2016-02-08 14:49:24 - rfi_service: Start searching rfis by search request: {'maxDueDate': <libs.API.model.information_request.rfi_search_filters.MaxDueDateFilter object at 0x10807fed0>, 'maxCreatedDate': <libs.API.model.information_request.rfi_search_filters.MaxCreatedDateFilter object at 0x10807f450>, 'minLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MinLastRespondDateFilter object at 0x10807f1d0>, 'pageSize': 50, 'minPriority': <libs.API.model.information_request.rfi_search_filters.MinPriorityFilter object at 0x108063410>, 'sortField': 'createdAt', 'minDueDate': <libs.API.model.information_request.rfi_search_filters.MinDueDateFilter object at 0x10807f6d0>, 'state': <libs.API.model.information_request.rfi_search_filters.StateFilter object at 0x108063a50>, 'maxLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MaxLastRespondDateFilter object at 0x10807f990>, 'states': ['PENDING', 'ASSIGNED', 'RESPONDED', 'CANCELLED'], 'sortDirection': False, 'createdBy': <libs.API.model.information_request.rfi_search_filters.CreatedByFilter object at 0x10807f790>, 'requestNumber': <libs.API.model.information_request.rfi_search_filters.RequestNumberFilter object at 0x10807fc10>, 'requestSource': <libs.API.model.information_request.rfi_search_filters.RequestSourceFilter object at 0x10807fad0>, 'page': 0, 'minCreatedDate': <libs.API.model.information_request.rfi_search_filters.MinCreatedDateFilter object at 0x10807ffd0>, 'subject': <libs.API.model.information_request.rfi_search_filters.SubjectFilter object at 0x10807f610>}
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/search
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/rfis/search HTTP/1.1" 200 21903
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I search for RFI with query
+[INFO] 2016-02-08 14:49:24 - environment: Starting step Search result is correct
+[DEBUG] 2016-02-08 14:49:24 - rfi_steps: Checking results....
+[DEBUG] 2016-02-08 14:49:24 - rfi_steps: Verification successfully completed
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step Search result is correct
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:24 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:24 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:24 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:24 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:24 - environment: Starting step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:24 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 407
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Starting step Rfi record is created
+[INFO] 2016-02-08 14:49:25 - rfi_steps: Request was sent successfully. Parsing results...
+[INFO] 2016-02-08 14:49:25 - rfi_steps: Information request record was created successfully
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step Rfi record is created
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I search for RFI with query
+[INFO] 2016-02-08 14:49:25 - rfi_service: Start searching rfis by search request: {'maxDueDate': <libs.API.model.information_request.rfi_search_filters.MaxDueDateFilter object at 0x10807fdd0>, 'maxCreatedDate': <libs.API.model.information_request.rfi_search_filters.MaxCreatedDateFilter object at 0x10807fb90>, 'minLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MinLastRespondDateFilter object at 0x10807f510>, 'pageSize': 50, 'minPriority': <libs.API.model.information_request.rfi_search_filters.MinPriorityFilter object at 0x108063210>, 'sortField': 'createdAt', 'minDueDate': <libs.API.model.information_request.rfi_search_filters.MinDueDateFilter object at 0x10807f050>, 'state': <libs.API.model.information_request.rfi_search_filters.StateFilter object at 0x1080631d0>, 'maxLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MaxLastRespondDateFilter object at 0x10807f350>, 'states': ['PENDING', 'ASSIGNED', 'RESPONDED', 'CANCELLED'], 'sortDirection': False, 'createdBy': <libs.API.model.information_request.rfi_search_filters.CreatedByFilter object at 0x10807fb10>, 'requestNumber': <libs.API.model.information_request.rfi_search_filters.RequestNumberFilter object at 0x10807fed0>, 'requestSource': <libs.API.model.information_request.rfi_search_filters.RequestSourceFilter object at 0x10807fe90>, 'page': 0, 'minCreatedDate': <libs.API.model.information_request.rfi_search_filters.MinCreatedDateFilter object at 0x10807f2d0>, 'subject': <libs.API.model.information_request.rfi_search_filters.SubjectFilter object at 0x10807f6d0>}
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/search
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/rfis/search HTTP/1.1" 200 12962
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I search for RFI with query
+[INFO] 2016-02-08 14:49:25 - environment: Starting step Search result is correct
+[DEBUG] 2016-02-08 14:49:25 - rfi_steps: Checking results....
+[DEBUG] 2016-02-08 14:49:25 - rfi_steps: Verification successfully completed
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step Search result is correct
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 405
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Starting step Rfi record is created
+[INFO] 2016-02-08 14:49:25 - rfi_steps: Request was sent successfully. Parsing results...
+[INFO] 2016-02-08 14:49:25 - rfi_steps: Information request record was created successfully
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step Rfi record is created
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I search for RFI with query
+[INFO] 2016-02-08 14:49:25 - rfi_service: Start searching rfis by search request: {'maxDueDate': <libs.API.model.information_request.rfi_search_filters.MaxDueDateFilter object at 0x10807fad0>, 'maxCreatedDate': <libs.API.model.information_request.rfi_search_filters.MaxCreatedDateFilter object at 0x10807fc10>, 'minLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MinLastRespondDateFilter object at 0x10807fc50>, 'pageSize': 50, 'minPriority': <libs.API.model.information_request.rfi_search_filters.MinPriorityFilter object at 0x1080637d0>, 'sortField': 'createdAt', 'minDueDate': <libs.API.model.information_request.rfi_search_filters.MinDueDateFilter object at 0x10807fbd0>, 'state': <libs.API.model.information_request.rfi_search_filters.StateFilter object at 0x108063f90>, 'maxLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MaxLastRespondDateFilter object at 0x10807f410>, 'states': ['PENDING', 'ASSIGNED', 'RESPONDED', 'CANCELLED'], 'sortDirection': False, 'createdBy': <libs.API.model.information_request.rfi_search_filters.CreatedByFilter object at 0x10807f790>, 'requestNumber': <libs.API.model.information_request.rfi_search_filters.RequestNumberFilter object at 0x10807fdd0>, 'requestSource': <libs.API.model.information_request.rfi_search_filters.RequestSourceFilter object at 0x10807f690>, 'page': 0, 'minCreatedDate': <libs.API.model.information_request.rfi_search_filters.MinCreatedDateFilter object at 0x10807f090>, 'subject': <libs.API.model.information_request.rfi_search_filters.SubjectFilter object at 0x10807f050>}
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/search
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/rfis/search HTTP/1.1" 200 3442
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I search for RFI with query
+[INFO] 2016-02-08 14:49:25 - environment: Starting step Search result is correct
+[DEBUG] 2016-02-08 14:49:25 - rfi_steps: Checking results....
+[DEBUG] 2016-02-08 14:49:25 - rfi_steps: Verification successfully completed
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step Search result is correct
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 407
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Starting step Rfi record is created
+[INFO] 2016-02-08 14:49:25 - rfi_steps: Request was sent successfully. Parsing results...
+[INFO] 2016-02-08 14:49:25 - rfi_steps: Information request record was created successfully
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step Rfi record is created
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I search for RFI with query
+[INFO] 2016-02-08 14:49:25 - rfi_service: Start searching rfis by search request: {'maxDueDate': <libs.API.model.information_request.rfi_search_filters.MaxDueDateFilter object at 0x10807fe90>, 'maxCreatedDate': <libs.API.model.information_request.rfi_search_filters.MaxCreatedDateFilter object at 0x10807fed0>, 'minLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MinLastRespondDateFilter object at 0x10807fe10>, 'pageSize': 50, 'minPriority': <libs.API.model.information_request.rfi_search_filters.MinPriorityFilter object at 0x108063a50>, 'sortField': 'createdAt', 'minDueDate': <libs.API.model.information_request.rfi_search_filters.MinDueDateFilter object at 0x10807f190>, 'state': <libs.API.model.information_request.rfi_search_filters.StateFilter object at 0x108063410>, 'maxLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MaxLastRespondDateFilter object at 0x10807f810>, 'states': ['PENDING', 'ASSIGNED', 'RESPONDED', 'CANCELLED'], 'sortDirection': False, 'createdBy': <libs.API.model.information_request.rfi_search_filters.CreatedByFilter object at 0x10807fb10>, 'requestNumber': <libs.API.model.information_request.rfi_search_filters.RequestNumberFilter object at 0x10807fad0>, 'requestSource': <libs.API.model.information_request.rfi_search_filters.RequestSourceFilter object at 0x10807ff10>, 'page': 0, 'minCreatedDate': <libs.API.model.information_request.rfi_search_filters.MinCreatedDateFilter object at 0x10807f4d0>, 'subject': <libs.API.model.information_request.rfi_search_filters.SubjectFilter object at 0x10807fbd0>}
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/search
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/rfis/search HTTP/1.1" 200 22439
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I search for RFI with query
+[INFO] 2016-02-08 14:49:25 - environment: Starting step Search result is correct
+[DEBUG] 2016-02-08 14:49:25 - rfi_steps: Checking results....
+[DEBUG] 2016-02-08 14:49:25 - rfi_steps: Verification successfully completed
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step Search result is correct
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 405
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Starting step Rfi record is created
+[INFO] 2016-02-08 14:49:25 - rfi_steps: Request was sent successfully. Parsing results...
+[INFO] 2016-02-08 14:49:25 - rfi_steps: Information request record was created successfully
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step Rfi record is created
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I delete rfi
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending DELETE request to URL http://192.168.99.100/sigint/api/rfis/56b87f32e4b0675764175afd
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "DELETE /sigint/api/rfis/56b87f32e4b0675764175afd HTTP/1.1" 200 15
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I delete rfi
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Starting step RFI record is deleted
+[INFO] 2016-02-08 14:49:25 - rfi_service: Start searching rfis by search request: {'maxDueDate': <libs.API.model.information_request.rfi_search_filters.MaxDueDateFilter object at 0x10807f350>, 'maxCreatedDate': <libs.API.model.information_request.rfi_search_filters.MaxCreatedDateFilter object at 0x10807fc10>, 'minLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MinLastRespondDateFilter object at 0x10807fb10>, 'pageSize': 50, 'minPriority': <libs.API.model.information_request.rfi_search_filters.MinPriorityFilter object at 0x1080631d0>, 'sortField': 'createdAt', 'minDueDate': <libs.API.model.information_request.rfi_search_filters.MinDueDateFilter object at 0x10807fc50>, 'state': <libs.API.model.information_request.rfi_search_filters.StateFilter object at 0x108063210>, 'maxLastRespondDate': <libs.API.model.information_request.rfi_search_filters.MaxLastRespondDateFilter object at 0x10807fbd0>, 'states': ['PENDING', 'ASSIGNED', 'RESPONDED', 'CANCELLED'], 'sortDirection': False, 'createdBy': <libs.API.model.information_request.rfi_search_filters.CreatedByFilter object at 0x10807f810>, 'requestNumber': <libs.API.model.information_request.rfi_search_filters.RequestNumberFilter object at 0x10807ff10>, 'requestSource': <libs.API.model.information_request.rfi_search_filters.RequestSourceFilter object at 0x10807ff90>, 'page': 0, 'minCreatedDate': <libs.API.model.information_request.rfi_search_filters.MinCreatedDateFilter object at 0x10807fad0>, 'subject': <libs.API.model.information_request.rfi_search_filters.SubjectFilter object at 0x10807fb90>}
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/search
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/rfis/search HTTP/1.1" 200 21896
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step RFI record is deleted
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I create new RFI with default values
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 407
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I create new RFI with default values
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Starting step Rfi record is created
+[INFO] 2016-02-08 14:49:25 - rfi_steps: Request was sent successfully. Parsing results...
+[INFO] 2016-02-08 14:49:25 - rfi_steps: Information request record was created successfully
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step Rfi record is created
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I cancel RFI
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/56b87f33e4b0675764175b02/CANCELLED
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/rfis/56b87f33e4b0675764175b02/CANCELLED HTTP/1.1" 200 409
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I cancel RFI
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Starting step RFI has status "Cancelled"
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending GET request to URL http://192.168.99.100/sigint/api/rfis/56b87f33e4b0675764175b02
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "GET /sigint/api/rfis/56b87f33e4b0675764175b02 HTTP/1.1" 200 409
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step RFI has status "Cancelled"
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I create new RFI with default values
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 408
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I create new RFI with default values
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Starting step Rfi record is created
+[INFO] 2016-02-08 14:49:25 - rfi_steps: Request was sent successfully. Parsing results...
+[INFO] 2016-02-08 14:49:25 - rfi_steps: Information request record was created successfully
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step Rfi record is created
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I get details of rfi
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending GET request to URL http://192.168.99.100/sigint/api/rfis/56b87f33e4b0675764175b07
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "GET /sigint/api/rfis/56b87f33e4b0675764175b07 HTTP/1.1" 200 434
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I get details of rfi
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Starting step Details of rfi are correct
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step Details of rfi are correct
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I create new RFI with default values
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 407
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I create new RFI with default values
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Starting step Rfi record is created
+[INFO] 2016-02-08 14:49:25 - rfi_steps: Request was sent successfully. Parsing results...
+[INFO] 2016-02-08 14:49:25 - rfi_steps: Information request record was created successfully
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step Rfi record is created
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I signed in as "analyst" user
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending PUT request to URL http://192.168.99.100/sigint/api/admin/user/add
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "PUT /sigint/api/admin/user/add HTTP/1.1" 200 264
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I signed in as "analyst" user
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I take ownership of rfi
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api//rfis/56b87f33e4b0675764175b0b/assign
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api//rfis/56b87f33e4b0675764175b0b/assign HTTP/1.1" 200 448
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I take ownership of rfi
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:25 - environment: Starting step RFI has status "assigned"
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending GET request to URL http://192.168.99.100/sigint/api/rfis/56b87f33e4b0675764175b0b
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "GET /sigint/api/rfis/56b87f33e4b0675764175b0b HTTP/1.1" 200 474
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step RFI has status "assigned"
+[INFO] 2016-02-08 14:49:25 - environment: Starting step RFI assigned to analyst
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step RFI assigned to analyst
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I signed in as "user" user
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending PUT request to URL http://192.168.99.100/sigint/api/admin/user/add
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "PUT /sigint/api/admin/user/add HTTP/1.1" 200 259
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I signed in as "user" user
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I create new RFI with default values
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 403 48
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [403]>
+[ERROR] 2016-02-08 14:49:25 - request_manager: Got error on request: <Response [403]>
+[DEBUG] 2016-02-08 14:49:25 - request_manager: Actual response code is 403
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I create new RFI with default values
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I expect response code "403"
+[INFO] 2016-02-08 14:49:25 - environment: Finishing step I expect response code "403"
+[INFO] 2016-02-08 14:49:25 - environment: Starting step I signed in as "admin" user
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending PUT request to URL http://192.168.99.100/sigint/api/admin/user/add
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:25 - connectionpool: "PUT /sigint/api/admin/user/add HTTP/1.1" 200 260
+[INFO] 2016-02-08 14:49:25 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:25 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:25 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I signed in as "admin" user
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I create new RFI with default values
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 403 48
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [403]>
+[ERROR] 2016-02-08 14:49:26 - request_manager: Got error on request: <Response [403]>
+[DEBUG] 2016-02-08 14:49:26 - request_manager: Actual response code is 403
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I create new RFI with default values
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I signed in as "analyst" user
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I signed in as "analyst" user
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I create new RFI with default values
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 403 48
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [403]>
+[ERROR] 2016-02-08 14:49:26 - request_manager: Got error on request: <Response [403]>
+[DEBUG] 2016-02-08 14:49:26 - request_manager: Actual response code is 403
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I create new RFI with default values
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I signed in as "approver" user
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending PUT request to URL http://192.168.99.100/sigint/api/admin/user/add
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "PUT /sigint/api/admin/user/add HTTP/1.1" 200 263
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I signed in as "approver" user
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I create new RFI with default values
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 403 48
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [403]>
+[ERROR] 2016-02-08 14:49:26 - request_manager: Got error on request: <Response [403]>
+[DEBUG] 2016-02-08 14:49:26 - request_manager: Actual response code is 403
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I create new RFI with default values
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 405
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I create new RFI with specific values
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:26 - environment: Starting step Rfi record is created
+[INFO] 2016-02-08 14:49:26 - rfi_steps: Request was sent successfully. Parsing results...
+[INFO] 2016-02-08 14:49:26 - rfi_steps: Information request record was created successfully
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step Rfi record is created
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I signed in as "user" user
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I signed in as "user" user
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I delete rfi
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending DELETE request to URL http://192.168.99.100/sigint/api/rfis/56b87f33e4b0675764175b21
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "DELETE /sigint/api/rfis/56b87f33e4b0675764175b21 HTTP/1.1" 403 48
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [403]>
+[ERROR] 2016-02-08 14:49:26 - request_manager: Got error on request: <Response [403]>
+[DEBUG] 2016-02-08 14:49:26 - request_manager: Actual response code is 403
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I delete rfi
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I signed in as "admin" user
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I signed in as "admin" user
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I signed in as "approver" user
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I signed in as "approver" user
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I signed in as "analyst" user
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I signed in as "analyst" user
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I create new RFI with default values
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/rfis/upload
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/rfis/upload HTTP/1.1" 200 407
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I create new RFI with default values
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I expect response code "200"
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I expect response code "200"
+[INFO] 2016-02-08 14:49:26 - environment: Starting step Rfi record is created
+[INFO] 2016-02-08 14:49:26 - rfi_steps: Request was sent successfully. Parsing results...
+[INFO] 2016-02-08 14:49:26 - rfi_steps: Information request record was created successfully
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step Rfi record is created
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I signed in as "tasker" user
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I take ownership of rfi
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api//rfis/56b87f34e4b0675764175b29/assign
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api//rfis/56b87f34e4b0675764175b29/assign HTTP/1.1" 403 48
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [403]>
+[ERROR] 2016-02-08 14:49:26 - request_manager: Got error on request: <Response [403]>
+[DEBUG] 2016-02-08 14:49:26 - request_manager: Actual response code is 403
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I take ownership of rfi
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I signed in as "user" user
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I signed in as "user" user
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I take ownership of rfi
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api//rfis/56b87f34e4b0675764175b29/assign
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api//rfis/56b87f34e4b0675764175b29/assign HTTP/1.1" 403 48
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [403]>
+[ERROR] 2016-02-08 14:49:26 - request_manager: Got error on request: <Response [403]>
+[DEBUG] 2016-02-08 14:49:26 - request_manager: Actual response code is 403
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I take ownership of rfi
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I signed in as "admin" user
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I signed in as "admin" user
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I take ownership of rfi
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api//rfis/56b87f34e4b0675764175b29/assign
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api//rfis/56b87f34e4b0675764175b29/assign HTTP/1.1" 403 48
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [403]>
+[ERROR] 2016-02-08 14:49:26 - request_manager: Got error on request: <Response [403]>
+[DEBUG] 2016-02-08 14:49:26 - request_manager: Actual response code is 403
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I take ownership of rfi
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I signed in as "approver" user
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api/auth/login
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api/auth/login HTTP/1.1" 200 87
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [200]>
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I signed in as "approver" user
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I take ownership of rfi
+[INFO] 2016-02-08 14:49:26 - request_manager: Sending POST request to URL http://192.168.99.100/sigint/api//rfis/56b87f34e4b0675764175b29/assign
+[INFO] 2016-02-08 14:49:26 - connectionpool: Starting new HTTP connection (1): 192.168.99.100
+[DEBUG] 2016-02-08 14:49:26 - connectionpool: "POST /sigint/api//rfis/56b87f34e4b0675764175b29/assign HTTP/1.1" 403 48
+[INFO] 2016-02-08 14:49:26 - request_manager: Got response on request: <Response [403]>
+[ERROR] 2016-02-08 14:49:26 - request_manager: Got error on request: <Response [403]>
+[DEBUG] 2016-02-08 14:49:26 - request_manager: Actual response code is 403
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I take ownership of rfi
+[INFO] 2016-02-08 14:49:26 - environment: Starting step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Finishing step I expect response code "403"
+[INFO] 2016-02-08 14:49:26 - environment: Finished verifying feature Users can create, update, delete RFI records based on permissions
+[INFO] 2016-02-08 14:49:26 - environment: Deleting all created during session user accounts
