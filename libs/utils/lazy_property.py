@@ -3,7 +3,7 @@ def lazyprop(fn):
 
     @property
     def _lazyprop(self):
-        if not __attr_name in self.keys():
+        if __attr_name not in self.keys():
             self[__attr_name] = None
         return fn(self)
     return _lazyprop

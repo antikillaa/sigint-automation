@@ -2,6 +2,23 @@ from libs.API.model.Entities import Entity
 from libs.utils.lazy_property import lazyprop
 
 
+
+class Records(object):
+
+    def __init__(self):
+        self._records = list()
+
+    def add_record(self, record):
+        for i_record in self._records:
+            if record.id == i_record.id:
+                i_record.update(record)
+                return
+        self._records.append(record)
+
+    def get_latest(self):
+        return self._records[-1]
+
+
 class Record(Entity):
 
     def __init__(self, **kwargs):
@@ -54,7 +71,7 @@ class Record(Entity):
 
     @optimizedDuration.setter
     def optimizedDuration(self, value):
-        self['optimizedDuratation'] = value
+        self['optimizedDuration'] = value
 
     @lazyprop
     def originalId(self):
@@ -92,7 +109,7 @@ class Record(Entity):
     def text(self):
         return self['text']
 
-    @text.settter
+    @text.setter
     def text(self, value):
         self['text'] = value
 

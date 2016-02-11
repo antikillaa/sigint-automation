@@ -35,3 +35,6 @@ class Entity(dict):
     """
     def __init__(self, **kwargs):
         super(Entity, self).__init__(**kwargs)
+
+    def __iter__(self):
+        return self.iteritems()

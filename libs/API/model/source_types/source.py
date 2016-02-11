@@ -21,6 +21,9 @@ class Sources(object):
 
 
 class Source(Entity):
+    """
+    Describes a source entity within the application. Set of properties are the same as per Source json
+    """
 
     @lazyprop
     def id(self):
@@ -76,6 +79,7 @@ class Source(Entity):
 
     @name.setter
     def name(self, value):
+        print self['name']
         self['name'] = value
 
     @lazyprop
