@@ -35,3 +35,95 @@ class Record(Entity):
     @lazyprop
     def imsi(self):
         return self['imsi']
+
+    @imsi.setter
+    def imsi(self, value):
+        self['imsi'] = value
+
+    @lazyprop
+    def manualEntry(self):
+        return self['manualEntry']
+
+    @manualEntry.setter
+    def manualEntry(self, value):
+        self['manualEntry'] = value
+
+    @lazyprop
+    def optimizedDuration(self):
+        return self['optimizedDuration']
+
+    @optimizedDuration.setter
+    def optimizedDuration(self, value):
+        self['optimizedDuratation'] = value
+
+    @lazyprop
+    def originalId(self):
+        return self['originalId']
+
+    @originalId.setter
+    def originalId(self, value):
+        self['originalId'] = value
+
+    @lazyprop
+    def priority(self):
+        return self['priority']
+
+    @priority.setter
+    def priority(self, value):
+        self['priority'] = value
+
+    @lazyprop
+    def sourceId(self):
+        return self['sourceId']
+
+    @sourceId.setter
+    def sourceId(self, value):
+        self['sourceId'] = value
+
+    @lazyprop
+    def state(self):
+        return self['state']
+
+    @state.setter
+    def state(self, value):
+        self['state'] = value
+
+    @lazyprop
+    def text(self):
+        return self['text']
+
+    @text.settter
+    def text(self, value):
+        self['text'] = value
+
+    @lazyprop
+    def time(self):
+        return self['time']
+
+    @time.setter
+    def time(self, value):
+        self['time'] = value
+
+    @lazyprop
+    def tmsi(self):
+        return self['tmsi']
+
+    @tmsi.setter
+    def tmsi(self, value):
+        self['tmsi'] = value
+
+    @lazyprop
+    def toNumber(self):
+        return self['toNumber']
+
+    @toNumber.setter
+    def toNumber(self, value):
+        self['toNumber'] = value
+
+    @lazyprop
+    def type(self):
+        return self['type']
+
+    @type.setter
+    def type(self, value):
+        self['type'] = value

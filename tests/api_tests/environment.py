@@ -1,6 +1,7 @@
 import logging
 from libs.API.controllers.auth_manager import AuthManager
 from libs.API.model.information_request.information_request import RFIs
+from libs.API.model.source_types.source import Sources
 from libs.core.users_management.users import UserManagement
 from libs.logging.logger import CustomLogger
 
@@ -16,6 +17,7 @@ def before_all(context):
     context.users = UserManagement(context)
     context.auth_manager = AuthManager(context)
     context.rfis = RFIs()
+    context.sources = Sources()
 
 
 def before_feature(context, feature):

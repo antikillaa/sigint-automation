@@ -1,3 +1,4 @@
+import copy
 from abc import abstractmethod
 
 class Manager:
@@ -6,6 +7,14 @@ class Manager:
 
     def __init__(self):
         pass
+
+    def _parse(self, req_obj, **kwargs):
+        if req_obj:
+            return req_obj
+        obj = copy.copy(self.template)
+        for attribute, value in kwargs.iteritems():
+            setattr(obj, attribute, value)
+        return obj
 
     @abstractmethod
     def to_request(self, **kwargs):

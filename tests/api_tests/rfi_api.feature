@@ -19,7 +19,7 @@ Feature: Users can create, update, delete RFI records based on permissions
 
 
   @stable
-  Scenario: Operator can find RFI searching by Max Request Date
+  Scenario: Operator can find RFI searching by Max Request Date Filter
     When I signed in as "tasker" user
     And  I create new RFI with specific values
          | createdDate |
@@ -27,23 +27,11 @@ Feature: Users can create, update, delete RFI records based on permissions
     Then I expect response code "200"
     And  Rfi record is created
     When I search for RFI with query
-         |max_created_date|
-         |2015-01-24      |
+         |min_created_date    | max_created_date
+         |2015-01-24T00:00:00 | 2015-01-24T23:59:59
     Then Search result is correct
 
 
-  @stable
-  Scenario: Operator can find RFI searching by min Request Date
-    When I signed in as "tasker" user
-    And  I create new RFI with specific values
-         | createdDate |
-         | 2015-01-24  |
-    Then I expect response code "200"
-    And  Rfi record is created
-    When I search for RFI with query
-         |min_created_date|
-         |2015-01-24      |
-    Then Search result is correct
 
   @stable
   Scenario: Operator can find RFI searching by status
@@ -59,7 +47,7 @@ Feature: Users can create, update, delete RFI records based on permissions
     Then Search result is correct
 
   @stable
-  Scenario: Operator can find RFI searching by min due date
+  Scenario: Operator can find RFI searching by Due Date filter
     When I signed in as "tasker" user
     And  I create new RFI with specific values
          | createdDate   | priority |
@@ -67,22 +55,10 @@ Feature: Users can create, update, delete RFI records based on permissions
     Then I expect response code "200"
     And  Rfi record is created
     When I search for RFI with query
-         |min_due_date       |
-         | 2015-01-25        |
+         |min_due_date           |  max_due_date        |
+         | 2015-01-25T00:00:00   |  2015-01-25T23:59:59 |
     Then Search result is correct
 
-  @stable
-  Scenario: Operator can find RFI searching by max due date
-    When I signed in as "tasker" user
-    And  I create new RFI with specific values
-         | createdDate   | priority |
-         | 2015-01-24    | 2        |
-    Then I expect response code "200"
-    And  Rfi record is created
-    When I search for RFI with query
-         |max_due_date       |
-         | 2015-01-25        |
-    Then Search result is correct
 
 
   @stable
@@ -99,7 +75,7 @@ Feature: Users can create, update, delete RFI records based on permissions
     Then Search result is correct
 
   @stable
-  Scenario: Operator can find RFI searching by status
+  Scenario: Operator can find RFI searching by priority
     When I signed in as "tasker" user
     And  I create new RFI with specific values
          | priority  |

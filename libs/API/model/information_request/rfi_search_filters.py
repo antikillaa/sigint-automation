@@ -1,6 +1,6 @@
 from datetime import datetime
-from libs.API.model.search_filter import SearchFilter
-from settings import date_str_format
+from libs.API.model.search_filter import SearchFilter, SearchDateFilter
+from settings import date_str_format, date_with_time_format
 
 """
 Filters for RFI Search
@@ -37,58 +37,52 @@ class CreatedByFilter(SearchFilter):
         return self._value == information_request.createdBy
 
 
-class MinCreatedDateFilter(SearchFilter):
+class MinCreatedDateFilter(SearchDateFilter):
 
     description = "Minimal Created Date Filter"
 
     def check(self, information_request):
-        filter_time = datetime.strptime(self._value, date_str_format)
-        return information_request.createdDate >= filter_time
+        return information_request.createdDate >= self._value
 
 
-class MaxCreatedDateFilter(SearchFilter):
+class MaxCreatedDateFilter(SearchDateFilter):
 
     description = "Max Created Date Filter"
 
     def check(self, information_request):
-        filter_time = datetime.strptime(self._value, date_str_format)
-        return information_request.createdDate <= filter_time
+        return information_request.createdDate <= self._value
 
 
-class MinDueDateFilter(SearchFilter):
+class MinDueDateFilter(SearchDateFilter):
 
     description = "Minimal Due Date Filter"
 
     def check(self, information_request):
-        filter_time = datetime.strptime(self._value, date_str_format)
-        return information_request.dueDate >= filter_time
+        return information_request.dueDate >= self._value
 
 
-class MaxDueDateFilter(SearchFilter):
+class MaxDueDateFilter(SearchDateFilter):
 
     description = "Max Due Date Filter"
 
     def check(self, information_request):
-        filter_time = datetime.strptime(self._value, date_str_format)
-        return information_request.dueDate <= filter_time
+        return information_request.dueDate <= self._value
 
 
-class MinLastRespondDateFilter(SearchFilter):
+class MinLastRespondDateFilter(SearchDateFilter):
 
     description = "Min Last Respond Date Filter"
 
     def check(self, information_request):
-        filter_time = datetime.strptime(self._value, date_str_format)
-        return information_request.modifiedAt >= filter_time
+        return information_request.modifiedAt >= self._value
 
 
-class MaxLastRespondDateFilter(SearchFilter):
+class MaxLastRespondDateFilter(SearchDateFilter):
 
     description = "Max Last Respond Date Filter"
 
     def check(self, information_request):
-        filter_time = datetime.strptime(self._value, date_str_format)
-        return information_request.modifiedAt <= filter_time
+        return information_request.modifiedAt <= self._value
 
 
 class RequestNumberFilter(SearchFilter):
