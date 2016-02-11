@@ -1,26 +1,17 @@
 import copy
 
-from libs.API.model.entities import Manager
+from libs.API.model.Entities import Manager
 from libs.API.model.information_request.information_request import \
     InformationRequest
 from datetime import datetime, timedelta
 from libs.API.model.information_request.rfi_data import RFIData
 from libs.utils.randomizer import random_string, select_random_item
 from libs.utils.unix_time_stamp import to_time_stamp
-from settings import date_str_format
 
 
 class InformationRequestManager(Manager):
 
     template = InformationRequest()
-
-    def __parse(self, req_obj, **kwargs):
-        if req_obj:
-            return req_obj
-        obj = copy.copy(self.template)
-        for attribute, value in kwargs.iteritems():
-            setattr(obj, attribute, value)
-        return obj
 
     def to_request(self, obj=None, **kwargs):
         """
@@ -31,7 +22,7 @@ class InformationRequestManager(Manager):
         :return: InformationRequest obj that should be sent to HTTP API
         """
         new_obj = copy.copy(self.template)
-        obj = self.__parse(obj, **kwargs)
+        obj = self._parse(obj, **kwargs)
         new_obj.createdDate = to_time_stamp(obj.createdDate) if obj.createdDate \
             else to_time_stamp(datetime.utcnow())
         new_obj.description = obj.description
@@ -61,7 +52,7 @@ class InformationRequestManager(Manager):
         as :class:InformationRequest
         :return: Information Request object
         """
-        obj = self.__parse(obj, **kwargs)
+        obj = self._parse(obj, **kwargs)
         return obj
 
     def to_response(self, obj=None, **kwargs):
@@ -72,5 +63,5 @@ class InformationRequestManager(Manager):
         as :class:InformationRequest
         :return: Information Request response
         """
-        obj = self.__parse(obj, **kwargs)
+        obj = self._parse(obj, **kwargs)
         return obj

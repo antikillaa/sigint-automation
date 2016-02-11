@@ -13,7 +13,6 @@ class RFIService(object):
 
     def __init__(self, context):
         self.context = context
-        self.request_manager = RequestManager(context)
 
     def create_rfi(self, rfi_request, approved=None, original=None):
         """
@@ -39,7 +38,7 @@ class RFIService(object):
         if original:
             attachments.add_attachment(FileAttachment("original"))
         with attachments as att:
-            response = self.request_manager.send_request(
+            response = self.context.request_manager.send_request(
                     request, files=att.files)
         return response
 
@@ -52,7 +51,7 @@ class RFIService(object):
         self.context.logger.info("Start searching rfis by search request: {}".format(search))
         rfi_search = SearchRFIHttp(self.context)
         rfi_search.build_json(search)
-        response = self.request_manager.send_request(rfi_search)
+        response = self.context.request_manager.send_request(rfi_search)
         return response
 
     def delete_rfi(self, rfi_id):
@@ -62,7 +61,7 @@ class RFIService(object):
         :return: response from HTTP API
         """
         delete_http = DeleteRFIHttp(self.context, rfi_id)
-        response = self.request_manager.send_request(delete_http)
+        response = self.context.request_manager.send_request(delete_http)
         return response
 
     def cancel_rfi(self, rfi_id):
@@ -82,10 +81,10 @@ class RFIService(object):
         :return: response on http request
         """
         details_http = DetailsRFIHttp(self.context, rfi_id)
-        response = self.request_manager.send_request(details_http)
+        response = self.context.request_manager.send_request(details_http)
         return response
 
     def assign_rfi(self, rfi_id):
         assign_http = AssignRFIHttp(self.context, rfi_id)
-        response = self.request_manager.send_request(assign_http)
+        response = self.context.request_manager.send_request(assign_http)
         return response

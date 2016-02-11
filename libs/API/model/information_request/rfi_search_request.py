@@ -7,7 +7,7 @@ from libs.API.model.search_request import SearchRequest
 
 class RFISearchRequest(SearchRequest):
 
-    def __init__(self,  sort_direction=False,
+    def  __init__(self,  sort_direction=False,
                  sort_field='createdAt', states=RFIData.states,
                  state=None, min_priority=None, request_source=None,
                  created_by=None, min_created_date=None, max_created_date=None,

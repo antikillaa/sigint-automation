@@ -10,13 +10,6 @@ from libs.API.services.rfi_service import RFIService
 rfi_manager = InformationRequestManager()
 
 
-@then('I expect response code "{code}"')
-def expect_response_code(context, code):
-    if context.request[-1].status_code != int(code):
-        raise AssertionError("Return status code wasn't as expected."
-                             "Actual code: {0}, expected code: {1}"
-                             "".format(context.request[-1].status_code, code))
-
 
 @then('Rfi record is created')
 def rfi_record_is_created(context):
@@ -77,7 +70,6 @@ def __search_rfi(context, **param_dict):
 
 def __send_rfi(context, rfi=None, approved=None, original=None,  **kwargs):
     rfi_service = RFIService(context)
-    rfi_manager = InformationRequestManager()
     rfi_request = rfi_manager.to_request(rfi, **kwargs)
     response = rfi_service.create_rfi(rfi_request, approved=approved, original=original)
     context.request = rfi_request, response
@@ -96,11 +88,6 @@ def rfi_record_has_attached_files(context):
     assert response_rfi.approvedCopy['filename'] == 'approved'
     assert response_rfi.originalDocument['filename'] == 'original'
     context.rfis.add_rfi(response_rfi)
-
-
-@when('I signed in as "{user_type}" user')
-def signed_in_as_user(context, user_type):
-    context.auth_token = context.auth_manager.get_token(user_type)
 
 
 @when('I delete rfi')
