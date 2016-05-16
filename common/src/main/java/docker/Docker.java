@@ -31,7 +31,7 @@ public class Docker {
 
     public Docker() {
         try {
-            Pattern pattern = Pattern.compile("(^http(s)*://)?([^:0-9]*)");
+            Pattern pattern = Pattern.compile("(^http(s)*://)?.*([^:81])");
             Matcher matcher = pattern.matcher(AppContext.getContext().getHost());
             matcher.find();
             this.dockerHost = matcher.group();

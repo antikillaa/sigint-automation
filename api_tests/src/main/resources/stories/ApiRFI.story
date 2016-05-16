@@ -30,8 +30,6 @@ Examples:
 
 
 Scenario: API.Tasker can get details of RFI
-Meta:
-@wip
 Given I sign in as tasker user
 When I send create RFI request
 Then I got response code 200
