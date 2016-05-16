@@ -53,7 +53,7 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *,cover
-
+*.iml
 # Translations
 *.mo
 *.pot
