@@ -5,20 +5,15 @@ import com.codeborne.selenide.SelenideElement;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import pages.BasePage;
-import pages.blocks.content.main.table.toolbar.Toolbar;
 
 import static com.codeborne.selenide.Condition.present;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.sleep;
 
 public abstract class Table extends BasePage {
 
     Logger log = Logger.getRootLogger();
-    private Toolbar toolbar = page(Toolbar.class);
 
-
-    public Toolbar getToolbar() {
-        return toolbar;
-    }
 
     public SelenideElement getTable() {
         return $(By.xpath("//div[contains(@class, 'pg-table')]")).shouldBe(present);

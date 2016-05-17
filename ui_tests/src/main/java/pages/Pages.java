@@ -5,10 +5,7 @@ import pages.records.RecordDetailsDialog;
 import pages.records.RecordsProcessedPage;
 import pages.records.RecordsSearchPage;
 import pages.records.RecordsCreatePage;
-import pages.reports.ReportsAllPage;
-import pages.reports.ReportsCreatePage;
-import pages.reports.ReportsDraftPage;
-import pages.reports.ReportsReadyPage;
+import pages.reports.*;
 
 import static com.codeborne.selenide.Selenide.page;
 
@@ -49,4 +46,9 @@ public class Pages {
     public ReportsReadyPage reportsReadyPage() {
         return page(ReportsReadyPage.class);
     }
+
+    public ReportsCreateManualPage reportsCreateManualPage() {
+        return page(ReportsCreateManualPage.class);
+    }
+
 }

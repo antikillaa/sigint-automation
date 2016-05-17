@@ -1,10 +1,17 @@
 package pages.blocks.content.main.table;
 
 import com.codeborne.selenide.SelenideElement;
+import pages.blocks.content.main.table.toolbar.ReportsTableToolbar;
 
 import java.util.ArrayList;
 
+import static com.codeborne.selenide.Selenide.page;
+
 public class ReportsTable extends Table {
+
+    public ReportsTableToolbar getTableToolbar() {
+        return page(ReportsTableToolbar.class);
+    }
 
     public ArrayList<ReportRow> getReports() {
         ArrayList<ReportRow> reportRows = new ArrayList<>();

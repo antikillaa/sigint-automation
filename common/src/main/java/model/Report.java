@@ -1,5 +1,7 @@
 package model;
 
+import org.apache.commons.lang.RandomStringUtils;
+
 public class Report {
 
     private String subject;
@@ -13,4 +15,8 @@ public class Report {
         this.subject = subject;
     }
 
+    public Report generate() {
+        this.setSubject("subject:" + RandomStringUtils.randomAlphabetic(4));
+        return this;
+    }
 }

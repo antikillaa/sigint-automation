@@ -5,19 +5,13 @@ import org.openqa.selenium.By;
 import pages.records.RecordsCreatePage;
 import pages.reports.ReportsCreatePage;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
 
-public class Toolbar {
-
-    public SelenideElement getToolbar() {
-        return $(By.xpath(".//div[@class='pg-table base-padding']" +
-                "/div[@class='pg-toolbar']"));
-    }
+public class RecordsTableToolbar extends TableToolbar {
 
     public SelenideElement getNewRecordButton() {
         return getToolbar()
-                .$(By.xpath("//button[@click.trigger='createNewRecord()']"));
+                .$(By.xpath(".//button[@click.trigger='createNewRecord()']"));
     }
 
     public RecordsCreatePage clickNewRecordButton() {
@@ -34,6 +28,5 @@ public class Toolbar {
         getCreateReportButton().click();
         return page(ReportsCreatePage.class);
     }
-
 
 }
