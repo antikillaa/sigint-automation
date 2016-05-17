@@ -1,7 +1,8 @@
 package services;
 import errors.NullReturnException;
-import model.AppContext;
 import http.requests.SignInRequest;
+import model.AppContext;
+import model.EntityList;
 import model.SearchFilter;
 import model.User;
 import rs.client.JsonCoverter;
@@ -9,7 +10,6 @@ import rs.client.RsClient;
 import service.EntityService;
 
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 
 /**
  * Created by dm on 3/11/16.
@@ -23,11 +23,11 @@ public class UserService implements EntityService<User> {
         return null;
     }
 
-    public void remove(User entity) {
-
+    public Response remove(User entity) {
+        return null;
     }
 
-    public ArrayList<User> list(SearchFilter filter) {
+    public EntityList<User> list(SearchFilter filter) {
         return null;
     }
 

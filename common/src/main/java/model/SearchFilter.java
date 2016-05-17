@@ -17,4 +17,5 @@ public abstract class SearchFilter <T extends TeelaEntity> {
     }
 
     public abstract boolean filter(T entity);
+
 }

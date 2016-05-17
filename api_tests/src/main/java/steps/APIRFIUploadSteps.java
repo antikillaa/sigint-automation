@@ -32,11 +32,14 @@ public class APIRFIUploadSteps {
         FileAttachment approvedFile = new FileAttachment("approved");
         rfi.addFileAttachment(originalFile);
         rfi.addFileAttachment(approvedFile);
-        Response response = service.addNew(rfi);
+        sendRFI(rfi);
+
+    }
+
+    private void sendRFI(InformationRequest RFI) {
+        Response response = service.addNew(RFI);
         readRFIfromJson(response);
-        context.putToRunContext("createdRfi", rfi);
         context.putToRunContext("code", response.getStatus());
-        log.info("RFI is created");
 
     }
 
@@ -48,14 +51,13 @@ public class APIRFIUploadSteps {
             log.warn("There is no RFI in response with code:" + response.getStatus());
             return;
         }
-        InformationRequest createdRfi;
+        InformationRequest createdRFI;
         MapType mapType = JsonCoverter.constructMapTypeToValue(InformationRequest.class);
         try {
             HashMap<String, InformationRequest> map = JsonCoverter.mapper.readValue(jsonString, mapType);
-            createdRfi = map.get("result");
-            if (response.getStatus() == 200) {
-                context.getEntitiesList(RFIList.class).addOrUpdateEntity(createdRfi);
-            }
+            createdRFI = map.get("result");
+            context.getEntitiesList(RFIList.class).addOrUpdateEntity(createdRFI);
+            context.putToRunContext("createdRFI", createdRFI);
 
         } catch (java.io.IOException e) {
             log.error(e.getMessage());
@@ -68,21 +70,16 @@ public class APIRFIUploadSteps {
     @Then("Created rfi is correct")
     public void rfiCorrect() {
         log.info("Verifying if RFI is correct");
-        InformationRequest etalonRfi;
-        InformationRequest createdRfi;
+        InformationRequest etalonRFI;
+        InformationRequest createdRFI;
+        etalonRFI = APISteps.getRFIfromContext();
         try {
-            etalonRfi = context.getFromRunContext("createdRfi", InformationRequest.class);
-        } catch (NullReturnException e) {
-            log.error("There is no added rfi in run context!");
-            throw new AssertionError();
-        }
-        try {
-            createdRfi = context.getEntitiesList(RFIList.class).getLatest();
+            createdRFI = context.getEntitiesList(RFIList.class).getLatest();
         } catch (NullReturnException e) {
             log.error(e.getMessage());
             throw new AssertionError();
         }
-        checkRFIs(etalonRfi, createdRfi);
+        checkRFIs(etalonRFI, createdRFI);
 
     }
 
@@ -104,23 +101,18 @@ public class APIRFIUploadSteps {
 
     @When("I update created RFI")
     public void updateCreatedRFI() {
-        InformationRequest rfi;
-        try {
-            rfi = context.getEntitiesList(RFIList.class).getLatest();
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError();
-        }
-        InformationRequest newRfi = rfi.generate();
-        Response response = service.addNew(newRfi);
-        context.putToRunContext("createdRfi", newRfi);
+        InformationRequest RFI;
+        RFI = APISteps.getRFIfromContext();
+        InformationRequest newRFI = RFI.generate();
+        Response response = service.addNew(newRFI);
+        context.putToRunContext("createdRFI", newRFI);
         readRFIfromJson(response);
     }
 
     @Then("RFI is updated")
     public void rfiIsUpdated() {
         try {
-            InformationRequest createdRequest = context.getFromRunContext("createdRfi", InformationRequest.class);
+            InformationRequest createdRequest = APISteps.getRFIfromContext();
             InformationRequest updatedRequest = context.getEntitiesList(RFIList.class).getLatest();
             checkRFIs(createdRequest, updatedRequest);
         } catch (NullReturnException e) {
@@ -132,24 +124,17 @@ public class APIRFIUploadSteps {
     @When("I get details of created RFI")
     public void rfiDetailsView() {
         log.info("Starting step of getting details of RFI...");
-
-        try {
-            InformationRequest createdRFI = context.getEntitiesList(RFIList.class).getLatest();
-            InformationRequest requestRFIView = service.view(createdRFI.getId());
-            log.debug("received RFI from response:"+requestRFIView);
-            context.putToRunContext("requestRFIView", requestRFIView);
-        } catch (NullReturnException e) {
-            log.error("Cannot get RFI from context List");
-            throw new AssertionError();
-        }
-
+        InformationRequest createdRFI = APISteps.getRFIfromContext();
+        InformationRequest requestRFIView = service.view(createdRFI.getId());
+        log.debug("received RFI from response:"+requestRFIView);
+        context.putToRunContext("requestRFIView", requestRFIView);
     }
 
     @Then("RFI details get via details are correct")
     public void RFIDetailsViewCorrect() {
         log.info("Comparing two RFIs...");
         try {
-            InformationRequest createdRFI = context.getEntitiesList(RFIList.class).getLatest();
+            InformationRequest createdRFI = APISteps.getRFIfromContext();
             InformationRequest requestRFIView = context.getFromRunContext("requestRFIView", InformationRequest.class);
             Assert.assertTrue(createdRFI.equals(requestRFIView));
         } catch (Exception e) {
@@ -159,5 +144,18 @@ public class APIRFIUploadSteps {
 
     }
 
+    @When("I create new RFI in status $status")
+    public void createRFIInStatus(String status) {
+        InformationRequest RFI = new InformationRequest().generate();
+        RFI.setState(status.toUpperCase());
+        sendRFI(RFI);
 
+    }
+
+    @When("I delete created RFI")
+    public void deleteRFI() {
+        InformationRequest RFI = APISteps.getRFIfromContext();
+        Response response = service.remove(RFI);
+        context.putToRunContext("code", response.getStatus());
+        }
 }

@@ -41,20 +41,14 @@ public class APILoginSteps {
     @Given("as $role user")
     public void setUserToContext(String role) {
         log.info("Getting user with role " + role);
-        User user = null;
-        try {
-            user = context.getEntitiesList(UsersList.class).getEntity(role);
-        }  catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError();
-        }
+        User user = GlobalSteps.getUserByRole(role);
         context.putToRunContext("user", user);
     }
 
     @When("I sent sign in request with $validness credentials")
     public void signInWithCrendentials(String validness) {
         log.info("Signing in...");
-        Response response = null;
+        Response response;
         User user;
         try {
             user = context.getFromRunContext("user", User.class);
