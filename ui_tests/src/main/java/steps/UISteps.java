@@ -7,8 +7,8 @@ import model.AppContext;
 import model.Record;
 import model.Report;
 import model.User;
-import org.jbehave.core.annotations.AfterScenario;
 import org.jbehave.core.annotations.AfterStory;
+import org.jbehave.core.annotations.BeforeScenario;
 import org.jbehave.core.annotations.BeforeStory;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
@@ -51,7 +51,7 @@ public abstract class UISteps extends GlobalSteps {
     }
 
 
-    @AfterScenario
+    @BeforeScenario
     public void reloadBrowser() {
         WebDriver driver = WebDriverRunner.getWebDriver();
         driver.manage().deleteAllCookies();
