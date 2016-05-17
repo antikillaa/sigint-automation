@@ -3,28 +3,35 @@ package steps;
 import com.codeborne.selenide.SelenideElement;
 import model.Record;
 import model.Report;
-import org.apache.commons.lang.RandomStringUtils;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import pages.blocks.content.header.breadcrumb.Breadcrumb;
 import pages.blocks.content.main.table.ReportRow;
-import pages.reports.ReportDetailsDialog;
-import pages.reports.ReportRecordRow;
-import pages.reports.ReportsDraftPage;
-import pages.reports.ReportsReadyPage;
+import pages.blocks.content.main.table.toolbar.ReportsTableToolbar;
+import pages.reports.*;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.page;
 
 public class UIReportsSteps extends UISteps {
 
+    private String getPageUrl() {
+        return page(Breadcrumb.class).getCurrentPath().getAttribute("href");
+    }
+
+
     @Given("I'm on 'Reports->Ready' page")
     public void iOnReportsReadyPage() {
-        String href = page(Breadcrumb.class).getCurrentPath().getAttribute("href");
-
-        if (!href.contentEquals(ReportsReadyPage.url)) {
+        if (!getPageUrl().contentEquals(ReportsReadyPage.url)) {
             pages.reportsReadyPage().load();
+        }
+    }
+
+    @Given("I'm on 'Reports->All' page")
+    public void iOnReportsAllPage() {
+        if (!getPageUrl().contentEquals(ReportsAllPage.url)) {
+            pages.reportsAllPage().load();
         }
     }
 
@@ -35,10 +42,21 @@ public class UIReportsSteps extends UISteps {
 
     @When("fill out required fields on 'Create Report' page")
     public void fillOutRequiredFieldsOnCreateReportScreen() {
-        Report report = new Report();
+        Report report = new Report().generate();
 
-        report.setSubject("subject:" + RandomStringUtils.randomAlphabetic(4));
         pages.reportsCreatePage().getSubject().val(report.getSubject());
+
+        context.putToRunContext("report", report);
+    }
+
+    @When("I fill out required fields on 'Create Manual Report' page")
+    public void fillOutRequiredFieldsOnCreateManualReportPage() {
+        Report report = new Report().generate();
+
+        pages.reportsCreateManualPage()
+                .setSubject(report.getSubject())
+                .selectRandomRecordType()
+                .selectRandomSourceId();
 
         context.putToRunContext("report", report);
     }
@@ -119,5 +137,13 @@ public class UIReportsSteps extends UISteps {
             throw new AssertionError("Report subject:" + report.getSubject() + " doesn't found on the Ready for Review page");
         }
     }
+
+
+    @When("I press 'Create Manual Report' button")
+    public void pressCreateManualReportButton() {
+        page(ReportsTableToolbar.class).clickCreateManualReportButton();
+    }
+
+
 
 }

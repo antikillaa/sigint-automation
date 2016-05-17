@@ -5,6 +5,7 @@ import model.Record;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import pages.blocks.SidebarRightWrapper;
 import pages.blocks.content.main.table.RecordRow;
 import pages.blocks.content.main.table.RecordsTable;
 import pages.records.RecordsProcessedPage;
@@ -21,7 +22,7 @@ public class UIRecordsSteps extends UISteps {
     @When("I press 'New Record' button")
     public void iClickNewRecordButton() {
         pages.recordsSearchPage()
-                .getTable().getToolbar().clickNewRecordButton();
+                .getTable().getTableToolbar().clickNewRecordButton();
     }
 
 
@@ -199,13 +200,13 @@ public class UIRecordsSteps extends UISteps {
 
     @When("I press 'Create Report' button")
     public void iPressCreateReportButton() {
-        pages.recordsProcessedPage().getTable().getToolbar().clickCreateReportButton();
+        pages.recordsProcessedPage().getTable().getTableToolbar().clickCreateReportButton();
     }
 
 
     @When("I press 'Save As Draft' button")
     public void iPressSaveAsDraftButton() {
-        pages.reportsCreatePage().getSidebarRightWrapper().clickSaveDraft();
+        page(SidebarRightWrapper.class).clickSaveDraft();
     }
 
 

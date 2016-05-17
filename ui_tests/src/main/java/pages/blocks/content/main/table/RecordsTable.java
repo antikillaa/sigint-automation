@@ -1,10 +1,17 @@
 package pages.blocks.content.main.table;
 
 import com.codeborne.selenide.SelenideElement;
+import pages.blocks.content.main.table.toolbar.RecordsTableToolbar;
 
 import java.util.ArrayList;
 
+import static com.codeborne.selenide.Selenide.page;
+
 public class RecordsTable extends Table {
+
+    public RecordsTableToolbar getTableToolbar() {
+        return page(RecordsTableToolbar.class);
+    }
 
     public ArrayList<RecordRow> getRecords() {
         ArrayList<RecordRow> recordRows = new ArrayList<>();
