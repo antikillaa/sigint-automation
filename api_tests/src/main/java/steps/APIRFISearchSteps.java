@@ -1,18 +1,14 @@
 package steps;
 
 import errors.NullReturnException;
-import model.AppContext;
-import model.InformationRequest;
-import model.RFISearchFilter;
-import model.SearchFilter;
+import model.*;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
 
 /**
  * Created by dm on 4/26/16.
@@ -23,35 +19,37 @@ public class APIRFISearchSteps {
     private AppContext context = AppContext.getContext();
 
 
-    @When("I search RFI by $criteria")
-    public void SearchRFIbyCriteria(@Named("criteria") String criteria) {
+
+
+    @When("I search RFI by $criteria and value $value")
+    public void SearchRFIbyCriteria(@Named("criteria") String criteria, @Named("value") String value) throws ParseException {
         log.info("Start search by criteria: "+ criteria);
-        InformationRequest RFI;
-        try {
-            RFI = context.getEntitiesList(RFIList.class).getLatest();
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("RFI wasn't recieved from collection");
-        }
+        InformationRequest RFI = APISteps.getRFIfromContext();
         RFISearchFilter searchFilter = new RFISearchFilter();
 
         if (criteria.toLowerCase().equals("state")) {
-            searchFilter.setActiveFilter(searchFilter.new StatusFilter(RFI.getState()));
+            searchFilter.setActiveFilter(searchFilter.new StatusFilter(value.equals("random") ?
+                    RFI.getState():value));
         } else if (criteria.toLowerCase().equals("min priority")){
-            searchFilter.setActiveFilter(searchFilter.new PriorityFilter(RFI.getPriority()));
+            searchFilter.setActiveFilter(searchFilter.new PriorityFilter(value.equals("random") ?
+                    RFI.getPriority(): Integer.parseInt(value)));
         } else if (criteria.toLowerCase().equals("created date")){
-            searchFilter.setActiveFilter(searchFilter.new CreatedDateFilter(RFI.getCreatedDate()));
+            searchFilter.setActiveFilter(searchFilter.new CreatedDateFilter(value.equals("random") ?
+                    RFI.getCreatedDate(): RFI.dateFormat.parse(value)));
         } else if (criteria.toLowerCase().equals("due date")) {
-            searchFilter.setActiveFilter(searchFilter.new DueDateFilter(RFI.getDueDate()));
+            searchFilter.setActiveFilter(searchFilter.new DueDateFilter(value.equals("random") ?
+                    RFI.getDueDate(): RFI.dateFormat.parse(value)));
         } else if (criteria.toLowerCase().equals("created by")){
-            searchFilter.setActiveFilter(searchFilter.new CreatedByFilter(RFI.getCreatedBy()));
+            searchFilter.setActiveFilter(searchFilter.new CreatedByFilter(value.equals("random") ?
+                    RFI.getCreatedBy(): value));
         } else if (criteria.toLowerCase().equals("originator")){
-            searchFilter.setActiveFilter(searchFilter.new OriginatorFilter(RFI.getRequestSource()));
+            searchFilter.setActiveFilter(searchFilter.new OriginatorFilter(value.equals("random") ?
+                    RFI.getRequestSource(): value));
         }
         else {
             throw new AssertionError("Unknown filter type");
         }
-        List<InformationRequest> RFIList = APIRFIUploadSteps.service.list(searchFilter);
+        EntityList<InformationRequest> RFIList = APIRFIUploadSteps.service.list(searchFilter);
         context.putToRunContext("searchFilter", searchFilter);
         context.putToRunContext("searchResult", RFIList);
     }
@@ -61,21 +59,51 @@ public class APIRFISearchSteps {
     public void searchResultsCorrect() {
         log.info("Checking if search result is correct");
         SearchFilter filter;
-        List <InformationRequest> searchResult;
+        EntityList <InformationRequest> searchResult;
         try {
             filter = context.getFromRunContext("searchFilter", RFISearchFilter.class);
-            searchResult = context.getFromRunContext("searchResult", ArrayList.class);
+            searchResult = context.getFromRunContext("searchResult", EntityList.class);
         } catch (NullReturnException e) {
             log.error(e.getMessage());
             throw new AssertionError("Cannot get search results");
         }
         if (searchResult.size() == 0) {
-            throw new AssertionError("Search result is incorrect. At least 1 record " +
-                    "should be found");
+            log.warn("Search result can be incorrect." +
+                    "There are not records in it");
         }
         for (InformationRequest RFI:searchResult) {
             Assert.assertTrue(filter.filter(RFI));
         }
+    }
+
+    @Then("Searched RFI $critera list")
+    public void checkRFIinResults(String criteria) {
+        InformationRequest request;
+        EntityList<InformationRequest> list;
+        try {
+            request = context.getFromRunContext("searchRFI", InformationRequest.class);
+            list = context.getFromRunContext("searchResult", EntityList.class);
+        } catch (NullReturnException e) {
+            log.error(e.getMessage());
+            throw new AssertionError();
+        }
+
+        Boolean contains = list.contains(request);
+        if (criteria.toLowerCase().equals("in")) {
+            Assert.assertTrue(contains);
+        } else if (criteria.toLowerCase().equals("not in")) {
+            Assert.assertFalse(contains);
+        } else {
+            throw new AssertionError("Incorrect argument passed to step");
+        }
+
+    }
+
+    @When("I put RFI to search query")
+    public void putRFI() {
+        InformationRequest RFI = APISteps.getRFIfromContext();
+        context.putToRunContext("searchRFI", RFI);
+
     }
 
 }

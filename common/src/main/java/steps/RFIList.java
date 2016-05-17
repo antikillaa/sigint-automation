@@ -2,9 +2,6 @@ package steps;
 
 import model.EntityList;
 import model.InformationRequest;
-import model.SearchFilter;
-
-import java.util.List;
 
 /**
  * Created by dm on 3/31/16.

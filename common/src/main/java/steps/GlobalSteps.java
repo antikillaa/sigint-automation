@@ -2,6 +2,7 @@ package steps;
 
 import errors.NullReturnException;
 import model.AppContext;
+import model.User;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStories;
 import org.jbehave.core.annotations.BeforeStories;
@@ -12,7 +13,8 @@ import java.io.InputStream;
 
 public class GlobalSteps {
 
-    Logger log = Logger.getRootLogger();
+    static Logger log = Logger.getRootLogger();
+    static AppContext context = AppContext.getContext();
 
 
     @BeforeStories
@@ -37,5 +39,16 @@ public class GlobalSteps {
     @AfterStories
     public void reportToZephyr(){
         new ReportParser().reportToZephyr("target/allure-results");
+    }
+
+    public static User getUserByRole(String role) {
+        User user;
+        try {
+            user = context.getEntitiesList(UsersList.class).getEntity(role);
+        } catch (NullReturnException e) {
+            log.error(e.getMessage());
+            throw new AssertionError("User doesn't exist");
+        }
+        return user;
     }
 }

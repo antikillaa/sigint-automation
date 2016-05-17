@@ -9,6 +9,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static java.lang.Boolean.TRUE;
@@ -33,7 +35,8 @@ public class InformationRequest extends TeelaEntity {
     private InformationRequestSearchType searchType;
     private List<InformationRequestDistribution> distributionList = new ArrayList<>();
     private List<InformationRequestTaskCategory> taskCategories = new ArrayList<>();
-
+    @JsonIgnore
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:MM:");
     public List<FileAttachment> getFileAttachments() {
         return fileAttachments;
     }
@@ -240,6 +243,9 @@ public class InformationRequest extends TeelaEntity {
     public Boolean equals(InformationRequest object) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         Boolean equals = TRUE;
         for (Field field: object.getClass().getDeclaredFields()) {
+            if (Modifier.isStatic(field.getModifiers())) {
+                continue;
+            }
             String originalValue = BeanUtils.getProperty(this, field.getName());
             String requestValue = BeanUtils.getProperty(object, field.getName());
             if (originalValue == null && requestValue == null) {

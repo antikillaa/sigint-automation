@@ -2,16 +2,36 @@ package model;
 import errors.NullReturnException;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 /**
  * Created by dm on 3/12/16.
  */
-public abstract class EntityList<T extends TeelaEntity> {
+public abstract class EntityList<T extends TeelaEntity> implements Iterable<T> {
 
-    private List <T> entities = new ArrayList<>();
+    private List <T> entities;
+
+
+    public EntityList(List<T> entities) {
+        this.entities = new ArrayList<>(entities);
+
+    }
+
+    public Integer size() {
+        return entities.size();
+    }
+
+    public EntityList() {
+        this.entities = new ArrayList<>();
+    }
 
     public List<T> getEntities() {
         return entities;
+    }
+
+    public Iterator<T> iterator() {
+
+        return entities.iterator();
     }
 
     public void addOrUpdateEntity(T entity) {
@@ -24,13 +44,21 @@ public abstract class EntityList<T extends TeelaEntity> {
         entities.add(entity);
     }
 
+
+    public boolean contains(T searchEntity) {
+        Boolean exist = false;
+        for(T entity: entities) {
+            if (entity.getId().equals(searchEntity.getId())) {
+                exist = true;
+                break;
+            }
+        }
+        return exist;
+    }
+
     private void updateEntity(T oldEntity, T newEntity) {
         int index = entities.indexOf(oldEntity);
         entities.set(index, newEntity);
-    }
-
-    public void setEntities(List<T> entities) {
-        this.entities = entities;
     }
 
     public void removeEntity(T entity) {

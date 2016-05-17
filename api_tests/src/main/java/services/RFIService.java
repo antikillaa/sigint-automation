@@ -1,10 +1,7 @@
 package services;
 
 import errors.NullReturnException;
-import http.requests.rfi.RFIDetailsRequest;
-import http.requests.rfi.RFIDetailsResponse;
-import http.requests.rfi.RFISearchRequest;
-import http.requests.rfi.RFIUploadRequest;
+import http.requests.rfi.*;
 import model.*;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.type.MapType;
@@ -18,7 +15,6 @@ import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by dm on 3/31/16.
@@ -56,11 +52,15 @@ public class RFIService implements EntityService<InformationRequest> {
         return response;
     }
 
-    public void remove(InformationRequest entity) {
+    public Response remove(InformationRequest entity) {
+        RFIDeleteRequest deleteRequest = new RFIDeleteRequest(entity.getId());
+        Response response = rsClient.delete(context.getHost()+ deleteRequest.getURI(), deleteRequest.getCookie());
+        return response;
+
 
     }
 
-    public List<InformationRequest> list(SearchFilter filter) {
+    public EntityList<InformationRequest> list(SearchFilter filter) {
         RFISearchRequest request = new RFISearchRequest();
         String json;
         try {
@@ -74,7 +74,11 @@ public class RFIService implements EntityService<InformationRequest> {
         MapType mapType = JsonCoverter.constructMapTypeToValue(RFISearchResults.class);
         try {
             HashMap<String, RFISearchResults> searchResults = JsonCoverter.mapper.readValue(responseJson, mapType);
-            return searchResults.get("result").getContent();
+            return new EntityList<InformationRequest>(searchResults.get("result").getContent()) {
+                public InformationRequest getEntity(String param) throws NullReturnException {
+                    return null;
+                }
+            };
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new AssertionError("Unable to read search results from RFI search");

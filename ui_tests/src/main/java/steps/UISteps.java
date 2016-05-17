@@ -26,8 +26,8 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 public abstract class UISteps extends GlobalSteps {
 
     static AppContext context = AppContext.getContext();
-    static User user;
     Pages pages = new Pages();
+    static User user;
 
 
 
@@ -65,16 +65,6 @@ public abstract class UISteps extends GlobalSteps {
         getWebDriver().quit();
     }
 
-
-    User getUserByRole(String role) {
-        try {
-            user = context.getEntitiesList(UsersList.class).getEntity(role);
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("User doesn't exist");
-        }
-        return user;
-    }
 
 
     Report getReportFromContext() {
