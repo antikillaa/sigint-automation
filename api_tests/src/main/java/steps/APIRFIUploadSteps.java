@@ -158,4 +158,11 @@ public class APIRFIUploadSteps {
         Response response = service.remove(RFI);
         context.putToRunContext("code", response.getStatus());
         }
+
+    @When("I cancel RFI")
+    public void cancelRFI() {
+        InformationRequest RFI = APISteps.getRFIfromContext();
+        Response response = service.cancel(RFI);
+        context.putToRunContext("code", response.getStatus());
+    }
 }
