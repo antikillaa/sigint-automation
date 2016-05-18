@@ -34,12 +34,20 @@ public class InformationRequest extends TeelaEntity {
     private InformationRequestSearchType searchType;
     private List<InformationRequestDistribution> distributionList = new ArrayList<>();
     private List<InformationRequestTaskCategory> taskCategories = new ArrayList<>();
+    private List<String> previousRequests;
+    private List<String> targets;
+    private FileAttachment approvedCopy;
+    private FileAttachment originalDocument;
+
+    @JsonIgnore
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:MM:");
 
     @JsonIgnore
     public FileAttachment getApprovedCopy() {
         return approvedCopy;
     }
 
+    @JsonProperty
     public void setApprovedCopy(FileAttachment approvedCopy) {
         this.approvedCopy = approvedCopy;
     }
@@ -49,26 +57,10 @@ public class InformationRequest extends TeelaEntity {
         return originalDocument;
     }
 
+    @JsonProperty
     public void setOriginalDocument(FileAttachment originalDocument) {
         this.originalDocument = originalDocument;
     }
-
-    private FileAttachment approvedCopy;
-    private FileAttachment originalDocument;
-    @JsonIgnore
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:MM:");
-    public List<FileAttachment> getFileAttachments() {
-        return fileAttachments;
-    }
-
-    public void addFileAttachment(FileAttachment fileAttachment) {
-        this.fileAttachments.add(fileAttachment);
-    }
-
-    @JsonIgnore
-    private List<FileAttachment> fileAttachments = new ArrayList<>();
-    private List<String> previousRequests;
-    private List<String> targets;
 
     public void setSearchType(InformationRequestSearchType searchType) {
         this.searchType = searchType;

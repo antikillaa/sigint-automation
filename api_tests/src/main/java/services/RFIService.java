@@ -15,7 +15,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by dm on 3/31/16.
@@ -61,9 +63,18 @@ public class RFIService implements EntityService<InformationRequest> {
             log.error(e.getMessage());
             throw new AssertionError("Failed to create json file");
         }
-        for (FileAttachment attachment : entity.getFileAttachments()) {
+        List<FileAttachment> attachments = new ArrayList<FileAttachment>();
+        if (entity.getApprovedCopy() != null) {
+            attachments.add(entity.getApprovedCopy());
+
+        }
+        if (entity.getOriginalDocument() != null) {
+            attachments.add(entity.getOriginalDocument());
+
+        }
+        for (FileAttachment attachment : attachments) {
             log.debug("Attaching files to request");
-            request.addBodyFile(attachment.getFilename(), attachment.getFile(),
+            request.addBodyFile(attachment.getTitle(), attachment.getFile(),
                     MediaType.APPLICATION_OCTET_STREAM_TYPE);
             attachment.getFile().deleteOnExit();
         }

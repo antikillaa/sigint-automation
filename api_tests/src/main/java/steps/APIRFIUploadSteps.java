@@ -64,7 +64,7 @@ public class APIRFIUploadSteps {
         Assert.assertEquals(etalon.getRequestSource(), created.getRequestSource());
         Assert.assertEquals(etalon.getTaskCategories(), created.getTaskCategories());
         Assert.assertEquals(etalon.getState(), created.getState());
-        Assert.assertTrue(Boolean.parseBoolean(created.getInternalRequestNumber()));
+        Assert.assertTrue(created.getInternalRequestNumber() != null);
         if (etalon.getApprovedCopy() != null) {
             Assert.assertEquals(etalon.getApprovedCopy().getFilename(),
                     created.getApprovedCopy().getFilename());

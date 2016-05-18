@@ -4,8 +4,10 @@ When I send create RFI request with approved copy and with original document
 Then I got response code 200
 
 Scenario: API.Tasker can update existing RFI
+Meta:
+@TEEL 1667
 Given I sign in as tasker user
-When I send create RFI request with approved copy and with original document
+When I send create RFI request without approved copy and without original document
 Then I got response code 200
 When I update created RFI
 Then I got response code 200
