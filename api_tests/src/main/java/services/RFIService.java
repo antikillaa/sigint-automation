@@ -103,4 +103,10 @@ public class RFIService implements EntityService<InformationRequest> {
             throw new AssertionError();
         }
     }
+
+    public Response cancel(InformationRequest entity) {
+        RFICancelRequest request = new RFICancelRequest(entity.getId());
+        Response response = rsClient.post(context.getHost()+ request.getURI(), null, request.getCookie());
+        return response;
+    }
 }

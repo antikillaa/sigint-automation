@@ -7,7 +7,7 @@ import http.requests.HttpRequest;
  */
 public class RFIDeleteRequest extends HttpRequest {
 
-    static final String URI = "/api/rfi/";
+    private static final String URI = "/api/rfi/";
     public RFIDeleteRequest(String rfiID) {
         super(URI+rfiID);
     }
