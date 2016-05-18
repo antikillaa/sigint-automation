@@ -9,7 +9,8 @@ import static com.codeborne.selenide.Selenide.page;
 
 public class RecordsProcessedPage extends SigintPage {
 
-    public static final String url = String.format("%s/#/app/records/processed", AppContext.getContext().getHost());
+    public static final String url = String.format("%s/#/app/records/processed",
+            AppContext.getContext().environment().getSigintHost());
 
     private RecordsTable table = page(RecordsTable.class);
 

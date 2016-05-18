@@ -12,7 +12,7 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class LoginPage {
 
-    private final String url = String.format("%s/#/login", AppContext.getContext().getHost());
+    private final String url = String.format("%s/#/login", AppContext.getContext().environment().getSigintHost());
 
     public SelenideElement getUsernameField() {
         return $(By.id("inputEmail")).shouldBe(present);

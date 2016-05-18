@@ -9,7 +9,8 @@ import static com.codeborne.selenide.Selenide.page;
 
 public class RecordsSearchPage extends SigintPage {
 
-    public static final String url = String.format("%s/#/app/records/search", AppContext.getContext().getHost());
+    public static final String url = String.format("%s/#/app/records/search",
+            AppContext.getContext().environment().getSigintHost());
 
     private RecordsTable table = page(RecordsTable.class);
 

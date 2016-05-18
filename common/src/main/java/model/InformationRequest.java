@@ -8,7 +8,6 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -35,20 +34,33 @@ public class InformationRequest extends TeelaEntity {
     private InformationRequestSearchType searchType;
     private List<InformationRequestDistribution> distributionList = new ArrayList<>();
     private List<InformationRequestTaskCategory> taskCategories = new ArrayList<>();
-    @JsonIgnore
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:MM:");
-    public List<FileAttachment> getFileAttachments() {
-        return fileAttachments;
-    }
-
-    public void addFileAttachment(FileAttachment fileAttachment) {
-        this.fileAttachments.add(fileAttachment);
-    }
-
-    @JsonIgnore
-    private List<FileAttachment> fileAttachments = new ArrayList<>();
     private List<String> previousRequests;
     private List<String> targets;
+    private FileAttachment approvedCopy;
+    private FileAttachment originalDocument;
+
+    @JsonIgnore
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:MM:");
+
+    @JsonIgnore
+    public FileAttachment getApprovedCopy() {
+        return approvedCopy;
+    }
+
+    @JsonProperty
+    public void setApprovedCopy(FileAttachment approvedCopy) {
+        this.approvedCopy = approvedCopy;
+    }
+
+    @JsonIgnore
+    public FileAttachment getOriginalDocument() {
+        return originalDocument;
+    }
+
+    @JsonProperty
+    public void setOriginalDocument(FileAttachment originalDocument) {
+        this.originalDocument = originalDocument;
+    }
 
     public void setSearchType(InformationRequestSearchType searchType) {
         this.searchType = searchType;
@@ -240,14 +252,20 @@ public class InformationRequest extends TeelaEntity {
         return this;
     }
 
-    public Boolean equals(InformationRequest object) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    public Boolean equals(InformationRequest object)  {
         Boolean equals = TRUE;
         for (Field field: object.getClass().getDeclaredFields()) {
             if (Modifier.isStatic(field.getModifiers())) {
                 continue;
             }
-            String originalValue = BeanUtils.getProperty(this, field.getName());
-            String requestValue = BeanUtils.getProperty(object, field.getName());
+            String originalValue;
+            String requestValue;
+            try {
+                originalValue = BeanUtils.getProperty(this, field.getName());
+                requestValue = BeanUtils.getProperty(object, field.getName());
+            } catch (Exception e) {
+               throw new AssertionError();
+            }
             if (originalValue == null && requestValue == null) {
                 continue;
             }

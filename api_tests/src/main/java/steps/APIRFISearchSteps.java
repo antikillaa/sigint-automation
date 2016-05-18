@@ -1,12 +1,12 @@
 package steps;
 
-import errors.NullReturnException;
 import model.*;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
+import services.RFIService;
 
 import java.text.ParseException;
 
@@ -15,8 +15,9 @@ import java.text.ParseException;
  */
 public class APIRFISearchSteps {
 
-    private Logger log = Logger.getRootLogger();
+    private Logger log = Logger.getLogger(APIRFISearchSteps.class);
     private AppContext context = AppContext.getContext();
+    private RFIService service = new RFIService();
 
 
 
@@ -24,7 +25,7 @@ public class APIRFISearchSteps {
     @When("I search RFI by $criteria and value $value")
     public void SearchRFIbyCriteria(@Named("criteria") String criteria, @Named("value") String value) throws ParseException {
         log.info("Start search by criteria: "+ criteria);
-        InformationRequest RFI = APISteps.getRFIfromContext();
+        InformationRequest RFI = context.entities().getRFIs().getLatest();
         RFISearchFilter searchFilter = new RFISearchFilter();
 
         if (criteria.toLowerCase().equals("state")) {
@@ -49,7 +50,7 @@ public class APIRFISearchSteps {
         else {
             throw new AssertionError("Unknown filter type");
         }
-        EntityList<InformationRequest> RFIList = APIRFIUploadSteps.service.list(searchFilter);
+        EntityList<InformationRequest> RFIList = service.list(searchFilter);
         context.putToRunContext("searchFilter", searchFilter);
         context.putToRunContext("searchResult", RFIList);
     }
@@ -60,13 +61,8 @@ public class APIRFISearchSteps {
         log.info("Checking if search result is correct");
         SearchFilter filter;
         EntityList <InformationRequest> searchResult;
-        try {
-            filter = context.getFromRunContext("searchFilter", RFISearchFilter.class);
-            searchResult = context.getFromRunContext("searchResult", EntityList.class);
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("Cannot get search results");
-        }
+        filter = context.getFromRunContext("searchFilter", RFISearchFilter.class);
+        searchResult = context.getFromRunContext("searchResult", EntityList.class);
         if (searchResult.size() == 0) {
             log.warn("Search result can be incorrect." +
                     "There are not records in it");
@@ -80,14 +76,8 @@ public class APIRFISearchSteps {
     public void checkRFIinResults(String criteria) {
         InformationRequest request;
         EntityList<InformationRequest> list;
-        try {
-            request = context.getFromRunContext("searchRFI", InformationRequest.class);
-            list = context.getFromRunContext("searchResult", EntityList.class);
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError();
-        }
-
+        request = context.getFromRunContext("searchRFI", InformationRequest.class);
+        list = context.getFromRunContext("searchResult", EntityList.class);
         Boolean contains = list.contains(request);
         if (criteria.toLowerCase().equals("in")) {
             Assert.assertTrue(contains);
@@ -101,7 +91,7 @@ public class APIRFISearchSteps {
 
     @When("I put RFI to search query")
     public void putRFI() {
-        InformationRequest RFI = APISteps.getRFIfromContext();
+        InformationRequest RFI = context.entities().getRFIs().getLatest();
         context.putToRunContext("searchRFI", RFI);
 
     }

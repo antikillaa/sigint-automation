@@ -6,14 +6,12 @@ import model.EntityList;
 import model.SearchFilter;
 import model.TeelaEntity;
 
-import javax.ws.rs.core.Response;
-
 
 public interface EntityService <T extends TeelaEntity> {
 
-    public Response addNew(T entity);
-    public Response remove(T entity);
+    public int addNew(T entity);
+    public int remove(T entity);
     public EntityList<T> list(SearchFilter filter);
-    public void update(T entity);
+    public int update(T entity);
     public T view(String id);
 }

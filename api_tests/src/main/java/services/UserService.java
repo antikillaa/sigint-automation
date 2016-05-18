@@ -19,20 +19,20 @@ public class UserService implements EntityService<User> {
     private static RsClient rsClient = new RsClient();
     private AppContext context = AppContext.getContext();
 
-    public Response addNew(User user) {
-        return null;
+    public int addNew(User user) {
+        return 0;
     }
 
-    public Response remove(User entity) {
-        return null;
+    public int remove(User entity) {
+        return 0;
     }
 
     public EntityList<User> list(SearchFilter filter) {
         return null;
     }
 
-    public void update(User entity) {
-
+    public int update(User entity) {
+        return 0;
     }
 
     public User view(String id) {
@@ -44,7 +44,7 @@ public class UserService implements EntityService<User> {
         signInRequest.setName(user.getName());
         signInRequest.setPassword(user.getPassword());
         try {
-            Response response = rsClient.post(context.getHost()
+            Response response = rsClient.post(context.environment().getSigintHost()
                     + signInRequest.getURI(),
                     JsonCoverter.toJsonString(signInRequest));
             return response;

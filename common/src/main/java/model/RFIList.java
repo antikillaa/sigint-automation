@@ -1,12 +1,9 @@
-package steps;
-
-import model.EntityList;
-import model.InformationRequest;
+package model;
 
 /**
  * Created by dm on 3/31/16.
  */
-class RFIList extends EntityList<InformationRequest> {
+public class RFIList extends EntityList<InformationRequest> {
 
     
     @Override

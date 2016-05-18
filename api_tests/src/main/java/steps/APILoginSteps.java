@@ -49,13 +49,7 @@ public class APILoginSteps {
     public void signInWithCrendentials(String validness) {
         log.info("Signing in...");
         Response response;
-        User user;
-        try {
-            user = context.getFromRunContext("user", User.class);
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError();
-        }
+        User user = context.getFromRunContext("user", User.class);
         if (validness.toLowerCase().equals("incorrect")) {
             user.setPassword("incorrect");
         }
@@ -69,12 +63,7 @@ public class APILoginSteps {
     public void checkResponseCode(String real) {
         log.info("Checking response code");
         Integer actual;
-        try {
-            actual = context.getFromRunContext("code", Integer.class);
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("Return code wasn't received");
-        }
+        actual = context.getFromRunContext("code", Integer.class);
         Integer expected = Integer.valueOf(real);
         Assert.assertEquals("Actual code:"+actual+" Expected code:"+real, actual, expected);
 
@@ -90,7 +79,7 @@ public class APILoginSteps {
             log.error("Cannot get token!");
             throw new AssertionError();
         }
-        context.setToken(token);
+        context.environment().setToken(token);
     }
 
     @Then("Error message is $message")

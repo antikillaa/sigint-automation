@@ -32,7 +32,7 @@ public class Docker {
     public Docker() {
         try {
             Pattern pattern = Pattern.compile("(^http(s)*://)?.*([^:81])");
-            Matcher matcher = pattern.matcher(AppContext.getContext().getHost());
+            Matcher matcher = pattern.matcher(AppContext.getContext().environment().getSigintHost());
             matcher.find();
             this.dockerHost = matcher.group();
         } catch (IllegalStateException e) {

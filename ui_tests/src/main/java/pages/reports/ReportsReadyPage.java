@@ -10,7 +10,8 @@ import static com.codeborne.selenide.Selenide.page;
 
 public class ReportsReadyPage extends SigintPage {
 
-    public static final String url = String.format("%s/#/app/reports/unassigned", AppContext.getContext().getHost());
+    public static final String url = String.format("%s/#/app/reports/unassigned",
+            AppContext.getContext().environment().getSigintHost());
 
     private ReportsTable reportsTable = page(ReportsTable.class);
 

@@ -1,6 +1,5 @@
 package steps;
 
-import errors.NullReturnException;
 import model.Record;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -240,14 +239,9 @@ public class UIRecordsSteps extends UISteps {
 
     @When("I press 'Create report' button against it")
     public void pressCreateReportButtonAgainstIt() {
-        try {
-            RecordRow recordRow = context.getFromRunContext("recordRow", RecordRow.class);
-            recordRow.clickCreateReportButton();
-        } catch (NullReturnException e) {
-            e.printStackTrace();
-            log.warn("Record doesn't exist!");
-            throw new AssertionError("Record doesn't exist");
-        }
+        RecordRow recordRow = context.getFromRunContext("recordRow", RecordRow.class);
+        recordRow.clickCreateReportButton();
+
     }
 
 

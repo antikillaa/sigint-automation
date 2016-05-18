@@ -61,16 +61,22 @@ public abstract class EntityList<T extends TeelaEntity> implements Iterable<T> {
         entities.set(index, newEntity);
     }
 
-    public void removeEntity(T entity) {
-        entities.remove(entity);
+    public void removeEntity(T entity) throws NullReturnException {
+        for (T exEntity: entities) {
+            if (exEntity.getId().equals(entity.getId())) {
+                entities.remove(entity);
+                return;
+            }
+        }
+        throw new NullReturnException("There was no entity to delete");
     }
 
     public abstract T getEntity(String param) throws NullReturnException;
 
-    public T getLatest() throws NullReturnException {
+    public T getLatest()  {
         T entity =  entities.get(entities.size()-1);
         if (entity == null) {
-            throw new NullReturnException("There are no entities in the list");
+            throw new AssertionError("There are no entities in the list");
         }
         return entity;
     }
