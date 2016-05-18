@@ -7,38 +7,35 @@ import java.io.IOException;
 /**
  * Created by dm on 4/22/16.
  */
+
 public class FileAttachment {
 
+    private String filename;
+    private File file;
 
-    public String getName() {
-        return name;
+    public String getFilename() {
+        return filename;
     }
 
     public File getFile() {
         return file;
     }
 
-    public FileAttachment(String name) {
-
-        try {
-            createAttachment(name);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public FileAttachment(String filename) {
+            createAttachment(filename);
     }
 
-    private String name;
-    private File file;
-
-    private void createAttachment(String name) throws IOException {
+    private void createAttachment(String name){
         File attachFile;
-        this.name = name;
-        attachFile = File.createTempFile(name, ".txt");
-        FileOutputStream os = new FileOutputStream(attachFile);
-        os.write("test file".getBytes());
-        os.close();
-        this.file = attachFile;
-
-
+        this.filename = name;
+        try {
+            attachFile = File.createTempFile(name, ".txt");
+            FileOutputStream os = new FileOutputStream(attachFile);
+            os.write("test file".getBytes());
+            os.close();
+            this.file = attachFile;
+        } catch (IOException e) {
+            throw new AssertionError("Error occurred creating attachment file");
+        }
     }
 }

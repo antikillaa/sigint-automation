@@ -2,7 +2,6 @@ package steps;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
-import errors.NullReturnException;
 import model.AppContext;
 import model.Record;
 import model.Report;
@@ -29,8 +28,6 @@ public abstract class UISteps extends GlobalSteps {
     Pages pages = new Pages();
     static User user;
 
-
-
     @BeforeStory
     public void InitWebDriver() throws IOException {
         InputStream is = this.getClass().getResourceAsStream("/web.properties");
@@ -50,7 +47,6 @@ public abstract class UISteps extends GlobalSteps {
         Configuration.collectionsTimeout = Long.parseLong(System.getProperties().getProperty("selenide.collectionsTimeout", "15000"));
     }
 
-
     @BeforeScenario
     public void reloadBrowser() {
         WebDriver driver = WebDriverRunner.getWebDriver();
@@ -58,34 +54,17 @@ public abstract class UISteps extends GlobalSteps {
         driver.navigate().refresh();
     }
 
-
-
     @AfterStory
     public void disposeDriver() {
         getWebDriver().quit();
     }
 
-
-
     Report getReportFromContext() {
-        try {
-            return context.getFromRunContext("report", Report.class);
-        } catch (NullReturnException e) {
-            e.printStackTrace();
-            log.warn("Report doesn't exist");
-            throw new AssertionError("Report doesn't exist");
-        }
+        return context.getFromRunContext("report", Report.class);
     }
 
-
     Record getRecordFromContext() {
-        try {
-            return context.getFromRunContext("record", Record.class);
-        } catch (NullReturnException e) {
-            e.printStackTrace();
-            log.warn("Record doesn't exist");
-            throw new AssertionError("Record doesn't exist");
-        }
+        return context.getFromRunContext("record", Record.class);
     }
 
 }

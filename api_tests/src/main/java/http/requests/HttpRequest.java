@@ -19,7 +19,7 @@ public class HttpRequest {
 
     public  Cookie getCookie() {
         if (cookie==null){
-            cookie = new Cookie("t", context.getToken());
+            cookie = new Cookie("t", context.environment().getToken().getValue());
         }
         return cookie;
     }

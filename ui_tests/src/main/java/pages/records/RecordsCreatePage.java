@@ -15,7 +15,8 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class RecordsCreatePage extends SigintPage {
 
-    public static final String url = String.format("%s/#/app/records/create", AppContext.getContext().getHost());
+    public static final String url = String.format("%s/#/app/records/create",
+            AppContext.getContext().environment().getSigintHost());
 
 
     public SelenideElement getForm() {
