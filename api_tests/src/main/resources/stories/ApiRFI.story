@@ -57,5 +57,5 @@ When I send create RFI request
 And I put RFI to search query
 And I cancel RFI
 Then I got response code 200
-When I search RFI by status and value Cancelled
+When I search RFI by state and value CANCELLED
 Then Searched RFI in list
