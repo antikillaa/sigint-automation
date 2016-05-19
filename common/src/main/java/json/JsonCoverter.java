@@ -1,7 +1,7 @@
-package rs.client;
+package json;
 
 import errors.NullReturnException;
-import model.EntityList;
+import abs.EntityList;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.MapType;

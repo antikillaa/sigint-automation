@@ -5,20 +5,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by dm on 4/27/16.
- */
-public enum InformationRequestSearchType {
+public enum TargetTypes {
+    SUSPECT, CRIME, INTEREST;
 
-    ST, S;
 
-    private static final List<InformationRequestSearchType> VALUES =
+    private static final List<TargetTypes> VALUES =
             Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();
     private static Random RANDOM = new Random();
 
 
-    public static InformationRequestSearchType getRandom() {
+    public static TargetTypes getRandom() {
         return VALUES.get(RANDOM.nextInt(SIZE));
     }
 }

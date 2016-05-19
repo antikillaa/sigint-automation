@@ -2,8 +2,8 @@ package zapi;
 
 import errors.NullReturnException;
 import model.AppContext;
-import rs.client.JsonCoverter;
-import rs.client.RsClient;
+import json.JsonCoverter;
+import json.RsClient;
 import zapi.model.Cycle;
 import zapi.model.CyclesList;
 import zapi.model.Execution;

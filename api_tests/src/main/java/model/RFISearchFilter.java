@@ -1,9 +1,9 @@
 package model;
 
-
+import abs.SearchFilter;
+import abs.TeelaEntity;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;

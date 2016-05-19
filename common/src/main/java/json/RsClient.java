@@ -1,4 +1,4 @@
-package rs.client;
+package json;
 
 import model.AppContext;
 import org.apache.log4j.Logger;

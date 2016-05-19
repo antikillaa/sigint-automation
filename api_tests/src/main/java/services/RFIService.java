@@ -1,13 +1,15 @@
 package services;
 
+import abs.SearchFilter;
 import errors.NullReturnException;
 import http.requests.rfi.*;
 import model.*;
+import abs.EntityList;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.type.MapType;
-import rs.client.JsonCoverter;
-import rs.client.RsClient;
+import json.JsonCoverter;
+import json.RsClient;
 import service.EntityService;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;

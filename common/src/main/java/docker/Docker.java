@@ -5,8 +5,8 @@ import errors.NullReturnException;
 import model.AppContext;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import rs.client.JsonCoverter;
-import rs.client.RsClient;
+import json.JsonCoverter;
+import json.RsClient;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.core.MediaType;

@@ -10,7 +10,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import rs.client.JsonCoverter;
+import json.JsonCoverter;
 import zapi.model.*;
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;

@@ -4,8 +4,8 @@ import errors.NullReturnException;
 import jira.model.*;
 import model.AppContext;
 import org.apache.log4j.Logger;
-import rs.client.JsonCoverter;
-import rs.client.RsClient;
+import json.JsonCoverter;
+import json.RsClient;
 
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Response;

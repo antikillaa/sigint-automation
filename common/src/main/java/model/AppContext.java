@@ -1,5 +1,8 @@
 package model;
 
+import model.lists.RFIList;
+import model.lists.UsersList;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;

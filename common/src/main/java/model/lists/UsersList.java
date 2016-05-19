@@ -1,5 +1,7 @@
-package model;
+package model.lists;
+import abs.EntityList;
 import errors.NullReturnException;
+import model.User;
 
 /**
  * Created by dm on 3/12/16.

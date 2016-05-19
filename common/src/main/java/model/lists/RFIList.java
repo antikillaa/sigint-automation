@@ -1,4 +1,7 @@
-package model;
+package model.lists;
+
+import abs.EntityList;
+import model.InformationRequest;
 
 /**
  * Created by dm on 3/31/16.

@@ -1,11 +1,11 @@
-package model;
+package abs;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 public abstract class SearchFilter <T extends TeelaEntity> {
 
     @JsonIgnore
-    SearchFilter activeFilter;
+    protected SearchFilter activeFilter;
 
 
     public SearchFilter getActiveFilter() {

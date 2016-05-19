@@ -2,13 +2,13 @@ package steps;
 
 import errors.NullReturnException;
 import model.AppContext;
-import model.RFIList;
+import model.lists.RFIList;
 import model.User;
-import model.UsersList;
+import model.lists.UsersList;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStories;
 import org.jbehave.core.annotations.BeforeStories;
-import rs.client.JsonCoverter;
+import json.JsonCoverter;
 import zapi.ReportParser;
 
 import java.io.InputStream;

@@ -9,7 +9,7 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
-import rs.client.JsonCoverter;
+import json.JsonCoverter;
 import services.UserService;
 
 import javax.ws.rs.core.Response;
