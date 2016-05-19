@@ -1,8 +1,9 @@
 package model;
 
+import abs.TeelaEntity;
 import org.apache.commons.lang.RandomStringUtils;
 
-public class Report {
+public class Report extends TeelaEntity{
 
     private String subject;
 

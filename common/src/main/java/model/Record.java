@@ -1,11 +1,12 @@
 package model;
 
+import abs.TeelaEntity;
 import org.apache.commons.lang.RandomStringUtils;
 
 import java.util.Date;
 import java.util.Random;
 
-public class Record {
+public class Record extends TeelaEntity {
 
     private String source;
     private String fromNumber;

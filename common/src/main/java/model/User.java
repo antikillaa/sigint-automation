@@ -133,4 +133,8 @@ public class User extends TeelaEntity {
         this.languages = languages;
     }
 
+    public User generate() {
+        return null;
+    }
+
 }
