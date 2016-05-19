@@ -5,6 +5,8 @@ Meta:
 
 
 Scenario: User is able to create a manual report and save it as Draft
+Meta:
+@TEEL
 Given I logged in as Operator
 And I'm on 'Reports->All' page
 When I press 'Create Manual Report' button

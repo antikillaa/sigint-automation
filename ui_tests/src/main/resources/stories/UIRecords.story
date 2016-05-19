@@ -27,6 +27,8 @@ And I should see new Voice record on the table
 
 
 Scenario: User can create report from record processing page and save it as Draft
+Meta:
+@TEEL
 Given I logged in as OPERATOR
 And I'm on 'Records->Processing' page
 When I checked checkbox on the first non-REPORTED record in table
@@ -39,6 +41,8 @@ And record status is 'REPORTED' on 'Records->Processed' page
 
 
 Scenario: User is able to attach record to existing report
+Meta:
+@TEEL
 Given I logged in as OPERATOR
 And I'm on 'Records->Search' page
 When I checked checkbox on the first non-REPORTED record in table
@@ -51,6 +55,8 @@ And report status is 'DRAFT' on 'Reports->All' page
 
 
 Scenario: User can create report from record processing screen and send it to Analyst for review
+Meta:
+@TEEL
 Given I logged in as OPERATOR
 And I'm on 'Records->Processing' page
 When I select first record in the table
