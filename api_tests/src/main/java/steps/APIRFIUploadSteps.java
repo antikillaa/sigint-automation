@@ -3,13 +3,12 @@ package steps;
 import model.AppContext;
 import model.FileAttachment;
 import model.InformationRequest;
+import model.User;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.RFIService;
-
-import javax.ws.rs.core.Response;
 
 
 public class APIRFIUploadSteps {
@@ -128,17 +127,23 @@ public class APIRFIUploadSteps {
     @When("I cancel RFI")
     public void cancelRFI() {
         InformationRequest RFI = context.entities().getRFIs().getLatest();
-        Response response = service.cancel(RFI);
-        context.putToRunContext("code", response.getStatus());
+        int response = service.cancel(RFI);
+        context.putToRunContext("code", response);
     }
 
     @When("I take ownership of RFI")
     public void assignRFI() {
         InformationRequest RFI = context.entities().getRFIs().getLatest();
+        int response = service.assign(RFI);
+        context.putToRunContext("code", response);
     }
 
     @Then("RFI has status Assigned and assigned to analyst")
     public void checkAssignedRFI(){
+        InformationRequest RFI = context.entities().getRFIs().getLatest();
+        User currentUser = context.getFromRunContext("user", User.class);
+        Assert.assertEquals(RFI.getState(), "ASSIGNED");
+        Assert.assertEquals(RFI.getAssignedTo(),currentUser.getId());
 
     }
 }

@@ -9,7 +9,6 @@ import org.codehaus.jackson.map.type.MapType;
 import rs.client.JsonCoverter;
 import rs.client.RsClient;
 import service.EntityService;
-
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -19,9 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by dm on 3/31/16.
- */
 public class RFIService implements EntityService<InformationRequest> {
 
     private static RsClient rsClient = new RsClient();
@@ -146,10 +142,11 @@ public class RFIService implements EntityService<InformationRequest> {
         }
     }
 
-    public Response cancel(InformationRequest entity) {
+    public int cancel(InformationRequest entity) {
         RFICancelRequest request = new RFICancelRequest(entity.getId());
         Response response = rsClient.post(sigintHost + request.getURI(), null, request.getCookie());
-        return response;
+        readRFIFromResponse(response);
+        return response.getStatus();
     }
 
     public int assign(InformationRequest entity) {
