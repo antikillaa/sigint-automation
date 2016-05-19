@@ -2,9 +2,9 @@ package service; /**
  * Created by dm on 3/11/16.
  */
 
-import model.EntityList;
-import model.SearchFilter;
-import model.TeelaEntity;
+import abs.EntityList;
+import abs.SearchFilter;
+import abs.TeelaEntity;
 
 
 public interface EntityService <T extends TeelaEntity> {

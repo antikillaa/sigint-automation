@@ -1,6 +1,8 @@
 package steps;
 
+import abs.SearchFilter;
 import model.*;
+import abs.EntityList;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;

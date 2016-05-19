@@ -2,11 +2,11 @@ package services;
 import errors.NullReturnException;
 import http.requests.SignInRequest;
 import model.AppContext;
-import model.EntityList;
-import model.SearchFilter;
+import abs.EntityList;
+import abs.SearchFilter;
 import model.User;
-import rs.client.JsonCoverter;
-import rs.client.RsClient;
+import json.JsonCoverter;
+import json.RsClient;
 import service.EntityService;
 
 import javax.ws.rs.core.Response;

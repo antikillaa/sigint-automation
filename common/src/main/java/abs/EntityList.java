@@ -1,12 +1,10 @@
-package model;
+package abs;
 import errors.NullReturnException;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-/**
- * Created by dm on 3/12/16.
- */
+
 public abstract class EntityList<T extends TeelaEntity> implements Iterable<T> {
 
     private List <T> entities;

@@ -1,18 +1,14 @@
 package model;
 
-import org.apache.commons.beanutils.BeanUtils;
+import abs.TeelaEntity;
 import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import static java.lang.Boolean.TRUE;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
@@ -250,30 +246,5 @@ public class InformationRequest extends TeelaEntity {
                 .setSearchType(InformationRequestSearchType.getRandom());
 
         return this;
-    }
-
-    public Boolean equals(InformationRequest object)  {
-        Boolean equals = TRUE;
-        for (Field field: object.getClass().getDeclaredFields()) {
-            if (Modifier.isStatic(field.getModifiers())) {
-                continue;
-            }
-            String originalValue;
-            String requestValue;
-            try {
-                originalValue = BeanUtils.getProperty(this, field.getName());
-                requestValue = BeanUtils.getProperty(object, field.getName());
-            } catch (Exception e) {
-               throw new AssertionError();
-            }
-            if (originalValue == null && requestValue == null) {
-                continue;
-            }
-            equals = originalValue.equals(requestValue);
-            if (!equals) {
-                return equals;
-            }
-        }
-        return equals;
     }
 }
