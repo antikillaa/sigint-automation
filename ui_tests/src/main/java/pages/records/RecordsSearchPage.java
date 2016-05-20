@@ -2,7 +2,7 @@ package pages.records;
 
 import model.AppContext;
 import pages.SigintPage;
-import pages.blocks.content.main.table.RecordsTable;
+import pages.blocks.tables.RecordsTable;
 
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Selenide.page;

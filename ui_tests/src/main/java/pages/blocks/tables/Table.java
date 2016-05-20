@@ -1,6 +1,7 @@
-package pages.blocks.content.main.table;
+package pages.blocks.tables;
 
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.SelenideElement;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
@@ -66,5 +67,11 @@ public abstract class Table extends BasePage {
         log.warn("Column with name:" + columnName + " was not found in the Records table");
         throw new AssertionError("Column with name:" + columnName + " was not found in the Records table");
     }
+
+    public boolean isEmpty(){
+        return getTable().$(new Selectors.ByText("Nothing found.")).isDisplayed();
+    }
+
+
 
 }

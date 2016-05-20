@@ -2,7 +2,7 @@ package pages.reports;
 
 import model.AppContext;
 import pages.SigintPage;
-import pages.blocks.content.main.table.ReportsTable;
+import pages.blocks.tables.ReportsTable;
 
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.disappear;

@@ -9,12 +9,12 @@ import static com.codeborne.selenide.Selenide.page;
 
 public class SidebarRightWrapper {
 
-    public SelenideElement getSidebarRightWrapper() {
+    public SelenideElement getSidebar() {
         return $(By.xpath("//div[@class='sidebar-right-wrapper']"));
     }
 
     public SelenideElement getSaveDraftButton() {
-        return getSidebarRightWrapper()
+        return getSidebar()
                 .$(By.xpath(".//button[contains(normalize-space(),'Save as Draft')]"));
     }
 
@@ -28,8 +28,22 @@ public class SidebarRightWrapper {
         return page(ReportsDraftPage.class);
     }
 
+    public SelenideElement getPublishButton() {
+        return getSidebar()
+                .$(By.xpath(".//button[@ref='publishButton' and contains(normalize-space(), 'Publish')]"));
+    }
+
     public void clickPublishButton() {
-        $(By.xpath(".//button[@ref='publishButton' and contains(normalize-space(), 'Publish')]")).click();
+        getPublishButton().click();
+    }
+
+    public SelenideElement getRemoveReportOwnership(){
+        return getSidebar()
+                .$(By.xpath(".//button[@click.trigger='removeReportOwnership()']"));
+    }
+
+    public void clickRemoveReportOwnership() {
+        getRemoveReportOwnership().click();
     }
 
 }

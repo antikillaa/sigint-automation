@@ -1,4 +1,4 @@
-package pages.blocks.content.main.table.toolbar;
+package pages.blocks.tables.toolbar;
 
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;

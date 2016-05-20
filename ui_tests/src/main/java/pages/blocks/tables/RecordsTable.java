@@ -1,7 +1,7 @@
-package pages.blocks.content.main.table;
+package pages.blocks.tables;
 
 import com.codeborne.selenide.SelenideElement;
-import pages.blocks.content.main.table.toolbar.RecordsTableToolbar;
+import pages.blocks.tables.toolbar.RecordsTableToolbar;
 
 import java.util.ArrayList;
 
