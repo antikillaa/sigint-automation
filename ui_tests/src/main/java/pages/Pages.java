@@ -51,4 +51,8 @@ public class Pages {
         return page(ReportsCreateManualPage.class);
     }
 
+    public ReportsEditPage reportsEditPage() {
+        return page(ReportsEditPage.class);
+    }
+
 }

@@ -5,8 +5,8 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import pages.blocks.SidebarRightWrapper;
-import pages.blocks.content.main.table.RecordRow;
-import pages.blocks.content.main.table.RecordsTable;
+import pages.blocks.tables.RecordRow;
+import pages.blocks.tables.RecordsTable;
 import pages.records.RecordsProcessedPage;
 import pages.records.RecordsSearchPage;
 

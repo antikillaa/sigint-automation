@@ -1,4 +1,4 @@
-package pages.blocks.content.main.table;
+package pages.blocks.tables;
 
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;

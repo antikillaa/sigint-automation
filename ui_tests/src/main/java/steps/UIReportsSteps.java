@@ -3,12 +3,17 @@ package steps;
 import com.codeborne.selenide.SelenideElement;
 import model.Record;
 import model.Report;
+import org.jbehave.core.annotations.Alias;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import org.junit.Assert;
+import pages.blocks.SidebarRightWrapper;
+import pages.blocks.content.header.Header;
 import pages.blocks.content.header.breadcrumb.Breadcrumb;
-import pages.blocks.content.main.table.ReportRow;
-import pages.blocks.content.main.table.toolbar.ReportsTableToolbar;
+import pages.blocks.tables.ReportRow;
+import pages.blocks.tables.ReportsTable;
+import pages.blocks.tables.toolbar.ReportsTableToolbar;
 import pages.reports.*;
 
 import static com.codeborne.selenide.Condition.*;
@@ -22,6 +27,7 @@ public class UIReportsSteps extends UISteps {
 
 
     @Given("I'm on 'Reports->Ready' page")
+    @When("I navigate to 'Reports->Ready for Review' page")
     public void iOnReportsReadyPage() {
         if (!getPageUrl().contentEquals(ReportsReadyPage.url)) {
             pages.reportsReadyPage().load();
@@ -29,9 +35,17 @@ public class UIReportsSteps extends UISteps {
     }
 
     @Given("I'm on 'Reports->All' page")
+    @When("I navigate to 'Reports->All' page")
     public void iOnReportsAllPage() {
         if (!getPageUrl().contentEquals(ReportsAllPage.url)) {
             pages.reportsAllPage().load();
+        }
+    }
+
+    @Given("I'm on 'Reports->Draft' page")
+    public void iOnReportsDraftPage() {
+        if (!getPageUrl().contentEquals(ReportsDraftPage.url)) {
+            pages.reportsDraftPage().load();
         }
     }
 
@@ -78,6 +92,7 @@ public class UIReportsSteps extends UISteps {
     }
 
     @Then("report status is '$status' on 'Reports->All' page")
+    @Alias("report status is '$status'")
     public void reportStatusIsDraft(String status) {
         Report report = getReportFromContext();
 
@@ -100,7 +115,6 @@ public class UIReportsSteps extends UISteps {
 
         context.putToRunContext("report", report);
     }
-
 
     @Then("record is attached to the report")
     public void recordIsAttachedToReport() {
@@ -126,7 +140,6 @@ public class UIReportsSteps extends UISteps {
         throw new AssertionError("Attached record fromNumber:" + record.getFromNumber() + " doesn't found in the report " + report.getSubject());
     }
 
-
     @Then("report appears on 'Reports->Ready for Review' page")
     public void reportAppearsOnAnalystReportsReadyPage() {
         Report report = getReportFromContext();
@@ -138,10 +151,73 @@ public class UIReportsSteps extends UISteps {
         }
     }
 
-
     @When("I press 'Create Manual Report' button")
     public void pressCreateManualReportButton() {
         page(ReportsTableToolbar.class).clickCreateManualReportButton();
+    }
+
+    @When("I select first report in the table")
+    public void selectFirstReport() {
+        ReportRow reportRow = page(ReportsTable.class).firstReport().selectReport();
+        Report report = new Report();
+        report.setSubject(reportRow.getCellByColumnName("Subject").text());
+
+        context.putToRunContext("reportRow", reportRow);
+        context.putToRunContext("report", report);
+    }
+
+    @When("I press 'Edit Report' button against it")
+    public void pressEditReportButtonAgainstIt() {
+        ReportRow reportRow = context.getFromRunContext("reportRow", ReportRow.class);
+        reportRow.clickEditReportButton();
+    }
+
+    @Then("I should see 'Remove Ownership' button on 'Edit Report' page")
+    public void shouldSeeRemoveOwnershipButtonOnEditReportPage(){
+        pages.reportsEditPage().getSidebarRightWrapper().getRemoveReportOwnership().shouldBe(visible);
+    }
+
+    @When("I press 'Remove Ownership' button on 'Edit Report' page")
+    public void pressRemoveOwnershipButton() {
+        page(SidebarRightWrapper.class).clickRemoveReportOwnership();
+    }
+
+    @Then("I should see 'Reports->Draft' page")
+    public void shouldSeeReportsDraftPage() {
+        page(Header.class).getBreadcrumb().getCurrentPath().shouldHave(text("Draft"));
+    }
+
+    @Then("I should not see selected report among other draft reports")
+    public void shouldNotSeeSelectedReportAmongOtherDraftReports() {
+        Report report = context.getFromRunContext("report", Report.class);
+        ReportsTable reportsTable = page(ReportsTable.class);
+        if (!reportsTable.isEmpty()) {
+            Assert.assertNull(reportsTable.getReportByColumnNameAndValue("Subject", report.getSubject()));
+        }
+    }
+
+    @Then("I should $see selected report on the reports table")
+    public void shouldSeeSelectedReportThere(String see) {
+        Report report = context.getFromRunContext("report", Report.class);
+        ReportsTable reportsTable = page(ReportsTable.class);
+        if (see.contentEquals("not see")) {
+            if (!reportsTable.isEmpty()) {
+                Assert.assertNull(reportsTable.getReportByColumnNameAndValue("Subject", report.getSubject()));
+            }
+        } else if (see.contentEquals("see")) {
+            reportsTable.getReportByColumnNameAndValue("Subject", report.getSubject()).getRow().shouldBe(present);
+        }
+    }
+
+    @Then("report owner should be '$owner'")
+    public void reportOwnerShouldBeEmpty(String owner) {
+        Report report = context.getFromRunContext("report", Report.class);
+        ReportRow reportRow = page(ReportsTable.class).getReportByColumnNameAndValue("Subject", report.getSubject());
+        if (reportRow != null) {
+            reportRow.getCellByColumnName("Owner").shouldHave(text(owner.toLowerCase().contentEquals("empty") ? "" : owner));
+        } else {
+            throw new AssertionError("Report with subject:" + report.getSubject() + " does not found!");
+        }
     }
 
 

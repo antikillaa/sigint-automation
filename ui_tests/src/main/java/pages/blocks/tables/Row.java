@@ -1,4 +1,4 @@
-package pages.blocks.content.main.table;
+package pages.blocks.tables;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
@@ -27,7 +27,7 @@ public abstract class Row {
     }
 
     public SelenideElement getCellByColumnName(String columnName) {
-        log.debug("Find cell by column name:" + columnName + " in the Records table");
+        log.debug("Find cell by column name:" + columnName + " in the table");
 
         String[] colTexts = getColumns().getTexts();
         for (int i = 0; i < colTexts.length; i++) {
@@ -37,11 +37,9 @@ public abstract class Row {
             }
         }
 
-        log.warn("Column with name:" + columnName + " was not found in the Records table");
-        throw new AssertionError("Column with name:" + columnName + " was not found in the Records table");
+        log.warn("Column with name:" + columnName + " was not found in the table");
+        throw new AssertionError("Column with name:" + columnName + " was not found in the table");
     }
-
-
 
     public SelenideElement getCheckBox() {
         return getRow()
