@@ -40,7 +40,7 @@ public class APITargetSteps {
         Assert.assertEquals(contextTarget.getName(), createdTarget.getName());
         Assert.assertEquals(contextTarget.getKeywords(), createdTarget.getKeywords());
         Assert.assertEquals(contextTarget.getPhones(), createdTarget.getPhones());
-        Assert.assertTrue(contextTarget.getLanguages().equals(createdTarget.getLanguages()));
+        Assert.assertEquals(contextTarget.getLanguages(), createdTarget.getLanguages());
         Assert.assertEquals(contextTarget.getGroups(), createdTarget.getGroups());
         Assert.assertEquals(contextTarget.getType(), createdTarget.getType());
         Assert.assertTrue(createdTarget.getId() != null);

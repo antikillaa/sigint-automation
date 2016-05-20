@@ -8,7 +8,7 @@ And Created target group is correct
 
 Scenario: API.Add new target with target groups
 Meta:
-@TEEL 1715
+@wip
 Given I sign in as admin user
 When I send create target group without targets request
 Then I got response code 200
