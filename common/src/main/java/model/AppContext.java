@@ -1,6 +1,8 @@
 package model;
 
 import model.lists.RFIList;
+import model.lists.TargetGroupsList;
+import model.lists.TargetsList;
 import model.lists.UsersList;
 
 import java.io.IOException;
@@ -64,8 +66,36 @@ public class AppContext {
 
         private RFIList RFIs;
         private UsersList users;
+        private TargetGroupsList targetGroups;
+        private TargetsList targets;
+
+
+        public TargetsList getTargets() {
+            if (targets == null) {
+                targets = new TargetsList();
+            }
+            return targets;
+        }
+
+        public void setTargets(TargetsList targets) {
+            this.targets = targets;
+        }
+
+        public TargetGroupsList getTargetGroups() {
+            if (targetGroups==null){
+                targetGroups = new TargetGroupsList();
+            }
+            return targetGroups;
+        }
+
+        public void setTargetGroups(TargetGroupsList targetGroups) {
+            this.targetGroups = targetGroups;
+        }
 
         public UsersList getUsers() {
+            if (users==null) {
+                users = new UsersList();
+            }
             return users;
         }
 
@@ -74,6 +104,9 @@ public class AppContext {
         }
 
         public RFIList getRFIs() {
+            if (RFIs == null){
+                RFIs = new RFIList();
+            }
             return RFIs;
         }
 

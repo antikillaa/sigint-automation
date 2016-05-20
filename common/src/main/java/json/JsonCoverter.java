@@ -1,12 +1,13 @@
 package json;
 
-import errors.NullReturnException;
 import abs.EntityList;
+import errors.NullReturnException;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.MapType;
 import org.codehaus.jackson.map.type.TypeFactory;
 
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -20,6 +21,27 @@ public class JsonCoverter {
 
     private static Logger log = Logger.getRootLogger();
     public static ObjectMapper mapper = new ObjectMapper();
+
+    public static <T> T readEntityFromResponse(Response response, Class<T> entityClass, String id) {
+        String jsonString;
+        if (response.getStatus() == 200) {
+            jsonString = response.readEntity(String.class);
+        } else {
+            log.warn("RFI was not found in json due to error in response");
+            return null;
+        }
+        T entity;
+        MapType mapType = JsonCoverter.constructMapTypeToValue(entityClass);
+        try {
+            HashMap<String, T> map = mapper.readValue(jsonString, mapType);
+            entity = map.get(id);
+        } catch (java.io.IOException e) {
+            log.error(e.getMessage());
+            throw new AssertionError();
+        }
+        return entity;
+
+    }
 
 
     public static MapType constructMapTypeToValue( Class<?> valueClass){
@@ -43,7 +65,7 @@ public class JsonCoverter {
     }
 
     public static <T> T fromJsonToObject(String jsonString, Class<T> userClass)
-            throws NullReturnException {
+             {
         log.debug("Converting json string:"+jsonString+" to user class:"+userClass);
         try {
             return mapper.readValue(jsonString, userClass);
@@ -51,7 +73,7 @@ public class JsonCoverter {
             log.error("Error when converting json string:"+jsonString+" to object:"+userClass);
             e.printStackTrace();
         }
-        throw new NullReturnException("Error converting json string to object");
+        throw new AssertionError("Error converting json string to object");
     }
 
     public  static <T >List<T> fromJsonToObjectsList(String jsonString, Class<T[]> userClass)

@@ -14,9 +14,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
-/**
- * Created by dm on 4/6/16.
- */
 public class CyclesDeserialize extends JsonDeserializer<CyclesList> {
 
 

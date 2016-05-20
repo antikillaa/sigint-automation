@@ -1,7 +1,7 @@
 package steps;
-import errors.NullReturnException;
-import model.AppContext;
 import http.requests.ErrorResponse;
+import json.JsonCoverter;
+import model.AppContext;
 import model.Token;
 import model.User;
 import org.apache.log4j.Logger;
@@ -9,7 +9,6 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
-import json.JsonCoverter;
 import services.UserService;
 
 import javax.ws.rs.core.Response;
@@ -50,10 +49,13 @@ public class APILoginSteps {
         log.info("Signing in...");
         Response response;
         User user = context.getFromRunContext("user", User.class);
+        String password;
         if (validness.toLowerCase().equals("incorrect")) {
-            user.setPassword("incorrect");
+            password = "incorrect";
+        } else {
+            password = user.getPassword();
         }
-        response = userService.signIn(user);
+        response = userService.signIn(user.getName(), password);
         context.putToRunContext("code", response.getStatus());
         context.putToRunContext("message", response.readEntity(String.class));
     }
@@ -65,35 +67,23 @@ public class APILoginSteps {
         Integer actual;
         actual = context.getFromRunContext("code", Integer.class);
         Integer expected = Integer.valueOf(real);
-        Assert.assertEquals("Actual code:"+actual+" Expected code:"+real, actual, expected);
+        Assert.assertEquals("Incorrect return codes!", expected, actual);
 
     }
 
     @Then("I got token in response")
     public void checkAndPutToken() throws IOException {
         log.info("Verifying if token is received");
-        Token token;
-        try {
-            token = JsonCoverter.fromJsonToObject(context.getFromRunContext("message", String.class), Token.class);
-        } catch (NullReturnException e) {
-            log.error("Cannot get token!");
-            throw new AssertionError();
-        }
+        Token token = JsonCoverter.fromJsonToObject(context.getFromRunContext("message", String.class), Token.class);
         context.environment().setToken(token);
     }
 
     @Then("Error message is $message")
     public void checkErrorMessage(String message) throws IOException {
         log.info("Verifying error message");
-        ErrorResponse response;
-        try {
-            response = JsonCoverter.fromJsonToObject(context.getFromRunContext("message", String.class),
+        ErrorResponse response = JsonCoverter.fromJsonToObject(context.getFromRunContext("message", String.class),
                     ErrorResponse.class);
-            Assert.assertTrue(response.getMessage().toLowerCase().equals(message.toLowerCase()));
-        } catch (NullReturnException e) {
-            log.error("Message is not received!");
-            log.error(e.getMessage());
-            throw new AssertionError("Error message wasn't not received!");
-        }
+        Assert.assertTrue(response.getMessage().toLowerCase().equals(message.toLowerCase()));
+
     }
 }

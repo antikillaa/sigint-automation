@@ -90,13 +90,8 @@ public class ReportParser {
         Response response = zapi.postCycle(cycle);
 
         if (response.getStatus() == 200) {
-            try {
-                cycle = JsonCoverter.fromJsonToObject(response.readEntity(String.class), Cycle.class);
-            } catch (NullReturnException e) {
-                log.error("Cycle wasn't created");
-                e.printStackTrace();
 
-            }
+            cycle = JsonCoverter.fromJsonToObject(response.readEntity(String.class), Cycle.class);
             log.info("cycle created: " + cycle);
 
         } else {

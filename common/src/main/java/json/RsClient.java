@@ -1,5 +1,6 @@
 package json;
 
+import errors.NullReturnException;
 import model.AppContext;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
@@ -51,6 +52,17 @@ public class RsClient {
 
     }
 
+    private Entity convertToJson(Object object) {
+        Entity payload;
+        try {
+            payload = Entity.json(JsonCoverter.toJsonString(object));
+        } catch (NullReturnException e) {
+            throw new AssertionError("Cannot convert");
+        }
+        return payload;
+
+    }
+
     /**
      * HTTP GET request
      *
@@ -71,18 +83,18 @@ public class RsClient {
      * HTTP PUT request
      *
      * @param url target URL
-     * @param jsonInString json for PUT request
      * @return JAX-RS client response
      */
-    public Response put(String url, String jsonInString){
-        log.debug("Sending PUT request with payload:"+jsonInString);
-        Entity payload = Entity.json(jsonInString);
+    public Response put(String url, Object object){
+
+        Entity payload = convertToJson(object);
+        log.debug("Sending PUT request with payload:"+ payload);
         return buildRequest(url).put(payload);
     }
 
-    public Response put(String url, String jsonInString, Cookie cookie) {
-        log.debug("Sending PUT request with payload:"+jsonInString);
-        Entity payload = Entity.json(jsonInString);
+    public Response put(String url, Object object, Cookie cookie) {
+        Entity payload = convertToJson(object);
+        log.debug("Sending PUT request with payload:"+ payload);
         return buildRequest(url).cookie(cookie).put(payload);
     }
 
