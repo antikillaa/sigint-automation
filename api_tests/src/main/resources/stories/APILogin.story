@@ -1,10 +1,3 @@
-Meta:
-
-Narrative:
-As a user
-I want to perform an action
-So that I can achieve a business goal
-
 
 Scenario: On Login request with correct credentials token should be sent
 Given as admin user

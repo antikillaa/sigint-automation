@@ -8,6 +8,11 @@ public class TargetGroupsList extends EntityList<TargetGroup> {
 
     @Override
     public TargetGroup getEntity(String param) throws NullReturnException {
-        return null;
+        for(TargetGroup group: entities) {
+            if (group.getId().equals(param)){
+                return group;
+            }
+        }
+        throw new NullReturnException("There is not Target Group!");
     }
 }

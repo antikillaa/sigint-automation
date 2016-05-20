@@ -135,13 +135,9 @@ public class RFIService implements EntityService<InformationRequest> {
         RFIDetailsRequest request = new RFIDetailsRequest(id);
         Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
         String responseJson = response.readEntity(String.class);
-        try {
-            InformationRequest RFI = JsonCoverter.fromJsonToObject(responseJson, RFIDetailsResponse.class).getResult();
-            return RFI;
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError();
-        }
+        InformationRequest RFI = JsonCoverter.fromJsonToObject(responseJson, RFIDetailsResponse.class).getResult();
+        return RFI;
+
     }
 
     public int cancel(InformationRequest entity) {

@@ -39,10 +39,10 @@ public class UserService implements EntityService<User> {
         return null;
     }
 
-    public Response signIn(User user){
+    public Response signIn(String name, String password){
         SignInRequest signInRequest = new SignInRequest();
-        signInRequest.setName(user.getName());
-        signInRequest.setPassword(user.getPassword());
+        signInRequest.setName(name);
+        signInRequest.setPassword(password);
         try {
             Response response = rsClient.post(context.environment().getSigintHost()
                     + signInRequest.getURI(),

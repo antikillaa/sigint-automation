@@ -1,4 +1,4 @@
-package json;
+package json.serialization;
 
 import model.TargetGroup;
 import org.codehaus.jackson.JsonGenerator;
@@ -11,10 +11,11 @@ import java.util.List;
 
 public class TargetJsonSerializer extends JsonSerializer<List<TargetGroup>> {
     public void serialize(List<TargetGroup> value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonProcessingException {
-
-        jgen.writeArrayFieldStart("groups");
+        jgen.writeStartArray();
         for (TargetGroup group: value) {
+            jgen.writeStartObject();
             jgen.writeObjectField("id", group.getId());
+            jgen.writeEndObject();
         }
         jgen.writeEndArray();
 

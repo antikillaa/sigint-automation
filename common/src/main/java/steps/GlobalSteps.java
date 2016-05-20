@@ -1,14 +1,13 @@
 package steps;
 
 import errors.NullReturnException;
+import json.JsonCoverter;
 import model.AppContext;
-import model.lists.RFIList;
 import model.User;
 import model.lists.UsersList;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStories;
 import org.jbehave.core.annotations.BeforeStories;
-import json.JsonCoverter;
 import zapi.ReportParser;
 
 import java.io.InputStream;
@@ -33,8 +32,6 @@ public class GlobalSteps {
         }
         AppContext context = AppContext.getContext();
         context.entities().setUsers(users);
-        RFIList rfiList = new RFIList();
-        context.entities().setRFIs(rfiList);
 
     }
 

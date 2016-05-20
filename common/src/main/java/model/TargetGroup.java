@@ -2,8 +2,11 @@ package model;
 
 
 import abs.TeelaEntity;
-import json.TargetGroupJsonSerializer;
+import json.serialization.TargetGroupDeserializer;
+import json.serialization.TargetGroupJsonSerializer;
+import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.List;
@@ -15,25 +18,16 @@ public class TargetGroup extends TeelaEntity {
     private String name;
     private String description;
     @JsonSerialize(using= TargetGroupJsonSerializer.class)
+    @JsonDeserialize(using= TargetGroupDeserializer.class)
     private List<Target> targets;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-
-    private String id;
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public TargetGroup setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getDescription() {
@@ -53,7 +47,10 @@ public class TargetGroup extends TeelaEntity {
     }
 
     public TargetGroup generate() {
-        return null;
+        this
+                .setName(RandomStringUtils.randomAlphabetic(10))
+                .setDescription(RandomStringUtils.randomAlphabetic(20));
+        return this;
     }
 
 }

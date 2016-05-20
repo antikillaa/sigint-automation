@@ -1,5 +1,6 @@
 package abs;
 import errors.NullReturnException;
+import org.apache.commons.lang.math.RandomUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,8 +8,7 @@ import java.util.List;
 
 public abstract class EntityList<T extends TeelaEntity> implements Iterable<T> {
 
-    private List <T> entities;
-
+    protected List <T> entities;
 
     public EntityList(List<T> entities) {
         this.entities = new ArrayList<>(entities);
@@ -77,6 +77,15 @@ public abstract class EntityList<T extends TeelaEntity> implements Iterable<T> {
             throw new AssertionError("There are no entities in the list");
         }
         return entity;
+    }
+
+    public T random() {
+        if (entities.size() == 0) {
+            throw new AssertionError("There are no entities in current list");
+        }
+        if (entities.size() > 1) {
+            return entities.get(RandomUtils.nextInt(entities.size()-1)); }
+        return entities.get(0);
     }
 
 }

@@ -6,10 +6,13 @@ import model.Target;
 
 public class TargetsList extends EntityList<Target> {
 
-
-
     @Override
     public Target getEntity(String param) throws NullReturnException {
-        return null;
+        for (Target target:entities) {
+            if (target.getId().equals(param)) {
+                return target;
+            }
+        }
+        throw new NullReturnException("Target is not found!");
     }
 }

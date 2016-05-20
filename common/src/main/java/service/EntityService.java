@@ -1,6 +1,4 @@
-package service; /**
- * Created by dm on 3/11/16.
- */
+package service;
 
 import abs.EntityList;
 import abs.SearchFilter;
