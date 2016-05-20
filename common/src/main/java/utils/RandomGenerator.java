@@ -49,6 +49,9 @@ public class RandomGenerator {
             languages.add(countryCodes.get(RandomUtils.nextInt(countryCodes.size())));
             i++;
         }
+        if (languages.size() == 0){
+            return null;
+        }
         return languages;
     }
 
