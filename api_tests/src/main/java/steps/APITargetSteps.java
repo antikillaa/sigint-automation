@@ -1,5 +1,6 @@
 package steps;
 
+import conditions.EqualCondition;
 import model.AppContext;
 import model.Target;
 import model.TargetGroup;
@@ -8,6 +9,7 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TargetService;
+import verifier.Verify;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +42,8 @@ public class APITargetSteps {
         Assert.assertEquals(contextTarget.getName(), createdTarget.getName());
         Assert.assertEquals(contextTarget.getKeywords(), createdTarget.getKeywords());
         Assert.assertEquals(contextTarget.getPhones(), createdTarget.getPhones());
-        Assert.assertEquals(contextTarget.getLanguages(), createdTarget.getLanguages());
+        //Assert.assertEquals(contextTarget.getLanguages(), createdTarget.getLanguages());
+        Verify.shouldBe(new EqualCondition(contextTarget.getLanguages(), createdTarget.getLanguages()));
         Assert.assertEquals(contextTarget.getGroups(), createdTarget.getGroups());
         Assert.assertEquals(contextTarget.getType(), createdTarget.getType());
         Assert.assertTrue(createdTarget.getId() != null);
