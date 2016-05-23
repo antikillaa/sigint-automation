@@ -8,13 +8,15 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
-import pages.blocks.SidebarRightWrapper;
 import pages.blocks.content.header.Header;
 import pages.blocks.content.header.breadcrumb.Breadcrumb;
 import pages.blocks.tables.ReportRow;
 import pages.blocks.tables.ReportsTable;
 import pages.blocks.tables.toolbar.ReportsTableToolbar;
 import pages.reports.*;
+import pages.reports.sidebar.SidebarRightWrapper;
+
+import java.util.ArrayList;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.page;
@@ -174,12 +176,12 @@ public class UIReportsSteps extends UISteps {
 
     @Then("I should see 'Remove Ownership' button on 'Edit Report' page")
     public void shouldSeeRemoveOwnershipButtonOnEditReportPage(){
-        pages.reportsEditPage().getSidebarRightWrapper().getRemoveReportOwnership().shouldBe(visible);
+        pages.reportsEditPage().getSidebarRightWrapper().getRemoveOwnership().shouldBe(visible);
     }
 
     @When("I press 'Remove Ownership' button on 'Edit Report' page")
     public void pressRemoveOwnershipButton() {
-        page(SidebarRightWrapper.class).clickRemoveReportOwnership();
+        page(SidebarRightWrapper.class).clickRemoveOwnership();
     }
 
     @Then("I should see 'Reports->Draft' page")
@@ -219,6 +221,47 @@ public class UIReportsSteps extends UISteps {
             throw new AssertionError("Report with subject:" + report.getSubject() + " does not found!");
         }
     }
+
+    @When("I select a report in 'Unassigned' status and owner is 'Empty'")
+    public void selectReportInStatusAndOwnerIs(){
+        ArrayList<ReportRow> reportRows = page(ReportsTable.class)
+                .findReports()
+                .filterByColumnWithValue("Status", "UNASSIGNED")
+                .filterByColumnWithValue("Owner", "")
+                .getReportRows();
+
+        if (reportRows.isEmpty()) {
+            log.error("UNASSIGNED report without ownership was not found!");
+            throw new AssertionError("UNASSIGNED report without ownership was not found!");
+        } else {
+            ReportRow reportRow = reportRows.get(0).selectReport();
+
+            Report report = new Report();
+            report.setSubject(reportRow.getCellByColumnName("Subject").text());
+
+            context.putToRunContext("reportRow", reportRow);
+            context.putToRunContext("report", report);
+        }
+    }
+
+    @When("I press 'Take Ownership' button on 'Edit Report' page")
+    public void pressTakeOwnershipButtonOnEditReportPage() {
+        pages.reportsEditPage().getSidebarRightWrapper().clickTakeOwnershipButton();
+    }
+
+    @Then("required fields are enabled on 'Edit Report' page")
+    public void requiredFieldsAreEnabledOnEditReportPage() {
+        pages.reportsEditPage().getSubject().shouldBe(enabled);
+    }
+
+    @Then("required buttons are enabled on 'Edit Report' page")
+    public void requiredButtonsAreEnabledOnEditReportPage() {
+        pages.reportsEditPage().getSidebarRightWrapper().getRefreshButton().shouldBe(enabled);
+        pages.reportsEditPage().getSidebarRightWrapper().getRemoveOwnership().shouldBe(enabled);
+        pages.reportsEditPage().getSidebarRightWrapper().getSubmitButton().shouldBe(enabled);
+        pages.reportsEditPage().getSidebarRightWrapper().getSaveDraftButton().shouldBe(enabled);
+    }
+
 
 
 

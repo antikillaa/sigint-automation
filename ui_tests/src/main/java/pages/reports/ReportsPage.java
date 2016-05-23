@@ -3,7 +3,7 @@ package pages.reports;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import pages.blocks.SidebarRightWrapper;
+import pages.reports.sidebar.SidebarRightWrapper;
 
 import java.util.Random;
 
@@ -66,7 +66,6 @@ public abstract class ReportsPage {
             clickRecordTypeSelect().getRecordTypeOptions().first().shouldBe(visible);
         }
         getRecordTypeOptions().get(new Random().nextInt(getRecordTypeOptions().size())).click();
-
         return this;
     }
 
@@ -75,7 +74,6 @@ public abstract class ReportsPage {
             clickSourceIdSelect().getSourceIdOptions().first().shouldBe(visible);
         }
         getSourceIdOptions().get(new Random().nextInt(getSourceIdOptions().size())).click();
-
         return this;
     }
 }
