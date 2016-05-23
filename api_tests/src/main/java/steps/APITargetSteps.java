@@ -38,14 +38,14 @@ public class APITargetSteps {
     public void createdTargetCorrect() {
         Target contextTarget = context.getFromRunContext("requestTarget", Target.class);
         Target createdTarget = context.entities().getTargets().getLatest();
-        Assert.assertEquals(contextTarget.getDescription(), createdTarget.getDescription());
-        Assert.assertEquals(contextTarget.getName(), createdTarget.getName());
-        Assert.assertEquals(contextTarget.getKeywords(), createdTarget.getKeywords());
-        Assert.assertEquals(contextTarget.getPhones(), createdTarget.getPhones());
-        //Assert.assertEquals(contextTarget.getLanguages(), createdTarget.getLanguages());
+        Verify.shouldBe(new EqualCondition(contextTarget.getDescription(), createdTarget.getDescription()));
+        Verify.shouldBe(new EqualCondition(contextTarget.getName(), createdTarget.getName()));
+        Verify.shouldBe(new EqualCondition(contextTarget.getKeywords(), createdTarget.getKeywords()));
+        Verify.shouldBe(new EqualCondition(contextTarget.getPhones(), createdTarget.getPhones()));
         Verify.shouldBe(new EqualCondition(contextTarget.getLanguages(), createdTarget.getLanguages()));
-        Assert.assertEquals(contextTarget.getGroups(), createdTarget.getGroups());
-        Assert.assertEquals(contextTarget.getType(), createdTarget.getType());
+        Verify.shouldBe(new EqualCondition(contextTarget.getGroups(), createdTarget.getGroups()));
+        Verify.shouldBe(new EqualCondition(contextTarget.getType(), createdTarget.getType()));
+
         Assert.assertTrue(createdTarget.getId() != null);
 
     }
