@@ -42,15 +42,12 @@ public class RandomGenerator {
 
     public static LinkedHashSet<String> generateLanguages(int maxLanguages) {
         LinkedHashSet<String> languages = new LinkedHashSet<>();
-        int numLanguages = RandomUtils.nextInt(maxLanguages)+1;
+        int numLanguages = RandomUtils.nextInt(maxLanguages);
         List<String> countryCodes = Arrays.asList(Locale.getISOCountries());
         int i = 0;
         while (i < numLanguages) {
             languages.add(countryCodes.get(RandomUtils.nextInt(countryCodes.size())));
             i++;
-        }
-        if (languages.size() == 0){
-            return null;
         }
         return languages;
     }
