@@ -4,7 +4,7 @@ import model.Record;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import pages.blocks.SidebarRightWrapper;
+import pages.reports.sidebar.SidebarRightWrapper;
 import pages.blocks.tables.RecordRow;
 import pages.blocks.tables.RecordsTable;
 import pages.records.RecordsProcessedPage;

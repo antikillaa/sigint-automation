@@ -43,8 +43,8 @@ public abstract class UISteps extends GlobalSteps {
             webDriver.manage().window().setSize(new Dimension(1920, 1080));
             WebDriverRunner.setWebDriver(webDriver);
         }
-        Configuration.timeout = Long.parseLong(System.getProperties().getProperty("selenide.timeout", "15000"));
-        Configuration.collectionsTimeout = Long.parseLong(System.getProperties().getProperty("selenide.collectionsTimeout", "15000"));
+        Configuration.timeout = Long.parseLong(System.getProperties().getProperty("selenide.timeout", "30000"));
+        Configuration.collectionsTimeout = Long.parseLong(System.getProperties().getProperty("selenide.collectionsTimeout", "30000"));
     }
 
     @BeforeScenario

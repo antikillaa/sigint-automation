@@ -9,6 +9,8 @@ import static com.codeborne.selenide.Selenide.page;
 
 public class ReportsTable extends Table {
 
+    private ArrayList<ReportRow> reportRows = new ArrayList<>();
+
     public ReportsTableToolbar getTableToolbar() {
         return page(ReportsTableToolbar.class);
     }
@@ -36,4 +38,25 @@ public class ReportsTable extends Table {
     public ReportRow firstReport() {
         return getReports().get(0);
     }
+
+    public ArrayList<ReportRow> getReportRows() {
+        return reportRows;
+    }
+
+    public ReportsTable findReports() {
+        reportRows = getReports();
+        return this;
+    }
+
+    public ReportsTable filterByColumnWithValue(String column, String value) {
+        ArrayList<ReportRow> list = new ArrayList<>();
+        for (ReportRow reportRow : reportRows) {
+            if (reportRow.getCellByColumnName(column).text().toLowerCase().contentEquals(value.toLowerCase())) {
+                list.add(reportRow);
+            }
+        }
+        reportRows = list;
+        return this;
+    }
+
 }
