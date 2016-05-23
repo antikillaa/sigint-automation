@@ -5,8 +5,6 @@ Meta:
 
 
 Scenario: User is able to create a manual report and save it as Draft
-Meta:
-@TEEL
 Given I logged in as Operator
 And I'm on 'Reports->All' page
 When I press 'Create Manual Report' button
@@ -17,8 +15,6 @@ And report status is 'Draft' on 'Reports->All' page
 
 
 Scenario: User is able to remove ownership from it’s own draft report
-Meta:
-@TEEL
 Given I logged in as Operator
 And I'm on 'Reports->Draft' page
 When I select first report in the table
