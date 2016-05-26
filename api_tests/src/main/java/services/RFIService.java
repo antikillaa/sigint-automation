@@ -29,23 +29,9 @@ public class RFIService implements EntityService<InformationRequest> {
 
 
     private void readRFIFromResponse(Response response) {
-        String jsonString;
-
-        if (response.getStatus() == 200) {
-            jsonString = response.readEntity(String.class);
-        } else {
-            log.warn("RFI was not found in json due to error in response");
-            return;
-        }
-        InformationRequest createdRFI ;
-        MapType mapType = JsonCoverter.constructMapTypeToValue(InformationRequest.class);
-        try {
-            HashMap<String, InformationRequest> map = JsonCoverter.mapper.readValue(jsonString, mapType);
-            createdRFI = map.get("result");
+        InformationRequest createdRFI = JsonCoverter.readEntityFromResponse(response, InformationRequest.class, "result");
+        if (createdRFI != null) {
             context.entities().getRFIs().addOrUpdateEntity(createdRFI);
-        } catch (java.io.IOException e) {
-            log.error(e.getMessage());
-            throw new AssertionError();
         }
     }
 
@@ -96,8 +82,6 @@ public class RFIService implements EntityService<InformationRequest> {
                     "doesn't in the list");
         }
         return response.getStatus();
-
-
     }
 
     public EntityList<InformationRequest> list(SearchFilter filter) {
@@ -123,7 +107,6 @@ public class RFIService implements EntityService<InformationRequest> {
             log.error(e.getMessage());
             throw new AssertionError("Unable to read search results from RFI search");
         }
-
     }
 
     public int update(InformationRequest entity) {
@@ -137,7 +120,6 @@ public class RFIService implements EntityService<InformationRequest> {
         String responseJson = response.readEntity(String.class);
         InformationRequest RFI = JsonCoverter.fromJsonToObject(responseJson, RFIDetailsResponse.class).getResult();
         return RFI;
-
     }
 
     public int cancel(InformationRequest entity) {
@@ -152,7 +134,6 @@ public class RFIService implements EntityService<InformationRequest> {
         Response response = rsClient.post(sigintHost + request.getURI(), null, request.getCookie());
         readRFIFromResponse(response);
         return response.getStatus();
-
     }
 
 }

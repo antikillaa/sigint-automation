@@ -1,9 +1,6 @@
 package model;
 
-import model.lists.RFIList;
-import model.lists.TargetGroupsList;
-import model.lists.TargetsList;
-import model.lists.UsersList;
+import model.lists.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +23,6 @@ public class AppContext {
             entities = new Entities();
         }
         return entities;
-
     }
 
     public Environment environment(){
@@ -68,7 +64,7 @@ public class AppContext {
         private UsersList users;
         private TargetGroupsList targetGroups;
         private TargetsList targets;
-
+        private PhonebookList phonebooks;
 
         public TargetsList getTargets() {
             if (targets == null) {
@@ -114,8 +110,18 @@ public class AppContext {
             this.RFIs = RFIs;
         }
 
-        private Entities(){}
+        public PhonebookList getPhonebooks() {
+            if (phonebooks == null) {
+                phonebooks = new PhonebookList();
+            }
+            return phonebooks;
+        }
 
+        public void setPhonebooks(PhonebookList phonebooks) {
+            this.phonebooks = phonebooks;
+        }
+
+        private Entities(){}
 
     }
 
