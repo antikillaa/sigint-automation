@@ -28,10 +28,9 @@ public class APITargetSteps {
             target.setGroups(groups);
         }
 
-        int response = service.addNew(target);
+        int response = service.add(target);
         context.putToRunContext("code", response);
         context.putToRunContext("requestTarget", target);
-
     }
 
     @Then("Created target is correct")
@@ -47,6 +46,5 @@ public class APITargetSteps {
         Verify.shouldBe(new EqualCondition(contextTarget.getType(), createdTarget.getType()));
 
         Assert.assertTrue(createdTarget.getId() != null);
-
     }
 }

@@ -28,7 +28,7 @@ public class APIPhonebookSteps {
     @When("I send create Phonebook Entry request with all fields")
     public void createPhonebookEntry() {
         Phonebook phonebook = new Phonebook().generate();
-        int responseCode = service.addNew(phonebook);
+        int responseCode = service.add(phonebook);
 
         context.putToRunContext("code", responseCode);
         context.putToRunContext("phonebook", phonebook);

@@ -12,12 +12,9 @@ import model.Phonebook;
 import model.phonebook.PhonebookSearchResults;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.type.MapType;
 import service.EntityService;
 
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.util.HashMap;
 
 public class PhonebookService implements EntityService<Phonebook>{
 
@@ -26,7 +23,7 @@ public class PhonebookService implements EntityService<Phonebook>{
     private static AppContext context = AppContext.getContext();
     private final String sigintHost = context.environment().getSigintHost();
 
-    public int addNew(Phonebook entity) {
+    public int add(Phonebook entity) {
         PhonebookEntriesRequest request = new PhonebookEntriesRequest();
         log.info("Creating new Phonebook entry");
         Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
@@ -44,19 +41,15 @@ public class PhonebookService implements EntityService<Phonebook>{
     public EntityList<Phonebook> list(SearchFilter filter) {
         PhonebookSearchRequest request = new PhonebookSearchRequest();
         Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
-
-        String responseJson = response.readEntity(String.class);
-        MapType mapType = JsonCoverter.constructMapTypeToValue(PhonebookSearchResults.class);
-        try {
-            HashMap<String, PhonebookSearchResults> searchResults = JsonCoverter.mapper.readValue(responseJson, mapType);
-            return new EntityList<Phonebook>(searchResults.get("result").getContent()) {
+        PhonebookSearchResults searchResults = JsonCoverter.readEntityFromResponse(response, PhonebookSearchResults.class, "result");
+        if (searchResults == null) {
+            throw new AssertionError("Unable to read search results from Phonebook search");
+        } else {
+            return new EntityList<Phonebook>(searchResults.getContent()) {
                 public Phonebook getEntity(String param) throws NullReturnException {
                     throw new NotImplementedException();
                 }
             };
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("Unable to read search results from Phonebook search");
         }
     }
 

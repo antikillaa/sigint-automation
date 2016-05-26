@@ -19,7 +19,7 @@ public class UserService implements EntityService<User> {
     private static RsClient rsClient = new RsClient();
     private AppContext context = AppContext.getContext();
 
-    public int addNew(User user) {
+    public int add(User user) {
         return 0;
     }
 
@@ -52,6 +52,5 @@ public class UserService implements EntityService<User> {
             e.printStackTrace();
             throw new AssertionError("Sign in attempt failed!");
         }
-
     }
 }
