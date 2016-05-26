@@ -1,23 +1,25 @@
 package services;
 
+import abs.EntityList;
 import abs.SearchFilter;
 import errors.NullReturnException;
 import http.requests.rfi.*;
-import model.*;
-import abs.EntityList;
-import org.apache.commons.lang.NotImplementedException;
-import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.type.MapType;
 import json.JsonCoverter;
 import json.RsClient;
+import model.AppContext;
+import model.FileAttachment;
+import model.InformationRequest;
+import model.RFISearchResults;
+import org.apache.commons.lang.NotImplementedException;
+import org.apache.log4j.Logger;
 import service.EntityService;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class RFIService implements EntityService<InformationRequest> {
@@ -29,27 +31,13 @@ public class RFIService implements EntityService<InformationRequest> {
 
 
     private void readRFIFromResponse(Response response) {
-        String jsonString;
-
-        if (response.getStatus() == 200) {
-            jsonString = response.readEntity(String.class);
-        } else {
-            log.warn("RFI was not found in json due to error in response");
-            return;
-        }
-        InformationRequest createdRFI ;
-        MapType mapType = JsonCoverter.constructMapTypeToValue(InformationRequest.class);
-        try {
-            HashMap<String, InformationRequest> map = JsonCoverter.mapper.readValue(jsonString, mapType);
-            createdRFI = map.get("result");
+        InformationRequest createdRFI = JsonCoverter.readEntityFromResponse(response, InformationRequest.class, "result");
+        if (createdRFI != null) {
             context.entities().getRFIs().addOrUpdateEntity(createdRFI);
-        } catch (java.io.IOException e) {
-            log.error(e.getMessage());
-            throw new AssertionError();
         }
     }
 
-    public int addNew(InformationRequest entity) {
+    public int add(InformationRequest entity) {
         RFIUploadRequest request = new RFIUploadRequest();
         try {
             log.debug("Writing InformationRequest to json file...");
@@ -96,38 +84,25 @@ public class RFIService implements EntityService<InformationRequest> {
                     "doesn't in the list");
         }
         return response.getStatus();
-
-
     }
 
     public EntityList<InformationRequest> list(SearchFilter filter) {
         RFISearchRequest request = new RFISearchRequest();
-        String json;
-        try {
-            json = JsonCoverter.toJsonString(filter);
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("JSON string wasn't generated");
-        }
-        Response response = rsClient.post(sigintHost + request.getURI(), json, request.getCookie());
-        String responseJson = response.readEntity(String.class);
-        MapType mapType = JsonCoverter.constructMapTypeToValue(RFISearchResults.class);
-        try {
-            HashMap<String, RFISearchResults> searchResults = JsonCoverter.mapper.readValue(responseJson, mapType);
-            return new EntityList<InformationRequest>(searchResults.get("result").getContent()) {
+        Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
+        RFISearchResults searchResults = JsonCoverter.readEntityFromResponse(response, RFISearchResults.class, "result");
+        if (searchResults == null) {
+            throw new AssertionError("Unable to read search results from RFI search");
+        } else {
+            return new EntityList<InformationRequest>(searchResults.getContent()) {
                 public InformationRequest getEntity(String param) throws NullReturnException {
                     throw new NotImplementedException();
                 }
             };
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("Unable to read search results from RFI search");
         }
-
     }
 
     public int update(InformationRequest entity) {
-        return addNew(entity);
+        return add(entity);
     }
 
     public InformationRequest view(String id) {
@@ -137,7 +112,6 @@ public class RFIService implements EntityService<InformationRequest> {
         String responseJson = response.readEntity(String.class);
         InformationRequest RFI = JsonCoverter.fromJsonToObject(responseJson, RFIDetailsResponse.class).getResult();
         return RFI;
-
     }
 
     public int cancel(InformationRequest entity) {
@@ -152,7 +126,6 @@ public class RFIService implements EntityService<InformationRequest> {
         Response response = rsClient.post(sigintHost + request.getURI(), null, request.getCookie());
         readRFIFromResponse(response);
         return response.getStatus();
-
     }
 
 }

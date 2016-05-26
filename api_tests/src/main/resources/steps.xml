@@ -15,4 +15,5 @@
     </bean>
     <bean id="targetSteps" class="steps.APITargetSteps">
     </bean>
+    <bean id="phonebookSteps" class="steps.APIPhonebookSteps" />
 </beans>

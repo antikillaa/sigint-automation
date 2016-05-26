@@ -40,7 +40,6 @@ public class JsonCoverter {
             throw new AssertionError();
         }
         return entity;
-
     }
 
 
@@ -86,7 +85,6 @@ public class JsonCoverter {
             e.printStackTrace();
         }
         throw new NullReturnException("Error when converting json string to user class");
-
     }
 
     public  static <T extends EntityList>T fromJsonToObjectsList(InputStream stream, Class<T> userClass)

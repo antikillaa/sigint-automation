@@ -26,10 +26,9 @@ public class APITargetGroupSteps {
             targets.add(context.entities().getTargets().random());
             group.setTargets(targets);
         }
-        int response = service.addNew(group);
+        int response = service.add(group);
         context.putToRunContext("code", response);
         context.putToRunContext("requestTargetGroup", group);
-
     }
 
     @Then("Created target group is correct")

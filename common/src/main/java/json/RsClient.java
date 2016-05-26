@@ -49,7 +49,6 @@ public class RsClient {
         return client
                 .target(url)
                 .request(MediaType.APPLICATION_JSON_TYPE);
-
     }
 
     private Entity convertToJson(Object object) {
@@ -60,7 +59,6 @@ public class RsClient {
             throw new AssertionError("Cannot convert");
         }
         return payload;
-
     }
 
     /**
@@ -86,7 +84,6 @@ public class RsClient {
      * @return JAX-RS client response
      */
     public Response put(String url, Object object){
-
         Entity payload = convertToJson(object);
         log.debug("Sending PUT request with payload:"+ payload);
         return buildRequest(url).put(payload);
@@ -106,17 +103,21 @@ public class RsClient {
      * @return JAX-RS client response
      */
     public Response post(String url, String jsonInString){
-        log.debug("Sending POST request with payload:"+jsonInString);
+        log.debug("Sending POST request with payload:" + jsonInString);
         Entity payload = Entity.json(jsonInString);
         return buildRequest(url).post(payload);
     }
 
     public Response post(String url, String jsonInString, Cookie cookie) {
-        log.debug("Sending POST request with payload:"+jsonInString);
+        log.debug("Sending POST request with payload:" + jsonInString);
         Entity payload = Entity.json(jsonInString);
         return buildRequest(url).cookie(cookie).post(payload);
+    }
 
-
+    public Response post(String url, Object object, Cookie cookie) {
+        Entity payload = convertToJson(object);
+        log.debug("Sending POST request with payload:" + object);
+        return buildRequest(url).cookie(cookie).post(payload);
     }
 
     /**
@@ -133,7 +134,6 @@ public class RsClient {
     public Response delete(String url, Cookie cookie) {
         log.debug("Sending Delete request");
         return buildRequest(url).cookie(cookie).delete();
-
     }
 
 
