@@ -62,7 +62,7 @@ public class UIReportsSteps extends UISteps {
 
         pages.reportsCreatePage().getSubject().val(report.getSubject());
 
-        context.putToRunContext("report", report);
+        context.put("report", report);
     }
 
     @When("I fill out required fields on 'Create Manual Report' page")
@@ -74,7 +74,7 @@ public class UIReportsSteps extends UISteps {
                 .selectRandomRecordType()
                 .selectRandomSourceId();
 
-        context.putToRunContext("report", report);
+        context.put("report", report);
     }
 
     @Then("report appears on 'Reports->Draft' page")
@@ -115,7 +115,7 @@ public class UIReportsSteps extends UISteps {
         report.setSubject(reportElement.getText());
         reportElement.click();
 
-        context.putToRunContext("report", report);
+        context.put("report", report);
     }
 
     @Then("record is attached to the report")
@@ -164,13 +164,13 @@ public class UIReportsSteps extends UISteps {
         Report report = new Report();
         report.setSubject(reportRow.getCellByColumnName("Subject").text());
 
-        context.putToRunContext("reportRow", reportRow);
-        context.putToRunContext("report", report);
+        context.put("reportRow", reportRow);
+        context.put("report", report);
     }
 
     @When("I press 'Edit Report' button against it")
     public void pressEditReportButtonAgainstIt() {
-        ReportRow reportRow = context.getFromRunContext("reportRow", ReportRow.class);
+        ReportRow reportRow = context.get("reportRow", ReportRow.class);
         reportRow.clickEditReportButton();
     }
 
@@ -191,7 +191,7 @@ public class UIReportsSteps extends UISteps {
 
     @Then("I should not see selected report among other draft reports")
     public void shouldNotSeeSelectedReportAmongOtherDraftReports() {
-        Report report = context.getFromRunContext("report", Report.class);
+        Report report = context.get("report", Report.class);
         ReportsTable reportsTable = page(ReportsTable.class);
         if (!reportsTable.isEmpty()) {
             Assert.assertNull(reportsTable.getReportByColumnNameAndValue("Subject", report.getSubject()));
@@ -200,7 +200,7 @@ public class UIReportsSteps extends UISteps {
 
     @Then("I should $see selected report on the reports table")
     public void shouldSeeSelectedReportThere(String see) {
-        Report report = context.getFromRunContext("report", Report.class);
+        Report report = context.get("report", Report.class);
         ReportsTable reportsTable = page(ReportsTable.class);
         if (see.contentEquals("not see")) {
             if (!reportsTable.isEmpty()) {
@@ -213,7 +213,7 @@ public class UIReportsSteps extends UISteps {
 
     @Then("report owner should be '$owner'")
     public void reportOwnerShouldBeEmpty(String owner) {
-        Report report = context.getFromRunContext("report", Report.class);
+        Report report = context.get("report", Report.class);
         ReportRow reportRow = page(ReportsTable.class).getReportByColumnNameAndValue("Subject", report.getSubject());
         if (reportRow != null) {
             reportRow.getCellByColumnName("Owner").shouldHave(text(owner.toLowerCase().contentEquals("empty") ? "" : owner));
@@ -239,8 +239,8 @@ public class UIReportsSteps extends UISteps {
             Report report = new Report();
             report.setSubject(reportRow.getCellByColumnName("Subject").text());
 
-            context.putToRunContext("reportRow", reportRow);
-            context.putToRunContext("report", report);
+            context.put("reportRow", reportRow);
+            context.put("report", report);
         }
     }
 

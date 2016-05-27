@@ -14,7 +14,7 @@ import verifier.Verify;
 import java.util.ArrayList;
 import java.util.List;
 
-public class APITargetSteps {
+public class APITargetSteps extends APISteps {
     private Logger log = Logger.getLogger(APITargetGroupSteps.class);
     private AppContext context = AppContext.getContext();
     private TargetService service = new TargetService();
@@ -29,13 +29,13 @@ public class APITargetSteps {
         }
 
         int response = service.add(target);
-        context.putToRunContext("code", response);
-        context.putToRunContext("requestTarget", target);
+        context.put("code", response);
+        context.put("requestTarget", target);
     }
 
     @Then("Created target is correct")
     public void createdTargetCorrect() {
-        Target contextTarget = context.getFromRunContext("requestTarget", Target.class);
+        Target contextTarget = context.get("requestTarget", Target.class);
         Target createdTarget = context.entities().getTargets().getLatest();
         Verify.shouldBe(new EqualCondition(contextTarget.getDescription(), createdTarget.getDescription()));
         Verify.shouldBe(new EqualCondition(contextTarget.getName(), createdTarget.getName()));

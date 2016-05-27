@@ -60,11 +60,11 @@ public abstract class UISteps extends GlobalSteps {
     }
 
     Report getReportFromContext() {
-        return context.getFromRunContext("report", Report.class);
+        return context.get("report", Report.class);
     }
 
     Record getRecordFromContext() {
-        return context.getFromRunContext("record", Record.class);
+        return context.get("record", Record.class);
     }
 
 }

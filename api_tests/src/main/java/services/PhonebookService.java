@@ -54,7 +54,15 @@ public class PhonebookService implements EntityService<Phonebook>{
     }
 
     public int update(Phonebook entity) {
-        return 0;
+        PhonebookEntriesRequest request = new PhonebookEntriesRequest();
+        request.setURI(request.getURI() + "/" + entity.getId());
+        log.info("Updating Phonebook entry id:" + entity.getId());
+        Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
+        Phonebook createdPhonebook = JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
+        if (createdPhonebook != null) {
+            context.entities().getPhonebooks().addOrUpdateEntity(createdPhonebook);
+        }
+        return response.getStatus();
     }
 
     public Phonebook view(String id) {

@@ -15,7 +15,7 @@ import java.text.ParseException;
 /**
  * Created by dm on 4/26/16.
  */
-public class APIRFISearchSteps {
+public class APIRFISearchSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APIRFISearchSteps.class);
     private AppContext context = AppContext.getContext();
@@ -53,8 +53,8 @@ public class APIRFISearchSteps {
             throw new AssertionError("Unknown filter type");
         }
         EntityList<InformationRequest> RFIList = service.list(searchFilter);
-        context.putToRunContext("searchFilter", searchFilter);
-        context.putToRunContext("searchResult", RFIList);
+        context.put("searchFilter", searchFilter);
+        context.put("searchResult", RFIList);
     }
 
 
@@ -63,8 +63,8 @@ public class APIRFISearchSteps {
         log.info("Checking if search result is correct");
         SearchFilter filter;
         EntityList <InformationRequest> searchResult;
-        filter = context.getFromRunContext("searchFilter", RFISearchFilter.class);
-        searchResult = context.getFromRunContext("searchResult", EntityList.class);
+        filter = context.get("searchFilter", RFISearchFilter.class);
+        searchResult = context.get("searchResult", EntityList.class);
         if (searchResult.size() == 0) {
             log.warn("Search result can be incorrect." +
                     "There are not records in it");
@@ -78,8 +78,8 @@ public class APIRFISearchSteps {
     public void checkRFIinResults(String criteria) {
         InformationRequest request;
         EntityList<InformationRequest> list;
-        request = context.getFromRunContext("searchRFI", InformationRequest.class);
-        list = context.getFromRunContext("searchResult", EntityList.class);
+        request = context.get("searchRFI", InformationRequest.class);
+        list = context.get("searchResult", EntityList.class);
         Boolean contains = list.contains(request);
         if (criteria.toLowerCase().equals("in")) {
             Assert.assertTrue(contains);
@@ -94,7 +94,7 @@ public class APIRFISearchSteps {
     @When("I put RFI to search query")
     public void putRFI() {
         InformationRequest RFI = context.entities().getRFIs().getLatest();
-        context.putToRunContext("searchRFI", RFI);
+        context.put("searchRFI", RFI);
 
     }
 

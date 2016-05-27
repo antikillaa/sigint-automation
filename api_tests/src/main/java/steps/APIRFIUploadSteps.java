@@ -11,7 +11,7 @@ import org.junit.Assert;
 import services.RFIService;
 
 
-public class APIRFIUploadSteps {
+public class APIRFIUploadSteps extends APISteps {
 
     private static Logger log = Logger.getLogger(APIRFIUploadSteps.class);
     private static RFIService service = new RFIService();
@@ -32,8 +32,8 @@ public class APIRFIUploadSteps {
 
     private void sendRFI(InformationRequest RFI) {
         int response = service.add(RFI);
-        context.putToRunContext("code", response);
-        context.putToRunContext("requestRFI", RFI);
+        context.put("code", response);
+        context.put("requestRFI", RFI);
         if (response == 200) {
             rfiCorrect();
         }
@@ -43,7 +43,7 @@ public class APIRFIUploadSteps {
         log.info("Verifying if RFI is correct");
         InformationRequest etalonRFI;
         InformationRequest createdRFI;
-        etalonRFI = context.getFromRunContext("requestRFI", InformationRequest.class);;
+        etalonRFI = context.get("requestRFI", InformationRequest.class);;
         createdRFI = context.entities().getRFIs().getLatest();
         checkRFIs(etalonRFI, createdRFI);
     }
@@ -76,8 +76,8 @@ public class APIRFIUploadSteps {
         InformationRequest RFI = context.entities().getRFIs().getLatest();
         InformationRequest newRFI = RFI.generate();
         int response = service.add(newRFI);
-        context.putToRunContext("code", response);
-        context.putToRunContext("requestRFI", newRFI);
+        context.put("code", response);
+        context.put("requestRFI", newRFI);
     }
 
     @Then("RFI is updated")
@@ -91,14 +91,14 @@ public class APIRFIUploadSteps {
         InformationRequest createdRFI = context.entities().getRFIs().getLatest();
         InformationRequest requestRFIView = service.view(createdRFI.getId());
         log.debug("received RFI from response:"+requestRFIView);
-        context.putToRunContext("requestRFIView", requestRFIView);
+        context.put("requestRFIView", requestRFIView);
     }
 
     @Then("RFI details get via details are correct")
     public void RFIDetailsViewCorrect() {
         log.info("Comparing two RFIs...");
         InformationRequest createdRFI = context.entities().getRFIs().getLatest();
-        InformationRequest requestRFIView = context.getFromRunContext("requestRFIView", InformationRequest.class);
+        InformationRequest requestRFIView = context.get("requestRFIView", InformationRequest.class);
         Assert.assertTrue(createdRFI.equals(requestRFIView));
     }
 
@@ -113,27 +113,27 @@ public class APIRFIUploadSteps {
     public void deleteRFI() {
         InformationRequest RFI = context.entities().getRFIs().getLatest();
         int response = service.remove(RFI);
-        context.putToRunContext("code",  response);
+        context.put("code",  response);
     }
 
     @When("I cancel RFI")
     public void cancelRFI() {
         InformationRequest RFI = context.entities().getRFIs().getLatest();
         int response = service.cancel(RFI);
-        context.putToRunContext("code", response);
+        context.put("code", response);
     }
 
     @When("I take ownership of RFI")
     public void assignRFI() {
         InformationRequest RFI = context.entities().getRFIs().getLatest();
         int response = service.assign(RFI);
-        context.putToRunContext("code", response);
+        context.put("code", response);
     }
 
     @Then("RFI has status Assigned and assigned to analyst")
     public void checkAssignedRFI(){
         InformationRequest RFI = context.entities().getRFIs().getLatest();
-        User currentUser = context.getFromRunContext("user", User.class);
+        User currentUser = context.get("user", User.class);
         Assert.assertEquals(RFI.getState(), "ASSIGNED");
         Assert.assertEquals(RFI.getAssignedTo(),currentUser.getId());
     }

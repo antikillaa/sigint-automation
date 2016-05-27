@@ -103,12 +103,11 @@ public class Phonebook extends TeelaEntity {
     @Override
     public Phonebook generate() {
         this
-                .setName(RandomStringUtils.randomAlphabetic(10))
+                .setName("name:" + RandomStringUtils.randomAlphabetic(10))
                 .setPhoneNumber(RandomStringUtils.randomNumeric(10))
-                .setCountry(RandomGenerator.generateCountry())
+                .setCountry("country:" + RandomGenerator.generateCountry())
                 .setAddress("address:" + RandomStringUtils.randomAlphanumeric(20))
-                //TODO TEEL-1754
-                //.setImsi("imsi:" + RandomStringUtils.randomAlphanumeric(10))
+                .setImsi("imsi:" + RandomStringUtils.randomAlphanumeric(10))
                 .setProvider("provider:" + RandomStringUtils.randomAlphanumeric(10))
                 .setLocation("location:" + RandomStringUtils.randomAlphanumeric(20));
         return this;
