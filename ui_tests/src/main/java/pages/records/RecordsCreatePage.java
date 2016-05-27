@@ -2,6 +2,7 @@ package pages.records;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import elements.Select;
 import model.AppContext;
 import org.openqa.selenium.By;
 import pages.SigintPage;
@@ -47,21 +48,18 @@ public class RecordsCreatePage extends SigintPage {
                 "//label[contains(., '" + text + "')]"));
     }
 
-    public SelenideElement getSource() {
-        return getForm()
+    public Select getSource() {
+        return new Select(getForm()
                 .$(By.xpath(".//text-tagger" +
-                        "//div[@click.delegate='enableEditableMode()']"));
+                        "//div[@click.delegate='enableEditableMode()']")));
     }
 
-    public RecordsCreatePage clickSource() {
-        getSource().click();
+
+    public RecordsCreatePage selectSource(String source) {
+        getSource().selectOption(source);
         return this;
     }
 
-    public ElementsCollection getOptionsList() {
-        return $$(By.xpath(".//div[@class='tagger-options-list au-target']" +
-                "/div[@click.delegate='$parent.toggleTag()']"));
-    }
 
     public SelenideElement getFromNumber() {
         return getForm()
@@ -75,30 +73,26 @@ public class RecordsCreatePage extends SigintPage {
         return this;
     }
 
-    public SelenideElement getFromCountry() {
-        return getForm()
-                .$(By.xpath(".//country-tagger[@selected.two-way='item.fromCountry']" +
-                        "//div[@click.delegate='enableEditableMode()']"));
+    public Select getFromCountry() {
+        return new Select(getForm().$(By.xpath(".//country-tagger[@selected.two-way='item.fromCountry']" +
+                        "//div[@click.delegate='enableEditableMode()']")));
     }
 
-    public RecordsCreatePage clickFromCountry() {
-        getFromCountry().click();
+    public RecordsCreatePage selectFromCountry(String country) {
+        getFromCountry().selectOption(country);
         return this;
     }
 
-    public RecordsCreatePage selectOptionByIndex(int index) {
-        getOptionsList().get(index).scrollTo().click();
-        return this;
-    }
 
-    public SelenideElement getLanguage() {
-        return getForm()
+    public Select getLanguage() {
+        return new Select(getForm()
                 .$(By.xpath(".//language-tagger[@selected.two-way='item.language']" +
-                        "//div[@click.delegate='enableEditableMode()']"));
+                        "//div[@click.delegate='enableEditableMode()']")));
+
     }
 
-    public RecordsCreatePage clickLanguage() {
-        getLanguage().click();
+    public RecordsCreatePage selectLanguage(String language) {
+        getLanguage().selectOption(language);
         return this;
     }
 
@@ -169,14 +163,14 @@ public class RecordsCreatePage extends SigintPage {
         return this;
     }
 
-    public SelenideElement getToCountry() {
-        return getForm()
+    public Select getToCountry() {
+        return new Select(getForm()
                 .$(By.xpath(".//country-tagger[@selected.two-way='item.toCountry']" +
-                        "//div[@click.delegate='enableEditableMode()']"));
+                        "//div[@click.delegate='enableEditableMode()']")));
     }
 
-    public RecordsCreatePage clickToCountry() {
-        getToCountry().click();
+    public RecordsCreatePage selectToCountry(String country) {
+        getToCountry().selectOption(country);
         return this;
     }
 

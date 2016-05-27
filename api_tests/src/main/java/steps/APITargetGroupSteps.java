@@ -27,14 +27,14 @@ public class APITargetGroupSteps {
             group.setTargets(targets);
         }
         int response = service.addNew(group);
-        context.putToRunContext("code", response);
-        context.putToRunContext("requestTargetGroup", group);
+        context.put("code", response);
+        context.put("requestTargetGroup", group);
 
     }
 
     @Then("Created target group is correct")
     public void targetGroupCorrect() {
-        TargetGroup contextTargetGroup = context.getFromRunContext("requestTargetGroup", TargetGroup.class);
+        TargetGroup contextTargetGroup = context.get("requestTargetGroup", TargetGroup.class);
         TargetGroup createdTargetGroup = context.entities().getTargetGroups().getLatest();
         Assert.assertEquals(contextTargetGroup.getDescription(), createdTargetGroup.getDescription());
         Assert.assertEquals(contextTargetGroup.getName(), createdTargetGroup.getName());

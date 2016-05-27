@@ -163,6 +163,7 @@ public class Record extends TeelaEntity {
                 .setToNumber(RandomStringUtils.randomNumeric(12))
                 .setRecordID(RandomStringUtils.randomAlphanumeric(8))
                 .setDateAndTime(new Date());
+
         return this;
     }
 

@@ -9,11 +9,14 @@ import model.User;
 import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.BeforeScenario;
 import org.jbehave.core.annotations.BeforeStory;
+import org.jbehave.core.annotations.Given;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import pages.Navigator;
 import pages.Pages;
+import pages.SigintPage;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +30,13 @@ public abstract class UISteps extends GlobalSteps {
     static AppContext context = AppContext.getContext();
     Pages pages = new Pages();
     static User user;
+    static Navigator navigator = new Navigator();
+
+    @Given("I navigate to $mainMenu -> $subMenu page" )
+    public void navigateTo(String mainMenu, String subMenu) {
+        SigintPage page = navigator.navigate_to(mainMenu, subMenu);
+        context.put("page", page);
+    }
 
     @BeforeStory
     public void InitWebDriver() throws IOException {
@@ -60,11 +70,11 @@ public abstract class UISteps extends GlobalSteps {
     }
 
     Report getReportFromContext() {
-        return context.getFromRunContext("report", Report.class);
+        return context.get("report", Report.class);
     }
 
     Record getRecordFromContext() {
-        return context.getFromRunContext("record", Record.class);
+        return context.get("record", Record.class);
     }
 
 }

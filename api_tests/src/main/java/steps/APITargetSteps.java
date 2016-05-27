@@ -9,7 +9,7 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TargetService;
-import verifier.Verify;
+import conditions.Verify;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +29,14 @@ public class APITargetSteps {
         }
 
         int response = service.addNew(target);
-        context.putToRunContext("code", response);
-        context.putToRunContext("requestTarget", target);
+        context.put("code", response);
+        context.put("requestTarget", target);
 
     }
 
     @Then("Created target is correct")
     public void createdTargetCorrect() {
-        Target contextTarget = context.getFromRunContext("requestTarget", Target.class);
+        Target contextTarget = context.get("requestTarget", Target.class);
         Target createdTarget = context.entities().getTargets().getLatest();
         Verify.shouldBe(new EqualCondition(contextTarget.getDescription(), createdTarget.getDescription()));
         Verify.shouldBe(new EqualCondition(contextTarget.getName(), createdTarget.getName()));

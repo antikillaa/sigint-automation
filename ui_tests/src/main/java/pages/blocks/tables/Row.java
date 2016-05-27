@@ -26,7 +26,7 @@ public abstract class Row {
                 "//div[contains(@class, 'pg-col')]"));
     }
 
-    public SelenideElement getCellByColumnName(String columnName) {
+    protected SelenideElement getCellByColumnName(String columnName) {
         log.debug("Find cell by column name:" + columnName + " in the table");
 
         String[] colTexts = getColumns().getTexts();

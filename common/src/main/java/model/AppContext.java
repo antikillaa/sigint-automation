@@ -21,6 +21,16 @@ public class AppContext {
     private Entities entities;
     private Environment environment;
 
+    public Dictionary getDictionary() {
+        return dictionary;
+    }
+
+    public void setDictionary(Dictionary dictionary) {
+        this.dictionary = dictionary;
+    }
+
+    private Dictionary dictionary;
+
     public Entities entities() {
         if (entities == null) {
             entities = new Entities();
@@ -146,16 +156,18 @@ public class AppContext {
         return instance;
     }
 
-    public <T>void putToRunContext(String key, T object) {
+    public <T>void put(String key, T object) {
         this.runContext.put(key, object);
     }
 
-    public <T> T getFromRunContext(String key, Class<T> classType) {
-        T object = classType.cast(runContext.get(key));
-        if (object == null){
-            throw new AssertionError("There is no object with type:"+ classType + " by key:"+key);
+    public <T>T get(String key, Class<T> userClass) {
+        Object object;
+        try {
+            object = runContext.get(key);
+        }catch (NullPointerException e) {
+            throw new AssertionError(String.format("Object with key %s doesn't exist!", key));
         }
-        return object;
+        return userClass.cast(object);
     }
 }
 

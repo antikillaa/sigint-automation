@@ -40,14 +40,44 @@ public class RecordRow extends Row {
                 .$(By.xpath(".//record-description-decorator"));
     }
 
-    public SelenideElement getToNumber() {
-        return getRecordDescription()
-                .$(By.xpath(".//div[2]/span[@class='au-target fx1']"));
+    public String getDate() {
+        return getCellByColumnName("Date").text();
     }
 
-    public SelenideElement getFromNumber() {
+    public String getSource() {
+        return getCellByColumnName("Source").text();
+    }
+
+    public String getFromCountry() {
+        getRecordDescription().$("div[ref='mainView']").click();
+        return getRecordDescription().$("div.popover").text();
+    }
+
+    public String getToCountry() {
+        getRecordDescription().$("div[ref='mainView']").click();
+        return getRecordDescription().$("div.popover").text();
+    }
+
+    public String getTMSI() {
+        return getCellByColumnName("TMSI").text();
+    }
+
+    public String getIMSI() {
+        return getCellByColumnName("IMSI").text();
+    }
+
+    public String getLanguage() {
+        return getCellByColumnName("Language").text();
+    }
+
+    public String getToNumber() {
         return getRecordDescription()
-                .$(By.xpath(".//div[1]/span[@class='au-target fx1']"));
+                .$(By.xpath(".//div[2]/span[@class='au-target fx1']")).text();
+    }
+
+    public String getFromNumber() {
+        return getRecordDescription()
+                .$(By.xpath(".//div[1]/span[@class='au-target fx1']")).text();
     }
 
     public SelenideElement getStatus() {

@@ -5,39 +5,32 @@ import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.SelenideElement;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
-import pages.BasePage;
+import pages.BaseSection;
 
 import static com.codeborne.selenide.Condition.present;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
 
-public abstract class Table extends BasePage {
+public abstract class Table extends BaseSection {
 
     Logger log = Logger.getRootLogger();
+    private static final String baseSelector = "div.pg-table";
 
-
-    public SelenideElement getTable() {
-        return $(By.xpath("//div[contains(@class, 'pg-table')]")).shouldBe(present);
-    }
-
-    public SelenideElement getLoading() {
-        return getTable()
-                .$(By.xpath(".//span[@class='inline-block' and contains(.,'Loading…')]"));
+    public Table() {
+        super(baseSelector);
     }
 
     public SelenideElement getRowByIndex(int indexRow) {
-        return getTable()
+        return get()
                 .$(By.xpath(".//div[contains(@class, 'pg-row')][" + indexRow + "]"));
     }
 
     public SelenideElement getTableHead() {
-        return getTable()
+        return get()
                 .$("./div[@class='pg-thead']");
     }
 
     public ElementsCollection getPgRows() {
-        return getTable()
-                .$$(By.xpath(".//div[contains(@class, 'pg-row')]"));
+        return get().$$("div.pg-row");
     }
 
     public ElementsCollection getRows() {
@@ -69,7 +62,7 @@ public abstract class Table extends BasePage {
     }
 
     public boolean isEmpty(){
-        return getTable().$(new Selectors.ByText("Nothing found.")).isDisplayed();
+        return get().$(new Selectors.ByText("Nothing found.")).isDisplayed();
     }
 
 

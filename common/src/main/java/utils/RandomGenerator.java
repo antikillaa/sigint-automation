@@ -40,7 +40,7 @@ public class RandomGenerator {
         return phoneNumbers;
     }
 
-    public static LinkedHashSet<String> generateLanguages(int maxLanguages) {
+    public static LinkedHashSet<String> generateLanguagesCodes(int maxLanguages) {
         LinkedHashSet<String> languages = new LinkedHashSet<>();
         int numLanguages = RandomUtils.nextInt(maxLanguages);
         List<String> countryCodes = Arrays.asList(Locale.getISOCountries());
@@ -52,6 +52,22 @@ public class RandomGenerator {
         return languages;
     }
 
+    public static String getRandomCountry() {
+        List<String> locale = Arrays.asList(Locale.getISOCountries());
+        String country = locale.get(RandomUtils.nextInt(locale.size()));
+        Locale obj = new Locale("", country);
+        return obj.getDisplayCountry();
+
+
+    }
+
+    public static String getRandomLanguage() {
+        List<String> langCodes = Arrays.asList(Locale.getISOLanguages());
+        String langCode = langCodes.get(RandomUtils.nextInt(langCodes.size()));
+        Locale obj = new Locale("", langCode);
+        return obj.getDisplayLanguage();
+    }
+
     public static LinkedHashSet<String> generateRandomStrings(int maxNumber) {
         LinkedHashSet<String> strings = new LinkedHashSet<>();
         int numMaxStrings = RandomUtils.nextInt(maxNumber);
@@ -61,5 +77,10 @@ public class RandomGenerator {
             i++;
         }
         return strings;
+    }
+
+    public static <T>T getRandomItemFromList(List<T> list) {
+        int index = RandomUtils.nextInt(list.size());
+        return list.get(index);
     }
 }
