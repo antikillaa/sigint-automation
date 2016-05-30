@@ -152,11 +152,11 @@ public class AppContext {
         return instance;
     }
 
-    public <T>void putToRunContext(String key, T object) {
+    public <T>void put(String key, T object) {
         this.runContext.put(key, object);
     }
 
-    public <T> T getFromRunContext(String key, Class<T> classType) {
+    public <T> T get(String key, Class<T> classType) {
         T object = classType.cast(runContext.get(key));
         if (object == null){
             throw new AssertionError("There is no object with type:"+ classType + " by key:"+key);

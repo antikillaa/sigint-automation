@@ -2,14 +2,19 @@ package steps;
 
 import model.AppContext;
 import org.apache.log4j.Logger;
+import org.jbehave.core.annotations.Then;
+import org.junit.Assert;
 
-/**
- * Created by dm on 5/16/16.
- */
-public class APISteps {
+public abstract class APISteps {
 
-    private static AppContext context = AppContext.getContext();
-    private static Logger log = Logger.getRootLogger();
+    static AppContext context = AppContext.getContext();
+    private Logger log = Logger.getLogger(APISteps.class);
 
+    @Then("I got response code $expected")
+    public void checkResponseCode(String expected) {
+        log.info("Checking response code");
+        Integer actual = context.get("code", Integer.class);
+        Assert.assertEquals("Incorrect return codes!", Integer.valueOf(expected), actual);
+    }
 
 }

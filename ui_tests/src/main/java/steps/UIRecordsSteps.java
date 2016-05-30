@@ -64,7 +64,7 @@ public class UIRecordsSteps extends UISteps {
                 .typeRecordId(record.getRecordID())
                 .typeToNumber(record.getToNumber());
 
-        context.putToRunContext("record", record);
+        context.put("record", record);
     }
 
     private void updateRecord(String type) {
@@ -77,11 +77,11 @@ public class UIRecordsSteps extends UISteps {
                 .setToCountry(pages.recordsCreatePage().getToCountry().getText())
                 .setLanguage(pages.recordsCreatePage().getLanguage().getText());
 
-        context.putToRunContext("record", record);
+        context.put("record", record);
     }
 
     private void selectRecord(RecordRow recordRow) {
-        context.putToRunContext("recordRow", recordRow);
+        context.put("recordRow", recordRow);
         recordRow.selectRecord();
 
         Record record = new Record();
@@ -90,7 +90,7 @@ public class UIRecordsSteps extends UISteps {
                 .setFromNumber(recordRow.getFromNumber().getText())
                 .setToNumber(recordRow.getToNumber().getText());
 
-        context.putToRunContext("record", record);
+        context.put("record", record);
     }
 
     @When("I fill the form for SMS record")
@@ -239,7 +239,7 @@ public class UIRecordsSteps extends UISteps {
 
     @When("I press 'Create report' button against it")
     public void pressCreateReportButtonAgainstIt() {
-        RecordRow recordRow = context.getFromRunContext("recordRow", RecordRow.class);
+        RecordRow recordRow = context.get("recordRow", RecordRow.class);
         recordRow.clickCreateReportButton();
 
     }

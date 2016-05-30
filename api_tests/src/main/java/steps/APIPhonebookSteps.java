@@ -1,45 +1,59 @@
 package steps;
 
 import abs.EntityList;
-import model.AppContext;
+import errors.NullReturnException;
+import json.JsonCoverter;
 import model.Phonebook;
 import model.phonebook.PhonebookSearchFilter;
 import org.apache.log4j.Logger;
+import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.PhonebookService;
 
-public class APIPhonebookSteps {
+public class APIPhonebookSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APIPhonebookSteps.class);
-    private AppContext context = AppContext.getContext();
     private PhonebookService service = new PhonebookService();
 
 
     @When("I send search phonebooks list with page $page pagesize $pageSize request")
     public void searchPhonebook(int page, int pageSize) {
         PhonebookSearchFilter searchFilter = new PhonebookSearchFilter().setPage(page).setPageSize(pageSize);
+
         EntityList<Phonebook> phonebookList = service.list(searchFilter);
 
-        context.putToRunContext("searchFilter", searchFilter);
-        context.putToRunContext("searchResult", phonebookList);
+        context.put("searchFilter", searchFilter);
+        context.put("searchResult", phonebookList);
     }
 
     @When("I send create Phonebook Entry request with all fields")
-    public void createPhonebookEntry() {
+    public void createPhonebookEntry() throws NullReturnException {
         Phonebook phonebook = new Phonebook().generate();
+
+        log.info(JsonCoverter.toJsonString(phonebook));
         int responseCode = service.add(phonebook);
 
-        context.putToRunContext("code", responseCode);
-        context.putToRunContext("phonebook", phonebook);
-        if (responseCode == 200) {
-            checkPhonebookEntry();
-        }
+        context.put("code", responseCode);
+        context.put("phonebook", phonebook);
     }
 
-    private void checkPhonebookEntry() {
+    @When("I send update request for created Phonebook Entry")
+    public void updatePhonebookEntry() throws NullReturnException {
+        Phonebook phonebook = context.entities().getPhonebooks().getLatest();
+        Phonebook newPhonebook = phonebook.generate();
+
+        log.info(JsonCoverter.toJsonString(newPhonebook));
+        int responseCode = service.update(newPhonebook);
+
+        context.put("code", responseCode);
+        context.put("phonebook", newPhonebook);
+    }
+
+    @Then("Phonebook Entry is correct")
+    public void checkPhonebookEntry() {
         log.info("Verifying if Phonebook Entry is correct");
-        Phonebook etalon = context.getFromRunContext("phonebook", Phonebook.class);
+        Phonebook etalon = context.get("phonebook", Phonebook.class);
         Phonebook created = context.entities().getPhonebooks().getLatest();
 
         Assert.assertEquals(etalon.getName(), created.getName());
