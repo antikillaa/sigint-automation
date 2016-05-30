@@ -38,10 +38,12 @@ public class PhonebookService implements EntityService<Phonebook>{
         PhonebookEntriesRequest request = new PhonebookEntriesRequest();
         log.info("Delete Phonebook entry id:" + entity.getId());
         Response response = rsClient.delete(sigintHost + request.getURI() + "/" + entity.getId(), request.getCookie());
-        try {
-            context.entities().getPhonebooks().removeEntity(entity);
-        } catch (NullReturnException e) {
-            log.warn("Was unable to remove entity with id:" + entity.getId() + " as it doesn't in the list");
+        if (response.getStatus() == 200) {
+            try {
+                context.entities().getPhonebooks().removeEntity(entity);
+            } catch (NullReturnException e) {
+                log.warn("Was unable to remove entity with id:" + entity.getId() + " as it doesn't in the list");
+            }
         }
         return response.getStatus();
     }
