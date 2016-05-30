@@ -77,11 +77,13 @@ public class RFIService implements EntityService<InformationRequest> {
     public int remove(InformationRequest entity) {
         RFIDeleteRequest deleteRequest = new RFIDeleteRequest(entity.getId());
         Response response = rsClient.delete(sigintHost + deleteRequest.getURI(), deleteRequest.getCookie());
-        try {
-            context.entities().getRFIs().removeEntity(entity);
-        } catch (NullReturnException e) {
-            log.warn("Was unable to remove entity with id " + entity.getId() + " as it" +
-                    "doesn't in the list");
+        if (response.getStatus() == 200) {
+            try {
+                context.entities().getRFIs().removeEntity(entity);
+            } catch (NullReturnException e) {
+                log.warn("Was unable to remove entity with id " + entity.getId() + " as it" +
+                        "doesn't in the list");
+            }
         }
         return response.getStatus();
     }
