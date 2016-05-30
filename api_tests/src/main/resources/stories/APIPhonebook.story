@@ -18,6 +18,14 @@ Then I got response code 200
 And Phonebook Entry is correct
 
 
+Scenario: API.Get details of Phonebook Entry
+Given I sign in as admin user
+When I send create Phonebook Entry request with all fields
+Then I got response code 200
+When I get details of created Phonebook Entry
+Then Phonebook Entry is correct
+
+
 Scenario: API.Update existing Phonebook
 Given I sign in as admin user
 When I send create Phonebook Entry request with all fields
