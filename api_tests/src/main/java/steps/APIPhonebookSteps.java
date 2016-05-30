@@ -2,7 +2,6 @@ package steps;
 
 import abs.EntityList;
 import errors.NullReturnException;
-import json.JsonCoverter;
 import model.Phonebook;
 import model.phonebook.PhonebookSearchFilter;
 import org.apache.log4j.Logger;
@@ -31,7 +30,6 @@ public class APIPhonebookSteps extends APISteps {
     public void createPhonebookEntry() throws NullReturnException {
         Phonebook phonebook = new Phonebook().generate();
 
-        log.info(JsonCoverter.toJsonString(phonebook));
         int responseCode = service.add(phonebook);
 
         context.put("code", responseCode);
@@ -43,7 +41,6 @@ public class APIPhonebookSteps extends APISteps {
         Phonebook phonebook = context.entities().getPhonebooks().getLatest();
         Phonebook newPhonebook = phonebook.generate();
 
-        log.info(JsonCoverter.toJsonString(newPhonebook));
         int responseCode = service.update(newPhonebook);
 
         context.put("code", responseCode);
@@ -66,6 +63,24 @@ public class APIPhonebookSteps extends APISteps {
         Assert.assertTrue(created.getId() != null);
         Assert.assertTrue(created.isManualEntry());
         Assert.assertTrue(created.get_version() != null);
+    }
+
+    @When("I send delete request for created Phonebook Entry")
+    public void deletePhonebookEntry() {
+        Phonebook phonebook = context.entities().getPhonebooks().getLatest();
+        context.put("id", phonebook.getId());
+
+        int responseCode = service.remove(phonebook);
+
+        context.put("code", responseCode);
+    }
+
+    @Then("Phonebook Entry was deleted")
+    public void checkPhonebookWasDeleted() throws NullReturnException {
+        String id = context.get("id", String.class);
+        Phonebook phonebook = service.view(id);
+
+        Assert.assertNull("Phonebook was not deleted", phonebook);
     }
 
 }

@@ -35,7 +35,17 @@ public class PhonebookService implements EntityService<Phonebook>{
     }
 
     public int remove(Phonebook entity) {
-        return 0;
+        PhonebookEntriesRequest request = new PhonebookEntriesRequest();
+        log.info("Delete Phonebook entry id:" + entity.getId());
+        Response response = rsClient.delete(sigintHost + request.getURI() + "/" + entity.getId(), request.getCookie());
+        if (response.getStatus() == 200) {
+            try {
+                context.entities().getPhonebooks().removeEntity(entity);
+            } catch (NullReturnException e) {
+                log.warn("Was unable to remove entity with id:" + entity.getId() + " as it doesn't in the list");
+            }
+        }
+        return response.getStatus();
     }
 
     public EntityList<Phonebook> list(SearchFilter filter) {
@@ -55,9 +65,8 @@ public class PhonebookService implements EntityService<Phonebook>{
 
     public int update(Phonebook entity) {
         PhonebookEntriesRequest request = new PhonebookEntriesRequest();
-        request.setURI(request.getURI() + "/" + entity.getId());
         log.info("Updating Phonebook entry id:" + entity.getId());
-        Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
+        Response response = rsClient.post(sigintHost + request.getURI() + "/" + entity.getId(), entity, request.getCookie());
         Phonebook createdPhonebook = JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
         if (createdPhonebook != null) {
             context.entities().getPhonebooks().addOrUpdateEntity(createdPhonebook);
@@ -66,7 +75,10 @@ public class PhonebookService implements EntityService<Phonebook>{
     }
 
     public Phonebook view(String id) {
-        return null;
+        PhonebookEntriesRequest request = new PhonebookEntriesRequest();
+        log.info("View Phonebook entry id:" + id);
+        Response response = rsClient.get(sigintHost + request.getURI() + "/" + id, request.getCookie());
+        return JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
     }
 
 
