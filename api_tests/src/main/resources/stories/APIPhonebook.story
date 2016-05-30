@@ -25,3 +25,12 @@ Then I got response code 200
 When I send update request for created Phonebook Entry
 Then I got response code 200
 And Phonebook Entry is correct
+
+
+Scenario: API.Deleting existing Phonebook
+Given I sign in as admin user
+When I send create Phonebook Entry request with all fields
+Then I got response code 200
+When I send delete request for created Phonebook Entry
+Then I got response code 200
+And Phonebook Entry was deleted
