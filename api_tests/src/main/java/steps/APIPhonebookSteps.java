@@ -83,4 +83,12 @@ public class APIPhonebookSteps extends APISteps {
         Assert.assertNull("Phonebook was not deleted", phonebook);
     }
 
+    @When("I get details of created Phonebook Entry")
+    public void getPhonebookEntry() {
+        Phonebook entity = context.entities().getPhonebooks().getLatest();
+        Phonebook phonebook = service.view(entity.getId());
+
+        context.put("phonebook", phonebook);
+    }
+
 }
