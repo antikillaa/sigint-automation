@@ -63,8 +63,13 @@ public class RandomGenerator {
         return strings;
     }
 
-    public static String generateCountry() {
+    public static String generateCountryCode() {
         List<String> countryCodes = Arrays.asList(Locale.getISOCountries());
         return countryCodes.get(RandomUtils.nextInt(countryCodes.size()));
+    }
+
+    public static String getCountryName(String countryCode) {
+        Locale locale = new Locale("", countryCode);
+        return locale.getDisplayCountry();
     }
 }

@@ -14,6 +14,7 @@ public class Phonebook extends TeelaEntity {
     private String name;
     private String address;
     private String country;
+    private String countryCode;
     private String provider;
     private String location;
     private String imsi;
@@ -54,6 +55,15 @@ public class Phonebook extends TeelaEntity {
 
     public Phonebook setCountry(String country) {
         this.country = country;
+        return this;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public Phonebook setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
         return this;
     }
 
@@ -103,13 +113,14 @@ public class Phonebook extends TeelaEntity {
     @Override
     public Phonebook generate() {
         this
-                .setName("name " + RandomStringUtils.randomAlphabetic(10))
+                .setName("name:" + RandomStringUtils.randomAlphabetic(10))
                 .setPhoneNumber(RandomStringUtils.randomNumeric(10))
-                .setCountry("country " + RandomGenerator.generateCountry())
-                .setAddress("address " + RandomStringUtils.randomAlphanumeric(20))
-                .setImsi("imsi " + RandomStringUtils.randomAlphanumeric(10))
-                .setProvider("provider " + RandomStringUtils.randomAlphanumeric(10))
-                .setLocation("location " + RandomStringUtils.randomAlphanumeric(20));
+                .setCountryCode(RandomGenerator.generateCountryCode())
+                .setCountry(RandomGenerator.getCountryName(this.getCountryCode()))
+                .setAddress("address:" + RandomStringUtils.randomAlphanumeric(20))
+                .setImsi("imsi:" + RandomStringUtils.randomAlphanumeric(10))
+                .setProvider("provider:" + RandomStringUtils.randomAlphanumeric(10))
+                .setLocation("location:" + RandomStringUtils.randomAlphanumeric(20));
         return this;
     }
 }
