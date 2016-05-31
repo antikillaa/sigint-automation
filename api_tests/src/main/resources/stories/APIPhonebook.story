@@ -37,8 +37,6 @@ And Phonebook Entry was deleted
 
 
 Scenario: API.Admin can find Phonebook Entry using search filters
-Meta:
-@test
 Given I sign in as tasker user
 When I send create Phonebook Entry request with all fields
 Then I got response code 200
@@ -47,10 +45,10 @@ Then Search Phonebook results are correct
 And Searched Phonebook Entry in list
 
 Examples:
-| criteria | value  |
-| address  | random |
-| name |  random |
-| imsi |  random |
-| phoneNumber |  random |
-| country |  random |
+| criteria    | value  |
+| address     | random |
+| name        | random |
+| imsi        | random |
+| phoneNumber | random |
+| country     | random |
 | countryCode | random |
