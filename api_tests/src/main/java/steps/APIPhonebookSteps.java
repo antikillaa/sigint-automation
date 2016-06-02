@@ -95,30 +95,24 @@ public class APIPhonebookSteps extends APISteps {
     public void searchPhonebookbyCriteria(String criteria, String value) {
         log.info("Start search phonebook by criteria: " + criteria + ", value: " + value);
         Phonebook phonebook = context.entities().getPhonebooks().getLatest();
-        PhonebookSearchFilter searchFilter = new PhonebookSearchFilter();
 
         if (criteria.toLowerCase().equals("address")) {
-            searchFilter.setActiveFilter(
-                    searchFilter.new AddressFilter(value.equals("random") ? phonebook.getAddress() : value));
+            value = value.equals("random") ? phonebook.getAddress() : value;
         } else if (criteria.toLowerCase().equals("name")) {
-            searchFilter.setActiveFilter(
-                    searchFilter.new NameFilter(value.equals("random") ? phonebook.getName() : value));
+            value = value.equals("random") ? phonebook.getName() : value;
         } else if (criteria.toLowerCase().equals("country")) {
-            searchFilter.setActiveFilter(
-                    searchFilter.new CountryFilter(value.equals("random") ? phonebook.getCountry() : value));
+            value = value.equals("random") ? phonebook.getCountry() : value;
         } else if (criteria.toLowerCase().equals("countrycode")) {
-            searchFilter.setActiveFilter(
-                    searchFilter.new CountryCodeFilter(value.equals("random") ? phonebook.getCountryCode() : value));
+            value = value.equals("random") ? phonebook.getCountryCode() : value;
         } else if (criteria.toLowerCase().equals("phonenumber")) {
-            searchFilter.setActiveFilter(
-                    searchFilter.new PhoneNumberFilter(value.equals("random") ? phonebook.getPhoneNumber() : value));
+            value = value.equals("random") ? phonebook.getPhoneNumber() : value;
         } else if (criteria.toLowerCase().equals("imsi")) {
-            searchFilter.setActiveFilter(
-                    searchFilter.new ImsiFilter(value.equals("random") ? phonebook.getImsi() : value));
+            value = value.equals("random") ? phonebook.getImsi() : value;
         } else {
             throw new AssertionError("Unknown filter type");
         }
 
+        PhonebookSearchFilter searchFilter = new PhonebookSearchFilter().filterBy(criteria, value);
         EntityList<Phonebook> phonebookList = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);

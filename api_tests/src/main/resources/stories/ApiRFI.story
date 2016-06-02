@@ -1,3 +1,6 @@
+Meta:
+@component RFI
+
 Scenario: API.Tasker can create new RFI with all fields
 Given I sign in as tasker user
 When I send create RFI request with approved copy and with original document

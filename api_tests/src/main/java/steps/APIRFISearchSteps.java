@@ -1,8 +1,10 @@
 package steps;
 
-import abs.SearchFilter;
-import model.*;
 import abs.EntityList;
+import abs.SearchFilter;
+import model.AppContext;
+import model.InformationRequest;
+import model.RFISearchFilter;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;
@@ -22,36 +24,28 @@ public class APIRFISearchSteps extends APISteps {
     private RFIService service = new RFIService();
 
 
-
-
     @When("I search RFI by $criteria and value $value")
     public void SearchRFIbyCriteria(@Named("criteria") String criteria, @Named("value") String value) throws ParseException {
         log.info("Start search by criteria: "+ criteria);
         InformationRequest RFI = context.entities().getRFIs().getLatest();
-        RFISearchFilter searchFilter = new RFISearchFilter();
 
         if (criteria.toLowerCase().equals("state")) {
-            searchFilter.setActiveFilter(searchFilter.new StatusFilter(value.equals("random") ?
-                    RFI.getState():value));
+            value = value.equals("random") ? RFI.getState() : value;
         } else if (criteria.toLowerCase().equals("min priority")){
-            searchFilter.setActiveFilter(searchFilter.new PriorityFilter(value.equals("random") ?
-                    RFI.getPriority(): Integer.parseInt(value)));
+            value = value.equals("random") ? RFI.getPriority().toString() : value;
         } else if (criteria.toLowerCase().equals("created date")){
-            searchFilter.setActiveFilter(searchFilter.new CreatedDateFilter(value.equals("random") ?
-                    RFI.getCreatedDate(): RFI.dateFormat.parse(value)));
+            value = Long.toString((value.equals("random") ? RFI.getCreatedDate() : RFI.dateFormat.parse(value)).getTime());
         } else if (criteria.toLowerCase().equals("due date")) {
-            searchFilter.setActiveFilter(searchFilter.new DueDateFilter(value.equals("random") ?
-                    RFI.getDueDate(): RFI.dateFormat.parse(value)));
+            value = Long.toString((value.equals("random") ? RFI.getDueDate() : RFI.dateFormat.parse(value)).getTime());
         } else if (criteria.toLowerCase().equals("created by")){
-            searchFilter.setActiveFilter(searchFilter.new CreatedByFilter(value.equals("random") ?
-                    RFI.getCreatedBy(): value));
+            value = value.equals("random") ? RFI.getCreatedBy() : value;
         } else if (criteria.toLowerCase().equals("originator")){
-            searchFilter.setActiveFilter(searchFilter.new OriginatorFilter(value.equals("random") ?
-                    RFI.getRequestSource(): value));
-        }
-        else {
+            value = value.equals("random") ? RFI.getRequestSource() : value;
+        } else {
             throw new AssertionError("Unknown filter type");
         }
+
+        RFISearchFilter searchFilter = new RFISearchFilter().filterBy(criteria, value);
         EntityList<InformationRequest> RFIList = service.list(searchFilter);
         context.put("searchFilter", searchFilter);
         context.put("searchResult", RFIList);
@@ -88,14 +82,12 @@ public class APIRFISearchSteps extends APISteps {
         } else {
             throw new AssertionError("Incorrect argument passed to step");
         }
-
     }
 
     @When("I put RFI to search query")
     public void putRFI() {
         InformationRequest RFI = context.entities().getRFIs().getLatest();
         context.put("searchRFI", RFI);
-
     }
 
 }

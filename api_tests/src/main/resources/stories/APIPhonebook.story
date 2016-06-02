@@ -36,8 +36,8 @@ Then I got response code 200
 And Phonebook Entry was deleted
 
 
-Scenario: API.Admin can find Phonebook Entry using search filters
-Given I sign in as tasker user
+Scenario: API.User can find Phonebook Entry using search filters
+Given I sign in as admin user
 When I send create Phonebook Entry request with all fields
 Then I got response code 200
 When I search Phonebook Entry by <criteria> and value <value>

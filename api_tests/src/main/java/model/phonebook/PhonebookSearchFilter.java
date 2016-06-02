@@ -165,4 +165,23 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
             return entity.getCountry().equals(country);
         }
     }
+
+    public PhonebookSearchFilter filterBy(String criteria, String value) {
+        if (criteria.toLowerCase().equals("address")) {
+            this.setActiveFilter(this.new AddressFilter(value));
+        } else if (criteria.toLowerCase().equals("name")) {
+            this.setActiveFilter(this.new NameFilter(value));
+        } else if (criteria.toLowerCase().equals("country")) {
+            this.setActiveFilter(this.new CountryFilter(value));
+        } else if (criteria.toLowerCase().equals("countrycode")) {
+            this.setActiveFilter(this.new CountryCodeFilter(value));
+        } else if (criteria.toLowerCase().equals("phonenumber")) {
+            this.setActiveFilter(this.new PhoneNumberFilter(value));
+        } else if (criteria.toLowerCase().equals("imsi")) {
+            this.setActiveFilter(this.new ImsiFilter(value));
+        } else {
+            throw new AssertionError("Unknown filter type");
+        }
+        return this;
+    }
 }
