@@ -1,7 +1,7 @@
 package steps;
 
 import abs.EntityList;
-import errors.NullReturnException;
+import abs.SearchFilter;
 import model.Phonebook;
 import model.phonebook.PhonebookSearchFilter;
 import org.apache.log4j.Logger;
@@ -27,7 +27,7 @@ public class APIPhonebookSteps extends APISteps {
     }
 
     @When("I send create Phonebook Entry request with all fields")
-    public void createPhonebookEntry() throws NullReturnException {
+    public void createPhonebookEntry() {
         Phonebook phonebook = new Phonebook().generate();
 
         int responseCode = service.add(phonebook);
@@ -37,7 +37,7 @@ public class APIPhonebookSteps extends APISteps {
     }
 
     @When("I send update request for created Phonebook Entry")
-    public void updatePhonebookEntry() throws NullReturnException {
+    public void updatePhonebookEntry() {
         Phonebook phonebook = context.entities().getPhonebooks().getLatest();
         Phonebook newPhonebook = phonebook.generate();
 
@@ -76,7 +76,7 @@ public class APIPhonebookSteps extends APISteps {
     }
 
     @Then("Phonebook Entry was deleted")
-    public void checkPhonebookWasDeleted() throws NullReturnException {
+    public void checkPhonebookWasDeleted() {
         String id = context.get("id", String.class);
         Phonebook phonebook = service.view(id);
 
@@ -89,6 +89,64 @@ public class APIPhonebookSteps extends APISteps {
         Phonebook phonebook = service.view(entity.getId());
 
         context.put("phonebook", phonebook);
+    }
+
+    @When("I search Phonebook Entry by $criteria and value $value")
+    public void searchPhonebookbyCriteria(String criteria, String value) {
+        log.info("Start search phonebook by criteria: " + criteria + ", value: " + value);
+        Phonebook phonebook = context.entities().getPhonebooks().getLatest();
+
+        if (criteria.toLowerCase().equals("address")) {
+            value = value.equals("random") ? phonebook.getAddress() : value;
+        } else if (criteria.toLowerCase().equals("name")) {
+            value = value.equals("random") ? phonebook.getName() : value;
+        } else if (criteria.toLowerCase().equals("country")) {
+            value = value.equals("random") ? phonebook.getCountry() : value;
+        } else if (criteria.toLowerCase().equals("countrycode")) {
+            value = value.equals("random") ? phonebook.getCountryCode() : value;
+        } else if (criteria.toLowerCase().equals("phonenumber")) {
+            value = value.equals("random") ? phonebook.getPhoneNumber() : value;
+        } else if (criteria.toLowerCase().equals("imsi")) {
+            value = value.equals("random") ? phonebook.getImsi() : value;
+        } else {
+            throw new AssertionError("Unknown filter type");
+        }
+
+        PhonebookSearchFilter searchFilter = new PhonebookSearchFilter().filterBy(criteria, value);
+        EntityList<Phonebook> phonebookList = service.list(searchFilter);
+
+        context.put("searchFilter", searchFilter);
+        context.put("searchResult", phonebookList);
+    }
+
+    @Then("Search Phonebook results are correct")
+    public void searchPhonebookResultsCorrect() {
+        log.info("Checking if search phonebook result is correct");
+        SearchFilter searchFilter = context.get("searchFilter", PhonebookSearchFilter.class);
+        EntityList<Phonebook> searchResult = context.get("searchResult", EntityList.class);
+
+        if (searchResult.size() == 0) {
+            log.warn("Search result can be incorrect. There are not records in it");
+        }
+        for (Phonebook phonebook : searchResult) {
+            Assert.assertTrue(searchFilter.filter(phonebook));
+        }
+    }
+
+    @Then("Searched Phonebook Entry $critera list")
+    public void checkPhonebookInResults(String criteria) {
+        Phonebook phonebook = context.entities().getPhonebooks().getLatest();
+        EntityList<Phonebook> list = context.get("searchResult", EntityList.class);
+        log.info("Checking if phonebook entry " + criteria + " list");
+
+        Boolean contains = list.contains(phonebook);
+        if (criteria.toLowerCase().equals("in")) {
+            Assert.assertTrue(contains);
+        } else if (criteria.toLowerCase().equals("not in")) {
+            Assert.assertFalse(contains);
+        } else {
+            throw new AssertionError("Incorrect argument passed to step");
+        }
     }
 
 }

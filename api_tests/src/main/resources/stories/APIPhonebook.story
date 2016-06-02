@@ -3,14 +3,6 @@ Meta:
 @component phonebook
 
 
-Scenario: List of phonebooks - GET
-Meta:
-@TEEL
-Given I sign in as admin user
-When I send search phonebooks list with page 0 pagesize 100 request
-Then I got response code 200
-
-
 Scenario: API.Create PhoneBook with all fields
 Given I sign in as admin user
 When I send create Phonebook Entry request with all fields
@@ -42,3 +34,21 @@ Then I got response code 200
 When I send delete request for created Phonebook Entry
 Then I got response code 200
 And Phonebook Entry was deleted
+
+
+Scenario: API.User can find Phonebook Entry using search filters
+Given I sign in as admin user
+When I send create Phonebook Entry request with all fields
+Then I got response code 200
+When I search Phonebook Entry by <criteria> and value <value>
+Then Search Phonebook results are correct
+And Searched Phonebook Entry in list
+
+Examples:
+| criteria    | value  |
+| address     | random |
+| name        | random |
+| imsi        | random |
+| phoneNumber | random |
+| country     | random |
+| countryCode | random |
