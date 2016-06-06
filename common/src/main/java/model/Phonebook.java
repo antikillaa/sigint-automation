@@ -3,6 +3,7 @@ package model;
 import abs.TeelaEntity;
 import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import utils.RandomGenerator;
 
@@ -19,7 +20,8 @@ public class Phonebook extends TeelaEntity {
     private String location;
     private String imsi;
     private boolean manualEntry;
-    private String _version;
+    @JsonProperty("_version")
+    private String version;
 
 
     public String getPhoneNumber() {
@@ -102,12 +104,12 @@ public class Phonebook extends TeelaEntity {
         this.manualEntry = manualEntry;
     }
 
-    public String get_version() {
-        return _version;
+    public String getVersion() {
+        return version;
     }
 
-    public void set_version(String _version) {
-        this._version = _version;
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     @Override

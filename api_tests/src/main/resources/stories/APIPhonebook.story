@@ -1,5 +1,4 @@
 Meta:
-@modules API
 @component phonebook
 
 
@@ -52,3 +51,10 @@ Examples:
 | phoneNumber | random |
 | country     | random |
 | countryCode | random |
+
+
+Scenario: API.Upload DuSubscribers Entry with all fields
+Given I sign in as admin user
+When I send upload DuSubscribersEntry request with all fields
+Then I got response code 200
+And DuSubscribersEntry upload result is successful

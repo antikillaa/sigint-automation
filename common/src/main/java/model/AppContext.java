@@ -65,6 +65,7 @@ public class AppContext {
         private TargetGroupsList targetGroups;
         private TargetsList targets;
         private PhonebookList phonebooks;
+        private DuSubscribersList duSubscriberses;
 
         public TargetsList getTargets() {
             if (targets == null) {
@@ -121,6 +122,14 @@ public class AppContext {
             this.phonebooks = phonebooks;
         }
 
+        public DuSubscribersList getDuSubscriberses() {
+            return duSubscriberses;
+        }
+
+        public void setDuSubscriberses(DuSubscribersList duSubscriberses) {
+            this.duSubscriberses = duSubscriberses;
+        }
+
         private Entities(){}
 
     }
@@ -159,7 +168,7 @@ public class AppContext {
     public <T> T get(String key, Class<T> classType) {
         T object = classType.cast(runContext.get(key));
         if (object == null){
-            throw new AssertionError("There is no object with type:"+ classType + " by key:"+key);
+            throw new AssertionError("There is no object with type:" + classType + " by key:" + key);
         }
         return object;
     }

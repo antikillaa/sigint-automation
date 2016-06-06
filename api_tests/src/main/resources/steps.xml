@@ -16,4 +16,5 @@
     <bean id="targetSteps" class="steps.APITargetSteps">
     </bean>
     <bean id="phonebookSteps" class="steps.APIPhonebookSteps" />
+    <bean id="duSubscribersSteps" class="steps.APIDuSubscribersSteps" />
 </beans>

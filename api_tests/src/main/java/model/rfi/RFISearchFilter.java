@@ -1,7 +1,8 @@
-package model;
+package model.rfi;
 
 import abs.SearchFilter;
 import abs.TeelaEntity;
+import model.InformationRequest;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 

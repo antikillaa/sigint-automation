@@ -62,7 +62,7 @@ public class APIPhonebookSteps extends APISteps {
         Assert.assertEquals(etalon.getLocation(), created.getLocation());
         Assert.assertTrue(created.getId() != null);
         Assert.assertTrue(created.isManualEntry());
-        Assert.assertTrue(created.get_version() != null);
+        Assert.assertTrue(created.getVersion() != null);
     }
 
     @When("I send delete request for created Phonebook Entry")

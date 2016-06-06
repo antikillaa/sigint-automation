@@ -1,4 +1,4 @@
-package model;
+package model.rfi;
 
 /**
  * Created by dm on 4/26/16.
