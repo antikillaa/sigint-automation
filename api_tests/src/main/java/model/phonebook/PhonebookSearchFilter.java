@@ -17,6 +17,10 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
     private String phoneNumber;
     private String countryCode;
     private String country;
+    private String sortField;
+    private boolean sortDirection = true; //asc=true, desc=false
+    private String queryString;
+
 
     public String getImsi() {
         return imsi;
@@ -86,6 +90,33 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
 
     public PhonebookSearchFilter setAddress(String address) {
         this.address = address;
+        return this;
+    }
+
+    public String getQueryString() {
+        return queryString;
+    }
+
+    public PhonebookSearchFilter setQueryString(String queryString) {
+        this.queryString = queryString;
+        return this;
+    }
+
+    public String getSortField() {
+        return sortField;
+    }
+
+    public PhonebookSearchFilter setSortField(String sortField) {
+        this.sortField = sortField;
+        return this;
+    }
+
+    public boolean isSortDirection() {
+        return sortDirection;
+    }
+
+    public PhonebookSearchFilter setSortDirection(boolean sortDirection) {
+        this.sortDirection = sortDirection;
         return this;
     }
 

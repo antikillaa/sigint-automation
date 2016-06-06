@@ -2,11 +2,11 @@ package http.requests.phonebook;
 
 import http.requests.HttpRequest;
 
-public class PhonebookSearchRequest extends HttpRequest {
+public class UnifiedPhonebookSearchRequest extends HttpRequest {
 
     private final static String URI = "/api/sigint/unified-phonebook/search";
 
-    public PhonebookSearchRequest() {
+    public UnifiedPhonebookSearchRequest() {
         super(URI);
     }
 

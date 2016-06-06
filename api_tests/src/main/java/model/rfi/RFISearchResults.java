@@ -1,5 +1,6 @@
-package model;
+package model.rfi;
 
+import model.InformationRequest;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.util.List;

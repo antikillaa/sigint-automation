@@ -4,7 +4,7 @@ import abs.EntityList;
 import abs.SearchFilter;
 import model.AppContext;
 import model.InformationRequest;
-import model.RFISearchFilter;
+import model.rfi.RFISearchFilter;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;

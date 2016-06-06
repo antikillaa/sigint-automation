@@ -9,7 +9,7 @@ import json.RsClient;
 import model.AppContext;
 import model.FileAttachment;
 import model.InformationRequest;
-import model.RFISearchResults;
+import model.rfi.RFISearchResults;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import service.EntityService;

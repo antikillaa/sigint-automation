@@ -4,7 +4,7 @@ import abs.EntityList;
 import abs.SearchFilter;
 import errors.NullReturnException;
 import http.requests.phonebook.PhonebookEntriesRequest;
-import http.requests.phonebook.PhonebookSearchRequest;
+import http.requests.phonebook.UnifiedPhonebookSearchRequest;
 import json.JsonCoverter;
 import json.RsClient;
 import model.AppContext;
@@ -49,7 +49,7 @@ public class PhonebookService implements EntityService<Phonebook>{
     }
 
     public EntityList<Phonebook> list(SearchFilter filter) {
-        PhonebookSearchRequest request = new PhonebookSearchRequest();
+        UnifiedPhonebookSearchRequest request = new UnifiedPhonebookSearchRequest();
         Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
         PhonebookSearchResults searchResults = JsonCoverter.readEntityFromResponse(response, PhonebookSearchResults.class, "result");
         if (searchResults == null) {
