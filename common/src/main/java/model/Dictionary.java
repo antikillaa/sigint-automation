@@ -18,4 +18,24 @@ public class Dictionary {
     }
 
     private List<Source> sources;
+
+    public List<RecordType> getRecordTypes() {
+        return recordTypes;
+    }
+
+    public void setRecordTypes(List<RecordType> recordTypes) {
+        this.recordTypes = recordTypes;
+    }
+
+    private List<RecordType> recordTypes;
+
+    public List<SourceType> getSourceTypes() {
+        return sourceTypes;
+    }
+
+    public void setSourceTypes(List<SourceType> sourceTypes) {
+        this.sourceTypes = sourceTypes;
+    }
+
+    private List<SourceType> sourceTypes;
 }

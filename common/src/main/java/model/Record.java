@@ -2,10 +2,14 @@ package model;
 
 import abs.TeelaEntity;
 import org.apache.commons.lang.RandomStringUtils;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import utils.RandomGenerator;
+import utils.TeelaDate;
 
-import java.util.Date;
-import java.util.Random;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Record extends TeelaEntity {
 
     private String source;
@@ -17,10 +21,20 @@ public class Record extends TeelaEntity {
     private String TMSI;
     private String IMSI;
     private String recordID;
-    private Date dateAndTime;
+    private TeelaDate dateAndTime;
     private String type;
     private String SMSText;
     private int duration;
+
+    public String getProcessedStatus() {
+        return processedStatus;
+    }
+
+    public void setProcessedStatus(String processedStatus) {
+        this.processedStatus = processedStatus;
+    }
+
+    private String processedStatus;
 
 
     public String getSource() {
@@ -86,11 +100,11 @@ public class Record extends TeelaEntity {
         return this;
     }
 
-    public Date getDateAndTime() {
+    public TeelaDate getDateAndTime() {
         return dateAndTime;
     }
 
-    public Record setDateAndTime(Date dateAndTime) {
+    public Record setDateAndTime(TeelaDate dateAndTime) {
         this.dateAndTime = dateAndTime;
         return this;
     }
@@ -140,30 +154,20 @@ public class Record extends TeelaEntity {
         return this;
     }
 
-    public String durationToString() {
-        int hours = getDuration() / 3600;
-        int minutes = (getDuration() % 3600) / 60;
-        int seconds = getDuration() % 60;
-
-        if ( getDuration() > 0 && getDuration() < 60 ) { return String.format("%ds", seconds); }
-        else if ( getDuration() >= 60 && getDuration() < 300 ) { return String.format("%dm %ds", minutes, seconds); }
-        else if ( getDuration() >= 300 && getDuration() < 3600 ) { return String.format("%dm", minutes); }
-        else if ( getDuration() >= 3600 ) { return String.format("%dh %dm", hours, minutes); }
-
-        return "-";
-    }
 
     public Record generate() {
         this
-                .setSMSText(RandomStringUtils.randomAlphabetic(30))
-                .setDuration(new Random().nextInt(9999))
                 .setIMSI(RandomStringUtils.randomAlphabetic(30))
                 .setTMSI(RandomStringUtils.randomAlphabetic(30))
                 .setFromNumber(RandomStringUtils.randomNumeric(12))
                 .setToNumber(RandomStringUtils.randomNumeric(12))
                 .setRecordID(RandomStringUtils.randomAlphanumeric(8))
-                .setDateAndTime(new Date());
-
+                .setDateAndTime(new TeelaDate());
+        if (type.equalsIgnoreCase("sms")) {
+            this.setSMSText(RandomStringUtils.randomAlphabetic(30));
+        } else if (type.equalsIgnoreCase("voice")) {
+            this.setDuration(RandomGenerator.getRandomDuration());
+        }
         return this;
     }
 

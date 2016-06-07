@@ -2,6 +2,7 @@ package steps;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
+import controllers.PageControllerFactory;
 import model.AppContext;
 import model.Record;
 import model.Report;
@@ -16,7 +17,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import pages.Navigator;
 import pages.Pages;
-import pages.SigintPage;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +25,7 @@ import java.util.Properties;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
-public abstract class UISteps extends GlobalSteps {
+public abstract class UISteps {
 
     static AppContext context = AppContext.getContext();
     Pages pages = new Pages();
@@ -34,8 +34,8 @@ public abstract class UISteps extends GlobalSteps {
 
     @Given("I navigate to $mainMenu -> $subMenu page" )
     public void navigateTo(String mainMenu, String subMenu) {
-        SigintPage page = navigator.navigate_to(mainMenu, subMenu);
-        context.put("page", page);
+        PageControllerFactory controller = navigator.navigate_to(mainMenu, subMenu);
+        context.put("controller", controller);
     }
 
     @BeforeStory

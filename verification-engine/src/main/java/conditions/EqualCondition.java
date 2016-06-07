@@ -93,7 +93,7 @@ public class EqualCondition extends ExpectedCondition {
        }
 
        public String toString() {
-           return String.format("Compare two Teela entitiies: %s and %s", obj1.toString(), obj2.toString());
+           return String.format("Compare two Teela entities: %s and %s", obj1.toString(), obj2.toString());
        }
 
        protected Boolean check() {
@@ -108,12 +108,12 @@ public class EqualCondition extends ExpectedCondition {
                    originalValue = BeanUtils.getProperty(obj1, field.getName());
                    requestValue = BeanUtils.getProperty(obj2, field.getName());
                } catch (Exception e) {
-                   throw new AssertionError();
+                   throw new AssertionError(e.getMessage());
                }
-               if (originalValue == null && requestValue == null) {
+               if ((originalValue == null || originalValue.equals(""))  && (requestValue == null || requestValue.equals(""))) {
                    continue;
                }
-               equals = originalValue.equals(requestValue);
+               equals = originalValue.trim().equals(requestValue.trim());
                if (!equals) {
                    return equals;
                }

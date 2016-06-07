@@ -1,9 +1,12 @@
 package model;
 
+import json.JsonCoverter;
 import model.lists.RFIList;
 import model.lists.TargetGroupsList;
 import model.lists.TargetsList;
 import model.lists.UsersList;
+import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.type.MapType;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +23,46 @@ public class AppContext {
     private Map<String, Object> runContext = new HashMap<>();
     private Entities entities;
     private Environment environment;
+    private Map<String, String> countries;
+    private static Logger log = Logger.getLogger(AppContext.class);
+
+    private static Map<String,String > loadJsonToMap(String filename) {
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        InputStream entityList = classloader.getResourceAsStream(filename);
+        MapType mapType = JsonCoverter.constructMapTypeToValue(String.class);
+        try {
+            Map<String, String> entities = JsonCoverter.mapper.readValue(entityList, mapType);
+            return entities;
+        } catch (IOException e) {
+            log.error("Cannot load list of entities");
+            throw new AssertionError();
+        }
+    }
+
+
+    public Map<String, String> getLanguages() {
+        if (languages == null) {
+            setLanguages(loadJsonToMap("languages.json"));
+        }
+        return languages;
+    }
+
+    public void setLanguages(Map<String, String> languages) {
+        this.languages = languages;
+    }
+
+    public Map<String, String> getCountries() {
+        if (countries == null) {
+            setCountries(loadJsonToMap("countries.json"));
+        }
+        return countries;
+    }
+
+    public void setCountries(Map<String, String> countries) {
+        this.countries = countries;
+    }
+
+    private Map<String, String> languages;
 
     public Dictionary getDictionary() {
         return dictionary;

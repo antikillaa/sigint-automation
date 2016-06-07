@@ -1,20 +1,18 @@
 package pages.reports;
 
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import elements.Select;
 import org.openqa.selenium.By;
-import pages.reports.sidebar.SidebarRightWrapper;
+import pages.SigintPage;
+import pages.reports.sidebar.ReportActionBar;
 
-import java.util.Random;
-
-import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
 
-public abstract class ReportsPage {
+public abstract class ReportsPage extends SigintPage {
 
-    public SidebarRightWrapper getSidebarRightWrapper() {
-        return page(SidebarRightWrapper.class);
+    public ReportActionBar getActionBar() {
+        return page(ReportActionBar.class);
     }
 
     public SelenideElement getForm() {
@@ -26,34 +24,24 @@ public abstract class ReportsPage {
                 .$(By.xpath(".//input[@id='subject']"));
     }
 
-    public SelenideElement getRecordTypeSelect() {
-        return getForm()
-                .$(By.xpath(".//select[@value.bind='record.type']"));
+    public Select getRecordTypeSelect() {
+        return new Select(getForm()
+                .$(By.xpath(".//select[@value.bind='record.type']")));
     }
 
-    public SelenideElement getSourceIdSelect() {
-        return getForm()
-                .$(By.xpath(".//select[@value.bind='record.sourceId']"));
+    public Select getSourceSelect() {
+        return new Select(getForm()
+                .$(By.xpath(".//select[@value.bind='record.sourceId']")));
     }
 
-    public ReportsPage clickRecordTypeSelect() {
-        getRecordTypeSelect().click();
+    public ReportsPage selectRecordType(String recordType) {
+        getRecordTypeSelect().selectOption(recordType);
         return this;
     }
 
-    public ReportsPage clickSourceIdSelect() {
-        getSourceIdSelect().click();
+    public ReportsPage selectSourceType(String sourceType) {
+        getSourceSelect().selectOption(sourceType);
         return this;
-    }
-
-    public ElementsCollection getRecordTypeOptions() {
-        return getRecordTypeSelect()
-                .$$(By.xpath(".//option[@value.bind='r.id']"));
-    }
-
-    public ElementsCollection getSourceIdOptions() {
-        return getSourceIdSelect()
-                .$$(By.xpath(".//option[@value.bind='s.id']"));
     }
 
     public ReportsPage setSubject(String subject) {
@@ -61,19 +49,4 @@ public abstract class ReportsPage {
         return this;
     }
 
-    public ReportsPage selectRandomRecordType() {
-        if (!getRecordTypeOptions().first().isDisplayed()) {
-            clickRecordTypeSelect().getRecordTypeOptions().first().shouldBe(visible);
-        }
-        getRecordTypeOptions().get(new Random().nextInt(getRecordTypeOptions().size())).click();
-        return this;
-    }
-
-    public ReportsPage selectRandomSourceId() {
-        if (!getSourceIdOptions().first().isDisplayed()) {
-            clickSourceIdSelect().getSourceIdOptions().first().shouldBe(visible);
-        }
-        getSourceIdOptions().get(new Random().nextInt(getSourceIdOptions().size())).click();
-        return this;
-    }
 }

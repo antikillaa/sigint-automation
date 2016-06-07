@@ -18,6 +18,7 @@ public class APILoginSteps {
     private static AppContext context = AppContext.getContext();
     private static Logger log = Logger.getRootLogger();
     private static APILogin login = new APILogin();
+    private static GlobalSteps globalSteps = new GlobalSteps();
 
 
     @Given("I sign in as $role user")
@@ -30,7 +31,7 @@ public class APILoginSteps {
 
     @Given("as $role user")
     public void setUser(String role) {
-        login.setUserToContext(role);
+        globalSteps.setUserToContext(role);
     }
 
     @When("I sent sign in request with $validness credentials")

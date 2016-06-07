@@ -1,9 +1,9 @@
 package pages.records;
 
+import blocks.context.Context;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import elements.Select;
-import model.AppContext;
 import org.openqa.selenium.By;
 import pages.SigintPage;
 
@@ -16,16 +16,12 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class RecordsCreatePage extends SigintPage {
 
-    public static final String url = String.format("%s/#/app/records/create",
-            AppContext.getContext().environment().getSigintHost());
-
-
-    public SelenideElement getForm() {
-        return $(By.xpath("//form"));
+    private SelenideElement form() {
+        return $("form.pg-form");
     }
 
     public SelenideElement getColumnByNumber(int numberCol) {
-        return getForm()
+        return form()
                 .$(By.xpath(".//div[@class='col-xs-6'][" + numberCol + "]"));
     }
 
@@ -35,23 +31,21 @@ public class RecordsCreatePage extends SigintPage {
     }
 
     public ElementsCollection getLabels() {
-        return getForm()
+        return form()
                 .$$(By.xpath(".//div[@class='col-xs-6']" +
                 "//div[contains(@class, 'form-group')]" +
                 "//label"));
     }
 
     public SelenideElement getLabelByText(String text) {
-        return getForm()
+        return form()
                 .$(By.xpath(".//div[@class='col-xs-6']" +
                 "//div[contains(@class, 'form-group')]" +
                 "//label[contains(., '" + text + "')]"));
     }
 
     public Select getSource() {
-        return new Select(getForm()
-                .$(By.xpath(".//text-tagger" +
-                        "//div[@click.delegate='enableEditableMode()']")));
+        return new Select(form().$(By.xpath("//selector[@source.bind='texts']/div")));
     }
 
 
@@ -62,7 +56,7 @@ public class RecordsCreatePage extends SigintPage {
 
 
     public SelenideElement getFromNumber() {
-        return getForm()
+        return form()
                 .$(By.xpath(".//div[@class='col-xs-6']" +
                         "//div[contains(@class, 'form-group')]" +
                         "//input[@value.two-way='item.fromNumber']"));
@@ -74,8 +68,8 @@ public class RecordsCreatePage extends SigintPage {
     }
 
     public Select getFromCountry() {
-        return new Select(getForm().$(By.xpath(".//country-tagger[@selected.two-way='item.fromCountry']" +
-                        "//div[@click.delegate='enableEditableMode()']")));
+        return new Select(form().$(By.xpath(".//country-tagger[@selected.two-way='item.fromCountry']" +
+                "/selector/div")));
     }
 
     public RecordsCreatePage selectFromCountry(String country) {
@@ -85,9 +79,9 @@ public class RecordsCreatePage extends SigintPage {
 
 
     public Select getLanguage() {
-        return new Select(getForm()
+        return new Select(form()
                 .$(By.xpath(".//language-tagger[@selected.two-way='item.language']" +
-                        "//div[@click.delegate='enableEditableMode()']")));
+                        "/selector/div")));
 
     }
 
@@ -97,7 +91,7 @@ public class RecordsCreatePage extends SigintPage {
     }
 
     public SelenideElement getTmsi() {
-        return getForm()
+        return form()
                 .$(By.xpath(".//div[@class='col-xs-6']" +
                 "//div[contains(@class, 'form-group')]" +
                 "//input[@id='tmsi']"));
@@ -109,7 +103,7 @@ public class RecordsCreatePage extends SigintPage {
     }
 
     public SelenideElement getSMSText() {
-        return getForm()
+        return form()
                 .$(By.xpath(".//textarea[@value.bind='value']"));
     }
 
@@ -119,7 +113,7 @@ public class RecordsCreatePage extends SigintPage {
     }
 
     public SelenideElement getCreateRecordButton() {
-        return getForm()
+        return form()
                 .$(By.xpath(".//button[contains(., 'Create record')]"));
     }
 
@@ -128,7 +122,7 @@ public class RecordsCreatePage extends SigintPage {
     }
 
     public SelenideElement getImsi() {
-        return getForm()
+        return form()
                 .$(By.xpath(".//div[@class='col-xs-6']" +
                 "//div[contains(@class, 'form-group')]" +
                 "//input[@id='imsi']"));
@@ -140,7 +134,7 @@ public class RecordsCreatePage extends SigintPage {
     }
 
     public SelenideElement getRecordId() {
-        return getForm()
+        return form()
                 .$(By.xpath(".//div[@class='col-xs-6']" +
                 "//div[contains(@class, 'form-group')]" +
                 "//input[@id='originalId']"));
@@ -152,7 +146,7 @@ public class RecordsCreatePage extends SigintPage {
     }
 
     public SelenideElement getToNumber() {
-        return getForm()
+        return form()
                 .$(By.xpath(".//div[@class='col-xs-6']" +
                 "//div[contains(@class, 'form-group')]" +
                 "//input[@value.two-way='item.toNumber']"));
@@ -164,9 +158,9 @@ public class RecordsCreatePage extends SigintPage {
     }
 
     public Select getToCountry() {
-        return new Select(getForm()
+        return new Select(form()
                 .$(By.xpath(".//country-tagger[@selected.two-way='item.toCountry']" +
-                        "//div[@click.delegate='enableEditableMode()']")));
+                        "/selector/div")));
     }
 
     public RecordsCreatePage selectToCountry(String country) {
@@ -175,7 +169,7 @@ public class RecordsCreatePage extends SigintPage {
     }
 
     public SelenideElement getSMSRecordType() {
-        return getForm()
+        return form()
                 .$(By.xpath(".//div[@class='col-xs-6']" +
                 "//div[contains(@class, 'form-group')]" +
                 "//label[contains(@class.bind, 'SMS')]"));
@@ -187,7 +181,7 @@ public class RecordsCreatePage extends SigintPage {
     }
 
     public SelenideElement getCallRecordType() {
-        return getForm()
+        return form()
                 .$(By.xpath(".//div[@class='col-xs-6']" +
                 "//div[contains(@class, 'form-group')]" +
                 "//label[contains(@class.bind, 'Voice')]"));
@@ -199,18 +193,20 @@ public class RecordsCreatePage extends SigintPage {
     }
 
     public SelenideElement getCallDuration() {
-        return getForm()
+        return form()
                 .$(By.xpath(".//div[@class='col-xs-6']" +
                 "//div[contains(@class, 'form-group')]" +
                 "//input[@id='duration']"));
     }
 
     public SelenideElement getDataAndTime() {
-        return getForm()
-                .$(By.xpath(".//div[@class='col-xs-6'][2]" +
-                "//div[contains(@class, 'form-group')][1]" +
-                "//input"));
+        return  form()
+                .$("date#datetime > input");
     }
+    //".//div[@class='col-xs-6'][2]" +
+    //        "//div[contains(@class, 'form-group')][1]" +
+    //        "//input"
+
 
     public RecordsCreatePage clickCalendarApplyButton() {
         $$(By.xpath("//div[@class='daterangepicker dropdown-menu single opensright show-calendar']" +
@@ -232,4 +228,8 @@ public class RecordsCreatePage extends SigintPage {
         return this;
     }
 
+    @Override
+    public Context context() {
+        return null;
+    }
 }

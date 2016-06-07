@@ -1,5 +1,6 @@
 package steps;
 
+import controllers.APILogin;
 import errors.NullReturnException;
 import http.GetDictionariesRequest;
 import json.JsonCoverter;
@@ -27,6 +28,11 @@ public class GlobalSteps {
         initDictionary();
     }
 
+    public void setUserToContext(String role) {
+        log.info("Getting user with role " + role);
+        User user = getUserByRole(role);
+        context.put("user", user);
+    }
 
 
     private void initEntities() {
@@ -46,6 +52,8 @@ public class GlobalSteps {
     }
 
     private void initDictionary() {
+        setUserToContext("admin");
+        new APILogin().signInWithCrendentials("valid");
         GetDictionariesRequest request = new GetDictionariesRequest();
         Response response = new RsClient().get(context.environment().getSigintHost()+ request.getURI(),
                 request.getCookie());

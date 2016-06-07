@@ -6,4 +6,6 @@
     <bean id="loginSteps" class="steps.UILoginSteps" />
     <bean id="recordsSteps" class="steps.UIRecordsSteps" />
     <bean id="reportsSteps" class="steps.UIReportsSteps" />
+    <bean id="testSteps" class="steps.GlobalSteps">
+    </bean>
 </beans>

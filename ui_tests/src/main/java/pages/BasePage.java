@@ -23,7 +23,8 @@ public abstract class BasePage {
      * <i class="fa fa-gear fa-spin"></i> Loading...
      * </div>
      */
-    public SelenideElement getPageLoading() {
+    public static SelenideElement getPageLoading() {
         return $(By.xpath(".//div[@class='page-loading text-center']"));
     }
+
 }

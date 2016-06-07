@@ -1,9 +1,11 @@
 package elements;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.apache.commons.lang.math.RandomUtils;
-import org.openqa.selenium.By;
+
+import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 
 public class Select {
 
@@ -22,19 +24,22 @@ public class Select {
     }
 
     public ElementsCollection getOptions() {
-        return element.$$(By.xpath(".//div[@class='tagger-options-list au-target']" +
-                "/div[@click.delegate='$parent.toggleTag()']"));
+        element.click();
+        return element.$$("div.tagger-options-list > div.tagger-tag-option").shouldHave(sizeGreaterThan(0));
     }
+
+
 
     public void selectOption(String option) {
-        ElementsCollection options = getOptions();
-        for (SelenideElement curOption: options) {
-            if(curOption.getText().equalsIgnoreCase(option)) {
-                navAndClickOption(curOption);
-            }
+        element.click();
+        try {
+            SelenideElement foundOption = getOptions().findBy(Condition.text(option));
+            navAndClickOption(foundOption);
+        }catch (IndexOutOfBoundsException e){
+            throw new AssertionError(String.format("There is no available option to click with name %s!", option));
         }
+            }
 
-    }
     public void selectOption() {
         ElementsCollection options = getOptions();
         int index = RandomUtils.nextInt(options.size());
@@ -43,7 +48,7 @@ public class Select {
     }
 
     private void navAndClickOption(SelenideElement option) {
-        element.click();
         option.scrollTo().click();
+
     }
 }

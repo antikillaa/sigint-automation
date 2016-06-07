@@ -1,32 +1,36 @@
 package pages.records;
 
+import blocks.context.Context;
+import blocks.context.factories.RecordProcessedPageFactory;
+import blocks.context.tables.records.RecordsAllTable;
 import model.AppContext;
+import pages.ContextPage;
 import pages.SigintPage;
-import pages.blocks.tables.RecordsTable;
 
-import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Selenide.page;
 
-public class RecordsProcessedPage extends SigintPage {
+public class RecordsProcessedPage extends SigintPage implements ContextPage{
 
     public static final String url = String.format("%s/#/app/records/processed",
             AppContext.getContext().environment().getSigintHost());
+    private RecordsAllTable table = page(RecordsAllTable.class);
+    private Context context;
 
-    private RecordsTable table = page(RecordsTable.class);
-
-
-    public RecordsTable getTable() {
+    public RecordsAllTable getTable() {
         return table;
     }
 
-    public RecordsProcessedPage load() {
-        if (getSidebar().getSubMenuItemByName("Processed").isDisplayed()) {
-            getSidebar().getSubMenuItemByName("Processed").click();
-        } else {
-            getSidebar().getSubMenuItemByName("Records").click();
-            getSidebar().getSubMenuItemByName("Processed").click();
+    @Override
+    public Context context() {
+        if (context == null) {
+            context = new RecordsProcessedContext();
         }
-        getHeader().getBreadcrumb().getCurrentPath().shouldHave(attribute("href", RecordsProcessedPage.url));
-        return this;
+        return context;
+    }
+
+    private class RecordsProcessedContext extends Context {
+        RecordsProcessedContext() {
+            super(new RecordProcessedPageFactory());
+        }
     }
 }

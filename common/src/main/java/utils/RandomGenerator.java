@@ -1,11 +1,18 @@
 package utils;
 
+import model.AppContext;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
+import org.apache.log4j.Logger;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class RandomGenerator {
+
+    private static Logger log = Logger.getLogger(RandomGenerator.class);
+
 
 
     public static LinkedHashSet<String> generatePhones(int maxPhones) {
@@ -53,19 +60,15 @@ public class RandomGenerator {
     }
 
     public static String getRandomCountry() {
-        List<String> locale = Arrays.asList(Locale.getISOCountries());
-        String country = locale.get(RandomUtils.nextInt(locale.size()));
-        Locale obj = new Locale("", country);
-        return obj.getDisplayCountry();
-
-
+        List<String> countries = new LinkedList<>(AppContext.getContext().getCountries().values());
+        String country = countries.get(RandomUtils.nextInt(countries.size()-1));
+        return country;
     }
 
     public static String getRandomLanguage() {
-        List<String> langCodes = Arrays.asList(Locale.getISOLanguages());
-        String langCode = langCodes.get(RandomUtils.nextInt(langCodes.size()));
-        Locale obj = new Locale("", langCode);
-        return obj.getDisplayLanguage();
+        List<String> languages = new LinkedList<>(AppContext.getContext().getLanguages().values());
+        String language = languages.get(RandomUtils.nextInt(languages.size()-1));
+        return language;
     }
 
     public static LinkedHashSet<String> generateRandomStrings(int maxNumber) {
@@ -83,4 +86,41 @@ public class RandomGenerator {
         int index = RandomUtils.nextInt(list.size());
         return list.get(index);
     }
+
+    public static String todayDateInterval() {
+
+        Date currDate = new Date();
+        Date startTime = getStartDate(currDate);
+        Date endTime =  getEndDate(currDate);
+        DateFormat format = new SimpleDateFormat("dd.MM.YYYY HH:MM:ss");
+        return format.format(startTime) + " - " + format.format(endTime);
+
+
+    }
+
+    public static int getRandomDuration() {
+        return RandomUtils.nextInt(120)*60;
+    }
+
+    private static Date getStartDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND,0);
+
+        return calendar.getTime();
+
+    }
+
+    private static Date getEndDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+
+        return calendar.getTime();
+    }
 }
+

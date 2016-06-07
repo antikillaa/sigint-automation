@@ -12,7 +12,7 @@ public class Verify {
         Assert.assertTrue(condition.check()); }
         catch (AssertionError e) {
             log.error("Error comparing with condition:"+condition+".Should be true but got false");
-            throw new AssertionError();
+            throw e;
         }
     }
 

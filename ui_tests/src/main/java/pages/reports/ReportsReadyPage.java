@@ -1,8 +1,9 @@
 package pages.reports;
 
+import blocks.context.Context;
 import model.AppContext;
 import pages.SigintPage;
-import pages.blocks.tables.ReportsTable;
+import blocks.context.tables.reports.ReportsTable;
 
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.disappear;
@@ -33,4 +34,8 @@ public class ReportsReadyPage extends SigintPage {
         return this;
     }
 
+    @Override
+    public Context context() {
+        return null;
+    }
 }

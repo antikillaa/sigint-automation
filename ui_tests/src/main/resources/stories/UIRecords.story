@@ -5,31 +5,34 @@ Meta:
 
 
 Scenario: User is able to create a manual record (SMS TEXT)
+Given I logged in as OPERATOR
+And I navigate to Records -> Search page
+When I open create record form
+And I fill the form for SMS record
+And I filter records by current date
+Then I should see new record on the table
+
+
+Scenario: User is able to create a manual record (CALL)
 Meta:
 @wip
 Given I logged in as OPERATOR
 And I navigate to Records -> Search page
 When I open create record form
-And I fill the form for SMS record
-Then I should see 'Records->Search' page
-And I should see new SMS record on the table
-
-
-Scenario: User is able to create a manual record (CALL)
-Given I logged in as OPERATOR
-And I navigate to Records -> Search page
-When I press 'New Record' button
-Then I should see 'Create a New Record' page
-When I fill the form for Call record
-And I press 'Create Record' button
-Then I should see 'Records->Search' page
-And I should see new Voice record on the table
+And I fill the form for Voice record
+And I filter records by current date
+Then I should see new record on the table
 
 
 Scenario: User can create report from record processing page and save it as Draft
 Given I logged in as OPERATOR
-And I navigate to Records -> Processing page
-When I checked checkbox on the first non-REPORTED record in table
+And I navigate to Records -> Search page
+When I open create record form
+And I fill the form for SMS record
+And I filter records by current date
+Then I should see new record on the table
+Given I navigate to Records -> Processed page
+When I checked checkbox on record with non-reported status
 And I press 'Create Report' button
 And fill out required fields on 'Create Report' page
 And I press 'Save As Draft' button
