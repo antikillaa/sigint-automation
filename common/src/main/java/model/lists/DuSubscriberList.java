@@ -4,7 +4,7 @@ import abs.EntityList;
 import errors.NullReturnException;
 import model.DuSubscriberEntry;
 
-public class DuSubscribersList extends EntityList<DuSubscriberEntry> {
+public class DuSubscriberList extends EntityList<DuSubscriberEntry> {
 
 
     @Override

@@ -8,29 +8,29 @@ import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
 
-public class DuSubscribersRequest extends HttpRequest {
+public class DuSubscriberRequest extends HttpRequest {
 
     private final static String URI = "/api/sigint/du-subscribers";
     private MultiPart multiPart;
     Logger log = Logger.getRootLogger();
 
-    public DuSubscribersRequest() {
+    public DuSubscriberRequest() {
         super(URI);
         this.multiPart = new MultiPart();
         multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
     }
 
-    public DuSubscribersRequest search() {
+    public DuSubscriberRequest search() {
         this.setURI(URI + "/search");
         return this;
     }
 
-    public DuSubscribersRequest upload() {
+    public DuSubscriberRequest upload() {
         this.setURI(URI + "/upload");
         return this;
     }
 
-    public DuSubscribersRequest get(String id) {
+    public DuSubscriberRequest get(String id) {
         this.setURI(URI + "/" + id);
         return this;
     }

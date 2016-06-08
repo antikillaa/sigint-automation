@@ -20,13 +20,13 @@ public class DuSubscriberEntry extends TeelaEntity {
     private Date fileUploadDate;
     private String phoneNumber;
     private String title;
-    private String name;
+    private String name; //firstName + " " + middleName + " " + lastName
     private String firstName;
     private String middleName;
     private String lastName;
     private String poBox;
     private String city;
-    private String address;
+    private String address; //city + ", " + poBox
     private String nationality;
     private String visaType;
     private String visaNumber;
@@ -240,17 +240,15 @@ public class DuSubscriberEntry extends TeelaEntity {
     public DuSubscriberEntry generate() {
         this
                 .setSourceId("du")
-                .setFileName(RandomStringUtils.randomAlphanumeric(10))
-                .setFileUploadDate(new Date())
-                .setName(RandomStringUtils.randomAlphabetic(8))
                 .setFirstName(RandomStringUtils.randomAlphabetic(8))
-                .setLastName(RandomStringUtils.randomAlphabetic(8))
                 .setMiddleName(RandomStringUtils.randomAlphabetic(8))
+                .setLastName(RandomStringUtils.randomAlphabetic(8))
+                .setName(this.getFirstName() + " " + this.getMiddleName() + " " + this.getLastName())
                 .setPoBox(RandomStringUtils.randomAlphabetic(10))
                 .setPhoneNumber(RandomStringUtils.randomNumeric(10))
                 .setTitle(RandomStringUtils.randomAlphabetic(10))
                 .setCity(RandomStringUtils.randomAlphabetic(10))
-                .setAddress(RandomStringUtils.randomAlphanumeric(20))
+                .setAddress(this.getCity() + ", " + this.getPoBox())
                 .setNationality(RandomGenerator.getCountryName(RandomGenerator.generateCountryCode()))
                 .setVisaType(RandomStringUtils.randomAlphanumeric(4))
                 .setVisaNumber(RandomStringUtils.randomNumeric(8))

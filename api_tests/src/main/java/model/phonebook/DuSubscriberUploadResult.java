@@ -3,7 +3,7 @@ package model.phonebook;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DuSubscribersUploadResult {
+public class DuSubscriberUploadResult {
 
     private int numEntries;
     private int failedEntries;
