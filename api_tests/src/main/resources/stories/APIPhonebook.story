@@ -79,3 +79,15 @@ Examples:
 | address     | random |
 | name        | random |
 | phoneNumber | random |
+
+
+Scenario: API.Get details of DuSubscriber Entry
+Given I sign in as admin user
+When I send upload DuSubscriberEntry request with all fields
+Then I got response code 200
+And DuSubscriberEntry upload result is successful
+When I send search DuSubscribers by phoneNumber and value random
+Then DuSubscriber search result are correct
+When I send get DuSubscriber Entry request
+Then I got response code 200
+And DuSubscriber Entry is correct

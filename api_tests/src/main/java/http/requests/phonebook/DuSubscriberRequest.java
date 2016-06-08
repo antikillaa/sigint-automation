@@ -31,7 +31,7 @@ public class DuSubscriberRequest extends HttpRequest {
     }
 
     public DuSubscriberRequest get(String id) {
-        this.setURI(URI + "/" + id);
+        this.setURI(URI + "/entries/" + id);
         return this;
     }
 

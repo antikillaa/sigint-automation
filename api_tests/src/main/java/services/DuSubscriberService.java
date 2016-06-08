@@ -2,13 +2,13 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import abs.SearchResult;
 import errors.NullReturnException;
 import http.requests.phonebook.DuSubscriberRequest;
 import json.JsonCoverter;
 import json.RsClient;
 import model.AppContext;
 import model.DuSubscriberEntry;
-import abs.SearchResult;
 import model.phonebook.DuSubscriberSearchResult;
 import model.phonebook.DuSubscriberUploadResult;
 import org.apache.commons.lang.NotImplementedException;
@@ -87,7 +87,10 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
 
     @Override
     public DuSubscriberEntry view(String id) {
-        return null;
+        DuSubscriberRequest request = new DuSubscriberRequest().get(id);
+        log.info("Getting derails of DuSubscriber Entry by id: " + id);
+        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
+        return JsonCoverter.readEntityFromResponse(response, DuSubscriberEntry.class, "result");
     }
 
 

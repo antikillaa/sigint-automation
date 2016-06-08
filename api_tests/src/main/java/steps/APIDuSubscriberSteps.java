@@ -12,6 +12,7 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.DuSubscriberService;
+import verifier.Verify;
 
 public class APIDuSubscriberSteps extends APISteps {
 
@@ -124,5 +125,23 @@ public class APIDuSubscriberSteps extends APISteps {
                 new EqualCondition(entry.getServiceType(), entity.getServiceType()).check();
     }
 
+    @When("I send get DuSubscriber Entry request")
+    public void sendGetDuSubscriberEntryRequest() {
+        EntityList<DuSubscriberEntry> searchResults = context.get("searchResult", EntityList.class);
+        DuSubscriberEntry etalonEntry = searchResults.getLatest();
+
+        DuSubscriberEntry entry = service.view(etalonEntry.getId());
+
+        context.put("duSubscriberEntry", entry);
+        context.put("etalonEntry", etalonEntry);
+    }
+
+    @Then("DuSubscriber Entry is correct")
+    public void checkDuSubscriberEntryIsCorrect() {
+        DuSubscriberEntry entry = context.get("duSubscriberEntry", DuSubscriberEntry.class);
+        DuSubscriberEntry etalonEntry = context.get("etalonEntry", DuSubscriberEntry.class);
+
+        Verify.shouldBe(new EqualCondition(entry, etalonEntry));
+    }
 
 }
