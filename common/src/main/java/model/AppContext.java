@@ -65,7 +65,7 @@ public class AppContext {
         private TargetGroupsList targetGroups;
         private TargetsList targets;
         private PhonebookList phonebooks;
-        private DuSubscribersList duSubscriberses;
+        private DuSubscriberList duSubscriberses;
 
         public TargetsList getTargets() {
             if (targets == null) {
@@ -122,11 +122,11 @@ public class AppContext {
             this.phonebooks = phonebooks;
         }
 
-        public DuSubscribersList getDuSubscriberses() {
+        public DuSubscriberList getDuSubscriberses() {
             return duSubscriberses;
         }
 
-        public void setDuSubscriberses(DuSubscribersList duSubscriberses) {
+        public void setDuSubscriberses(DuSubscriberList duSubscriberses) {
             this.duSubscriberses = duSubscriberses;
         }
 

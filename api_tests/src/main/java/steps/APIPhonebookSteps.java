@@ -2,6 +2,8 @@ package steps;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import errors.NullReturnException;
+import json.JsonCoverter;
 import model.Phonebook;
 import model.phonebook.PhonebookSearchFilter;
 import org.apache.log4j.Logger;
@@ -15,16 +17,6 @@ public class APIPhonebookSteps extends APISteps {
     private Logger log = Logger.getLogger(APIPhonebookSteps.class);
     private PhonebookService service = new PhonebookService();
 
-
-    @When("I send search phonebooks list with page $page pagesize $pageSize request")
-    public void searchPhonebook(int page, int pageSize) {
-        PhonebookSearchFilter searchFilter = new PhonebookSearchFilter().setPage(page).setPageSize(pageSize);
-
-        EntityList<Phonebook> phonebookList = service.list(searchFilter);
-
-        context.put("searchFilter", searchFilter);
-        context.put("searchResult", phonebookList);
-    }
 
     @When("I send create Phonebook Entry request with all fields")
     public void createPhonebookEntry() {
@@ -92,7 +84,7 @@ public class APIPhonebookSteps extends APISteps {
     }
 
     @When("I search Phonebook Entry by $criteria and value $value")
-    public void searchPhonebookbyCriteria(String criteria, String value) {
+    public void searchPhonebookbyCriteria(String criteria, String value) throws NullReturnException {
         log.info("Start search phonebook by criteria: " + criteria + ", value: " + value);
         Phonebook phonebook = context.entities().getPhonebooks().getLatest();
 
@@ -113,6 +105,7 @@ public class APIPhonebookSteps extends APISteps {
         }
 
         PhonebookSearchFilter searchFilter = new PhonebookSearchFilter().filterBy(criteria, value);
+        log.info("filter" + JsonCoverter.toJsonString(searchFilter));
         EntityList<Phonebook> phonebookList = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);

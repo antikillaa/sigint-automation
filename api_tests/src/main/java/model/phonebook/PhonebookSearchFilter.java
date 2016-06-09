@@ -9,16 +9,13 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
 
-    private int page = 0;
-    private int pageSize = 100;
     private String address;
     private String name;
     private String imsi;
     private String phoneNumber;
     private String countryCode;
     private String country;
-    private String sortField;
-    private boolean sortDirection = true; //asc=true, desc=false
+
     private String queryString;
 
 
@@ -66,24 +63,6 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         return this;
     }
 
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public PhonebookSearchFilter setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-        return this;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public PhonebookSearchFilter setPage(int page) {
-        this.page = page;
-        return this;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -99,24 +78,6 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
 
     public PhonebookSearchFilter setQueryString(String queryString) {
         this.queryString = queryString;
-        return this;
-    }
-
-    public String getSortField() {
-        return sortField;
-    }
-
-    public PhonebookSearchFilter setSortField(String sortField) {
-        this.sortField = sortField;
-        return this;
-    }
-
-    public boolean isSortDirection() {
-        return sortDirection;
-    }
-
-    public PhonebookSearchFilter setSortDirection(boolean sortDirection) {
-        this.sortDirection = sortDirection;
         return this;
     }
 

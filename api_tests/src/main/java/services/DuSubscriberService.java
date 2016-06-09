@@ -2,26 +2,29 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
-import http.requests.phonebook.DuSubscribersRequest;
+import errors.NullReturnException;
+import http.requests.phonebook.DuSubscriberRequest;
 import json.JsonCoverter;
 import json.RsClient;
 import model.AppContext;
 import model.DuSubscriberEntry;
-import model.phonebook.DuSubscribersUploadResult;
+import abs.SearchResult;
+import model.phonebook.DuSubscriberSearchResult;
+import model.phonebook.DuSubscriberUploadResult;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import service.EntityService;
+import utils.FileHelper;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 
-public class DuSubscribersService implements EntityService<DuSubscriberEntry> {
+public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
 
-    private Logger log = Logger.getLogger(DuSubscribersService.class);
+    private Logger log = Logger.getLogger(DuSubscriberService.class);
     private static RsClient rsClient = new RsClient();
     private static AppContext context = AppContext.getContext();
     private final String sigintHost = context.environment().getSigintHost();
@@ -29,11 +32,11 @@ public class DuSubscribersService implements EntityService<DuSubscriberEntry> {
     @Override
     public int add(DuSubscriberEntry entity) {
         log.info("Upload new DuSubscriber Entry");
-        DuSubscribersRequest request = new DuSubscribersRequest().upload();
+        DuSubscriberRequest request = new DuSubscriberRequest().upload();
         try {
-            log.debug("Writing DuSubscribersEntry to csv file...");
-            File file = File.createTempFile("DuSubscribersEntry", ".csv");
-            writeEntryToFile(file, entity);
+            log.debug("Writing DuSubscriberEntry to csv file...");
+            File file = File.createTempFile("DuSubscriberEntry", ".csv");
+            FileHelper.writeLineToFile(file, entryToString(entity));
             request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
             file.deleteOnExit();
         } catch (IOException e) {
@@ -48,7 +51,7 @@ public class DuSubscribersService implements EntityService<DuSubscriberEntry> {
                 .cookie(request.getCookie())
                 .post(payload);
 
-        DuSubscribersUploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, DuSubscribersUploadResult.class, "result");
+        DuSubscriberUploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, DuSubscriberUploadResult.class, "result");
         if (uploadResult != null) {
             context.put("uploadResult", uploadResult);
         }
@@ -62,7 +65,19 @@ public class DuSubscribersService implements EntityService<DuSubscriberEntry> {
 
     @Override
     public EntityList<DuSubscriberEntry> list(SearchFilter filter) {
-        return null;
+        DuSubscriberRequest request = new DuSubscriberRequest().search();
+        Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
+
+        SearchResult<DuSubscriberEntry> searchResults = JsonCoverter.readEntityFromResponse(response, DuSubscriberSearchResult.class, "result");
+        if (searchResults == null) {
+            throw new AssertionError("Unable to read search results from DuSubscriber search");
+        } else {
+            return new EntityList<DuSubscriberEntry>(searchResults.getContent()) {
+                public DuSubscriberEntry getEntity(String param) throws NullReturnException {
+                    throw new NotImplementedException();
+                }
+            };
+        }
     }
 
     @Override
@@ -93,26 +108,6 @@ public class DuSubscribersService implements EntityService<DuSubscriberEntry> {
                 entry.getCustomerType() + "~" +
                 entry.getServiceType() + "~" +
                 entry.getCustomerCode();
-    }
-
-    private void writeEntryToFile(File file, DuSubscriberEntry entry) {
-        Writer writer = null;
-        try {
-            writer = new FileWriter(file);
-            writer.write(entryToString(entry));
-            writer.write(System.getProperty("line.separator"));
-            writer.flush();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        } finally {
-            if (writer != null) {
-                try {
-                    writer.close();
-                } catch (IOException ex) {
-                    log.error(ex.getMessage());
-                }
-            }
-        }
     }
 
 }

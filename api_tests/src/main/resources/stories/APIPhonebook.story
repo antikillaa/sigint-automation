@@ -53,8 +53,29 @@ Examples:
 | countryCode | random |
 
 
-Scenario: API.Upload DuSubscribers Entry with all fields
+Scenario: API.Upload DuSubscriber Entry with all fields
 Given I sign in as admin user
-When I send upload DuSubscribersEntry request with all fields
+When I send upload DuSubscriberEntry request with all fields
 Then I got response code 200
-And DuSubscribersEntry upload result is successful
+And DuSubscriberEntry upload result is successful
+When I send search DuSubscribers by phoneNumber and value random
+Then DuSubscriber search result are correct
+And Searched DuSubscriber Entry in list
+
+
+Scenario: API.Search DuSubscriber Entry using search filters
+Meta:
+@TEEL 1787
+Given I sign in as admin user
+When I send upload DuSubscriberEntry request with all fields
+Then I got response code 200
+And DuSubscriberEntry upload result is successful
+When I send search DuSubscribers by <criteria> and value <value>
+Then DuSubscriber search result are correct
+And Searched DuSubscriber Entry in list
+
+Examples:
+| criteria    | value  |
+| address     | random |
+| name        | random |
+| phoneNumber | random |
