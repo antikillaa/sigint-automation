@@ -6,7 +6,7 @@ import errors.NullReturnException;
 import json.JsonCoverter;
 import model.DuSubscriberEntry;
 import model.phonebook.DuSubscriberFilter;
-import model.phonebook.DuSubscriberUploadResult;
+import model.phonebook.EntriesUploadResult;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -24,21 +24,21 @@ public class APIDuSubscriberSteps extends APISteps {
     public void sendUploadDuSubscriberEntryRequest() throws NullReturnException {
         DuSubscriberEntry duSubscriberEntry = new DuSubscriberEntry().generate();
 
-        log.info("entry:" + JsonCoverter.toJsonString(duSubscriberEntry));
+        log.info("Entry:" + JsonCoverter.toJsonString(duSubscriberEntry));
         int responseCode = service.add(duSubscriberEntry);
 
         context.put("code", responseCode);
         context.put("duSubscriberEntry", duSubscriberEntry);
     }
 
-    @Then("DuSubscriberEntry upload result is successful")
-    public void checkDuSubscriberUploadResults() {
+    @Then("Entry upload result is successful")
+    public void checkEntryUploadResults() {
         log.info("Checking DuSubscriberEntry upload result");
-        DuSubscriberUploadResult uploadResult = context.get("uploadResult", DuSubscriberUploadResult.class);
+        EntriesUploadResult uploadResult = context.get("uploadResult", EntriesUploadResult.class);
 
         if (uploadResult.getNumEntries() != 1 && uploadResult.getFailedEntries() > 0) {
-            log.error("DuSubscriberEntry upload result is not correct!");
-            throw new AssertionError("DuSubscriberEntry upload result is not correct!");
+            log.error("Entry upload result is not correct!");
+            throw new AssertionError("Entry upload result is not correct!");
         }
     }
 
@@ -58,7 +58,7 @@ public class APIDuSubscriberSteps extends APISteps {
         }
 
         DuSubscriberFilter searchFilter = new DuSubscriberFilter().filterBy(criteria, value);
-        log.info("search filter: " + JsonCoverter.toJsonString(searchFilter));
+        log.info("Search filter: " + JsonCoverter.toJsonString(searchFilter));
         EntityList<DuSubscriberEntry> duSubscriberList = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
@@ -73,9 +73,11 @@ public class APIDuSubscriberSteps extends APISteps {
 
         if (searchResults.size() == 0) {
             log.warn("Search result can be incorrect. There are not records in it");
+        } else {
+            log.info("Search result size: " + searchResults.size());
         }
         for (DuSubscriberEntry entry : searchResults) {
-            log.info("Search result: " + JsonCoverter.toJsonString(entry));
+            log.info("Checking result: " + JsonCoverter.toJsonString(entry));
             Assert.assertTrue(searchFilter.filter(entry));
         }
     }

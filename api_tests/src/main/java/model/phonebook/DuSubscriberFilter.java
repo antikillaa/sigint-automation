@@ -12,6 +12,9 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
     private String phoneNumber;
     private String name;
     private String address;
+    // To search all fields using the query string syntax, phone number is the default field:
+    // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
+    private String queryString; //TODO
 
     public String getAddress() {
         return address;
@@ -36,11 +39,6 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
     public void setName(String name) {
         this.name = name;
     }
-
-    // To search all fields using the query string syntax, phone number is the default field:
-    // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
-    private String queryString;
-
 
     public String getQueryString() {
         return queryString;

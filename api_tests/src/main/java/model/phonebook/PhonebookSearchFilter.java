@@ -16,7 +16,7 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
     private String countryCode;
     private String country;
 
-    private String queryString;
+    private String queryString; //TODO
 
 
     public String getImsi() {

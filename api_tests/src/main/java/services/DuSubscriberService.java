@@ -10,7 +10,7 @@ import json.RsClient;
 import model.AppContext;
 import model.DuSubscriberEntry;
 import model.phonebook.DuSubscriberSearchResult;
-import model.phonebook.DuSubscriberUploadResult;
+import model.phonebook.EntriesUploadResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import service.EntityService;
@@ -51,7 +51,7 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
                 .cookie(request.getCookie())
                 .post(payload);
 
-        DuSubscriberUploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, DuSubscriberUploadResult.class, "result");
+        EntriesUploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, EntriesUploadResult.class, "result");
         if (uploadResult != null) {
             context.put("uploadResult", uploadResult);
         }
@@ -95,21 +95,22 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
 
 
     private String entryToString(DuSubscriberEntry entry) {
-        return  entry.getPhoneNumber() + "~" +
-                entry.getTitle() + "~" +
-                entry.getFirstName() + "~" +
-                entry.getMiddleName() + "~" +
-                entry.getLastName() + "~" +
-                entry.getPoBox() + "~" +
-                entry.getCity() + "~" +
-                entry.getNationality() + "~" +
-                entry.getVisaType() + "~" +
-                entry.getVisaNumber() + "~" +
-                entry.getIdType() + "~" +
-                entry.getIdNumber() + "~" +
-                entry.getStatus() + "~" +
-                entry.getCustomerType() + "~" +
-                entry.getServiceType() + "~" +
+        String DELIMETER = "~";
+        return  entry.getPhoneNumber() + DELIMETER +
+                entry.getTitle() + DELIMETER +
+                entry.getFirstName() + DELIMETER +
+                entry.getMiddleName() + DELIMETER +
+                entry.getLastName() + DELIMETER +
+                entry.getPoBox() + DELIMETER +
+                entry.getCity() + DELIMETER +
+                entry.getNationality() + DELIMETER +
+                entry.getVisaType() + DELIMETER +
+                entry.getVisaNumber() + DELIMETER +
+                entry.getIdType() + DELIMETER +
+                entry.getIdNumber() + DELIMETER +
+                entry.getStatus() + DELIMETER +
+                entry.getCustomerType() + DELIMETER +
+                entry.getServiceType() + DELIMETER +
                 entry.getCustomerCode();
     }
 
