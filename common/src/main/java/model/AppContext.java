@@ -1,10 +1,7 @@
 package model;
 
 import json.JsonCoverter;
-import model.lists.RFIList;
-import model.lists.TargetGroupsList;
-import model.lists.TargetsList;
-import model.lists.UsersList;
+import model.lists.*;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.type.MapType;
 
@@ -12,7 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 
 public class AppContext {
@@ -79,7 +78,6 @@ public class AppContext {
             entities = new Entities();
         }
         return entities;
-
     }
 
     public Environment environment(){
@@ -121,7 +119,8 @@ public class AppContext {
         private UsersList users;
         private TargetGroupsList targetGroups;
         private TargetsList targets;
-
+        private PhonebookList phonebooks;
+        private DuSubscriberList duSubscriberses;
 
         public TargetsList getTargets() {
             if (targets == null) {
@@ -167,8 +166,26 @@ public class AppContext {
             this.RFIs = RFIs;
         }
 
-        private Entities(){}
+        public PhonebookList getPhonebooks() {
+            if (phonebooks == null) {
+                phonebooks = new PhonebookList();
+            }
+            return phonebooks;
+        }
 
+        public void setPhonebooks(PhonebookList phonebooks) {
+            this.phonebooks = phonebooks;
+        }
+
+        public DuSubscriberList getDuSubscriberses() {
+            return duSubscriberses;
+        }
+
+        public void setDuSubscriberses(DuSubscriberList duSubscriberses) {
+            this.duSubscriberses = duSubscriberses;
+        }
+
+        private Entities(){}
 
     }
 

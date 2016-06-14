@@ -11,7 +11,7 @@ import org.junit.Assert;
 import services.RFIService;
 
 
-public class APIRFIUploadSteps {
+public class APIRFIUploadSteps extends APISteps {
 
     private static Logger log = Logger.getLogger(APIRFIUploadSteps.class);
     private static RFIService service = new RFIService();
@@ -28,17 +28,15 @@ public class APIRFIUploadSteps {
             RFI.setOriginalDocument(new FileAttachment("original"));
         }
         sendRFI(RFI);
-
     }
 
     private void sendRFI(InformationRequest RFI) {
-        int response = service.addNew(RFI);
+        int response = service.add(RFI);
         context.put("code", response);
         context.put("requestRFI", RFI);
         if (response == 200) {
             rfiCorrect();
         }
-
     }
 
     private void rfiCorrect() {
@@ -48,7 +46,6 @@ public class APIRFIUploadSteps {
         etalonRFI = context.get("requestRFI", InformationRequest.class);;
         createdRFI = context.entities().getRFIs().getLatest();
         checkRFIs(etalonRFI, createdRFI);
-
     }
 
     private void checkRFIs(InformationRequest etalon, InformationRequest created) {
@@ -72,14 +69,13 @@ public class APIRFIUploadSteps {
             Assert.assertEquals(etalon.getOriginalDocument().getFilename(),
                     created.getOriginalDocument().getFilename());
         }
-
     }
 
     @When("I update created RFI")
     public void updateCreatedRFI() {
         InformationRequest RFI = context.entities().getRFIs().getLatest();
         InformationRequest newRFI = RFI.generate();
-        int response = service.addNew(newRFI);
+        int response = service.add(newRFI);
         context.put("code", response);
         context.put("requestRFI", newRFI);
     }
@@ -87,7 +83,6 @@ public class APIRFIUploadSteps {
     @Then("RFI is updated")
     public void rfiIsUpdated() {
         rfiCorrect();
-
     }
 
     @When("I get details of created RFI")
@@ -105,8 +100,6 @@ public class APIRFIUploadSteps {
         InformationRequest createdRFI = context.entities().getRFIs().getLatest();
         InformationRequest requestRFIView = context.get("requestRFIView", InformationRequest.class);
         Assert.assertTrue(createdRFI.equals(requestRFIView));
-
-
     }
 
     @When("I create new RFI in status $status")
@@ -114,7 +107,6 @@ public class APIRFIUploadSteps {
         InformationRequest RFI = new InformationRequest().generate();
         RFI.setState(status.toUpperCase());
         sendRFI(RFI);
-
     }
 
     @When("I delete created RFI")
@@ -122,7 +114,7 @@ public class APIRFIUploadSteps {
         InformationRequest RFI = context.entities().getRFIs().getLatest();
         int response = service.remove(RFI);
         context.put("code",  response);
-        }
+    }
 
     @When("I cancel RFI")
     public void cancelRFI() {
@@ -144,6 +136,5 @@ public class APIRFIUploadSteps {
         User currentUser = context.get("user", User.class);
         Assert.assertEquals(RFI.getState(), "ASSIGNED");
         Assert.assertEquals(RFI.getAssignedTo(),currentUser.getId());
-
     }
 }

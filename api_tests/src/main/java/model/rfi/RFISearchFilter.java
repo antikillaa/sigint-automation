@@ -1,9 +1,12 @@
-package model;
+package model.rfi;
 
 import abs.SearchFilter;
 import abs.TeelaEntity;
+import model.InformationRequest;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -99,23 +102,21 @@ public class RFISearchFilter extends SearchFilter {
         return states;
     }
 
-    public class StatusFilter extends SearchFilter<InformationRequest> {
+    private class StatusFilter extends SearchFilter<InformationRequest> {
 
-        public StatusFilter(String value) {
+        StatusFilter(String value) {
             state = value;
         }
 
         public boolean filter(InformationRequest entity) {
              return entity.getState().equals(state);
-
         }
     }
 
-    public class PriorityFilter extends SearchFilter<InformationRequest> {
+    private class PriorityFilter extends SearchFilter<InformationRequest> {
 
-        public PriorityFilter(Integer value) {
+        PriorityFilter(Integer value) {
             minPriority = value;
-
         }
 
         public boolean filter(InformationRequest entity) {
@@ -123,9 +124,9 @@ public class RFISearchFilter extends SearchFilter {
         }
     }
 
-    public class CreatedDateFilter extends SearchFilter<InformationRequest> {
+    private class CreatedDateFilter extends SearchFilter<InformationRequest> {
 
-        public CreatedDateFilter(Date date) {
+        CreatedDateFilter(Date date) {
             maxCreatedDate = date;
             minCreatedDate = date;
         }
@@ -136,12 +137,11 @@ public class RFISearchFilter extends SearchFilter {
         }
     }
 
-    public class DueDateFilter extends SearchFilter<InformationRequest> {
+    private class DueDateFilter extends SearchFilter<InformationRequest> {
 
-        public DueDateFilter(Date date) {
+        DueDateFilter(Date date) {
             minDueDate = date;
             maxDueDate = date;
-
         }
         public boolean filter(InformationRequest entity) {
             return (entity.getDueDate().equals(minDueDate) &&
@@ -149,9 +149,9 @@ public class RFISearchFilter extends SearchFilter {
         }
     }
 
-    public class CreatedByFilter extends SearchFilter<InformationRequest> {
+    private class CreatedByFilter extends SearchFilter<InformationRequest> {
 
-        public CreatedByFilter(String id) {
+        CreatedByFilter(String id) {
             createdBy = id;
         }
 
@@ -160,9 +160,9 @@ public class RFISearchFilter extends SearchFilter {
         }
     }
 
-    public class OriginatorFilter extends SearchFilter<InformationRequest> {
+    private class OriginatorFilter extends SearchFilter<InformationRequest> {
 
-        public OriginatorFilter(String originator) {
+        OriginatorFilter(String originator) {
             requestSource = originator;
         }
 
@@ -171,5 +171,24 @@ public class RFISearchFilter extends SearchFilter {
         }
     }
 
+    public RFISearchFilter filterBy(String criteria, String value) throws ParseException {
+        if (criteria.toLowerCase().equals("state")) {
+            this.setActiveFilter(this.new StatusFilter(value));
+        } else if (criteria.toLowerCase().equals("min priority")) {
+            this.setActiveFilter(this.new PriorityFilter(Integer.parseInt(value)));
+        } else if (criteria.toLowerCase().equals("created date")) {
+            this.setActiveFilter(this.new CreatedDateFilter(new Date(Long.valueOf(value))));
+        } else if (criteria.toLowerCase().equals("due date")) {
+            this.setActiveFilter(this.new DueDateFilter(new Date(Long.valueOf(value))));
+        } else if (criteria.toLowerCase().equals("created by")) {
+            this.setActiveFilter(this.new CreatedByFilter(value));
+        } else if (criteria.toLowerCase().equals("originator")) {
+            this.setActiveFilter(this.new OriginatorFilter(value));
+        } else {
+            throw new AssertionError("Unknown filter type");
+        }
+        return this;
     }
+
+}
 

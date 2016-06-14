@@ -27,7 +27,7 @@ public class JsonCoverter {
         if (response.getStatus() == 200) {
             jsonString = response.readEntity(String.class);
         } else {
-            log.warn("RFI was not found in json due to error in response");
+            log.warn("Entity was not found in json due to error in response");
             return null;
         }
         T entity;
@@ -40,7 +40,6 @@ public class JsonCoverter {
             throw new AssertionError();
         }
         return entity;
-
     }
 
 
@@ -86,7 +85,6 @@ public class JsonCoverter {
             e.printStackTrace();
         }
         throw new NullReturnException("Error when converting json string to user class");
-
     }
 
     public  static <T extends EntityList>T fromJsonToObjectsList(InputStream stream, Class<T> userClass)

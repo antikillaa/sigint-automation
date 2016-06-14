@@ -12,7 +12,7 @@ import services.TargetGroupService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class APITargetGroupSteps {
+public class APITargetGroupSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APITargetGroupSteps.class);
     private AppContext context = AppContext.getContext();
@@ -26,10 +26,9 @@ public class APITargetGroupSteps {
             targets.add(context.entities().getTargets().random());
             group.setTargets(targets);
         }
-        int response = service.addNew(group);
+        int response = service.add(group);
         context.put("code", response);
         context.put("requestTargetGroup", group);
-
     }
 
     @Then("Created target group is correct")

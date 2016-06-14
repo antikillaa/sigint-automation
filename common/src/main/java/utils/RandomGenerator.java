@@ -82,6 +82,7 @@ public class RandomGenerator {
         return strings;
     }
 
+
     public static <T>T getRandomItemFromList(List<T> list) {
         int index = RandomUtils.nextInt(list.size());
         return list.get(index);
@@ -121,6 +122,17 @@ public class RandomGenerator {
         calendar.set(Calendar.SECOND, 59);
 
         return calendar.getTime();
+    }
+
+    public static String generateCountryCode() {
+        List<String> countryCodes = Arrays.asList(Locale.getISOCountries());
+        return countryCodes.get(RandomUtils.nextInt(countryCodes.size()));
+    }
+
+    public static String getCountryName(String countryCode) {
+        Locale locale = new Locale("", countryCode);
+        return locale.getDisplayCountry();
+
     }
 }
 

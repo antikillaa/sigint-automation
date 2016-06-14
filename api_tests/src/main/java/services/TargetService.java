@@ -20,7 +20,7 @@ public class TargetService implements EntityService<Target> {
     private final String sigintHost = context.environment().getSigintHost();
 
 
-    public int addNew(Target entity) {
+    public int add(Target entity) {
         log.info("Creating new target");
         TargetNewRequest request = new TargetNewRequest();
         Response response = rsClient.put(sigintHost + request.getURI(), entity, request.getCookie());

@@ -20,7 +20,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
     private final String sigintHost = context.environment().getSigintHost();
 
 
-    public int addNew(TargetGroup entity) {
+    public int add(TargetGroup entity) {
         log.info("Creating new target group");
         TargetGroupNewRequest request = new TargetGroupNewRequest();
         Response response = rsClient.put(sigintHost + request.getURI(), entity, request.getCookie());

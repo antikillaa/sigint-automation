@@ -16,6 +16,10 @@ public class Verify {
         }
     }
 
+    public static Boolean isTrue(ExpectedCondition condition) {
+        return condition.check();
+    }
+
     public static void shouldNotBe(ExpectedCondition condition) {
         try {
             Assert.assertFalse(condition.check());
