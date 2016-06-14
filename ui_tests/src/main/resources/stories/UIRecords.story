@@ -59,8 +59,6 @@ Then record is attached to the report
 
 
 Scenario: User can create report from record processing screen and send it to Analyst for review
-Meta:
-@wip
 Given I logged in as OPERATOR
 When I navigate to Reports -> All page
 And I create new manual draft report
