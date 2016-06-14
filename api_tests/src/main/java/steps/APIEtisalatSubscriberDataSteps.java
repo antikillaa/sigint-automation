@@ -1,7 +1,7 @@
 package steps;
 
 import abs.EntityList;
-import conditions.EqualCondition;
+import conditions.Verify;
 import errors.NullReturnException;
 import json.JsonCoverter;
 import model.EtisalatSubscriberEntry;
@@ -11,7 +11,8 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.EtisalatSubscriberService;
-import verifier.Verify;
+
+import static conditions.Conditions.equals;
 
 public class APIEtisalatSubscriberDataSteps extends APISteps {
 
@@ -106,49 +107,49 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
     }
 
     private boolean checkEntry(EtisalatSubscriberEntry entry, EtisalatSubscriberEntry entity) {
-        return new EqualCondition(entry.getPhoneNumber(), entity.getPhoneNumber()).check() &&
-                new EqualCondition(entry.getName(), entity.getName()).check() &&
-                new EqualCondition(entry.getAddress(), entity.getAddress()).check() &&
-                new EqualCondition(entry.getSourceId(), entity.getSourceId()).check() &&
-                new EqualCondition(entry.getAction(), entity.getAction()).check() &&
-                new EqualCondition(entry.getAccountSuffix(), entity.getAccountSuffix()).check() &&
-                new EqualCondition(entry.getPartyId(), entity.getPartyId()).check() &&
-                new EqualCondition(entry.getAccountNameArabic(), entity.getAccountNameArabic()).check() &&
-                new EqualCondition(entry.getUserIdOrName(), entity.getUserIdOrName()).check() &&
-                new EqualCondition(entry.getInstallationBuilding(), entity.getInstallationBuilding()).check() &&
-                new EqualCondition(entry.getInstallationFlatNumber(), entity.getInstallationFlatNumber()).check() &&
-                new EqualCondition(entry.getInstallationFloor(), entity.getInstallationFloor()).check() &&
-                new EqualCondition(entry.getInstallationStreetName(), entity.getInstallationStreetName()).check() &&
-                new EqualCondition(entry.getInstallationPlotNumber(), entity.getInstallationPlotNumber()).check() &&
-                new EqualCondition(entry.getInstallationMapNumber(), entity.getInstallationMapNumber()).check() &&
-                new EqualCondition(entry.getInstallationSector(), entity.getInstallationSector()).check() &&
-                new EqualCondition(entry.getInstallationTownCode(), entity.getInstallationTownCode()).check() &&
-                new EqualCondition(entry.getInstallationTownName(), entity.getInstallationTownName()).check() &&
-                new EqualCondition(entry.getInstallationTownEmirate(), entity.getInstallationTownEmirate()).check() &&
-                new EqualCondition(entry.getAddress(), entity.getAddress()).check() &&
-                new EqualCondition(entry.getFirstAddressLine(), entity.getFirstAddressLine()).check() &&
-                new EqualCondition(entry.getSecondAddressLine(), entity.getSecondAddressLine()).check() &&
-                new EqualCondition(entry.getPoBoxNumber(), entity.getPoBoxNumber()).check() &&
-                new EqualCondition(entry.getCustomerCategoryCode(), entity.getCustomerCategoryCode()).check() &&
-                new EqualCondition(entry.getCustomerCategoryCodeDesc(), entity.getCustomerCategoryCodeDesc()).check() &&
-                new EqualCondition(entry.getDateOfInstallation(), entity.getDateOfInstallation()).check() &&
-                new EqualCondition(entry.getCountryCode(), entity.getCountryCode()).check() &&
-                new EqualCondition(entry.getCountryCodeOriginal(), entity.getCountryCodeOriginal()).check() &&
-                new EqualCondition(entry.getCountry(), entity.getCountry()).check() &&
-                new EqualCondition(entry.getSubscriberAccountStatusCode(), entity.getSubscriberAccountStatusCode()).check() &&
-                new EqualCondition(entry.getSubscriberAccountStatusDesc(), entity.getSubscriberAccountStatusDesc()).check() &&
-                new EqualCondition(entry.getProductGroupCode(), entity.getProductGroupCode()).check() &&
-                new EqualCondition(entry.getProductGroupDesc(), entity.getProductGroupDesc()).check() &&
-                new EqualCondition(entry.getProductCode(), entity.getProductCode()).check() &&
-                new EqualCondition(entry.getProductDesc(), entity.getProductDesc()).check() &&
-                new EqualCondition(entry.getImsi(), entity.getImsi()).check() &&
-                new EqualCondition(entry.getIdentificationTypeCode(), entity.getIdentificationTypeCode()).check() &&
-                new EqualCondition(entry.getIdentificationTypeDesc(), entity.getIdentificationTypeDesc()).check() &&
-                new EqualCondition(entry.getIdentificationInfo(), entity.getIdentificationInfo()).check() &&
-                new EqualCondition(entry.getProvisionedRegionCode(), entity.getProvisionedRegionCode()).check() &&
-                new EqualCondition(entry.getProvisionedRegionCodeDesc(), entity.getProvisionedRegionCodeDesc()).check() &&
-                new EqualCondition(entry.getCityId(), entity.getCityId()).check() &&
-                new EqualCondition(entry.getCityName(), entity.getCityName()).check();
+        return Verify.isTrue(equals.elements(entry.getPhoneNumber(), entity.getPhoneNumber())) &&
+                Verify.isTrue(equals.elements(entry.getName(), entity.getName())) &&
+                Verify.isTrue(equals.elements(entry.getAddress(), entity.getAddress())) &&
+                Verify.isTrue(equals.elements(entry.getSourceId(), entity.getSourceId())) &&
+                Verify.isTrue(equals.elements(entry.getAction(), entity.getAction())) &&
+                Verify.isTrue(equals.elements(entry.getAccountSuffix(), entity.getAccountSuffix())) &&
+                Verify.isTrue(equals.elements(entry.getPartyId(), entity.getPartyId())) &&
+                Verify.isTrue(equals.elements(entry.getAccountNameArabic(), entity.getAccountNameArabic())) &&
+                Verify.isTrue(equals.elements(entry.getUserIdOrName(), entity.getUserIdOrName())) &&
+                Verify.isTrue(equals.elements(entry.getInstallationBuilding(), entity.getInstallationBuilding())) &&
+                Verify.isTrue(equals.elements(entry.getInstallationFlatNumber(), entity.getInstallationFlatNumber())) &&
+                Verify.isTrue(equals.elements(entry.getInstallationFloor(), entity.getInstallationFloor())) &&
+                Verify.isTrue(equals.elements(entry.getInstallationStreetName(), entity.getInstallationStreetName())) &&
+                Verify.isTrue(equals.elements(entry.getInstallationPlotNumber(), entity.getInstallationPlotNumber())) &&
+                Verify.isTrue(equals.elements(entry.getInstallationMapNumber(), entity.getInstallationMapNumber())) &&
+                Verify.isTrue(equals.elements(entry.getInstallationSector(), entity.getInstallationSector())) &&
+                Verify.isTrue(equals.elements(entry.getInstallationTownCode(), entity.getInstallationTownCode())) &&
+                Verify.isTrue(equals.elements(entry.getInstallationTownName(), entity.getInstallationTownName())) &&
+                Verify.isTrue(equals.elements(entry.getInstallationTownEmirate(), entity.getInstallationTownEmirate())) &&
+                Verify.isTrue(equals.elements(entry.getAddress(), entity.getAddress())) &&
+                Verify.isTrue(equals.elements(entry.getFirstAddressLine(), entity.getFirstAddressLine())) &&
+                Verify.isTrue(equals.elements(entry.getSecondAddressLine(), entity.getSecondAddressLine())) &&
+                Verify.isTrue(equals.elements(entry.getPoBoxNumber(), entity.getPoBoxNumber())) &&
+                Verify.isTrue(equals.elements(entry.getCustomerCategoryCode(), entity.getCustomerCategoryCode())) &&
+                Verify.isTrue(equals.elements(entry.getCustomerCategoryCodeDesc(), entity.getCustomerCategoryCodeDesc())) &&
+                Verify.isTrue(equals.elements(entry.getDateOfInstallation(), entity.getDateOfInstallation())) &&
+                Verify.isTrue(equals.elements(entry.getCountryCode(), entity.getCountryCode())) &&
+                Verify.isTrue(equals.elements(entry.getCountryCodeOriginal(), entity.getCountryCodeOriginal())) &&
+                Verify.isTrue(equals.elements(entry.getCountry(), entity.getCountry())) &&
+                Verify.isTrue(equals.elements(entry.getSubscriberAccountStatusCode(), entity.getSubscriberAccountStatusCode())) &&
+                Verify.isTrue(equals.elements(entry.getSubscriberAccountStatusDesc(), entity.getSubscriberAccountStatusDesc())) &&
+                Verify.isTrue(equals.elements(entry.getProductGroupCode(), entity.getProductGroupCode())) &&
+                Verify.isTrue(equals.elements(entry.getProductGroupDesc(), entity.getProductGroupDesc())) &&
+                Verify.isTrue(equals.elements(entry.getProductCode(), entity.getProductCode())) &&
+                Verify.isTrue(equals.elements(entry.getProductDesc(), entity.getProductDesc())) &&
+                Verify.isTrue(equals.elements(entry.getImsi(), entity.getImsi())) &&
+                Verify.isTrue(equals.elements(entry.getIdentificationTypeCode(), entity.getIdentificationTypeCode())) &&
+                Verify.isTrue(equals.elements(entry.getIdentificationTypeDesc(), entity.getIdentificationTypeDesc())) &&
+                Verify.isTrue(equals.elements(entry.getIdentificationInfo(), entity.getIdentificationInfo())) &&
+                Verify.isTrue(equals.elements(entry.getProvisionedRegionCode(), entity.getProvisionedRegionCode())) &&
+                Verify.isTrue(equals.elements(entry.getProvisionedRegionCodeDesc(), entity.getProvisionedRegionCodeDesc())) &&
+                Verify.isTrue(equals.elements(entry.getCityId(), entity.getCityId())) &&
+                Verify.isTrue(equals.elements(entry.getCityName(), entity.getCityName()));
     }
 
     @When("I send get EtisalatSubscriberData Entry request")
@@ -167,7 +168,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         EtisalatSubscriberEntry entry = context.get("etisalatSubscriberEntry", EtisalatSubscriberEntry.class);
         EtisalatSubscriberEntry etalonEntry = context.get("etalonEntry", EtisalatSubscriberEntry.class);
 
-        Verify.shouldBe(new EqualCondition(entry, etalonEntry));
+        Verify.shouldBe(equals.elements(entry, etalonEntry));
     }
 
 }
