@@ -7,4 +7,5 @@ public class ReportsTable extends EntityTable<ReportRow> {
     public ReportsTable() {
         super(ReportRow.class);
     }
+
 }

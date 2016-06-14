@@ -11,6 +11,10 @@ import static com.codeborne.selenide.Selenide.page;
 
 public class Pages {
 
+    public static SigintPage sigintPage() {
+        return page(SigintPage.class);
+    }
+
     public LoginPage loginPage() {
         return page(LoginPage.class);
     }
@@ -53,6 +57,10 @@ public class Pages {
 
     public static ReportsEditPage reportsEditPage() {
         return page(ReportsEditPage.class);
+    }
+
+    public static ReportDetailsDialog reportDetailsDialog() {
+        return page(ReportDetailsDialog.class);
     }
 
 }

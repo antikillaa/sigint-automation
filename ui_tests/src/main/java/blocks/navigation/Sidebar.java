@@ -21,7 +21,7 @@ public class Sidebar {
                 .$$(By.xpath(".//div[contains(@class, 'pg-sidebar__sub-menu')]"));
     }
 
-    public SelenideElement getMainMenuByName(String menuName) {
+    public SelenideElement  getMainMenuByName(String menuName) {
         for (SelenideElement menu : getMenusWebElements()) {
             SelenideElement mainMenu = menu.$(".pg-sidebar__item");
             if (mainMenu.$("div.pg-sidebar__item__name").getText().toLowerCase().contentEquals(menuName.toLowerCase())) {

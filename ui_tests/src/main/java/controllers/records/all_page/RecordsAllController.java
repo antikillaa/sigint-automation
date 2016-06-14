@@ -1,13 +1,18 @@
 package controllers.records.all_page;
 
-import controllers.PageControllerFactory;
+import blocks.context.factories.RecordsControllerFactory;
+import controllers.records.RecordsToolbarController;
 import pages.Pages;
 import pages.records.RecordsAllPage;
 
-public  class RecordsAllController implements
-        PageControllerFactory<RecordsTableAllController, RecordsAllToolbarController, RecordsAllSearchController > {
+public  class RecordsAllController implements RecordsControllerFactory {
 
-    private RecordsAllPage page = Pages.recordsAllPage();
+    private static RecordsAllPage page = Pages.recordsAllPage();
+
+    @Override
+    public RecordsAllPage getPage() {
+        return page;
+    }
 
     @Override
     public RecordsTableAllController getTableController() {
@@ -15,12 +20,12 @@ public  class RecordsAllController implements
     }
 
     @Override
-    public RecordsAllToolbarController getToolbarController() {
-        return new RecordsAllToolbarController(page);
+    public RecordsToolbarController getToolbarController() {
+        return new RecordsToolbarController(page);
     }
 
     @Override
     public RecordsAllSearchController getSearchController() {
-        return null;
+        return new RecordsAllSearchController(page);
     }
 }

@@ -1,14 +1,14 @@
 package blocks.context.tables;
+import blocks.context.Context;
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.SelenideElement;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import pages.BaseSection;
-import blocks.context.Context;
 
 import static com.codeborne.selenide.Condition.disappear;
-import static com.codeborne.selenide.Condition.present;
 import static com.codeborne.selenide.Selenide.sleep;
 
 public class Table extends BaseSection{
@@ -31,16 +31,17 @@ public class Table extends BaseSection{
     }
 
     public ElementsCollection getPgRows() {
+        waitLoad();
+        return base().$$("div.pg-row").shouldBe(CollectionCondition.sizeGreaterThan(0));
+    }
+
+    public void waitLoad() {
         getLoading().shouldBe(disappear);
-        return base().$$("div.pg-row");
+        sleep(500);
     }
 
     public ElementsCollection getRows() {
-        getPgRows().first().shouldBe(present);
-
-        sleep(500); //TODO
         log.debug("Rows size: " + getPgRows().size());
-
         return getPgRows();
     }
 
@@ -59,8 +60,8 @@ public class Table extends BaseSection{
             }
         }
 
-        log.warn("Column with name:" + columnName + " was not found in the Records table");
-        throw new AssertionError("Column with name:" + columnName + " was not found in the Records table");
+        log.warn("Column with name:" + columnName + " was not found in the table");
+        throw new AssertionError("Column with name:" + columnName + " was not found in the table");
     }
 
     public boolean isEmpty(){

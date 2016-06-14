@@ -1,12 +1,19 @@
 package steps;
 
+import blocks.context.Context;
 import com.codeborne.selenide.WebDriverRunner;
-import org.jbehave.core.annotations.*;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Named;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import static com.codeborne.selenide.Condition.*;
+import pages.SigintPage;
+
+import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.sleep;
 
 public class UILoginSteps extends UISteps {
@@ -18,13 +25,6 @@ public class UILoginSteps extends UISteps {
         pages.loginPage().getUsernameField().val(username);
         pages.loginPage().getPasswordField().val(password);
         pages.loginPage().clickSignInButton();
-    }
-
-
-    private void iShouldSeeSigintPage() {
-        //pages.recordsSearchPage().getMain().get().shouldBe(present);
-        //pages.recordsSearchPage().getHeader().get().shouldBe(present);
-        //pages.recordsSearchPage().getSidebar().getSidebar().shouldBe(present);
     }
 
 
@@ -42,10 +42,6 @@ public class UILoginSteps extends UISteps {
 
     @Then("I should see $message error")
     public void userDoesNotSignIn(String message) {
-        //pages.recordsSearchPage().getMain().get().shouldNotBe(present);
-        //pages.recordsSearchPage().getHeader().get().shouldNotBe(present);
-        //pages.recordsSearchPage().getSidebar().getSidebar().shouldNotBe(present);
-
         pages.loginPage().getErrorMessage().shouldHave(text(message));
     }
 
@@ -66,10 +62,13 @@ public class UILoginSteps extends UISteps {
     public void userSignOut() {
         WaitForReady();
         sleep(5000); //TODO
+        new SigintPage() {
+            @Override
+            public Context context() {
+                return null;
+            }
+        }.getHeader().clickUserProfile().clickSignOut();
 
-        //pages.recordsSearchPage()
-        //        .getHeader().clickUserProfile()
-        //        .clickSignOut();
     }
 
 
@@ -93,6 +92,6 @@ public class UILoginSteps extends UISteps {
         );
 
         // Assert
-        iShouldSeeSigintPage();
+        context.put("user", user);
     }
 }

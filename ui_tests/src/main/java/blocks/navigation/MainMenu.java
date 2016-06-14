@@ -1,7 +1,6 @@
 package blocks.navigation;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.SelenideElement;
 import controllers.PageControllerFactory;
 import org.apache.log4j.Logger;
@@ -9,38 +8,39 @@ import org.apache.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.codeborne.selenide.Selenide.page;
+
 
 public abstract class MainMenu {
 
-    private SelenideElement element;
+    private static Sidebar sidebar = page(Sidebar.class);
+    private String menuName;
     private Logger log = Logger.getLogger(MainMenu.class);
     private Map<String, SubMenu> submenues = new HashMap<>();
 
 
-    public MainMenu(SelenideElement menuElement) {
-        this.element = menuElement;
+    public MainMenu(String menuName) {
+        this.menuName = menuName;
 
     }
 
+    public SelenideElement getMenu() {
+        return sidebar.getMainMenuByName(menuName);
+    }
+
     public void click() {
-        element.click();
+        getMenu().click();
     }
 
     protected abstract PageControllerFactory getController(String pageName);
 
     public Boolean isExpanded() {
-        try {
-            element.$(".pg-sidebar__item").shouldNotHave(Condition.cssClass("pg-sidebar__item--collapsed"));
-        } catch (Exception e) {
-            log.debug(String.format("Menu %s expanded", element.getText()));
-            return true;
-        }
-        return false;
+        return getMenu().$(".pg-sidebar__item").has(Condition.cssClass("pg-sidebar__item--collapsed"));
     }
 
     public SubMenu getSubMenuByName(String name) {
         if (!submenues.containsKey(name)) {
-            submenues.put(name, new SubMenu(element.$(new Selectors.ByText(name)), getController(name)));
+            submenues.put(name, new SubMenu(this, name, getController(name)));
         }
         return submenues.get(name);
     }

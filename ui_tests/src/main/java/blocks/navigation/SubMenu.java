@@ -1,23 +1,27 @@
 package blocks.navigation;
 
-import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.SelenideElement;
 import controllers.PageControllerFactory;
-import pages.BasePage;
 
 public class SubMenu  {
 
-    private SelenideElement element;
+    private MainMenu menu;
+    private String subMenuName;
     private PageControllerFactory controller;
 
-    public SubMenu(SelenideElement element, PageControllerFactory controller) {
+    public SubMenu(MainMenu menu, String subMenuName, PageControllerFactory controller) {
         this.controller = controller;
-        this.element = element;
+        this.menu = menu;
+        this.subMenuName = subMenuName;
+    }
+
+    public SelenideElement getSubMenu() {
+        return menu.getMenu().$((new Selectors.ByText(subMenuName)));
     }
 
     public PageControllerFactory click() {
-        element.click();
-        BasePage.getPageLoading().shouldBe(Condition.disappear);
+        getSubMenu().click();
         return controller;
 
     }

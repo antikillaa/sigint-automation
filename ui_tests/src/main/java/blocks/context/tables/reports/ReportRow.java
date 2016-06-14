@@ -22,18 +22,10 @@ public class ReportRow extends Row {
     }
 
     public ReportDetailsDialog clickShowInfoButton() {
-        getShowInfoButton().click();
+        getShowInfoButton().hover().click();
         return page(ReportDetailsDialog.class);
     }
 
-
-
-    public ReportRow selectReport() {
-        if (!getCheckBox().isSelected()) {
-            getCheckBox().click();
-        }
-        return this;
-    }
 
     public SelenideElement getActionsCell() {
         return row
@@ -49,5 +41,18 @@ public class ReportRow extends Row {
         Actions actions = new Actions(WebDriverRunner.getWebDriver());
         actions.moveToElement(getEditReportButton()).click().build().perform();
         return page(ReportsEditPage.class);
+    }
+
+
+    public String getSubject() {
+        return getCellByColumnName("Subject").text();
+    }
+
+    public String getReportID() {
+        return getCellByColumnName("Report ID").text();
+    }
+
+    public String getOwner() {
+        return getCellByColumnName("Owner").text();
     }
 }

@@ -50,7 +50,7 @@ public class RecordsCreatePage extends SigintPage {
 
 
     public RecordsCreatePage selectSource(String source) {
-        getSource().selectOption(source);
+        getSource().selectOptionByText(source);
         return this;
     }
 
@@ -73,7 +73,7 @@ public class RecordsCreatePage extends SigintPage {
     }
 
     public RecordsCreatePage selectFromCountry(String country) {
-        getFromCountry().selectOption(country);
+        getFromCountry().selectOptionByText(country);
         return this;
     }
 
@@ -86,7 +86,7 @@ public class RecordsCreatePage extends SigintPage {
     }
 
     public RecordsCreatePage selectLanguage(String language) {
-        getLanguage().selectOption(language);
+        getLanguage().selectOptionByText(language);
         return this;
     }
 
@@ -164,7 +164,7 @@ public class RecordsCreatePage extends SigintPage {
     }
 
     public RecordsCreatePage selectToCountry(String country) {
-        getToCountry().selectOption(country);
+        getToCountry().selectOptionByText(country);
         return this;
     }
 

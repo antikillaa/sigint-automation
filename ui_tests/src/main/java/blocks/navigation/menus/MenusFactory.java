@@ -11,9 +11,9 @@ public class MenusFactory {
 
     public static MainMenu getMenu(String name) {
         if (name.equalsIgnoreCase("records")) {
-            return new RecordsMenu(sidebar.getMainMenuByName(name));
+            return new RecordsMenu(name);
         } else if (name.equalsIgnoreCase("reports")) {
-            return new ReportsMenu(sidebar.getMainMenuByName(name));
+            return new ReportsMenu(name);
         }
         throw new AssertionError(String.format("Menu with name %s is not found!", name));
 

@@ -1,8 +1,11 @@
 package steps;
 
+import blocks.context.factories.RecordsControllerFactory;
+import blocks.context.factories.ReportsControllerFactory;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import controllers.PageControllerFactory;
+import controllers.reports.form_page.ReportFormFactoryController;
 import model.AppContext;
 import model.Record;
 import model.Report;
@@ -10,7 +13,7 @@ import model.User;
 import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.BeforeScenario;
 import org.jbehave.core.annotations.BeforeStory;
-import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.When;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -32,7 +35,7 @@ public abstract class UISteps {
     static User user;
     static Navigator navigator = new Navigator();
 
-    @Given("I navigate to $mainMenu -> $subMenu page" )
+    @When("I navigate to $mainMenu -> $subMenu page" )
     public void navigateTo(String mainMenu, String subMenu) {
         PageControllerFactory controller = navigator.navigate_to(mainMenu, subMenu);
         context.put("controller", controller);
@@ -66,7 +69,8 @@ public abstract class UISteps {
 
     @AfterStory
     public void disposeDriver() {
-        getWebDriver().quit();
+        if (!getWebDriver().toString().contains("(null)")) {
+            getWebDriver().quit();}
     }
 
     Report getReportFromContext() {
@@ -76,5 +80,23 @@ public abstract class UISteps {
     Record getRecordFromContext() {
         return context.get("record", Record.class);
     }
+
+
+    public RecordsControllerFactory getRecordsController() {
+        return AppContext.getContext().get("controller", RecordsControllerFactory.class);
+    }
+
+    public ReportsControllerFactory getReportsController() {
+        return AppContext.getContext().get("controller", ReportsControllerFactory.class);
+    }
+
+    public ReportFormFactoryController getReportsFormFactory() {
+        return AppContext.getContext().get("controller", ReportFormFactoryController.class);
+    }
+
+    public User getUserFromContext() {
+        return context.get("user", User.class);
+    }
+
 
 }

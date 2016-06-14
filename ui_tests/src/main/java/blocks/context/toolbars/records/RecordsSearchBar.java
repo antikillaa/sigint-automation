@@ -4,7 +4,7 @@ import blocks.context.toolbars.SearchToolbar;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 
-public class RecordsAllSearchBar extends SearchToolbar {
+public class RecordsSearchBar extends SearchToolbar {
 
 
     private void clickExpandOnCondition(String condition) {

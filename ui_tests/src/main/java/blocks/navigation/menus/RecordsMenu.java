@@ -8,8 +8,8 @@ import controllers.records.processed_page.RecordsProcessedController;
 
 public class  RecordsMenu extends MainMenu {
 
-    public RecordsMenu(SelenideElement menuElement) {
-        super(menuElement);
+    public RecordsMenu(String menuName) {
+        super(menuName);
     }
 
     @Override

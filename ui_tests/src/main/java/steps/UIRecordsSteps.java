@@ -3,43 +3,47 @@ package steps;
 import conditions.Conditions;
 import conditions.Verify;
 import controllers.records.RecordAddController;
-import controllers.records.all_page.RecordsAllController;
+import controllers.records.RecordsDetailsController;
+import errors.NotFoundException;
 import model.Record;
+import model.Report;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import blocks.context.tables.records.RecordAllRow;
 import utils.RandomGenerator;
 
 public class UIRecordsSteps extends UISteps {
 
-    private RecordsAllController allController = new RecordsAllController();
-    private RecordAddController addController = new RecordAddController();
     private static Logger log = Logger.getLogger(UIRecordsSteps.class);
+    private RecordAddController addController = new RecordAddController();
+    private RecordsDetailsController detailsController = new RecordsDetailsController();
+
+    @When("I create new $type record")
+    public void createRecord(String type) {
+        openCreateForm();
+        fillTheForm(type);
+        navigateTo("Records", "Search");
+        filterByDate();
+        iShouldSeeNewRecordOnTheTable("see");
+    }
 
     @When("I filter records by current date")
     public void filterByDate() {
         String dateInterval = RandomGenerator.todayDateInterval();
-        allController.getToolbarController().searchByDate(dateInterval);
+        getRecordsController().getToolbarController().searchByDate(dateInterval);
+        getRecordsController().getTableController().waitLoading();
 
     }
 
     @When("I open create record form")
     public void openCreateForm() {
-        allController.getToolbarController().openCreateRecordForm();
+        getRecordsController().getToolbarController().openCreateRecordForm();
 
     }
 
-
-    private void selectRecord(RecordAllRow recordRow) {
-        context.put("recordRow", recordRow);
-        recordRow.selectRecord();
-        Record record = new Record();
-        context.put("record", record);
-    }
 
     @When("I fill the form for $recordType record")
-    public void iFillTheForm(String recordType) {
+    public void fillTheForm(String recordType) {
         Record record = new Record();
         record.setType(recordType);
         record.setSource(RandomGenerator.getRandomItemFromList(context.getDictionary().getSources()).getName());
@@ -53,11 +57,20 @@ public class UIRecordsSteps extends UISteps {
 
 
 
-    @Then("I should see new record on the table")
-    public void iShouldSeeNewSMSRecordOnTheTable() {
-        // Arrange
+    @Then("I should $see new record on the table")
+    public void iShouldSeeNewRecordOnTheTable(String see) {
         Record record = getRecordFromContext();
-        Record foundRecord = allController.getTableController().findRecordById(record.getRecordID());
+        Record foundRecord;
+        try {
+            foundRecord = getRecordsController().getTableController().findRecordById(record.getRecordID());
+        } catch (NotFoundException e) {
+            if (see.startsWith("not")) {
+                return;
+            } else {
+                log.trace(e);
+                throw new AssertionError(e.getMessage());
+            }
+        }
         Verify.shouldBe(Conditions.equals.elements(record, foundRecord));
 
     }
@@ -65,66 +78,48 @@ public class UIRecordsSteps extends UISteps {
 
     @When("I checked checkbox on record with $status status")
     public void iCheckFirstRecordCheckbox(String status) {
-        //if (status.equalsIgnoreCase("non-reported")) {
-        //    searchController.selectRecordbyStatus("");
-        //} else {
-        //    searchController.selectRecordbyStatus(status);
-        //}
+        Record record;
+        if (status.equalsIgnoreCase("non-reported")) {
+            record = getRecordsController().getTableController().selectRecordbyStatus("");
+        } else {
+            record = getRecordsController().getTableController().selectRecordbyStatus(status);
+        }
+        context.put("record", record);
     }
-
-
 
     @When("I press 'Create Report' button")
     public void iPressCreateReportButton() {
-        allController.getToolbarController().openCreateReportForm();
+        getRecordsController().getToolbarController().openCreateReportForm();
     }
 
 
-
-    @Then("record status is '$status' on 'Records->Processed' page")
+    @Then("Record status is $status")
     public void chekcRecordStatusOnRecordsProcessedPage(String status) {
-        //pages.recordsProcessedPage().load();
+        Record record = getRecordFromContext();
+        Record recordRow;
+        try {
+            recordRow = getRecordsController().getTableController().findRecordById(record.getRecordID());
+        } catch (NotFoundException e) {
+            log.trace(e);
+            throw new AssertionError(e.getMessage());
+        }
+        Verify.shouldBe(Conditions.equals.elements(recordRow.getProcessedStatus(), status));
 
-        //RecordAllRow recordRow = pages.recordsProcessedPage().getTable().getRecordByColumnNameAndValue("Record ID", getRecordFromContext().getRecordID());
-        //if (recordRow != null) {
-         //   recordRow.getStatus().shouldHave(attribute("title", status));
-        //} else {
-         //   log.warn("Record ID : " + getRecordFromContext().getRecordID() + " does not found on Records->Processed page");
-         //   throw new AssertionError("Record ID : " + getRecordFromContext().getRecordID() + " does not found on Records->Processed page");
-       // }
-    }
-
-
-    @Then("record status is '$status' on 'Records->Search' page")
-    public void checkRecordStatusOnRecordsSearchPage(String status) {
-
-        //RecordAllRow recordRow = pages.recordsSearchPage().getTable().getRecordByColumnNameAndValue("Record ID", getRecordFromContext().getRecordID());
-        //if (recordRow != null) {
-        //    recordRow.getStatus().shouldHave(attribute("title", status));
-        //} else {
-        //    log.warn("Record ID : " + getRecordFromContext().getRecordID() + " does not found on Records->Search page");
-        //    throw new AssertionError("Record ID : " + getRecordFromContext().getRecordID() + " does not found on Records->Search page");
-        //}
     }
 
 
     @When("I press 'Create report' button against it")
     public void pressCreateReportButtonAgainstIt() {
-        RecordAllRow recordRow = context.get("recordRow", RecordAllRow.class);
-        recordRow.clickCreateReportButton();
-
+        Record record = getRecordFromContext();
+        getRecordsController().getTableController().openCreateReportForm(record.getRecordID());
     }
 
 
-    @When("I press 'Attach to report' button on 'Record Details' modal dialog")
+    @When("I attach record to draft report from Details dialog")
     public void pressAttachToReportButton() {
-        pages.recordDetailsDialog().clickAttachButton();
+        Report report = getReportFromContext();
+        detailsController.attachRecordToReport(report.getSubject());
     }
 
-
-    @When("I select first record in the table")
-    public void selectFirstRecord() {
-        //selectRecord(page(RecordsAllTable.class).firstRecord());
-    }
 
 }

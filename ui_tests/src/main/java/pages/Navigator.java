@@ -14,6 +14,7 @@ public class Navigator {
 
 
     public PageControllerFactory navigate_to(String mainMenuName, String subMenuName) {
+        PageControllerFactory factory;
         String menuName = mainMenuName.toLowerCase();
         if (!menus.containsKey(menuName)) {
             menus.put(menuName, MenusFactory.getMenu(mainMenuName));
@@ -22,7 +23,9 @@ public class Navigator {
         if (!menu.isExpanded()) {
             menu.click();
         }
-        return menu.getSubMenuByName(subMenuName).click();
+        factory = menu.getSubMenuByName(subMenuName).click();
+        factory.getTableController().waitLoading();
+        return factory;
     }
 
 

@@ -22,7 +22,7 @@ public abstract class Row {
                 "//div[contains(@class, 'pg-col')]"));
     }
 
-    protected SelenideElement getCellByColumnName(String columnName) {
+    public SelenideElement getCellByColumnName(String columnName) {
         log.debug("Find cell by column name:" + columnName + " in the table");
 
         String[] colTexts = getColumns().getTexts();

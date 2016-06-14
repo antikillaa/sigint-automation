@@ -1,19 +1,11 @@
 package controllers.records.processed_page;
 
-import blocks.context.tables.Row;
-import controllers.TableController;
-import model.Record;
+import controllers.records.RecordsTableController;
 import pages.SigintPage;
 
-public class RecordsTableProcessedController extends TableController {
-
-
+public class RecordsTableProcessedController extends RecordsTableController {
     public RecordsTableProcessedController(SigintPage page) {
         super(page);
     }
 
-    @Override
-    protected Record initFromRow(Row recordRow) {
-        return null;
-    }
 }

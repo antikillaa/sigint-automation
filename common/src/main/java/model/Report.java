@@ -10,6 +10,16 @@ public class Report extends TeelaEntity{
     private String owner;
     private String sourceType;
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    private String status;
+
     public String getRecordType() {
         return recordType;
     }

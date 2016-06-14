@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Selenide.page;
 public class ReportActionBar {
 
     public SelenideElement getSidebar() {
-        return $(By.xpath("//div[@class='navigation-right-wrapper']"));
+        return $(By.xpath("//div[@class='sidebar-right-wrapper']"));
     }
 
     public SelenideElement getSaveDraftButton() {

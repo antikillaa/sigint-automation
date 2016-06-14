@@ -49,7 +49,6 @@ public class RecordAddController extends PageController<RecordsCreatePage> {
         }
         else {throw new AssertionError(String.format("Incorrect record type %s", recordType));}
         getPage().clickCreateRecordButton();
-        Pages.recordsAllPage().context().getTable().waitLoading();
         return record;
     }
 }

@@ -1,13 +1,16 @@
 package controllers;
 
-public interface PageControllerFactory<T extends TableController,
-        TB extends TableToolbarController,S extends PageController> {
+import pages.SigintPage;
 
-    T getTableController();
-    TB getToolbarController();
-    S getSearchController();
+public interface PageControllerFactory{
 
+    SigintPage getPage();
 
+    TableController getTableController();
+
+    ToolbarController getToolbarController();
+
+    PageController getSearchController();
 
 }
 

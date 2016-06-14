@@ -2,6 +2,7 @@ package conditions;
 
 import abs.TeelaEntity;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -12,6 +13,8 @@ import static java.lang.Boolean.TRUE;
 public class EqualCondition extends ExpectedCondition {
 
     private ExpectedCondition condition;
+    private Logger log = Logger.getLogger(EqualCondition.class);
+
 
     @Override
     public String toString() {
@@ -97,6 +100,7 @@ public class EqualCondition extends ExpectedCondition {
        }
 
        protected Boolean check() {
+           log.debug("Comparing two teela entities with type:"+ obj2.getClass().getName());
            Boolean equals = TRUE;
            for (Field field: obj2.getClass().getDeclaredFields()) {
                if (Modifier.isStatic(field.getModifiers())) {
@@ -104,10 +108,14 @@ public class EqualCondition extends ExpectedCondition {
                }
                String originalValue;
                String requestValue;
+               log.debug("Checking field with name:"+field.getName());
                try {
                    originalValue = BeanUtils.getProperty(obj1, field.getName());
+                   log.debug("Value of object 1 is:"+originalValue);
                    requestValue = BeanUtils.getProperty(obj2, field.getName());
+                   log.debug("Value of object 2 is:"+requestValue);
                } catch (Exception e) {
+                   log.trace(e.getMessage(), e);
                    throw new AssertionError(e.getMessage());
                }
                if ((originalValue == null || originalValue.equals(""))  && (requestValue == null || requestValue.equals(""))) {
