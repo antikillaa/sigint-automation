@@ -1,76 +1,62 @@
 package steps;
-import http.requests.ErrorResponse;
+
+import controllers.APILogin;
+import http.ErrorResponse;
 import json.JsonCoverter;
 import model.AppContext;
-import model.Token;
-import model.User;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
-import services.UserService;
 
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 
-/**
- * Created by dm on 3/25/16.
- */
-public class APILoginSteps extends APISteps {
 
-    private UserService userService = new UserService();
-    private AppContext context = AppContext.getContext();
-    Logger log = Logger.getRootLogger();
+public class APILoginSteps {
+
+    private static AppContext context = AppContext.getContext();
+    private static Logger log = Logger.getRootLogger();
+    private static APILogin login = new APILogin();
+    private static GlobalSteps globalSteps = new GlobalSteps();
+
 
     @Given("I sign in as $role user")
     public void signInGlobal(String role) {
-        setUserToContext(role);
-        signInWithCrendentials("correct");
+        setUser(role);
+        signInCreds("correct");
         checkResponseCode("200");
 
-        try {
-            checkAndPutToken();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Given("as $role user")
-    public void setUserToContext(String role) {
-        log.info("Getting user with role " + role);
-        User user = GlobalSteps.getUserByRole(role);
-        context.put("user", user);
+    public void setUser(String role) {
+        globalSteps.setUserToContext(role);
     }
 
     @When("I sent sign in request with $validness credentials")
-    public void signInWithCrendentials(String validness) {
-        log.info("Signing in...");
-        Response response;
-        User user = context.get("user", User.class);
-        String password;
-        if (validness.toLowerCase().equals("incorrect")) {
-            password = "incorrect";
-        } else {
-            password = user.getPassword();
-        }
-        response = userService.signIn(user.getName(), password);
-        context.put("code", response.getStatus());
-        context.put("message", response.readEntity(String.class));
+    public void signInCreds(String validness) {
+        login.signInWithCrendentials(validness);
     }
 
-    @Then("I got token in response")
-    public void checkAndPutToken() throws IOException {
-        log.info("Verifying if token is received");
-        Token token = JsonCoverter.fromJsonToObject(context.get("message", String.class), Token.class);
-        context.environment().setToken(token);
+    @Then("I got response code $real")
+    public void checkResponseCode(String real) {
+        log.info("Checking response code");
+        Integer actual;
+        actual = context.get("code", Integer.class);
+        Integer expected = Integer.valueOf(real);
+        Assert.assertEquals("Incorrect return codes!", expected, actual);
+
     }
 
     @Then("Error message is $message")
     public void checkErrorMessage(String message) throws IOException {
         log.info("Verifying error message");
         ErrorResponse response = JsonCoverter.fromJsonToObject(context.get("message", String.class),
-                    ErrorResponse.class);
+                ErrorResponse.class);
         Assert.assertTrue(response.getMessage().toLowerCase().equals(message.toLowerCase()));
+
     }
+
+
 }

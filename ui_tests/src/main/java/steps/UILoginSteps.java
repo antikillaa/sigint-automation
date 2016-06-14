@@ -1,15 +1,24 @@
 package steps;
 
+import blocks.context.Context;
 import com.codeborne.selenide.WebDriverRunner;
-import org.jbehave.core.annotations.*;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Named;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import static com.codeborne.selenide.Condition.*;
+import pages.SigintPage;
+
+import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.sleep;
 
 public class UILoginSteps extends UISteps {
+
+    private GlobalSteps steps = new GlobalSteps();
 
 
     private void login(String username, String password) {
@@ -19,16 +28,9 @@ public class UILoginSteps extends UISteps {
     }
 
 
-    private void iShouldSeeSigintPage() {
-        pages.recordsSearchPage().getMain().get().shouldBe(present);
-        pages.recordsSearchPage().getHeader().get().shouldBe(present);
-        pages.recordsSearchPage().getSidebar().getSidebar().shouldBe(present);
-    }
-
-
     @Given("I as <role> try sign in with incorrect credentials")
     public void userAsRoleSignInWithIncorrectCredentials(@Named("role") String role) {
-        user = getUserByRole(role);
+        user = steps.getUserByRole(role);
         pages.loginPage().load();
 
         login(
@@ -40,10 +42,6 @@ public class UILoginSteps extends UISteps {
 
     @Then("I should see $message error")
     public void userDoesNotSignIn(String message) {
-        pages.recordsSearchPage().getMain().get().shouldNotBe(present);
-        pages.recordsSearchPage().getHeader().get().shouldNotBe(present);
-        pages.recordsSearchPage().getSidebar().getSidebar().shouldNotBe(present);
-
         pages.loginPage().getErrorMessage().shouldHave(text(message));
     }
 
@@ -64,10 +62,13 @@ public class UILoginSteps extends UISteps {
     public void userSignOut() {
         WaitForReady();
         sleep(5000); //TODO
+        new SigintPage() {
+            @Override
+            public Context context() {
+                return null;
+            }
+        }.getHeader().clickUserProfile().clickSignOut();
 
-        pages.recordsSearchPage()
-                .getHeader().clickUserProfile()
-                .clickSignOut();
     }
 
 
@@ -81,7 +82,7 @@ public class UILoginSteps extends UISteps {
     @Then("I logged in as $role")
     public void iLoggedInAsOperator(@Named("role") String role) {
         // Arrange
-        user = getUserByRole(role);
+        user = steps.getUserByRole(role);
         pages.loginPage().load();
 
         // Act
@@ -91,6 +92,6 @@ public class UILoginSteps extends UISteps {
         );
 
         // Assert
-        iShouldSeeSigintPage();
+        context.put("user", user);
     }
 }

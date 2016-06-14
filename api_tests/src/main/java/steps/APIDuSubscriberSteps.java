@@ -1,7 +1,8 @@
 package steps;
 
 import abs.EntityList;
-import conditions.EqualCondition;
+import conditions.Conditions;
+import conditions.Verify;
 import errors.NullReturnException;
 import json.JsonCoverter;
 import model.DuSubscriberEntry;
@@ -12,7 +13,7 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.DuSubscriberService;
-import verifier.Verify;
+
 
 public class APIDuSubscriberSteps extends APISteps {
 
@@ -106,25 +107,25 @@ public class APIDuSubscriberSteps extends APISteps {
     }
 
     private boolean checkEntry(DuSubscriberEntry entry, DuSubscriberEntry entity) {
-        return new EqualCondition(entry.getPhoneNumber(), entity.getPhoneNumber()).check() &&
-                new EqualCondition(entry.getFirstName(), entity.getFirstName()).check() &&
-                new EqualCondition(entry.getMiddleName(), entity.getMiddleName()).check() &&
-                new EqualCondition(entry.getLastName(), entity.getLastName()).check() &&
-                new EqualCondition(entry.getName(), entity.getName()).check() &&
-                new EqualCondition(entry.getCity(), entity.getCity()).check() &&
-                new EqualCondition(entry.getPoBox(), entity.getPoBox()).check() &&
-                new EqualCondition(entry.getAddress(), entity.getAddress()).check() &&
-                new EqualCondition(entry.getSourceId(), entity.getSourceId()).check() &&
-                new EqualCondition(entry.getTitle(), entity.getTitle()).check() &&
-                new EqualCondition(entry.getNationality(), entity.getNationality()).check() &&
-                new EqualCondition(entry.getVisaType(), entity.getVisaType()).check() &&
-                new EqualCondition(entry.getVisaNumber(), entity.getVisaNumber()).check() &&
-                new EqualCondition(entry.getIdType(), entity.getIdType()).check() &&
-                new EqualCondition(entry.getIdNumber(), entity.getIdNumber()).check() &&
-                new EqualCondition(entry.getStatus(), entity.getStatus()).check() &&
-                new EqualCondition(entry.getCustomerType(), entity.getCustomerType()).check() &&
-                new EqualCondition(entry.getCustomerCode(), entity.getCustomerCode()).check() &&
-                new EqualCondition(entry.getServiceType(), entity.getServiceType()).check();
+        return Verify.isTrue(Conditions.equals.elements(entry.getPhoneNumber(), entity.getPhoneNumber())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getFirstName(), entity.getFirstName())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getMiddleName(), entity.getMiddleName())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getLastName(), entity.getLastName())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getName(), entity.getName())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getCity(), entity.getCity())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getPoBox(), entity.getPoBox())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getAddress(), entity.getAddress())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getSourceId(), entity.getSourceId())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getTitle(), entity.getTitle())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getNationality(), entity.getNationality())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getVisaType(), entity.getVisaType())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getVisaNumber(), entity.getVisaNumber())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getIdType(), entity.getIdType())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getIdNumber(), entity.getIdNumber())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getStatus(), entity.getStatus())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getCustomerType(), entity.getCustomerType())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getCustomerCode(), entity.getCustomerCode())) &&
+                Verify.isTrue(Conditions.equals.elements(entry.getServiceType(), entity.getServiceType()));
     }
 
     @When("I send get DuSubscriber Entry request")
@@ -143,7 +144,7 @@ public class APIDuSubscriberSteps extends APISteps {
         DuSubscriberEntry entry = context.get("duSubscriberEntry", DuSubscriberEntry.class);
         DuSubscriberEntry etalonEntry = context.get("etalonEntry", DuSubscriberEntry.class);
 
-        Verify.shouldBe(new EqualCondition(entry, etalonEntry));
+        Verify.shouldBe(Conditions.equals.elements(entry, etalonEntry));
     }
 
 }

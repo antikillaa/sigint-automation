@@ -1,8 +1,8 @@
 package conditions;
 
-public interface ExpectedCondition {
+abstract class ExpectedCondition {
 
-    public String toString();
+    public abstract String toString();
 
-    public Boolean check();
+    protected abstract Boolean check();
 }

@@ -1,33 +1,27 @@
 package pages.reports;
 
-import model.AppContext;
+import blocks.context.Context;
+import blocks.context.factories.ReportsAllPageFactory;
+import pages.ContextPage;
 import pages.SigintPage;
-import pages.blocks.tables.ReportsTable;
 
-import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Selenide.page;
+public class ReportsAllPage extends SigintPage implements ContextPage {
 
-public class ReportsAllPage extends SigintPage {
-
-    public static final String url = String.format("%s/#/app/reports/all",
-            AppContext.getContext().environment().getSigintHost());
-
-    private ReportsTable reportsTable = page(ReportsTable.class);
+    private Context context;
 
 
-    public ReportsTable getReportsTable() {
-        return reportsTable;
-    }
-
-    public ReportsAllPage load() {
-        if (getSidebar().getSubMenuItemByName("Reports", "All").isDisplayed()) {
-            getSidebar().getSubMenuItemByName("Reports", "All").click();
-        } else {
-            getSidebar().getSubMenuItemByName("Reports").click();
-            getSidebar().getSubMenuItemByName("Reports", "All").click();
+    @Override
+    public Context context() {
+        if (context == null) {
+            context = new ReportsAllContext();
         }
-        getHeader().getBreadcrumb().getCurrentPath().shouldHave(attribute("href", ReportsAllPage.url));
-        return this;
+        return context;
     }
 
+
+    private class ReportsAllContext extends Context {
+        public ReportsAllContext() {
+            super(new ReportsAllPageFactory());
+        }
+    }
 }

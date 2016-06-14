@@ -1,7 +1,7 @@
 package http.requests.rfi;
 
 
-import http.requests.HttpRequest;
+import http.HttpRequest;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;

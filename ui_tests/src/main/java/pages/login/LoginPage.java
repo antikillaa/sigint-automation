@@ -42,9 +42,7 @@ public class LoginPage {
     public LoginPage load() {
         System.out.println(url);
         open(url);
-
         getPageLoading().shouldBe(hidden);
-
         String currentURL = getWebDriver().getCurrentUrl();
         if (!currentURL.equals(url)) {
             throw new Error("[ERROR] Current Login page url: " + currentURL + ", expected: " + url);
