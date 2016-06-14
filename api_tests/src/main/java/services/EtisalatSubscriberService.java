@@ -93,7 +93,10 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
 
     @Override
     public EtisalatSubscriberEntry view(String id) {
-        return null;
+        EtisalatSubscriberDataRequest request = new EtisalatSubscriberDataRequest().get(id);
+        log.info("Getting derails of EtisalatSubscriberData entry by id: " + id);
+        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
+        return JsonCoverter.readEntityFromResponse(response, EtisalatSubscriberEntry.class, "result");
     }
 
 

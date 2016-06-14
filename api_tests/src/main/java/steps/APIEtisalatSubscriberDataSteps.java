@@ -11,6 +11,7 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.EtisalatSubscriberService;
+import verifier.Verify;
 
 public class APIEtisalatSubscriberDataSteps extends APISteps {
 
@@ -148,6 +149,25 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
                 new EqualCondition(entry.getProvisionedRegionCodeDesc(), entity.getProvisionedRegionCodeDesc()).check() &&
                 new EqualCondition(entry.getCityId(), entity.getCityId()).check() &&
                 new EqualCondition(entry.getCityName(), entity.getCityName()).check();
+    }
+
+    @When("I send get EtisalatSubscriberData Entry request")
+    public void getEtisalatSubscriberRequest() {
+        EntityList<EtisalatSubscriberEntry> searchResults = context.get("searchResult", EntityList.class);
+        EtisalatSubscriberEntry etalonEntry = searchResults.getLatest();
+
+        EtisalatSubscriberEntry entry = service.view(etalonEntry.getId());
+
+        context.put("etisalatSubscriberEntry", entry);
+        context.put("etalonEntry", etalonEntry);
+    }
+
+    @Then("EtisalatSubscriberData Entry is correct")
+    public void checkDuSubscriberEntryIsCorrect() {
+        EtisalatSubscriberEntry entry = context.get("etisalatSubscriberEntry", EtisalatSubscriberEntry.class);
+        EtisalatSubscriberEntry etalonEntry = context.get("etalonEntry", EtisalatSubscriberEntry.class);
+
+        Verify.shouldBe(new EqualCondition(entry, etalonEntry));
     }
 
 }
