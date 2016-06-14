@@ -217,7 +217,7 @@ public class AllureReporter implements StoryReporter {
 
     public  void makeStepFailedAttachment() {
         takeScreenshot();
-        attachLogs();
+        //attachLogs();
     }
 
 

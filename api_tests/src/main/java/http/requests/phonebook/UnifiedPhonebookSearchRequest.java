@@ -1,6 +1,6 @@
 package http.requests.phonebook;
 
-import http.requests.HttpRequest;
+import http.HttpRequest;
 
 public class UnifiedPhonebookSearchRequest extends HttpRequest {
 

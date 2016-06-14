@@ -1,266 +1,184 @@
 package steps;
 
-import com.codeborne.selenide.SelenideElement;
+import conditions.Conditions;
+import conditions.Verify;
+import controllers.TableController;
+import errors.NotFoundException;
+import model.AppContext;
 import model.Record;
 import model.Report;
+import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Alias;
-import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.junit.Assert;
-import pages.blocks.content.header.Header;
-import pages.blocks.content.header.breadcrumb.Breadcrumb;
-import pages.blocks.tables.ReportRow;
-import pages.blocks.tables.ReportsTable;
-import pages.blocks.tables.toolbar.ReportsTableToolbar;
-import pages.reports.*;
-import pages.reports.sidebar.SidebarRightWrapper;
-
-import java.util.ArrayList;
-
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.page;
+import utils.RandomGenerator;
 
 public class UIReportsSteps extends UISteps {
 
-    private String getPageUrl() {
-        return page(Breadcrumb.class).getCurrentPath().getAttribute("href");
+    private static Logger log = Logger.getLogger(UIReportsSteps.class);
+    private AppContext context = AppContext.getContext();
+
+    @When("I create new manual draft report")
+    public void createManualDraftReport() {
+        pressCreateManualReport();
+        fillOutRequiredFieldsOnCreateManualReportPage();
+        iPressSaveAsDraftButton();
+        navigateTo("Reports", "All");
+        reportAppearsOnReportsDraftScreen("see");
+
+
+    }
+
+    @When("I press 'Create Manual Report' button")
+    public void pressCreateManualReport() {
+        getReportsController().getToolbarController().openCreateReportForm();
+
     }
 
 
-    @Given("I'm on 'Reports->Ready' page")
-    @When("I navigate to 'Reports->Ready for Review' page")
-    public void iOnReportsReadyPage() {
-        if (!getPageUrl().contentEquals(ReportsReadyPage.url)) {
-            pages.reportsReadyPage().load();
-        }
+    @When("I press 'Save As Draft' button")
+    public void iPressSaveAsDraftButton() {
+        getReportsFormFactory().getDetailsForm().saveAsDraft();
     }
 
-    @Given("I'm on 'Reports->All' page")
-    @When("I navigate to 'Reports->All' page")
-    public void iOnReportsAllPage() {
-        if (!getPageUrl().contentEquals(ReportsAllPage.url)) {
-            pages.reportsAllPage().load();
-        }
-    }
 
-    @Given("I'm on 'Reports->Draft' page")
-    public void iOnReportsDraftPage() {
-        if (!getPageUrl().contentEquals(ReportsDraftPage.url)) {
-            pages.reportsDraftPage().load();
-        }
-    }
 
     @When("I press 'Submit' button")
     public void pressSubmitButton() {
-        pages.reportsCreatePage().getSidebarRightWrapper().clickSubmitButton();
+        getReportsFormFactory().getDetailsForm().submitReport();
     }
 
-    @When("fill out required fields on 'Create Report' page")
+    @When("Fill out required fields on 'Create Report' page based from record")
     public void fillOutRequiredFieldsOnCreateReportScreen() {
+        Record record  = getRecordFromContext();
         Report report = new Report().generate();
-
-        pages.reportsCreatePage().getSubject().val(report.getSubject());
-
+        report.setRecordType(record.getType());
+        report.setSourceType(record.getSource());
+        getReportsFormFactory().getRecordBasedForm().fillForm(report);
         context.put("report", report);
     }
 
     @When("I fill out required fields on 'Create Manual Report' page")
     public void fillOutRequiredFieldsOnCreateManualReportPage() {
         Report report = new Report().generate();
+        report
+                .setRecordType(RandomGenerator.getRandomItemFromList(context.getDictionary().getRecordTypes()).getType())
+                .setSourceType(RandomGenerator.getRandomItemFromList(context.getDictionary().getSources()).getType());
 
-        pages.reportsCreateManualPage()
-                .setSubject(report.getSubject())
-                .selectRandomRecordType()
-                .selectRandomSourceId();
-
+        getReportsFormFactory().getManualForm().fillForm(report);
         context.put("report", report);
     }
 
-    @Then("report appears on 'Reports->Draft' page")
-    public void reportAppearsOnReportsDraftScreen() {
+    @Then("I should $see report on page")
+    public void reportAppearsOnReportsDraftScreen(String see) {
         Report report = getReportFromContext();
-
-        pages.reportsDraftPage().getHeader().getBreadcrumb().getCurrentPath()
-                .shouldHave(attribute("href", ReportsDraftPage.url));
-
-        ReportRow reportRow = pages.reportsDraftPage().getReportsTable().getReportByColumnNameAndValue("Subject", report.getSubject());
-        if (reportRow != null) {
-            reportRow.getCellByColumnName("Created By").shouldHave(text(user.getName()));
-        } else {
-            log.warn("Report subject:" + report.getSubject() + " does not found on Reports->Draft page");
-            throw new AssertionError("Report subject:" + report.getSubject() + " does not found on Reports->Draft page");
+        Report reportRow;
+        try {
+            reportRow = getReportsController().getTableController().findReportBySubject(report.getSubject());
+        } catch (NotFoundException e) {
+            if (see.startsWith("not")) {
+                return;
+            } else {
+                throw new AssertionError(e.getMessage());
+            }
         }
+        Verify.shouldBe(Conditions.equals.elements(report.getSubject(), reportRow.getSubject()));
+
     }
 
     @Then("report status is '$status' on 'Reports->All' page")
     @Alias("report status is '$status'")
     public void reportStatusIsDraft(String status) {
         Report report = getReportFromContext();
-
-        ReportRow reportRow = pages.reportsAllPage().load().getReportsTable().getReportByColumnNameAndValue("Subject", report.getSubject());
-        if (reportRow != null) {
-            reportRow.getCellByColumnName("Status").shouldHave(text(status));
-        } else {
-            log.warn("Report subject:" + report.getSubject() + " does not found on Reports->All page");
-            throw new AssertionError("Report subject:" + report.getSubject() + " does not found on Reports->All page");
+        Report reportRow;
+        try {
+            reportRow = getReportsController().getTableController().findReportBySubject(report.getSubject());
+        } catch (NotFoundException e) {
+            throw new AssertionError(e.getMessage());
         }
+        Verify.shouldBe(Conditions.equals.elements(reportRow.getStatus(), status));
+
     }
 
-    @When("I select report, which records should be attached to")
-    public void selectReportWhichRecordsShouldBeAttachedTo() {
-        Report report = new Report();
-        SelenideElement reportElement = pages.recordDetailsDialog().getAttachListElements().first();
-
-        report.setSubject(reportElement.getText());
-        reportElement.click();
-
-        context.put("report", report);
-    }
 
     @Then("record is attached to the report")
     public void recordIsAttachedToReport() {
         Record record = getRecordFromContext();
         Report report = getReportFromContext();
+        getReportsController().getTableController().openDetailsForm(report.getSubject());
+        Boolean isExist = getReportsFormFactory().getDetailsDialog().isRecordAttached(record.getFromNumber(),record.getToNumber());
+        Verify.shouldBe(Conditions.isTrue.element(isExist));
 
-        // find report which records should be attached to
-        ReportRow reportRow  = pages.reportsDraftPage().getReportsTable().getReportByColumnNameAndValue("Subject", report.getSubject());
+            }
 
-        // open reportDetailsDialog for this report
-        ReportDetailsDialog reportDetailsDialog = reportRow.selectReport().clickShowInfoButton();
-        // find attached record by fromNumber
-        for (ReportRecordRow reportRecordRow : reportDetailsDialog.getRecords()) {
-            if (reportRecordRow.getFromNumber().text().contentEquals(record.getFromNumber())) {
-                // Assert
-                reportRecordRow.getToNumber().shouldHave(text(record.getToNumber()));
-                // close reportDetailsDialog
-                reportDetailsDialog.getReportDetailsDialog().pressEscape().shouldBe(disappear);
-                return;
+
+    @When("I select $reportType report in the table")
+    public void selectFirstReport(String reportSubject) {
+        Report report;
+        if (reportSubject.equalsIgnoreCase("any")){
+            report = getReportsController().getTableController().selectAnyReport();
+        } else {
+            try {
+                report = getReportsController().getTableController().findReportBySubject(reportSubject);
+            } catch (NotFoundException e) {
+                throw new AssertionError(e.getMessage());
             }
         }
-        log.warn("Attached record fromNumber:" + record.getFromNumber() + " doesn't found in the report " + report.getSubject());
-        throw new AssertionError("Attached record fromNumber:" + record.getFromNumber() + " doesn't found in the report " + report.getSubject());
-    }
-
-    @Then("report appears on 'Reports->Ready for Review' page")
-    public void reportAppearsOnAnalystReportsReadyPage() {
-        Report report = getReportFromContext();
-
-        ReportRow reportRow  = pages.reportsReadyPage().load().getReportsTable().getReportByColumnNameAndValue("Subject", report.getSubject());
-        if (reportRow == null) {
-            log.error("Report subject:" + report.getSubject() + " doesn't found on the Ready for Review page");
-            throw new AssertionError("Report subject:" + report.getSubject() + " doesn't found on the Ready for Review page");
-        }
-    }
-
-    @When("I press 'Create Manual Report' button")
-    public void pressCreateManualReportButton() {
-        page(ReportsTableToolbar.class).clickCreateManualReportButton();
-    }
-
-    @When("I select first report in the table")
-    public void selectFirstReport() {
-        ReportRow reportRow = page(ReportsTable.class).firstReport().selectReport();
-        Report report = new Report();
-        report.setSubject(reportRow.getCellByColumnName("Subject").text());
-
-        context.put("reportRow", reportRow);
         context.put("report", report);
+
     }
 
     @When("I press 'Edit Report' button against it")
     public void pressEditReportButtonAgainstIt() {
-        ReportRow reportRow = context.get("reportRow", ReportRow.class);
-        reportRow.clickEditReportButton();
+        Report report = getReportFromContext();
+        getReportsController().getTableController().openEditForm(report.getSubject());
     }
 
-    @Then("I should see 'Remove Ownership' button on 'Edit Report' page")
-    public void shouldSeeRemoveOwnershipButtonOnEditReportPage(){
-        pages.reportsEditPage().getSidebarRightWrapper().getRemoveOwnership().shouldBe(visible);
-    }
 
     @When("I press 'Remove Ownership' button on 'Edit Report' page")
     public void pressRemoveOwnershipButton() {
-        page(SidebarRightWrapper.class).clickRemoveOwnership();
+        getReportsFormFactory().getDetailsForm().removeOwnership(getReportFromContext());
     }
 
-    @Then("I should see 'Reports->Draft' page")
-    public void shouldSeeReportsDraftPage() {
-        page(Header.class).getBreadcrumb().getCurrentPath().shouldHave(text("Draft"));
-    }
 
-    @Then("I should not see selected report among other draft reports")
-    public void shouldNotSeeSelectedReportAmongOtherDraftReports() {
-        Report report = context.get("report", Report.class);
-        ReportsTable reportsTable = page(ReportsTable.class);
-        if (!reportsTable.isEmpty()) {
-            Assert.assertNull(reportsTable.getReportByColumnNameAndValue("Subject", report.getSubject()));
-        }
-    }
-
-    @Then("I should $see selected report on the reports table")
-    public void shouldSeeSelectedReportThere(String see) {
-        Report report = context.get("report", Report.class);
-        ReportsTable reportsTable = page(ReportsTable.class);
-        if (see.contentEquals("not see")) {
-            if (!reportsTable.isEmpty()) {
-                Assert.assertNull(reportsTable.getReportByColumnNameAndValue("Subject", report.getSubject()));
-            }
-        } else if (see.contentEquals("see")) {
-            reportsTable.getReportByColumnNameAndValue("Subject", report.getSubject()).getRow().shouldBe(present);
-        }
-    }
-
-    @Then("report owner should be '$owner'")
+    @Then("report owner should be $owner")
     public void reportOwnerShouldBeEmpty(String owner) {
-        Report report = context.get("report", Report.class);
-        ReportRow reportRow = page(ReportsTable.class).getReportByColumnNameAndValue("Subject", report.getSubject());
-        if (reportRow != null) {
-            reportRow.getCellByColumnName("Owner").shouldHave(text(owner.toLowerCase().contentEquals("empty") ? "" : owner));
-        } else {
-            throw new AssertionError("Report with subject:" + report.getSubject() + " does not found!");
+        Report contextReport = getReportFromContext();
+        Report rowReport;
+        try {
+            rowReport = getReportsController().getTableController().findReportBySubject(contextReport.getSubject());
+        } catch (NotFoundException e) {
+            throw new AssertionError();
         }
+        if (owner.equalsIgnoreCase("empty")) {
+            owner = "";
+        }
+        Verify.shouldBe(Conditions.equals.elements(owner, rowReport.getOwner()));
+
     }
 
-    @When("I select a report in 'Unassigned' status and owner is 'Empty'")
-    public void selectReportInStatusAndOwnerIs(){
-        ArrayList<ReportRow> reportRows = page(ReportsTable.class)
-                .findReports()
-                .filterByColumnWithValue("Status", "UNASSIGNED")
-                .filterByColumnWithValue("Owner", "")
-                .getReportRows();
-
-        if (reportRows.isEmpty()) {
-            log.error("UNASSIGNED report without ownership was not found!");
-            throw new AssertionError("UNASSIGNED report without ownership was not found!");
-        } else {
-            ReportRow reportRow = reportRows.get(0).selectReport();
-
-            Report report = new Report();
-            report.setSubject(reportRow.getCellByColumnName("Subject").text());
-
-            context.put("reportRow", reportRow);
-            context.put("report", report);
+    @When("I select a report in $status status and owner is $owner")
+    public void selectReportInStatusAndOwnerIs(String status, String owner){
+        if (owner.equalsIgnoreCase("empty")) {
+            owner = "";
         }
+        Report report = getReportsController().getTableController().selectReportByFilter(
+                TableController.filter().set("Status", status).set("Owner", owner));
+        context.put("report", report);
+
+
     }
 
     @When("I press 'Take Ownership' button on 'Edit Report' page")
     public void pressTakeOwnershipButtonOnEditReportPage() {
-        pages.reportsEditPage().getSidebarRightWrapper().clickTakeOwnershipButton();
+        getReportsFormFactory().getDetailsForm().takeOwnership(getReportFromContext(), getUserFromContext());
     }
 
-    @Then("required fields are enabled on 'Edit Report' page")
+    @Then("Edit report form is enabled")
     public void requiredFieldsAreEnabledOnEditReportPage() {
-        pages.reportsEditPage().getSubject().shouldBe(enabled);
+        Verify.shouldBe(Conditions.isTrue.element(getReportsFormFactory().getDetailsForm().isEnabled()));
     }
 
-    @Then("required buttons are enabled on 'Edit Report' page")
-    public void requiredButtonsAreEnabledOnEditReportPage() {
-        pages.reportsEditPage().getSidebarRightWrapper().getRefreshButton().shouldBe(enabled);
-        pages.reportsEditPage().getSidebarRightWrapper().getRemoveOwnership().shouldBe(enabled);
-        pages.reportsEditPage().getSidebarRightWrapper().getSubmitButton().shouldBe(enabled);
-        pages.reportsEditPage().getSidebarRightWrapper().getSaveDraftButton().shouldBe(enabled);
-    }
 
 
 

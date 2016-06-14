@@ -1,12 +1,12 @@
 package pages;
 
-import pages.blocks.content.header.Header;
-import pages.blocks.content.main.Main;
-import pages.blocks.sidebar.Sidebar;
+import blocks.common.header.Header;
+import blocks.common.main.Main;
+import blocks.navigation.Sidebar;
 
 import static com.codeborne.selenide.Selenide.page;
 
-public abstract class SigintPage extends BasePage {
+public abstract class SigintPage extends BasePage implements ContextPage {
 
     private Header header = page(Header.class);
     private Main main = page(Main.class);

@@ -2,6 +2,7 @@ package conditions;
 
 import abs.TeelaEntity;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -9,9 +10,11 @@ import java.util.Set;
 
 import static java.lang.Boolean.TRUE;
 
-public class EqualCondition implements ExpectedCondition {
+public class EqualCondition extends ExpectedCondition {
 
     private ExpectedCondition condition;
+    private Logger log = Logger.getLogger(EqualCondition.class);
+
 
     @Override
     public String toString() {
@@ -19,24 +22,30 @@ public class EqualCondition implements ExpectedCondition {
     }
 
 
-    public EqualCondition(Object obj1, Object obj2) {
+
+
+    public EqualCondition elements(Object obj1, Object obj2) {
         condition = new ObjectEqualCondition(obj1, obj2);
+        return this;
 
     }
 
-    public EqualCondition(Set set1, Set set2) {
+    public EqualCondition elements(Set set1, Set set2) {
         condition = new SetEqualCondition(set1, set2);
-
+        return this;
     }
 
-    public <T extends TeelaEntity> EqualCondition(T obj1, T obj2) {
+    public <T extends TeelaEntity> EqualCondition elements(T obj1, T obj2) {
         condition = new TeelaEntityEqualCondition<T>(obj1, obj2);
+        return this;
     }
+
 
     public Boolean check() {
         return condition.check();
     }
-    private class SetEqualCondition implements ExpectedCondition {
+
+    private class SetEqualCondition extends ExpectedCondition {
         private Set set1;
         private Set set2;
 
@@ -57,7 +66,7 @@ public class EqualCondition implements ExpectedCondition {
         }
     }
 
-    private class ObjectEqualCondition implements ExpectedCondition {
+    private class ObjectEqualCondition extends ExpectedCondition {
         private Object obj1;
         private Object obj2;
 
@@ -71,12 +80,12 @@ public class EqualCondition implements ExpectedCondition {
             return "Object condition with object1:"+obj1.toString()+" and object2:"+obj2.toString();
         }
 
-        public Boolean check() {
+        protected Boolean check() {
             return obj1.equals(obj2);
         }
     }
 
-   private class TeelaEntityEqualCondition<T extends TeelaEntity> implements ExpectedCondition {
+   private class TeelaEntityEqualCondition<T extends TeelaEntity> extends ExpectedCondition {
        private T obj1;
        private T obj2;
 
@@ -86,7 +95,12 @@ public class EqualCondition implements ExpectedCondition {
 
        }
 
-       public Boolean check() {
+       public String toString() {
+           return String.format("Compare two Teela entities: %s and %s", obj1.toString(), obj2.toString());
+       }
+
+       protected Boolean check() {
+           log.debug("Comparing two teela entities with type:"+ obj2.getClass().getName());
            Boolean equals = TRUE;
            for (Field field: obj2.getClass().getDeclaredFields()) {
                if (Modifier.isStatic(field.getModifiers())) {
@@ -94,16 +108,20 @@ public class EqualCondition implements ExpectedCondition {
                }
                String originalValue;
                String requestValue;
+               log.debug("Checking field with name:"+field.getName());
                try {
                    originalValue = BeanUtils.getProperty(obj1, field.getName());
+                   log.debug("Value of object 1 is:"+originalValue);
                    requestValue = BeanUtils.getProperty(obj2, field.getName());
+                   log.debug("Value of object 2 is:"+requestValue);
                } catch (Exception e) {
-                   throw new AssertionError();
+                   log.trace(e.getMessage(), e);
+                   throw new AssertionError(e.getMessage());
                }
-               if (originalValue == null && requestValue == null) {
+               if ((originalValue == null || originalValue.equals(""))  && (requestValue == null || requestValue.equals(""))) {
                    continue;
                }
-               equals = originalValue.equals(requestValue);
+               equals = originalValue.trim().equals(requestValue.trim());
                if (!equals) {
                    return equals;
                }

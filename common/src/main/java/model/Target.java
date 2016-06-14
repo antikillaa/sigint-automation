@@ -100,7 +100,7 @@ public class Target extends TeelaEntity {
                 .setName(RandomStringUtils.randomAlphabetic(10))
                 .setType(TargetTypes.getRandom())
                 .setPhones(RandomGenerator.generatePhones(10))
-                .setLanguages(RandomGenerator.generateLanguages(5))
+                .setLanguages(RandomGenerator.generateLanguagesCodes(5))
                 .setKeywords(RandomGenerator.generateRandomStrings(5));
 
         return this;

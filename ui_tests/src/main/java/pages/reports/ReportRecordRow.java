@@ -16,14 +16,14 @@ public class ReportRecordRow {
         return reportRecordRow;
     }
 
-    public SelenideElement getToNumber() {
+    public String getToNumber() {
         return getReportRecordRow()
-                .$(By.xpath(".//div[@textcontent.bind='record.toNumber']"));
+                .$(By.xpath(".//div[@textcontent.bind='record.toNumber']")).text();
     }
 
-    public SelenideElement getFromNumber() {
+    public String getFromNumber() {
         return getReportRecordRow()
-                .$(By.xpath(".//div[@textcontent.bind='record.fromNumber']"));
+                .$(By.xpath(".//div[@textcontent.bind='record.fromNumber']")).text();
     }
 
 }

@@ -1,32 +1,25 @@
 package pages.records;
 
-import model.AppContext;
+import blocks.context.Context;
+import blocks.context.factories.RecordProcessedPageFactory;
+import pages.ContextPage;
 import pages.SigintPage;
-import pages.blocks.tables.RecordsTable;
 
-import static com.codeborne.selenide.Condition.attribute;
-import static com.codeborne.selenide.Selenide.page;
+public class RecordsProcessedPage extends SigintPage implements ContextPage{
 
-public class RecordsProcessedPage extends SigintPage {
+    private Context context;
 
-    public static final String url = String.format("%s/#/app/records/processed",
-            AppContext.getContext().environment().getSigintHost());
-
-    private RecordsTable table = page(RecordsTable.class);
-
-
-    public RecordsTable getTable() {
-        return table;
+    @Override
+    public Context context() {
+        if (context == null) {
+            context = new RecordsProcessedContext();
+        }
+        return context;
     }
 
-    public RecordsProcessedPage load() {
-        if (getSidebar().getSubMenuItemByName("Processed").isDisplayed()) {
-            getSidebar().getSubMenuItemByName("Processed").click();
-        } else {
-            getSidebar().getSubMenuItemByName("Records").click();
-            getSidebar().getSubMenuItemByName("Processed").click();
+    private class RecordsProcessedContext extends Context {
+        RecordsProcessedContext() {
+            super(new RecordProcessedPageFactory());
         }
-        getHeader().getBreadcrumb().getCurrentPath().shouldHave(attribute("href", RecordsProcessedPage.url));
-        return this;
     }
 }
