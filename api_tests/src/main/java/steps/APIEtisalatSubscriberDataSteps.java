@@ -54,6 +54,8 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
             value = value.equals("random") ? entry.getSecondAddressLine() : value;
         } else if (criteria.toLowerCase().equals("cityname")) {
             value = value.equals("random") ? entry.getCityName() : value;
+        } else if (criteria.toLowerCase().equals("querystring")) {
+            value = value.equals("random") ? entry.getPhoneNumber() : value;
         } else {
             throw new AssertionError("Unknown filter type");
         }
@@ -91,7 +93,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         log.info("Checking if etisalatSubscriberData entry " + criteria + " list");
         Boolean contains = false;
         for (EtisalatSubscriberEntry entity : entityList) {
-            if (checkEntry(entry, entity)) {
+            if (equalsEntries(entry, entity)) {
                 contains = true;
                 break;
             }
@@ -106,7 +108,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         }
     }
 
-    private boolean checkEntry(EtisalatSubscriberEntry entry, EtisalatSubscriberEntry entity) {
+    private boolean equalsEntries(EtisalatSubscriberEntry entry, EtisalatSubscriberEntry entity) {
         return Verify.isTrue(equals.elements(entry.getPhoneNumber(), entity.getPhoneNumber())) &&
                 Verify.isTrue(equals.elements(entry.getName(), entity.getName())) &&
                 Verify.isTrue(equals.elements(entry.getAddress(), entity.getAddress())) &&

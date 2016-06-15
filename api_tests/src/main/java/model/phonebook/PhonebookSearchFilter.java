@@ -16,7 +16,7 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
     private String countryCode;
     private String country;
 
-    private String queryString; //TODO
+    private String queryString;
 
 
     public String getImsi() {
@@ -158,6 +158,18 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         }
     }
 
+    public class QueryStringFilter extends SearchFilter<Phonebook> {
+
+        public QueryStringFilter(String value) {
+            queryString = value;
+        }
+
+        @Override
+        public boolean filter(Phonebook entity) {
+            return entity.getPhoneNumber().equals(queryString);
+        }
+    }
+
     public PhonebookSearchFilter filterBy(String criteria, String value) {
         if (criteria.toLowerCase().equals("address")) {
             this.setActiveFilter(this.new AddressFilter(value));
@@ -171,6 +183,8 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
             this.setActiveFilter(this.new PhoneNumberFilter(value));
         } else if (criteria.toLowerCase().equals("imsi")) {
             this.setActiveFilter(this.new ImsiFilter(value));
+        } else if (criteria.toLowerCase().equals("querystring")) {
+            this.setActiveFilter(this.new QueryStringFilter(value));
         } else {
             throw new AssertionError("Unknown filter type");
         }

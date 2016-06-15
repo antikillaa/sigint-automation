@@ -54,6 +54,8 @@ public class APIDuSubscriberSteps extends APISteps {
             value = value.equals("random") ? duSubscriberEntry.getName() : value;
         } else if (criteria.toLowerCase().equals("phonenumber")) {
             value = value.equals("random") ? duSubscriberEntry.getPhoneNumber() : value;
+        } else if (criteria.toLowerCase().equals("querystring")) {
+            value = value.equals("random") ? duSubscriberEntry.getPhoneNumber() : value;
         } else {
             throw new AssertionError("Unknown filter type");
         }
@@ -91,7 +93,7 @@ public class APIDuSubscriberSteps extends APISteps {
         log.info("Checking if duSubscriber entry " + criteria + " list");
         Boolean contains = false;
         for (DuSubscriberEntry entity : entityList) {
-            if (checkEntry(entry, entity)) {
+            if (equalsEntries(entry, entity)) {
                 contains = true;
                 break;
             }
@@ -106,7 +108,7 @@ public class APIDuSubscriberSteps extends APISteps {
         }
     }
 
-    private boolean checkEntry(DuSubscriberEntry entry, DuSubscriberEntry entity) {
+    private boolean equalsEntries(DuSubscriberEntry entry, DuSubscriberEntry entity) {
         return Verify.isTrue(equals.elements(entry.getPhoneNumber(), entity.getPhoneNumber())) &&
                 Verify.isTrue(equals.elements(entry.getFirstName(), entity.getFirstName())) &&
                 Verify.isTrue(equals.elements(entry.getMiddleName(), entity.getMiddleName())) &&

@@ -45,6 +45,7 @@ And Searched Phonebook Entry in list
 
 Examples:
 | criteria    | value  |
+| queryString | random |
 | address     | random |
 | name        | random |
 | imsi        | random |
@@ -74,6 +75,7 @@ And Searched DuSubscriber Entry in list
 
 Examples:
 | criteria    | value  |
+| queryString | random |
 | address     | random |
 | name        | random |
 | phoneNumber | random |
@@ -113,6 +115,7 @@ And Searched EtisalatSubscriberData Entry in list
 
 Examples:
 | criteria      | value  |
+| queryString | random |
 | address       | random |
 | name          | random |
 | phoneNumber   | random |

@@ -1,7 +1,6 @@
 package steps;
 
 import abs.EntityList;
-import abs.SearchFilter;
 import errors.NullReturnException;
 import json.JsonCoverter;
 import model.Phonebook;
@@ -100,12 +99,14 @@ public class APIPhonebookSteps extends APISteps {
             value = value.equals("random") ? phonebook.getPhoneNumber() : value;
         } else if (criteria.toLowerCase().equals("imsi")) {
             value = value.equals("random") ? phonebook.getImsi() : value;
+        } else if (criteria.toLowerCase().equals("querystring")) {
+            value = value.equals("random") ? phonebook.getPhoneNumber() : value;
         } else {
             throw new AssertionError("Unknown filter type");
         }
 
         PhonebookSearchFilter searchFilter = new PhonebookSearchFilter().filterBy(criteria, value);
-        log.info("filter" + JsonCoverter.toJsonString(searchFilter));
+        log.info("Search filter: " + JsonCoverter.toJsonString(searchFilter));
         EntityList<Phonebook> phonebookList = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
@@ -115,11 +116,13 @@ public class APIPhonebookSteps extends APISteps {
     @Then("Search Phonebook results are correct")
     public void searchPhonebookResultsCorrect() {
         log.info("Checking if search phonebook result is correct");
-        SearchFilter searchFilter = context.get("searchFilter", PhonebookSearchFilter.class);
+        PhonebookSearchFilter searchFilter = context.get("searchFilter", PhonebookSearchFilter.class);
         EntityList<Phonebook> searchResult = context.get("searchResult", EntityList.class);
 
         if (searchResult.size() == 0) {
             log.warn("Search result can be incorrect. There are not records in it");
+        } else {
+            log.info("Search result size: " + searchResult.size());
         }
         for (Phonebook phonebook : searchResult) {
             Assert.assertTrue(searchFilter.filter(phonebook));

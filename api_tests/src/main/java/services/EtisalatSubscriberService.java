@@ -100,7 +100,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
     }
 
 
-    public String entryToString(EtisalatSubscriberEntry entry) {
+    private String entryToString(EtisalatSubscriberEntry entry) {
         String DELIMETER = "~";
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));

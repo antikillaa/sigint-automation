@@ -9,7 +9,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
-    private String queryString; //TODO
+    private String queryString;
 
     private String phoneNumber;
     private String name;
@@ -215,6 +215,18 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
     }
 
+    public class QueryStringFilter extends SearchFilter<EtisalatSubscriberEntry> {
+
+        public QueryStringFilter(String value) {
+            queryString = value;
+        }
+
+        @Override
+        public boolean filter(EtisalatSubscriberEntry entity) {
+            return entity.getPhoneNumber().equals(queryString);
+        }
+    }
+
     public EtisalatSubscriberFilter filterBy(String criteria, String value) {
         if (criteria.toLowerCase().equals("address")) {
             this.setActiveFilter(this.new AddressFilter(value));
@@ -234,6 +246,8 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
             this.setActiveFilter(this.new SecondAddressLineFilter(value));
         } else if (criteria.toLowerCase().equals("cityname")) {
             this.setActiveFilter(this.new CityNameFilter(value));
+        } else if (criteria.toLowerCase().equals("querystring")) {
+            this.setActiveFilter(this.new QueryStringFilter(value));
         } else {
             throw new AssertionError("Unknown filter type");
         }
