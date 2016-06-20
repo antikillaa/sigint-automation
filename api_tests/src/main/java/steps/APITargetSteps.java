@@ -1,7 +1,8 @@
 package steps;
 
-import conditions.Conditions;
 import conditions.Verify;
+import errors.NullReturnException;
+import json.JsonCoverter;
 import model.AppContext;
 import model.Target;
 import model.TargetGroup;
@@ -14,13 +15,15 @@ import services.TargetService;
 import java.util.ArrayList;
 import java.util.List;
 
+import static conditions.Conditions.equals;
+
 public class APITargetSteps extends APISteps {
     private Logger log = Logger.getLogger(APITargetGroupSteps.class);
     private AppContext context = AppContext.getContext();
     private TargetService service = new TargetService();
 
     @When("I send create target $with targets group request")
-    public void sendCreateRequest(String with){
+    public void sendCreateRequest(String with) throws NullReturnException {
         Target target = new Target().generate();
         if (with.toLowerCase().equals("with")) {
             List<TargetGroup> groups = new ArrayList<TargetGroup>();
@@ -28,7 +31,9 @@ public class APITargetSteps extends APISteps {
             target.setGroups(groups);
         }
 
+        log.info("Target: " + JsonCoverter.toJsonString(target));
         int response = service.add(target);
+
         context.put("code", response);
         context.put("requestTarget", target);
     }
@@ -37,14 +42,59 @@ public class APITargetSteps extends APISteps {
     public void createdTargetCorrect() {
         Target contextTarget = context.get("requestTarget", Target.class);
         Target createdTarget = context.entities().getTargets().getLatest();
-        Verify.shouldBe(Conditions.equals.elements(contextTarget.getDescription(), createdTarget.getDescription()));
-        Verify.shouldBe(Conditions.equals.elements(contextTarget.getName(), createdTarget.getName()));
-        Verify.shouldBe(Conditions.equals.elements(contextTarget.getKeywords(), createdTarget.getKeywords()));
-        Verify.shouldBe(Conditions.equals.elements(contextTarget.getPhones(), createdTarget.getPhones()));
-        Verify.shouldBe(Conditions.equals.elements(contextTarget.getLanguages(), createdTarget.getLanguages()));
-        Verify.shouldBe(Conditions.equals.elements(contextTarget.getGroups(), createdTarget.getGroups()));
-        Verify.shouldBe(Conditions.equals.elements(contextTarget.getType(), createdTarget.getType()));
 
         Assert.assertTrue(createdTarget.getId() != null);
+        equalsTargets(createdTarget, contextTarget);
+    }
+
+    @When("I send get target details request")
+    public void getTargetDetails() {
+        Target createdTarget = context.entities().getTargets().getLatest();
+
+        Target viewedTarget = service.view(createdTarget.getId());
+
+        context.put("viewedTarget", viewedTarget);
+    }
+
+    @Then("Viewed target is correct")
+    public void viewedTargetIsCorrect() throws NullReturnException {
+        Target createdTarget = context.entities().getTargets().getLatest();
+
+        Target viewedTarget = context.get("viewedTarget", Target.class);
+        log.info("Target: " + JsonCoverter.toJsonString(viewedTarget));
+
+        equalsTargets(viewedTarget, createdTarget);
+    }
+
+    private void equalsTargets(Target checkedTarget, Target etalonTarget) {
+        Verify.shouldBe(equals.elements(checkedTarget.getDescription(), etalonTarget.getDescription()));
+        Verify.shouldBe(equals.elements(checkedTarget.getName(), etalonTarget.getName()));
+        Verify.shouldBe(equals.elements(checkedTarget.getKeywords(), etalonTarget.getKeywords()));
+        Verify.shouldBe(equals.elements(checkedTarget.getPhones(), etalonTarget.getPhones()));
+        Verify.shouldBe(equals.elements(checkedTarget.getLanguages(), etalonTarget.getLanguages()));
+        Verify.shouldBe(equals.elements(checkedTarget.getGroups(), etalonTarget.getGroups()));
+        Verify.shouldBe(equals.elements(checkedTarget.getType(), etalonTarget.getType()));
+    }
+
+    @When("I send update target request")
+    public void updateTargetRequest() throws NullReturnException {
+        Target createdTarget = context.entities().getTargets().getLatest();
+        Target requestTarget = createdTarget.generate();
+
+        log.info("Updated target: " + JsonCoverter.toJsonString(requestTarget));
+        int responseCode = service.update(requestTarget);
+
+        context.put("code", responseCode);
+        context.put("updatedTarget", requestTarget);
+    }
+
+    @Then("Target updated correctly")
+    public void targetUpdatedCorrectly() throws NullReturnException {
+        Target updatedTarget = context.get("updatedTarget", Target.class);
+
+        Target resultTarget = service.view(updatedTarget.getId());
+        log.info("Result target: " + JsonCoverter.toJsonString(resultTarget));
+
+        equalsTargets(updatedTarget, resultTarget);
     }
 }
