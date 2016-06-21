@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static conditions.Conditions.equals;
+import static conditions.Conditions.isTrue;
 
 public class APITargetSteps extends APISteps {
     private Logger log = Logger.getLogger(APITargetGroupSteps.class);
@@ -79,13 +80,13 @@ public class APITargetSteps extends APISteps {
     @When("I send update target request")
     public void updateTargetRequest() throws NullReturnException {
         Target createdTarget = context.entities().getTargets().getLatest();
-        Target requestTarget = createdTarget.generate();
+        Target updatedTarget = createdTarget.generate();
 
-        log.info("Updated target: " + JsonCoverter.toJsonString(requestTarget));
-        int responseCode = service.update(requestTarget);
+        log.info("Updated target: " + JsonCoverter.toJsonString(updatedTarget));
+        int responseCode = service.update(updatedTarget);
 
         context.put("code", responseCode);
-        context.put("updatedTarget", requestTarget);
+        context.put("updatedTarget", updatedTarget);
     }
 
     @Then("Target updated correctly")
@@ -93,8 +94,27 @@ public class APITargetSteps extends APISteps {
         Target updatedTarget = context.get("updatedTarget", Target.class);
 
         Target resultTarget = service.view(updatedTarget.getId());
-        log.info("Result target: " + JsonCoverter.toJsonString(resultTarget));
 
         equalsTargets(updatedTarget, resultTarget);
+    }
+
+    @When("I send delete target request")
+    public void deleteTargetRequest() {
+        Target createdTarget = context.entities().getTargets().getLatest();
+
+        int responseCode = service.remove(createdTarget);
+
+        context.put("deletedTarget", createdTarget);
+        context.put("code", responseCode);
+    }
+
+
+    @Then("Target deleted correctly")
+    public void targetDeletedCorrectly() throws NullReturnException {
+        Target deletedTarget = context.get("deletedTarget", Target.class);
+
+        Target resultTarget = service.view(deletedTarget.getId());
+
+        Verify.shouldBe(isTrue.element(resultTarget.getName().contains("DELETED at")));
     }
 }

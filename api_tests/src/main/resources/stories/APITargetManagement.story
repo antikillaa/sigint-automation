@@ -32,3 +32,11 @@ Then I got response code 200
 When I send update target request
 Then I got response code 200
 And Target updated correctly
+
+Scenario: API.Deleting Target - DELETE
+Given I sign in as admin user
+When I send create target without targets group request
+Then I got response code 200
+When I send delete target request
+Then I got response code 200
+And Target deleted correctly

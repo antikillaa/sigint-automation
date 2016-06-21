@@ -19,5 +19,9 @@ public class TargetRequest extends HttpRequest {
         return this;
     }
 
+    public TargetRequest delete(String id) {
+        this.setURI(URI + "/" + id );
+        return this;
+    }
 
 }
