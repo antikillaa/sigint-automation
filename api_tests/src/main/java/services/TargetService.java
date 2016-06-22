@@ -83,7 +83,6 @@ public class TargetService implements EntityService<Target> {
             log.info("Result target: " + JsonCoverter.toJsonString(resultTarget));
         } catch (NullReturnException e) {
             log.error(e.getMessage());
-            e.printStackTrace();
         }
         return resultTarget;
     }

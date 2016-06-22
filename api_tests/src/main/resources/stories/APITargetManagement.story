@@ -40,3 +40,17 @@ Then I got response code 200
 When I send delete target request
 Then I got response code 200
 And Target deleted correctly
+
+Scenario: API.View target group details
+Given I sign in as admin user
+When I send create target group without targets request
+Then I got response code 200
+When I send get target group details request
+Then Viewed target group is correct
+
+Scenario: API.List of target groups - GET
+Given I sign in as admin user
+When I send create target group without targets request
+Then I got response code 200
+When I send get list of target group request
+Then Created target group in list

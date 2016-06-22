@@ -58,11 +58,10 @@ public class APITargetSteps extends APISteps {
     }
 
     @Then("Viewed target is correct")
-    public void viewedTargetIsCorrect() throws NullReturnException {
+    public void viewedTargetIsCorrect() {
         Target createdTarget = context.entities().getTargets().getLatest();
 
         Target viewedTarget = context.get("viewedTarget", Target.class);
-        log.info("Target: " + JsonCoverter.toJsonString(viewedTarget));
 
         equalsTargets(viewedTarget, createdTarget);
     }
@@ -107,7 +106,6 @@ public class APITargetSteps extends APISteps {
         context.put("deletedTarget", createdTarget);
         context.put("code", responseCode);
     }
-
 
     @Then("Target deleted correctly")
     public void targetDeletedCorrectly() throws NullReturnException {

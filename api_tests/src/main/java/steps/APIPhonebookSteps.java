@@ -1,6 +1,7 @@
 package steps;
 
 import abs.EntityList;
+import conditions.Verify;
 import errors.NullReturnException;
 import json.JsonCoverter;
 import model.Phonebook;
@@ -10,6 +11,8 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.PhonebookService;
+
+import static conditions.Conditions.isTrue;
 
 public class APIPhonebookSteps extends APISteps {
 
@@ -137,9 +140,9 @@ public class APIPhonebookSteps extends APISteps {
 
         Boolean contains = list.contains(phonebook);
         if (criteria.toLowerCase().equals("in")) {
-            Assert.assertTrue(contains);
+            Verify.shouldBe(isTrue.element(contains));
         } else if (criteria.toLowerCase().equals("not in")) {
-            Assert.assertFalse(contains);
+            Verify.shouldNotBe(isTrue.element(contains));
         } else {
             throw new AssertionError("Incorrect argument passed to step");
         }

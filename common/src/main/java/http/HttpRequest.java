@@ -14,7 +14,6 @@ public class HttpRequest {
 
     public HttpRequest(String URI) {
         this.URI = URI;
-
     }
 
     public  Cookie getCookie() {

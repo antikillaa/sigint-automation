@@ -13,6 +13,7 @@ import org.junit.Assert;
 import services.EtisalatSubscriberService;
 
 import static conditions.Conditions.equals;
+import static conditions.Conditions.isTrue;
 
 public class APIEtisalatSubscriberDataSteps extends APISteps {
 
@@ -100,9 +101,9 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         }
 
         if (criteria.toLowerCase().equals("in")) {
-            Assert.assertTrue(contains);
+            Verify.shouldBe(isTrue.element(contains));
         } else if (criteria.toLowerCase().equals("not in")) {
-            Assert.assertFalse(contains);
+            Verify.shouldNotBe(isTrue.element(contains));
         } else {
             throw new AssertionError("Incorrect argument passed to step");
         }

@@ -1,5 +1,7 @@
 package steps;
 
+import conditions.Verify;
+import errors.NullReturnException;
 import model.AppContext;
 import model.Target;
 import model.TargetGroup;
@@ -11,6 +13,9 @@ import services.TargetGroupService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static conditions.Conditions.equals;
+import static conditions.Conditions.isTrue;
 
 public class APITargetGroupSteps extends APISteps {
 
@@ -35,10 +40,62 @@ public class APITargetGroupSteps extends APISteps {
     public void targetGroupCorrect() {
         TargetGroup contextTargetGroup = context.get("requestTargetGroup", TargetGroup.class);
         TargetGroup createdTargetGroup = context.entities().getTargetGroups().getLatest();
-        Assert.assertEquals(contextTargetGroup.getDescription(), createdTargetGroup.getDescription());
-        Assert.assertEquals(contextTargetGroup.getName(), createdTargetGroup.getName());
-        Assert.assertEquals(contextTargetGroup.getTargets(), createdTargetGroup.getTargets());
-        Assert.assertTrue(createdTargetGroup.getId()!=null);
+
+        Verify.shouldBe(isTrue.element(equalsTargetGroups(createdTargetGroup, contextTargetGroup)));
+    }
+
+    private boolean equalsTargetGroups(TargetGroup checkedTargetGroup, TargetGroup etalonTargetGroup) {
+        Assert.assertTrue(checkedTargetGroup.getId() != null);
+        return Verify.isTrue(equals.elements(checkedTargetGroup.getDescription(), etalonTargetGroup.getDescription())) &&
+                Verify.isTrue(equals.elements(checkedTargetGroup.getName(), etalonTargetGroup.getName())) &&
+                Verify.isTrue(equals.elements(checkedTargetGroup.getTargets(), etalonTargetGroup.getTargets()));
+    }
+
+    @When("I send get target group details request")
+    public void getTargetGroupRequest() {
+        TargetGroup createdTargetGroup = context.entities().getTargetGroups().getLatest();
+
+        TargetGroup viewedTargetGroup = service.view(createdTargetGroup.getId());
+
+        context.put("viewedTargetGroup", viewedTargetGroup);
+    }
+
+    @Then("Viewed target group is correct")
+    public void viewedTargetGroupIsCorrect() {
+        TargetGroup createdTarget = context.entities().getTargetGroups().getLatest();
+
+        TargetGroup viewedTargetGroup = context.get("viewedTargetGroup", TargetGroup.class);
+
+        equalsTargetGroups(viewedTargetGroup, createdTarget);
+    }
+
+    @When("I send get list of target group request")
+    public void getListOfTargetGroupsRequest() throws NullReturnException {
+        List<TargetGroup> listTargetGroups = service.view();
+
+        context.put("listTargetGroup", listTargetGroups);
+    }
+
+    @Then("Created target group $criteria list")
+    public void targetGroupsContainNewTArgetGroup(String criteria) throws NullReturnException {
+        TargetGroup targetGroup = context.entities().getTargetGroups().getLatest();
+        List<TargetGroup> list = context.get("listTargetGroup", List.class);
+
+        Boolean contains = false;
+        for (TargetGroup entity : list) {
+            if (Verify.isTrue(isTrue.element(equalsTargetGroups(targetGroup, entity)))) {
+                contains = true;
+                break;
+            }
+        }
+
+        if (criteria.toLowerCase().equals("in")) {
+            Verify.shouldBe(isTrue.element(contains));
+        } else if (criteria.toLowerCase().equals("not in")) {
+            Verify.shouldNotBe(isTrue.element(contains));
+        } else {
+            throw new AssertionError("Incorrect argument passed to step");
+        }
     }
 
 }

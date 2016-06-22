@@ -2,6 +2,7 @@ package steps;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import conditions.Verify;
 import model.AppContext;
 import model.InformationRequest;
 import model.rfi.RFISearchFilter;
@@ -13,6 +14,8 @@ import org.junit.Assert;
 import services.RFIService;
 
 import java.text.ParseException;
+
+import static conditions.Conditions.isTrue;
 
 /**
  * Created by dm on 4/26/16.
@@ -74,11 +77,12 @@ public class APIRFISearchSteps extends APISteps {
         EntityList<InformationRequest> list;
         request = context.get("searchRFI", InformationRequest.class);
         list = context.get("searchResult", EntityList.class);
+
         Boolean contains = list.contains(request);
         if (criteria.toLowerCase().equals("in")) {
-            Assert.assertTrue(contains);
+            Verify.shouldBe(isTrue.element(contains));
         } else if (criteria.toLowerCase().equals("not in")) {
-            Assert.assertFalse(contains);
+            Verify.shouldNotBe(isTrue.element(contains));
         } else {
             throw new AssertionError("Incorrect argument passed to step");
         }
