@@ -116,4 +116,23 @@ public class APITargetGroupSteps extends APISteps {
 
         Verify.shouldBe(isTrue.element(resultTargetGroup.getName().contains("DELETED at")));
     }
+
+    @When("I send update target group request")
+    public void updateTargetGroupRequest() {
+        TargetGroup createdTargetGroup = context.entities().getTargetGroups().getLatest();
+        TargetGroup updatedTargetGroup = createdTargetGroup.generate();
+
+        int responseCode = service.update(updatedTargetGroup);
+
+        context.put("code", responseCode);
+        context.put("updatedTargetGroup", updatedTargetGroup);
+    }
+
+    @Then("Target group updated correctly")
+    public void targetGroupUpdatedCorrectly() {
+        TargetGroup updatedTargetGroup = context.get("updatedTargetGroup", TargetGroup.class);
+        TargetGroup responseTargetGroup = context.entities().getTargetGroups().getLatest();
+
+        equalsTargetGroups(responseTargetGroup, updatedTargetGroup);
+    }
 }

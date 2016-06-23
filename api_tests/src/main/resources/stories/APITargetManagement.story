@@ -55,6 +55,14 @@ Then I got response code 200
 When I send get list of target group request
 Then Created target group in list
 
+Scenario: API.Update target group
+Given I sign in as admin user
+When I send create target group without targets request
+Then I got response code 200
+When I send update target group request
+Then I got response code 200
+And Target group updated correctly
+
 Scenario: API.Delete target group
 Given I sign in as admin user
 When I send create target group without targets request

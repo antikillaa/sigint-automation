@@ -58,7 +58,7 @@ public class TargetService implements EntityService<Target> {
     }
 
     public int update(Target entity) {
-        log.info("Updating new target");
+        log.info("Updating target");
         TargetRequest request = new TargetRequest();
         Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
 

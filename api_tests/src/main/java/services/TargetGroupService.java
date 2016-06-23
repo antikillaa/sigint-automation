@@ -70,7 +70,23 @@ public class TargetGroupService implements EntityService<TargetGroup> {
     }
 
     public int update(TargetGroup entity) {
-        return 0;
+        log.info("Updating target group" );
+        try {
+            log.info("Target group: " + JsonCoverter.toJsonString(entity));
+        } catch (NullReturnException e) {
+            log.error(e.getMessage());
+        }
+        TargetGroupRequest request = new TargetGroupRequest();
+        Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
+
+        TargetGroup targetGroup = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "result");
+        if (targetGroup != null) {
+            context.entities().getTargetGroups().addOrUpdateEntity(entity);
+        } else {
+            log.error("Error! Update targetGroup process was failed");
+            throw new AssertionError("Error! Update targetGroup process was failed");
+        }
+        return response.getStatus();
     }
 
     public TargetGroup view(String id) {
@@ -80,7 +96,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
 
         TargetGroup resultTargetGroup = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "result");
         try {
-            log.info("Result target group: " + JsonCoverter.toJsonString(resultTargetGroup));
+            log.info("Target group: " + JsonCoverter.toJsonString(resultTargetGroup));
         } catch (NullReturnException e) {
             log.error(e.getMessage());
         }
