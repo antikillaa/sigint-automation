@@ -2,11 +2,14 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import conditions.Conditions;
+import conditions.Verify;
 import errors.NullReturnException;
 import http.requests.targetGroups.TargetGroupRequest;
 import json.JsonCoverter;
 import json.RsClient;
 import model.AppContext;
+import model.Result;
 import model.TargetGroup;
 import model.targetGroup.TargetGroupSearchResult;
 import org.apache.log4j.Logger;
@@ -41,7 +44,25 @@ public class TargetGroupService implements EntityService<TargetGroup> {
     }
 
     public int remove(TargetGroup entity) {
-        return 0;
+        log.info("Deleting target group id:" + entity.getId());
+        TargetGroupRequest request = new TargetGroupRequest().delete(entity.getId());
+        Response response = rsClient.delete(sigintHost + request.getURI(), request.getCookie());
+
+        Result result = JsonCoverter.fromJsonToObject(response.readEntity(String.class), Result.class);
+        try {
+            log.info("result: " + JsonCoverter.toJsonString(result));
+        } catch (NullReturnException e) {
+            e.printStackTrace();
+        }
+        if (response.getStatus() == 200) {
+            try {
+                Verify.isTrue(Conditions.equals.elements(result.getResult(), "ok"));
+                context.entities().getTargetGroups().removeEntity(entity);
+            } catch (NullReturnException e) {
+                log.warn("Was unable to remove entity with id:" + entity.getId() + " as it doesn't in the list");
+            }
+        }
+        return response.getStatus();
     }
 
     public EntityList<TargetGroup> list(SearchFilter filter) {

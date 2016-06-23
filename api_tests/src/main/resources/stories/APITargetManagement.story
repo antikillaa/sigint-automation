@@ -54,3 +54,11 @@ When I send create target group without targets request
 Then I got response code 200
 When I send get list of target group request
 Then Created target group in list
+
+Scenario: API.Delete target group
+Given I sign in as admin user
+When I send create target group without targets request
+Then I got response code 200
+When I send delete target group request
+Then I got response code 200
+And Target group deleted correctly

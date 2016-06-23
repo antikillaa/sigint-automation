@@ -14,4 +14,9 @@ public class TargetGroupRequest extends HttpRequest {
         this.setURI(URI + "/" + id + "/details");
         return this;
     }
+
+    public TargetGroupRequest delete(String id) {
+        this.setURI(URI + "/" + id );
+        return this;
+    }
 }

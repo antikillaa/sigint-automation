@@ -98,4 +98,22 @@ public class APITargetGroupSteps extends APISteps {
         }
     }
 
+    @When("I send delete target group request")
+    public void deleteTargetGroupRequest() {
+        TargetGroup targetGroup = context.entities().getTargetGroups().getLatest();
+
+        int responseCode = service.remove(targetGroup);
+
+        context.put("deletedTargetGroup", targetGroup);
+        context.put("code", responseCode);
+    }
+
+    @Then("Target group deleted correctly")
+    public void targetGroupDeletedCorrectly() {
+        TargetGroup deletedTargetGroup = context.get("deletedTargetGroup", TargetGroup.class);
+
+        TargetGroup resultTargetGroup = service.view(deletedTargetGroup.getId());
+
+        Verify.shouldBe(isTrue.element(resultTargetGroup.getName().contains("DELETED at")));
+    }
 }
