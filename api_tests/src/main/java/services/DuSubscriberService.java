@@ -29,7 +29,6 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
     private static AppContext context = AppContext.getContext();
     private final String sigintHost = context.environment().getSigintHost();
 
-    @Override
     public int add(DuSubscriberEntry entity) {
         log.info("Upload new DuSubscriber Entry");
         DuSubscriberRequest request = new DuSubscriberRequest().upload();
@@ -58,12 +57,10 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
         return response.getStatus();
     }
 
-    @Override
     public int remove(DuSubscriberEntry entity) {
         return 0;
     }
 
-    @Override
     public EntityList<DuSubscriberEntry> list(SearchFilter filter) {
         DuSubscriberRequest request = new DuSubscriberRequest().search();
         Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
@@ -80,12 +77,10 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
         }
     }
 
-    @Override
     public int update(DuSubscriberEntry entity) {
         return 0;
     }
 
-    @Override
     public DuSubscriberEntry view(String id) {
         DuSubscriberRequest request = new DuSubscriberRequest().get(id);
         log.info("Getting derails of DuSubscriber Entry by id: " + id);

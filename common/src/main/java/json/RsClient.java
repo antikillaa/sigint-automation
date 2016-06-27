@@ -51,6 +51,13 @@ public class RsClient {
                 .request(MediaType.APPLICATION_JSON_TYPE);
     }
 
+    private Invocation.Builder buildRequest(String url, String mediaType) {
+        log.debug("Building request to url:" + url);
+        return client
+                .target(url)
+                .request(mediaType);
+    }
+
     private Entity convertToJson(Object object) {
         Entity payload;
         try {
@@ -118,6 +125,12 @@ public class RsClient {
         Entity payload = convertToJson(object);
         log.debug("Sending POST request with payload:" + object);
         return buildRequest(url).cookie(cookie).post(payload);
+    }
+
+    public Response post(String url, Object object, Cookie cookie, String mediaType) {
+        Entity payload = convertToJson(object);
+        log.debug("Sending POST request with payload:" + object);
+        return buildRequest(url, mediaType).cookie(cookie).post(payload);
     }
 
     /**

@@ -15,6 +15,10 @@
     </bean>
     <bean id="targetSteps" class="steps.APITargetSteps">
     </bean>
-    <bean id="phonebookSteps" class="steps.APIPhonebookSteps" />
-    <bean id="duSubscriberSteps" class="steps.APIDuSubscriberSteps" />
+    <bean id="phonebookSteps" class="steps.APIPhonebookSteps">
+    </bean>
+    <bean id="duSubscriberSteps" class="steps.APIDuSubscriberSteps">
+    </bean>
+    <bean id="userManagementSteps" class="steps.APIRoleSteps">
+    </bean>
 </beans>
