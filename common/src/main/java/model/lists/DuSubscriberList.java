@@ -9,6 +9,11 @@ public class DuSubscriberList extends EntityList<DuSubscriberEntry> {
 
     @Override
     public DuSubscriberEntry getEntity(String param) throws NullReturnException {
-        return null;
+        for(DuSubscriberEntry entry : entities) {
+            if (entry.getId().equals(param)){
+                return entry;
+            }
+        }
+        throw new NullReturnException("There is not DuSubscriberEntry!");
     }
 }

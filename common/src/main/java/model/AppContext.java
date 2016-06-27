@@ -121,8 +121,8 @@ public class AppContext {
         private TargetsList targets;
         private PhonebookList phonebooks;
         private DuSubscriberList duSubscriberses;
-
         private RoleList roles;
+        private GroupList groups;
 
         public TargetsList getTargets() {
             if (targets == null) {
@@ -199,6 +199,17 @@ public class AppContext {
 
         public void setRoles(RoleList roles) {
             this.roles = roles;
+        }
+
+        public GroupList getGroups() {
+            if (groups == null) {
+                groups = new GroupList();
+            }
+            return groups;
+        }
+
+        public void setGroups(GroupList groups) {
+            this.groups = groups;
         }
 
         private Entities(){}

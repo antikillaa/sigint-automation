@@ -19,6 +19,8 @@
     </bean>
     <bean id="duSubscriberSteps" class="steps.APIDuSubscriberSteps">
     </bean>
-    <bean id="userManagementSteps" class="steps.APIRoleSteps">
+    <bean id="userRoleSteps" class="steps.APIRoleSteps">
+    </bean>
+    <bean id="userGroupSteps" class="steps.APIUserGroupSteps">
     </bean>
 </beans>
