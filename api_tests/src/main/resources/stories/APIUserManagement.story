@@ -10,8 +10,18 @@ And Created role is correct
 
 Scenario: API.Create a new group
 Given I sign in as admin user
-When I send create a new role request
-Then I got response code 200
-When I send create a new group with created role request
+When I send create a new group without any roles
 Then I got response code 200
 And Created group is correct
+
+Scenario: API.Adding user roles to user groups
+Given I sign in as admin user
+When I send create a new group without any roles
+Then I got response code 200
+When I send create a new role request
+Then I got response code 200
+When I send add a created role to group request
+Then I got response code 200
+And Updated group is correct
+
+

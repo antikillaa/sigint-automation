@@ -102,6 +102,12 @@ public class RsClient {
         return buildRequest(url).cookie(cookie).put(payload);
     }
 
+    public Response put(String url, Object object, Cookie cookie, String mediaType) {
+        Entity payload = convertToJson(object);
+        log.debug("Sending PUT request with payload:"+ payload);
+        return buildRequest(url, mediaType).cookie(cookie).put(payload);
+    }
+
     /**
      * HTTP POST request
      *

@@ -51,7 +51,24 @@ public class GroupService implements EntityService<Group> {
     }
 
     public int update(Group entity) {
-        return 0;
+        log.info("Updating Group id" + entity.getId());
+        try {
+            log.info("Group: " + JsonCoverter.toJsonString(entity));
+        } catch (NullReturnException e) {
+            log.info(e.getMessage());
+        }
+
+        GroupsRequest request = new GroupsRequest().update(entity.getId());
+        Response response = rsClient
+                .put(sigintHost + request.getURI(), entity, request.getCookie(), PegasusMediaType.PEGASUS_JSON);
+        String jsonString = response.readEntity(String.class);
+        log.info("Response: " + jsonString);
+
+        Group updatedGroup = JsonCoverter.fromJsonToObject(jsonString, Group.class);
+        if (updatedGroup != null) {
+            context.entities().getGroups().addOrUpdateEntity(updatedGroup);
+        }
+        return response.getStatus();
     }
 
     public Group view(String id) {

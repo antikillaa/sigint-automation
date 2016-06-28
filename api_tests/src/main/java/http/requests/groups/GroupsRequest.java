@@ -9,4 +9,9 @@ public class GroupsRequest extends HttpRequest {
     public GroupsRequest() {
         super(URI);
     }
+
+    public GroupsRequest update(String id) {
+        this.setURI(URI + "/" + id);
+        return this;
+    }
 }
