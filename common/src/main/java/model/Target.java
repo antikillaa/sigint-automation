@@ -102,7 +102,6 @@ public class Target extends TeelaEntity {
                 .setPhones(RandomGenerator.generatePhones(10))
                 .setLanguages(RandomGenerator.generateLanguagesCodes(5))
                 .setKeywords(RandomGenerator.generateRandomStrings(5));
-
         return this;
     }
 

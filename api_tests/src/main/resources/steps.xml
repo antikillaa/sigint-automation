@@ -17,4 +17,5 @@
     </bean>
     <bean id="phonebookSteps" class="steps.APIPhonebookSteps" />
     <bean id="duSubscriberSteps" class="steps.APIDuSubscriberSteps" />
+    <bean id="etisalatSubscriberDataSteps" class="steps.APIEtisalatSubscriberDataSteps" />
 </beans>

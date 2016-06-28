@@ -27,7 +27,6 @@ public class EqualCondition extends ExpectedCondition {
     public EqualCondition elements(Object obj1, Object obj2) {
         condition = new ObjectEqualCondition(obj1, obj2);
         return this;
-
     }
 
     public EqualCondition elements(Set set1, Set set2) {
@@ -81,6 +80,9 @@ public class EqualCondition extends ExpectedCondition {
         }
 
         protected Boolean check() {
+            if ((obj1 == null) && (obj2 == null)) {
+                return true;
+            }
             return obj1.equals(obj2);
         }
     }
@@ -128,7 +130,7 @@ public class EqualCondition extends ExpectedCondition {
            }
            return equals;
        }
-       }
+   }
 }
 
 
