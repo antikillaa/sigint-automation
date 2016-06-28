@@ -1,10 +1,11 @@
 package model;
 
 import abs.TeelaEntity;
+import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,18 +14,21 @@ import java.util.List;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class User extends TeelaEntity {
 
-    private String id;
     private Date createdAt;
     private Date modifiedAt;
     private String modifiedBy;
     private String name;
+    @JsonProperty("display_name")
     private String displayName;
     private String password;
     private String phone;
     private String token;
+    @JsonProperty("staff_id")
     private String staffId;
-    private List<String> roles = new ArrayList();
-    private List<String> languages = new ArrayList();
+    private List<String> roles;
+    private List<String> languages;
+    @JsonProperty("user_group_ids")
+    private List<String> userGroupIds;
 
     public boolean hasRole(String role) {
         if (roles == null || role == null) {
@@ -55,33 +59,27 @@ public class User extends TeelaEntity {
     }
 
 
-    public void setDisplayName(String name) {
+    public User setDisplayName(String name) {
         this.displayName = name;
+        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public User setPassword(String password) {
         this.password = password;
+        return this;
     }
-
 
     public String getName() {
         return name;
     }
 
-    public void setName(String email) {
-        this.name = email;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public User setName(String userName) {
+        this.name = userName;
+        return this;
     }
 
     public List<String> getRoles() {
@@ -120,10 +118,10 @@ public class User extends TeelaEntity {
         return staffId;
     }
 
-    public void setStaffId(String staffId) {
+    public User setStaffId(String staffId) {
         this.staffId = staffId;
+        return this;
     }
-
 
     public List<String> getLanguages() {
         return languages;
@@ -133,8 +131,22 @@ public class User extends TeelaEntity {
         this.languages = languages;
     }
 
+    public List<String> getUserGroupIds() {
+        return userGroupIds;
+    }
+
+    public User setUserGroupIds(List<String> userGroupIds) {
+        this.userGroupIds = userGroupIds;
+        return this;
+    }
+
     public User generate() {
-        return null;
+        this
+                .setName(RandomStringUtils.randomAlphabetic(8).toLowerCase())
+                .setDisplayName(RandomStringUtils.randomAlphabetic(8))
+                .setStaffId(RandomStringUtils.randomAlphanumeric(6))
+                .setPassword(RandomStringUtils.randomAlphanumeric(8));
+        return this;
     }
 
 }

@@ -23,4 +23,6 @@
     </bean>
     <bean id="userGroupSteps" class="steps.APIUserGroupSteps">
     </bean>
+    <bean id="userSteps" class="steps.APIUserSteps">
+    </bean>
 </beans>
