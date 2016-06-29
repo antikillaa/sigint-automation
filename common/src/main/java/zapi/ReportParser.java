@@ -165,7 +165,7 @@ public class ReportParser {
     }
 
 
-    private void setExecutionResult(Execution execution, short result){
+    private void setExecutionResult(Execution execution, String result){
         log.info("Set execution result for issueKey: " + execution.getIssueKey() + ", result: " + result);
 
         Response response = zapi.putExecution(execution.getId(), result);

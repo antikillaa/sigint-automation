@@ -17,13 +17,12 @@ public class ZAPI {
 
     private RsClient rsClient = new RsClient();
     private String server = AppContext.getContext().getJiraConnection().getProperty("server");
-    public static final short UNEXECUTED = -1;
-    public static final short PASS = 1;
-    public static final short FAIL = 2;
-    public static final short WIP = 3;
-    public static final short BLOCKED = 4;
 
-
+    static final String UNEXECUTED = "-1";
+    static final String PASS = "1";
+    static final String FAIL = "2";
+    static final String WIP = "3";
+    static final String BLOCKED = "4";
 
 
     /**
@@ -139,9 +138,8 @@ public class ZAPI {
      *
      *  @return JAX-RS Response
      */
-    public Response putExecution(int executionId, short status){
-        ExecutionStatus executionStatus = new ExecutionStatus()
-                .setStatus(String.valueOf(status));
+    public Response putExecution(int executionId, String status){
+        ExecutionStatus executionStatus = new ExecutionStatus().setStatus(status);
 
         return rsClient.put(
                 server + "/rest/zapi/latest/execution/" + executionId + "/execute",
