@@ -2,6 +2,7 @@ package zapi;
 
 import errors.NullReturnException;
 import jira.JiraConnector;
+import json.JsonCoverter;
 import model.AppContext;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -10,8 +11,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import json.JsonCoverter;
 import zapi.model.*;
+
 import javax.ws.rs.core.Response;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -165,6 +166,8 @@ public class ReportParser {
 
 
     private void setExecutionResult(Execution execution, short result){
+        log.info("Set execution result for issueKey: " + execution.getIssueKey() + ", result: " + result);
+
         Response response = zapi.putExecution(execution.getId(), result);
         if (response.getStatus() != 200) {
             log.error("Failed to set execution result");

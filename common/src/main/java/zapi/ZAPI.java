@@ -1,12 +1,13 @@
 package zapi;
 
 import errors.NullReturnException;
-import model.AppContext;
 import json.JsonCoverter;
 import json.RsClient;
+import model.AppContext;
 import zapi.model.Cycle;
 import zapi.model.CyclesList;
 import zapi.model.Execution;
+import zapi.model.ExecutionStatus;
 
 import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
@@ -139,9 +140,12 @@ public class ZAPI {
      *  @return JAX-RS Response
      */
     public Response putExecution(int executionId, short status){
+        ExecutionStatus executionStatus = new ExecutionStatus()
+                .setStatus(String.valueOf(status));
+
         return rsClient.put(
-                server + "/rest/zapi/latest/execution/" + executionId +"/execute",
-                "{ \"status\": " + status + " }"
+                server + "/rest/zapi/latest/execution/" + executionId + "/execute",
+                executionStatus
         );
     }
 
