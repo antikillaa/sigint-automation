@@ -45,6 +45,7 @@ And Searched Phonebook Entry in list
 
 Examples:
 | criteria    | value  |
+| queryString | random |
 | address     | random |
 | name        | random |
 | imsi        | random |
@@ -57,25 +58,24 @@ Scenario: API.Upload DuSubscriber Entry with all fields
 Given I sign in as admin user
 When I send upload DuSubscriberEntry request with all fields
 Then I got response code 200
-And DuSubscriberEntry upload result is successful
+And Entry upload result is successful
 When I send search DuSubscribers by phoneNumber and value random
 Then DuSubscriber search result are correct
 And Searched DuSubscriber Entry in list
 
 
 Scenario: API.Search DuSubscriber Entry using search filters
-Meta:
-@TEEL 1787
 Given I sign in as admin user
 When I send upload DuSubscriberEntry request with all fields
 Then I got response code 200
-And DuSubscriberEntry upload result is successful
+And Entry upload result is successful
 When I send search DuSubscribers by <criteria> and value <value>
 Then DuSubscriber search result are correct
 And Searched DuSubscriber Entry in list
 
 Examples:
 | criteria    | value  |
+| queryString | random |
 | address     | random |
 | name        | random |
 | phoneNumber | random |
@@ -85,9 +85,55 @@ Scenario: API.Get details of DuSubscriber Entry
 Given I sign in as admin user
 When I send upload DuSubscriberEntry request with all fields
 Then I got response code 200
-And DuSubscriberEntry upload result is successful
+And Entry upload result is successful
 When I send search DuSubscribers by phoneNumber and value random
 Then DuSubscriber search result are correct
 When I send get DuSubscriber Entry request
 Then I got response code 200
 And DuSubscriber Entry is correct
+
+
+Scenario: API.Upload EtisalatSubscriberData Entry with all fields
+Given I sign in as admin user
+When I send upload EtisalatSubscriberData entry request with all fields
+Then I got response code 200
+And Entry upload result is successful
+When I send search EtisalatSubscriberData by phoneNumber and value random
+Then EtisalatSubscriberData search result are correct
+And Searched EtisalatSubscriberData Entry in list
+
+
+Scenario: API.Search EtisalatSubscriberData Entry using search filters
+Given I sign in as admin user
+When I send upload EtisalatSubscriberData entry request with all fields
+Then I got response code 200
+And Entry upload result is successful
+When I send search EtisalatSubscriberData by <criteria> and value <value>
+Then EtisalatSubscriberData search result are correct
+And Searched EtisalatSubscriberData Entry in list
+
+
+Examples:
+| criteria      | value  |
+| queryString | random |
+| address       | random |
+| name          | random |
+| phoneNumber   | random |
+| useridOrName  | random |
+| accountNameArabic | random |
+| imsi          | random |
+| firstAddressLine | random |
+| secondAddressLine | random |
+| cityName | random |
+
+
+Scenario: API.Get details of EtisalatSubscriberData Entry
+Given I sign in as admin user
+When I send upload EtisalatSubscriberData entry request with all fields
+Then I got response code 200
+And Entry upload result is successful
+When I send search EtisalatSubscriberData by phoneNumber and value random
+Then EtisalatSubscriberData search result are correct
+When I send get EtisalatSubscriberData Entry request
+Then I got response code 200
+And EtisalatSubscriberData Entry is correct

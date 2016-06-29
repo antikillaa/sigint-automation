@@ -12,6 +12,9 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
     private String phoneNumber;
     private String name;
     private String address;
+    // To search all fields using the query string syntax, phone number is the default field:
+    // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
+    private String queryString;
 
     public String getAddress() {
         return address;
@@ -36,11 +39,6 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
     public void setName(String name) {
         this.name = name;
     }
-
-    // To search all fields using the query string syntax, phone number is the default field:
-    // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
-    private String queryString;
-
 
     public String getQueryString() {
         return queryString;
@@ -92,6 +90,19 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
         }
     }
 
+    public class QueryStringFilter extends SearchFilter<DuSubscriberEntry> {
+
+        public QueryStringFilter(String value) {
+            queryString = value;
+        }
+
+        @Override
+        public boolean filter(DuSubscriberEntry entity) {
+            return entity.getPhoneNumber().equals(queryString);
+        }
+    }
+
+
     public DuSubscriberFilter filterBy(String criteria, String value) {
         if (criteria.toLowerCase().equals("address")) {
             this.setActiveFilter(this.new AddressFilter(value));
@@ -99,6 +110,8 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
             this.setActiveFilter(this.new NameFilter(value));
         } else if (criteria.toLowerCase().equals("phonenumber")) {
             this.setActiveFilter(this.new PhoneNumberFilter(value));
+        } else if (criteria.toLowerCase().equals("querystring")) {
+            this.setActiveFilter(this.new QueryStringFilter(value));
         } else {
             throw new AssertionError("Unknown filter type");
         }

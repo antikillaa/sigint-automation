@@ -1,6 +1,5 @@
 package http.requests.phonebook;
 
-
 import http.HttpRequest;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.media.multipart.MultiPart;
@@ -9,29 +8,29 @@ import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
 
-public class DuSubscriberRequest extends HttpRequest {
+public class EtisalatSubscriberDataRequest extends HttpRequest {
 
-    private final static String URI = "/api/sigint/du-subscribers";
+    private final static String URI = "/api/sigint/etisalat-subscriber-data";
     private MultiPart multiPart;
     Logger log = Logger.getLogger(DuSubscriberRequest.class);
 
-    public DuSubscriberRequest() {
+    public EtisalatSubscriberDataRequest() {
         super(URI);
         this.multiPart = new MultiPart();
         multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
     }
 
-    public DuSubscriberRequest search() {
+    public EtisalatSubscriberDataRequest search() {
         this.setURI(URI + "/search");
         return this;
     }
 
-    public DuSubscriberRequest upload() {
+    public EtisalatSubscriberDataRequest upload() {
         this.setURI(URI + "/upload");
         return this;
     }
 
-    public DuSubscriberRequest get(String id) {
+    public EtisalatSubscriberDataRequest get(String id) {
         this.setURI(URI + "/entries/" + id);
         return this;
     }
