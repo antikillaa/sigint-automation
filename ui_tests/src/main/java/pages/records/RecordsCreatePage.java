@@ -209,8 +209,7 @@ public class RecordsCreatePage extends SigintPage {
 
 
     public RecordsCreatePage clickCalendarApplyButton() {
-        $$(By.xpath("//div[@class='daterangepicker']" +
-                "//button[contains(.,'Apply')]"))
+        $$("div.daterangepicker button.applyBtn")
                 .filter(visible)
                 .get(0)
                 .click();

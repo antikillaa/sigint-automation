@@ -108,7 +108,7 @@
               <excludes />
               <ignoreFailureInStories>true</ignoreFailureInStories>
               <ignoreFailureInView>false</ignoreFailureInView>
-              <storyTimeouts>300</storyTimeouts>
+              <storyTimeouts>900</storyTimeouts>
               <threads>1</threads>
               <metaFilters>
                 <metaFilter>${metaFilters}</metaFilter>

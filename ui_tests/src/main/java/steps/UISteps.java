@@ -59,9 +59,11 @@ public class UISteps {
 
     @BeforeScenario
     public void reloadBrowser() {
-        WebDriver driver = WebDriverRunner.getWebDriver();
-        driver.manage().deleteAllCookies();
-        driver.navigate().refresh();
+        if (!getWebDriver().toString().contains("(null)")) {
+            WebDriver driver = WebDriverRunner.getWebDriver();
+            driver.manage().deleteAllCookies();
+            driver.navigate().refresh();
+        }
     }
 
     @AfterStory
