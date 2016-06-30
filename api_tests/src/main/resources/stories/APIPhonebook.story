@@ -64,7 +64,7 @@ Then DuSubscriber search result are correct
 And Searched DuSubscriber Entry in list
 
 
-Scenario: API.Search DuSubscriber Entry using search filters
+Scenario: API.Search DuSubscriber entries using search filters
 Given I sign in as admin user
 When I send upload DuSubscriberEntry request with all fields
 Then I got response code 200
@@ -81,7 +81,7 @@ Examples:
 | phoneNumber | random |
 
 
-Scenario: API.Get details of DuSubscriber Entry
+Scenario: API.Get details of DuSubscriber entry
 Given I sign in as admin user
 When I send upload DuSubscriberEntry request with all fields
 Then I got response code 200
@@ -93,7 +93,7 @@ Then I got response code 200
 And DuSubscriber Entry is correct
 
 
-Scenario: API.Upload EtisalatSubscriberData Entry with all fields
+Scenario: API.Upload EtisalatSubscriberData entry with all fields
 Given I sign in as admin user
 When I send upload EtisalatSubscriberData entry request with all fields
 Then I got response code 200
@@ -103,7 +103,7 @@ Then EtisalatSubscriberData search result are correct
 And Searched EtisalatSubscriberData Entry in list
 
 
-Scenario: API.Search EtisalatSubscriberData Entry using search filters
+Scenario: API.Search EtisalatSubscriberData entry using search filters
 Given I sign in as admin user
 When I send upload EtisalatSubscriberData entry request with all fields
 Then I got response code 200
@@ -127,7 +127,7 @@ Examples:
 | cityName | random |
 
 
-Scenario: API.Get details of EtisalatSubscriberData Entry
+Scenario: API.Get details of EtisalatSubscriberData entry
 Given I sign in as admin user
 When I send upload EtisalatSubscriberData entry request with all fields
 Then I got response code 200

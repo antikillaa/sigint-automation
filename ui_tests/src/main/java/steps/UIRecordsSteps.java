@@ -32,30 +32,23 @@ public class UIRecordsSteps extends UISteps {
         String dateInterval = RandomGenerator.todayDateInterval();
         getRecordsController().getToolbarController().searchByDate(dateInterval);
         getRecordsController().getTableController().waitLoading();
-
     }
 
     @When("I open create record form")
     public void openCreateForm() {
         getRecordsController().getToolbarController().openCreateRecordForm();
-
     }
-
 
     @When("I fill the form for $recordType record")
     public void fillTheForm(String recordType) {
         Record record = new Record();
         record.setType(recordType);
         record.setSource(RandomGenerator.getRandomItemFromList(context.getDictionary().getSources()).getName());
-        record.setFromCountry(RandomGenerator.getRandomCountry());
-        record.setToCountry(RandomGenerator.getRandomCountry());
-        record.setLanguage(RandomGenerator.getRandomLanguage());
         record.generate();
+
         addController.fillForm(record);
         context.put("record", record);
     }
-
-
 
     @Then("I should $see new record on the table")
     public void iShouldSeeNewRecordOnTheTable(String see) {
@@ -72,9 +65,7 @@ public class UIRecordsSteps extends UISteps {
             }
         }
         Verify.shouldBe(Conditions.equals.elements(record, foundRecord));
-
     }
-
 
     @When("I checked checkbox on record with $status status")
     public void iCheckFirstRecordCheckbox(String status) {
@@ -92,7 +83,6 @@ public class UIRecordsSteps extends UISteps {
         getRecordsController().getToolbarController().openCreateReportForm();
     }
 
-
     @Then("Record status is $status")
     public void chekcRecordStatusOnRecordsProcessedPage(String status) {
         Record record = getRecordFromContext();
@@ -104,9 +94,7 @@ public class UIRecordsSteps extends UISteps {
             throw new AssertionError(e.getMessage());
         }
         Verify.shouldBe(Conditions.equals.elements(recordRow.getProcessedStatus(), status));
-
     }
-
 
     @When("I press 'Create report' button against it")
     public void pressCreateReportButtonAgainstIt() {
@@ -114,12 +102,10 @@ public class UIRecordsSteps extends UISteps {
         getRecordsController().getTableController().openCreateReportForm(record.getRecordID());
     }
 
-
     @When("I attach record to draft report from Details dialog")
     public void pressAttachToReportButton() {
         Report report = getReportFromContext();
         detailsController.attachRecordToReport(report.getSubject());
     }
-
 
 }

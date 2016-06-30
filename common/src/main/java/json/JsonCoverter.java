@@ -23,10 +23,10 @@ public class JsonCoverter {
     public static ObjectMapper mapper = new ObjectMapper();
 
     public static <T> T readEntityFromResponse(Response response, Class<T> entityClass, String id) {
-        String jsonString;
-        if (response.getStatus() == 200) {
-            jsonString = response.readEntity(String.class);
-        } else {
+        String jsonString = response.readEntity(String.class);
+        log.info("Response: " + jsonString);
+
+        if (response.getStatus() != 200) {
             log.warn("Entity was not found in json due to error in response");
             return null;
         }
