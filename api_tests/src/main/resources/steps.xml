@@ -27,4 +27,6 @@
     </bean>
     <bean id="userSteps" class="steps.APIUserSteps">
     </bean>
+    <bean id="recordSteps" class="steps.APIRecordSteps">
+    </bean>
 </beans>

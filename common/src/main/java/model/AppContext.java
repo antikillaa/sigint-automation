@@ -123,6 +123,7 @@ public class AppContext {
         private DuSubscriberList duSubscriberses;
         private RoleList roles;
         private GroupList groups;
+        private RecordList records;
 
         public TargetsList getTargets() {
             if (targets == null) {
@@ -188,6 +189,17 @@ public class AppContext {
 
         public void setDuSubscriberses(DuSubscriberList duSubscriberses) {
             this.duSubscriberses = duSubscriberses;
+        }
+
+        public RecordList getRecords() {
+            if (records == null) {
+                records = new RecordList();
+            }
+            return records;
+        }
+
+        public void setRecords(RecordList records) {
+            this.records = records;
         }
 
         public RoleList getRoles() {

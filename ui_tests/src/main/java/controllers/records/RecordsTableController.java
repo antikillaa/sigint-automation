@@ -73,7 +73,7 @@ public abstract class RecordsTableController extends TableController {
         if (row.getType().equalsIgnoreCase("voice")) {
             newRecord.setDuration(Parser.getDurationFromString(row.getDetails()));
         } else {
-            newRecord.setSMSText(row.getDetails());
+            newRecord.setText(row.getDetails());
         }
         return newRecord;
     }

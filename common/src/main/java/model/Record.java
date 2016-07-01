@@ -3,9 +3,12 @@ package model;
 import abs.TeelaEntity;
 import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import utils.RandomGenerator;
 import utils.TeelaDate;
+
+import java.util.Date;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -20,11 +23,18 @@ public class Record extends TeelaEntity {
     private String language;
     private String TMSI;
     private String IMSI;
+    @JsonProperty("originalId")
     private String recordID;
     private TeelaDate dateAndTime;
+    private Date time;
     private String type;
-    private String SMSText;
+    private String text;
     private int duration;
+    private boolean manualEntry = true;
+    private int priority;
+    private String state;
+    private String sourceId;
+    private String processedStatus;
 
     public String getProcessedStatus() {
         return processedStatus;
@@ -33,9 +43,6 @@ public class Record extends TeelaEntity {
     public void setProcessedStatus(String processedStatus) {
         this.processedStatus = processedStatus;
     }
-
-    private String processedStatus;
-
 
     public String getSource() {
         return source;
@@ -127,12 +134,12 @@ public class Record extends TeelaEntity {
         return this;
     }
 
-    public String getSMSText() {
-        return SMSText;
+    public String getText() {
+        return text;
     }
 
-    public Record setSMSText(String SMSText) {
-        this.SMSText = SMSText;
+    public Record setText(String text) {
+        this.text = text;
         return this;
     }
 
@@ -154,20 +161,96 @@ public class Record extends TeelaEntity {
         return this;
     }
 
+    public Date getTime() {
+        return time;
+    }
+
+    public Record setTime(Date time) {
+        this.time = time;
+        return this;
+    }
+
+    public boolean isManualEntry() {
+        return manualEntry;
+    }
+
+    public void setManualEntry(boolean manualEntry) {
+        this.manualEntry = manualEntry;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public Record setState(String state) {
+        this.state = state;
+        return this;
+    }
 
     public Record generate() {
         this
-                .setIMSI(RandomStringUtils.randomAlphabetic(30))
-                .setTMSI(RandomStringUtils.randomAlphabetic(30))
+                .setIMSI(RandomStringUtils.randomNumeric(15))
+                .setTMSI(RandomStringUtils.randomNumeric(15))
                 .setFromNumber(RandomStringUtils.randomNumeric(12))
                 .setToNumber(RandomStringUtils.randomNumeric(12))
                 .setRecordID(RandomStringUtils.randomAlphanumeric(8))
-                .setDateAndTime(new TeelaDate());
+                .setDateAndTime(new TeelaDate())
+                .setFromCountry(RandomGenerator.getRandomCountry())
+                .setToCountry(RandomGenerator.getRandomCountry())
+                .setLanguage(RandomGenerator.getRandomLanguage());
         if (type.equalsIgnoreCase("sms")) {
-            this.setSMSText(RandomStringUtils.randomAlphabetic(30));
+            this.setText(RandomStringUtils.randomAlphabetic(30));
         } else if (type.equalsIgnoreCase("voice")) {
             this.setDuration(RandomGenerator.getRandomDuration());
         }
+        return this;
+    }
+
+    public Record generateSMS() {
+        this
+                .setIMSI(RandomStringUtils.randomNumeric(15))
+                .setTMSI(RandomStringUtils.randomNumeric(15))
+                .setFromNumber(RandomStringUtils.randomNumeric(12))
+                .setToNumber(RandomStringUtils.randomNumeric(12))
+                .setRecordID(RandomStringUtils.randomAlphanumeric(8))
+                .setTime(new Date())
+                .setFromCountry(RandomGenerator.getRandomCountry())
+                .setToCountry(RandomGenerator.getRandomCountry())
+                .setLanguage(RandomGenerator.getRandomLanguage())
+                .setType("SMS")
+                .setText(RandomStringUtils.randomAlphabetic(30));
+        return this;
+    }
+
+    public Record generateVoice() {
+        this
+                .setIMSI(RandomStringUtils.randomNumeric(15))
+                .setTMSI(RandomStringUtils.randomNumeric(15))
+                .setFromNumber(RandomStringUtils.randomNumeric(12))
+                .setToNumber(RandomStringUtils.randomNumeric(12))
+                .setRecordID(RandomStringUtils.randomAlphanumeric(8))
+                .setTime(new Date())
+                .setFromCountry(RandomGenerator.getRandomCountry())
+                .setToCountry(RandomGenerator.getRandomCountry())
+                .setLanguage(RandomGenerator.getRandomLanguage())
+                .setType("Voice")
+                .setDuration(RandomGenerator.getRandomDuration());
         return this;
     }
 

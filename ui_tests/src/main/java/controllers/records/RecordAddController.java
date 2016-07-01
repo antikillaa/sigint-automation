@@ -14,7 +14,7 @@ public class RecordAddController extends PageController<RecordsCreatePage> {
     private Record fillSMS(Record record) {
         getPage()
                 .clickSMSRecordType()
-                .typeSMSText(record.getSMSText());
+                .typeSMSText(record.getText());
 
         return record;
     }
