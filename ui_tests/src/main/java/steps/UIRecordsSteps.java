@@ -15,8 +15,23 @@ import utils.RandomGenerator;
 public class UIRecordsSteps extends UISteps {
 
     private static Logger log = Logger.getLogger(UIRecordsSteps.class);
-    private RecordAddController addController = new RecordAddController();
-    private RecordsDetailsController detailsController = new RecordsDetailsController();
+    private RecordAddController addController;
+    private RecordsDetailsController detailsController;
+
+
+    private RecordAddController addController() {
+        if (addController==null) {
+            addController = new RecordAddController();
+        }
+        return addController;
+    }
+
+    private RecordsDetailsController detailsController() {
+        if (detailsController == null) {
+            detailsController = new RecordsDetailsController();
+        }
+        return detailsController;
+    }
 
     @When("I create new $type record")
     public void createRecord(String type) {
@@ -46,7 +61,7 @@ public class UIRecordsSteps extends UISteps {
         record.setSource(RandomGenerator.getRandomItemFromList(context.getDictionary().getSources()).getName());
         record.generate();
 
-        addController.fillForm(record);
+        addController().fillForm(record);
         context.put("record", record);
     }
 
@@ -105,7 +120,7 @@ public class UIRecordsSteps extends UISteps {
     @When("I attach record to draft report from Details dialog")
     public void pressAttachToReportButton() {
         Report report = getReportFromContext();
-        detailsController.attachRecordToReport(report.getSubject());
+        detailsController().attachRecordToReport(report.getSubject());
     }
 
 }

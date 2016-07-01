@@ -19,8 +19,9 @@ public class UIReporter extends AllureReporter {
     protected void takeScreenshot() {
         try {
             allure.fire(new MakeAttachmentEvent(screenshot(), "Page screenshot", "image/png"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.trace("Was unable to take screenshot", e);
+
         }
 
     }

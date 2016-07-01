@@ -10,10 +10,7 @@ import model.AppContext;
 import model.Record;
 import model.Report;
 import model.User;
-import org.jbehave.core.annotations.AfterStory;
-import org.jbehave.core.annotations.BeforeScenario;
-import org.jbehave.core.annotations.BeforeStory;
-import org.jbehave.core.annotations.When;
+import org.jbehave.core.annotations.*;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -28,7 +25,7 @@ import java.util.Properties;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
-public abstract class UISteps {
+public class UISteps {
 
     static AppContext context = AppContext.getContext();
     Pages pages = new Pages();
@@ -62,9 +59,11 @@ public abstract class UISteps {
 
     @BeforeScenario
     public void reloadBrowser() {
-        WebDriver driver = WebDriverRunner.getWebDriver();
-        driver.manage().deleteAllCookies();
-        driver.navigate().refresh();
+        if (!getWebDriver().toString().contains("(null)")) {
+            WebDriver driver = WebDriverRunner.getWebDriver();
+            driver.manage().deleteAllCookies();
+            driver.navigate().refresh();
+        }
     }
 
     @AfterStory
