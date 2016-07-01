@@ -15,7 +15,16 @@
     </bean>
     <bean id="targetSteps" class="steps.APITargetSteps">
     </bean>
-    <bean id="phonebookSteps" class="steps.APIPhonebookSteps" />
-    <bean id="duSubscriberSteps" class="steps.APIDuSubscriberSteps" />
-    <bean id="etisalatSubscriberDataSteps" class="steps.APIEtisalatSubscriberDataSteps" />
+    <bean id="etisalatSubscriberDataSteps" class="steps.APIEtisalatSubscriberDataSteps">
+    </bean>
+    <bean id="phonebookSteps" class="steps.APIPhonebookSteps">
+    </bean>
+    <bean id="duSubscriberSteps" class="steps.APIDuSubscriberSteps">
+    </bean>
+    <bean id="userRoleSteps" class="steps.APIRoleSteps">
+    </bean>
+    <bean id="userGroupSteps" class="steps.APIUserGroupSteps">
+    </bean>
+    <bean id="userSteps" class="steps.APIUserSteps">
+    </bean>
 </beans>
