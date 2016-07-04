@@ -51,7 +51,7 @@ public class ReportParser {
                                 if (stepList.getLength() != 0) {
                                     for (int j = 0; j < stepList.getLength(); j++){
                                         Node stepNode = stepList.item(j);
-                                        Step step = new Step();
+                                        Step step = new Step().setNumber(j+1);
                                         if (testNode.getNodeType() == Node.ELEMENT_NODE) {
                                             Element stepElement = (Element) stepNode;
                                             step.setStatus(stepElement.getAttribute("status"));
@@ -63,8 +63,9 @@ public class ReportParser {
                                                 log.debug("step: " + step.getName() + ", status: " + step.getStatus());
                                             }
                                         }
-                                        if (!testCase.getSteps().add(step)){
-                                            log.warn("Step: " + step.getName() + ", does not added into test: " + testCase.getTitle());
+                                        Step updatedStep = testCase.add(step);
+                                        if (updatedStep != null) {
+                                            log.warn("Step №" + step.getNumber() + ". " + updatedStep.getName() + ", was updated");
                                         }
                                     }
                                 }

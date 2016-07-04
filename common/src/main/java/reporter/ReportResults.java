@@ -13,8 +13,8 @@ public class ReportResults {
         return testCases.size();
     }
 
-    public TestCase get(String title) {
-        return testCases.get(title);
+    public TestCase get(String testTitle) {
+        return testCases.get(testTitle);
     }
 
     public TestCase add(TestCase testCase) {
@@ -35,15 +35,15 @@ public class ReportResults {
 
     private List<TestCase> getTestCasesByStatus(String status) {
         log.debug("Getting '" + status + "' tests list");
-        List<TestCase> testCases = new ArrayList<>();
-        for (TestCase test : testCases) {
+        List<TestCase> testList = new ArrayList<>();
+        for (TestCase test : getTestCases()) {
             if (test.getStatus().equals(status)) {
-                if (!testCases.add(test)) {
+                if (!testList.add(test)) {
                     log.warn("Test: " + test.getTitle() + ", does not added into '" + status + "' list");
                 }
             }
         }
-        return testCases;
+        return testList;
     }
 
     public List<TestCase> getPassed() {

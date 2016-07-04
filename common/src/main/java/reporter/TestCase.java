@@ -3,6 +3,7 @@ package reporter;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class TestCase {
@@ -10,7 +11,7 @@ public class TestCase {
     private String title;
     private String status;
     private String url;
-    private List<Step> steps = new ArrayList<>();
+    private HashMap<Integer, Step> steps = new HashMap<>();
     private Logger log = Logger.getLogger(TestCase.class);
 
     public String getTitle() {
@@ -31,11 +32,27 @@ public class TestCase {
         return this;
     }
 
-    public List<Step> getSteps() {
-        return steps;
+    public Step get(Integer stepNumber) {
+        return steps.get(stepNumber);
     }
 
-    public TestCase setSteps(List<Step> steps) {
+    public Step add(Step step) {
+        return steps.put(step.getNumber(), step);
+    }
+
+    public Step update(Step step) {
+        return steps.put(step.getNumber(), step);
+    }
+
+    public Step remove(int stepNumber) {
+        return steps.remove(stepNumber);
+    }
+
+    public List<Step> getSteps() {
+        return new ArrayList<>(steps.values());
+    }
+
+    public TestCase setSteps(HashMap<Integer, Step> steps) {
         this.steps = steps;
         return this;
     }
@@ -50,9 +67,9 @@ public class TestCase {
     }
 
     private List<Step> getStepsByStatus(String status) {
-        List<Step> stepList = new ArrayList<>();
         log.debug("Getting '" + status + "' steps for test: " + title);
-        for (Step step : steps) {
+        List<Step> stepList = new ArrayList<>();
+        for (Step step : new ArrayList<>(steps.values())) {
             if (step.getStatus().equals(status)) {
                 if (!stepList.add(step)) {
                     log.warn("Step: " + step.getName() + ", does not added into '" + status + "' steps list");
