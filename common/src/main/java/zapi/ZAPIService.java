@@ -7,77 +7,29 @@ import model.AppContext;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Assert;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import reporter.ReportParser;
+import reporter.Step;
+import reporter.TestCase;
 import zapi.model.*;
 
 import javax.ws.rs.core.Response;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Properties;
 
-public class ReportParser {
+public class ZAPIService {
 
     private ZAPI zapi = new ZAPI();
     private ObjectMapper mapper = new ObjectMapper();
-    private List<TestResult> results = new ArrayList<>();
     private HashMap<String, Integer> issueIdMap = new HashMap<>();
     private Properties connectionProperties = AppContext.getContext().getJiraConnection();
-    private Logger log = Logger.getRootLogger();
-
-
-    private void parseXmlReportFiles(String pathToXml){
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(pathToXml), "*.xml")) {
-            for (Path file: stream) {
-                if(!file.toFile().isDirectory()) {
-
-                    log.debug("Parse file: " + file.getFileName());
-
-                    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-                    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-                    Document doc = dBuilder.parse(new File(String.valueOf(file)));
-
-                    doc.getDocumentElement().normalize();
-
-                    NodeList testList = doc.getElementsByTagName("test-case");
-                    if (testList.getLength() != 0) {
-                        for (int i = 0; i < testList.getLength(); i++){
-                            Node testNode = testList.item(i);
-                            if (testNode.getNodeType() == Node.ELEMENT_NODE) {
-                                Element testElement = (Element) testNode;
-                                TestResult result = new TestResult().setResult(testElement.getAttribute("status"));
-                                NodeList nameList = testElement.getElementsByTagName("name");
-                                Node nameNode = nameList.item(0);
-                                if(nameNode.getNodeType() == Node.ELEMENT_NODE) {
-                                    Element nameElement = (Element) nameNode;
-                                    result.setScenario(nameElement.getTextContent());
-                                }
-                                results.add(result);
-                            }
-                        }
-                    } else {
-                        log.warn("file not contain any tests");
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    private Logger log = Logger.getLogger(ReportParser.class);
 
     /**
      * Create test cycle
      */
-
     private Cycle createCycle(String projectId, String versionId) {
         log.info("Creating test cycle in Zephyr");
         Cycle cycle = new Cycle()
@@ -131,7 +83,6 @@ public class ReportParser {
         return cycle;
     }
 
-
     private Execution addTestToCycle(Cycle cycle, int issueId){
         // Arrange
         Execution execution = new Execution()
@@ -141,7 +92,7 @@ public class ReportParser {
                 .setVersionId(cycle.getVersionId());
 
         // Act
-        log.info("Add new test-case to cycle...");
+        log.debug("Add new execution of test with issueId: " + execution.getIssueId() + " to cycle");
         Response response = zapi.postExecution(execution);
 
         execution = null;
@@ -164,9 +115,8 @@ public class ReportParser {
         return execution;
     }
 
-
     private void setExecutionResult(Execution execution, String result){
-        log.info("Set execution result for issueKey: " + execution.getIssueKey() + ", result: " + result);
+        log.debug("Set execution result for: " + execution.getIssueKey() + ", result: " + result);
 
         Response response = zapi.putExecution(execution.getId(), result);
         if (response.getStatus() != 200) {
@@ -177,18 +127,18 @@ public class ReportParser {
         }
     }
 
-
     /**
      * Mapping test issue from Jira via API
      */
-    private void setIssueMapForProject(String projectKey) {
+    private void getTestCasesFromProject(String projectKey) {
         // TODO batch load data
+        log.info("Download tests from Zephyr...");
         Response response = zapi.JQL(0, 1000, "id,key,summary", "project=" + projectKey + " and issuetype = Test");
 
         if (response.getStatus() == 200) {
             try {
                 IssueList issueList = mapper.readValue(response.readEntity(String.class), IssueList.class);
-                log.info("Test list size : " + issueList.getIssues().size());
+                log.info("Tests downloaded: " + issueList.getIssues().size());
                 for (Issue issue : issueList.getIssues()) {
                     issueIdMap.put(issue.getFields().getSummary(), issue.getId());
                 }
@@ -212,40 +162,49 @@ public class ReportParser {
         log.info("Reporting results to Zephyr...");
         Boolean shouldReport = Boolean.valueOf(AppContext.getContext().getGeneralProperties().getProperty("report"));
         if (!shouldReport) {
+            log.info("Reporting skipped");
             return;
         }
-        setIssueMapForProject("GQ");
-        parseXmlReportFiles(path);
 
-        // Create test cycle
+        ReportParser parser = new ReportParser();
+        parser.parseXmlReportFiles(path);
+
+        getTestCasesFromProject("GQ");
+
         Cycle cycle = getCycle();
         Assert.assertTrue(cycle != null);
 
-        log.debug("Test result size: " + results.size());
+        List<TestCase> testCases = parser.getResults().getTestCases();
+        log.info("Add test results to cycle...");
+        log.info("Test result size: " + testCases.size());
+        for (TestCase testCase : testCases) {
+            log.info("Scenario: " + testCase.getTitle() + ", status: " + testCase.getStatus());
+            if (issueIdMap.containsKey(testCase.getTitle())) {
+                // create test
+                Execution execution = addTestToCycle(cycle, issueIdMap.get(testCase.getTitle()));
+                testCase.setUrl(connectionProperties.getProperty("server") + "/browse/" + execution.getIssueKey());
 
-        // Add test results to cycle
-        for (TestResult result : results) {
-            // create test
-            if (issueIdMap.containsKey(result.getScenario())) {
-                Execution execution = addTestToCycle(cycle, issueIdMap.get(result.getScenario()));
+                log.info("URL: " + testCase.getUrl());
+                for (Step step : testCase.getSteps()) {
+                    log.debug("Step: " + step.getName() + ", status: " + step.getStatus());
+                }
+
                 // set test result
-                switch ( result.getResult() ) {
+                switch ( testCase.getStatus() ) {
                     case "passed":
                         setExecutionResult(execution, ZAPI.PASS);
                         break;
                     case "failed":
                         setExecutionResult(execution, ZAPI.FAIL);
                         break;
+                    case "broken":
+                        setExecutionResult(execution, ZAPI.FAIL);
                     default:
-                        setExecutionResult(execution, ZAPI.UNEXECUTED);
+                        setExecutionResult(execution, ZAPI.WIP);
                         break;
                 }
             } else {
-                log.warn(
-                        "Test not present in issueIdMap!" +
-                                "summary: " + result.getScenario() + "\n" +
-                                "status: " + result.getResult()
-                );
+                log.warn("Test: '" + testCase.getTitle() + "', does not found on Zephyr");
             }
         }
     }

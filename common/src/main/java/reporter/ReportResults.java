@@ -1,22 +1,66 @@
 package reporter;
 
-import java.util.List;
+import org.apache.log4j.Logger;
+
+import java.util.*;
 
 public class ReportResults {
 
+    private Logger log = Logger.getLogger(ReportResults.class);
+    private HashMap<String, TestCase> testCases = new HashMap<>();
+
     public int getTotalRun(){
-        return 0;
+        return testCases.size();
+    }
+
+    public TestCase get(String testTitle) {
+        return testCases.get(testTitle);
+    }
+
+    public TestCase add(TestCase testCase) {
+        return testCases.put(testCase.getTitle(), testCase);
+    }
+
+    public TestCase update(TestCase testCase) {
+        return testCases.put(testCase.getTitle(), testCase);
+    }
+
+    public TestCase remove(TestCase testCase) {
+        return testCases.remove(testCase.getTitle());
+    }
+
+    public List<TestCase> getTestCases() {
+        return new ArrayList<>(testCases.values());
+    }
+
+    private List<TestCase> getTestCasesByStatus(String status) {
+        log.debug("Getting '" + status + "' tests list");
+        List<TestCase> testList = new ArrayList<>();
+        for (TestCase test : getTestCases()) {
+            if (test.getStatus().equals(status)) {
+                if (!testList.add(test)) {
+                    log.warn("Test: " + test.getTitle() + ", does not added into '" + status + "' list");
+                }
+            }
+        }
+        return testList;
     }
 
     public List<TestCase> getPassed() {
-        return null;
+        return getTestCasesByStatus("passed");
     }
 
     public List<TestCase> getFailed() {
-        return null;
+        return getTestCasesByStatus("failed");
     }
 
+    public List<TestCase> getBrokened() {
+        return getTestCasesByStatus("broken");
+    }
 
+    public List<TestCase> getSkipped() {
+        return getTestCasesByStatus("pending");
+    }
 
 
 }
