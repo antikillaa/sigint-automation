@@ -69,7 +69,7 @@ public class TestCase {
     private List<Step> getStepsByStatus(String status) {
         log.debug("Getting '" + status + "' steps for test: " + title);
         List<Step> stepList = new ArrayList<>();
-        for (Step step : new ArrayList<>(steps.values())) {
+        for (Step step : getSteps()) {
             if (step.getStatus().equals(status)) {
                 if (!stepList.add(step)) {
                     log.warn("Step: " + step.getName() + ", does not added into '" + status + "' steps list");
