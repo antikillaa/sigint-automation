@@ -12,7 +12,7 @@ import model.lists.UsersList;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStories;
 import org.jbehave.core.annotations.BeforeStories;
-import zapi.ReportParser;
+import zapi.ZAPIService;
 
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
@@ -48,7 +48,6 @@ public class GlobalSteps {
         }
         AppContext context = AppContext.getContext();
         context.entities().setUsers(users);
-
     }
 
     private void initDictionary() {
@@ -59,12 +58,11 @@ public class GlobalSteps {
                 request.getCookie());
         Dictionary dictionary = JsonCoverter.readEntityFromResponse(response, Dictionary.class, "result");
         context.setDictionary(dictionary);
-
     }
 
     @AfterStories
     public void reportToZephyr(){
-        new ReportParser().reportToZephyr("target/allure-results");
+        new ZAPIService().reportToZephyr("target/allure-results");
     }
 
     public static User getUserByRole(String role) {
