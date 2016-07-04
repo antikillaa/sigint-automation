@@ -2,23 +2,38 @@ package reporter;
 
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ReportResults {
 
     private Logger log = Logger.getLogger(ReportResults.class);
-    private List<TestCase> testCases = new ArrayList<>();
+    private HashMap<String, TestCase> testCases = new HashMap<>();
 
     public int getTotalRun(){
         return testCases.size();
     }
 
-    public List<TestCase> getTestCases() {
-        return testCases;
+    public TestCase get(String title) {
+        return testCases.get(title);
     }
 
-    public List<TestCase> getTestCasesByStatus(String status) {
+    public TestCase add(TestCase testCase) {
+        return testCases.put(testCase.getTitle(), testCase);
+    }
+
+    public TestCase update(TestCase testCase) {
+        return testCases.put(testCase.getTitle(), testCase);
+    }
+
+    public TestCase remove(TestCase testCase) {
+        return testCases.remove(testCase.getTitle());
+    }
+
+    public List<TestCase> getTestCases() {
+        return new ArrayList<>(testCases.values());
+    }
+
+    private List<TestCase> getTestCasesByStatus(String status) {
         log.debug("Getting '" + status + "' tests list");
         List<TestCase> testCases = new ArrayList<>();
         for (TestCase test : testCases) {

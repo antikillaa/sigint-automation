@@ -49,7 +49,7 @@ public class TestCase {
         return this;
     }
 
-    public List<Step> getStepsByStatus(String status) {
+    private List<Step> getStepsByStatus(String status) {
         List<Step> stepList = new ArrayList<>();
         log.debug("Getting '" + status + "' steps for test: " + title);
         for (Step step : steps) {

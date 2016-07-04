@@ -68,8 +68,9 @@ public class ReportParser {
                                         }
                                     }
                                 }
-                                if (!results.getTestCases().add(testCase)){
-                                    log.warn("Test: " + testCase.getTitle() + ", does not added into resultList");
+                                TestCase updatedTest = results.add(testCase);
+                                if (updatedTest != null) {
+                                    log.warn("Test: " + updatedTest.getTitle() + ", was updated");
                                 }
                             }
                         }
