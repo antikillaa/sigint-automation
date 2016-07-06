@@ -5,26 +5,51 @@ public class Style {
     private String text_align;
     private String border;
     private String padding;
-    private String font_weight;
+    private String fontWeight;
+
+    public String getFontFamily() {
+        return fontFamily;
+    }
+
+    public void setFontFamily(String fontFamily) {
+        this.fontFamily = fontFamily;
+    }
+
+    public String getFontSize() {
+        return fontSize;
+    }
+
+    public void setFontSize(String fontSize) {
+        this.fontSize = fontSize;
+    }
+
+    private String fontFamily;
+    private String fontSize;
 
     @Override
     public String toString() {
         String main = "style = \"";
-        if (!(color==null)) {
-            main+=String.format(" color: %s;", color);
+        if (color!=null) {
+            main+=String.format(" color:%s;", color);
         }
-        if (!(text_align==null)) {
-            main+=String.format(" text-align: %s;", text_align);
+        if (text_align!=null) {
+            main+=String.format(" text-align:%s;", text_align);
         }
 
-        if (!(border==null)) {
-            main+=String.format(" border: %s;", border);
+        if (border!=null) {
+            main+=String.format(" border:%s;", border);
         }
-        if (!(padding==null)) {
-            main+=String.format(" padding: %s;", padding);
+        if (padding!=null) {
+            main+=String.format(" padding:%s;", padding);
         }
-        if (!(font_weight==null)) {
-            main+=String.format(" font-weight: %s;", font_weight);
+        if (fontWeight!=null) {
+            main+=String.format(" font-weight:%s;", fontWeight);
+        }
+        if (fontSize!=null) {
+            main+=String.format(" font-size:%s;", fontSize);
+        }
+        if (fontFamily!=null){
+            main+=String.format(" font-family:%s;", fontFamily);
         }
         main+="\"";
         return main;
@@ -35,15 +60,16 @@ public class Style {
         return color;
     }
 
-    public void setColor(String color) {
+    public Style setColor(String color) {
         this.color = color;
+        return this;
     }
 
     public String getText_align() {
         return text_align;
     }
 
-    public void setText_align(String text_align) {
+    public void setTextAlign(String text_align) {
         this.text_align = text_align;
     }
 
@@ -64,11 +90,12 @@ public class Style {
     }
 
     public String getFont_weight() {
-        return font_weight;
+        return fontWeight;
     }
 
-    public void setFont_weight(String font_weight) {
-        this.font_weight = font_weight;
+    public Style setFontWeight(String font_weight) {
+        this.fontWeight = font_weight;
+        return this;
     }
 
 }

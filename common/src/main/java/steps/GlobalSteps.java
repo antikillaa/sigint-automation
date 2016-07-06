@@ -12,6 +12,8 @@ import model.lists.UsersList;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStories;
 import org.jbehave.core.annotations.BeforeStories;
+import reporter.Emailing;
+import reporter.ReportResults;
 import zapi.ZAPIService;
 
 import javax.ws.rs.core.Response;
@@ -62,7 +64,17 @@ public class GlobalSteps {
 
     @AfterStories
     public void reportToZephyr(){
-        new ZAPIService().reportToZephyr("target/allure-results");
+        ZAPIService service = new ZAPIService("target/allure-results");
+        Boolean shouldReport = Boolean.valueOf(context.getGeneralProperties().getProperty("report"));
+        if (shouldReport) {
+            service.reportToZephyr();
+        }
+        ReportResults results = service.getReportResults();
+        //if (results.getFailed().size()>0 || results.getBrokened().size()>0
+        //        || results.getSkipped().size()>0) {
+        new Emailing().send_email(results);
+        //}
+
     }
 
     public static User getUserByRole(String role) {

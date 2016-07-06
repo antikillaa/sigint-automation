@@ -1,5 +1,6 @@
 package reporter;
 
+import jersey.repackaged.com.google.common.base.Function;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -94,5 +95,12 @@ public class TestCase {
     public List<Step> getSkippedSteps() {
         return getStepsByStatus("skipped");
     }
+
+    public static Function<Step, String> stepNames = new Function<Step, String>() {
+        @Override
+        public String apply(Step from) {
+            return from.getName();
+        }
+    };
 
 }

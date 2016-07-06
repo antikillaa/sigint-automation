@@ -4,6 +4,6 @@ import html_email.HtmlElement;
 
 public class Heading extends HtmlElement {
     public Heading() {
-        super("head");
+        super("h2");
     }
 }

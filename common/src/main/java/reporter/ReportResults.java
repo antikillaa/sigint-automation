@@ -2,7 +2,9 @@ package reporter;
 
 import org.apache.log4j.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ReportResults {
 
@@ -61,6 +63,5 @@ public class ReportResults {
     public List<TestCase> getSkipped() {
         return getTestCasesByStatus("pending");
     }
-
 
 }

@@ -1,52 +1,59 @@
 package html_email;
 
-import html_email.html_elements.*;
+import com.google.common.base.Joiner;
+import html_email.html_elements.Heading;
+import html_email.html_elements.Paragraph;
+import html_email.html_elements.Title;
 
-public class HtmlBuilder {
+import java.util.ArrayList;
+import java.util.List;
 
-    private HtmlElement current;
-    private HtmlElement top;
+ class HtmlBuilder {
 
-    public HtmlBuilder(String title) {
-        html(title);
+    private List<HtmlElement> elements = new ArrayList<>();
+
+
+    String build() {
+        String html = "";
+        for (HtmlElement element: elements) {
+            html+=Joiner.on("").join(element.expose());
+        }
+        return html;
     }
 
-    private void html(String assignTitle) {
-        HtmlElement base = new Base();
-        HtmlElement head = new Heading();
+    HtmlBuilder addTitle(String value, Style style) {
         HtmlElement title = new Title();
-        title.setValue(assignTitle);
-        head.addChild(title);
-        base.addChild(head);
-        HtmlElement body = new Body();
-        base.addChild(body);
-        top = base;
-        current = body;
-
+        if (!(style==null)) {
+            title.setStyle(style);
+        }
+        title.setValue(value);
+        elements.add(title);
+        return this;
     }
 
-    public HtmlBuilder addHeading(String value, Style style) {
+
+    HtmlBuilder addHeading(String value, Style style) {
         HtmlElement heading = new Heading();
         heading.setValue(value);
         if (!(style==null)) {
             heading.setStyle(style);
         }
-        current.addChild(heading);
+        elements.add(heading);
         return this;
     }
 
-    public HtmlBuilder addParagraph(String value, Style style) {
+    HtmlBuilder addParagraph(String value, Style style) {
         HtmlElement parag = new Paragraph();
         parag.setValue(value);
         if (!(style==null)) {
             parag.setStyle(style);
         }
-        current.addChild(parag);
+        elements.add(parag);
         return this;
     }
 
-    public HtmlBuilder addTable(HtmlElement table){
-        current.addChild(table);
+    HtmlBuilder addTable(HtmlElement table){
+        elements.add(table);
         return this;
     }
 

@@ -5,10 +5,10 @@ import java.util.List;
 
 public abstract class HtmlElement {
 
-    private String tag;
+    protected String tag;
     private HtmlElement parent;
     private List<HtmlElement> childs = new ArrayList<>();
-    private String value;
+    protected String value;
 
     public String getValue() {
         return value;
@@ -22,7 +22,7 @@ public abstract class HtmlElement {
     public List<String> expose() {
         List<String> elements = new ArrayList<>();
         String startTag= "<" + tag;
-        if (!(style==null)) {
+        if (style!=null) {
             startTag += ' ' + style.toString();
         }
         elements.add(startTag + ">"+ "\r\n ");
@@ -32,7 +32,7 @@ public abstract class HtmlElement {
         if (!(value==null)) {
             elements.add(value+"\r\n ");
         }
-        elements.add("<"+tag+"/>"+"\r\n ");
+        elements.add("</"+tag+">"+"\r\n ");
         return elements;
     }
 
@@ -49,7 +49,7 @@ public abstract class HtmlElement {
         this.style = style;
     }
 
-    private Style style;
+    protected Style style;
 
     public HtmlElement getParent() {
         return parent;
