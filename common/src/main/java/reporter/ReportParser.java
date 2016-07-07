@@ -19,7 +19,7 @@ public class ReportParser {
     private ReportResults results = new ReportResults();
     private Logger log = Logger.getLogger(ReportParser.class);
 
-    public void parseXmlReportFiles(String pathToXml){
+    public ReportResults parseXmlReportFiles(String pathToXml){
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(pathToXml), "*.xml")) {
             for (Path file: stream) {
                 if(!file.toFile().isDirectory()) {
@@ -83,6 +83,7 @@ public class ReportParser {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return results;
     }
 
     public ReportResults getResults() {

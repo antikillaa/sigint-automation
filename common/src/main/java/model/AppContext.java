@@ -19,6 +19,7 @@ public class AppContext {
     private static AppContext instance = new AppContext();
     private Properties generalProperties = new Properties();
     private Properties jiraConnection = new Properties();
+    private Properties mailProperties = new Properties();
     private Map<String, Object> runContext = new HashMap<>();
     private Entities entities;
     private Environment environment;
@@ -232,9 +233,11 @@ public class AppContext {
         String host;
         InputStream general = this.getClass().getResourceAsStream("/general.properties");
         InputStream connection = getClass().getClassLoader().getResourceAsStream("jiraConnection.properties");
+        InputStream mail = getClass().getClassLoader().getResourceAsStream("email.properties");
         try {
             generalProperties.load(general);
             jiraConnection.load(connection);
+            mailProperties.load(mail);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -246,6 +249,8 @@ public class AppContext {
         }
         environment().setSigintHost(host);
     }
+
+    public Properties getMailProperties() {return  mailProperties;}
 
     public Properties getJiraConnection() {return jiraConnection;}
 

@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Assert;
 import reporter.ReportParser;
+import reporter.ReportResults;
 import reporter.Step;
 import reporter.TestCase;
 import zapi.model.*;
@@ -26,6 +27,23 @@ public class ZAPIService {
     private HashMap<String, Integer> issueIdMap = new HashMap<>();
     private Properties connectionProperties = AppContext.getContext().getJiraConnection();
     private Logger log = Logger.getLogger(ReportParser.class);
+    private ReportResults reportResults;
+    private String pathToXml;
+
+    public ZAPIService(String pathToXML) {
+        this.pathToXml = pathToXML;
+    }
+
+    public ReportResults getReportResults(){
+        if (reportResults==null){
+            reportResults = new ReportParser().parseXmlReportFiles(pathToXml);
+        }
+        for (TestCase testCase:reportResults.getFailed()){
+            testCase.setUrl(connectionProperties.getProperty("server") + "/browse/"+
+                    getTestCaseKeyByTitle(testCase.getTitle()));
+        }
+        return reportResults;
+    }
 
     /**
      * Create test cycle
@@ -127,6 +145,25 @@ public class ZAPIService {
         }
     }
 
+
+    public String getTestCaseKeyByTitle(String title) {
+        log.info("Finding test case by it's id "+title);
+        Response response = zapi.JQL(0,1000,"key", String.format("summary~\"%s\"", title));
+        if (response.getStatus()!=200) {
+            log.error("Was unable to complete request to JIRA");
+            return null;
+        }
+
+        try {
+            IssueList issueList = mapper.readValue(response.readEntity(String.class), IssueList.class);
+            return issueList.getIssues().get(0).getKey();
+        } catch (IOException e) {
+            log.error("Cannot get issue key from json response");
+            return null;
+        }
+
+    }
+
     /**
      * Mapping test issue from Jira via API
      */
@@ -153,28 +190,15 @@ public class ZAPIService {
         }
     }
 
-    /**
-     * Publish test run results to Zephyr via ZAPI
-     *
-     * @param path example "target/allure-results"
-     */
-    public void reportToZephyr(String path){
+
+    public void reportToZephyr(){
         log.info("Reporting results to Zephyr...");
-        Boolean shouldReport = Boolean.valueOf(AppContext.getContext().getGeneralProperties().getProperty("report"));
-        if (!shouldReport) {
-            log.info("Reporting skipped");
-            return;
-        }
-
-        ReportParser parser = new ReportParser();
-        parser.parseXmlReportFiles(path);
-
         getTestCasesFromProject("GQ");
 
         Cycle cycle = getCycle();
         Assert.assertTrue(cycle != null);
 
-        List<TestCase> testCases = parser.getResults().getTestCases();
+        List<TestCase> testCases = reportResults.getTestCases();
         log.info("Add test results to cycle...");
         log.info("Test result size: " + testCases.size());
         for (TestCase testCase : testCases) {

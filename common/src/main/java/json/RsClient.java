@@ -13,6 +13,8 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 public class RsClient {
@@ -45,9 +47,16 @@ public class RsClient {
 
 
     private Invocation.Builder buildRequest(String url) {
-        log.debug("Building request to url:" + url);
+        URI uri;
+        try {
+            uri = new URI(url);
+        } catch (URISyntaxException e) {
+            log.error(e.getMessage());
+            throw new AssertionError("Request cannot be built");
+        }
+        log.debug("Building request to url:" + uri);
         return client
-                .target(url)
+                .target(uri)
                 .request(MediaType.APPLICATION_JSON_TYPE);
     }
 
