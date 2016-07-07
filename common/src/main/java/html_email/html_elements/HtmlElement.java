@@ -1,14 +1,24 @@
-package html_email;
+package html_email.html_elements;
+
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class HtmlElement {
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     protected String tag;
-    private HtmlElement parent;
     private List<HtmlElement> childs = new ArrayList<>();
     protected String value;
+    private Logger log = Logger.getLogger(HtmlElement.class);
 
     public String getValue() {
         return value;
@@ -19,7 +29,8 @@ public abstract class HtmlElement {
     }
 
 
-    public List<String> expose() {
+    protected List<String> expose() {
+        log.debug("Exposing html elements to list of Strings");
         List<String> elements = new ArrayList<>();
         String startTag= "<" + tag;
         if (style!=null) {
@@ -33,6 +44,7 @@ public abstract class HtmlElement {
             elements.add(value+"\r\n ");
         }
         elements.add("</"+tag+">"+"\r\n ");
+        log.debug("Result elements list:" + elements);
         return elements;
     }
 
@@ -49,17 +61,12 @@ public abstract class HtmlElement {
         this.style = style;
     }
 
-    protected Style style;
+     Style style;
 
-    public HtmlElement getParent() {
-        return parent;
-    }
-
-    public void setParent(HtmlElement parent) {
-        this.parent = parent;
-    }
-    public void addChild(HtmlElement child) {
+    public HtmlElement addChild(HtmlElement child) {
+        log.debug(String.format("Adding %s as child to current element %s", child.getTag(), this.getTag()));
         this.childs.add(child);
+        return this;
     }
 
     public void removeChild(HtmlElement child) {

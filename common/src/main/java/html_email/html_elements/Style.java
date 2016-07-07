@@ -1,4 +1,4 @@
-package html_email;
+package html_email.html_elements;
 
 public class Style {
     private String color;
@@ -7,20 +7,44 @@ public class Style {
     private String padding;
     private String fontWeight;
 
+    public String getValign() {
+        return valign;
+    }
+
+    public Style setValign(String valign) {
+        this.valign = valign;
+        return this;
+    }
+
+    private String valign;
+
+    public String getAlign() {
+        return align;
+    }
+
+    public Style setAlign(String align) {
+        this.align = align;
+        return this;
+    }
+
+    private String align;
+
     public String getFontFamily() {
         return fontFamily;
     }
 
-    public void setFontFamily(String fontFamily) {
+    public Style setFontFamily(String fontFamily) {
         this.fontFamily = fontFamily;
+        return this;
     }
 
     public String getFontSize() {
         return fontSize;
     }
 
-    public void setFontSize(String fontSize) {
+    public Style setFontSize(String fontSize) {
         this.fontSize = fontSize;
+        return this;
     }
 
     private String fontFamily;
@@ -37,7 +61,7 @@ public class Style {
         }
 
         if (border!=null) {
-            main+=String.format(" border:%s;", border);
+            main+=String.format(" border=%s;", border);
         }
         if (padding!=null) {
             main+=String.format(" padding:%s;", padding);
@@ -50,6 +74,13 @@ public class Style {
         }
         if (fontFamily!=null){
             main+=String.format(" font-family:%s;", fontFamily);
+        }
+        if (align!=null) {
+            return String.format(" align=%s", align);
+
+        }
+        if (valign!=null) {
+            return String.format(" valign=%s", valign);
         }
         main+="\"";
         return main;
@@ -77,8 +108,9 @@ public class Style {
         return border;
     }
 
-    public void setBorder(String border) {
+    public Style setBorder(String border) {
         this.border = border;
+        return this;
     }
 
     public String getPadding() {

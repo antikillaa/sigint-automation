@@ -20,6 +20,7 @@ public class Emailing {
 
 
     public void send_email(ReportResults results) {
+        logger.info("Sending email on failure test results...");
         HtmlEmail email = new HtmlEmail();
         String html = email.buildHtml(results);
         Properties prop = System.getProperties();
@@ -38,7 +39,7 @@ public class Emailing {
                 tries++;
                 send_email(results);
             }
-                logger.error("Cannot send email");
+                logger.error("Cannot send email due to error");
                 logger.error(e.getMessage());
 
             }

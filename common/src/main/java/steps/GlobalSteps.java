@@ -70,10 +70,9 @@ public class GlobalSteps {
             service.reportToZephyr();
         }
         ReportResults results = service.getReportResults();
-        //if (results.getFailed().size()>0 || results.getBrokened().size()>0
-        //        || results.getSkipped().size()>0) {
+        if (results.getFailed().size()>0 ) {
         new Emailing().send_email(results);
-        //}
+        }
 
     }
 

@@ -1,11 +1,9 @@
 package html_email.html_elements;
 
-import html_email.HtmlElement;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class Link extends HtmlElement {
+class HtmlLink extends HtmlElement {
 
     public String getUrl() {
         return url;
@@ -17,7 +15,7 @@ public class Link extends HtmlElement {
 
     private String url;
 
-    public Link() {
+    HtmlLink() {
         super("a");
     }
 
