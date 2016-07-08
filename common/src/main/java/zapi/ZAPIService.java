@@ -5,7 +5,6 @@ import jira.JiraConnector;
 import json.JsonCoverter;
 import model.AppContext;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Assert;
 import reporter.ReportParser;
 import reporter.ReportResults;
@@ -14,7 +13,6 @@ import reporter.TestCase;
 import zapi.model.*;
 
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +21,6 @@ import java.util.Properties;
 public class ZAPIService {
 
     private ZAPI zapi = new ZAPI();
-    private ObjectMapper mapper = new ObjectMapper();
     private HashMap<String, Integer> issueIdMap = new HashMap<>();
     private Properties connectionProperties = AppContext.getContext().getJiraConnection();
     private Logger log = Logger.getLogger(ReportParser.class);
@@ -117,13 +114,9 @@ public class ZAPIService {
         if (response.getStatus() == 200) {
             String json = response.readEntity(String.class);
             json = json.substring(json.lastIndexOf("{"), json.indexOf("}") + 1);
+            execution = JsonCoverter.fromJsonToObject(json, Execution.class);
+            log.debug(execution + " executionId = " + execution.getId());
 
-            try {
-                execution = mapper.readValue(json, Execution.class);
-                log.debug(execution + " executionId = " + execution.getId());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         } else {
             log.error("Failed to add test case to cycle");
             log.error("status: " + response.getStatus());
@@ -147,7 +140,7 @@ public class ZAPIService {
 
 
     public String getTestCaseKeyByTitle(String title) {
-        log.info("Finding test case by it's id "+title);
+        log.debug("Finding test case by it's title "+title);
         Response response = zapi.JQL(0,1000,"key", String.format("summary~\"%s\"", title));
         if (response.getStatus()!=200) {
             log.error("Was unable to complete request to JIRA");
@@ -155,11 +148,12 @@ public class ZAPIService {
         }
 
         try {
-            IssueList issueList = mapper.readValue(response.readEntity(String.class), IssueList.class);
+            IssueList issueList = JsonCoverter.fromJsonToObject(response.readEntity(String.class), IssueList.class);
+            log.debug("Found issues: "+issueList.getIssues());
             return issueList.getIssues().get(0).getKey();
-        } catch (IOException e) {
-            log.error("Cannot get issue key from json response");
-            return null;
+        }  catch (IndexOutOfBoundsException e) {
+            log.error("Cannot find test case by it's name " + title);
+            return "";
         }
 
     }
@@ -173,15 +167,12 @@ public class ZAPIService {
         Response response = zapi.JQL(0, 1000, "id,key,summary", "project=" + projectKey + " and issuetype = Test");
 
         if (response.getStatus() == 200) {
-            try {
-                IssueList issueList = mapper.readValue(response.readEntity(String.class), IssueList.class);
-                log.info("Tests downloaded: " + issueList.getIssues().size());
-                for (Issue issue : issueList.getIssues()) {
-                    issueIdMap.put(issue.getFields().getSummary(), issue.getId());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+            IssueList issueList = JsonCoverter.fromJsonToObject(response.readEntity(String.class), IssueList.class);
+            log.info("Tests downloaded: " + issueList.getIssues().size());
+            for (Issue issue : issueList.getIssues()) {
+                issueIdMap.put(issue.getFields().getSummary(), issue.getId());
             }
+
         } else {
             log.error("Failed to get list of jira issues with type 'Test'");
             log.error("status: " + response.getStatus());
@@ -197,18 +188,15 @@ public class ZAPIService {
 
         Cycle cycle = getCycle();
         Assert.assertTrue(cycle != null);
-
+        getReportResults();
         List<TestCase> testCases = reportResults.getTestCases();
-        log.info("Add test results to cycle...");
-        log.info("Test result size: " + testCases.size());
+        log.debug("Add test results to cycle...");
+        log.debug("Test result size: " + testCases.size());
         for (TestCase testCase : testCases) {
-            log.info("Scenario: " + testCase.getTitle() + ", status: " + testCase.getStatus());
+            log.debug("Scenario: " + testCase.getTitle() + ", status: " + testCase.getStatus());
             if (issueIdMap.containsKey(testCase.getTitle())) {
                 // create test
                 Execution execution = addTestToCycle(cycle, issueIdMap.get(testCase.getTitle()));
-                testCase.setUrl(connectionProperties.getProperty("server") + "/browse/" + execution.getIssueKey());
-
-                log.info("URL: " + testCase.getUrl());
                 for (Step step : testCase.getSteps()) {
                     log.debug("Step: " + step.getName() + ", status: " + step.getStatus());
                 }

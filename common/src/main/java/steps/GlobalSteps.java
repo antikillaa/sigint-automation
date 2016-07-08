@@ -63,14 +63,13 @@ public class GlobalSteps {
     }
 
     @AfterStories
-    public void reportToZephyr(){
+    public void reportResults(){
         ReportResults results;
         ZAPIService service = new ZAPIService("target/allure-results");
         Boolean shouldReport = Boolean.valueOf(context.getGeneralProperties().getProperty("report"));
         Boolean shouldEmail = Boolean.valueOf(context.getGeneralProperties().getProperty("email"));
         try {
         if (shouldReport) {
-            service.getReportResults();
             service.reportToZephyr();
         } }catch (Exception e){
             log.error(e.getMessage());
