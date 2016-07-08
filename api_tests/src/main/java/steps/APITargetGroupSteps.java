@@ -35,9 +35,6 @@ public class APITargetGroupSteps extends APISteps {
         context.put("requestTargetGroup", group);
     }
 
-    //{"name":"hkoiaZCEFa","description":"EMAyjTcbbPZlbeXKkQhY","targets":[{"id":"577f971be4b035cf6d414d6a","description":"NDlShUByZsBWgpIrxVWe","groups":null,"keywords":["YbBIv","fQXk8"],"name":"FQlBSiQqXH","phones":["3511718288"],"type":"INTEREST"}],"lmt":0,"threatScore":0,"deleted":false}
-
-
     @Then("Created target group is correct")
     public void targetGroupCorrect() {
         TargetGroup contextTargetGroup = context.get("requestTargetGroup", TargetGroup.class);
