@@ -174,8 +174,9 @@ public class Record extends TeelaEntity {
         return manualEntry;
     }
 
-    public void setManualEntry(boolean manualEntry) {
+    public Record setManualEntry(boolean manualEntry) {
         this.manualEntry = manualEntry;
+        return this;
     }
 
     public int getPriority() {
@@ -190,8 +191,9 @@ public class Record extends TeelaEntity {
         return sourceId;
     }
 
-    public void setSourceId(String sourceId) {
+    public Record setSourceId(String sourceId) {
         this.sourceId = sourceId;
+        return this;
     }
 
     public String getState() {

@@ -11,7 +11,7 @@ import java.util.Date;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Source extends TeelaEntity {
 
-    private String type;
+    private SourceType type;
     private String name;
     private String location;
     private Date createdAt;
@@ -19,11 +19,11 @@ public class Source extends TeelaEntity {
     private Date lmt;
     private Date modifiedAt;
 
-    public String getType() {
+    public SourceType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(SourceType type) {
         this.type = type;
     }
 

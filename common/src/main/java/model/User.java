@@ -29,6 +29,10 @@ public class User extends TeelaEntity {
     private List<String> languages;
     @JsonProperty("user_group_ids")
     private List<String> userGroupIds;
+    @JsonProperty("expanded_permissions")
+    private List<String> expandedPermissions;
+    @JsonProperty("expanded_roles")
+    private List<String> expandedRoles;
 
     public boolean hasRole(String role) {
         if (roles == null || role == null) {
@@ -137,6 +141,24 @@ public class User extends TeelaEntity {
 
     public User setUserGroupIds(List<String> userGroupIds) {
         this.userGroupIds = userGroupIds;
+        return this;
+    }
+
+    public List<String> getExpandedPermissions() {
+        return expandedPermissions;
+    }
+
+    public User setExpandedPermissions(List<String> expandedPermissions) {
+        this.expandedPermissions = expandedPermissions;
+        return this;
+    }
+
+    public List<String> getExpandedRoles() {
+        return expandedRoles;
+    }
+
+    public User setExpandedRoles(List<String> expandedRoles) {
+        this.expandedRoles = expandedRoles;
         return this;
     }
 

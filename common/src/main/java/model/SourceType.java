@@ -1,37 +1,35 @@
 package model;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+public enum SourceType {
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class SourceType {
+    Tactical("T", "Terra", "Terra"),
+    Strategic("S", "Speed", "Speed"),
+    F("F", "Falcon", "Falcon"),
+    C("C", "CIO", "CIO"),
+    O("O", "Octopus", "Octopus"),
+    J("J", "Jernas", "Jernas"),
+    HumanInput("H", "HumInt", "HumInt"),
+    Etisalat("E", "External", "External");
 
-    public String getId() {
-        return id;
+    private final String letterCode;
+    private final String englishName;
+    private final String arabicName;
+
+    private SourceType(String letterCode, String englishName, String arabicName) {
+        this.letterCode = letterCode;
+        this.englishName = englishName;
+        this.arabicName = arabicName;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getLetterCode() {
+    public String toLetterCode() {
         return letterCode;
     }
 
-    public void setLetterCode(String letterCode) {
-        this.letterCode = letterCode;
+    public String toEnglishName() {
+        return englishName;
     }
 
-    private String id;
-    private String type;
-    private String letterCode;
+    public String toArabicName() {
+        return arabicName;
+    }
 }

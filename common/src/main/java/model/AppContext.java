@@ -125,6 +125,7 @@ public class AppContext {
         private RoleList roles;
         private GroupList groups;
         private RecordList records;
+        private ReportList reports;
 
         public TargetsList getTargets() {
             if (targets == null) {
@@ -223,6 +224,17 @@ public class AppContext {
 
         public void setGroups(GroupList groups) {
             this.groups = groups;
+        }
+
+        public ReportList getReports() {
+            if (reports == null) {
+                reports = new ReportList();
+            }
+            return reports;
+        }
+
+        public void setReports(ReportList reports) {
+            this.reports = reports;
         }
 
         private Entities(){}

@@ -1,6 +1,8 @@
 package conditions;
 
 import abs.TeelaEntity;
+import errors.NullReturnException;
+import json.JsonCoverter;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 
@@ -76,14 +78,25 @@ public class EqualCondition extends ExpectedCondition {
 
         @Override
         public String toString() {
-            return "Object condition with object1:"+obj1.toString()+" and object2:"+obj2.toString();
+            return "Object condition with object1: " + obj1.toString() + " and object2: " + obj2.toString();
         }
 
         protected Boolean check() {
             if ((obj1 == null) && (obj2 == null)) {
                 return true;
             }
-            return obj1.equals(obj2);
+            String json1 = "";
+            String json2 = "";
+            try {
+                json1 = JsonCoverter.toJsonString(obj1);
+                json2 = JsonCoverter.toJsonString(obj2);
+                log.debug("json1: " + json1);
+                log.debug("json2: " + json2);
+            } catch (NullReturnException e) {
+                log.error(e.getMessage());
+                log.error(e.getStackTrace());
+            }
+            return json1.equals(json2);
         }
     }
 

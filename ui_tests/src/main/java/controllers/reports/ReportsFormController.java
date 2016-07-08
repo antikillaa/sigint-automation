@@ -26,10 +26,12 @@ public class ReportsFormController<T extends ReportsPage> extends PageController
 
     public void takeOwnership(Report report, User user) {
         getPage().getActionBar().clickTakeOwnershipButton();
-        report.setOwner(user.getName());}
+        report.setOwnerName(user.getName());
+    }
 
 
     public void removeOwnership(Report report) {
         getPage().getActionBar().clickRemoveOwnership();
-        report.setOwner("");}
+        report.setOwnerName("");
+    }
 }

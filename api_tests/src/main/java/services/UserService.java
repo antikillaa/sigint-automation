@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import service.EntityService;
 
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 
 public class UserService implements EntityService<User> {
@@ -57,6 +58,32 @@ public class UserService implements EntityService<User> {
 
     public User view(String id) {
         return null;
+    }
+
+    public User me() {
+        log.info("Get current user");
+        UserRequest request = new UserRequest().me();
+        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie(), PegasusMediaType.PEGASUS_JSON);
+        context.put("code", response.getStatus());
+
+        String jsonString = response.readEntity(String.class);
+        log.info("Response: " + jsonString);
+
+        return JsonCoverter.fromJsonToObject(jsonString, User.class);
+    }
+
+    public String getReportRole(User user) {
+        List<String> roles = user.getExpandedRoles();
+        if (roles.contains("APPROVER") || roles.contains("ADMIN")) {
+            return "approver";
+        } else if (roles.contains("ANALYST")) {
+            return "analyst";
+        } else if (roles.contains("OPERATOR")) {
+            return "operator";
+        } else {
+            log.error("Can not get reportRole for current user");
+            throw new AssertionError("Can not get reportRole for current user");
+        }
     }
 
 }

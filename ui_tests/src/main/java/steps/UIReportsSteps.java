@@ -25,23 +25,17 @@ public class UIReportsSteps extends UISteps {
         iPressSaveAsDraftButton();
         navigateTo("Reports", "All");
         reportAppearsOnReportsDraftScreen("see");
-
-
     }
 
     @When("I press 'Create Manual Report' button")
     public void pressCreateManualReport() {
         getReportsController().getToolbarController().openCreateReportForm();
-
     }
-
 
     @When("I press 'Save As Draft' button")
     public void iPressSaveAsDraftButton() {
         getReportsFormFactory().getDetailsForm().saveAsDraft();
     }
-
-
 
     @When("I press 'Submit' button")
     public void pressSubmitButton() {
@@ -63,7 +57,7 @@ public class UIReportsSteps extends UISteps {
         Report report = new Report().generate();
         report
                 .setRecordType(RandomGenerator.getRandomItemFromList(context.getDictionary().getRecordTypes()).getType())
-                .setSourceType(RandomGenerator.getRandomItemFromList(context.getDictionary().getSources()).getType());
+                .setSourceType(RandomGenerator.getRandomItemFromList(context.getDictionary().getSources()).getType().name());
 
         getReportsFormFactory().getManualForm().fillForm(report);
         context.put("report", report);
@@ -83,7 +77,6 @@ public class UIReportsSteps extends UISteps {
             }
         }
         Verify.shouldBe(Conditions.equals.elements(report.getSubject(), reportRow.getSubject()));
-
     }
 
     @Then("report status is '$status' on 'Reports->All' page")
@@ -97,7 +90,6 @@ public class UIReportsSteps extends UISteps {
             throw new AssertionError(e.getMessage());
         }
         Verify.shouldBe(Conditions.equals.elements(reportRow.getStatus(), status));
-
     }
 
 
@@ -108,8 +100,7 @@ public class UIReportsSteps extends UISteps {
         getReportsController().getTableController().openDetailsForm(report.getSubject());
         Boolean isExist = getReportsFormFactory().getDetailsDialog().isRecordAttached(record.getFromNumber(),record.getToNumber());
         Verify.shouldBe(Conditions.isTrue.element(isExist));
-
-            }
+    }
 
 
     @When("I select $reportType report in the table")
@@ -125,7 +116,6 @@ public class UIReportsSteps extends UISteps {
             }
         }
         context.put("report", report);
-
     }
 
     @When("I press 'Edit Report' button against it")
@@ -153,8 +143,7 @@ public class UIReportsSteps extends UISteps {
         if (owner.equalsIgnoreCase("empty")) {
             owner = "";
         }
-        Verify.shouldBe(Conditions.equals.elements(owner, rowReport.getOwner()));
-
+        Verify.shouldBe(Conditions.equals.elements(owner, rowReport.getOwnerName()));
     }
 
     @When("I select a report in $status status and owner is $owner")
@@ -165,8 +154,6 @@ public class UIReportsSteps extends UISteps {
         Report report = getReportsController().getTableController().selectReportByFilter(
                 TableController.filter().set("Status", status).set("Owner", owner));
         context.put("report", report);
-
-
     }
 
     @When("I press 'Take Ownership' button on 'Edit Report' page")

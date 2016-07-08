@@ -9,4 +9,9 @@ public class UserRequest extends HttpRequest {
     public UserRequest() {
         super(URI);
     }
+
+    public UserRequest me() {
+        this.setURI(URI + "/me");
+        return this;
+    }
 }
