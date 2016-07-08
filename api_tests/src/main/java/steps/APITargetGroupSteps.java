@@ -3,7 +3,6 @@ package steps;
 import conditions.Verify;
 import errors.NullReturnException;
 import model.AppContext;
-import model.Target;
 import model.TargetGroup;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -27,14 +26,17 @@ public class APITargetGroupSteps extends APISteps {
     public void sendCreateRequest(String with){
         TargetGroup group = new TargetGroup().generate();
         if (with.toLowerCase().equals("with")) {
-            List<Target> targets = new ArrayList<Target>();
-            targets.add(context.entities().getTargets().random());
+            List<String> targets = new ArrayList<>();
+            targets.add(context.entities().getTargets().random().getId());
             group.setTargets(targets);
         }
         int response = service.add(group);
         context.put("code", response);
         context.put("requestTargetGroup", group);
     }
+
+    //{"name":"hkoiaZCEFa","description":"EMAyjTcbbPZlbeXKkQhY","targets":[{"id":"577f971be4b035cf6d414d6a","description":"NDlShUByZsBWgpIrxVWe","groups":null,"keywords":["YbBIv","fQXk8"],"name":"FQlBSiQqXH","phones":["3511718288"],"type":"INTEREST"}],"lmt":0,"threatScore":0,"deleted":false}
+
 
     @Then("Created target group is correct")
     public void targetGroupCorrect() {

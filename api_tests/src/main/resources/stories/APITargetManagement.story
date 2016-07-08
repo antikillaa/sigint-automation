@@ -3,6 +3,8 @@ Meta:
 
 
 Scenario: API.Add new target group with target in body
+Meta:
+@wip
 Given I sign in as admin user
 When I send create target without targets group request
 Then I got response code 200
@@ -19,8 +21,6 @@ Then I got response code 200
 And Created target is correct
 
 Scenario: API.View target details
-Meta:
-@wip
 Given I sign in as admin user
 When I send create target without targets group request
 Then I got response code 200
