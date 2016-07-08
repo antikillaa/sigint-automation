@@ -3,7 +3,6 @@ package model;
 import abs.TeelaEntity;
 import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import utils.RandomGenerator;
 
@@ -13,8 +12,6 @@ import java.util.Date;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class DuSubscriberEntry extends TeelaEntity {
 
-    @JsonProperty("_version")
-    protected String version = "1.0";
     private String sourceId;
     private String fileName;
     private Date fileUploadDate;
@@ -36,16 +33,6 @@ public class DuSubscriberEntry extends TeelaEntity {
     private String customerType;
     private String serviceType;
     private String customerCode;
-
-
-    public String getVersion() {
-        return version;
-    }
-
-    public DuSubscriberEntry setVersion(String version) {
-        this.version = version;
-        return this;
-    }
 
     public String getSourceId() {
         return sourceId;

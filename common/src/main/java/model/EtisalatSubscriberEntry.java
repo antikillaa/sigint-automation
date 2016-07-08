@@ -4,7 +4,6 @@ import abs.TeelaEntity;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import utils.RandomGenerator;
 
@@ -13,9 +12,6 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class EtisalatSubscriberEntry extends TeelaEntity {
-
-    @JsonProperty("_version")
-    protected String version = "1.0";
 
     private String sourceId;
 
@@ -249,15 +245,6 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
      * Date & Time of DeActivation
      */
     private Date dateOfDeactivation;
-
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
 
     public String getAction() {
         return action;

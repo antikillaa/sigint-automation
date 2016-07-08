@@ -36,6 +36,8 @@ And Phonebook Entry was deleted
 
 
 Scenario: API.User can find Phonebook Entry using search filters
+Meta:
+@TEEL 1945
 Given I sign in as admin user
 When I send create Phonebook Entry request with all fields
 Then I got response code 200
