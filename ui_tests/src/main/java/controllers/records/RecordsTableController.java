@@ -5,6 +5,7 @@ import blocks.context.tables.records.RecordRow;
 import controllers.TableController;
 import errors.NotFoundException;
 import model.Record;
+import model.UIRecord;
 import org.apache.log4j.Logger;
 import pages.SigintPage;
 import utils.Parser;
@@ -50,26 +51,21 @@ public abstract class RecordsTableController extends TableController {
         recordRow.clickCreateReportButton();
     }
 
-    protected Record initFromRow(Row recordRow) {
+    protected Record  initFromRow(Row recordRow) {
         RecordRow row = (RecordRow) recordRow;
-        Record newRecord = new Record();
+        Record newRecord = new UIRecord();
         try {
             TeelaDate date = new TeelaDate(new SimpleDateFormat("d MMM, HH:mm yyyy").parse(row.getDate().replace("GMT", "") + "2016"));
             newRecord.setDateAndTime(date);
         } catch (ParseException e) {
             e.printStackTrace();
-            throw new AssertionError();
+            throw new AssertionError("Was unable to set teela date from ui Row date");
         }
         newRecord.setTMSI(row.getTMSI());
         newRecord.setIMSI(row.getIMSI());
         newRecord.setLanguage(row.getLanguage());
-        newRecord.setToNumber(row.getToNumber());
-        newRecord.setFromNumber(row.getFromNumber());
-        newRecord.setFromCountry(row.getFromCountry());
-        newRecord.setToCountry(row.getToCountry());
         newRecord.setProcessedStatus(row.getStatus());
         newRecord.setRecordID(row.getRecordID());
-        newRecord.setType(row.getType());
         if (row.getType().equalsIgnoreCase("voice")) {
             newRecord.setDuration(Parser.getDurationFromString(row.getDetails()));
         } else {

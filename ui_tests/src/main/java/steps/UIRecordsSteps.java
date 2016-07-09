@@ -75,7 +75,7 @@ public class UIRecordsSteps extends UISteps {
             if (see.startsWith("not")) {
                 return;
             } else {
-                log.trace(e);
+                log.trace(e.getMessage());
                 throw new AssertionError(e.getMessage());
             }
         }
