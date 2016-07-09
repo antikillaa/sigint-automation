@@ -15,10 +15,9 @@ public class TargetGroup extends TeelaEntity {
 
     private String name;
     private String description;
-    //TODO ask Dzmitry§
     //@JsonSerialize(using= TargetGroupJsonSerializer.class)
     //@JsonDeserialize(using= TargetGroupDeserializer.class)
-    private List<Target> targets;
+    private List<String> targets;
     private Date createdAt;
     private Date modifiedAt;
     private String modifiedBy;
@@ -43,11 +42,11 @@ public class TargetGroup extends TeelaEntity {
         this.description = description;
     }
 
-    public List<Target> getTargets() {
+    public List<String> getTargets() {
         return targets;
     }
 
-    public void setTargets(List<Target> targets) {
+    public void setTargets(List<String> targets) {
         this.targets = targets;
     }
 

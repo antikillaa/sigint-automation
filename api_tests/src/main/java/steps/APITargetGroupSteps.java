@@ -3,7 +3,6 @@ package steps;
 import conditions.Verify;
 import errors.NullReturnException;
 import model.AppContext;
-import model.Target;
 import model.TargetGroup;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -27,8 +26,8 @@ public class APITargetGroupSteps extends APISteps {
     public void sendCreateRequest(String with){
         TargetGroup group = new TargetGroup().generate();
         if (with.toLowerCase().equals("with")) {
-            List<Target> targets = new ArrayList<Target>();
-            targets.add(context.entities().getTargets().random());
+            List<String> targets = new ArrayList<>();
+            targets.add(context.entities().getTargets().random().getId());
             group.setTargets(targets);
         }
         int response = service.add(group);
