@@ -43,6 +43,8 @@ And I filter records by current date
 Then Record status is REPORTED
 
 Scenario: User is able to attach record to existing report
+Meta:
+@wip
 Given I logged in as OPERATOR
 When I navigate to Reports -> All page
 And I create new manual draft report

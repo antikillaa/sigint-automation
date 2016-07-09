@@ -35,7 +35,7 @@ public class ReportRecordRow {
     }
 
     public String getDetails() {
-        return getReportRecordRow().$("div.sms-text > pre").text();
+        return getReportRecordRow().$("div.sms-text pre").text();
     }
 
 }

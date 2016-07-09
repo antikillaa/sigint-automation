@@ -65,7 +65,6 @@ public class EqualCondition extends ExpectedCondition {
         }
 
         public Boolean check() {
-            log.debug(String.format("Comparing two sets: %s and %s", set1.toString(), set2.toString()));
             if ((set1==null || set1.size()==0) && (set2==null || set2.size()==0)) {
                 return true;
             }
