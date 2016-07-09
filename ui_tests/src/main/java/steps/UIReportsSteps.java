@@ -106,7 +106,7 @@ public class UIReportsSteps extends UISteps {
         Record record = getRecordFromContext();
         Report report = getReportFromContext();
         getReportsController().getTableController().openDetailsForm(report.getSubject());
-        Boolean isExist = getReportsFormFactory().getDetailsDialog().isRecordAttached(record.getFromNumber(),record.getToNumber());
+        Boolean isExist = getReportsFormFactory().getDetailsDialog().isRecordAttached(record.getText());
         Verify.shouldBe(Conditions.isTrue.element(isExist));
 
             }

@@ -2,6 +2,7 @@ package pages;
 
 import blocks.navigation.MainMenu;
 import blocks.navigation.menus.MenusFactory;
+import com.codeborne.selenide.Condition;
 import controllers.PageControllerFactory;
 
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class Navigator {
             menu.click();
         }
         factory = menu.getSubMenuByName(subMenuName).click();
+        factory.getPage().getHeader().getBreadcrumb().getCurrentPath().shouldHave(Condition.text(subMenuName));
         factory.getTableController().waitLoading();
         return factory;
     }

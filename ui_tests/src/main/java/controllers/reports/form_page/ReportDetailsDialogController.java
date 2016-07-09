@@ -12,11 +12,10 @@ public class ReportDetailsDialogController extends PageController<ReportDetailsD
         super(Pages.reportDetailsDialog(), ReportDetailsDialog.class);
     }
 
-    public Boolean isRecordAttached(String fromNumber, String toNumber) {
+    public Boolean isRecordAttached(String text) {
         List<ReportRecordRow> records = getPage().getRecords();
         for (ReportRecordRow row: records) {
-            if (row.getFromNumber().equalsIgnoreCase(fromNumber)
-                    && (row.getToNumber().equalsIgnoreCase(toNumber))) {
+            if (row.getDetails().equalsIgnoreCase(text)) {
                 return true;
             }
         }
