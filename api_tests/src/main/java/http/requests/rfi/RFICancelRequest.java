@@ -1,6 +1,6 @@
 package http.requests.rfi;
 
-import http.HttpRequest;
+import http.requests.HttpRequest;
 
 /**
  * Created by dm on 5/18/16.

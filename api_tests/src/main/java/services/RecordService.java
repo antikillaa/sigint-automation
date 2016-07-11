@@ -9,7 +9,6 @@ import json.RsClient;
 import model.AppContext;
 import model.Record;
 import org.apache.log4j.Logger;
-import service.EntityService;
 
 import javax.ws.rs.core.Response;
 

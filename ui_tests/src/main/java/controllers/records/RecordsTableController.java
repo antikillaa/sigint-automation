@@ -61,11 +61,11 @@ public abstract class RecordsTableController extends TableController {
             e.printStackTrace();
             throw new AssertionError("Was unable to set teela date from ui Row date");
         }
-        newRecord.setTMSI(row.getTMSI());
-        newRecord.setIMSI(row.getIMSI());
+        newRecord.setTmsi(row.getTMSI());
+        newRecord.setImsi(row.getIMSI());
         newRecord.setLanguage(row.getLanguage());
         newRecord.setProcessedStatus(row.getStatus());
-        newRecord.setRecordID(row.getRecordID());
+        newRecord.setOriginalId(row.getRecordID());
         if (row.getType().equalsIgnoreCase("voice")) {
             newRecord.setDuration(Parser.getDurationFromString(row.getDetails()));
         } else {

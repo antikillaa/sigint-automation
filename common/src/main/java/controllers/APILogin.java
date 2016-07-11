@@ -15,9 +15,6 @@ public class APILogin {
     Logger log = Logger.getRootLogger();
 
 
-
-
-
     public void signInWithCrendentials(String validness) {
         log.info("Signing in...");
         Response response;

@@ -8,10 +8,7 @@ import json.JsonCoverter;
 import json.RsClient;
 import model.AppContext;
 import model.Report;
-import model.ReportOwner;
-import model.User;
 import org.apache.log4j.Logger;
-import service.EntityService;
 
 import javax.ws.rs.core.Response;
 
@@ -64,26 +61,4 @@ public class ReportService implements EntityService<Report> {
         return null;
     }
 
-    public Report setOwner(Report report) {
-        UserService userService = new UserService();
-        User user = userService.me();
-
-        log.info("Set owner to report...");
-        ReportOwner.User reportUser = new ReportOwner.User();
-        reportUser.setId(user.getId());
-        reportUser.setName(user.getName());
-        reportUser.setStaffId(user.getStaffId());
-
-        ReportOwner owner = new ReportOwner();
-        owner
-                .setRole(userService.getReportRole(user))
-                .setUser(reportUser);
-
-        report
-                .setAuthorId(user.getId())
-                .setAuthorName(user.getName())
-                .setOwner(owner);
-
-        return report;
-    }
 }

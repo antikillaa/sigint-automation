@@ -2,6 +2,7 @@ package controllers.records;
 
 import controllers.PageController;
 import model.Record;
+import model.RecordType;
 import pages.Pages;
 import pages.records.RecordsCreatePage;
 
@@ -30,21 +31,21 @@ public class RecordAddController extends PageController<RecordsCreatePage> {
 
     public Record fillForm(Record record) {
             getPage()
-                .selectSource(record.getSource())
+                .selectSource(record.getSourceName())
                 .selectFromCountry(record.getFromCountry())
                 .selectToCountry(record.getToCountry())
                 .selectLanguage(record.getLanguage())
                 .typeDataAndTime(record.getDateAndTime())
                 .typeFromNumber(record.getFromNumber())
-                .typeTmsi(record.getTMSI())
-                .typeImsi(record.getIMSI())
-                .typeRecordId(record.getRecordID())
+                .typeTmsi(record.getTmsi())
+                .typeImsi(record.getImsi())
+                .typeRecordId(record.getOriginalId())
                 .typeToNumber(record.getToNumber());
 
-        String recordType = record.getType();
-        if (recordType.equalsIgnoreCase("sms")) {
+        RecordType recordType = record.getType();
+        if (recordType.equals(RecordType.SMS)) {
             fillSMS(record);
-        } else if (recordType.equalsIgnoreCase("voice")) {
+        } else if (recordType.equals(RecordType.Voice)) {
             fillCall(record);
         }
         else {throw new AssertionError(String.format("Incorrect record type %s", recordType));}

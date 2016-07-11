@@ -3,7 +3,6 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import model.Source;
-import service.EntityService;
 
 public class SourceService implements EntityService<Source> {
 

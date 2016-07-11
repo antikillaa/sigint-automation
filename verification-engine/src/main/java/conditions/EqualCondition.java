@@ -171,12 +171,12 @@ public class EqualCondition extends ExpectedCondition {
         @Override
         protected Boolean check() {
             String.format("Checking records...");
-            return record.getTMSI().equals(uiRecord.getTMSI()) &&
+            return record.getTmsi().equals(uiRecord.getTmsi()) &&
                     record.getLanguage().equals(uiRecord.getLanguage()) &&
-                    record.getIMSI().equals(uiRecord.getIMSI()) &&
+                    record.getImsi().equals(uiRecord.getImsi()) &&
                     record.getDateAndTime().equals(uiRecord.getDateAndTime()) &&
                     record.getProcessedStatus().equals(uiRecord.getProcessedStatus()) &&
-                    record.getRecordID().equals(uiRecord.getRecordID()) &&
+                    record.getOriginalId().equals(uiRecord.getOriginalId()) &&
                     record.getDuration() == uiRecord.getDuration() &&
                     record.getText().equals(uiRecord.getText());
 

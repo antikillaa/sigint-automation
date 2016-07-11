@@ -1,8 +1,8 @@
-package http;
+package http.requests;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(value = { "URI", "cookie" })
-public class SignInRequest extends HttpRequest{
+public class SignInRequest extends HttpRequest {
 
     private final static String URI = "/api/auth/tokens";
     private String name;

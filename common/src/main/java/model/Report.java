@@ -5,6 +5,7 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import services.UserService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,7 +49,7 @@ public class Report extends TeelaEntity {
     private String approverCommentsRich;
     private List<ReportCategory> categories = new ArrayList<>();
     private List<String> recordIds = new ArrayList<>();
-    private List<ReportRecord> reportRecords = new ArrayList<>();
+    private List<Record> reportRecords = new ArrayList<>();
     private List<String> reportTeamIds = new ArrayList<>();
     private Boolean statusChanged;
     private String sourceType;
@@ -208,11 +209,11 @@ public class Report extends TeelaEntity {
         this.approverCommentsRich = approverCommentsRich;
     }
 
-    public List<ReportRecord> getReportRecords() {
+    public List<Record> getReportRecords() {
         return reportRecords;
     }
 
-    public Report setReportRecords(List<ReportRecord> reportRecords) {
+    public Report setReportRecords(List<Record> reportRecords) {
         this.reportRecords = reportRecords;
         return this;
     }
@@ -345,15 +346,37 @@ public class Report extends TeelaEntity {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public Report setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+        return this;
     }
 
     public Report generate() {
         this
                 .setSubject("subject:" + RandomStringUtils.randomAlphabetic(4))
                 .setStatus(ReportStatus.DRAFT)
-                .setCreatedAt(new Date());
+                .setCreatedAt(new Date())
+                .initOwner();
+        return this;
+    }
+
+    public Report initOwner() {
+        UserService userService = new UserService();
+        User user = userService.me();
+
+        User reportUser = new User();
+        reportUser.setId(user.getId());
+        reportUser.setName(user.getName());
+        reportUser.setStaffId(user.getStaffId());
+
+        ReportOwner owner = new ReportOwner();
+        owner
+                .setRole(userService.getReportRole(user))
+                .setUser(reportUser);
+        this
+                .setAuthorId(user.getId())
+                .setAuthorName(user.getName())
+                .setOwner(owner);
         return this;
     }
 }

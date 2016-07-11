@@ -1,6 +1,6 @@
 package http.requests.targets;
 
-import http.HttpRequest;
+import http.requests.HttpRequest;
 
 public class TargetRequest extends HttpRequest {
 

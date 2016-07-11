@@ -12,7 +12,6 @@ import model.Phonebook;
 import model.phonebook.PhonebookSearchResults;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import service.EntityService;
 
 import javax.ws.rs.core.Response;
 

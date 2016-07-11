@@ -10,7 +10,6 @@ import model.AppContext;
 import model.PegasusMediaType;
 import model.User;
 import org.apache.log4j.Logger;
-import service.EntityService;
 
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -22,20 +21,24 @@ public class UserService implements EntityService<User> {
     private static AppContext context = AppContext.getContext();
     Logger log = Logger.getLogger(UserService.class);
     private final String sigintHost = context.environment().getSigintHost();
+    private UserRequest request = new UserRequest();
 
     public int add(User entity) {
         log.info("Creating new user");
         try {
-            log.info("User: " + JsonCoverter.toJsonString(entity));
+            log.debug("User: " + JsonCoverter.toJsonString(entity));
         } catch (NullReturnException e) {
             log.info(e.getMessage());
         }
 
-        UserRequest request = new UserRequest();
-        Response response = rsClient
-                .post(sigintHost + request.getURI(), entity, request.getCookie(), PegasusMediaType.PEGASUS_JSON);
+        Response response = rsClient.post(
+                sigintHost + request.getURI(),
+                entity,
+                request.getCookie(),
+                PegasusMediaType.PEGASUS_JSON
+        );
         String jsonString = response.readEntity(String.class);
-        log.info("Response: " + jsonString);
+        log.debug("Response: " + jsonString);
 
         User createdUser = JsonCoverter.fromJsonToObject(jsonString, User.class);
         if (createdUser != null) {
@@ -62,14 +65,21 @@ public class UserService implements EntityService<User> {
 
     public User me() {
         log.info("Get current user...");
-        UserRequest request = new UserRequest().me();
-        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie(), PegasusMediaType.PEGASUS_JSON);
-        context.put("code", response.getStatus());
+        Response response = rsClient.get(
+                sigintHost + request.me().getURI(),
+                request.getCookie(),
+                PegasusMediaType.PEGASUS_JSON
+        );
 
         String jsonString = response.readEntity(String.class);
         log.debug("Response: " + jsonString);
 
-        return JsonCoverter.fromJsonToObject(jsonString, User.class);
+        User user = JsonCoverter.fromJsonToObject(jsonString, User.class);
+        if (user != null) {
+            context.entities().getUsers().addOrUpdateEntity(user);
+            context.setLoggedUser(user);
+        }
+        return user;
     }
 
     public String getReportRole(User user) {

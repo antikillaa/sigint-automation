@@ -6,6 +6,7 @@ import controllers.records.RecordAddController;
 import controllers.records.RecordsDetailsController;
 import errors.NotFoundException;
 import model.Record;
+import model.RecordType;
 import model.Report;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -57,8 +58,8 @@ public class UIRecordsSteps extends UISteps {
     @When("I fill the form for $recordType record")
     public void fillTheForm(String recordType) {
         Record record = new Record();
-        record.setType(recordType);
-        record.setSource(RandomGenerator.getRandomItemFromList(context.getDictionary().getSources()).getName());
+        record.setType(RecordType.valueOf(recordType));
+        record.setSourceName(RandomGenerator.getRandomItemFromList(context.getDictionary().getSources()).getName());
         record.generate();
 
         addController().fillForm(record);
@@ -70,7 +71,7 @@ public class UIRecordsSteps extends UISteps {
         Record record = getRecordFromContext();
         Record foundRecord;
         try {
-            foundRecord = getRecordsController().getTableController().findRecordById(record.getRecordID());
+            foundRecord = getRecordsController().getTableController().findRecordById(record.getOriginalId());
         } catch (NotFoundException e) {
             if (see.startsWith("not")) {
                 return;
@@ -103,7 +104,7 @@ public class UIRecordsSteps extends UISteps {
         Record record = getRecordFromContext();
         Record recordRow;
         try {
-            recordRow = getRecordsController().getTableController().findRecordById(record.getRecordID());
+            recordRow = getRecordsController().getTableController().findRecordById(record.getOriginalId());
         } catch (NotFoundException e) {
             log.trace(e);
             throw new AssertionError(e.getMessage());
@@ -114,7 +115,7 @@ public class UIRecordsSteps extends UISteps {
     @When("I press 'Create report' button against it")
     public void pressCreateReportButtonAgainstIt() {
         Record record = getRecordFromContext();
-        getRecordsController().getTableController().openCreateReportForm(record.getRecordID());
+        getRecordsController().getTableController().openCreateReportForm(record.getOriginalId());
     }
 
     @When("I attach record to draft report from Details dialog")

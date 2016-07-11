@@ -24,7 +24,16 @@ public class AppContext {
     private Entities entities;
     private Environment environment;
     private Map<String, String> countries;
+    private User loggedUser;
     private static Logger log = Logger.getLogger(AppContext.class);
+
+    public User getLoggedUser() {
+        return loggedUser;
+    }
+
+    public void setLoggedUser(User loggedUser) {
+        this.loggedUser = loggedUser;
+    }
 
     private static Map<String,String > loadJsonToMap(String filename) {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
@@ -38,7 +47,6 @@ public class AppContext {
             throw new AssertionError();
         }
     }
-
 
     public Map<String, String> getLanguages() {
         if (languages == null) {

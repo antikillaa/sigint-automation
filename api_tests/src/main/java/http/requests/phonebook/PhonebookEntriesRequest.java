@@ -1,7 +1,7 @@
 package http.requests.phonebook;
 
 
-import http.HttpRequest;
+import http.requests.HttpRequest;
 
 public class PhonebookEntriesRequest extends HttpRequest {
 

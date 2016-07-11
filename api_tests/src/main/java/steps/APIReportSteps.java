@@ -30,11 +30,10 @@ public class APIReportSteps extends APISteps {
         context.put("requestReport", report);
     }
 
-    @When("Generate new report with current user as owner")
+    @When("Generate new report with logged user as owner")
     public void generateNewReport(){
         log.info("Generate new report...");
         Report report = new Report().generate();
-        report = service.setOwner(report);
 
         context.put("report", report);
     }
@@ -59,7 +58,7 @@ public class APIReportSteps extends APISteps {
         Source source = RandomGenerator.getRandomItemFromList(context.getDictionary().getSources());
         RecordType recordType = RecordType.getRandom();
 
-        ReportRecord reportRecord = new ReportRecord()
+        Record record = new Record()
                 .generate()
                 .setSourceId(source.getId())
                 .setSourceName(source.getName())
@@ -72,8 +71,8 @@ public class APIReportSteps extends APISteps {
         Report report = context.get("report", Report.class);
 
         log.info("Add record to report...");
-        List<ReportRecord> recordList = report.getReportRecords();
-        recordList.add(reportRecord);
+        List<Record> recordList = report.getReportRecords();
+        recordList.add(record);
         report.setReportRecords(recordList);
 
         context.put("report", report);

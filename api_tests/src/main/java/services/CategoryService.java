@@ -9,7 +9,6 @@ import model.AppContext;
 import model.ReportCategory;
 import model.CategoryListResult;
 import org.apache.log4j.Logger;
-import service.EntityService;
 
 import javax.ws.rs.core.Response;
 import java.util.List;

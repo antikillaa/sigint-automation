@@ -46,8 +46,8 @@ public class UIReportsSteps extends UISteps {
     public void fillOutRequiredFieldsOnCreateReportScreen() {
         Record record  = getRecordFromContext();
         Report report = new Report().generate();
-        report.setRecordType(record.getType());
-        report.setSourceType(record.getSource());
+        report.setRecordType(record.getType().name());
+        report.setSourceType(record.getSourceName());
         getReportsFormFactory().getRecordBasedForm().fillForm(report);
         context.put("report", report);
     }

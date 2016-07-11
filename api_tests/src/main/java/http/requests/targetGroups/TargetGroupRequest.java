@@ -1,6 +1,6 @@
 package http.requests.targetGroups;
 
-import http.HttpRequest;
+import http.requests.HttpRequest;
 
 public class TargetGroupRequest extends HttpRequest {
 

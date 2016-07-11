@@ -13,7 +13,6 @@ import model.phonebook.EntriesUploadResult;
 import model.phonebook.EtisalatSubscriberSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import service.EntityService;
 import utils.FileHelper;
 import utils.RandomGenerator;
 
