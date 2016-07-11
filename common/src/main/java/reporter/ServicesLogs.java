@@ -5,12 +5,10 @@ import docker.Docker;
 import docker.model.DockerContainer;
 import docker.model.DockerContainers;
 import errors.NullReturnException;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -38,6 +36,19 @@ public class ServicesLogs {
             }
         }
         return outputDir;
+    }
+
+    public File getOutputLog() throws IOException {
+        log.info("Getting output log");
+        File outputDir = Files.createTempDir();
+        File file = File.createTempFile("log", ".txt", outputDir);
+        InputStream is = new FileInputStream("log4j/log.out");
+        FileOutputStream stream = new FileOutputStream(file);
+        stream.write(is.read());
+        IOUtils.closeQuietly(is);
+        IOUtils.closeQuietly(stream);
+        return outputDir;
+
     }
 }
 
