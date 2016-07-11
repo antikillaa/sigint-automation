@@ -6,6 +6,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,10 +46,10 @@ public class Report extends TeelaEntity {
     private String analystNotesRich;
     private String approverComments;
     private String approverCommentsRich;
-    private List<ReportCategory> categories;
-    private List<String> recordIds;
-    private List<ReportRecord> reportRecords;
-    private List<String> reportTeamIds;
+    private List<ReportCategory> categories = new ArrayList<>();
+    private List<String> recordIds = new ArrayList<>();
+    private List<ReportRecord> reportRecords = new ArrayList<>();
+    private List<String> reportTeamIds = new ArrayList<>();
     private Boolean statusChanged;
     private String sourceType;
     private String recordType;

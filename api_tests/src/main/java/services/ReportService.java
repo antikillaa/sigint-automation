@@ -24,9 +24,9 @@ public class ReportService implements EntityService<Report> {
 
     @Override
     public int add(Report entity) {
-        log.info("Creating new report");
+        log.info("Sending create new report request...");
         try {
-            log.info("Report: " + JsonCoverter.toJsonString(entity));
+            log.debug("Report: " + JsonCoverter.toJsonString(entity));
         } catch (NullReturnException e) {
             log.error(e.getMessage());
             throw new AssertionError("This is not a report");
@@ -68,6 +68,7 @@ public class ReportService implements EntityService<Report> {
         UserService userService = new UserService();
         User user = userService.me();
 
+        log.info("Set owner to report...");
         ReportOwner.User reportUser = new ReportOwner.User();
         reportUser.setId(user.getId());
         reportUser.setName(user.getName());

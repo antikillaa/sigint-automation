@@ -3,9 +3,10 @@ Meta:
 
 
 Scenario: API.Create manual report
-Meta:
-@wip
 Given I sign in as admin user
-When I send create manual report
+When Generate new report with current user as owner
+And Add new random record to report
+And Add categories to report
+And I send create manual report
 Then I got response code 201
 And Created report is correct

@@ -10,7 +10,6 @@ import services.CategoryService;
 import services.ReportService;
 import utils.RandomGenerator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static conditions.Conditions.equals;
@@ -22,16 +21,8 @@ public class APIReportSteps extends APISteps {
     private CategoryService categoryService = new CategoryService();
 
     @When("I send create manual report")
-    public void createManualReport(){
-        Report report = new Report().generate();
-        report = service.setOwner(report);
-        report = addRecordToReport(report);
-
-        List<ReportCategory> categories = categoryService.list();
-        for (ReportCategory reportCategory : categories) {
-            reportCategory.setCurrentValue("--");
-        }
-        report.setCategories(categories);
+    public void createManualReport() {
+        Report report = context.get("report", Report.class);
 
         int responseCode = service.add(report);
 
@@ -39,7 +30,32 @@ public class APIReportSteps extends APISteps {
         context.put("requestReport", report);
     }
 
-    private Report addRecordToReport(Report report) {
+    @When("Generate new report with current user as owner")
+    public void generateNewReport(){
+        log.info("Generate new report...");
+        Report report = new Report().generate();
+        report = service.setOwner(report);
+
+        context.put("report", report);
+    }
+
+    @When("Add categories to report")
+    public void addCategoriesToReport() {
+        List<ReportCategory> categories = categoryService.list();
+        for (ReportCategory reportCategory : categories) {
+            reportCategory.setCurrentValue("--");
+        }
+
+        Report report = context.get("report", Report.class);
+        log.info("Set categories to report...");
+        report.setCategories(categories);
+
+        context.put("report", report);
+    }
+
+    @When("Add new random record to report")
+    public void addRecordToReport() {
+        log.info("Generate new random record...");
         Source source = RandomGenerator.getRandomItemFromList(context.getDictionary().getSources());
         RecordType recordType = RecordType.getRandom();
 
@@ -53,10 +69,14 @@ public class APIReportSteps extends APISteps {
                 .setTypeEnglishName(recordType.toEnglishName())
                 .setTypeArabicName(recordType.toArabicName());
 
-        List<ReportRecord> recordList = new ArrayList<>();
+        Report report = context.get("report", Report.class);
+
+        log.info("Add record to report...");
+        List<ReportRecord> recordList = report.getReportRecords();
         recordList.add(reportRecord);
         report.setReportRecords(recordList);
-        return report;
+
+        context.put("report", report);
     }
 
     @Then("Created report is correct")

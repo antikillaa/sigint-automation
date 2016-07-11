@@ -61,13 +61,13 @@ public class UserService implements EntityService<User> {
     }
 
     public User me() {
-        log.info("Get current user");
+        log.info("Get current user...");
         UserRequest request = new UserRequest().me();
         Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie(), PegasusMediaType.PEGASUS_JSON);
         context.put("code", response.getStatus());
 
         String jsonString = response.readEntity(String.class);
-        log.info("Response: " + jsonString);
+        log.debug("Response: " + jsonString);
 
         return JsonCoverter.fromJsonToObject(jsonString, User.class);
     }

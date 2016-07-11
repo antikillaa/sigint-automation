@@ -37,6 +37,7 @@ public class CategoryService implements EntityService<ReportCategory> {
     }
 
     public List<ReportCategory> list() {
+        log.info("Get categories...");
         CategoriesRequest request = new CategoriesRequest();
 
         Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
@@ -44,7 +45,7 @@ public class CategoryService implements EntityService<ReportCategory> {
 
         CategoryListResult result = JsonCoverter.fromJsonToObject(jsonResponse, CategoryListResult.class);
         if (result != null) {
-            log.info("Size of categories list: " + result.getResult().size());
+            log.debug("Size of categories list: " + result.getResult().size());
             return result.getResult();
         } else {
             throw new AssertionError("Can not get report categories");
