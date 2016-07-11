@@ -17,13 +17,25 @@ public class ReportRecordRow {
     }
 
     public String getToNumber() {
-        return getReportRecordRow()
-                .$(By.xpath(".//div[@textcontent.bind='record.toNumber']")).text();
+        try {
+            return getReportRecordRow()
+                    .$(By.xpath(".//div[@textcontent.bind='record.toNumber']")).text();
+        } catch (Exception e) {
+            return "unknown";
+        }
     }
 
     public String getFromNumber() {
-        return getReportRecordRow()
-                .$(By.xpath(".//div[@textcontent.bind='record.fromNumber']")).text();
+        try {
+            return getReportRecordRow()
+                    .$(By.xpath(".//div[@textcontent.bind='record.fromNumber']")).text();
+        } catch (Exception e) {
+            return "unknown";
+        }
+    }
+
+    public String getDetails() {
+        return getReportRecordRow().$("div.sms-text pre").text();
     }
 
 }

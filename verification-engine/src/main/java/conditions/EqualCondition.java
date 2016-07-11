@@ -1,6 +1,8 @@
 package conditions;
 
 import abs.TeelaEntity;
+import model.Record;
+import model.UIRecord;
 import errors.NullReturnException;
 import json.JsonCoverter;
 import org.apache.commons.beanutils.BeanUtils;
@@ -38,6 +40,11 @@ public class EqualCondition extends ExpectedCondition {
 
     public <T extends TeelaEntity> EqualCondition elements(T obj1, T obj2) {
         condition = new TeelaEntityEqualCondition<T>(obj1, obj2);
+        return this;
+    }
+
+    public EqualCondition elements(Record record, UIRecord uiRecord) {
+        condition = new RecordToUIRecordEqualCondition(record, uiRecord);
         return this;
     }
 
@@ -144,6 +151,37 @@ public class EqualCondition extends ExpectedCondition {
            return equals;
        }
    }
+
+    private class RecordToUIRecordEqualCondition extends ExpectedCondition {
+
+        private Record record;
+        private UIRecord uiRecord;
+
+
+        public RecordToUIRecordEqualCondition(Record record, UIRecord uiRecord) {
+            this.record = record;
+            this.uiRecord = uiRecord;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("Comparing Record %s with record parsed from UI %s", record, uiRecord);
+        }
+
+        @Override
+        protected Boolean check() {
+            String.format("Checking records...");
+            return record.getTMSI().equals(uiRecord.getTMSI()) &&
+                    record.getLanguage().equals(uiRecord.getLanguage()) &&
+                    record.getIMSI().equals(uiRecord.getIMSI()) &&
+                    record.getDateAndTime().equals(uiRecord.getDateAndTime()) &&
+                    record.getProcessedStatus().equals(uiRecord.getProcessedStatus()) &&
+                    record.getRecordID().equals(uiRecord.getRecordID()) &&
+                    record.getDuration() == uiRecord.getDuration() &&
+                    record.getText().equals(uiRecord.getText());
+
+        }
+    }
 }
 
 
