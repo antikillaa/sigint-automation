@@ -35,6 +35,12 @@ And report owner should be empty
 Scenario: User is able to take ownership on unassigned draft report
 Given I logged in as Operator
 When I navigate to Reports -> All page
+And I create new manual draft report
+When I navigate to Reports -> Draft page
+And I select any report in the table
+And I press 'Edit Report' button against it
+When I press 'Remove Ownership' button on 'Edit Report' page
+When I navigate to Reports -> All page
 When I select a report in Unassigned status and owner is Empty
 And I press 'Edit Report' button against it
 And I press 'Take Ownership' button on 'Edit Report' page
