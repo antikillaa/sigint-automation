@@ -3,6 +3,8 @@ package conditions;
 import abs.TeelaEntity;
 import model.Record;
 import model.UIRecord;
+import errors.NullReturnException;
+import json.JsonCoverter;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 
@@ -83,14 +85,25 @@ public class EqualCondition extends ExpectedCondition {
 
         @Override
         public String toString() {
-            return "Object condition with object1:"+obj1.toString()+" and object2:"+obj2.toString();
+            return "Object condition with object1: " + obj1.toString() + " and object2: " + obj2.toString();
         }
 
         protected Boolean check() {
             if ((obj1 == null) && (obj2 == null)) {
                 return true;
             }
-            return obj1.equals(obj2);
+            String json1 = "";
+            String json2 = "";
+            try {
+                json1 = JsonCoverter.toJsonString(obj1);
+                json2 = JsonCoverter.toJsonString(obj2);
+                log.debug("json1: " + json1);
+                log.debug("json2: " + json2);
+            } catch (NullReturnException e) {
+                log.error(e.getMessage());
+                log.error(e.getStackTrace());
+            }
+            return json1.equals(json2);
         }
     }
 
@@ -158,12 +171,12 @@ public class EqualCondition extends ExpectedCondition {
         @Override
         protected Boolean check() {
             String.format("Checking records...");
-            return record.getTMSI().equals(uiRecord.getTMSI()) &&
+            return record.getTmsi().equals(uiRecord.getTmsi()) &&
                     record.getLanguage().equals(uiRecord.getLanguage()) &&
-                    record.getIMSI().equals(uiRecord.getIMSI()) &&
+                    record.getImsi().equals(uiRecord.getImsi()) &&
                     record.getDateAndTime().equals(uiRecord.getDateAndTime()) &&
                     record.getProcessedStatus().equals(uiRecord.getProcessedStatus()) &&
-                    record.getRecordID().equals(uiRecord.getRecordID()) &&
+                    record.getOriginalId().equals(uiRecord.getOriginalId()) &&
                     record.getDuration() == uiRecord.getDuration() &&
                     record.getText().equals(uiRecord.getText());
 

@@ -185,12 +185,12 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     private String productGroupDesc;
 
     /**
-     * The code/id of the service associated with this Product.
+     * The code/id of the services associated with this Product.
      */
     private Long productCode;
 
     /**
-     * The description of the service associated with this Product. e.g. GSM Post Paid
+     * The description of the services associated with this Product. e.g. GSM Post Paid
      */
     private String productDesc;
 
@@ -200,12 +200,12 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     private String imsi;
 
     /**
-     * The identification type code/id submitted by the subscriber at the time of subscription of a service.
+     * The identification type code/id submitted by the subscriber at the time of subscription of a services.
      */
     private Long identificationTypeCode;
 
     /**
-     * The identification type code description submitted by the subscriber at the time of subscription of a service.
+     * The identification type code description submitted by the subscriber at the time of subscription of a services.
      * (E.g. Passport, UAE Identity card, Business document.)
      */
     private String identificationTypeDesc;

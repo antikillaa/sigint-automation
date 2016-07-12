@@ -10,7 +10,6 @@ import model.AppContext;
 import model.PegasusMediaType;
 import model.Role;
 import org.apache.log4j.Logger;
-import service.EntityService;
 
 import javax.ws.rs.core.Response;
 

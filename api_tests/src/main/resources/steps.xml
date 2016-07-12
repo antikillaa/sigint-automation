@@ -29,4 +29,6 @@
     </bean>
     <bean id="recordSteps" class="steps.APIRecordSteps">
     </bean>
+    <bean id="reportSteps" class="steps.APIReportSteps">
+    </bean>
 </beans>

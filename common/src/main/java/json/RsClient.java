@@ -88,9 +88,14 @@ public class RsClient {
         return buildRequest(url).get();
     }
 
-    public Response  get(String url, Cookie cookie) {
+    public Response get(String url, Cookie cookie) {
         log.debug("Sending get request");
         return buildRequest(url).cookie(cookie).get();
+    }
+
+    public Response get(String url, Cookie cookie, String mediaType) {
+        log.debug("Sending get request");
+        return buildRequest(url, mediaType).cookie(cookie).get();
     }
 
     /**

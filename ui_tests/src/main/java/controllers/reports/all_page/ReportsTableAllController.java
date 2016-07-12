@@ -4,6 +4,7 @@ import blocks.context.tables.Row;
 import blocks.context.tables.reports.ReportAllRow;
 import controllers.reports.ReportsTableController;
 import model.Report;
+import model.ReportStatus;
 import pages.SigintPage;
 
 public class ReportsTableAllController extends ReportsTableController {
@@ -16,8 +17,8 @@ public class ReportsTableAllController extends ReportsTableController {
     public Report initFromRow(Row reportRow) {
         Report report = super.initFromRow(reportRow);
         ReportAllRow row = (ReportAllRow)reportRow;
-        report.setStatus(row.getStatus());
-        report.setOwner(row.getOwner());
+        report.setStatus(ReportStatus.valueOf(row.getStatus()));
+        report.setOwnerName(row.getOwner());
         return report;
     }
 

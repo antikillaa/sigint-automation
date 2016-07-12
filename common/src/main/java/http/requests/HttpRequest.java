@@ -1,4 +1,4 @@
-package http;
+package http.requests;
 
 import model.AppContext;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;

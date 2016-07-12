@@ -1,6 +1,6 @@
 package http.requests.groups;
 
-import http.HttpRequest;
+import http.requests.HttpRequest;
 
 public class GroupsRequest extends HttpRequest {
 

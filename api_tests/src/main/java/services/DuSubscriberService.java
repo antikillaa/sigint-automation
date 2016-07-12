@@ -13,7 +13,6 @@ import model.phonebook.DuSubscriberSearchResult;
 import model.phonebook.EntriesUploadResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import service.EntityService;
 import utils.FileHelper;
 
 import javax.ws.rs.client.Entity;

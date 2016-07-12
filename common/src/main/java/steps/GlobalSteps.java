@@ -2,7 +2,7 @@ package steps;
 
 import controllers.APILogin;
 import errors.NullReturnException;
-import http.GetDictionariesRequest;
+import http.requests.GetDictionariesRequest;
 import json.JsonCoverter;
 import json.RsClient;
 import model.AppContext;

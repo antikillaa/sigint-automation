@@ -24,7 +24,16 @@ public class AppContext {
     private Entities entities;
     private Environment environment;
     private Map<String, String> countries;
+    private User loggedUser;
     private static Logger log = Logger.getLogger(AppContext.class);
+
+    public User getLoggedUser() {
+        return loggedUser;
+    }
+
+    public void setLoggedUser(User loggedUser) {
+        this.loggedUser = loggedUser;
+    }
 
     private static Map<String,String > loadJsonToMap(String filename) {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
@@ -38,7 +47,6 @@ public class AppContext {
             throw new AssertionError();
         }
     }
-
 
     public Map<String, String> getLanguages() {
         if (languages == null) {
@@ -125,6 +133,7 @@ public class AppContext {
         private RoleList roles;
         private GroupList groups;
         private RecordList records;
+        private ReportList reports;
 
         public TargetsList getTargets() {
             if (targets == null) {
@@ -223,6 +232,17 @@ public class AppContext {
 
         public void setGroups(GroupList groups) {
             this.groups = groups;
+        }
+
+        public ReportList getReports() {
+            if (reports == null) {
+                reports = new ReportList();
+            }
+            return reports;
+        }
+
+        public void setReports(ReportList reports) {
+            this.reports = reports;
         }
 
         private Entities(){}

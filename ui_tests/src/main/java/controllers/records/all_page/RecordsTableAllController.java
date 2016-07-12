@@ -17,7 +17,7 @@ public class RecordsTableAllController extends RecordsTableController {
     protected Record initFromRow(Row recordRow) {
         RecordAllRow row = (RecordAllRow)recordRow;
         Record newRecord = super.initFromRow(recordRow);
-        newRecord.setSource(row.getSource());
+        newRecord.setSourceName(row.getSource());
         return newRecord;
     }
 

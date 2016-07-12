@@ -9,6 +9,10 @@ import java.util.List;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Dictionary {
 
+    private List<DictionaryRecordType> recordTypes;
+    private List<Source> sources;
+    private List<DictionarySourceType> sourceTypes;
+
     public List<Source> getSources() {
         return sources;
     }
@@ -17,25 +21,20 @@ public class Dictionary {
         this.sources = sources;
     }
 
-    private List<Source> sources;
-
-    public List<RecordType> getRecordTypes() {
+    public List<DictionaryRecordType> getRecordTypes() {
         return recordTypes;
     }
 
-    public void setRecordTypes(List<RecordType> recordTypes) {
+    public void setRecordTypes(List<DictionaryRecordType> recordTypes) {
         this.recordTypes = recordTypes;
     }
 
-    private List<RecordType> recordTypes;
-
-    public List<SourceType> getSourceTypes() {
+    public List<DictionarySourceType> getSourceTypes() {
         return sourceTypes;
     }
 
-    public void setSourceTypes(List<SourceType> sourceTypes) {
+    public void setSourceTypes(List<DictionarySourceType> sourceTypes) {
         this.sourceTypes = sourceTypes;
     }
 
-    private List<SourceType> sourceTypes;
 }

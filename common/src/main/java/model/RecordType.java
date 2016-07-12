@@ -1,39 +1,50 @@
 package model;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+public enum RecordType {
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class RecordType {
+    Voice("V", "Voice", "مكالمة هاتفية"),
+    SMS("S", "SMS", "رسالة نصية"),
+    Email("E", "Email", "بريد الالكتروني"),
+    Metadata("M", "Metadata", "البيانات الوصفية"),
+    Fax("F", "Fax", "فاكس"),
+    InternetChat("C", "Internet Chat", "الدردشة عبر الإنترنت"),
+    PhoneBook("PhoneBook", "PhoneBook", "دليل التلفونات" ),
+    Subscriber("Subscriber", "Subscriber", "مكتتب"),
+    VLR("VLR", "VLR", "VLR");
 
-    private String id;
-    private String type;
+    private final String letterCode;
+    private final String englishName;
+    private final String arabicName;
 
-    public String getLetterCode() {
+    private RecordType(String letterCode, String englishName, String arabicName) {
+        this.letterCode = letterCode;
+        this.englishName = englishName;
+        this.arabicName = arabicName;
+    }
+
+    public String toLetterCode() {
         return letterCode;
     }
 
-    public void setLetterCode(String letterCode) {
-        this.letterCode = letterCode;
+    public String toEnglishName() {
+        return englishName;
     }
 
-    public String getType() {
-        return type;
+    public String toArabicName() {
+        return arabicName;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+    private static final List<RecordType> VALUES =
+            Collections.unmodifiableList(Arrays.asList(values()));
+    private static final int SIZE = VALUES.size();
+    private static Random RANDOM = new Random();
 
-    public String getId() {
-        return id;
+    public static RecordType getRandom() {
+        return VALUES.get(RANDOM.nextInt(SIZE));
     }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    private String letterCode;
 }

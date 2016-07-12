@@ -1,4 +1,4 @@
-package service;
+package services;
 
 import abs.EntityList;
 import abs.SearchFilter;

@@ -12,7 +12,6 @@ import model.InformationRequest;
 import model.rfi.RFISearchResults;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import service.EntityService;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;

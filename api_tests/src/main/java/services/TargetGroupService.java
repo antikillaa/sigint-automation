@@ -13,7 +13,6 @@ import model.Result;
 import model.TargetGroup;
 import model.targetGroup.TargetGroupSearchResult;
 import org.apache.log4j.Logger;
-import service.EntityService;
 
 import javax.ws.rs.core.Response;
 import java.util.List;

@@ -12,7 +12,7 @@ import static conditions.Conditions.equals;
 
 public class APIRecordSteps extends APISteps {
 
-    private Logger log = Logger.getLogger(APIEtisalatSubscriberDataSteps.class);
+    private Logger log = Logger.getLogger(APIRecordSteps.class);
     private RecordService service = new RecordService();
 
     @When("I send create manual record - $recordType")

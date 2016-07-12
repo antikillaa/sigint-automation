@@ -12,7 +12,6 @@ import model.AppContext;
 import model.Result;
 import model.Target;
 import org.apache.log4j.Logger;
-import service.EntityService;
 
 import javax.ws.rs.core.Response;
 

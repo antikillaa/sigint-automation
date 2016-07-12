@@ -1,6 +1,6 @@
 package http.requests.roles;
 
-import http.HttpRequest;
+import http.requests.HttpRequest;
 
 public class RoleRequest extends HttpRequest {
 
