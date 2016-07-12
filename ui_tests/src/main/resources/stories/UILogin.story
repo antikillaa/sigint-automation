@@ -15,8 +15,6 @@ Examples:
 
 
 Scenario: User as <role> is able to sign in and sign out with correct credentials
-Meta:
-@TEEL
 Given I logged in as <role>
 When I sign out
 Then I should see Login page
