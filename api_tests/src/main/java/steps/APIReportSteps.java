@@ -2,7 +2,10 @@ package steps;
 
 import conditions.Verify;
 import errors.NullReturnException;
-import model.*;
+import model.Record;
+import model.Report;
+import model.ReportCategory;
+import model.Source;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -56,17 +59,12 @@ public class APIReportSteps extends APISteps {
     public void addRecordToReport() {
         log.info("Generate new random record...");
         Source source = RandomGenerator.getRandomItemFromList(context.getDictionary().getSources());
-        RecordType recordType = RecordType.getRandom();
-
         Record record = new Record()
-                .generate()
+                .generateReportRecord()
                 .setSourceId(source.getId())
                 .setSourceName(source.getName())
                 .setSourceType(source.getType())
-                .setType(recordType)
-                .setSourceLetterCode(source.getType().toLetterCode())
-                .setTypeEnglishName(recordType.toEnglishName())
-                .setTypeArabicName(recordType.toArabicName());
+                .setSourceLetterCode(source.getType().toLetterCode());
 
         Report report = context.get("report", Report.class);
 
@@ -83,10 +81,9 @@ public class APIReportSteps extends APISteps {
         Report requestReport = context.get("requestReport", Report.class);
         Report createdReport = context.entities().getReports().getLatest();
 
-        Verify.shouldBe(equals.elements(createdReport.getOwner().getUser(), requestReport.getOwner().getUser()));
-        createdReport.getOwner().setUser(null);
-        requestReport.getOwner().setUser(null);
-        Verify.shouldBe(equals.elements(createdReport.getOwner(), requestReport.getOwner()));
+        Verify.shouldBe(equals.elements(createdReport.getOwner().getRole(), requestReport.getOwner().getRole()));
+        Verify.shouldBe(equals.elements(createdReport.getOwner().getUser().getId(), requestReport.getOwner().getUser().getId()));
+
         Verify.shouldBe(equals.elements(createdReport.getStatus(), requestReport.getStatus()));
         Verify.shouldBe(equals.elements(createdReport.getAuthorId(), requestReport.getAuthorId()));
         Verify.shouldBe(equals.elements(createdReport.getAuthorName(), requestReport.getAuthorName()));

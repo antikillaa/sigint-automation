@@ -323,6 +323,22 @@ public class Record extends TeelaEntity {
         return this;
     }
 
+    public Record generateReportRecord() {
+        RecordType recordType = RecordType.getRandom();
+        this
+                .setType(recordType)
+                .setTypeEnglishName(recordType.toEnglishName())
+                .setTypeArabicName(recordType.toArabicName())
+                .setImsi(RandomStringUtils.randomNumeric(15))
+                .setTmsi(RandomStringUtils.randomNumeric(15))
+                .setFromNumber(RandomStringUtils.randomNumeric(12))
+                .setToNumber(RandomStringUtils.randomNumeric(12))
+                .setOriginalId(RandomStringUtils.randomAlphanumeric(8))
+                .setTime(new Date())
+                .setOriginalId(RandomStringUtils.randomAlphanumeric(8));
+        return this;
+    }
+
     public Record generateSMS() {
         this
                 .setImsi(RandomStringUtils.randomNumeric(15))

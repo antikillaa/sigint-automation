@@ -5,6 +5,7 @@ import model.AppContext;
 import model.Token;
 import model.User;
 import org.apache.log4j.Logger;
+import services.UserService;
 
 import javax.ws.rs.core.Response;
 
@@ -33,6 +34,9 @@ public class APILogin {
         } else {
             context.put("message", response.readEntity(String.class));
         }
+
+        UserService userService = new UserService();
+        userService.me();
     }
 
 }

@@ -6,7 +6,6 @@ import json.JsonCoverter;
 import json.RsClient;
 import model.AppContext;
 import org.apache.log4j.Logger;
-import services.UserService;
 
 import javax.ws.rs.core.Response;
 
@@ -24,10 +23,6 @@ public class SignInService {
             Response response = rsClient.post(
                     context.environment().getSigintHost() + signInRequest.getURI(),
                     JsonCoverter.toJsonString(signInRequest));
-
-            UserService userService = new UserService();
-            userService.me();
-
             return response;
         } catch (NullReturnException e) {
             e.printStackTrace();
