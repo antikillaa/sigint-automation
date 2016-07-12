@@ -99,8 +99,8 @@ public class RandomGenerator {
 
     }
 
-    public static Integer getRandomDuration() {
-        return RandomUtils.nextInt(120) * 60;
+    public static int getRandomDuration() {
+        return (RandomUtils.nextInt(120)+1)*60;
     }
 
     private static Date getStartDate(Date date) {

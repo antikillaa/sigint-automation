@@ -1,10 +1,8 @@
 package blocks.context.tables.reports;
 
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
-import org.openqa.selenium.By;
-import org.openqa.selenium.interactions.Actions;
 import blocks.context.tables.Row;
+import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
 import pages.reports.ReportDetailsDialog;
 import pages.reports.ReportsEditPage;
 
@@ -38,8 +36,7 @@ public class ReportRow extends Row {
     }
 
     public ReportsEditPage clickEditReportButton() {
-        Actions actions = new Actions(WebDriverRunner.getWebDriver());
-        actions.moveToElement(getEditReportButton()).click().build().perform();
+        getEditReportButton().hover().click();
         return page(ReportsEditPage.class);
     }
 

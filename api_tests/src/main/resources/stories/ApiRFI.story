@@ -7,8 +7,6 @@ When I send create RFI request with approved copy and with original document
 Then I got response code 200
 
 Scenario: API.Tasker can update existing RFI
-Meta:
-@TEEL 1667
 Given I sign in as tasker user
 When I send create RFI request without approved copy and without original document
 Then I got response code 200
@@ -54,8 +52,6 @@ Then Search results are correct
 And Searched RFI not in list
 
 Scenario: API.Tasker can cancel RFI
-Meta:
-@TEEL 1640
 Given I sign in as tasker user
 When I send create RFI request without approved copy and without original document
 And I put RFI to search query
@@ -65,8 +61,6 @@ When I search RFI by state and value CANCELLED
 Then Searched RFI in list
 
 Scenario: API.Analyst can take ownership of RFI
-Meta:
-@TEEL
 Given I sign in as tasker user
 When I send create RFI request without approved copy and without original document
 Then I got response code 200

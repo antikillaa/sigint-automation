@@ -22,7 +22,7 @@ public class RecordRow extends Row {
     }
 
     public RecordDetailsDialog clickCreateReportButton() {
-        getCreateReportButton().click();
+        getCreateReportButton().hover().click();
         return page(RecordDetailsDialog.class);
     }
 

@@ -4,6 +4,7 @@ import blocks.navigation.MainMenu;
 import blocks.navigation.menus.MenusFactory;
 import com.codeborne.selenide.Condition;
 import controllers.PageControllerFactory;
+import org.jbehave.core.failures.RestartingScenarioFailure;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,9 +25,13 @@ public class Navigator {
         if (!menu.isExpanded()) {
             menu.click();
         }
-        factory = menu.getSubMenuByName(subMenuName).click();
-        factory.getPage().getHeader().getBreadcrumb().getCurrentPath().shouldHave(Condition.text(subMenuName));
-        factory.getTableController().waitLoading();
+        try {
+            factory = menu.getSubMenuByName(subMenuName).click();
+            factory.getPage().getHeader().getBreadcrumb().getCurrentPath().shouldHave(Condition.text(subMenuName));
+            factory.getTableController().waitLoading();
+        } catch (Exception e) {
+            throw new RestartingScenarioFailure("Error on navigating to link. Will try one more", e);
+        }
         return factory;
     }
 

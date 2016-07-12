@@ -205,7 +205,7 @@ public class AllureReporter implements StoryReporter {
         ByteArrayOutputStream zipArchive;
         ServicesLogs logs = new ServicesLogs();
         try {
-            zipArchive = new Zipper().zip(logs.collectLogs());
+            zipArchive = new Zipper().zip(logs.getOutputLog());
             byte[] zip = zipArchive.toByteArray();
             allure.fire(new MakeAttachmentEvent(zip,"logs", "application/zip"));
         } catch (IOException e) {
@@ -217,7 +217,7 @@ public class AllureReporter implements StoryReporter {
 
     public  void makeStepFailedAttachment() {
         takeScreenshot();
-        //attachLogs();
+        attachLogs();
     }
 
 
