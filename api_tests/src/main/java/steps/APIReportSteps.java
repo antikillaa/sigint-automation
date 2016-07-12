@@ -83,6 +83,7 @@ public class APIReportSteps extends APISteps {
 
         Verify.shouldBe(equals.elements(createdReport.getOwner().getRole(), requestReport.getOwner().getRole()));
         Verify.shouldBe(equals.elements(createdReport.getOwner().getUser().getId(), requestReport.getOwner().getUser().getId()));
+        Verify.shouldBe(equals.elements(createdReport.getOwner().getUser().getName(), requestReport.getOwner().getUser().getName()));
 
         Verify.shouldBe(equals.elements(createdReport.getStatus(), requestReport.getStatus()));
         Verify.shouldBe(equals.elements(createdReport.getAuthorId(), requestReport.getAuthorId()));
