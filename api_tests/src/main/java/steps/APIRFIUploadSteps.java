@@ -133,8 +133,8 @@ public class APIRFIUploadSteps extends APISteps {
     @Then("RFI has status Assigned and assigned to analyst")
     public void checkAssignedRFI(){
         InformationRequest RFI = context.entities().getRFIs().getLatest();
-        User currentUser = context.get("user", User.class);
+        User currentUser = context.getLoggedUser();
         Assert.assertEquals(RFI.getState(), "ASSIGNED");
-        Assert.assertEquals(RFI.getAssignedTo(),currentUser.getId());
+        Assert.assertEquals(RFI.getAssignedTo(), currentUser.getId());
     }
 }
