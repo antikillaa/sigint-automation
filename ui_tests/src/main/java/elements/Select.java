@@ -3,8 +3,10 @@ package elements;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.interactions.Actions;
 
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class Select {
 
@@ -24,7 +26,7 @@ public class Select {
 
     public ElementsCollection getOptions() {
         element.click();
-        return element.$$("div.tagger-options-list > div.tagger-tag-option").shouldHave(sizeGreaterThan(0));
+        return element.$$("div.tagger-options-list > tagger-option").shouldHave(sizeGreaterThan(0));
     }
 
 
@@ -32,12 +34,16 @@ public class Select {
 
     public void selectOptionByText(String option) {
         element.click();
-        try {
-            SelenideElement foundOption = getOptions().findBy(Condition.text(option));
-            navAndClickOption(foundOption);
-        }catch (IndexOutOfBoundsException e){
-            throw new AssertionError(String.format("There is no available option to click with name %s!", option));
+       
+            ElementsCollection options = getOptions();
+            for (SelenideElement selenideElement: options) {
+                if(selenideElement.getText().equalsIgnoreCase(option)) {
+                    navAndClickOption(selenideElement);
+                    return;
+            }
+           
         }
+        throw new AssertionError(String.format("Option with text %s was not found!", option));
             }
 
 
@@ -52,7 +58,7 @@ public class Select {
     }
 
     private void navAndClickOption(SelenideElement option) {
-        option.scrollTo().click();
-
+        new Actions(getWebDriver()).moveToElement(option.getWrappedElement()).click().perform();
+       
     }
 }
