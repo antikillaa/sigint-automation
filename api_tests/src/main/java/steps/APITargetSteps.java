@@ -115,4 +115,12 @@ public class APITargetSteps extends APISteps {
 
         Verify.shouldBe(isTrue.element(resultTarget.getName().contains("DELETED at")));
     }
+
+    @When("I send upload targets request with XLS file containing $count targets")
+    public void targetGeneratedXls(String count){
+        int numTarget = Integer.valueOf(count);
+        int responseCode = service.add(numTarget);
+
+        context.put("code", responseCode);
+    }
 }

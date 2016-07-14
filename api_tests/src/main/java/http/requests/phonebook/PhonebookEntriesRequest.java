@@ -5,7 +5,7 @@ import http.requests.HttpRequest;
 
 public class PhonebookEntriesRequest extends HttpRequest {
 
-    private final static String URI = "/api/sigint/phonebook/entries";
+    private final static String URI = "/api/profile/phonebook/entries";
 
     public PhonebookEntriesRequest() {
         super(URI);

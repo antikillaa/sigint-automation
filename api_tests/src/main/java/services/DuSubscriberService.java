@@ -10,7 +10,7 @@ import json.RsClient;
 import model.AppContext;
 import model.DuSubscriberEntry;
 import model.phonebook.DuSubscriberSearchResult;
-import model.phonebook.EntriesUploadResult;
+import model.UploadResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.FileHelper;
@@ -49,7 +49,7 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
                 .cookie(request.getCookie())
                 .post(payload);
 
-        EntriesUploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, EntriesUploadResult.class, "result");
+        UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
         if (uploadResult != null) {
             context.put("uploadResult", uploadResult);
         }

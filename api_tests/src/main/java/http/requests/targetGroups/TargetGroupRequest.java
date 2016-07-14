@@ -4,7 +4,7 @@ import http.requests.HttpRequest;
 
 public class TargetGroupRequest extends HttpRequest {
 
-    private static final String URI = "/api/sigint/target-groups";
+    private static final String URI = "/api/profile/target-groups";
 
     public TargetGroupRequest() {
         super(URI);

@@ -11,9 +11,14 @@ import json.RsClient;
 import model.AppContext;
 import model.Result;
 import model.Target;
+import model.UploadResult;
 import org.apache.log4j.Logger;
+import utils.RandomGenerator;
 
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
 
 public class TargetService implements EntityService<Target> {
 
@@ -33,6 +38,29 @@ public class TargetService implements EntityService<Target> {
         } else {
             log.error("Add new target process was failed");
             throw new AssertionError("Add new target process was failed");
+        }
+        return response.getStatus();
+    }
+
+    public int add(int count) {
+        log.info("Upload new " + count + " targets");
+        TargetRequest request = new TargetRequest().upload();
+
+        File file = RandomGenerator.writeTargetXLS(count);
+        request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
+        file.deleteOnExit();
+
+        Entity payload = Entity.entity(request.getBody(), request.getMediaType());
+        log.debug("Sending request to " + sigintHost + request.getURI());
+        Response response = rsClient.client()
+                .target(sigintHost + request.getURI())
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .cookie(request.getCookie())
+                .post(payload);
+
+        UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
+        if (uploadResult != null) {
+            context.put("uploadResult", uploadResult);
         }
         return response.getStatus();
     }
@@ -57,7 +85,7 @@ public class TargetService implements EntityService<Target> {
     }
 
     public int update(Target entity) {
-        log.info("Updating target");
+        log.info("Updating target id: " + entity.getId());
         TargetRequest request = new TargetRequest();
         Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
 

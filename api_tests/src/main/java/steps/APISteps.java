@@ -8,7 +8,7 @@ import org.junit.Assert;
 public abstract class APISteps {
 
     static AppContext context = AppContext.getContext();
-    private Logger log = Logger.getLogger(APISteps.class);
+    Logger log = Logger.getLogger(APISteps.class);
 
     @Then("I got response code $expected")
     public void checkResponseCode(String expected) {

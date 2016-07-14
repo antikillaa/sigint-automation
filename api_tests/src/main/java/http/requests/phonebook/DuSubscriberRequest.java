@@ -11,7 +11,7 @@ import java.io.File;
 
 public class DuSubscriberRequest extends HttpRequest {
 
-    private final static String URI = "/api/sigint/du-subscribers";
+    private final static String URI = "/api/profile/du-subscribers";
     private MultiPart multiPart;
     Logger log = Logger.getLogger(DuSubscriberRequest.class);
 

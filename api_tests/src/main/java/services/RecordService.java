@@ -22,7 +22,7 @@ public class RecordService implements EntityService<Record> {
     public int add(Record entity) {
         log.info("Creating new record");
         try {
-            log.info("Record: " + JsonCoverter.toJsonString(entity));
+            log.debug("Record: " + JsonCoverter.toJsonString(entity));
         } catch (NullReturnException e) {
             log.error(e.getMessage());
             throw new AssertionError("This is not a record");

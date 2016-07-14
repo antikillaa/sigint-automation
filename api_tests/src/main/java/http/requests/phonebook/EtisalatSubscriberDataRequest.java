@@ -10,7 +10,7 @@ import java.io.File;
 
 public class EtisalatSubscriberDataRequest extends HttpRequest {
 
-    private final static String URI = "/api/sigint/etisalat-subscriber-data";
+    private final static String URI = "/api/profile/etisalat-subscriber-data";
     private MultiPart multiPart;
     Logger log = Logger.getLogger(DuSubscriberRequest.class);
 
