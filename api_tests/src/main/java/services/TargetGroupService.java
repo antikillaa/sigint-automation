@@ -28,7 +28,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
     public int add(TargetGroup entity) {
         log.info("Creating new target group");
         try {
-            log.info("TargetGroup: " + JsonCoverter.toJsonString(entity));
+            log.debug("TargetGroup: " + JsonCoverter.toJsonString(entity));
         } catch (NullReturnException e) {
             log.error(e.getMessage());
         }
@@ -49,9 +49,9 @@ public class TargetGroupService implements EntityService<TargetGroup> {
 
         Result result = JsonCoverter.fromJsonToObject(response.readEntity(String.class), Result.class);
         try {
-            log.info("result: " + JsonCoverter.toJsonString(result));
+            log.debug("result: " + JsonCoverter.toJsonString(result));
         } catch (NullReturnException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         if (response.getStatus() == 200) {
             try {
@@ -71,7 +71,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
     public int update(TargetGroup entity) {
         log.info("Updating target group" );
         try {
-            log.info("Target group: " + JsonCoverter.toJsonString(entity));
+            log.debug("Target group: " + JsonCoverter.toJsonString(entity));
         } catch (NullReturnException e) {
             log.error(e.getMessage());
         }
@@ -94,11 +94,6 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
 
         TargetGroup resultTargetGroup = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "result");
-        try {
-            log.info("Target group: " + JsonCoverter.toJsonString(resultTargetGroup));
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-        }
         return resultTargetGroup;
     }
 
@@ -109,7 +104,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
 
         TargetGroupSearchResult result = JsonCoverter.fromJsonToObject(response.readEntity(String.class), TargetGroupSearchResult.class);
         if (result != null) {
-            log.info("Size of list: " + result.getResult().size());
+            log.debug("Size of list: " + result.getResult().size());
             return result.getResult();
         } else {
             throw new AssertionError("Unable to get list of target groups");

@@ -31,4 +31,6 @@
     </bean>
     <bean id="reportSteps" class="steps.APIReportSteps">
     </bean>
+    <bean id="uploadSteps" class="steps.APIUploadSteps">
+    </bean>
 </beans>

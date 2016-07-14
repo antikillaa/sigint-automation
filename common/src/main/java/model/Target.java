@@ -9,8 +9,7 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import utils.RandomGenerator;
 
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
@@ -105,4 +104,27 @@ public class Target extends TeelaEntity {
         return this;
     }
 
+    public Map<Integer, Object[]> generateTargets(int count) {
+        Map<Integer, Object[]> data = new HashMap<>();
+        data.put(1, new Object[] {"ID", "Name", "Type", "Phones", "Keywords", "Target Groups"});
+
+        for (int i = 0; i < count; i++) {
+            Target target = new Target().generate();
+            List<String> targetFields = new ArrayList<>();
+
+            //ID	Name	Type	Phones	Keywords    Target Groups
+            targetFields.add(target.getId());
+            targetFields.add(target.getName());
+            targetFields.add(target.getType().name());
+            targetFields.add(target.getPhones().toString().replace("[", "").replace("]", ""));
+            targetFields.add(target.getKeywords().toString().replace("[", "").replace("]", ""));
+
+            Object[] array = new Object[targetFields.size()];
+            Object[] row = targetFields.toArray(array);
+
+            Integer rowNum = i + 2;
+            data.put(rowNum, row);
+        }
+        return data;
+    }
 }

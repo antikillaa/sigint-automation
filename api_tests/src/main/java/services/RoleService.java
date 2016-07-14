@@ -23,16 +23,16 @@ public class RoleService implements EntityService<Role> {
     public int add(Role entity) {
         log.info("Creating new Role");
         try {
-            log.info("Role: " + JsonCoverter.toJsonString(entity));
+            log.debug("Role: " + JsonCoverter.toJsonString(entity));
         } catch (NullReturnException e) {
-            log.info(e.getMessage());
+            log.error(e.getMessage());
         }
 
         RoleRequest request = new RoleRequest();
         Response response = rsClient
                 .post(sigintHost + request.getURI(), entity, request.getCookie(), PegasusMediaType.PEGASUS_JSON);
         String jsonString = response.readEntity(String.class);
-        log.info("Response: " + jsonString);
+        log.debug("Response: " + jsonString);
 
         Role createdRole = JsonCoverter.fromJsonToObject(jsonString, Role.class);
         if (createdRole != null) {

@@ -70,3 +70,9 @@ Then I got response code 200
 When I send delete target group request
 Then I got response code 200
 And Target group deleted correctly
+
+Scenario: API.Upload targets
+Given I sign in as admin user
+When I send upload targets request with XLS file containing 10 targets
+Then I got response code 200
+And Upload result of 10 targets is successful
