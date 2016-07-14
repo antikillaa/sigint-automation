@@ -80,8 +80,7 @@ public class JiraConnector {
         log.debug("Getting issue by it's key:" + issueKey);
         Response response = client.get(jiraServer + "/rest/api/latest/issue/"+issueKey,
                 sessionCookie);
-        Issue issue = JsonCoverter.readEntityFromResponse();
-        System.out.println(issue);
+        Issue issue = JsonCoverter.readEntityFromResponse(response, Issue.class);
         return issue;
     }
 

@@ -25,6 +25,17 @@ public class AppContext {
     private Environment environment;
     private Map<String, String> countries;
     private static Logger log = Logger.getLogger(AppContext.class);
+    
+    
+    public SelenideContext getSelenideContext() {
+        return selenideContext;
+    }
+    
+    public void setSelenideContext(SelenideContext selenideContext) {
+        this.selenideContext = selenideContext;
+    }
+    
+    private SelenideContext selenideContext = new SelenideContext();
 
     private static Map<String,String > loadJsonToMap(String filename) {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();

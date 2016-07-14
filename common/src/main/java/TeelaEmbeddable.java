@@ -23,9 +23,6 @@ import java.util.List;
 import static org.jbehave.core.io.CodeLocations.codeLocationFromClass;
 import static org.jbehave.core.reporters.Format.*;
 
-/**
- * Created by dm on 3/30/16.
- */
 public class TeelaEmbeddable extends JUnitStories {
 
     AllureReporter reporter;
