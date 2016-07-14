@@ -2,6 +2,7 @@ package steps;
 
 import controllers.APILogin;
 import errors.NullReturnException;
+import failure_strategy.Failures;
 import http.requests.GetDictionariesRequest;
 import json.JsonCoverter;
 import json.RsClient;
@@ -13,7 +14,6 @@ import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStories;
 import org.jbehave.core.annotations.BeforeStories;
 import reporter.Emailing;
-import reporter.ReportResults;
 import zapi.ZAPIService;
 
 import javax.ws.rs.core.Response;
@@ -64,7 +64,6 @@ public class GlobalSteps {
 
     @AfterStories
     public void reportResults(){
-        ReportResults results;
         ZAPIService service = new ZAPIService();
         Boolean shouldReport = Boolean.valueOf(context.getGeneralProperties().getProperty("report"));
         Boolean shouldEmail = Boolean.valueOf(context.getGeneralProperties().getProperty("email"));
@@ -74,14 +73,12 @@ public class GlobalSteps {
         } }catch (Exception e){
             log.error(e.getMessage());
         }
-        if (shouldEmail) {
-            results = service.getReportResults();
-            if (results.getFailed().size() > 0) {
-                new Emailing().send_email(results);
+        if (shouldEmail && Failures.hasFailuresWithoutBugs()) {
+                new Emailing().send_email(Failures.getResults());
             }
         }
 
-    }
+    
 
     public static User getUserByRole(String role) {
         User user;

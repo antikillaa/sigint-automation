@@ -1,5 +1,8 @@
 package reporter;
 
+import failure_strategy.Failures;
+import model.AppContext;
+import model.SelenideContext;
 import org.apache.log4j.Logger;
 import org.jbehave.core.model.*;
 import org.jbehave.core.reporters.StoryReporter;
@@ -21,6 +24,8 @@ public class AllureReporter implements StoryReporter {
     private final Map<String, String> suites = new HashMap<>();
     private String uid;
     static Logger log = Logger.getRootLogger();
+    private SelenideContext context = AppContext.getContext().getSelenideContext();
+    
 
     @Override
     public void beforeStory(Story story, boolean givenStory) {
@@ -40,6 +45,7 @@ public class AllureReporter implements StoryReporter {
     public void beforeScenario(String scenarioTitle) {
         allure.fire(new TestCaseStartedEvent(uid, scenarioTitle));
         allure.fire(new ClearStepStorageEvent());
+        context.setScenarioTitle(scenarioTitle);
     }
 
     @Override
@@ -64,11 +70,18 @@ public class AllureReporter implements StoryReporter {
 
     @Override
     public void failed(String step, Throwable cause) {
-        allure.fire(new StepFailureEvent().withThrowable(cause.getCause()));
-        makeStepFailedAttachment();
-        allure.fire(new TestCaseFailureEvent().withThrowable(cause.getCause()));
-        allure.fire(new StepFinishedEvent());
-        allure.fire(new TestCaseFinishedEvent());
+        if (!Failures.hasOpenedBug(context.getScenarioTitle())) {
+            allure.fire(new StepFailureEvent().withThrowable(cause.getCause()));
+            makeStepFailedAttachment();
+            allure.fire(new TestCaseFailureEvent().withThrowable(cause.getCause()));
+            allure.fire(new StepFinishedEvent());
+            allure.fire(new TestCaseFinishedEvent());
+            
+        } else {
+            allure.fire(new StepFinishedEvent());
+            allure.fire(new TestCaseFinishedEvent());
+        }
+        
     }
 
 
