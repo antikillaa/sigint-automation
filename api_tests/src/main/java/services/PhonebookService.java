@@ -29,6 +29,7 @@ public class PhonebookService implements EntityService<Phonebook>{
             log.debug("entity: " + JsonCoverter.toJsonString(entity));
         } catch (NullReturnException e) {
             log.error(e.getMessage());
+            throw new AssertionError("Unable to parse Phonebook entity");
         }
         Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
         Phonebook createdPhonebook = JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");

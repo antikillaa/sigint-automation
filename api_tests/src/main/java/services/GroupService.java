@@ -26,6 +26,7 @@ public class GroupService implements EntityService<Group> {
             log.debug("Group: " + JsonCoverter.toJsonString(entity));
         } catch (NullReturnException e) {
             log.error(e.getMessage());
+            throw new AssertionError("Unable to parse Group entity");
         }
 
         GroupsRequest request = new GroupsRequest();
@@ -55,6 +56,7 @@ public class GroupService implements EntityService<Group> {
             log.debug("Group: " + JsonCoverter.toJsonString(entity));
         } catch (NullReturnException e) {
             log.error(e.getMessage());
+            throw new AssertionError("Unable to parse Group entity");
         }
 
         GroupsRequest request = new GroupsRequest().update(entity.getId());
