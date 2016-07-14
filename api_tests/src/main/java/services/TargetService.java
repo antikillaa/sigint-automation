@@ -43,7 +43,7 @@ public class TargetService implements EntityService<Target> {
     }
 
     public int add(int count) {
-        log.info("");
+        log.info("Upload new " + count + " targets");
         TargetRequest request = new TargetRequest().upload();
 
         File file = RandomGenerator.writeTargetXLS(count);
