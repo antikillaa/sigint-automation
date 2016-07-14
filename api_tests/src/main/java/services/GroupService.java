@@ -23,16 +23,16 @@ public class GroupService implements EntityService<Group> {
     public int add(Group entity) {
         log.info("Creating new Group");
         try {
-            log.info("Group: " + JsonCoverter.toJsonString(entity));
+            log.debug("Group: " + JsonCoverter.toJsonString(entity));
         } catch (NullReturnException e) {
-            log.info(e.getMessage());
+            log.error(e.getMessage());
         }
 
         GroupsRequest request = new GroupsRequest();
         Response response = rsClient
                 .post(sigintHost + request.getURI(), entity, request.getCookie(), PegasusMediaType.PEGASUS_JSON);
         String jsonString = response.readEntity(String.class);
-        log.info("Response: " + jsonString);
+        log.debug("Response: " + jsonString);
 
         Group createdGroup = JsonCoverter.fromJsonToObject(jsonString, Group.class);
         if (createdGroup != null) {
@@ -52,16 +52,16 @@ public class GroupService implements EntityService<Group> {
     public int update(Group entity) {
         log.info("Updating Group id" + entity.getId());
         try {
-            log.info("Group: " + JsonCoverter.toJsonString(entity));
+            log.debug("Group: " + JsonCoverter.toJsonString(entity));
         } catch (NullReturnException e) {
-            log.info(e.getMessage());
+            log.error(e.getMessage());
         }
 
         GroupsRequest request = new GroupsRequest().update(entity.getId());
         Response response = rsClient
                 .put(sigintHost + request.getURI(), entity, request.getCookie(), PegasusMediaType.PEGASUS_JSON);
         String jsonString = response.readEntity(String.class);
-        log.info("Response: " + jsonString);
+        log.debug("Response: " + jsonString);
 
         Group updatedGroup = JsonCoverter.fromJsonToObject(jsonString, Group.class);
         if (updatedGroup != null) {

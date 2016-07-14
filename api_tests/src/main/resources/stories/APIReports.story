@@ -3,8 +3,6 @@ Meta:
 
 
 Scenario: API.Create manual report
-Meta:
-@wip
 Given I sign in as admin user
 When Generate new report with logged user as owner
 And Add new random record to report

@@ -9,7 +9,7 @@ import json.JsonCoverter;
 import json.RsClient;
 import model.AppContext;
 import model.EtisalatSubscriberEntry;
-import model.phonebook.EntriesUploadResult;
+import model.UploadResult;
 import model.phonebook.EtisalatSubscriberSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
@@ -56,7 +56,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
                 .cookie(request.getCookie())
                 .post(payload);
 
-        EntriesUploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, EntriesUploadResult.class, "result");
+        UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
         if (uploadResult != null) {
             context.put("uploadResult", uploadResult);
         }

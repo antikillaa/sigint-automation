@@ -6,7 +6,6 @@ import errors.NullReturnException;
 import json.JsonCoverter;
 import model.DuSubscriberEntry;
 import model.phonebook.DuSubscriberFilter;
-import model.phonebook.EntriesUploadResult;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -31,17 +30,6 @@ public class APIDuSubscriberSteps extends APISteps {
 
         context.put("code", responseCode);
         context.put("duSubscriberEntry", duSubscriberEntry);
-    }
-
-    @Then("Entry upload result is successful")
-    public void checkEntryUploadResults() {
-        log.info("Checking DuSubscriberEntry upload result");
-        EntriesUploadResult uploadResult = context.get("uploadResult", EntriesUploadResult.class);
-
-        if (uploadResult.getNumEntries() != 1 && uploadResult.getFailedEntries() > 0) {
-            log.error("Entry upload result is not correct!");
-            throw new AssertionError("Entry upload result is not correct!");
-        }
     }
 
     @When("I send search DuSubscribers by $criteria and value $value")

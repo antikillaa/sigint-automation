@@ -25,6 +25,11 @@ public class PhonebookService implements EntityService<Phonebook>{
     public int add(Phonebook entity) {
         PhonebookEntriesRequest request = new PhonebookEntriesRequest();
         log.info("Creating new Phonebook entry");
+        try {
+            log.info("entite: " + JsonCoverter.toJsonString(entity));
+        } catch (NullReturnException e) {
+            e.printStackTrace();
+        }
         Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
         Phonebook createdPhonebook = JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
         if (createdPhonebook != null) {
