@@ -10,7 +10,7 @@ import java.io.File;
 
 public class TargetRequest extends HttpRequest {
 
-    private final static String URI = "/api/sigint/targets";
+    private final static String URI = "/api/profile/targets";
     private MultiPart multiPart = new MultiPart();
     Logger log = Logger.getLogger(TargetRequest.class);
 
@@ -34,7 +34,7 @@ public class TargetRequest extends HttpRequest {
     }
 
     public TargetRequest upload() {
-        this.setURI(":8086/targets/upload");
+        this.setURI(URI + "/upload");
         return this;
     }
 

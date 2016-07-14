@@ -51,7 +51,6 @@ public class APIPhonebookSteps extends APISteps {
         Assert.assertEquals(etalon.getPhoneNumber(), created.getPhoneNumber());
         Assert.assertEquals(etalon.getCountry(), created.getCountry());
         Assert.assertEquals(etalon.getAddress(), created.getAddress());
-        Assert.assertEquals(etalon.getImsi(), created.getImsi());
         Assert.assertEquals(etalon.getProvider(), created.getProvider());
         Assert.assertEquals(etalon.getLocation(), created.getLocation());
         Assert.assertTrue(created.getId() != null);
