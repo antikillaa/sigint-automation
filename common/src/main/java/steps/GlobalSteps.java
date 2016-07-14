@@ -65,7 +65,7 @@ public class GlobalSteps {
     @AfterStories
     public void reportResults(){
         ReportResults results;
-        ZAPIService service = new ZAPIService("target/allure-results");
+        ZAPIService service = new ZAPIService();
         Boolean shouldReport = Boolean.valueOf(context.getGeneralProperties().getProperty("report"));
         Boolean shouldEmail = Boolean.valueOf(context.getGeneralProperties().getProperty("email"));
         try {

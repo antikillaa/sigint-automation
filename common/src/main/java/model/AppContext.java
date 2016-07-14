@@ -26,6 +26,17 @@ public class AppContext {
     private Map<String, String> countries;
     private User loggedUser;
     private static Logger log = Logger.getLogger(AppContext.class);
+    
+    
+    public SelenideContext getSelenideContext() {
+        return selenideContext;
+    }
+    
+    public void setSelenideContext(SelenideContext selenideContext) {
+        this.selenideContext = selenideContext;
+    }
+    
+    private SelenideContext selenideContext = new SelenideContext();
 
     public User getLoggedUser() {
         return loggedUser;

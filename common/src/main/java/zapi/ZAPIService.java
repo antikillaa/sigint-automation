@@ -25,12 +25,8 @@ public class ZAPIService {
     private Properties connectionProperties = AppContext.getContext().getJiraConnection();
     private Logger log = Logger.getLogger(ReportParser.class);
     private ReportResults reportResults;
-    private String pathToXml;
-
-    public ZAPIService(String pathToXML) {
-        this.pathToXml = pathToXML;
-    }
-
+    private final String pathToXml = "target/allure-results";
+    
     public ReportResults getReportResults(){
         if (reportResults==null){
             reportResults = new ReportParser().parseXmlReportFiles(pathToXml);

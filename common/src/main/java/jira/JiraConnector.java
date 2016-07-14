@@ -11,9 +11,7 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-/**
- * Created by dm on 4/5/16.
- */
+
 public class JiraConnector {
     public static Logger log = Logger.getRootLogger();
     private AppContext context = AppContext.getContext();
@@ -76,6 +74,14 @@ public class JiraConnector {
             }
         }
         throw new NullReturnException("There is version with name:"+versionName+" for project id:"+projectId);
+    }
+    
+    public Issue getIssue(String issueKey) {
+        log.debug("Getting issue by it's key:" + issueKey);
+        Response response = client.get(jiraServer + "/rest/api/latest/issue/"+issueKey,
+                sessionCookie);
+        Issue issue = JsonCoverter.readEntityFromResponse(response, Issue.class);
+        return issue;
     }
 
 }
