@@ -104,14 +104,14 @@ public class Phonebook extends TeelaEntity {
     @Override
     public Phonebook generate() {
         this
-                .setName("name:" + RandomStringUtils.randomAlphabetic(10))
+                .setName(RandomStringUtils.randomAlphabetic(10))
                 .setPhoneNumber(RandomStringUtils.randomNumeric(10))
                 .setCountryCode(RandomGenerator.generateCountryCode())
                 .setCountry(RandomGenerator.getCountryName(this.getCountryCode()))
-                .setAddress("address:" + RandomStringUtils.randomAlphanumeric(20))
-                .setImsi("imsi:" + RandomStringUtils.randomAlphanumeric(10))
-                .setProvider("provider:" + RandomStringUtils.randomAlphanumeric(10))
-                .setLocation("location:" + RandomStringUtils.randomAlphanumeric(20));
+                .setAddress(RandomStringUtils.randomAlphanumeric(20))
+                .setImsi(RandomStringUtils.randomAlphanumeric(10))
+                .setProvider(RandomStringUtils.randomAlphanumeric(10))
+                .setLocation(RandomStringUtils.randomAlphanumeric(20));
         return this;
     }
 }
