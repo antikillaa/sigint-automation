@@ -25,7 +25,6 @@ public class Select {
     }
 
     public ElementsCollection getOptions() {
-        element.click();
         return element.$$("div.tagger-options-list > tagger-option").shouldHave(sizeGreaterThan(0));
     }
 
@@ -34,7 +33,6 @@ public class Select {
 
     public void selectOptionByText(String option) {
         element.click();
-       
             ElementsCollection options = getOptions();
             for (SelenideElement selenideElement: options) {
                 if(selenideElement.getText().equalsIgnoreCase(option)) {
@@ -57,7 +55,7 @@ public class Select {
         }
     }
 
-    private void navAndClickOption(SelenideElement option) {
+    protected void navAndClickOption(SelenideElement option) {
         new Actions(getWebDriver()).moveToElement(option.getWrappedElement()).click().perform();
        
     }

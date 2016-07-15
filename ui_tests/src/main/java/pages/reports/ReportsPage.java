@@ -1,5 +1,6 @@
 package pages.reports;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import pages.SigintPage;
@@ -15,7 +16,7 @@ public abstract class ReportsPage extends SigintPage {
     }
 
     public SelenideElement getForm() {
-        return $(By.xpath("//div[contains(@class, 'pg-form')]"));
+        return $(By.xpath("//div[contains(@class, 'pg-form')]")).should(Condition.exist);
     }
 
     public SelenideElement getSubject() {
