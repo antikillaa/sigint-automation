@@ -30,7 +30,7 @@ public class TeelaEmbeddable extends CustomStories {
     public TeelaEmbeddable(AllureReporter reporter) {
         this.reporter = reporter;
         configuredEmbedder().embedderControls().doGenerateViewAfterStories(true).doIgnoreFailureInStories(true)
-                .doIgnoreFailureInView(true).useThreads(1);
+                .doIgnoreFailureInView(true).useThreads(5);
     }
 
     @Override
