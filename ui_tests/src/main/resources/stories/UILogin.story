@@ -1,6 +1,4 @@
 Meta:
-@modules UI
-@phase sanity
 @component login
 
 
@@ -11,7 +9,7 @@ And I should see invalid credentials error
 
 Examples:
 |role|
-|PAPER|
+|ADMIN|
 
 
 Scenario: User as <role> is able to sign in and sign out with correct credentials
