@@ -135,7 +135,8 @@ public class RandomGenerator {
         return locale.getDisplayCountry();
     }
 
-    private static Map<Integer, Object[]> mapTargets(List<Target> targets) {
+    public static File writeTargetXLS(List<Target> targets) {
+
         Map<Integer, Object[]> data = new HashMap<>();
         data.put(1, new Object[] {"ID", "Name", "Type", "Phones", "Keywords", "Target Groups"});
 
@@ -156,12 +157,6 @@ public class RandomGenerator {
             Integer rowNum = i + 2;
             data.put(rowNum, row);
         }
-        return data;
-    }
-
-    public static File writeTargetXLS(List<Target> targets) {
-
-        Map<Integer, Object[]> data = mapTargets(targets);
 
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("Target sheet");
