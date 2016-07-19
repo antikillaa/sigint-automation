@@ -107,9 +107,9 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
     }
 
 
-    public class AddressFilter extends SearchFilter<EtisalatSubscriberEntry> {
+    private class AddressFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
-        public AddressFilter(String value) {
+        AddressFilter(String value) {
             address = value;
         }
 
@@ -119,9 +119,9 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
     }
 
-    public class PhoneNumberFilter extends SearchFilter<EtisalatSubscriberEntry> {
+    private class PhoneNumberFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
-        public PhoneNumberFilter(String value) {
+        PhoneNumberFilter(String value) {
             phoneNumber = value;
         }
 
@@ -131,9 +131,9 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
     }
 
-    public class NameFilter extends SearchFilter<EtisalatSubscriberEntry> {
+    private class NameFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
-        public NameFilter(String value) {
+        NameFilter(String value) {
             name = value;
         }
 
@@ -143,9 +143,9 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
     }
 
-    public class AccountNameArabicFilter extends SearchFilter<EtisalatSubscriberEntry> {
+    private class AccountNameArabicFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
-        public AccountNameArabicFilter(String value) {
+        AccountNameArabicFilter(String value) {
             accountNameArabic = value;
         }
 
@@ -155,9 +155,9 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
     }
 
-    public class UserIdOrNameFilter extends SearchFilter<EtisalatSubscriberEntry> {
+    private class UserIdOrNameFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
-        public UserIdOrNameFilter(String value) {
+        UserIdOrNameFilter(String value) {
             userIdOrName = value;
         }
 
@@ -167,9 +167,9 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
     }
 
-    public class FirstAddressLineFilter extends SearchFilter<EtisalatSubscriberEntry> {
+    private class FirstAddressLineFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
-        public FirstAddressLineFilter(String value) {
+        FirstAddressLineFilter(String value) {
             firstAddressLine = value;
         }
 
@@ -179,9 +179,9 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
     }
 
-    public class SecondAddressLineFilter extends SearchFilter<EtisalatSubscriberEntry> {
+    private class SecondAddressLineFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
-        public SecondAddressLineFilter(String value) {
+        SecondAddressLineFilter(String value) {
             secondAddressLine = value;
         }
 
@@ -191,9 +191,9 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
     }
 
-    public class CityNameFilter extends SearchFilter<EtisalatSubscriberEntry> {
+    private class CityNameFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
-        public CityNameFilter(String value) {
+        CityNameFilter(String value) {
             cityName = value;
         }
 
@@ -203,9 +203,9 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
     }
 
-    public class ImsiFilter extends SearchFilter<EtisalatSubscriberEntry> {
+    private class ImsiFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
-        public ImsiFilter(String value) {
+        ImsiFilter(String value) {
             imsi = value;
         }
 
@@ -215,9 +215,9 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
     }
 
-    public class QueryStringFilter extends SearchFilter<EtisalatSubscriberEntry> {
+    private class QueryStringFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
-        public QueryStringFilter(String value) {
+        QueryStringFilter(String value) {
             queryString = value;
         }
 

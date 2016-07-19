@@ -4,12 +4,16 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Date;
 
 import static java.lang.Boolean.TRUE;
 
 public abstract class TeelaEntity {
 
     private String id;
+    private Date createdAt;
+    private Date modifiedAt;
+    private String modifiedBy;
 
 
     public String getId() {
@@ -18,6 +22,30 @@ public abstract class TeelaEntity {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getModifiedAt() {
+        return modifiedAt;
+    }
+
+    public void setModifiedAt(Date modifiedAt) {
+        this.modifiedAt = modifiedAt;
     }
 
     public abstract <T extends TeelaEntity> T generate();

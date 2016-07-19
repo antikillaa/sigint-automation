@@ -4,7 +4,6 @@ import abs.TeelaEntity;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -13,8 +12,6 @@ import java.util.List;
 public class ReportCategory extends TeelaEntity {
 
     private int version;
-    private Date createdAt;
-    private Date modifiedAt;
     private String name;
     private List<String> values;
     private int order;
@@ -28,22 +25,6 @@ public class ReportCategory extends TeelaEntity {
 
     public void setVersion(int version) {
         this.version = version;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getModifiedAt() {
-        return modifiedAt;
-    }
-
-    public void setModifiedAt(Date modifiedAt) {
-        this.modifiedAt = modifiedAt;
     }
 
     public String getName() {

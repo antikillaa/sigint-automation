@@ -12,7 +12,7 @@ public class TargetRequest extends HttpRequest {
 
     private final static String URI = "/api/profile/targets";
     private MultiPart multiPart = new MultiPart();
-    Logger log = Logger.getLogger(TargetRequest.class);
+    private Logger log = Logger.getLogger(TargetRequest.class);
 
     public TargetRequest() {
         super(URI);
@@ -35,6 +35,11 @@ public class TargetRequest extends HttpRequest {
 
     public TargetRequest upload() {
         this.setURI(URI + "/upload");
+        return this;
+    }
+
+    public TargetRequest search() {
+        this.setURI(URI + "/search");
         return this;
     }
 

@@ -1,9 +1,13 @@
 package utils;
 
+import errors.NullReturnException;
+import json.JsonCoverter;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,4 +39,29 @@ public class Parser {
 
         return sum;
     }
+
+    public static Set<String> stringToSet(String list) {
+        Set<String> strings = new HashSet<>();
+        for (String value : list.split(",")) {
+            strings.add(value.trim());
+        }
+        return strings;
+    }
+
+    public static String setToString(Set<String> list) {
+        return list
+                .toString()
+                .replace("[", "")
+                .replace("]", "");
+    }
+
+    public static String entityToString(Object entity) {
+        try {
+            return entity.getClass().getName() + ": " + JsonCoverter.toJsonString(entity);
+        } catch (NullReturnException e) {
+            log.error(e.getMessage());
+            throw new AssertionError("Unable to parse entity");
+        }
+    }
+
 }

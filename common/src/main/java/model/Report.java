@@ -54,7 +54,6 @@ public class Report extends TeelaEntity {
     private Boolean statusChanged;
     private String sourceType;
     private String recordType;
-    private Date createdAt;
 
     public String getName() {
         return name;
@@ -342,21 +341,12 @@ public class Report extends TeelaEntity {
         return this;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public Report setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-        return this;
-    }
-
     public Report generate() {
         this
                 .setSubject("subject:" + RandomStringUtils.randomAlphabetic(4))
                 .setStatus(ReportStatus.DRAFT)
-                .setCreatedAt(new Date())
                 .initOwner();
+        this.setCreatedAt(new Date());
         return this;
     }
 

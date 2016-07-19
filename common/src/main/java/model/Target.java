@@ -18,12 +18,16 @@ public class Target extends TeelaEntity {
     private String description;
     @JsonSerialize(using = TargetJsonSerializer.class)
     @JsonDeserialize(using = TargetDeserializer.class)
-    private List<TargetGroup> groups;
-    private LinkedHashSet<String> keywords;
-    private LinkedHashSet<String> languages;
+    private List<TargetGroup> groups = new ArrayList<>();
+    private Set<String> keywords = new HashSet<>();
+    private Set<String> languages = new HashSet<>();
     private String name;
-    private LinkedHashSet<String> phones;
-    private TargetTypes type;
+    private Set<String> phones = new HashSet<>();
+    private TargetType type;
+    private String originalName;
+    private int threatScore;
+    private long lmt;
+    private boolean deleted;
 
     public Target(String id) {
         setId(id);
@@ -48,19 +52,19 @@ public class Target extends TeelaEntity {
         this.groups = groups;
     }
 
-    public LinkedHashSet<String> getKeywords() {
+    public Set<String> getKeywords() {
         return keywords;
     }
 
-    public void setKeywords(LinkedHashSet<String> keywords) {
+    public void setKeywords(Set<String> keywords) {
         this.keywords = keywords;
     }
 
-    public LinkedHashSet<String> getLanguages() {
+    public Set<String> getLanguages() {
         return languages;
     }
 
-    public Target setLanguages(LinkedHashSet<String> languages) {
+    public Target setLanguages(Set<String> languages) {
         this.languages = languages;
         return this;
     }
@@ -74,57 +78,65 @@ public class Target extends TeelaEntity {
         return this;
     }
 
-    public LinkedHashSet<String> getPhones() {
+    public Set<String> getPhones() {
         return phones;
     }
 
-    public Target setPhones(LinkedHashSet<String> phones) {
+    public Target setPhones(Set<String> phones) {
         this.phones = phones;
         return this;
     }
 
-    public TargetTypes getType() {
+    public TargetType getType() {
         return type;
     }
 
-    public Target setType(TargetTypes type) {
+    public Target setType(TargetType type) {
         this.type = type;
         return this;
     }
 
+    public String getOriginalName() {
+        return originalName;
+    }
+
+    public void setOriginalName(String originalName) {
+        this.originalName = originalName;
+    }
+
+    public int getThreatScore() {
+        return threatScore;
+    }
+
+    public void setThreatScore(int threatScore) {
+        this.threatScore = threatScore;
+    }
+
+    public long getLmt() {
+        return lmt;
+    }
+
+    public void setLmt(long lmt) {
+        this.lmt = lmt;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 
     public Target generate() {
         this
                 .setDescription(RandomStringUtils.randomAlphabetic(20))
                 .setName(RandomStringUtils.randomAlphabetic(10))
-                .setType(TargetTypes.getRandom())
+                .setType(TargetType.getRandom())
                 .setPhones(RandomGenerator.generatePhones(10))
                 .setLanguages(RandomGenerator.generateLanguagesCodes(5))
                 .setKeywords(RandomGenerator.generateRandomStrings(5));
         return this;
     }
 
-    public Map<Integer, Object[]> generateTargets(int count) {
-        Map<Integer, Object[]> data = new HashMap<>();
-        data.put(1, new Object[] {"ID", "Name", "Type", "Phones", "Keywords", "Target Groups"});
-
-        for (int i = 0; i < count; i++) {
-            Target target = new Target().generate();
-            List<String> targetFields = new ArrayList<>();
-
-            //ID	Name	Type	Phones	Keywords    Target Groups
-            targetFields.add(target.getId());
-            targetFields.add(target.getName());
-            targetFields.add(target.getType().name());
-            targetFields.add(target.getPhones().toString().replace("[", "").replace("]", ""));
-            targetFields.add(target.getKeywords().toString().replace("[", "").replace("]", ""));
-
-            Object[] array = new Object[targetFields.size()];
-            Object[] row = targetFields.toArray(array);
-
-            Integer rowNum = i + 2;
-            data.put(rowNum, row);
-        }
-        return data;
-    }
 }
