@@ -110,7 +110,7 @@
               <ignoreFailureInStories>true</ignoreFailureInStories>
               <ignoreFailureInView>false</ignoreFailureInView>
               <storyTimeouts>5000</storyTimeouts>
-              <threads>5</threads>
+              <threads>1</threads>
               <metaFilters>
                 <metaFilter>${metaFilters}</metaFilter>
               </metaFilters>
