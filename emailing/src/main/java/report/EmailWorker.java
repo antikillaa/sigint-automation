@@ -19,7 +19,7 @@ public class EmailWorker {
     
     private static Properties mailProperties = AppContext.getContext().getMailProperties();
     private static Logger logger = Logger.getLogger(EmailWorker.class);
-    private static Integer tries=0;
+    private static int tries=0;
     
     private static void send(Session session, String html)  {
         try {
