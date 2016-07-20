@@ -1,6 +1,6 @@
 package reporter;
 
-import database.EmailManager;
+import post_build_managers.EmailManager;
 import failure_strategy.Statistic;
 import org.apache.log4j.Logger;
 

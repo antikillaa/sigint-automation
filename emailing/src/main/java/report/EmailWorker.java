@@ -1,9 +1,11 @@
 package report;
 
+import email.EmailFactory;
+import email.HtmlEmail;
 import failure_strategy.Statistic;
-import html_email.HtmlEmail;
 import model.AppContext;
 import org.apache.log4j.Logger;
+import post_build_managers.BuildManager;
 import reporter.EmailCondition;
 import reporter.ReportResults;
 
@@ -18,6 +20,7 @@ import java.util.Properties;
 public class EmailWorker {
     
     private static Properties mailProperties = AppContext.getContext().getMailProperties();
+    private static Properties connection = AppContext.getContext().getJiraConnection();
     private static Logger logger = Logger.getLogger(EmailWorker.class);
     private static Integer tries=0;
     
@@ -43,7 +46,7 @@ public class EmailWorker {
     private static void send_email() {
         ReportResults results = Statistic.getResults();
         logger.info("Sending email on failure test results...");
-        HtmlEmail email = new HtmlEmail();
+        HtmlEmail email = EmailFactory.getEmail(new BuildManager().getBuildStatus(), Statistic.hasFailuresWithoutBugs() );
         String html = email.buildHtml(results);
         Properties prop = System.getProperties();
         prop.setProperty("mail.smtp.host", mailProperties.getProperty("smtp"));
@@ -52,15 +55,9 @@ public class EmailWorker {
     }
     
     public static void main(String[] args) {
-        boolean shouldSend;
-        try {
-            shouldSend = EmailCondition.getEmailCondition();
-        } catch (Exception e) {
-            logger.error("Unable to get email status. Sending email");
-            shouldSend = true;
-        }
-        if (shouldSend) {
-            send_email();
+        Boolean shouldEmail = Boolean.valueOf(AppContext.getContext().getGeneralProperties().getProperty("email"));
+        if (shouldEmail) {
+            EmailSender(email);
             EmailCondition.setEmailtoSucess();
         }
     }
