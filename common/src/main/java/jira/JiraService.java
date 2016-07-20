@@ -26,8 +26,15 @@ public class JiraService {
     public boolean hasOpenedBugs(String testCaseTitle) {
         Boolean isOpened = false;
         Issue issue = connector.getIssue(new ZAPIService().getTestCaseKeyByTitle(testCaseTitle));
+        List<IssueLink> issueLinks = issue.getFields().getIssueLinks();
+        if (issueLinks.size() == 0) {
+            return false;
+        }
         for (IssueLink issueLink: issue.getFields().getIssueLinks()) {
                 Issue outwardIssue = issueLink.getOutwardIssue();
+            if (outwardIssue == null) {
+                return false;
+            }
             if (outwardIssue.getFields().getIssueType().getName().equalsIgnoreCase("bug")){
                 String status = outwardIssue.getFields().getStatus().getName().toLowerCase();
                 isOpened = activeStatuses.contains(status);
