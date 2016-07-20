@@ -6,7 +6,6 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.util.Date;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -18,9 +17,6 @@ public class TargetGroup extends TeelaEntity {
     //@JsonSerialize(using= TargetGroupJsonSerializer.class)
     //@JsonDeserialize(using= TargetGroupDeserializer.class)
     private List<String> targets;
-    private Date createdAt;
-    private Date modifiedAt;
-    private String modifiedBy;
     private int lmt;
     private int threatScore;
     private boolean deleted;
@@ -48,30 +44,6 @@ public class TargetGroup extends TeelaEntity {
 
     public void setTargets(List<String> targets) {
         this.targets = targets;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getModifiedAt() {
-        return modifiedAt;
-    }
-
-    public void setModifiedAt(Date modifiedAt) {
-        this.modifiedAt = modifiedAt;
-    }
-
-    public String getModifiedBy() {
-        return modifiedBy;
-    }
-
-    public void setModifiedBy(String modifiedBy) {
-        this.modifiedBy = modifiedBy;
     }
 
     public int getLmt() {

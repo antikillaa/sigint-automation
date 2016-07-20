@@ -8,17 +8,17 @@ import errors.NullReturnException;
 import http.requests.targets.TargetRequest;
 import json.JsonCoverter;
 import json.RsClient;
-import model.AppContext;
-import model.Result;
-import model.Target;
-import model.UploadResult;
+import model.*;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
+import utils.Parser;
 import utils.RandomGenerator;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
+import java.util.List;
 
 public class TargetService implements EntityService<Target> {
 
@@ -30,6 +30,8 @@ public class TargetService implements EntityService<Target> {
 
     public int add(Target entity) {
         log.info("Creating new target");
+        log.debug(Parser.entityToString(entity));
+
         TargetRequest request = new TargetRequest();
         Response response = rsClient.put(sigintHost + request.getURI(), entity, request.getCookie());
         Target target = JsonCoverter.readEntityFromResponse(response, Target.class, "id");
@@ -42,11 +44,11 @@ public class TargetService implements EntityService<Target> {
         return response.getStatus();
     }
 
-    public int add(int count) {
-        log.info("Upload new " + count + " targets");
+    public int upload(List<Target> targets) {
+        log.info("Upload new " + targets.size() + " targets");
         TargetRequest request = new TargetRequest().upload();
 
-        File file = RandomGenerator.writeTargetXLS(count);
+        File file = RandomGenerator.writeTargetXLS(targets);
         request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         file.deleteOnExit();
 
@@ -67,6 +69,7 @@ public class TargetService implements EntityService<Target> {
 
     public int remove(Target entity) {
         log.info("Deleting target id:" + entity.getId());
+
         TargetRequest request = new TargetRequest().delete(entity.getId());
         Response response = rsClient.delete(sigintHost + request.getURI(), request.getCookie());
 
@@ -81,11 +84,26 @@ public class TargetService implements EntityService<Target> {
     }
 
     public EntityList<Target> list(SearchFilter filter) {
-        return null;
+        log.debug(Parser.entityToString(filter));
+
+        TargetRequest request = new TargetRequest().search();
+        Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
+        TargetSearchResults searchResults = JsonCoverter.readEntityFromResponse(response, TargetSearchResults.class, "result");
+        if (searchResults == null) {
+            throw new AssertionError("Unable to read search results from Targets search");
+        } else {
+            return new EntityList<Target>(searchResults.getContent()) {
+                public Target getEntity(String param) throws NullReturnException {
+                    throw new NotImplementedException();
+                }
+            };
+        }
     }
 
     public int update(Target entity) {
         log.info("Updating target id: " + entity.getId());
+        log.debug(Parser.entityToString(entity));
+
         TargetRequest request = new TargetRequest();
         Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
 
@@ -102,15 +120,13 @@ public class TargetService implements EntityService<Target> {
 
     public Target view(String id) {
         log.info("View target entry id:" + id);
+
         TargetRequest request = new TargetRequest().get(id);
         Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
 
         Target resultTarget = JsonCoverter.readEntityFromResponse(response, Target.class, "result");
-        try {
-            log.info("Result target: " + JsonCoverter.toJsonString(resultTarget));
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-        }
+        log.debug(Parser.entityToString(resultTarget));
+
         return resultTarget;
     }
 }

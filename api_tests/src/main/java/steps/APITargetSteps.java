@@ -1,19 +1,18 @@
 package steps;
 
+import abs.EntityList;
 import conditions.Verify;
 import errors.NullReturnException;
 import json.JsonCoverter;
-import model.AppContext;
-import model.Target;
-import model.TargetGroup;
+import model.*;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TargetService;
+import utils.Parser;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static conditions.Conditions.equals;
 import static conditions.Conditions.isTrue;
@@ -32,7 +31,6 @@ public class APITargetSteps extends APISteps {
             target.setGroups(groups);
         }
 
-        log.info("Target: " + JsonCoverter.toJsonString(target));
         int response = service.add(target);
 
         context.put("code", response);
@@ -119,8 +117,79 @@ public class APITargetSteps extends APISteps {
     @When("I send upload targets request with XLS file containing $count targets")
     public void targetGeneratedXls(String count){
         int numTarget = Integer.valueOf(count);
-        int responseCode = service.add(numTarget);
+
+        List<Target> targets = new ArrayList<>();
+        for (int i = 0; i < numTarget; i++) {
+            targets.add(new Target().generate());
+        }
+
+        int responseCode = service.upload(targets);
 
         context.put("code", responseCode);
     }
+
+    @When("I send search targets by $criteria and value $value")
+    public void targetSearchByCriteriaAndValue(String criteria, String value) {
+        log.info("Start search targets by criteria: " + criteria + ", value: " + value);
+        Target target = context.entities().getTargets().getLatest();
+
+        if (criteria.toLowerCase().equals("type")) {
+            value = value.equals("random") ? target.getType().toString() : value;
+        } else if (criteria.toLowerCase().equals("name")) {
+            value = value.equals("random") ? target.getName() : value;
+        } else if (criteria.toLowerCase().equals("keywords")) {
+            value = value.equals("random") ? Parser.setToString(target.getKeywords()) : value;
+        } else if (criteria.toLowerCase().equals("description")) {
+            value = value.equals("random") ? target.getDescription() : value;
+        } else if (criteria.toLowerCase().equals("deleted")) {
+            value = value.equals("random") ? String.valueOf(target.isDeleted()) : value;
+        } else if (criteria.toLowerCase().equals("languages")) {
+            value = value.equals("random") ? Parser.setToString(target.getLanguages()) : value;
+        } else if (criteria.toLowerCase().equals("phones")) {
+            value = value.equals("random") ? Parser.setToString(target.getPhones()) : value;
+        } else if (criteria.toLowerCase().equals("updatedafter")) {
+            value = value.equals("random") ? String.valueOf(target.getCreatedAt().getTime()-1000) : value;
+        } else {
+            throw new AssertionError("Unknown filter type");
+        }
+
+        TargetFilter searchFilter = new TargetFilter().filterBy(criteria, value);
+        EntityList<Target> targets = service.list(searchFilter);
+
+        context.put("searchFilter", searchFilter);
+        context.put("searchResult", targets);
+    }
+
+    @Then("targets search result are correct")
+    public void targetSearchResultAreCorrect(){
+        log.info("Checking if search phonebook result is correct");
+        TargetFilter searchFilter = context.get("searchFilter", TargetFilter.class);
+        EntityList<Target> searchResult = context.get("searchResult", EntityList.class);
+
+        if (searchResult.size() == 0) {
+            log.warn("Search result can be incorrect. There are not records in it");
+        } else {
+            log.info("Search result size: " + searchResult.size());
+        }
+        for (Target target : searchResult) {
+            Assert.assertTrue(searchFilter.filter(target));
+        }
+    }
+
+    @Then("searched target entry $criteria list")
+    public void searchetTargetInList(String criteria) {
+        log.info("Checking if Target entry " + criteria + " list");
+        Target target = context.entities().getTargets().getLatest();
+        EntityList<Target> list = context.get("searchResult", EntityList.class);
+
+        Boolean contains = list.contains(target);
+        if (criteria.toLowerCase().equals("in")) {
+            Verify.shouldBe(isTrue.element(contains));
+        } else if (criteria.toLowerCase().equals("not in")) {
+            Verify.shouldNotBe(isTrue.element(contains));
+        } else {
+            throw new AssertionError("Incorrect argument passed to step");
+        }
+    }
+
 }

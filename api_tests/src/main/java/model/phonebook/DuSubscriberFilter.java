@@ -54,9 +54,9 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
     }
 
 
-    public class AddressFilter extends SearchFilter<DuSubscriberEntry> {
+    private class AddressFilter extends SearchFilter<DuSubscriberEntry> {
 
-        public AddressFilter(String value) {
+        AddressFilter(String value) {
             address = value;
         }
 
@@ -66,9 +66,9 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
         }
     }
 
-    public class PhoneNumberFilter extends SearchFilter<DuSubscriberEntry> {
+    private class PhoneNumberFilter extends SearchFilter<DuSubscriberEntry> {
 
-        public PhoneNumberFilter(String value) {
+        PhoneNumberFilter(String value) {
             phoneNumber = value;
         }
 
@@ -78,9 +78,9 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
         }
     }
 
-    public class NameFilter extends SearchFilter<DuSubscriberEntry> {
+    private class NameFilter extends SearchFilter<DuSubscriberEntry> {
 
-        public NameFilter(String value) {
+        NameFilter(String value) {
             name = value;
         }
 
@@ -90,9 +90,9 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
         }
     }
 
-    public class QueryStringFilter extends SearchFilter<DuSubscriberEntry> {
+    private class QueryStringFilter extends SearchFilter<DuSubscriberEntry> {
 
-        public QueryStringFilter(String value) {
+        QueryStringFilter(String value) {
             queryString = value;
         }
 

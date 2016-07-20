@@ -2,7 +2,6 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
-import errors.NullReturnException;
 import http.requests.roles.RoleRequest;
 import json.JsonCoverter;
 import json.RsClient;
@@ -10,6 +9,7 @@ import model.AppContext;
 import model.PegasusMediaType;
 import model.Role;
 import org.apache.log4j.Logger;
+import utils.Parser;
 
 import javax.ws.rs.core.Response;
 
@@ -22,19 +22,15 @@ public class RoleService implements EntityService<Role> {
 
     public int add(Role entity) {
         log.info("Creating new Role");
-        try {
-            log.debug("Role: " + JsonCoverter.toJsonString(entity));
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-        }
+        log.debug(Parser.entityToString(entity));
 
         RoleRequest request = new RoleRequest();
         Response response = rsClient
                 .post(sigintHost + request.getURI(), entity, request.getCookie(), PegasusMediaType.PEGASUS_JSON);
         String jsonString = response.readEntity(String.class);
-        log.debug("Response: " + jsonString);
 
         Role createdRole = JsonCoverter.fromJsonToObject(jsonString, Role.class);
+        log.debug(Parser.entityToString(createdRole));
         if (createdRole != null) {
             context.entities().getRoles().addOrUpdateEntity(createdRole);
         }

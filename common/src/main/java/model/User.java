@@ -6,7 +6,6 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -14,9 +13,6 @@ import java.util.List;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class User extends TeelaEntity {
 
-    private Date createdAt;
-    private Date modifiedAt;
-    private String modifiedBy;
     private String name;
     @JsonProperty("display_name")
     private String displayName;
@@ -42,26 +38,9 @@ public class User extends TeelaEntity {
     }
 
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getModifiedAt() {
-        return modifiedAt;
-    }
-
-    public void setModifiedAt(Date modifiedAt) {
-        this.modifiedAt = modifiedAt;
-    }
-
     public String getDisplayName() {
         return displayName;
     }
-
 
     public User setDisplayName(String name) {
         this.displayName = name;
@@ -100,14 +79,6 @@ public class User extends TeelaEntity {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public String getModifiedBy() {
-        return modifiedBy;
-    }
-
-    public void setModifiedBy(String modifiedBy) {
-        this.modifiedBy = modifiedBy;
     }
 
     public String getPhone() {

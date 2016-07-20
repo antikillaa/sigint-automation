@@ -14,10 +14,8 @@ public class Source extends TeelaEntity {
     private SourceType type;
     private String name;
     private String location;
-    private Date createdAt;
     private boolean deleted;
     private Date lmt;
-    private Date modifiedAt;
 
     public SourceType getType() {
         return type;
@@ -43,14 +41,6 @@ public class Source extends TeelaEntity {
         this.location = location;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public boolean isDeleted() {
         return deleted;
     }
@@ -65,14 +55,6 @@ public class Source extends TeelaEntity {
 
     public void setLmt(Date lmt) {
         this.lmt = lmt;
-    }
-
-    public Date getModifiedAt() {
-        return modifiedAt;
-    }
-
-    public void setModifiedAt(Date modifiedAt) {
-        this.modifiedAt = modifiedAt;
     }
 
     @Override

@@ -71,8 +71,28 @@ When I send delete target group request
 Then I got response code 200
 And Target group deleted correctly
 
-Scenario: API.Upload targets
+Scenario: API.Search targets entries using search filters
 Given I sign in as admin user
-When I send upload targets request with XLS file containing 10 targets
+When I send create target without targets group request
 Then I got response code 200
-And Upload result of 10 targets is successful
+And Created target is correct
+When I send search targets by <criteria> and value <value>
+Then targets search result are correct
+And searched target entry in list
+
+Examples:
+| criteria | value |
+| type | random |
+| name | random |
+| keywords | random |
+| description | random |
+| languages | random |
+| phones | random |
+| updatedAfter | random |
+
+
+Scenario: API.Upload multiple targets
+Given I sign in as admin user
+When I send upload targets request with XLS file containing 3 targets
+Then I got response code 200
+And Upload result of 3 targets is successful

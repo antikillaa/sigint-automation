@@ -43,9 +43,11 @@ public class RandomGenerator {
         }
         LinkedHashSet<String> phoneNumbers = new LinkedHashSet<>();
         int phones = RandomUtils.nextInt(maxPhones);
-        for (int i=0; i<phones; i++){
+        int i = 0;
+        do {
             phoneNumbers.add(new RandomPhone().generate());
-        }
+            i++;
+        } while (i < phones);
 
         return phoneNumbers;
     }
@@ -55,10 +57,10 @@ public class RandomGenerator {
         int numLanguages = RandomUtils.nextInt(maxLanguages);
         List<String> countryCodes = Arrays.asList(Locale.getISOCountries());
         int i = 0;
-        while (i < numLanguages) {
+        do {
             languages.add(countryCodes.get(RandomUtils.nextInt(countryCodes.size())));
             i++;
-        }
+        } while (i < numLanguages);
         return languages;
     }
 
@@ -78,13 +80,12 @@ public class RandomGenerator {
         LinkedHashSet<String> strings = new LinkedHashSet<>();
         int numMaxStrings = RandomUtils.nextInt(maxNumber);
         int i = 0;
-        while (i < numMaxStrings) {
+        do {
             strings.add(RandomStringUtils.randomAlphanumeric(5));
             i++;
-        }
+        } while (i < numMaxStrings);
         return strings;
     }
-
 
     public static <T>T getRandomItemFromList(List<T> list) {
         int index = RandomUtils.nextInt(list.size());
@@ -134,9 +135,28 @@ public class RandomGenerator {
         return locale.getDisplayCountry();
     }
 
-    public static File writeTargetXLS(int count) {
-        log.info("Generate targets count: " + count);
-        Map<Integer, Object[]> data = new Target().generateTargets(count);
+    public static File writeTargetXLS(List<Target> targets) {
+
+        Map<Integer, Object[]> data = new HashMap<>();
+        data.put(1, new Object[] {"ID", "Name", "Type", "Phones", "Keywords", "Target Groups"});
+
+        for (int i = 0; i < targets.size(); i++) {
+            List<String> targetFields = new ArrayList<>();
+
+            //ID	Name	Type	Phones	Keywords    Target Groups
+            targetFields.add(targets.get(i).getId());
+            targetFields.add(targets.get(i).getName());
+            targetFields.add(targets.get(i).getType().name());
+            targetFields.add(targets.get(i).getPhones().toString().replace("[", "").replace("]", ""));
+            targetFields.add(targets.get(i).getKeywords().toString().replace("[", "").replace("]", ""));
+            //targetFields.add(targets.get(i).getGroups().toString().replace("[", "").replace("]", ""));
+
+            Object[] array = new Object[targetFields.size()];
+            Object[] row = targetFields.toArray(array);
+
+            Integer rowNum = i + 2;
+            data.put(rowNum, row);
+        }
 
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("Target sheet");

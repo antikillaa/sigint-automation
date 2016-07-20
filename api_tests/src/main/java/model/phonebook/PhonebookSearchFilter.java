@@ -15,7 +15,6 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
     private String phoneNumber;
     private String countryCode;
     private String country;
-
     private String queryString;
 
 
@@ -86,9 +85,9 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
     }
 
 
-    public class AddressFilter extends SearchFilter<Phonebook> {
+    private class AddressFilter extends SearchFilter<Phonebook> {
 
-        public AddressFilter(String value) {
+        AddressFilter(String value) {
             address = value;
         }
 
@@ -98,9 +97,9 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         }
     }
 
-    public class NameFilter extends SearchFilter<Phonebook> {
+    private class NameFilter extends SearchFilter<Phonebook> {
 
-        public NameFilter(String value) {
+        NameFilter(String value) {
             name = value;
         }
 
@@ -110,9 +109,9 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         }
     }
 
-    public class ImsiFilter extends SearchFilter<Phonebook> {
+    private class ImsiFilter extends SearchFilter<Phonebook> {
 
-        public ImsiFilter(String value) {
+        ImsiFilter(String value) {
             imsi = value;
         }
 
@@ -122,9 +121,9 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         }
     }
 
-    public class PhoneNumberFilter extends SearchFilter<Phonebook> {
+    private class PhoneNumberFilter extends SearchFilter<Phonebook> {
 
-        public PhoneNumberFilter(String value) {
+        PhoneNumberFilter(String value) {
             phoneNumber = value;
         }
 
@@ -134,9 +133,9 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         }
     }
 
-    public class CountryCodeFilter extends SearchFilter<Phonebook> {
+    private class CountryCodeFilter extends SearchFilter<Phonebook> {
 
-        public CountryCodeFilter(String value) {
+        CountryCodeFilter(String value) {
             countryCode = value;
         }
 
@@ -146,9 +145,9 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         }
     }
 
-    public class CountryFilter extends SearchFilter<Phonebook> {
+    private class CountryFilter extends SearchFilter<Phonebook> {
 
-        public CountryFilter(String value) {
+        CountryFilter(String value) {
             country = value;
         }
 
@@ -158,9 +157,9 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         }
     }
 
-    public class QueryStringFilter extends SearchFilter<Phonebook> {
+    private class QueryStringFilter extends SearchFilter<Phonebook> {
 
-        public QueryStringFilter(String value) {
+        QueryStringFilter(String value) {
             queryString = value;
         }
 
