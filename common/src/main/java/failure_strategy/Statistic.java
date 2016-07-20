@@ -7,7 +7,7 @@ import zapi.ZAPIService;
 
 import java.util.List;
 
-public class Failures {
+public class Statistic {
     
     private static ZAPIService service = new ZAPIService();
     private static JiraService jiraService = new JiraService();

@@ -111,6 +111,35 @@ public class AppContext {
 
         private Token token;
         private String sigintHost;
+    
+        public String getBrowser() {
+            return browser;
+        }
+    
+        public void setBrowser(String browser) {
+            this.browser = browser;
+        }
+    
+        private String browser;
+    
+        public String getDatabaseHost() {
+            return databaseHost;
+        }
+    
+        public void setDatabaseHost(String databaseHost) {
+            this.databaseHost = databaseHost;
+        }
+    
+        public String getRemoteHub() {
+            return remoteHub;
+        }
+    
+        public void setRemoteHub(String remoteHub) {
+            this.remoteHub = remoteHub;
+        }
+    
+        private String databaseHost;
+        private String remoteHub;
 
         public String getSigintHost() {
             return sigintHost;
@@ -279,6 +308,8 @@ public class AppContext {
             e.printStackTrace();
         }
         environment().setSigintHost(host);
+        environment().setRemoteHub(generalProperties.getProperty("seleniumHub"));
+        environment().setBrowser(generalProperties.getProperty("webBrowser"));
     }
 
     public Properties getMailProperties() {return  mailProperties;}

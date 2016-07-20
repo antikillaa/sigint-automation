@@ -2,7 +2,6 @@ package steps;
 
 import controllers.APILogin;
 import errors.NullReturnException;
-import failure_strategy.Failures;
 import http.requests.GetDictionariesRequest;
 import json.JsonCoverter;
 import json.RsClient;
@@ -13,7 +12,7 @@ import model.lists.UsersList;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStories;
 import org.jbehave.core.annotations.BeforeStories;
-import reporter.Emailing;
+import reporter.EmailCondition;
 import zapi.ZAPIService;
 
 import javax.ws.rs.core.Response;
@@ -73,8 +72,8 @@ public class GlobalSteps {
         } }catch (Exception e){
             log.error(e.getMessage());
         }
-        if (shouldEmail && Failures.hasFailuresWithoutBugs()) {
-                new Emailing().send_email(Failures.getResults());
+        if (shouldEmail) {
+            EmailCondition.setEmailCondition();
             }
         }
 

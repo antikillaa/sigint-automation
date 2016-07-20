@@ -1,6 +1,6 @@
 package junit_custom;
 
-import failure_strategy.Failures;
+import failure_strategy.Statistic;
 import org.jbehave.core.junit.JUnitStories;
 import org.junit.Test;
 
@@ -11,7 +11,7 @@ public abstract class CustomStories extends JUnitStories {
         try {
             super.run();
         } catch (Throwable throwable) {
-            if (Failures.hasFailuresWithoutBugs()) {
+            if (Statistic.hasFailuresWithoutBugs()) {
                 throw new RuntimeException();
             }
         }
