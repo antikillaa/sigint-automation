@@ -10,7 +10,10 @@ import model.AppContext;
 import model.Record;
 import model.Report;
 import model.User;
-import org.jbehave.core.annotations.*;
+import org.jbehave.core.annotations.AfterStory;
+import org.jbehave.core.annotations.BeforeScenario;
+import org.jbehave.core.annotations.BeforeStory;
+import org.jbehave.core.annotations.When;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -19,9 +22,7 @@ import pages.Navigator;
 import pages.Pages;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.util.Properties;
 
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
@@ -40,13 +41,11 @@ public class UISteps {
 
     @BeforeStory
     public void InitWebDriver() throws IOException {
-        InputStream is = this.getClass().getResourceAsStream("/web.properties");
-        Properties p = new Properties();
-        p.load(is);
+        AppContext.Environment environment = AppContext.getContext().environment();
         Boolean remoteRun = Boolean.valueOf(AppContext.getContext().getGeneralProperties().getProperty("remoteRun"));
         if (remoteRun) {
-            String browser = p.getProperty("webBrowser");
-            String seleniumHub = p.getProperty("seleniumHub");
+            String browser = environment.getBrowser();
+            String seleniumHub = environment.getRemoteHub();
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.setBrowserName(browser);
             RemoteWebDriver webDriver = new RemoteWebDriver(new URL(String.format("http://%s:4444/wd/hub", seleniumHub)), capabilities);

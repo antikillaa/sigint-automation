@@ -1,6 +1,6 @@
 package reporter;
 
-import failure_strategy.Failures;
+import failure_strategy.Statistic;
 import model.AppContext;
 import model.SelenideContext;
 import org.apache.log4j.Logger;
@@ -70,7 +70,7 @@ public class AllureReporter implements StoryReporter {
 
     @Override
     public void failed(String step, Throwable cause) {
-        if (!Failures.hasOpenedBug(context.getScenarioTitle())) {
+        if (!Statistic.hasOpenedBug(context.getScenarioTitle())) {
             allure.fire(new StepFailureEvent().withThrowable(cause.getCause()));
             makeStepFailedAttachment();
             allure.fire(new TestCaseFailureEvent().withThrowable(cause.getCause()));
