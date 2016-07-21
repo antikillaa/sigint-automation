@@ -43,7 +43,7 @@ public class APITargetSteps extends APISteps {
         Target createdTarget = context.entities().getTargets().getLatest();
 
         Assert.assertTrue(createdTarget.getId() != null);
-        equalsTargets(createdTarget, contextTarget);
+        isEqualsTargets(createdTarget, contextTarget);
     }
 
     @When("I send get target details request")
@@ -61,17 +61,25 @@ public class APITargetSteps extends APISteps {
 
         Target viewedTarget = context.get("viewedTarget", Target.class);
 
-        equalsTargets(viewedTarget, createdTarget);
+        Verify.shouldBe(isTrue.element(isEqualsTargets(viewedTarget, createdTarget)));
     }
 
-    private void equalsTargets(Target checkedTarget, Target etalonTarget) {
-        Verify.shouldBe(equals.elements(checkedTarget.getDescription(), etalonTarget.getDescription()));
-        Verify.shouldBe(equals.elements(checkedTarget.getName(), etalonTarget.getName()));
-        Verify.shouldBe(equals.elements(checkedTarget.getKeywords(), etalonTarget.getKeywords()));
-        Verify.shouldBe(equals.elements(checkedTarget.getPhones(), etalonTarget.getPhones()));
-        Verify.shouldBe(equals.elements(checkedTarget.getLanguages(), etalonTarget.getLanguages()));
-        Verify.shouldBe(equals.elements(checkedTarget.getGroups(), etalonTarget.getGroups()));
-        Verify.shouldBe(equals.elements(checkedTarget.getType(), etalonTarget.getType()));
+    private boolean isEqualsTargets(Target checkedTarget, Target etalonTarget) {
+        return Verify.isTrue(equals.elements(checkedTarget.getDescription(), etalonTarget.getDescription())) &&
+        Verify.isTrue(equals.elements(checkedTarget.getName(), etalonTarget.getName())) &&
+        Verify.isTrue(equals.elements(checkedTarget.getKeywords(), etalonTarget.getKeywords())) &&
+        Verify.isTrue(equals.elements(checkedTarget.getPhones(), etalonTarget.getPhones())) &&
+        Verify.isTrue(equals.elements(checkedTarget.getLanguages(), etalonTarget.getLanguages())) &&
+        Verify.isTrue(equals.elements(checkedTarget.getGroups(), etalonTarget.getGroups())) &&
+        Verify.isTrue(equals.elements(checkedTarget.getType(), etalonTarget.getType()));
+    }
+
+    private boolean isEqualsUploadedTargets(Target checkedTarget, Target etalonTarget) {
+        return Verify.isTrue(equals.elements(checkedTarget.getName(), etalonTarget.getName())) &&
+                Verify.isTrue(equals.elements(checkedTarget.getKeywords(), etalonTarget.getKeywords())) &&
+                Verify.isTrue(equals.elements(checkedTarget.getPhones(), etalonTarget.getPhones())) &&
+                Verify.isTrue(equals.elements(checkedTarget.getGroups(), etalonTarget.getGroups())) &&
+                Verify.isTrue(equals.elements(checkedTarget.getType(), etalonTarget.getType()));
     }
 
     @When("I send update target request")
@@ -92,7 +100,7 @@ public class APITargetSteps extends APISteps {
 
         Target resultTarget = service.view(updatedTarget.getId());
 
-        equalsTargets(updatedTarget, resultTarget);
+        Verify.shouldBe(isTrue.element(isEqualsTargets(updatedTarget, resultTarget)));
     }
 
     @When("I send delete target request")
@@ -114,7 +122,7 @@ public class APITargetSteps extends APISteps {
         Verify.shouldBe(isTrue.element(resultTarget.getName().contains("DELETED at")));
     }
 
-    @When("I send upload targets request with XLS file containing $count targets")
+    @When("I send upload targets request with XLS file containing $count targets without specified id")
     public void targetGeneratedXls(String count){
         int numTarget = Integer.valueOf(count);
 
@@ -126,6 +134,7 @@ public class APITargetSteps extends APISteps {
         int responseCode = service.upload(targets);
 
         context.put("code", responseCode);
+        context.put("uploadedTargets", targets);
     }
 
     @When("I send search targets by $criteria and value $value")
@@ -162,7 +171,7 @@ public class APITargetSteps extends APISteps {
 
     @Then("targets search result are correct")
     public void targetSearchResultAreCorrect(){
-        log.info("Checking if search phonebook result is correct");
+        log.info("Checking if search targets result is correct");
         TargetFilter searchFilter = context.get("searchFilter", TargetFilter.class);
         EntityList<Target> searchResult = context.get("searchResult", EntityList.class);
 
@@ -177,7 +186,7 @@ public class APITargetSteps extends APISteps {
     }
 
     @Then("searched target entry $criteria list")
-    public void searchetTargetInList(String criteria) {
+    public void searchedTargetInList(String criteria) {
         log.info("Checking if Target entry " + criteria + " list");
         Target target = context.entities().getTargets().getLatest();
         EntityList<Target> list = context.get("searchResult", EntityList.class);
@@ -189,6 +198,38 @@ public class APITargetSteps extends APISteps {
             Verify.shouldNotBe(isTrue.element(contains));
         } else {
             throw new AssertionError("Incorrect argument passed to step");
+        }
+    }
+
+    @Then("uploaded target $criteria list")
+    public void uploadedTargetInList(String criteria) {
+        log.info("Checking if Target entry " + criteria + " list");
+        Target target = context.entities().getTargets().getLatest();
+        EntityList<Target> list = context.get("searchResult", EntityList.class);
+
+        Boolean contains = false;
+        for (Target entity : list) {
+            if (isEqualsUploadedTargets(target, entity)) {
+                contains = true;
+                break;
+            }
+        }
+        
+        if (criteria.toLowerCase().equals("in")) {
+            Verify.shouldBe(isTrue.element(contains));
+        } else if (criteria.toLowerCase().equals("not in")) {
+            Verify.shouldNotBe(isTrue.element(contains));
+        } else {
+            throw new AssertionError("Incorrect argument passed to step");
+        }
+    }
+
+    @Then("target has auto-generated ID")
+    public void targetHasID() {
+        log.info("Checking if Target has ID");
+        EntityList<Target> list = context.get("searchResult", EntityList.class);
+        for (Target target : list) {
+            Assert.assertNotNull(target.getId());
         }
     }
 
