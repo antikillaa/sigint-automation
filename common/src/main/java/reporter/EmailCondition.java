@@ -11,7 +11,7 @@ public class EmailCondition {
     
     public static void setEmailtoSucess() {
         try {
-            emailManager.updateEmailSendInfo(false);
+v            emailManager.updateEmailSendInfo(false);
         } catch (Exception e) {
             logger.error("Was unable to mark email send as sucess. Might cause failures in email of next" +
                     "run");
