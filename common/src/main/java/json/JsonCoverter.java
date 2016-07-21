@@ -44,8 +44,8 @@ public class JsonCoverter {
     private static String readJsonStringFromResponse(Response response) {
         String jsonString = response.readEntity(String.class);
         log.debug("Response: " + jsonString);
-        
-        if (response.getStatus() != 200) {
+
+        if (response.getStatus() < 200 || response.getStatus() >= 300) {
             log.warn("Entity was not found in json due to error in response");
             return null;
         }
