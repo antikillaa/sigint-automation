@@ -29,7 +29,7 @@ public class JsonCoverter {
         try {
             HashMap<String, T> map = mapper.readValue(jsonString, mapType);
             entity = map.get(id);
-        } catch (java.io.IOException e) {
+        } catch (IOException | NullPointerException e) {
             log.error(e.getMessage());
             throw new AssertionError();
         }
@@ -39,7 +39,6 @@ public class JsonCoverter {
     public static<T>T readEntityFromResponse(Response response, Class<T> entityClass) {
         String jsonString = readJsonStringFromResponse(response);
         return fromJsonToObject(jsonString, entityClass);
-        
     }
     
     private static String readJsonStringFromResponse(Response response) {
@@ -65,8 +64,7 @@ public class JsonCoverter {
         log.debug("Converting to json string Object "+ object);
         try {
             return mapper.writeValueAsString(object);
-
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             log.error("Error occurred when trying to convert object with class"
                     +object.getClass()+"to JSON string");
             e.printStackTrace();
@@ -74,12 +72,11 @@ public class JsonCoverter {
         throw new NullReturnException("Error converting json string to object");
     }
 
-    public static <T> T fromJsonToObject(String jsonString, Class<T> userClass)
-             {
+    public static <T> T fromJsonToObject(String jsonString, Class<T> userClass) {
         log.debug("Converting json string:"+jsonString+" to user class:"+userClass);
         try {
             return mapper.readValue(jsonString, userClass);
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             log.error("Error when converting json string:"+jsonString+" to object:"+userClass);
             e.printStackTrace();
         }
@@ -91,7 +88,7 @@ public class JsonCoverter {
         log.debug("Converting json:"+jsonString+" to object list:"+userClass);
         try {
             return Arrays.asList(mapper.readValue(jsonString, userClass));
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             log.error("Error occurred when converting json:"+jsonString+" to object list:"+userClass);
             e.printStackTrace();
         }
@@ -103,7 +100,7 @@ public class JsonCoverter {
         log.debug("Converting from Input stream to user:" + userClass);
         try {
             return mapper.readValue(stream, userClass);
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             log.error("Error occurred when converting from Input stream to user:" + userClass);
             e.printStackTrace();
 
