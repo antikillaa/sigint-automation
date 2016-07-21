@@ -12,7 +12,7 @@ public class Statistic {
     
     private static ZAPIService service = new ZAPIService();
     private static JiraService jiraService = new JiraService();
-    private static Logger log = Logger.getLogger(Failures.class);
+    private static Logger log = Logger.getLogger(Statistic.class);
     
     public static ReportResults getResults() {
         return service.getReportResults();
