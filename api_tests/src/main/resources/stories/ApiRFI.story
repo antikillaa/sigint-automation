@@ -51,10 +51,12 @@ When I search RFI by state and value DRAFT
 Then Search results are correct
 And Searched RFI not in list
 
-Scenario: API.Tasker can cancel RFI
+Scenario: API.Admin can cancel sended RFI
 Given I sign in as tasker user
 When I send create RFI request without approved copy and without original document
-And I put RFI to search query
+Then I got response code 200
+Given I sign in as admin user
+When I put RFI to search query
 And I cancel RFI
 Then I got response code 200
 When I search RFI by state and value CANCELLED
