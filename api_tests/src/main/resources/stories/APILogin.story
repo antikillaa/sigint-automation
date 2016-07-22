@@ -1,5 +1,7 @@
 
 Scenario: On Login request with correct credentials token should be sent
+Meta:
+@wip
 Given as admin user
 When I sent sign in request with correct credentials
 Then I got response code 200

@@ -17,14 +17,14 @@
     <artifactId>common</artifactId>
     <dependencies>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.39</version>
-        </dependency>
-        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava-io</artifactId>
             <version>r03</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.39</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>

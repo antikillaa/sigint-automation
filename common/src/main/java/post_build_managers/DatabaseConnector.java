@@ -63,6 +63,11 @@ import java.util.Properties;
     }
     
     Connection connect() throws SQLException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return DriverManager.getConnection(String.format("jdbc:mysql://%s:3306/%s",host, database), user, password);
     }
 }

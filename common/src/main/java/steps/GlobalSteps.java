@@ -13,7 +13,8 @@ import model.lists.UsersList;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStories;
 import org.jbehave.core.annotations.BeforeStories;
-import post_build_managers.BuildManager;
+import post_build_managers.BuildCondition;
+import post_build_managers.BuildStatus;
 import zapi.ZAPIService;
 
 import javax.ws.rs.core.Response;
@@ -72,7 +73,8 @@ public class GlobalSteps {
         } }catch (Exception e){
             log.error(e.getMessage());
         }
-        new BuildManager().updateBuildStatus(Statistic.hasFailuresWithoutBugs());
+        BuildCondition.updateBuildStatus(
+                (Statistic.hasFailuresWithoutBugs())? BuildStatus.FAILED: BuildStatus.PASSED);
         }
 
     
