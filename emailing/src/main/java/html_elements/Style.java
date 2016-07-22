@@ -1,4 +1,4 @@
-package html_email.html_elements;
+package html_elements;
 
 public class Style {
     private String color;

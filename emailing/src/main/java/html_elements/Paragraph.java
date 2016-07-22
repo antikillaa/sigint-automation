@@ -1,7 +1,7 @@
-package html_email.html_elements;
+package html_elements;
 
 class Paragraph extends HtmlElement {
-    public Paragraph() {
+    Paragraph() {
         super("p");
     }
 }

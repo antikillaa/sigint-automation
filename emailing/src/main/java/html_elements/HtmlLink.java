@@ -1,32 +1,32 @@
-package html_email.html_elements;
+package html_elements;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HtmlImage extends HtmlElement {
+class HtmlLink extends HtmlElement {
 
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    void setUrl(String url) {
         this.url = url;
     }
 
     private String url;
 
-    public HtmlImage() {
-        super("img");
+    HtmlLink() {
+        super("a");
     }
 
     @Override
-    public List<String> expose() {
+    protected List<String> expose() {
         List<String> elements = new ArrayList<>();
         String startTag= "<" + tag;
         if (style!=null) {
             startTag += ' ' + style.toString();
         }
-        elements.add(startTag + String.format(" src='%s'", url)+ ">"+ "\r\n ");
+        elements.add(startTag + String.format(" href='%s'", url)+ ">"+ "\r\n ");
 
         if (value!=null) {
             elements.add(value+"\r\n ");

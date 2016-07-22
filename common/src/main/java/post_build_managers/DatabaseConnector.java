@@ -1,4 +1,4 @@
-package database;
+package post_build_managers;
 
 import model.AppContext;
 
@@ -58,11 +58,16 @@ import java.util.Properties;
         this.host = AppContext.getContext().environment().getRemoteHub();
         this.user = database.getProperty("user");
         this.password = database.getProperty("password");
-        this.database = database.getProperty("database");
+        this.database = database.getProperty("post_build_managers");
         
     }
     
     Connection connect() throws SQLException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return DriverManager.getConnection(String.format("jdbc:mysql://%s:3306/%s",host, database), user, password);
     }
 }

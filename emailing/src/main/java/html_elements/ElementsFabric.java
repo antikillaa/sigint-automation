@@ -1,4 +1,4 @@
-package html_email.html_elements;
+package html_elements;
 
 import com.google.common.base.Joiner;
 import org.apache.log4j.Logger;

@@ -1,4 +1,4 @@
-package html_email.html_elements;
+package html_elements;
 
 import com.google.common.base.Joiner;
 import org.apache.log4j.Logger;
@@ -18,7 +18,7 @@ public class HtmlBuilder {
         for (HtmlElement element: elements) {
             html+=Joiner.on("").join(element.expose());
         }
-        log.debug("Resulting html is:"+ html);
+        log.debug("Result html is built");
         return html;
     }
 
