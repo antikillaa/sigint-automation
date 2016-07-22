@@ -1,8 +1,8 @@
-package html_email.html_elements;
+package html_elements;
 
 class HtmlTableRow extends HtmlElement {
 
-    public HtmlTableRow(){
+    HtmlTableRow(){
         super("tr");
     }
 

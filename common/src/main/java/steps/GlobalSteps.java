@@ -2,6 +2,7 @@ package steps;
 
 import controllers.APILogin;
 import errors.NullReturnException;
+import failure_strategy.Statistic;
 import http.requests.GetDictionariesRequest;
 import json.JsonCoverter;
 import json.RsClient;
@@ -12,7 +13,8 @@ import model.lists.UsersList;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStories;
 import org.jbehave.core.annotations.BeforeStories;
-import reporter.EmailCondition;
+import post_build_managers.BuildCondition;
+import post_build_managers.BuildStatus;
 import zapi.ZAPIService;
 
 import javax.ws.rs.core.Response;
@@ -65,16 +67,14 @@ public class GlobalSteps {
     public void reportResults(){
         ZAPIService service = new ZAPIService();
         Boolean shouldReport = Boolean.valueOf(context.getGeneralProperties().getProperty("report"));
-        Boolean shouldEmail = Boolean.valueOf(context.getGeneralProperties().getProperty("email"));
         try {
         if (shouldReport) {
             service.reportToZephyr();
         } }catch (Exception e){
             log.error(e.getMessage());
         }
-        if (shouldEmail) {
-            EmailCondition.setEmailCondition();
-            }
+        BuildCondition.updateBuildStatus(
+                (Statistic.hasFailuresWithoutBugs())? BuildStatus.FAILED: BuildStatus.PASSED);
         }
 
     

@@ -1,4 +1,4 @@
-package html_email.html_elements;
+package html_elements;
 
 import org.apache.log4j.Logger;
 
@@ -20,11 +20,11 @@ public abstract class HtmlElement {
     protected String value;
     private Logger log = Logger.getLogger(HtmlElement.class);
 
-    public String getValue() {
+    protected String getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    protected void setValue(String value) {
         this.value = value;
     }
 
@@ -53,11 +53,11 @@ public abstract class HtmlElement {
         this.tag = tag;
     }
 
-    public Style getStyle() {
+    protected Style getStyle() {
         return style;
     }
 
-    public void setStyle(Style style) {
+    protected void setStyle(Style style) {
         this.style = style;
     }
 
