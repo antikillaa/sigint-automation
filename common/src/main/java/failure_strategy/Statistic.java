@@ -1,6 +1,7 @@
 package failure_strategy;
 
 import jira.JiraService;
+import org.apache.log4j.Logger;
 import reporter.ReportResults;
 import reporter.TestCase;
 import zapi.ZAPIService;
@@ -11,6 +12,7 @@ public class Statistic {
     
     private static ZAPIService service = new ZAPIService();
     private static JiraService jiraService = new JiraService();
+    private static Logger log = Logger.getLogger(Statistic.class);
     
     public static ReportResults getResults() {
         return service.getReportResults();
@@ -26,10 +28,15 @@ public class Statistic {
             return false;
         }
     
-    
     public static Boolean hasOpenedBug(String testCaseTitle) {
-        return jiraService.hasOpenedBugs(testCaseTitle);
-        
+        try {
+            return jiraService.hasOpenedBugs(testCaseTitle);
+        } catch (Exception e) {
+            log.warn("Error during jira connection. Unable to check opened bugs on the issue: " + testCaseTitle);
+            log.warn(e.getMessage());
+            log.warn(e.getStackTrace());
+            return false;
+        }
     }
     
 }

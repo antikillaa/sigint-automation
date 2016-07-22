@@ -93,6 +93,16 @@ Examples:
 
 Scenario: API.Upload multiple targets
 Given I sign in as admin user
-When I send upload targets request with XLS file containing 3 targets
+When I send upload targets request with XLS file containing 3 targets without specified id
 Then I got response code 200
 And Upload result of 3 targets is successful
+
+Scenario: API.Upload new target without group and ID
+Given I sign in as admin user
+When I send upload targets request with XLS file containing 1 targets without specified id
+Then I got response code 200
+And Upload result of 1 targets is successful
+When I send search targets by name and value random
+Then targets search result are correct
+And uploaded target in list
+And target has auto-generated ID

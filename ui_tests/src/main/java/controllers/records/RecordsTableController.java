@@ -5,6 +5,7 @@ import blocks.context.tables.records.RecordRow;
 import controllers.TableController;
 import errors.NotFoundException;
 import model.Record;
+import model.RecordType;
 import model.UIRecord;
 import org.apache.log4j.Logger;
 import pages.SigintPage;
@@ -66,6 +67,7 @@ public abstract class RecordsTableController extends TableController {
         newRecord.setLanguage(row.getLanguage());
         newRecord.setProcessedStatus(row.getStatus());
         newRecord.setOriginalId(row.getRecordID());
+        newRecord.setType(RecordType.valueOf(row.getType()));
         if (row.getType().equalsIgnoreCase("voice")) {
             newRecord.setDuration(Parser.getDurationFromString(row.getDetails()));
         } else {
