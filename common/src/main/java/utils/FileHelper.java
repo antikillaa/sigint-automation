@@ -1,11 +1,9 @@
 package utils;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 
 public class FileHelper {
 
@@ -29,6 +27,23 @@ public class FileHelper {
                 }
             }
         }
+    }
+    
+    public static void writeToFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[8 * 1024];
+        int length;
+        try {
+            while ((length = in.read(buffer)) >= 0) {
+                out.write(buffer, 0, length);
+            }
+        } catch (IOException e) {
+            log.error("Exception occurred writing to output stream");
+            throw  e;
+        }
+        IOUtils.closeQuietly(in);
+        IOUtils.closeQuietly(out);
+        
+        
     }
 
 }

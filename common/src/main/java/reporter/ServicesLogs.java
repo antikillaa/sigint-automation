@@ -5,8 +5,8 @@ import docker.Docker;
 import docker.model.DockerContainer;
 import docker.model.DockerContainers;
 import errors.NullReturnException;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import utils.FileHelper;
 
 import java.io.*;
 import java.util.zip.Deflater;
@@ -44,9 +44,7 @@ public class ServicesLogs {
         File file = File.createTempFile("log", ".txt", outputDir);
         InputStream is = new FileInputStream("log4j/log.out");
         FileOutputStream stream = new FileOutputStream(file);
-        stream.write(is.read());
-        IOUtils.closeQuietly(is);
-        IOUtils.closeQuietly(stream);
+        FileHelper.writeToFile(is, stream);
         return outputDir;
 
     }
