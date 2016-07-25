@@ -67,14 +67,17 @@ public class GlobalSteps {
     public void reportResults(){
         ZAPIService service = new ZAPIService();
         Boolean shouldReport = Boolean.valueOf(context.getGeneralProperties().getProperty("report"));
+        Boolean updateBuildStatus = Boolean.valueOf(context.getGeneralProperties().getProperty("reportBuildStatus"));
         try {
         if (shouldReport) {
             service.reportToZephyr();
         } }catch (Exception e){
             log.error(e.getMessage());
         }
-        BuildCondition.updateBuildStatus(
-                (Statistic.hasFailuresWithoutBugs())? BuildStatus.FAILED: BuildStatus.PASSED);
+        if (updateBuildStatus) {
+            BuildCondition.updateBuildStatus(
+                    (Statistic.hasFailuresWithoutBugs()) ? BuildStatus.FAILED : BuildStatus.PASSED);
+        }
         }
 
     

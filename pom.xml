@@ -21,6 +21,7 @@
     <email>true</email>
     <stories>**/*Launcher.java</stories>
     <metaFilters>-TEEL *</metaFilters>
+    <reportBuildStatus>false</reportBuildStatus>
   </properties>
 
   <profiles>
