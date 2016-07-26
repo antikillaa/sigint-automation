@@ -19,6 +19,13 @@ public class Phonebook extends TeelaEntity {
     private String location;
     private String imsi;
     private boolean manualEntry;
+    
+    @Override
+    public String toString() {
+        return String.format("Phone:%s, name:%s, address:%s, country:%s," +
+                "countryCode:%s, provider:%s, location:%s, imsi:%s",
+                phoneNumber, name, address, country, countryCode, provider, location, imsi);
+    }
 
 
     public String getPhoneNumber() {

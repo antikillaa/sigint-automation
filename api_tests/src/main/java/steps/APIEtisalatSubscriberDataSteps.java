@@ -58,11 +58,11 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         } else if (criteria.toLowerCase().equals("querystring")) {
             value = value.equals("random") ? entry.getPhoneNumber() : value;
         } else {
-            throw new AssertionError("Unknown filter type");
+            throw new AssertionError("Unknown isAppliedToEntity type");
         }
 
         EtisalatSubscriberFilter searchFilter = new EtisalatSubscriberFilter().filterBy(criteria, value);
-        log.info("Search filter: " + JsonCoverter.toJsonString(searchFilter));
+        log.info("Search isAppliedToEntity: " + JsonCoverter.toJsonString(searchFilter));
         EntityList<EtisalatSubscriberEntry> entityList = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
@@ -82,7 +82,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         }
         for (EtisalatSubscriberEntry entry : searchResults) {
             log.info("Checking result: " + JsonCoverter.toJsonString(entry));
-            Assert.assertTrue(searchFilter.filter(entry));
+            Assert.assertTrue(searchFilter.isAppliedToEntity(entry));
         }
     }
 

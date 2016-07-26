@@ -3,6 +3,7 @@ package pages.records;
 
 import blocks.context.Context;
 import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import errors.NullReturnException;
@@ -32,7 +33,7 @@ public class RecordDetailsDialog extends SigintPage {
 
     private List<Attachment> getAttachListElements() {
         List<Attachment> attachments = new ArrayList<>();
-        ElementsCollection collection= getRecordDetailsDialog()
+        ElementsCollection collection= getRecordDetailsDialog().should(Condition.visible)
                 .$("attach-to-report ul.dropdown-menu").$$("li").shouldHave(CollectionCondition.sizeGreaterThan(0));
 
         for (SelenideElement element: collection) {

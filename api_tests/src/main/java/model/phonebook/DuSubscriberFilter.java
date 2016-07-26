@@ -49,8 +49,8 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
     }
 
     @Override
-    public boolean filter(DuSubscriberEntry entity) {
-        return activeFilter.filter(entity);
+    public boolean isAppliedToEntity(DuSubscriberEntry entity) {
+        return activeFilter.isAppliedToEntity(entity);
     }
 
 
@@ -61,7 +61,7 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
         }
 
         @Override
-        public boolean filter(DuSubscriberEntry entity) {
+        public boolean isAppliedToEntity(DuSubscriberEntry entity) {
             return entity.getAddress().equals(address);
         }
     }
@@ -73,7 +73,7 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
         }
 
         @Override
-        public boolean filter(DuSubscriberEntry entity) {
+        public boolean isAppliedToEntity(DuSubscriberEntry entity) {
             return entity.getPhoneNumber().equals(phoneNumber);
         }
     }
@@ -85,7 +85,7 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
         }
 
         @Override
-        public boolean filter(DuSubscriberEntry entity) {
+        public boolean isAppliedToEntity(DuSubscriberEntry entity) {
             return entity.getName().equals(name);
         }
     }
@@ -97,7 +97,7 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
         }
 
         @Override
-        public boolean filter(DuSubscriberEntry entity) {
+        public boolean isAppliedToEntity(DuSubscriberEntry entity) {
             return entity.getPhoneNumber().equals(queryString);
         }
     }
@@ -113,7 +113,7 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
         } else if (criteria.toLowerCase().equals("querystring")) {
             this.setActiveFilter(this.new QueryStringFilter(value));
         } else {
-            throw new AssertionError("Unknown filter type");
+            throw new AssertionError("Unknown isAppliedToEntity type");
         }
         return this;
     }

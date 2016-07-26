@@ -45,7 +45,7 @@ public class APIRFISearchSteps extends APISteps {
         } else if (criteria.toLowerCase().equals("originator")){
             value = value.equals("random") ? RFI.getRequestSource() : value;
         } else {
-            throw new AssertionError("Unknown filter type");
+            throw new AssertionError("Unknown isAppliedToEntity type");
         }
 
         RFISearchFilter searchFilter = new RFISearchFilter().filterBy(criteria, value);
@@ -67,7 +67,7 @@ public class APIRFISearchSteps extends APISteps {
                     "There are not records in it");
         }
         for (InformationRequest RFI:searchResult) {
-            Assert.assertTrue(filter.filter(RFI));
+            Assert.assertTrue(filter.isAppliedToEntity(RFI));
         }
     }
 

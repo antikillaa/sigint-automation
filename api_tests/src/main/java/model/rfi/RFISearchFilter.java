@@ -94,8 +94,8 @@ public class RFISearchFilter extends SearchFilter {
 
 
 
-    public boolean filter(TeelaEntity entity) {
-        return activeFilter.filter(entity);
+    public boolean isAppliedToEntity(TeelaEntity entity) {
+        return activeFilter.isAppliedToEntity(entity);
     }
 
     public List<RFIStates> getStates() {
@@ -108,7 +108,7 @@ public class RFISearchFilter extends SearchFilter {
             state = value;
         }
 
-        public boolean filter(InformationRequest entity) {
+        public boolean isAppliedToEntity(InformationRequest entity) {
              return entity.getState().equals(state);
         }
     }
@@ -119,7 +119,7 @@ public class RFISearchFilter extends SearchFilter {
             minPriority = value;
         }
 
-        public boolean filter(InformationRequest entity) {
+        public boolean isAppliedToEntity(InformationRequest entity) {
             return entity.getPriority() >= minPriority;
         }
     }
@@ -131,7 +131,7 @@ public class RFISearchFilter extends SearchFilter {
             minCreatedDate = date;
         }
 
-        public boolean filter(InformationRequest entity) {
+        public boolean isAppliedToEntity(InformationRequest entity) {
             return (entity.getCreatedDate().equals(minCreatedDate) &&
                     entity.getCreatedDate().equals(maxCreatedDate));
         }
@@ -143,7 +143,7 @@ public class RFISearchFilter extends SearchFilter {
             minDueDate = date;
             maxDueDate = date;
         }
-        public boolean filter(InformationRequest entity) {
+        public boolean isAppliedToEntity(InformationRequest entity) {
             return (entity.getDueDate().equals(minDueDate) &&
                     entity.getDueDate().equals(maxDueDate));
         }
@@ -155,7 +155,7 @@ public class RFISearchFilter extends SearchFilter {
             createdBy = id;
         }
 
-        public boolean filter(InformationRequest entity) {
+        public boolean isAppliedToEntity(InformationRequest entity) {
             return entity.getCreatedBy().equals(createdBy);
         }
     }
@@ -166,7 +166,7 @@ public class RFISearchFilter extends SearchFilter {
             requestSource = originator;
         }
 
-        public boolean filter(InformationRequest entity) {
+        public boolean isAppliedToEntity(InformationRequest entity) {
             return entity.getRequestSource().equals(requestSource);
         }
     }
@@ -185,7 +185,7 @@ public class RFISearchFilter extends SearchFilter {
         } else if (criteria.toLowerCase().equals("originator")) {
             this.setActiveFilter(this.new OriginatorFilter(value));
         } else {
-            throw new AssertionError("Unknown filter type");
+            throw new AssertionError("Unknown isAppliedToEntity type");
         }
         return this;
     }

@@ -43,7 +43,7 @@ public abstract class TableController extends PageController {
         List<Row> rowList;
         rowList = table.filterBy(filter.getFilterValues());
         if (rowList.size()==0){
-            log.error("There are not record in the table set by filter");
+            log.error("There are not record in the table set by isAppliedToEntity");
             throw new AssertionError();
         }
         Row row = rowList.get(0);

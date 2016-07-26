@@ -46,11 +46,11 @@ public class APIDuSubscriberSteps extends APISteps {
         } else if (criteria.toLowerCase().equals("querystring")) {
             value = value.equals("random") ? duSubscriberEntry.getPhoneNumber() : value;
         } else {
-            throw new AssertionError("Unknown filter type");
+            throw new AssertionError("Unknown isAppliedToEntity type");
         }
 
         DuSubscriberFilter searchFilter = new DuSubscriberFilter().filterBy(criteria, value);
-        log.info("Search filter: " + JsonCoverter.toJsonString(searchFilter));
+        log.info("Search isAppliedToEntity: " + JsonCoverter.toJsonString(searchFilter));
         EntityList<DuSubscriberEntry> duSubscriberList = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
@@ -70,7 +70,7 @@ public class APIDuSubscriberSteps extends APISteps {
         }
         for (DuSubscriberEntry entry : searchResults) {
             log.info("Checking result: " + JsonCoverter.toJsonString(entry));
-            Assert.assertTrue(searchFilter.filter(entry));
+            Assert.assertTrue(searchFilter.isAppliedToEntity(entry));
         }
     }
 

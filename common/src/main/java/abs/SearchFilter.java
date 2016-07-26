@@ -21,7 +21,7 @@ public abstract class SearchFilter <T extends TeelaEntity> {
         this.activeFilter = activeFilter;
     }
 
-    public abstract boolean filter(T entity);
+    public abstract boolean isAppliedToEntity(T entity);
 
 
     public String getSortField() {

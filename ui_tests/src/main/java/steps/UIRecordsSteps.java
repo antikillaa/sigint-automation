@@ -43,7 +43,7 @@ public class UIRecordsSteps extends UISteps {
         iShouldSeeNewRecordOnTheTable("see");
     }
 
-    @When("I filter records by current date")
+    @When("I isAppliedToEntity records by current date")
     public void filterByDate() {
         String dateInterval = RandomGenerator.todayDateInterval();
         getRecordsController().getToolbarController().searchByDate(dateInterval);

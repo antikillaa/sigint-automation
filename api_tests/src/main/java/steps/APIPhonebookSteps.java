@@ -103,11 +103,11 @@ public class APIPhonebookSteps extends APISteps {
         } else if (criteria.toLowerCase().equals("querystring")) {
             value = value.equals("random") ? phonebook.getPhoneNumber() : value;
         } else {
-            throw new AssertionError("Unknown filter type");
+            throw new AssertionError("Unknown isAppliedToEntity type");
         }
 
         PhonebookSearchFilter searchFilter = new PhonebookSearchFilter().filterBy(criteria, value);
-        log.info("Search filter: " + JsonCoverter.toJsonString(searchFilter));
+        log.info("Search isAppliedToEntity: " + JsonCoverter.toJsonString(searchFilter));
         EntityList<Phonebook> phonebookList = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
@@ -126,7 +126,8 @@ public class APIPhonebookSteps extends APISteps {
             log.info("Search result size: " + searchResult.size());
         }
         for (Phonebook phonebook : searchResult) {
-            Assert.assertTrue(searchFilter.filter(phonebook));
+            Assert.assertTrue(String.format("Entity:%s found by filter %s is not correct", phonebook, searchFilter),
+                    searchFilter.isAppliedToEntity(phonebook));
         }
     }
 

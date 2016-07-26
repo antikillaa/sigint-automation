@@ -16,6 +16,14 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
     private String countryCode;
     private String country;
     private String queryString;
+    
+    
+    @Override
+    public String toString() {
+        return String.format("address:%s, name:%s, imsi:%s,phoneNumber:%s, countryCode:%s, " +
+                "country:%s, queryString:%s", address, name, imsi, phoneNumber, countryCode,
+                country, queryString);
+    }
 
 
     public String getImsi() {
@@ -80,8 +88,8 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         return this;
     }
 
-    public boolean filter(Phonebook entity) {
-        return activeFilter.filter(entity);
+    public boolean isAppliedToEntity(Phonebook entity) {
+        return activeFilter.isAppliedToEntity(entity);
     }
 
 
@@ -92,7 +100,7 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         }
 
         @Override
-        public boolean filter(Phonebook entity) {
+        public boolean isAppliedToEntity(Phonebook entity) {
             return entity.getAddress().equals(address);
         }
     }
@@ -104,7 +112,7 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         }
 
         @Override
-        public boolean filter(Phonebook entity) {
+        public boolean isAppliedToEntity(Phonebook entity) {
             return entity.getName().equals(name);
         }
     }
@@ -116,7 +124,7 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         }
 
         @Override
-        public boolean filter(Phonebook entity) {
+        public boolean isAppliedToEntity(Phonebook entity) {
             return entity.getImsi().equals(imsi);
         }
     }
@@ -128,7 +136,7 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         }
 
         @Override
-        public boolean filter(Phonebook entity) {
+        public boolean isAppliedToEntity(Phonebook entity) {
             return entity.getPhoneNumber().equals(phoneNumber);
         }
     }
@@ -140,7 +148,7 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         }
 
         @Override
-        public boolean filter(Phonebook entity) {
+        public boolean isAppliedToEntity(Phonebook entity) {
             return entity.getCountryCode().equals(countryCode);
         }
     }
@@ -152,7 +160,7 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         }
 
         @Override
-        public boolean filter(Phonebook entity) {
+        public boolean isAppliedToEntity(Phonebook entity) {
             return entity.getCountry().equals(country);
         }
     }
@@ -164,7 +172,7 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         }
 
         @Override
-        public boolean filter(Phonebook entity) {
+        public boolean isAppliedToEntity(Phonebook entity) {
             return entity.getPhoneNumber().equals(queryString);
         }
     }
@@ -185,7 +193,7 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         } else if (criteria.toLowerCase().equals("querystring")) {
             this.setActiveFilter(this.new QueryStringFilter(value));
         } else {
-            throw new AssertionError("Unknown filter type");
+            throw new AssertionError("Unknown isAppliedToEntity type");
         }
         return this;
     }

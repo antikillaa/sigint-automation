@@ -159,7 +159,7 @@ public class APITargetSteps extends APISteps {
         } else if (criteria.toLowerCase().equals("updatedafter")) {
             value = value.equals("random") ? String.valueOf(target.getCreatedAt().getTime()-1000) : value;
         } else {
-            throw new AssertionError("Unknown filter type");
+            throw new AssertionError("Unknown isAppliedToEntity type");
         }
 
         TargetFilter searchFilter = new TargetFilter().filterBy(criteria, value);
@@ -181,7 +181,7 @@ public class APITargetSteps extends APISteps {
             log.info("Search result size: " + searchResult.size());
         }
         for (Target target : searchResult) {
-            Assert.assertTrue(searchFilter.filter(target));
+            Assert.assertTrue(searchFilter.isAppliedToEntity(target));
         }
     }
 

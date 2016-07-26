@@ -102,8 +102,8 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
     }
 
     @Override
-    public boolean filter(EtisalatSubscriberEntry entity) {
-        return activeFilter.filter(entity);
+    public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
+        return activeFilter.isAppliedToEntity(entity);
     }
 
 
@@ -114,7 +114,7 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
 
         @Override
-        public boolean filter(EtisalatSubscriberEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getAddress().equals(address);
         }
     }
@@ -126,7 +126,7 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
 
         @Override
-        public boolean filter(EtisalatSubscriberEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getPhoneNumber().equals(phoneNumber);
         }
     }
@@ -138,7 +138,7 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
 
         @Override
-        public boolean filter(EtisalatSubscriberEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getName().equals(name);
         }
     }
@@ -150,7 +150,7 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
 
         @Override
-        public boolean filter(EtisalatSubscriberEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getAccountNameArabic().equals(accountNameArabic);
         }
     }
@@ -162,7 +162,7 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
 
         @Override
-        public boolean filter(EtisalatSubscriberEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getUserIdOrName().equals(userIdOrName);
         }
     }
@@ -174,7 +174,7 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
 
         @Override
-        public boolean filter(EtisalatSubscriberEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getFirstAddressLine().equals(firstAddressLine);
         }
     }
@@ -186,7 +186,7 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
 
         @Override
-        public boolean filter(EtisalatSubscriberEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getSecondAddressLine().equals(secondAddressLine);
         }
     }
@@ -198,7 +198,7 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
 
         @Override
-        public boolean filter(EtisalatSubscriberEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getCityName().equals(cityName);
         }
     }
@@ -210,7 +210,7 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
 
         @Override
-        public boolean filter(EtisalatSubscriberEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getImsi().equals(imsi);
         }
     }
@@ -222,7 +222,7 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         }
 
         @Override
-        public boolean filter(EtisalatSubscriberEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getPhoneNumber().equals(queryString);
         }
     }
@@ -249,7 +249,7 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEnt
         } else if (criteria.toLowerCase().equals("querystring")) {
             this.setActiveFilter(this.new QueryStringFilter(value));
         } else {
-            throw new AssertionError("Unknown filter type");
+            throw new AssertionError("Unknown isAppliedToEntity type");
         }
         return this;
     }

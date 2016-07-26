@@ -132,8 +132,8 @@ public class TargetFilter extends SearchFilter<Target> {
 
 
     @Override
-    public boolean filter(Target entity) {
-        return activeFilter.filter(entity);
+    public boolean isAppliedToEntity(Target entity) {
+        return activeFilter.isAppliedToEntity(entity);
     }
 
     private class NameFilter extends SearchFilter<Target> {
@@ -143,7 +143,7 @@ public class TargetFilter extends SearchFilter<Target> {
         }
 
         @Override
-        public boolean filter(Target entity) {
+        public boolean isAppliedToEntity(Target entity) {
             return entity.getName().equals(name);
         }
     }
@@ -155,7 +155,7 @@ public class TargetFilter extends SearchFilter<Target> {
         }
 
         @Override
-        public boolean filter(Target entity) {
+        public boolean isAppliedToEntity(Target entity) {
             return entity.getType().equals(type);
         }
     }
@@ -167,7 +167,7 @@ public class TargetFilter extends SearchFilter<Target> {
         }
 
         @Override
-        public boolean filter(Target entity) {
+        public boolean isAppliedToEntity(Target entity) {
             return entity.getDescription().equals(description);
         }
     }
@@ -179,7 +179,7 @@ public class TargetFilter extends SearchFilter<Target> {
         }
 
         @Override
-        public boolean filter(Target entity) {
+        public boolean isAppliedToEntity(Target entity) {
             return entity.isDeleted() == deleted;
         }
     }
@@ -191,7 +191,7 @@ public class TargetFilter extends SearchFilter<Target> {
         }
 
         @Override
-        public boolean filter(Target entity) {
+        public boolean isAppliedToEntity(Target entity) {
             Set<String> valueSet = entity.getKeywords();
             valueSet.retainAll(keywords);
             return !valueSet.isEmpty();
@@ -205,7 +205,7 @@ public class TargetFilter extends SearchFilter<Target> {
         }
 
         @Override
-        public boolean filter(Target entity) {
+        public boolean isAppliedToEntity(Target entity) {
             Set<String> valueSet = entity.getLanguages();
             valueSet.retainAll(languages);
             return !valueSet.isEmpty();
@@ -219,7 +219,7 @@ public class TargetFilter extends SearchFilter<Target> {
         }
 
         @Override
-        public boolean filter(Target entity) {
+        public boolean isAppliedToEntity(Target entity) {
             Set<String> valueSet = entity.getPhones();
             valueSet.retainAll(phones);
             return !valueSet.isEmpty();
@@ -233,7 +233,7 @@ public class TargetFilter extends SearchFilter<Target> {
         }
 
         @Override
-        public boolean filter(Target entity) {
+        public boolean isAppliedToEntity(Target entity) {
             return entity.getModifiedAt().after(updatedAfter);
         }
     }
@@ -256,7 +256,7 @@ public class TargetFilter extends SearchFilter<Target> {
         } else if (criteria.toLowerCase().equals("updatedafter")) {
             this.setActiveFilter(this.new UpdateAfterFilter(new Date(Long.valueOf(value))));
         } else {
-            throw new AssertionError("Unknown filter type");
+            throw new AssertionError("Unknown isAppliedToEntity type");
         }
         return this;
     }
