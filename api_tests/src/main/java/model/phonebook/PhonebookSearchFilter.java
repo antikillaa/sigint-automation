@@ -183,7 +183,7 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
         } else if (criteria.toLowerCase().equals("name")) {
             this.setActiveFilter(this.new NameFilter(value));
         } else if (criteria.toLowerCase().equals("country")) {
-            this.setActiveFilter(this.new CountryFilter(value));
+            this.setActiveFilter(this.new CountryCodeFilter((value)));
         } else if (criteria.toLowerCase().equals("countrycode")) {
             this.setActiveFilter(this.new CountryCodeFilter(value));
         } else if (criteria.toLowerCase().equals("phonenumber")) {

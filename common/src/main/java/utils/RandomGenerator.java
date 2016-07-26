@@ -69,6 +69,7 @@ public class RandomGenerator {
         String country = countries.get(RandomUtils.nextInt(countries.size()-1));
         return country;
     }
+    
 
     public static String getRandomLanguage() {
         List<String> languages = new LinkedList<>(AppContext.getContext().getLanguages().values());
@@ -108,7 +109,7 @@ public class RandomGenerator {
     private static Date getStartDate(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE)-5);
+        calendar.set(Calendar.HOUR, calendar.get(Calendar.HOUR)-1);
         calendar.set(Calendar.SECOND,0);
 
         return calendar.getTime();
@@ -132,6 +133,19 @@ public class RandomGenerator {
     public static String getCountryName(String countryCode) {
         Locale locale = new Locale("", countryCode);
         return locale.getDisplayCountry();
+    }
+    
+    public static String getCountryCode(String countryName) {
+        Map<String, String> countries = new HashMap<>();
+        for (String iso : Locale.getISOCountries()) {
+            Locale l = new Locale("", iso);
+            countries.put(l.getDisplayCountry(), iso);
+        }
+        try {
+            return countries.get(countryName);
+        } catch (NullPointerException e) {
+            throw new AssertionError("There is no country with name " + countryName);
+        }
     }
 
     public static File writeTargetXLS(List<Target> targets) {

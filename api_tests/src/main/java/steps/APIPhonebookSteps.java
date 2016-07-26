@@ -11,6 +11,7 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.PhonebookService;
+import utils.RandomGenerator;
 
 import static conditions.Conditions.isTrue;
 
@@ -93,7 +94,8 @@ public class APIPhonebookSteps extends APISteps {
         } else if (criteria.toLowerCase().equals("name")) {
             value = value.equals("random") ? phonebook.getName() : value;
         } else if (criteria.toLowerCase().equals("country")) {
-            value = value.equals("random") ? phonebook.getCountry() : value;
+            String countryName =  value.equals("random") ? phonebook.getCountry() : value;
+            value = RandomGenerator.getCountryCode(countryName);
         } else if (criteria.toLowerCase().equals("countrycode")) {
             value = value.equals("random") ? phonebook.getCountryCode() : value;
         } else if (criteria.toLowerCase().equals("phonenumber")) {
