@@ -109,9 +109,9 @@ public class RandomGenerator {
     private static Date getStartDate(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.set(Calendar.HOUR, calendar.get(Calendar.HOUR_OF_DAY)-1);
-        calendar.set(Calendar.SECOND,0);
-
+        calendar.set(Calendar.HOUR_OF_DAY, 00);
+        calendar.set(Calendar.MINUTE,01);
+        calendar.set(Calendar.SECOND, 00);
         return calendar.getTime();
     }
 
