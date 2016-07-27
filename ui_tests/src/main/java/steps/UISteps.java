@@ -52,7 +52,7 @@ public class UISteps {
             webDriver.manage().window().setSize(new Dimension(1920, 1080));
             WebDriverRunner.setWebDriver(webDriver);
         }
-        Configuration.timeout = Long.parseLong(System.getProperties().getProperty("selenide.timeout", "40000"));
+        Configuration.timeout = Long.parseLong(System.getProperties().getProperty("selenide.timeout", "80000"));
         Configuration.collectionsTimeout = Long.parseLong(System.getProperties().getProperty("selenide.collectionsTimeout", "40000"));
     }
 
