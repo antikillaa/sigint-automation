@@ -54,7 +54,7 @@ public abstract class EntityList<T extends TeelaEntity> implements Iterable<T> {
         return exist;
     }
 
-    private void updateEntity(T oldEntity, T newEntity) {
+    public void updateEntity(T oldEntity, T newEntity) {
         int index = entities.indexOf(oldEntity);
         entities.set(index, newEntity);
     }

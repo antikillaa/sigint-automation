@@ -2,6 +2,7 @@ package utils;
 
 import model.AppContext;
 import model.Target;
+import model.TargetGroup;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
@@ -148,6 +149,32 @@ public class RandomGenerator {
         }
     }
 
+    public static LinkedHashSet<String> generateKeywords(int maxNumber) {
+        String text = FileHelper.readTxtFile("keywords.txt");
+        ArrayList<String> strings = new ArrayList<>();
+        if (text != null) {
+            String[] values = text.split(" ");
+            for (String value : values) {
+                value = value.trim().replace(",", "").replace(".", "");
+                if (value.length() > 2) {
+                    strings.add(value);
+                }
+            }
+        }
+
+        LinkedHashSet<String> keys = new LinkedHashSet<>();
+        int numMaxStrings = RandomUtils.nextInt(maxNumber);
+        int i = 0;
+        do {
+            if (text != null) {
+                int index = RandomUtils.nextInt(strings.size());
+                keys.add(strings.get(index));
+            }
+            i++;
+        } while (i < numMaxStrings);
+        return keys;
+    }
+
     public static File writeTargetXLS(List<Target> targets) {
 
         Map<Integer, Object[]> data = new HashMap<>();
@@ -162,7 +189,17 @@ public class RandomGenerator {
             targetFields.add(targets.get(i).getType().name());
             targetFields.add(targets.get(i).getPhones().toString().replace("[", "").replace("]", ""));
             targetFields.add(targets.get(i).getKeywords().toString().replace("[", "").replace("]", ""));
-            //targetFields.add(targets.get(i).getGroups().toString().replace("[", "").replace("]", ""));
+            // fill target groups
+            List<TargetGroup> targetGroups = targets.get(i).getGroups();
+            String groups = "";
+            for (TargetGroup targetGroup : targetGroups) {
+                if (groups.isEmpty()) {
+                    groups = groups.concat(targetGroup.getName());
+                } else {
+                    groups = groups.concat(", " + targetGroup.getName());
+                }
+            }
+            targetFields.add(groups);
 
             Object[] array = new Object[targetFields.size()];
             Object[] row = targetFields.toArray(array);

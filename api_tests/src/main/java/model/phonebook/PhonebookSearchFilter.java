@@ -16,8 +16,8 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
     private String countryCode;
     private String country;
     private String queryString;
-    
-    
+
+
     @Override
     public String toString() {
         return String.format("address:%s, name:%s, imsi:%s,phoneNumber:%s, countryCode:%s, " +
@@ -161,7 +161,15 @@ public class PhonebookSearchFilter extends SearchFilter<Phonebook> {
 
         @Override
         public boolean isAppliedToEntity(Phonebook entity) {
-            return entity.getCountry().equals(country);
+            // for Elastic Search
+            // search by "Netherlands Antilles" returns "Netherlands Antilles" and "Netherlands"
+            // the search is performed on each word separately
+            boolean correct = false;
+            String[] patters = country.split(" ");
+            for (String pattern : patters) {
+                correct = correct || entity.getCountry().contains(pattern.trim());
+            }
+            return correct;
         }
     }
 

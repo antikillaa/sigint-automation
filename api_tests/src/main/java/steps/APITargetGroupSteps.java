@@ -44,7 +44,6 @@ public class APITargetGroupSteps extends APISteps {
     }
 
     private boolean equalsTargetGroups(TargetGroup checkedTargetGroup, TargetGroup etalonTargetGroup) {
-        Assert.assertTrue(checkedTargetGroup.getId() != null);
         return Verify.isTrue(equals.elements(checkedTargetGroup.getDescription(), etalonTargetGroup.getDescription())) &&
                 Verify.isTrue(equals.elements(checkedTargetGroup.getName(), etalonTargetGroup.getName())) &&
                 Verify.isTrue(equals.elements(checkedTargetGroup.getTargets(), etalonTargetGroup.getTargets()));
@@ -70,19 +69,41 @@ public class APITargetGroupSteps extends APISteps {
 
     @When("I send get list of target group request")
     public void getListOfTargetGroupsRequest() throws NullReturnException {
-        List<TargetGroup> listTargetGroups = service.view();
+        List<TargetGroup> targetGroupList = service.view();
 
-        context.put("listTargetGroup", listTargetGroups);
+        context.put("targetGroupList", targetGroupList);
     }
 
     @Then("Created target group $criteria list")
-    public void targetGroupsContainNewTArgetGroup(String criteria) throws NullReturnException {
+    public void targetGroupsContainNewTargetGroup(String criteria) throws NullReturnException {
         TargetGroup targetGroup = context.entities().getTargetGroups().getLatest();
-        List<TargetGroup> list = context.get("listTargetGroup", List.class);
+        List<TargetGroup> list = context.get("targetGroupList", List.class);
 
         Boolean contains = false;
         for (TargetGroup entity : list) {
             if (Verify.isTrue(isTrue.element(equalsTargetGroups(targetGroup, entity)))) {
+                contains = true;
+                break;
+            }
+        }
+
+        if (criteria.toLowerCase().equals("in")) {
+            Verify.shouldBe(isTrue.element(contains));
+        } else if (criteria.toLowerCase().equals("not in")) {
+            Verify.shouldNotBe(isTrue.element(contains));
+        } else {
+            throw new AssertionError("Incorrect argument passed to step");
+        }
+    }
+
+    @Then("existing target group $criteria list")
+    public void existingTargetGroupContainsInList(String criteria) throws NullReturnException {
+        TargetGroup targetGroup = context.entities().getTargetGroups().getLatest();
+        List<TargetGroup> list = context.get("targetGroupList", List.class);
+
+        Boolean contains = false;
+        for (TargetGroup entity : list) {
+            if (targetGroup.getName().equals(entity.getName())) {
                 contains = true;
                 break;
             }
@@ -133,5 +154,22 @@ public class APITargetGroupSteps extends APISteps {
         TargetGroup responseTargetGroup = context.entities().getTargetGroups().getLatest();
 
         equalsTargetGroups(responseTargetGroup, updatedTargetGroup);
+    }
+
+    @Then("existing group is listed in list only once")
+    public void groupNotDuplicated() {
+        List<TargetGroup> targetGroups = context.entities().getTargets().getLatest().getGroups();
+        List<TargetGroup> groups = context.get("targetGroupList", List.class);
+
+        for (TargetGroup uploadedGroup : targetGroups) {
+            int count = 0;
+            for (TargetGroup group : groups) {
+                if (uploadedGroup.getName().equals(group.getName())) {
+                    context.entities().getTargetGroups().updateEntity(uploadedGroup, group);
+                    count += 1;
+                }
+            }
+            Assert.assertTrue(count == 1);
+        }
     }
 }

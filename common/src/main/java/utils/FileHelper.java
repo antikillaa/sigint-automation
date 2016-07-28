@@ -46,4 +46,19 @@ public class FileHelper {
         
     }
 
+    public static String readTxtFile(String fileName) {
+        ClassLoader classLoader = FileHelper.class.getClassLoader();
+        File file = new File(classLoader.getResource(fileName).getFile());
+        try {
+            FileReader reader = new FileReader(file);
+            char[] buffer = new char[(int)file.length()];
+            reader.read(buffer);
+            return new String(buffer);
+        }
+        catch(IOException e) {
+            log.error(e.getMessage());
+            return null;
+        }
+    }
+
 }

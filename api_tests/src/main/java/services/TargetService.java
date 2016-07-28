@@ -9,6 +9,7 @@ import http.requests.targets.TargetRequest;
 import json.JsonCoverter;
 import json.RsClient;
 import model.*;
+import model.targetGroup.TargetGroupSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
@@ -127,5 +128,21 @@ public class TargetService implements EntityService<Target> {
         log.debug(Parser.entityToString(resultTarget));
 
         return resultTarget;
+    }
+
+    public List<TargetGroup> getTargetGroups(String id) {
+        log.info("Get targetGroups of target id:" + id);
+
+        TargetRequest request = new TargetRequest().findTargetGroups(id);
+        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
+
+        TargetGroupSearchResult result = JsonCoverter.fromJsonToObject(response.readEntity(String.class), TargetGroupSearchResult.class);
+        context.put("code", response.getStatus());
+        if (result != null) {
+            log.debug("Count of found groups: " + result.getResult().size());
+            return result.getResult();
+        } else {
+            throw new AssertionError("Unable to get list of target groups");
+        }
     }
 }

@@ -43,6 +43,11 @@ public class TargetRequest extends HttpRequest {
         return this;
     }
 
+    public TargetRequest findTargetGroups(String id) {
+        this.setURI(URI + "/" + id + "/groups");
+        return this;
+    }
+
     public void addBodyFile(String name, File file, MediaType type) {
         log.debug("Adding file to multipart body...");
         FileDataBodyPart filePart = new FileDataBodyPart(name, file, type);
