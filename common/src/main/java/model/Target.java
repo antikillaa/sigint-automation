@@ -28,6 +28,17 @@ public class Target extends TeelaEntity {
     private int threatScore;
     private long lmt;
     private boolean deleted;
+    
+    
+    @Override
+    public String toString(){
+        return String.format("groups:%s, keywords:%s, languages:%s, name:%s," +
+                "phones:%s, type:%s, originalName:%s, threatScore:%s, lmt:%s",
+                Arrays.toString(groups.toArray()), Arrays.toString(keywords.toArray()),
+                Arrays.toString(languages.toArray()), name, Arrays.toString(phones.toArray()),
+                type, originalName, threatScore, lmt);
+        
+    }
 
     public Target(String id) {
         setId(id);

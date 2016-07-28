@@ -181,7 +181,8 @@ public class APITargetSteps extends APISteps {
             log.info("Search result size: " + searchResult.size());
         }
         for (Target target : searchResult) {
-            Assert.assertTrue(searchFilter.isAppliedToEntity(target));
+            Assert.assertTrue(String.format("Target:%s should not match to filter %s", target, searchFilter),
+                    searchFilter.isAppliedToEntity(target));
         }
     }
 

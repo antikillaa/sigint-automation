@@ -5,6 +5,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import utils.Parser;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Set;
 
@@ -25,6 +26,17 @@ public class TargetFilter extends SearchFilter<Target> {
     private Long minLmt;
     private Long maxLmt;
     private Date updatedAfter;
+    
+    @Override
+    public String toString() {
+        return String.format("name:%s, description:%s, type:%s, languages:%s," +
+                " phones:%s, keywords:%s, originalName:%s, " +
+                "minThreatScore:%s, maxThreatScore:%s, minLmt:%s, maxLmt:%s," +
+                "updatedAfter:%s", name, description, type, Arrays.toString(languages.toArray()),
+                Arrays.toString(phones.toArray()), Arrays.toString(keywords.toArray()),
+                originalName, minThreatScore, maxThreatScore, minLmt, maxLmt,
+                updatedAfter);
+    }
 
     public String getDescription() {
         return description;
