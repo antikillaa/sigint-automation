@@ -27,7 +27,7 @@ public class RecordDetailsDialog extends SigintPage {
     }
 
     public RecordDetailsDialog clickAttachButton() {
-        getAttachButton().click();
+        getAttachButton().should(Condition.visible).click();
         return this;
     }
 
