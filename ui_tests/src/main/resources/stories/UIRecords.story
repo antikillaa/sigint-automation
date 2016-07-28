@@ -5,8 +5,6 @@ Meta:
 
 
 Scenario: User is able to create a manual record (SMS TEXT)
-Meta:
-@wip
 Given I logged in as OPERATOR
 When I navigate to Records -> Search page
 And I open create record form

@@ -84,8 +84,7 @@ public class TargetService implements EntityService<Target> {
     }
 
     public EntityList<Target> list(SearchFilter filter) {
-        log.debug(Parser.entityToString(filter));
-
+        log.debug(filter);
         TargetRequest request = new TargetRequest().search();
         Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
         TargetSearchResults searchResults = JsonCoverter.readEntityFromResponse(response, TargetSearchResults.class, "result");
