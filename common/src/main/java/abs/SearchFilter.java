@@ -11,7 +11,7 @@ public abstract class SearchFilter <T extends TeelaEntity> {
     protected boolean sortDirection; //asc=true, desc=false
 
     protected int page = 0;
-    protected int pageSize = 100;
+    protected int pageSize = 1000; //TODO
 
     public SearchFilter getActiveFilter() {
         return activeFilter;

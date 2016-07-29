@@ -3,6 +3,7 @@ package model;
 import abs.SearchFilter;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import utils.DateHelper;
 import utils.Parser;
 
 import java.util.Date;
@@ -24,7 +25,7 @@ public class TargetFilter extends SearchFilter<Target> {
     private Integer maxThreatScore;
     private Long minLmt;
     private Long maxLmt;
-    private Date updatedAfter;
+    private Date updatedAfter = DateHelper.yesterday();
 
     public String getDescription() {
         return description;

@@ -280,4 +280,17 @@ public class APITargetSteps extends APISteps {
 
         context.put("targetGroupList", targetGroups);
     }
+
+    @When("I send upload new $count targets with new group request")
+    public void uploadTargetWithNewGroup(String count) {
+        List<Target> targets = new Target().generate(Integer.valueOf(count));
+        TargetGroup targetGroup = new TargetGroup().generate();
+        targets.get(0).addGroup(targetGroup);
+
+        int responseCode = service.upload(targets);
+
+        context.put("code", responseCode);
+        context.put("uploadedTargets", targets);
+        context.entities().getTargetGroups().addOrUpdateEntity(targetGroup);
+    }
 }

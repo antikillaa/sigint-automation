@@ -96,7 +96,7 @@ public class APITargetGroupSteps extends APISteps {
         }
     }
 
-    @Then("existing target group $criteria list")
+    @Then("target group $criteria list")
     public void existingTargetGroupContainsInList(String criteria) throws NullReturnException {
         TargetGroup targetGroup = context.entities().getTargetGroups().getLatest();
         List<TargetGroup> list = context.get("targetGroupList", List.class);
