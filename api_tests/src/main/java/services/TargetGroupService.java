@@ -98,6 +98,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
 
         TargetGroupSearchResult result = JsonCoverter.fromJsonToObject(response.readEntity(String.class), TargetGroupSearchResult.class);
+        context.put("code", response.getStatus());
         if (result != null) {
             log.debug("Size of list: " + result.getResult().size());
             return result.getResult();

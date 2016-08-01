@@ -146,7 +146,21 @@ public class Target extends TeelaEntity {
                 .setType(TargetType.getRandom())
                 .setPhones(RandomGenerator.generatePhones(10))
                 .setLanguages(RandomGenerator.generateLanguagesCodes(5))
-                .setKeywords(RandomGenerator.generateRandomStrings(5));
+                .setKeywords(RandomGenerator.generateKeywords(3));
+        return this;
+    }
+
+    public List<Target> generate(int count) {
+        List<Target> targets = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            targets.add(new Target().generate());
+        }
+        return targets;
+    }
+
+    public Target addGroup(TargetGroup targetGroup) {
+        List<TargetGroup> groups = getGroups();
+        groups.add(targetGroup);
         return this;
     }
 

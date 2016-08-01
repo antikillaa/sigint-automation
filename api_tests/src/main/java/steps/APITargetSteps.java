@@ -4,15 +4,23 @@ import abs.EntityList;
 import conditions.Verify;
 import errors.NullReturnException;
 import json.JsonCoverter;
-import model.*;
+import model.AppContext;
+import model.Target;
+import model.TargetFilter;
+import model.TargetGroup;
+import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
+import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TargetService;
 import utils.Parser;
+import utils.RandomGenerator;
 
-import java.util.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import static conditions.Conditions.equals;
 import static conditions.Conditions.isTrue;
@@ -78,7 +86,6 @@ public class APITargetSteps extends APISteps {
         return Verify.isTrue(equals.elements(checkedTarget.getName(), etalonTarget.getName())) &&
                 Verify.isTrue(equals.elements(checkedTarget.getKeywords(), etalonTarget.getKeywords())) &&
                 Verify.isTrue(equals.elements(checkedTarget.getPhones(), etalonTarget.getPhones())) &&
-                Verify.isTrue(equals.elements(checkedTarget.getGroups(), etalonTarget.getGroups())) &&
                 Verify.isTrue(equals.elements(checkedTarget.getType(), etalonTarget.getType()));
     }
 
@@ -124,11 +131,24 @@ public class APITargetSteps extends APISteps {
 
     @When("I send upload targets request with XLS file containing $count targets without specified id")
     public void targetGeneratedXls(String count){
-        int numTarget = Integer.valueOf(count);
+        List<Target> targets = new Target().generate(Integer.valueOf(count));
 
-        List<Target> targets = new ArrayList<>();
-        for (int i = 0; i < numTarget; i++) {
-            targets.add(new Target().generate());
+        int responseCode = service.upload(targets);
+
+        context.put("code", responseCode);
+        context.put("uploadedTargets", targets);
+    }
+
+    @When("I send upload targets request with XLS file containing $count targets with existing group request")
+    public void uploadTargetsWithExistingGroup(String count){
+        List<TargetGroup> targetGroups = context.get("targetGroupList", List.class);
+        List<Target> targets = new Target().generate(Integer.valueOf(count));
+
+        for (Target target : targets ) {
+            int index = RandomUtils.nextInt(targetGroups.size());
+            TargetGroup group = targetGroups.get(index);
+            target.addGroup(group);
+            context.entities().getTargetGroups().addOrUpdateEntity(group);
         }
 
         int responseCode = service.upload(targets);
@@ -212,6 +232,7 @@ public class APITargetSteps extends APISteps {
         for (Target entity : list) {
             if (isEqualsUploadedTargets(target, entity)) {
                 contains = true;
+                context.entities().getTargets().updateEntity(target, entity);
                 break;
             }
         }
@@ -234,4 +255,42 @@ public class APITargetSteps extends APISteps {
         }
     }
 
+    @When("I send upload updated target request")
+    public void uploadUpdatedTarget() {
+        List<Target> targets = context.get("uploadedTargets", List.class);
+        for (Target target : targets) {
+            target.generate();
+        }
+        service.upload(targets);
+        context.put("uploadedTargets", targets);
+    }
+
+    @Given("generate XLS with $count target")
+    public void generateTargets(String count) {
+        List<Target> targets = new Target().generate(Integer.valueOf(count));
+        File file = RandomGenerator.writeTargetXLS(targets);
+
+        context.put("targetsXLS", file);
+    }
+
+    @When("I send get groups list of new target request")
+    public void getTargetGroupsOfNewTarget(){
+        Target target = context.entities().getTargets().getLatest();
+        List<TargetGroup> targetGroups = service.getTargetGroups(target.getId());
+
+        context.put("targetGroupList", targetGroups);
+    }
+
+    @When("I send upload new $count targets with new group request")
+    public void uploadTargetWithNewGroup(String count) {
+        List<Target> targets = new Target().generate(Integer.valueOf(count));
+        TargetGroup targetGroup = new TargetGroup().generate();
+        targets.get(0).addGroup(targetGroup);
+
+        int responseCode = service.upload(targets);
+
+        context.put("code", responseCode);
+        context.put("uploadedTargets", targets);
+        context.entities().getTargetGroups().addOrUpdateEntity(targetGroup);
+    }
 }

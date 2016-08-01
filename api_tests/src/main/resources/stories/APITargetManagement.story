@@ -106,3 +106,46 @@ When I send search targets by name and value random
 Then targets search result are correct
 And uploaded target in list
 And target has auto-generated ID
+
+Scenario: API.Upload updated target
+Given I sign in as admin user
+When I send upload targets request with XLS file containing 1 targets without specified id
+Then I got response code 200
+And Upload result of 1 targets is successful
+When I send search targets by name and value random
+Then targets search result are correct
+And uploaded target in list
+When I send upload updated target request
+Then I got response code 200
+And Upload result of 1 targets is successful
+When I send search targets by name and value random
+Then targets search result are correct
+And uploaded target in list
+
+Scenario: API.Upload new target with existing group
+Given I sign in as admin user
+When I send get list of target group request
+Then I got response code 200
+When I send upload targets request with XLS file containing 1 targets with existing group request
+Then I got response code 200
+And Upload result of 1 targets is successful
+When I send search targets by name and value random
+Then targets search result are correct
+And uploaded target in list
+When I send get list of target group request
+Then existing group is listed in list only once
+When I send get groups list of new target request
+Then target group in list
+
+Scenario: API.Upload new target with new group
+Given I sign in as admin user
+When I send upload new 1 targets with new group request
+Then I got response code 200
+And Upload result of 1 targets is successful
+When I send search targets by name and value random
+Then targets search result are correct
+And uploaded target in list
+When I send get list of target group request
+Then target group in list
+When I send get groups list of new target request
+Then target group in list
