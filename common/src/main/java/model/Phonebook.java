@@ -6,6 +6,9 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import utils.RandomGenerator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Phonebook extends TeelaEntity {
@@ -27,6 +30,21 @@ public class Phonebook extends TeelaEntity {
                 phoneNumber, name, address, country, countryCode, provider, location, imsi);
     }
 
+    /**
+        Records look like this:
+
+        967700000000," Arthur King "," postpaid 123 Main St Phoenix AZ ",\N,\N,"usa","Y","mobile"
+
+        Records are terminated by a newline character.
+        Some records have a carriage return character inside.
+        Some records have a newline character inside, preceded by a backslash.
+        Some records have 2 unknown \N fields next to each other.
+
+        The parts are: phone number, name, address, \N, possibly another \N, country, provider, location.
+    */
+    public String toCSVString() {
+        return String.format("\"%s\",\"%s\",\"%s\",\\N,\\N,\"%s\",\"%s\",\"%s\"", phoneNumber, name, address, country, provider, location);
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -120,5 +138,13 @@ public class Phonebook extends TeelaEntity {
                 .setProvider(RandomStringUtils.randomAlphanumeric(10))
                 .setLocation(RandomStringUtils.randomAlphanumeric(20));
         return this;
+    }
+
+    public List<Phonebook> generate(int count) {
+        List<Phonebook> list = new ArrayList<>();
+        for (int i = 0; i < count; i++ ) {
+            list.add(new Phonebook().generate());
+        }
+        return list;
     }
 }

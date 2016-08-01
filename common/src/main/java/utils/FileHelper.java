@@ -12,7 +12,7 @@ public class FileHelper {
     public static void writeLineToFile(File file, String line) {
         Writer writer = null;
         try {
-            writer = new FileWriter(file);
+            writer = new FileWriter(file, true);
             writer.write(line);
             writer.write(System.getProperty("line.separator"));
             writer.flush();
@@ -42,8 +42,6 @@ public class FileHelper {
         }
         IOUtils.closeQuietly(in);
         IOUtils.closeQuietly(out);
-        
-        
     }
 
     public static String readTxtFile(String fileName) {

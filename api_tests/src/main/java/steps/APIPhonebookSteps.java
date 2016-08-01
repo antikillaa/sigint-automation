@@ -5,6 +5,7 @@ import conditions.Verify;
 import errors.NullReturnException;
 import json.JsonCoverter;
 import model.Phonebook;
+import model.UploadResult;
 import model.phonebook.PhonebookSearchFilter;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -12,6 +13,8 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.PhonebookService;
 import utils.RandomGenerator;
+
+import java.util.List;
 
 import static conditions.Conditions.isTrue;
 
@@ -139,7 +142,14 @@ public class APIPhonebookSteps extends APISteps {
         EntityList<Phonebook> list = context.get("searchResult", EntityList.class);
         log.info("Checking if phonebook entry " + criteria + " list");
 
-        Boolean contains = list.contains(phonebook);
+        Boolean contains = false;
+        for(Phonebook entry : list) {
+            if (entry.getPhoneNumber().equals(phonebook.getPhoneNumber())) {
+                contains = true;
+                break;
+            }
+        }
+
         if (criteria.toLowerCase().equals("in")) {
             Verify.shouldBe(isTrue.element(contains));
         } else if (criteria.toLowerCase().equals("not in")) {
@@ -149,4 +159,29 @@ public class APIPhonebookSteps extends APISteps {
         }
     }
 
+    @When("I send upload phonebook request with CSV file containing $count phonebooks")
+    public void uploadPhonebookCSVFile(String count) {
+        int numPonebooks = Integer.valueOf(count);
+        List<Phonebook> phonebooks = new Phonebook().generate(numPonebooks);
+
+        int responseCode = service.upload(phonebooks);
+
+        context.put("code", responseCode);
+        context.put("uploadedPhonebooks", phonebooks);
+        for (Phonebook phonebook : phonebooks){
+            context.entities().getPhonebooks().addOrUpdateEntity(phonebook);
+        }
+    }
+
+    @Then("Upload result of $count 'Phonebook' entries is successful")
+    public void checkUploadResults(String count) {
+        log.info("Checking 'Phonebook' entries upload result");
+        UploadResult uploadResult = context.get("uploadResult", UploadResult.class);
+
+        int numEntries = Integer.valueOf(count);
+        if (uploadResult.getNumEntries() != numEntries || uploadResult.getFailedEntries() > 0) {
+            log.error("Entry upload result is not correct!");
+            throw new AssertionError("Entry upload result is not correct!");
+        }
+    }
 }

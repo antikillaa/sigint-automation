@@ -4,10 +4,7 @@ import abs.EntityList;
 import conditions.Verify;
 import errors.NullReturnException;
 import json.JsonCoverter;
-import model.AppContext;
-import model.Target;
-import model.TargetFilter;
-import model.TargetGroup;
+import model.*;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
@@ -16,7 +13,6 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TargetService;
 import utils.Parser;
-import utils.RandomGenerator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -268,7 +264,7 @@ public class APITargetSteps extends APISteps {
     @Given("generate XLS with $count target")
     public void generateTargets(String count) {
         List<Target> targets = new Target().generate(Integer.valueOf(count));
-        File file = RandomGenerator.writeTargetXLS(targets);
+        File file = service.writeTargetXLS(targets);
 
         context.put("targetsXLS", file);
     }
@@ -284,13 +280,34 @@ public class APITargetSteps extends APISteps {
     @When("I send upload new $count targets with new group request")
     public void uploadTargetWithNewGroup(String count) {
         List<Target> targets = new Target().generate(Integer.valueOf(count));
-        TargetGroup targetGroup = new TargetGroup().generate();
-        targets.get(0).addGroup(targetGroup);
+
+        for (Target target : targets) {
+            TargetGroup targetGroup = new TargetGroup().generate();
+            target.addGroup(targetGroup);
+            context.entities().getTargetGroups().addOrUpdateEntity(targetGroup);
+        }
 
         int responseCode = service.upload(targets);
 
         context.put("code", responseCode);
         context.put("uploadedTargets", targets);
-        context.entities().getTargetGroups().addOrUpdateEntity(targetGroup);
+    }
+
+    @Then("Upload result of $count targets is successful")
+    public void checkUploadTargetsResults(String count) {
+        log.info("Checking targets upload result");
+        UploadResult result = context.get("uploadResult", UploadResult.class);
+
+        int numEntries = Integer.valueOf(count);
+        if ((result.getRowsAdded() + result.getRowsUpdated()) == numEntries || result.getRowsFailed() == 0) {
+            List<Target> targets = context.get("uploadedTargets", ArrayList.class);
+            for (Target target : targets) {
+                context.entities().getTargets().addOrUpdateEntity(target);
+            }
+        } else {
+            log.error("Entry upload result is not correct!");
+            log.error("Errors:" + result.getErrors());
+            throw new AssertionError("Entry upload result is not correct! Errors: " + result.getErrors());
+        }
     }
 }
