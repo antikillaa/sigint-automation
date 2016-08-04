@@ -194,8 +194,14 @@ public class TargetFilter extends SearchFilter<Target> {
         @Override
         public boolean isAppliedToEntity(Target entity) {
             Set<String> valueSet = entity.getKeywords();
-            valueSet.retainAll(keywords);
-            return !valueSet.isEmpty();
+            for (String keyword : keywords) {
+                for (String value : valueSet) {
+                    if (value.toLowerCase().contains(keyword.toLowerCase())) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 
