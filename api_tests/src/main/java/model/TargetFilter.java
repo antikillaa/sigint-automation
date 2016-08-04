@@ -196,7 +196,7 @@ public class TargetFilter extends SearchFilter<Target> {
             Set<String> valueSet = entity.getKeywords();
             for (String keyword : keywords) {
                 for (String value : valueSet) {
-                    if (value.contains(keyword)) {
+                    if (value.toLowerCase().contains(keyword.toLowerCase())) {
                         return true;
                     }
                 }
