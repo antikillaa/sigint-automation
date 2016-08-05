@@ -45,8 +45,8 @@ public class FileHelper {
     }
 
     public static String readTxtFile(String fileName) {
-        ClassLoader classLoader = FileHelper.class.getClassLoader();
-        File file = new File(classLoader.getResource(fileName).getFile());
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        File file = new File(classloader.getResource(fileName).getFile());
         try {
             FileReader reader = new FileReader(file);
             char[] buffer = new char[(int)file.length()];

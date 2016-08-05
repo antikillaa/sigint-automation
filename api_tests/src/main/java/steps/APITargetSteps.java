@@ -5,6 +5,7 @@ import conditions.Verify;
 import errors.NullReturnException;
 import json.JsonCoverter;
 import model.*;
+import model.bulders.SSMSGenerator;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
@@ -13,6 +14,8 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TargetService;
 import utils.Parser;
+import utils.RandomGenerator;
+import data_generator.TargetFile;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -264,7 +267,7 @@ public class APITargetSteps extends APISteps {
     @Given("generate XLS with $count target")
     public void generateTargets(String count) {
         List<Target> targets = new Target().generate(Integer.valueOf(count));
-        File file = service.writeTargetXLS(targets);
+        File file = new TargetFile().write(targets);
 
         context.put("targetsXLS", file);
     }
@@ -310,4 +313,26 @@ public class APITargetSteps extends APISteps {
             throw new AssertionError("Entry upload result is not correct! Errors: " + result.getErrors());
         }
     }
+
+    @Given("Generate $count SSMS")
+    public void generateSSMS(String count) throws NullReturnException {
+        List<SSMS> ssmsList = new ArrayList<>();
+        int numSSMS = Integer.valueOf(count);
+
+        for (int i = 0; i < numSSMS; i++ ) {
+            Target target = new Target().generate();
+            String targetPhone = RandomGenerator.getRandomItemFromList(new ArrayList<>(target.getPhones()));
+
+            SSMS ssms = new SSMSGenerator()
+                    .toNumber(targetPhone)
+                    .generateSSMS();
+
+            ssmsList.add(ssms);
+        }
+
+        log.info("ssms count: " + ssmsList.size());
+        context.put("ssmsList", ssmsList);
+    }
+
+
 }

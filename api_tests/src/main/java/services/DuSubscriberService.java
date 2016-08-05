@@ -3,23 +3,24 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import abs.SearchResult;
+import data_generator.DuFile;
 import errors.NullReturnException;
 import http.requests.phonebook.DuSubscriberRequest;
 import json.JsonCoverter;
 import json.RsClient;
 import model.AppContext;
 import model.DuSubscriberEntry;
-import model.phonebook.DuSubscriberSearchResult;
 import model.UploadResult;
+import model.phonebook.DuSubscriberSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import utils.FileHelper;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
 
@@ -29,18 +30,20 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
     private final String sigintHost = context.environment().getSigintHost();
 
     public int add(DuSubscriberEntry entity) {
-        log.info("Upload new DuSubscriber Entry");
+        log.info("Add DuSubscriber Entry..");
+        List<DuSubscriberEntry> entries = new ArrayList<>();
+        entries.add(entity);
+        return upload(entries);
+    }
+
+    public int upload(List<DuSubscriberEntry> entries) {
+        log.debug("Writing DuSubscriberEntry to csv file...");
+        File file = new DuFile().write(entries);
+
+        log.info("Upload file with " + entries.size() + " DuSubscriber entries..");
         DuSubscriberRequest request = new DuSubscriberRequest().upload();
-        try {
-            log.debug("Writing DuSubscriberEntry to csv file...");
-            File file = File.createTempFile("DuSubscriberEntry", ".csv");
-            FileHelper.writeLineToFile(file, entryToString(entity));
-            request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
-            file.deleteOnExit();
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("Failed to create csv file");
-        }
+        request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
+        file.deleteOnExit();
 
         Entity payload = Entity.entity(request.getBody(), request.getMediaType());
         log.debug("Sending request to " + sigintHost + request.getURI());
@@ -64,7 +67,8 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
         DuSubscriberRequest request = new DuSubscriberRequest().search();
         Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
 
-        SearchResult<DuSubscriberEntry> searchResults = JsonCoverter.readEntityFromResponse(response, DuSubscriberSearchResult.class, "result");
+        SearchResult<DuSubscriberEntry> searchResults =
+                JsonCoverter.readEntityFromResponse(response, DuSubscriberSearchResult.class, "result");
         if (searchResults == null) {
             throw new AssertionError("Unable to read search results from DuSubscriber search");
         } else {
@@ -85,27 +89,6 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
         log.info("Getting derails of DuSubscriber Entry by id: " + id);
         Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
         return JsonCoverter.readEntityFromResponse(response, DuSubscriberEntry.class, "result");
-    }
-
-
-    private String entryToString(DuSubscriberEntry entry) {
-        String DELIMETER = "~";
-        return  entry.getPhoneNumber() + DELIMETER +
-                entry.getTitle() + DELIMETER +
-                entry.getFirstName() + DELIMETER +
-                entry.getMiddleName() + DELIMETER +
-                entry.getLastName() + DELIMETER +
-                entry.getPoBox() + DELIMETER +
-                entry.getCity() + DELIMETER +
-                entry.getNationality() + DELIMETER +
-                entry.getVisaType() + DELIMETER +
-                entry.getVisaNumber() + DELIMETER +
-                entry.getIdType() + DELIMETER +
-                entry.getIdNumber() + DELIMETER +
-                entry.getStatus() + DELIMETER +
-                entry.getCustomerType() + DELIMETER +
-                entry.getServiceType() + DELIMETER +
-                entry.getCustomerCode();
     }
 
 }

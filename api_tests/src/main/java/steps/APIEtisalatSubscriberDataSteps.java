@@ -4,13 +4,13 @@ import abs.EntityList;
 import conditions.Verify;
 import errors.NullReturnException;
 import json.JsonCoverter;
-import model.EtisalatSubscriberEntry;
+import model.EtisalatEntry;
 import model.phonebook.EtisalatSubscriberFilter;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
-import services.EtisalatSubscriberService;
+import services.EtisalatService;
 
 import static conditions.Conditions.equals;
 import static conditions.Conditions.isTrue;
@@ -18,12 +18,12 @@ import static conditions.Conditions.isTrue;
 public class APIEtisalatSubscriberDataSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APIEtisalatSubscriberDataSteps.class);
-    private EtisalatSubscriberService service = new EtisalatSubscriberService();
+    private EtisalatService service = new EtisalatService();
 
 
     @When("I send upload EtisalatSubscriberData entry request with all fields")
     public void sendUploadEtisalatSubscriberDataEntryRequest() throws NullReturnException {
-        EtisalatSubscriberEntry entry = new EtisalatSubscriberEntry().generate();
+        EtisalatEntry entry = new EtisalatEntry().generate();
         log.info("Entry:" + JsonCoverter.toJsonString(entry));
 
         int responseCode = service.add(entry);
@@ -35,7 +35,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
     @When("I send search EtisalatSubscriberData by $criteria and value $value")
     public void sendSearchEtisalatListByCriteriaAndValue(String criteria, String value) throws NullReturnException {
         log.info("Searching EtisalatSubscriberData by criteria:" + criteria + " and value:" + value);
-        EtisalatSubscriberEntry entry = context.get("etisalatSubscriberEntry", EtisalatSubscriberEntry.class);
+        EtisalatEntry entry = context.get("etisalatSubscriberEntry", EtisalatEntry.class);
 
         if (criteria.toLowerCase().equals("address")) {
             value = value.equals("random") ? entry.getAddress() : value;
@@ -63,7 +63,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
 
         EtisalatSubscriberFilter searchFilter = new EtisalatSubscriberFilter().filterBy(criteria, value);
         log.info("Search isAppliedToEntity: " + JsonCoverter.toJsonString(searchFilter));
-        EntityList<EtisalatSubscriberEntry> entityList = service.list(searchFilter);
+        EntityList<EtisalatEntry> entityList = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
         context.put("searchResult", entityList);
@@ -73,14 +73,14 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
     public void searchEtisalatResultsCorrect() throws NullReturnException {
         log.info("Checking if etisalatSubscriberData search result is correct");
         EtisalatSubscriberFilter searchFilter = context.get("searchFilter", EtisalatSubscriberFilter.class);
-        EntityList<EtisalatSubscriberEntry> searchResults = context.get("searchResult", EntityList.class);
+        EntityList<EtisalatEntry> searchResults = context.get("searchResult", EntityList.class);
 
         if (searchResults.size() == 0) {
             log.warn("Search result can be incorrect. There are not records in it");
         } else {
             log.info("Search result size: " + searchResults.size());
         }
-        for (EtisalatSubscriberEntry entry : searchResults) {
+        for (EtisalatEntry entry : searchResults) {
             log.info("Checking result: " + JsonCoverter.toJsonString(entry));
             Assert.assertTrue(searchFilter.isAppliedToEntity(entry));
         }
@@ -88,12 +88,12 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
 
     @Then("Searched EtisalatSubscriberData Entry $critera list")
     public void checkEtisalatSubscriberEntryInResults(String criteria) throws NullReturnException {
-        EtisalatSubscriberEntry entry = context.get("etisalatSubscriberEntry", EtisalatSubscriberEntry.class);
-        EntityList<EtisalatSubscriberEntry> entityList = context.get("searchResult", EntityList.class);
+        EtisalatEntry entry = context.get("etisalatSubscriberEntry", EtisalatEntry.class);
+        EntityList<EtisalatEntry> entityList = context.get("searchResult", EntityList.class);
 
         log.info("Checking if etisalatSubscriberData entry " + criteria + " list");
         Boolean contains = false;
-        for (EtisalatSubscriberEntry entity : entityList) {
+        for (EtisalatEntry entity : entityList) {
             if (equalsEntries(entry, entity)) {
                 contains = true;
                 break;
@@ -109,7 +109,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         }
     }
 
-    private boolean equalsEntries(EtisalatSubscriberEntry entry, EtisalatSubscriberEntry entity) {
+    private boolean equalsEntries(EtisalatEntry entry, EtisalatEntry entity) {
         return Verify.isTrue(equals.elements(entry.getPhoneNumber(), entity.getPhoneNumber())) &&
                 Verify.isTrue(equals.elements(entry.getName(), entity.getName())) &&
                 Verify.isTrue(equals.elements(entry.getAddress(), entity.getAddress())) &&
@@ -157,10 +157,10 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
 
     @When("I send get EtisalatSubscriberData Entry request")
     public void getEtisalatSubscriberRequest() {
-        EntityList<EtisalatSubscriberEntry> searchResults = context.get("searchResult", EntityList.class);
-        EtisalatSubscriberEntry etalonEntry = searchResults.getLatest();
+        EntityList<EtisalatEntry> searchResults = context.get("searchResult", EntityList.class);
+        EtisalatEntry etalonEntry = searchResults.getLatest();
 
-        EtisalatSubscriberEntry entry = service.view(etalonEntry.getId());
+        EtisalatEntry entry = service.view(etalonEntry.getId());
 
         context.put("etisalatSubscriberEntry", entry);
         context.put("etalonEntry", etalonEntry);
@@ -168,8 +168,8 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
 
     @Then("EtisalatSubscriberData Entry is correct")
     public void checkDuSubscriberEntryIsCorrect() {
-        EtisalatSubscriberEntry entry = context.get("etisalatSubscriberEntry", EtisalatSubscriberEntry.class);
-        EtisalatSubscriberEntry etalonEntry = context.get("etalonEntry", EtisalatSubscriberEntry.class);
+        EtisalatEntry entry = context.get("etisalatSubscriberEntry", EtisalatEntry.class);
+        EtisalatEntry etalonEntry = context.get("etalonEntry", EtisalatEntry.class);
 
         Verify.shouldBe(equals.elements(entry, etalonEntry));
     }

@@ -16,23 +16,23 @@ public class RandomGenerator {
     public static LinkedHashSet<String> generatePhones(int maxPhones) {
 
          class RandomPhone {
-            String num1, num2, num3; //3 numbers in area code
-            String set2, set3; //sequence 2 and 3 of the phone number
+            private String num, num1, num2, num3; //3-4 numbers in area code
+            private String set1, set2, set3; //sequence 2 and 3 of the phone number
 
-            Random generator = new Random();
+            private Random generator = new Random();
 
             public String generate() {
+                num = generator.nextInt(1) == 1 ? "1" : "";
                 num1 = Integer.toString(generator.nextInt(7) + 1);
                 num2 = Integer.toString(generator.nextInt(8));
                 num3 = Integer.toString(generator.nextInt(8));
 
+                set1 = Integer.toString(generator.nextInt(9999)); //city code
 
                 set2 = Integer.toString(generator.nextInt(643) + 100);
-
-
                 set3 = Integer.toString(generator.nextInt(8999) + 1000);
 
-                return num1+num2+num3+set2+set3;
+                return num+num1+num2+num3+set1+set2+set3;
             }
         }
         LinkedHashSet<String> phoneNumbers = new LinkedHashSet<>();
@@ -142,7 +142,11 @@ public class RandomGenerator {
         }
     }
 
-    public static LinkedHashSet<String> generateKeywords(int maxNumber) {
+    public static LinkedHashSet<String> generateKeywords(int maxNumber, int ratio) {
+
+        LinkedHashSet<String> keys = new LinkedHashSet<>();
+        int maxKeywords = RandomUtils.nextInt(maxNumber+1);
+
         String text = FileHelper.readTxtFile("keywords.txt");
         ArrayList<String> strings = new ArrayList<>();
         if (text != null) {
@@ -153,19 +157,38 @@ public class RandomGenerator {
                     strings.add(value);
                 }
             }
+
+            int i = 0;
+            do {
+                int random = new Random().nextInt(ratio);
+                if (random != 1) {
+                    keys.add(RandomStringUtils.randomAlphabetic(6));
+                } else {
+                    int index = RandomUtils.nextInt(strings.size());
+                    keys.add(strings.get(index));
+                }
+                i++;
+            } while (i < maxKeywords);
         }
 
-        LinkedHashSet<String> keys = new LinkedHashSet<>();
-        int numMaxStrings = RandomUtils.nextInt(maxNumber);
-        int i = 0;
-        do {
-            if (text != null) {
-                int index = RandomUtils.nextInt(strings.size());
-                keys.add(strings.get(index));
-            }
-            i++;
-        } while (i < numMaxStrings);
         return keys;
+    }
+
+    public static String generateIMSI() {
+        return RandomStringUtils.randomNumeric(15);
+    }
+
+    public static String generateSMSText() {
+        String text = FileHelper.readTxtFile("sms_text.txt");
+        String[] values = null;
+
+        if (text != null) {
+            values = text.split(".");
+            int index = new Random().nextInt(values.length);
+            return values[index].trim();
+        } else {
+            return "";
+        }
     }
 
 }

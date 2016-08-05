@@ -2,6 +2,7 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import data_generator.PhoneBookFile;
 import errors.NullReturnException;
 import http.requests.phonebook.PhonebookRequest;
 import http.requests.phonebook.UnifiedPhonebookSearchRequest;
@@ -13,13 +14,11 @@ import model.UploadResult;
 import model.phonebook.PhonebookSearchResults;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import utils.FileHelper;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class PhonebookService implements EntityService<Phonebook>{
@@ -94,10 +93,11 @@ public class PhonebookService implements EntityService<Phonebook>{
     }
 
     public int upload(List<Phonebook> phonebooks) {
-        log.info("Upload new " + phonebooks.size() + " phonebooks");
-        PhonebookRequest request = new PhonebookRequest().upload();
+        log.info("Writing Phonebook entries to file..");
+        File file = new PhoneBookFile().write(phonebooks);
 
-        File file = writePhonebookCSV(phonebooks);
+        log.info("Upload file with " + phonebooks.size() + " Phonebook entries..");
+        PhonebookRequest request = new PhonebookRequest().upload();
         request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         file.deleteOnExit();
 
@@ -114,35 +114,6 @@ public class PhonebookService implements EntityService<Phonebook>{
             context.put("uploadResult", uploadResult);
         }
         return response.getStatus();
-    }
-
-    /**
-     Records look like this:
-
-     967700000000," Arthur King "," postpaid 123 Main St Phoenix AZ ",\N,"usa","Y","mobile"
-
-     Records are terminated by a newline character.
-     Some records have a carriage return character inside.
-     Some records have a newline character inside, preceded by a backslash.
-     Some records have 2 unknown \N fields next to each other.
-     // The parts are: phone number, name, address, \N, possibly another \N, country, provider, location.
-     */
-    public File writePhonebookCSV(List<Phonebook> phonebooks) {
-        File file = null;
-        try {
-            file = File.createTempFile("Phonebooks", ".csv");
-            log.info("File for phonebooks created: " + file.getAbsolutePath());
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            throw new Error("Unable to create new Phonebook CVS file!");
-        }
-
-        for (Phonebook phonebook : phonebooks) {
-            FileHelper.writeLineToFile(file, phonebook.toCSVString());
-        }
-
-        log.info("Phonebooks CSV written successfully..");
-        return file;
     }
 
 }
