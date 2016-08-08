@@ -149,38 +149,3 @@ When I send get list of target group request
 Then target group in list
 When I send get groups list of new target request
 Then target group in list
-
-
-Scenario: Targets generator
-Meta:
-@TEEL
-Given generate XLS with 5000 target
-
-
-Scenario: API.Check matching results
-Meta:
-@TEEL
-Given I sign in as admin user
-And Generate 10 SSMS
-When I send create target with <match_criterion> request
-Then I got response code 200
-And target creation result is successful
-When I send upload <data_type> data request
-Then I got response code 201
-And data is processed
-When I send get upload details request
-Then I got response code 200
-And search results contains targets matched with <match_criterion> and have <targetResultType>
-
-Examples:
-| data_type | match_criterion | targetResultType |
-| sdata | keywords | MENTION |
-| sdata | callee's phone number | HIT |
-| sdata | caller's phone number | HIT |
-| sdata | phone number in text | MENTION |
-| sdata | target name | MENTION |
-| tdata | keywords | MENTION |
-| tdata | callee's phone number | HIT |
-| tdata | caller's phone number | HIT |
-| tdata | phone number in text | MENTION |
-| tdata | target name | MENTION |
