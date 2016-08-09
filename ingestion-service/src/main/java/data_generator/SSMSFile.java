@@ -2,24 +2,27 @@ package data_generator;
 
 import abs.EntityList;
 import model.SSMS;
+import utils.FileHelper;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 public class SSMSFile extends FileProcessor {
 
     public String entityToCSVString(SSMS ssms) {
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:MM:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        return String.format("%d,\"%s\",%d,%d,%d," +
+        return String.format("%s,\"%s\",%d,%d,%d," +
                         "%d,%d,%d,%d,\"%s\",\"%s\"," +
                         "\"%s\",\"%s\",\"%s\",%d,%d," +
                         "%s,\"%s\",%s,\"%s\"," +
                         "%s,\"%s\",%s,\"%s\"," +
                         "\"%s\"," +
-                        "\"%s\",%d,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"" +
-                        "\"%s\",%d,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"" +
+                        "\"%s\",%d,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"," +
+                        "\"%s\",%d,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"," +
                         "%s,%d,%s,\"%s\",\"%s\",\"%s\",\"%s\"",
                 ssms.getCdr_id(), df.format(ssms.getEvent_time()), ssms.getUnit(), ssms.getMatrix_ts(), ssms.getNi(),
                 ssms.getOpc(), ssms.getDpc(), ssms.getHit_count(), ssms.getMaskmarked(), ssms.getSrcip(), ssms.getDscip(),
@@ -38,7 +41,20 @@ public class SSMSFile extends FileProcessor {
 
     @Override
     public File write(EntityList entityList) {
-        return null;
+        List<SSMS> ssmsList = entityList.getEntities();
+        return write(ssmsList);
+    }
+
+    public File write(List<SSMS> ssmsList) {
+        File file = new File("SSMS" + new Date().getTime() + ".csv");
+        log.info("File for s-sms created: " + file.getAbsolutePath());
+
+        for (SSMS ssms : ssmsList) {
+            FileHelper.writeLineToFile(file, entityToCSVString(ssms));
+        }
+
+        log.info("SSMS list written successfully to cvs file..");
+        return file;
     }
 
     @Override

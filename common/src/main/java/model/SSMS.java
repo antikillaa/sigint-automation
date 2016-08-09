@@ -427,38 +427,45 @@ public class SSMS extends TeelaEntity {
     @Override
     public <T extends TeelaEntity> T generate() {
 
+        Calendar calendar = Calendar.getInstance();
+        int seconds = new Random().nextInt(3600);
+        calendar.add(Calendar.HOUR, -3); // "GMT+03:00"
+        calendar.add(Calendar.SECOND, -seconds);
+
         setCdr_id(Integer.valueOf(RandomStringUtils.randomNumeric(8)));
-        setEvent_time(new Date()); // 2015-05-15 00:00:00
-//        setUnit(0);
+        setEvent_time(calendar.getTime()); // 2015-05-15 00:00:00
+        setUnit(0);
         setMatrix_ts(Integer.valueOf(RandomStringUtils.randomNumeric(4)));
-//        setNi(0);
+        setNi(0);
         setOpc(Integer.valueOf(RandomStringUtils.randomNumeric(6)));
         setDpc(Integer.valueOf(RandomStringUtils.randomNumeric(6)));
-//        setHit_count(0);
-//        setMaskmarked(0);
+        setHit_count(0);
+        setMaskmarked(0);
         setSrcip("");
         setDscip("");
-        setSms_time(new Date());  // 2015-05-15 00:00:00
+        setSms_time(calendar.getTime());  // 2015-05-15 00:00:00
         setSmstimezone("GMT+03:00");
-        setTxt(RandomGenerator.generateSMSText());
+        int random = new Random().nextInt(1000);
+        setTxt(random == 1 ? RandomGenerator.generateSMSText(true) : RandomGenerator.generateSMSText(false));
         setHaveparts(Integer.valueOf(RandomStringUtils.randomNumeric(3)));
         setTotalparts(Integer.valueOf(RandomStringUtils.randomNumeric(3)));
 
         String calledIMSI = RandomGenerator.generateIMSI();
         setCalled_imsi(calledIMSI);
-        setCalled_imsi_cc(calledIMSI.substring(0,2));
+        setCalled_imsi_cc(calledIMSI.substring(0,3));
         setCalled_imsi_ac(RandomStringUtils.randomNumeric(1));
         setCalled_imsi_hit("");
 
         String callerIMSI = RandomGenerator.generateIMSI();
         setCaller_imsi(callerIMSI);
-        setCaller_imsi_cc(callerIMSI.substring(0,2));
+        setCaller_imsi_cc(callerIMSI.substring(0,3));
         setCaller_imsi_ac(RandomStringUtils.randomNumeric(1));
         setCaller_imsi_hit("");
 
         setPattern("");
 
-        String toNumber = new ArrayList<>(RandomGenerator.generatePhones(1)).get(0);
+        //String toNumber = new ArrayList<>(RandomGenerator.generatePhones(1)).get(0);
+        String toNumber = RandomStringUtils.randomNumeric(12);
         setCalled(toNumber);
         setCalled_non(1);
         setCalled_mod(toNumber);
@@ -469,7 +476,8 @@ public class SSMS extends TeelaEntity {
         setCalled_cc("");
         setCalled_ac("");
 
-        String fromNumber = new ArrayList<>(RandomGenerator.generatePhones(1)).get(0);
+        //String fromNumber = new ArrayList<>(RandomGenerator.generatePhones(1)).get(0);
+        String fromNumber = RandomStringUtils.randomNumeric(12);
         setCaller(fromNumber);
         setCaller_non(1);
         setCaller_mod(fromNumber);
@@ -479,10 +487,11 @@ public class SSMS extends TeelaEntity {
         setCaller_cc("");
         setCaller_ac("");
 
-        // String ssmsNumber = new ArrayList<>(RandomGenerator.generatePhones(1)).get(0);
-        setSmsc("");
+        //String ssmsNumber = new ArrayList<>(RandomGenerator.generatePhones(1)).get(0);
+        String ssmsNumber = RandomStringUtils.randomNumeric(6);
+        setSmsc(ssmsNumber);
         setSmsc_non(1);
-        setSmsc_mod("");
+        setSmsc_mod(ssmsNumber);
         setSmsc_rule("");
         setSmsc_hit("");
         setSmsc_cc("");

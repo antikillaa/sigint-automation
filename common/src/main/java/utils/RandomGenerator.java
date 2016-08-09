@@ -178,16 +178,19 @@ public class RandomGenerator {
         return RandomStringUtils.randomNumeric(15);
     }
 
-    public static String generateSMSText() {
-        String text = FileHelper.readTxtFile("sms_text.txt");
-        String[] values = null;
+    public static String generateSMSText(boolean fromFile) {
+        if (fromFile) {
+            String text = FileHelper.readTxtFile("sms_text.txt");
 
-        if (text != null) {
-            values = text.split(".");
-            int index = new Random().nextInt(values.length);
-            return values[index].trim();
+            if (text != null) {
+                int sms_length = new Random().nextInt(160);
+                int beginIndex = new Random().nextInt(text.length() - sms_length);
+                return text.substring(beginIndex, beginIndex + sms_length);
+            } else {
+                return "";
+            }
         } else {
-            return "";
+            return RandomStringUtils.randomAlphabetic(10);
         }
     }
 

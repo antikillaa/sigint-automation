@@ -157,11 +157,20 @@ Meta:
 Given generate XLS with 5000 target
 
 
+Scenario: API.Generate SSMS
+Meta:
+@wip
+Given I sign in as admin user
+And Generate 3 SSMS
+When Upload file with generated SSMS list
+
+
 Scenario: API.Check matching results
 Meta:
 @TEEL
 Given I sign in as admin user
 And Generate 10 SSMS
+When Upload file with generated SSMS list
 When I send create target with <match_criterion> request
 Then I got response code 200
 And target creation result is successful

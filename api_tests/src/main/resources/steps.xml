@@ -31,4 +31,6 @@
     </bean>
     <bean id="reportSteps" class="steps.APIReportSteps">
     </bean>
+    <bean id="ssmsSteps" class="steps.APISSMSSteps">
+    </bean>
 </beans>
