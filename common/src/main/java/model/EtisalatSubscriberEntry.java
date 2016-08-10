@@ -11,7 +11,7 @@ import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class EtisalatEntry extends TeelaEntity {
+public class EtisalatSubscriberEntry extends TeelaEntity {
 
     private String sourceId;
 
@@ -623,7 +623,7 @@ public class EtisalatEntry extends TeelaEntity {
     }
 
     @Override
-    public EtisalatEntry generate() {
+    public EtisalatSubscriberEntry generate() {
         Date date = new Date();
         date.setTime(date.getTime() - date.getTime() % 1000);
 

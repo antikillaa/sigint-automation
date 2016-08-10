@@ -1,13 +1,13 @@
 package model.phonebook;
 
 import abs.SearchFilter;
-import model.EtisalatEntry;
+import model.EtisalatSubscriberEntry;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class EtisalatSubscriberFilter extends SearchFilter<EtisalatEntry> {
+public class EtisalatSubscriberFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
     private String queryString;
 
@@ -102,127 +102,127 @@ public class EtisalatSubscriberFilter extends SearchFilter<EtisalatEntry> {
     }
 
     @Override
-    public boolean isAppliedToEntity(EtisalatEntry entity) {
+    public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
         return activeFilter.isAppliedToEntity(entity);
     }
 
 
-    private class AddressFilter extends SearchFilter<EtisalatEntry> {
+    private class AddressFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
         AddressFilter(String value) {
             address = value;
         }
 
         @Override
-        public boolean isAppliedToEntity(EtisalatEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getAddress().equals(address);
         }
     }
 
-    private class PhoneNumberFilter extends SearchFilter<EtisalatEntry> {
+    private class PhoneNumberFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
         PhoneNumberFilter(String value) {
             phoneNumber = value;
         }
 
         @Override
-        public boolean isAppliedToEntity(EtisalatEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getPhoneNumber().equals(phoneNumber);
         }
     }
 
-    private class NameFilter extends SearchFilter<EtisalatEntry> {
+    private class NameFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
         NameFilter(String value) {
             name = value;
         }
 
         @Override
-        public boolean isAppliedToEntity(EtisalatEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getName().equals(name);
         }
     }
 
-    private class AccountNameArabicFilter extends SearchFilter<EtisalatEntry> {
+    private class AccountNameArabicFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
         AccountNameArabicFilter(String value) {
             accountNameArabic = value;
         }
 
         @Override
-        public boolean isAppliedToEntity(EtisalatEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getAccountNameArabic().equals(accountNameArabic);
         }
     }
 
-    private class UserIdOrNameFilter extends SearchFilter<EtisalatEntry> {
+    private class UserIdOrNameFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
         UserIdOrNameFilter(String value) {
             userIdOrName = value;
         }
 
         @Override
-        public boolean isAppliedToEntity(EtisalatEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getUserIdOrName().equals(userIdOrName);
         }
     }
 
-    private class FirstAddressLineFilter extends SearchFilter<EtisalatEntry> {
+    private class FirstAddressLineFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
         FirstAddressLineFilter(String value) {
             firstAddressLine = value;
         }
 
         @Override
-        public boolean isAppliedToEntity(EtisalatEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getFirstAddressLine().equals(firstAddressLine);
         }
     }
 
-    private class SecondAddressLineFilter extends SearchFilter<EtisalatEntry> {
+    private class SecondAddressLineFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
         SecondAddressLineFilter(String value) {
             secondAddressLine = value;
         }
 
         @Override
-        public boolean isAppliedToEntity(EtisalatEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getSecondAddressLine().equals(secondAddressLine);
         }
     }
 
-    private class CityNameFilter extends SearchFilter<EtisalatEntry> {
+    private class CityNameFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
         CityNameFilter(String value) {
             cityName = value;
         }
 
         @Override
-        public boolean isAppliedToEntity(EtisalatEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getCityName().equals(cityName);
         }
     }
 
-    private class ImsiFilter extends SearchFilter<EtisalatEntry> {
+    private class ImsiFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
         ImsiFilter(String value) {
             imsi = value;
         }
 
         @Override
-        public boolean isAppliedToEntity(EtisalatEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getImsi().equals(imsi);
         }
     }
 
-    private class QueryStringFilter extends SearchFilter<EtisalatEntry> {
+    private class QueryStringFilter extends SearchFilter<EtisalatSubscriberEntry> {
 
         QueryStringFilter(String value) {
             queryString = value;
         }
 
         @Override
-        public boolean isAppliedToEntity(EtisalatEntry entity) {
+        public boolean isAppliedToEntity(EtisalatSubscriberEntry entity) {
             return entity.getPhoneNumber().equals(queryString);
         }
     }

@@ -1,10 +1,10 @@
 package model.phonebook;
 
 import abs.SearchResult;
-import model.EtisalatEntry;
+import model.EtisalatSubscriberEntry;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EtisalatSearchResult extends SearchResult<EtisalatEntry> {
+public class EtisalatSubscriberSearchResult extends SearchResult<EtisalatSubscriberEntry> {
 
 }

@@ -8,29 +8,29 @@ import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
 
-public class EtisalatRequest extends HttpRequest {
+public class EtisalatSubscriberRequest extends HttpRequest {
 
     private final static String URI = "/api/profile/etisalat-subscriber-data";
     private MultiPart multiPart;
     Logger log = Logger.getLogger(DuSubscriberRequest.class);
 
-    public EtisalatRequest() {
+    public EtisalatSubscriberRequest() {
         super(URI);
         this.multiPart = new MultiPart();
         multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
     }
 
-    public EtisalatRequest search() {
+    public EtisalatSubscriberRequest search() {
         this.setURI(URI + "/search");
         return this;
     }
 
-    public EtisalatRequest upload() {
+    public EtisalatSubscriberRequest upload() {
         this.setURI(URI + "/upload");
         return this;
     }
 
-    public EtisalatRequest get(String id) {
+    public EtisalatSubscriberRequest get(String id) {
         this.setURI(URI + "/entries/" + id);
         return this;
     }

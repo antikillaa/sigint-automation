@@ -1,7 +1,7 @@
 package data_generator;
 
 import abs.EntityList;
-import model.EtisalatEntry;
+import model.EtisalatSubscriberEntry;
 import utils.FileHelper;
 import utils.RandomGenerator;
 
@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class EtisalatFile extends FileProcessor {
+public class EtisalatSubscriberFile extends FileProcessor {
 
     @Override
     public EntityList read(File file) {
@@ -21,30 +21,30 @@ public class EtisalatFile extends FileProcessor {
 
     @Override
     public File write(EntityList entityList) {
-        List<EtisalatEntry> entries = entityList.getEntities();
+        List<EtisalatSubscriberEntry> entries = entityList.getEntities();
         return write(entries);
     }
 
-    public File write(List<EtisalatEntry> entries) {
+    public File write(List<EtisalatSubscriberEntry> entries) {
 
         File file = null;
         try {
-            log.info("Create Etisalat file..");
+            log.info("Create Etisalat Subscriber file..");
             String fileName = new SimpleDateFormat("yyyyMMdd").format(new Date()) + "-etisalat_sample";
             file = File.createTempFile(fileName, "-01." + RandomGenerator.generateCountryCode()); //yyyyMMdd-filename-No.DX
         } catch (IOException e) {
             log.error(e.getMessage());
-            throw new AssertionError("Failed to create Etisalat file");
+            throw new AssertionError("Failed to create Etisalat Subscriber file");
         }
 
-        for (EtisalatEntry entry : entries) {
+        for (EtisalatSubscriberEntry entry : entries) {
             FileHelper.writeLineToFile(file, entryToString(entry));
         }
 
         return file;
     }
 
-    private String entryToString(EtisalatEntry entry) {
+    private String entryToString(EtisalatSubscriberEntry entry) {
         String DELIMETER = "~";
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
