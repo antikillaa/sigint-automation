@@ -1,18 +1,17 @@
 package data_generator;
 
 import abs.EntityList;
-import model.EtisalatEntry;
+import model.EtisalatSubscriberEntry;
 import utils.FileHelper;
 import utils.RandomGenerator;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class EtisalatFile extends FileProcessor {
+public class EtisalatSubscriberFile extends FileProcessor {
 
     @Override
     public EntityList read(File file) {
@@ -21,33 +20,29 @@ public class EtisalatFile extends FileProcessor {
 
     @Override
     public File write(EntityList entityList) {
-        List<EtisalatEntry> entries = entityList.getEntities();
+        List<EtisalatSubscriberEntry> entries = entityList.getEntities();
         return write(entries);
     }
 
-    public File write(List<EtisalatEntry> entries) {
+    public File write(List<EtisalatSubscriberEntry> entries) {
+        log.info("Create Etisalat Subscriber file..");
+        String fileName = new SimpleDateFormat("yyyyMMdd").format(new Date()) + "-etisalat_sample";
+        File file = new File(fileName + "-01." + RandomGenerator.generateCountryCode()); //yyyyMMdd-filename-No.DX
 
-        File file = null;
-        try {
-            log.info("Create Etisalat file..");
-            String fileName = new SimpleDateFormat("yyyyMMdd").format(new Date()) + "-etisalat_sample";
-            file = File.createTempFile(fileName, "-01." + RandomGenerator.generateCountryCode()); //yyyyMMdd-filename-No.DX
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("Failed to create Etisalat file");
-        }
-
-        for (EtisalatEntry entry : entries) {
+        for (EtisalatSubscriberEntry entry : entries) {
             FileHelper.writeLineToFile(file, entryToString(entry));
         }
 
         return file;
     }
 
-    private String entryToString(EtisalatEntry entry) {
+    private String entryToString(EtisalatSubscriberEntry entry) {
         String DELIMETER = "~";
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+        dateTimeFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+
         return  entry.getAction() + DELIMETER +
                 entry.getPhoneNumber() + DELIMETER +
                 entry.getAccountSuffix() + DELIMETER +
@@ -70,7 +65,7 @@ public class EtisalatFile extends FileProcessor {
                 entry.getPoBoxNumber() + DELIMETER +
                 entry.getCustomerCategoryCode() + DELIMETER +
                 entry.getCustomerCategoryCodeDesc() + DELIMETER +
-                dateFormat.format(entry.getDateOfInstallation()) + DELIMETER +
+                dateTimeFormat.format(entry.getDateOfInstallation()) + DELIMETER +
                 entry.getCountryCodeOriginal() + DELIMETER +
                 entry.getCountry() + DELIMETER +
                 entry.getSubscriberAccountStatusCode() + DELIMETER +
@@ -86,6 +81,8 @@ public class EtisalatFile extends FileProcessor {
                 entry.getProvisionedRegionCode() + DELIMETER +
                 entry.getProvisionedRegionCodeDesc() + DELIMETER +
                 entry.getCityId() + DELIMETER +
-                entry.getCityName();
+                entry.getCityName() + DELIMETER +
+                ((entry.getUpdatedDate() != null) ? dateFormat.format(entry.getUpdatedDate()) : "") + DELIMETER  +
+                ((entry.getDateOfDeactivation() != null) ? dateTimeFormat.format(entry.getDateOfDeactivation()) : "");
     }
 }

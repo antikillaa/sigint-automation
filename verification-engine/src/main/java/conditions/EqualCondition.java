@@ -1,15 +1,16 @@
 package conditions;
 
 import abs.TeelaEntity;
-import model.Record;
-import model.UIRecord;
 import errors.NullReturnException;
 import json.JsonCoverter;
+import model.Record;
+import model.UIRecord;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.Set;
 
 import static java.lang.Boolean.TRUE;
@@ -54,16 +55,16 @@ public class EqualCondition extends ExpectedCondition {
     }
 
     private class SetEqualCondition extends ExpectedCondition {
-        private Set set1;
-        private Set set2;
+        private Collection set1;
+        private Collection set2;
 
-        private SetEqualCondition(Set set1, Set set2) {
+        private SetEqualCondition(Collection set1, Collection set2) {
             this.set1 = set1;
             this.set2 = set2;
         }
 
         public String toString() {
-            return "Set condition with set1:"+set1+" and set2:"+set2;
+            return "Collection condition with collection1: " + set1 + " and collection2: " + set2;
         }
 
         public Boolean check() {
@@ -97,8 +98,6 @@ public class EqualCondition extends ExpectedCondition {
             try {
                 json1 = JsonCoverter.toJsonString(obj1);
                 json2 = JsonCoverter.toJsonString(obj2);
-                log.debug("json1: " + json1);
-                log.debug("json2: " + json2);
             } catch (NullReturnException e) {
                 log.error(e.getMessage());
                 log.error(e.getStackTrace());

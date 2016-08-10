@@ -14,7 +14,8 @@ public class FileHelper {
         try {
             writer = new FileWriter(file, true);
             writer.write(line);
-            writer.write(System.getProperty("line.separator"));
+            writer.write("\r\n");
+            //writer.write(System.getProperty("line.separator"));
             writer.flush();
         } catch (Exception e) {
             log.error(e.getMessage());

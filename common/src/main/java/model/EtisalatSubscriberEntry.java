@@ -11,7 +11,7 @@ import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class EtisalatEntry extends TeelaEntity {
+public class EtisalatSubscriberEntry extends TeelaEntity {
 
     private String sourceId;
 
@@ -35,7 +35,7 @@ public class EtisalatEntry extends TeelaEntity {
     /**
      * GSM, PSTN or Account No. (Format will be CC-NDC-SN. Example: 971508112562, 9712618XXXX)
      */
-    private String phoneNumber;
+    private String phoneNumber; //nationalNumber
 
     /**
      * When the No. is created and provisioned this field has a value 0, after the No.
@@ -52,7 +52,7 @@ public class EtisalatEntry extends TeelaEntity {
     /**
      * Name of the customer in English
      */
-    private String name;
+    private String name; //accountName
 
     /**
      * Name of the customer in Arabic
@@ -157,12 +157,12 @@ public class EtisalatEntry extends TeelaEntity {
     /**
      * Country Code of the Customer (as in source csv files)
      */
-    private String countryCodeOriginal;
+    private String countryCodeOriginal; //???
 
     /**
      * Country Name of the Customer
      */
-    private String country;
+    private String country; //countryCodeDescription
 
     /**
      * Customer Account Status Code/ID
@@ -623,9 +623,8 @@ public class EtisalatEntry extends TeelaEntity {
     }
 
     @Override
-    public EtisalatEntry generate() {
+    public EtisalatSubscriberEntry generate() {
         Date date = new Date();
-        date.setTime(date.getTime() - date.getTime() % 1000);
 
         this.setSourceId("etisalat");
         this.setAction("ADDED");
@@ -669,6 +668,8 @@ public class EtisalatEntry extends TeelaEntity {
         this.setProvisionedRegionCodeDesc(RandomGenerator.getCountryName(this.getProvisionedRegionCode()));
         this.setCityId(RandomStringUtils.randomNumeric(2));
         this.setCityName(RandomStringUtils.randomAlphabetic(12));
+        //this.setUpdatedDate(date);
+        //this.setDateOfDeactivation(date);
         return this;
     }
 }

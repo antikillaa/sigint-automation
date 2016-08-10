@@ -11,7 +11,7 @@ public class Verify {
         try {
         Assert.assertTrue(condition.check()); }
         catch (AssertionError e) {
-            log.error("Error comparing with condition:"+condition+".Should be true but got false");
+            log.error("Error comparing with condition: " + condition + ". Should be true but got false");
             throw e;
         }
     }

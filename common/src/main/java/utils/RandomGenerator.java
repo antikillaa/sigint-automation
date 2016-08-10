@@ -147,35 +147,38 @@ public class RandomGenerator {
         LinkedHashSet<String> keys = new LinkedHashSet<>();
         int maxKeywords = RandomUtils.nextInt(maxNumber+1);
 
-        String text = FileHelper.readTxtFile("keywords.txt");
-        ArrayList<String> strings = new ArrayList<>();
-        if (text != null) {
-            String[] values = text.split(" ");
-            for (String value : values) {
-                value = value.trim().replace(",", "").replace(".", "");
-                if (value.length() > 2) {
-                    strings.add(value);
-                }
-            }
+        int i = 0;
+        do {
+            int random = new Random().nextInt(ratio);
+            if (random != 1) {
+                keys.add(RandomStringUtils.randomAlphabetic(6));
+            } else {
+                String text = FileHelper.readTxtFile("keywords.txt");
+                ArrayList<String> strings = new ArrayList<>();
+                if (text != null) {
+                    String[] values = text.split(" ");
 
-            int i = 0;
-            do {
-                int random = new Random().nextInt(ratio);
-                if (random != 1) {
-                    keys.add(RandomStringUtils.randomAlphabetic(6));
-                } else {
+                    for (String value : values) {
+                        value = value.trim().replace(",", "").replace(".", "");
+                        if (value.length() > 2) {
+                            strings.add(value);
+                        }
+                    }
+
                     int index = RandomUtils.nextInt(strings.size());
                     keys.add(strings.get(index));
+                } else {
+                    keys.add(RandomStringUtils.randomAlphabetic(6));
                 }
-                i++;
-            } while (i < maxKeywords);
-        }
+            }
+            i++;
+        } while (i < maxKeywords);
 
         return keys;
     }
 
     public static String generateIMSI() {
-        return RandomStringUtils.randomNumeric(15);
+        return RandomStringUtils.randomNumeric(10);
     }
 
     public static String generateSMSText(boolean fromFile) {

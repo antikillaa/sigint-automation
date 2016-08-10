@@ -3,15 +3,15 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import abs.SearchResult;
-import data_generator.EtisalatFile;
+import data_generator.EtisalatSubscriberFile;
 import errors.NullReturnException;
-import http.requests.phonebook.EtisalatRequest;
+import http.requests.phonebook.EtisalatSubscriberRequest;
 import json.JsonCoverter;
 import json.RsClient;
 import model.AppContext;
-import model.EtisalatEntry;
+import model.EtisalatSubscriberEntry;
 import model.UploadResult;
-import model.phonebook.EtisalatSearchResult;
+import model.phonebook.EtisalatSubscriberSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
@@ -22,27 +22,27 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EtisalatService implements EntityService<EtisalatEntry> {
+public class EtisalatSubscriberService implements EntityService<EtisalatSubscriberEntry> {
 
-    private Logger log = Logger.getLogger(EtisalatService.class);
+    private Logger log = Logger.getLogger(EtisalatSubscriberService.class);
     private static RsClient rsClient = new RsClient();
     private static AppContext context = AppContext.getContext();
     private final String sigintHost = context.environment().getSigintHost();
 
     @Override
-    public int add(EtisalatEntry entity) {
-        log.info("Add Etisalat Entry..");
-        List<EtisalatEntry> entries = new ArrayList<>();
+    public int add(EtisalatSubscriberEntry entity) {
+        log.info("Add Etisalat Subscriber entry..");
+        List<EtisalatSubscriberEntry> entries = new ArrayList<>();
         entries.add(entity);
         return upload(entries);
     }
 
-    public int upload(List<EtisalatEntry> entries) {
-        log.info("Writing Etisalat entries to file..");
-        File file = new EtisalatFile().write(entries);
+    public int upload(List<EtisalatSubscriberEntry> entries) {
+        log.info("Writing Etisalat Subscriber entries to file..");
+        File file = new EtisalatSubscriberFile().write(entries);
 
-        log.info("Upload file with " + entries.size() + "Etisalat entries..");
-        EtisalatRequest request = new EtisalatRequest().upload();
+        log.info("Upload file with " + entries.size() + " Etisalat Subscriber entries..");
+        EtisalatSubscriberRequest request = new EtisalatSubscriberRequest().upload();
         request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         file.deleteOnExit();
 
@@ -62,22 +62,22 @@ public class EtisalatService implements EntityService<EtisalatEntry> {
     }
 
     @Override
-    public int remove(EtisalatEntry entity) {
+    public int remove(EtisalatSubscriberEntry entity) {
         return 0;
     }
 
     @Override
-    public EntityList<EtisalatEntry> list(SearchFilter filter) {
-        EtisalatRequest request = new EtisalatRequest().search();
+    public EntityList<EtisalatSubscriberEntry> list(SearchFilter filter) {
+        EtisalatSubscriberRequest request = new EtisalatSubscriberRequest().search();
         Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
 
-        SearchResult<EtisalatEntry> searchResults =
-                JsonCoverter.readEntityFromResponse(response, EtisalatSearchResult.class, "result");
+        SearchResult<EtisalatSubscriberEntry> searchResults =
+                JsonCoverter.readEntityFromResponse(response, EtisalatSubscriberSearchResult.class, "result");
         if (searchResults == null) {
-            throw new AssertionError("Unable to read search results from Etisalat search");
+            throw new AssertionError("Unable to read search results from Etisalat Subscriber search");
         } else {
-            return new EntityList<EtisalatEntry>(searchResults.getContent()) {
-                public EtisalatEntry getEntity(String param) throws NullReturnException {
+            return new EntityList<EtisalatSubscriberEntry>(searchResults.getContent()) {
+                public EtisalatSubscriberEntry getEntity(String param) throws NullReturnException {
                     throw new NotImplementedException();
                 }
             };
@@ -85,16 +85,16 @@ public class EtisalatService implements EntityService<EtisalatEntry> {
     }
 
     @Override
-    public int update(EtisalatEntry entity) {
+    public int update(EtisalatSubscriberEntry entity) {
         return 0;
     }
 
     @Override
-    public EtisalatEntry view(String id) {
-        EtisalatRequest request = new EtisalatRequest().get(id);
-        log.info("Getting derails of Etisalat entry by id: " + id);
+    public EtisalatSubscriberEntry view(String id) {
+        EtisalatSubscriberRequest request = new EtisalatSubscriberRequest().get(id);
+        log.info("Getting derails of Etisalat Subscriber entry by id: " + id);
         Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
-        return JsonCoverter.readEntityFromResponse(response, EtisalatEntry.class, "result");
+        return JsonCoverter.readEntityFromResponse(response, EtisalatSubscriberEntry.class, "result");
     }
 
 }
