@@ -13,6 +13,8 @@ import org.junit.Assert;
 import services.EtisalatSubscriberService;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TimeZone;
 
 import static conditions.Conditions.equals;
@@ -185,4 +187,19 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         Verify.shouldBe(equals.elements(entry, etalonEntry));
     }
 
+    @When("I send upload $count EtisalatSubscriber entries request")
+    public void uploadMultipleEtisalatSubscriberEntries(String count) {
+        int numEntries = Integer.valueOf(count);
+
+        List<EtisalatSubscriberEntry> entries = new ArrayList<>();
+        for (int i = 0; i < numEntries; i++) {
+            EtisalatSubscriberEntry entry = new EtisalatSubscriberEntry().generate();
+            entries.add(entry);
+        }
+
+        int responseCode = service.upload(entries);
+
+        context.put("code", responseCode);
+        context.put("uploadedEtisalatSubscriberEntries", entries);
+    }
 }

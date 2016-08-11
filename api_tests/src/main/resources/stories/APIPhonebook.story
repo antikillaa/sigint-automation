@@ -109,6 +109,13 @@ Then EtisalatSubscriberData search result are correct
 And Searched EtisalatSubscriberData Entry in list
 
 
+Scenario: API.Upload multiple EtisalatSubscriber entries
+Given I sign in as admin user
+When I send upload 5 EtisalatSubscriber entries request
+Then I got response code 200
+And Upload result of 5 'Phonebook' entries is successful
+
+
 Scenario: API.Search EtisalatSubscriberData entry using search filters
 Given I sign in as admin user
 When I send upload EtisalatSubscriberData entry request with all fields
