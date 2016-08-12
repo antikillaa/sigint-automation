@@ -159,7 +159,7 @@ Given generate XLS with 5000 target
 
 Scenario: API.Generate SSMS
 Meta:
-@wip
+@TEEL
 Given I sign in as admin user
 And Generate 3 SSMS
 When Upload file with generated SSMS list

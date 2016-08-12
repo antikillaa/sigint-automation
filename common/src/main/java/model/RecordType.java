@@ -21,7 +21,7 @@ public enum RecordType {
     private final String englishName;
     private final String arabicName;
 
-    private RecordType(String letterCode, String englishName, String arabicName) {
+    RecordType(String letterCode, String englishName, String arabicName) {
         this.letterCode = letterCode;
         this.englishName = englishName;
         this.arabicName = arabicName;
@@ -39,8 +39,7 @@ public enum RecordType {
         return arabicName;
     }
 
-    private static final List<RecordType> VALUES =
-            Collections.unmodifiableList(Arrays.asList(values()));
+    private static final List<RecordType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();
     private static Random RANDOM = new Random();
 

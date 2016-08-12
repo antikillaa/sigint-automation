@@ -1,5 +1,10 @@
 package model;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
 public enum SourceType {
 
     Tactical("T", "Terra", "Terra"),
@@ -15,7 +20,7 @@ public enum SourceType {
     private final String englishName;
     private final String arabicName;
 
-    private SourceType(String letterCode, String englishName, String arabicName) {
+    SourceType(String letterCode, String englishName, String arabicName) {
         this.letterCode = letterCode;
         this.englishName = englishName;
         this.arabicName = arabicName;
@@ -32,4 +37,13 @@ public enum SourceType {
     public String toArabicName() {
         return arabicName;
     }
+
+    private static final List<SourceType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
+    private static final int SIZE = VALUES.size();
+    private static Random RANDOM = new Random();
+
+    public static SourceType getRandom() {
+        return VALUES.get(RANDOM.nextInt(SIZE));
+    }
+
 }

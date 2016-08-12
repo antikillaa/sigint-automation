@@ -126,7 +126,6 @@ public class TargetService implements EntityService<Target> {
         Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
 
         Target resultTarget = JsonCoverter.readEntityFromResponse(response, Target.class, "result");
-        log.debug(Parser.entityToString(resultTarget));
 
         return resultTarget;
     }

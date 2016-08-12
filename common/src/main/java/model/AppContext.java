@@ -174,6 +174,7 @@ public class AppContext {
         private GroupList groups;
         private RecordList records;
         private ReportList reports;
+        private SourceList sources;
 
         public TargetsList getTargets() {
             if (targets == null) {
@@ -283,6 +284,17 @@ public class AppContext {
 
         public void setReports(ReportList reports) {
             this.reports = reports;
+        }
+
+        public SourceList getSources() {
+            if (sources == null) {
+                sources = new SourceList();
+            }
+            return sources;
+        }
+
+        public void setSources(SourceList sources) {
+            this.sources = sources;
         }
 
         private Entities(){}
