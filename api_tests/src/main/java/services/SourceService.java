@@ -2,7 +2,6 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
-import conditions.Verify;
 import http.requests.SourceRequest;
 import json.JsonCoverter;
 import json.RsClient;
@@ -12,8 +11,6 @@ import utils.Parser;
 
 import javax.ws.rs.core.Response;
 import java.util.List;
-
-import static conditions.Conditions.equals;
 
 public class SourceService implements EntityService<Source> {
 
@@ -45,7 +42,7 @@ public class SourceService implements EntityService<Source> {
 
         Result result = JsonCoverter.fromJsonToObject(response.readEntity(String.class), Result.class);
         if (response.getStatus() == 200) {
-            Verify.isTrue(equals.elements(result.getResult(), "deleted"));
+            context.put("resultMessage", result.getResult());
             context.entities().getSources().addOrUpdateEntity(entity);
         }
         return response.getStatus();
@@ -78,7 +75,7 @@ public class SourceService implements EntityService<Source> {
 
         Result result = JsonCoverter.fromJsonToObject(response.readEntity(String.class), Result.class);
         if (result != null) {
-            Verify.isTrue(equals.elements(result.getResult(), "ok"));
+            context.put("resultMessage", result.getResult());
             context.entities().getSources().addOrUpdateEntity(entity);
         } else {
             log.error("Error! Update target process was failed");

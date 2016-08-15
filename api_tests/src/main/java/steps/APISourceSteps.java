@@ -15,6 +15,7 @@ import utils.RandomGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
+import static conditions.Conditions.equals;
 import static conditions.Conditions.isTrue;
 
 public class APISourceSteps extends APISteps {
@@ -131,6 +132,13 @@ public class APISourceSteps extends APISteps {
 
         Verify.shouldBe(isTrue.element(source.isDeleted()));
         Verify.shouldBe(isTrue.element(source.getName().contains("DELETED at")));
+    }
+
+    @Then("Result message should be '$result'")
+    public void resultMessageShouldBe(String result) {
+        String resultMessage = context.get("resultMessage", String.class);
+
+        Verify.shouldBe(equals.elements(resultMessage, result));
     }
 
 }
