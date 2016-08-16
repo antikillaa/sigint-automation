@@ -12,13 +12,12 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.EtisalatSubscriberService;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 import static conditions.Conditions.equals;
 import static conditions.Conditions.isTrue;
+import static utils.DateHelper.dateToFormat;
 
 public class APIEtisalatSubscriberDataSteps extends APISteps {
 
@@ -115,11 +114,8 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
     }
 
     private boolean equalsEntries(EtisalatSubscriberEntry entry, EtisalatSubscriberEntry entity) {
-
-        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
-        dateTimeFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String dateTimestring = "dd/MM/yy HH:mm:ss";
+        String dateString = "dd/MM/yy";
 
         return Verify.isTrue(equals.elements(entry.getPhoneNumber(), entity.getPhoneNumber())) &&
                 Verify.isTrue(equals.elements(entry.getName(), entity.getName())) &&
@@ -146,7 +142,10 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
                 Verify.isTrue(equals.elements(entry.getPoBoxNumber(), entity.getPoBoxNumber())) &&
                 Verify.isTrue(equals.elements(entry.getCustomerCategoryCode(), entity.getCustomerCategoryCode())) &&
                 Verify.isTrue(equals.elements(entry.getCustomerCategoryCodeDesc(), entity.getCustomerCategoryCodeDesc())) &&
-                Verify.isTrue(equals.elements(dateTimeFormat.format(entry.getDateOfInstallation()), dateTimeFormat.format(entity.getDateOfInstallation()))) &&
+                Verify.isTrue(equals.elements(
+                        dateToFormat(entry.getDateOfInstallation(), dateTimestring),
+                        dateToFormat(entity.getDateOfInstallation(), dateTimestring)
+                )) &&
                 Verify.isTrue(equals.elements(entry.getCountryCode(), entity.getCountryCode())) &&
                 Verify.isTrue(equals.elements(entry.getCountryCodeOriginal(), entity.getCountryCodeOriginal())) &&
                 Verify.isTrue(equals.elements(entry.getCountry(), entity.getCountry())) &&
@@ -164,8 +163,14 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
                 Verify.isTrue(equals.elements(entry.getProvisionedRegionCodeDesc(), entity.getProvisionedRegionCodeDesc())) &&
                 Verify.isTrue(equals.elements(entry.getCityId(), entity.getCityId())) &&
                 Verify.isTrue(equals.elements(entry.getCityName(), entity.getCityName())) &&
-                Verify.isTrue(equals.elements(dateFormat.format(entry.getUpdatedDate()), dateFormat.format(entity.getUpdatedDate()))) &&
-                Verify.isTrue(equals.elements(dateTimeFormat.format(entry.getDateOfDeactivation()), dateTimeFormat.format(entity.getDateOfDeactivation())));
+                Verify.isTrue(equals.elements(
+                        dateToFormat(entry.getUpdatedDate(), dateString),
+                        dateToFormat(entity.getUpdatedDate(), dateString)
+                )) &&
+                Verify.isTrue(equals.elements(
+                        dateToFormat(entry.getDateOfDeactivation(), dateTimestring),
+                        dateToFormat(entity.getDateOfDeactivation(), dateTimestring)
+                ));
     }
 
     @When("I send get EtisalatSubscriberData Entry request")
