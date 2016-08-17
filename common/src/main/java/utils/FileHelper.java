@@ -30,6 +30,12 @@ public class FileHelper {
         }
     }
     
+    public static String writeToFile(final String filename, String context) {
+        File file = new File(filename);
+        writeLineToFile(file, context);
+        return filename;
+    }
+    
     public static void writeToFile(InputStream in, OutputStream out) throws IOException {
         byte[] buffer = new byte[8 * 1024];
         int length;
