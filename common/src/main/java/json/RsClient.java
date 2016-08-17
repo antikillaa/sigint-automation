@@ -17,6 +17,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Properties;
 
+import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.*;
+
 public class RsClient {
 
     public static Logger log = Logger.getRootLogger();
@@ -66,6 +68,14 @@ public class RsClient {
                 .target(url)
                 .request(mediaType);
     }
+    
+    private Invocation.Builder buildRequest(String url, String username, String password) {
+        log.debug("Building request to url: + url");
+        return client.target(url)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .property(HTTP_AUTHENTICATION_BASIC_USERNAME, username)
+                .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, password);
+    }
 
     private Entity convertToJson(Object object) {
         Entity payload;
@@ -96,6 +106,11 @@ public class RsClient {
     public Response get(String url, Cookie cookie, String mediaType) {
         log.debug("Sending get request");
         return buildRequest(url, mediaType).cookie(cookie).get();
+    }
+    
+    public Response get(String url, String username, String password) {
+        return buildRequest(url, username, password).get();
+        
     }
 
     /**

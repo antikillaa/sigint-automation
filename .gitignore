@@ -5,3 +5,5 @@ log4j/log.out
 */target
 target
 .DS_Store
+/htmlEmail
+htmlEmail.html

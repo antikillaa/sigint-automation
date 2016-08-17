@@ -20,6 +20,12 @@ public class AppContext {
     private Properties generalProperties = new Properties();
     private Properties jiraConnection = new Properties();
     private Properties mailProperties = new Properties();
+    
+    public Properties getJenkinsProperties() {
+        return jenkinsProperties;
+    }
+    
+    private Properties jenkinsProperties = new Properties();
     private Map<String, Object> runContext = new HashMap<>();
     private Entities entities;
     private Environment environment;
@@ -306,10 +312,12 @@ public class AppContext {
         InputStream general = this.getClass().getResourceAsStream("/general.properties");
         InputStream connection = getClass().getClassLoader().getResourceAsStream("jiraConnection.properties");
         InputStream mail = getClass().getClassLoader().getResourceAsStream("email.properties");
+        InputStream jenkins = getClass().getClassLoader().getResourceAsStream("jenkins.properties");
         try {
             generalProperties.load(general);
             jiraConnection.load(connection);
             mailProperties.load(mail);
+            jenkinsProperties.load(jenkins);
         } catch (IOException e) {
             e.printStackTrace();
         }
