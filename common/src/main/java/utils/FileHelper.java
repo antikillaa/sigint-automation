@@ -31,7 +31,7 @@ public class FileHelper {
     }
     
     public static String writeToFile(final String filename, String context) {
-        File file = new File(filename);
+        File file = new File( System.getProperty("user.home")+"/"+filename);
         writeLineToFile(file, context);
         return filename;
     }
