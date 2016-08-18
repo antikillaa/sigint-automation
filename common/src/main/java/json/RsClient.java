@@ -72,7 +72,7 @@ public class RsClient {
     private Invocation.Builder buildRequest(String url, String username, String password) {
         log.debug("Building request to url: + url");
         return client.target(url)
-                .request(MediaType.APPLICATION_JSON_TYPE)
+                .request()
                 .property(HTTP_AUTHENTICATION_BASIC_USERNAME, username)
                 .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, password);
     }
