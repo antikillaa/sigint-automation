@@ -1,7 +1,6 @@
 package steps;
 
 import controllers.APILogin;
-import emailing.report.EmailWorker;
 import errors.NullReturnException;
 import http.requests.GetDictionariesRequest;
 import json.JsonCoverter;
@@ -65,17 +64,13 @@ public class GlobalSteps {
     public void reportResults(){
         ZAPIService service = new ZAPIService();
         Boolean shouldReport = Boolean.valueOf(context.getGeneralProperties().getProperty("report"));
-        Boolean shouldEmail = Boolean.valueOf(AppContext.getContext().getGeneralProperties().getProperty("email"));
         try {
         if (shouldReport) {
             service.reportToZephyr();
         }
-            if (shouldEmail) {
-                EmailWorker.saveHtmlEmailToDisk();
-            }
          }catch (Exception e){
             log.error(e.getMessage());
-            e.printStackTrace();
+            log.trace(e.getMessage(), e);
         }
         }
 

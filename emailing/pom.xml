@@ -37,7 +37,7 @@
                         </goals>
                         <configuration>
                             <includePluginDependencies>true</includePluginDependencies>
-                            <mainClass>report.EmailWorker</mainClass>
+                            <mainClass>emailing.report.EmailWorker</mainClass>
                         </configuration>
                     </execution>
                 </executions>
