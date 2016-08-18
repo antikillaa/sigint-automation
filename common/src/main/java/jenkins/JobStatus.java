@@ -1,5 +1,5 @@
 package jenkins;
 
 public enum JobStatus {
-    FAILURE, SUCCESS
+    FAILURE, SUCCESS, ABORTED
 }
