@@ -10,7 +10,7 @@ public class JenkinsService {
     
     private JobStatus getJobStatus(String jobNumber) {
         JobInfo jobInfo = jenkinsClient.getJenkinsJobInfo(jobNumber);
-        logger.debug("Got job with result:"+jobInfo.getResult());
+        logger.error("Got job with result:"+jobInfo.getResult());
         return jobInfo.getResult();
     }
     
