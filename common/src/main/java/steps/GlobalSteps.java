@@ -69,11 +69,13 @@ public class GlobalSteps {
         try {
         if (shouldReport) {
             service.reportToZephyr();
-        } }catch (Exception e){
-            log.error(e.getMessage());
         }
-        if (shouldEmail) {
-            EmailWorker.saveHtmlEmailToDisk();
+            if (shouldEmail) {
+                EmailWorker.saveHtmlEmailToDisk();
+            }
+         }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
         }
         }
 
