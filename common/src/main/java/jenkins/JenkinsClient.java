@@ -34,8 +34,9 @@ class JenkinsClient {
             logger.error("Got error from jenkins when trying to get job status." +
                     "Got code:"+ response.getStatus());
         }
-        logger.info(response.readEntity(String.class));
-        JobInfo jobInfo = JsonCoverter.fromJsonToObject(response.readEntity(String.class), JobInfo.class);
+        String json = response.readEntity(String.class);
+        logger.info(json);
+        JobInfo jobInfo = JsonCoverter.fromJsonToObject(json, JobInfo.class);
         logger.info("Received job:"+jobInfo);
         return jobInfo;
     }
