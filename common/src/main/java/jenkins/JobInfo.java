@@ -9,6 +9,15 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 class JobInfo {
     
+    public String getId() {
+        return id;
+    }
+    
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    private String id;
     private JobStatus result;
     private Long duration;
     @JsonProperty("fullDisplayName")
