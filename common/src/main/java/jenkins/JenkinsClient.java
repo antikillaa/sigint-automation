@@ -27,6 +27,7 @@ class JenkinsClient {
     
     
     JobInfo getJenkinsJobInfo(String jobNumber) {
+        logger.debug("Getting jenkins job info by job number:"+jobNumber);
         Response response = client.get(String.format("%s/job/%s/%s/api/json", jenkinsURL, jobName, jobNumber),
                 jenkinsUsername, jenkinsPassword);
         if (response.getStatus()!=200) {
@@ -34,6 +35,7 @@ class JenkinsClient {
                     "Got code:"+ response.getStatus());
         }
         JobInfo jobInfo = JsonCoverter.fromJsonToObject(response.readEntity(String.class), JobInfo.class);
+        logger.debug("Received job:"+jobInfo);
         return jobInfo;
     }
     

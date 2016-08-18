@@ -14,6 +14,11 @@ class JobInfo {
     @JsonProperty("fullDisplayName")
     private String name;
     
+    @Override
+    public String toString() {
+        return String.format("result:%s, duration:%s, name:%s", result, duration, name);
+    }
+    
     public JobStatus getResult() {
         return result;
     }
