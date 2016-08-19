@@ -20,6 +20,7 @@ public class EmailSender {
     public void send_email(String subject, String emailBody) {
         Properties prop = System.getProperties();
         prop.setProperty("mail.smtp.host", mailProperties.getProperty("smtp"));
+        prop.setProperty("mail.smtp.port", mailProperties.getProperty("port"));
         Session session = Session.getDefaultInstance(prop);
         send(session, emailBody, subject);
     }
