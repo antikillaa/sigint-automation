@@ -27,7 +27,7 @@ public class EmailWorker {
                 return;
             }
             new EmailSender().send_email(htmlEmail.getSubject(), htmlEmail.getHtmlBody());
-            logger.info("Html Email is saved");
+            logger.info("Html Email is sent");
         }
     }
 }
