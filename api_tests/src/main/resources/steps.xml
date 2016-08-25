@@ -35,4 +35,8 @@
     </bean>
     <bean id="sourceSteps" class="steps.APISourceSteps">
     </bean>
+    <bean id="dataGeneratorSteps" class="steps.APIDataGeneratorSteps">
+    </bean>
+    <bean id="uploadFilesSteps" class="steps.APIUploadFilesSteps">
+    </bean>
 </beans>

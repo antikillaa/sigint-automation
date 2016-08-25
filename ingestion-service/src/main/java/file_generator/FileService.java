@@ -1,13 +1,13 @@
-package data_generator;
+package file_generator;
 
 import abs.EntityList;
 import org.apache.log4j.Logger;
 
 import java.io.File;
 
-public abstract class FileProcessor {
+public abstract class FileService {
 
-    Logger log = Logger.getLogger(FileProcessor.class);
+    Logger log = Logger.getLogger(FileService.class);
 
     public abstract EntityList read(File file);
 

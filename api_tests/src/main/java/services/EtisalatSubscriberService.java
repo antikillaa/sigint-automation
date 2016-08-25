@@ -3,7 +3,7 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import abs.SearchResult;
-import data_generator.EtisalatSubscriberFile;
+import file_generator.EtisalatSubscriberFile;
 import errors.NullReturnException;
 import http.requests.phonebook.EtisalatSubscriberRequest;
 import json.JsonCoverter;

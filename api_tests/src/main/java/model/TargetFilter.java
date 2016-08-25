@@ -245,6 +245,18 @@ public class TargetFilter extends SearchFilter<Target> {
         }
     }
 
+    private class EmptyFilter extends SearchFilter<Target> {
+
+        EmptyFilter() {
+            updatedAfter = null;
+        }
+
+        @Override
+        public boolean isAppliedToEntity(Target entity) {
+            return true;
+        }
+    }
+
     public TargetFilter filterBy(String criteria, String value) {
         if (criteria.toLowerCase().equals("name")) {
             this.setActiveFilter(this.new NameFilter(value));
@@ -262,6 +274,8 @@ public class TargetFilter extends SearchFilter<Target> {
             this.setActiveFilter(this.new PhonesFilter(Parser.stringToSet(value)));
         } else if (criteria.toLowerCase().equals("updatedafter")) {
             this.setActiveFilter(this.new UpdateAfterFilter(new Date(Long.valueOf(value))));
+        } else if (criteria.toLowerCase().equals("empty")) {
+            this.setActiveFilter(this.new EmptyFilter());
         } else {
             throw new AssertionError("Unknown isAppliedToEntity type");
         }

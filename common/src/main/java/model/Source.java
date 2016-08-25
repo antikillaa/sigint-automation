@@ -8,7 +8,6 @@ import utils.RandomGenerator;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-
 public class Source extends TeelaEntity {
 
     private SourceType type;
@@ -24,24 +23,27 @@ public class Source extends TeelaEntity {
         return type;
     }
 
-    public void setType(SourceType type) {
+    public Source setType(SourceType type) {
         this.type = type;
+        return this;
     }
 
     public RecordType getRecordType() {
         return recordType;
     }
 
-    public void setRecordType(RecordType recordType) {
+    public Source setRecordType(RecordType recordType) {
         this.recordType = recordType;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public Source setName(String name) {
         this.name = name;
+        return this;
     }
 
     public String getLocation() {

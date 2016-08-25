@@ -1,4 +1,4 @@
-package data_generator;
+package file_generator;
 
 import abs.EntityList;
 import model.EtisalatSubscriberEntry;
@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class EtisalatSubscriberFile extends FileProcessor {
+public class EtisalatSubscriberFile extends FileService {
 
     @Override
     public EntityList read(File file) {
@@ -26,8 +26,9 @@ public class EtisalatSubscriberFile extends FileProcessor {
 
     public File write(List<EtisalatSubscriberEntry> entries) {
         log.info("Create Etisalat Subscriber file..");
-        String fileName = new SimpleDateFormat("yyyyMMdd").format(new Date()) + "-etisalat_sample";
-        File file = new File(fileName + "-01." + RandomGenerator.generateCountryCode()); //yyyyMMdd-filename-No.DX
+        String fileName = new SimpleDateFormat("yyyyMMdd").format(new Date())
+                + "-etisalat" + new Date().getTime() + "-01." + RandomGenerator.generateCountryCode(); //yyyyMMdd-filename-No.DX
+        File file = new File(fileName);
 
         for (EtisalatSubscriberEntry entry : entries) {
             FileHelper.writeLineToFile(file, entryToString(entry));

@@ -1,4 +1,4 @@
-package data_generator;
+package file_generator;
 
 import abs.EntityList;
 import model.SSMS;
@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class SSMSFile extends FileProcessor {
+public class SSMSFile extends FileService {
 
     public String entityToCSVString(SSMS ssms) {
 

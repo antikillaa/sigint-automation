@@ -2,16 +2,10 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
-import http.requests.UploadFilesRequest;
 import json.RsClient;
-import data_generator.SSMSFile;
 import model.AppContext;
 import model.SSMS;
 import org.apache.log4j.Logger;
-
-import javax.ws.rs.core.MediaType;
-import java.io.File;
-import java.util.List;
 
 public class SSMSService implements EntityService<SSMS> {
 
@@ -43,35 +37,6 @@ public class SSMSService implements EntityService<SSMS> {
     @Override
     public SSMS view(String id) {
         return null;
-    }
-
-    public int upload(List<SSMS> ssmsList) {
-        log.info("Writing S-SMSs to file..");
-        File file = new SSMSFile().write(ssmsList);
-
-        log.info("Upload file with " + ssmsList.size() + " S-SMS..");
-        UploadFilesRequest request = new UploadFilesRequest();
-        request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
-        //file.deleteOnExit();
-
-        /*
-        Entity payload = Entity.entity(request.getBody(), request.getMediaType());
-
-        log.debug("Sending request to " + sigintHost + request.getURI());
-        Response response = rsClient.client()
-                .target(sigintHost + request.getURI())
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .cookie(request.getCookie())
-                .post(payload);
-
-        //TODO
-        UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
-        if (uploadResult != null) {
-            context.put("uploadResult", uploadResult);
-        }
-        return response.getStatus();
-        */
-        return 0;
     }
 
 }

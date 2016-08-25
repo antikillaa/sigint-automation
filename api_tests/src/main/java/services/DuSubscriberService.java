@@ -3,7 +3,7 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import abs.SearchResult;
-import data_generator.DuFile;
+import file_generator.DuFile;
 import errors.NullReturnException;
 import http.requests.phonebook.DuSubscriberRequest;
 import json.JsonCoverter;

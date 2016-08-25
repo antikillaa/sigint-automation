@@ -13,7 +13,7 @@ import model.targetGroup.TargetGroupSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
-import data_generator.TargetFile;
+import file_generator.TargetFile;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;

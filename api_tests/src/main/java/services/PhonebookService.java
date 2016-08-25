@@ -2,7 +2,7 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
-import data_generator.PhoneBookFile;
+import file_generator.PhoneBookFile;
 import errors.NullReturnException;
 import http.requests.phonebook.PhonebookRequest;
 import http.requests.phonebook.UnifiedPhonebookSearchRequest;
