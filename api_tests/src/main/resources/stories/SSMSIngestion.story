@@ -9,7 +9,7 @@ Given I sign in as admin user
 And Generate 3 SSMS
 
 
-Scenario: API.Check matching results
+Scenario: API.Target matching by phone number
 Meta:
 @wip
 Given I sign in as admin user
