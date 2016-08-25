@@ -3,10 +3,7 @@ package emailing.report;
 import model.AppContext;
 import org.apache.log4j.Logger;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
@@ -20,7 +17,17 @@ public class EmailSender {
     public void send_email(String subject, String emailBody) {
         Properties prop = System.getProperties();
         prop.setProperty("mail.smtp.host", mailProperties.getProperty("smtp"));
-        Session session = Session.getDefaultInstance(prop);
+        prop.setProperty("mail.smtp.auth", "true");
+        prop.setProperty("mail.smtp.port", mailProperties.getProperty("port"));
+        prop.setProperty("mail.smtp.starttls.enable", "true");
+        //Session session1 = Session.getDefaultInstance(prop);
+        Session session = Session.getInstance(prop, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return  new PasswordAuthentication(mailProperties.getProperty("account"),
+                        mailProperties.getProperty("password"));
+            }
+            
+        });
         send(session, emailBody, subject);
     }
     
