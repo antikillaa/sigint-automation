@@ -38,8 +38,8 @@ public class EmailSender {
                 tries++;
                 send(session, html, subject);
             }
-            logger.error("Cannot send email");
             logger.error(e.getMessage());
+            logger.trace("Cannot send email", e);
     
         }
     }
