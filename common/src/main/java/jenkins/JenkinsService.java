@@ -25,7 +25,9 @@ public class JenkinsService {
     
     public JobStatus getPreviousJobStatus() {
         String jobInfoIdLatest = getJobInfo("lastBuild").getId();
+        logger.info("Latest job id " +jobInfoIdLatest);
         String jobInfoIdPrevious = String.valueOf(Integer.valueOf(jobInfoIdLatest)-1);
+        logger.info("Previous job id " +jobInfoIdPrevious);
         return getJobStatus(jobInfoIdPrevious);
     }
 }
