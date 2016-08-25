@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class MatchingResult extends TeelaEntity {
 
-    private String searchResultType;
+    private SearchResultType searchResultType;
     private TargetResultType targetResultType;
     private Date searchTime;
     private int searchDuration;
@@ -24,11 +24,11 @@ public class MatchingResult extends TeelaEntity {
     private String assignedUserId;
     private String searchResultIds;
 
-    public String getSearchResultType() {
+    public SearchResultType getSearchResultType() {
         return searchResultType;
     }
 
-    public void setSearchResultType(String searchResultType) {
+    public void setSearchResultType(SearchResultType searchResultType) {
         this.searchResultType = searchResultType;
     }
 

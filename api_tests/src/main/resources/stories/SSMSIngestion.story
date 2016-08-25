@@ -24,9 +24,6 @@ Then search results contain <totalRecords> total records with: <targetHitCount> 
 When I send get upload details request
 Then I got response code 200
 And matching results contain <targetHitCount> hits number and <recordHitCount> matched records and have HIT target result type
-When I send get an uploaded records details request
-Then I got response code 200
-And result contains <targetHitCount> linked targets
 
 Examples:
 | sourceType | recordType | totalRecords | numToTarget | numFromTarget | targetHitCount | recordHitCount | mentionCount |

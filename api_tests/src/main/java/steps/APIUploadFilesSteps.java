@@ -155,8 +155,10 @@ public class APIUploadFilesSteps extends APISteps {
         Integer targets = 0;
         List<MatchingResult> matchingResults = uploadDetails.getSearchResults();
         for (MatchingResult result : matchingResults) {
-            hits += result.getNumRecords();
-            Assert.assertEquals(resultType, result.getTargetResultType());
+            if (result.getSearchResultType().equals(SearchResultType.Target)) {
+                hits += result.getNumRecords();
+                Assert.assertEquals(resultType, result.getTargetResultType());
+            }
         }
 
         //Assert.assertTrue(targets >= totalTargets); TODO
