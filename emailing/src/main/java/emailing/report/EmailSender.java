@@ -40,6 +40,7 @@ public class EmailSender {
             }
             logger.error(e.getMessage());
             logger.trace("Cannot send email", e);
+            e.printStackTrace();
     
         }
     }
