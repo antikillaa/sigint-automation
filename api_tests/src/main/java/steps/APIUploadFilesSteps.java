@@ -87,7 +87,7 @@ public class APIUploadFilesSteps extends APISteps {
 
         UploadFilter filter = new UploadFilter().setMinCreatedDate(minDate).setMaxCreatedDate(maxDate);
         try {
-            log.info("search by filter: " + JsonCoverter.toJsonString(filter));
+            log.debug("search by filter: " + JsonCoverter.toJsonString(filter));
         } catch (NullReturnException e) {
             e.printStackTrace();
         }
@@ -97,8 +97,8 @@ public class APIUploadFilesSteps extends APISteps {
         if (!processList.isEmpty()) {
             for (Process process : processList) {
                 if (process.getMd5().equals(md5)) {
-                    log.info("File was found");
-                    log.info(Parser.entityToString(process));
+                    log.info("File start processing");
+                    log.debug(Parser.entityToString(process));
                     if (process.getState().equals(State.Complete)) {
                         log.info("File is processed");
                         context.put("process", process);
@@ -109,6 +109,7 @@ public class APIUploadFilesSteps extends APISteps {
         }
         // file not processed yet, wait and try again
         try {
+            log.info("Uploaded file not processed yet..");
             Thread.sleep(5000);
             fileIsProcessed();
         } catch (InterruptedException e) {

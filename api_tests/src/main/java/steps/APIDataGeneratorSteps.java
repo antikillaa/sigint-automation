@@ -65,8 +65,7 @@ public class APIDataGeneratorSteps extends APISteps {
             }
 
             SSMS ssms = generator.generateSSMS();
-            //TODO
-            log.info(Parser.entityToString(ssms));
+            log.debug(Parser.entityToString(ssms));
             ssmsList.add(ssms);
         }
 
