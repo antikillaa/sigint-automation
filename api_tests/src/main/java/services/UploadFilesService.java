@@ -25,14 +25,16 @@ public class UploadFilesService {
 
 
     public int upload(File file, FileMeta fileMeta) {
+        log.info("Upload file" + file.getAbsolutePath() + "with 'meta' string..");
         UploadFilesRequest request = new UploadFilesRequest();
 
-        String meta = null;
+        String meta;
         try {
             meta = JsonCoverter.toJsonString(fileMeta);
-            log.info(meta);
         } catch (NullReturnException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
+            log.error(e.getStackTrace());
+            throw new Error("Error! Meta for uploading file is empty!");
         }
 
         request.addBodyString("meta", meta);
@@ -51,11 +53,6 @@ public class UploadFilesService {
         FileMeta entityFromResponse = JsonCoverter.readEntityFromResponse(response, FileMeta.class);
         context.put("fileMeta", entityFromResponse);
 
-        try {
-            log.info("response: " + JsonCoverter.toJsonString(entityFromResponse));
-        } catch (NullReturnException e) {
-            e.printStackTrace();
-        }
         return response.getStatus();
     }
 
