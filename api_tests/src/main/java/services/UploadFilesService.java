@@ -44,11 +44,7 @@ public class UploadFilesService {
         Entity payload = Entity.entity(request.getBody(), request.getMediaType());
 
         log.debug("Sending request to " + sigintHost + request.getURI());
-        Response response = rsClient.client()
-                .target(sigintHost + request.getURI())
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .cookie(request.getCookie())
-                .post(payload);
+        Response response = rsClient.post(sigintHost + request.getURI(), payload, request.getCookie());
 
         FileMeta entityFromResponse = JsonCoverter.readEntityFromResponse(response, FileMeta.class);
         context.put("fileMeta", entityFromResponse);
