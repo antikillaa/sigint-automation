@@ -1,10 +1,6 @@
 package reporter;
 
 import com.google.common.io.Files;
-import docker.Docker;
-import docker.model.DockerContainer;
-import docker.model.DockerContainers;
-import errors.NullReturnException;
 import org.apache.log4j.Logger;
 import utils.FileHelper;
 
@@ -13,31 +9,11 @@ import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-/**
- * Created by dm on 4/12/16.
- */
+
 public class ServicesLogs {
 
-    static Logger log = Logger.getRootLogger();
-    private Docker docker = new Docker();
-
-
-    public File collectLogs() throws IOException {
-        log.info("Collecting logs of G4 services...");
-        File outputDir;
-        DockerContainer dockerContainer;
-        outputDir = Files.createTempDir();
-        for (DockerContainers container: DockerContainers.values()) {
-            try {
-                dockerContainer = docker.getContainerByRole(container.toString());
-                docker.putLogFileToDir(outputDir, dockerContainer);
-            } catch (NullReturnException e) {
-                log.warn("Container with name:"+container + " wasn't found!");
-            }
-        }
-        return outputDir;
-    }
-
+    static Logger log = Logger.getLogger(ServicesLogs.class);
+    
     public File getOutputLog() throws IOException {
         log.info("Getting output log");
         File outputDir = Files.createTempDir();
