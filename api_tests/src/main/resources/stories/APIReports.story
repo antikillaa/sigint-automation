@@ -1,5 +1,5 @@
 Meta:
-@component records
+@component reports
 
 
 Scenario: API.Create manual report

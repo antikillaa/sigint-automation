@@ -7,6 +7,7 @@ import model.Record;
 import model.UIRecord;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
+import utils.Parser;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -86,7 +87,7 @@ public class EqualCondition extends ExpectedCondition {
 
         @Override
         public String toString() {
-            return "Object condition with object1: " + obj1.toString() + " and object2: " + obj2.toString();
+            return "Object condition with object1: " + Parser.entityToString(obj1) + " and object2: " + Parser.entityToString(obj1);
         }
 
         protected Boolean check() {
@@ -178,7 +179,6 @@ public class EqualCondition extends ExpectedCondition {
                     record.getOriginalId().equals(uiRecord.getOriginalId()) &&
                     record.getDuration() == uiRecord.getDuration() &&
                     record.getText().equals(uiRecord.getText());
-
         }
     }
 }
