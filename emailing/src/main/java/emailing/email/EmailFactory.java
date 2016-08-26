@@ -1,5 +1,6 @@
 package emailing.email;
 
+import emailing.email.html_body_builder.FailingContentBuilder;
 import emailing.email.html_body_builder.StableContentBuilder;
 import emailing.email.html_body_builder.StillFailingContentBuilder;
 import jenkins.JenkinsService;
@@ -13,12 +14,12 @@ public class EmailFactory {
         JobStatus latestJobStatus = jenkinsService.getLatestJobStatus();
         JobStatus previousJobStatus = jenkinsService.getPreviousJobStatus();
         HtmlEmail email;
-        if (latestJobStatus.equals(JobStatus.FAILURE)) {
-            email = (previousJobStatus.equals(JobStatus.FAILURE)) ? new HtmlEmail(new StillFailingContentBuilder()) :
+        if (previousJobStatus.equals(JobStatus.FAILURE)) {
+            email = (latestJobStatus.equals(JobStatus.FAILURE)) ? new HtmlEmail(new StillFailingContentBuilder()) :
                     new HtmlEmail(new StableContentBuilder());
         }
-        else if (latestJobStatus.equals(JobStatus.SUCCESS)) {
-            email = (previousJobStatus.equals(JobStatus.FAILURE)) ? new HtmlEmail(new StableContentBuilder()): null;
+        else if (previousJobStatus.equals(JobStatus.SUCCESS)) {
+            email = (latestJobStatus.equals(JobStatus.FAILURE)) ? new HtmlEmail(new FailingContentBuilder()): null;
         }
         else {
             throw new AssertionError("Email status is not recognized");
