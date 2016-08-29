@@ -13,6 +13,8 @@ import org.apache.log4j.Logger;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class UploadFilesService {
@@ -23,10 +25,11 @@ public class UploadFilesService {
     private final String sigintHost = context.environment().getSigintHost();
 
 
-    public int upload(File file, FileMeta fileMeta) {
-        log.info("Upload file" + file.getAbsolutePath() + "with 'meta' string..");
+    public int upload(File file, MediaType mediaType) {
+        log.info("Upload file" + file.getAbsolutePath() + " with 'meta' string..");
         UploadFilesRequest request = new UploadFilesRequest();
 
+        FileMeta fileMeta = initFileMeta(file, mediaType);
         String meta;
         try {
             meta = JsonCoverter.toJsonString(fileMeta);
@@ -40,13 +43,31 @@ public class UploadFilesService {
         request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         file.deleteOnExit();
 
-        log.debug("Sending request to " + sigintHost + request.getURI());
         Response response = rsClient.post(sigintHost + request.getURI(), request.getBody(), request.getCookie());
 
         FileMeta entityFromResponse = JsonCoverter.readEntityFromResponse(response, FileMeta.class);
         context.put("fileMeta", entityFromResponse);
 
         return response.getStatus();
+    }
+
+    private FileMeta initFileMeta(File file, MediaType mediaType) {
+        Source source = context.get("source", Source.class);
+        User user = context.getLoggedUser();
+
+        Meta meta = new Meta();
+        meta.setFileName(file.getName());
+        meta.setUserId(user.getId());
+        meta.setSourceId(source.getId());
+
+        FileMeta fileMeta = new FileMeta();
+        fileMeta.setMeta(meta);
+        String path = "/" + source.getType() + "/" + source.getName()
+                + new SimpleDateFormat("/yyyy/MM/dd/").format(new Date())  + file.getName();
+        fileMeta.setName(path);
+        fileMeta.setType(mediaType.toString());
+
+        return fileMeta;
     }
 
     public FileMeta meta(String id) {
@@ -69,7 +90,7 @@ public class UploadFilesService {
     }
 
     public List<Process> search(SearchFilter filter) {
-        log.info("Get list of processed files..");
+        log.info("Get Ingestion History list..");
         UploadRequest request = new UploadRequest().search();
 
         Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());

@@ -31,7 +31,7 @@ public class JsonCoverter {
             entity = map.get(id);
         } catch (IOException | NullPointerException e) {
             log.error(e.getMessage());
-            throw new AssertionError();
+            throw new AssertionError("Unable to parse entity from response");
         }
         return entity;
     }
@@ -46,7 +46,7 @@ public class JsonCoverter {
         log.debug("Response: " + jsonString);
 
         if (response.getStatus() < 200 || response.getStatus() >= 300) {
-            log.warn("Entity was not found in json due to error in response");
+            log.warn("Entity was not found in json due to error in response, status code: " + response.getStatus());
             return null;
         }
         return jsonString;
