@@ -3,6 +3,7 @@ package steps;
 import conditions.Conditions;
 import conditions.Verify;
 import model.AppContext;
+import model.RecordType;
 import model.Source;
 import model.SourceType;
 import org.apache.log4j.Logger;
@@ -139,6 +140,31 @@ public class APISourceSteps extends APISteps {
         String resultMessage = context.get("resultMessage", String.class);
 
         Verify.shouldBe(equals.elements(resultMessage, result));
+    }
+
+    @Given("data source with $sourceType and $recordType exists")
+    public void getDataSourceWithSourceTypeAndRecordType(String sType, String rType) {
+        SourceType sourceType = SourceType.valueOf(sType);
+        RecordType recordType = RecordType.valueOf(rType);
+
+        // if exist, return source
+        List<Source> sources = service.list();
+        for (Source source : sources) {
+            if (source.getType().equals(sourceType) && source.getRecordType().equals(recordType)) {
+                context.put("source", source);
+                return;
+            }
+        }
+        // not exist, create source
+        Source source = new Source().generate()
+                .setType(sourceType)
+                .setRecordType(recordType)
+                .setName(
+                        sourceType.toLetterCode() + "-" + recordType.toEnglishName() + "-0"
+                );
+
+        service.add(source);
+        context.put("source", source);
     }
 
 }

@@ -1,5 +1,6 @@
 package utils;
 
+import model.AppContext;
 import org.apache.log4j.Logger;
 
 import java.text.ParseException;
@@ -11,6 +12,7 @@ import java.util.TimeZone;
 public class DateHelper {
 
     private static Logger log = Logger.getLogger(DateHelper.class);
+    private static AppContext context = AppContext.getContext();
 
     public static Date yesterday() {
         Calendar calendar = Calendar.getInstance();
@@ -32,4 +34,17 @@ public class DateHelper {
         }
         return null;
     }
+
+    public static boolean isTimeout() {
+        Calendar now = Calendar.getInstance();
+        Calendar deadLine = Calendar.getInstance();
+        deadLine.setTime(context.get("timeout", Date.class));
+
+        return now.after(deadLine);
+    }
+
+    public static void setTimeout(Date date) {
+        context.put("timeout", date);
+    }
+
 }

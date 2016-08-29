@@ -1,6 +1,7 @@
 package http.requests;
 
 import org.apache.log4j.Logger;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 
@@ -25,12 +26,22 @@ public class UploadFilesRequest extends HttpRequest {
         multiPart.bodyPart(filePart);
     }
 
+    public void addBodyString(String fieldName, String value) {
+        FormDataBodyPart part = new FormDataBodyPart(fieldName, value);
+        multiPart.bodyPart(part);
+    }
+
     public MediaType getMediaType() {
         return multiPart.getMediaType();
     }
 
     public MultiPart getBody(){
         return multiPart;
+    }
+
+    public UploadFilesRequest meta(String id) {
+        setURI(URI + "/" + id + "/meta");
+        return this;
     }
 
 }
