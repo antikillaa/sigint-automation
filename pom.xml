@@ -20,7 +20,7 @@
     <allure.version>1.4.19</allure.version>
     <report>true</report>
     <email>true</email>
-    <emailSender>pegasus</emailSender>
+    <emailSender>gmail</emailSender>
     <stories>**/*Launcher.java</stories>
     <metaFilters>-TEEL *</metaFilters>
     <reportBuildStatus>false</reportBuildStatus>
