@@ -2,8 +2,8 @@ package steps;
 
 import abs.EntityList;
 import conditions.Verify;
-import data_generator.TargetFile;
 import errors.NullReturnException;
+import file_generator.TargetFile;
 import json.JsonCoverter;
 import model.*;
 import org.apache.commons.lang.math.RandomUtils;
@@ -17,6 +17,7 @@ import utils.Parser;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static conditions.Conditions.equals;
@@ -175,6 +176,8 @@ public class APITargetSteps extends APISteps {
             value = value.equals("random") ? Parser.setToString(target.getPhones()) : value;
         } else if (criteria.toLowerCase().equals("updatedafter")) {
             value = value.equals("random") ? String.valueOf(target.getCreatedAt().getTime()-1000) : value;
+        } else if (criteria.toLowerCase().equals("empty")) {
+            log.debug("Search without filter..");
         } else {
             throw new AssertionError("Unknown filter type");
         }
@@ -310,6 +313,32 @@ public class APITargetSteps extends APISteps {
             log.error("Errors:" + result.getErrors());
             throw new AssertionError("Entry upload result is not correct! Errors: " + result.getErrors());
         }
+    }
+
+    @Given("targets with phones exists")
+    public void targetWithPhonesExist(){
+        TargetFilter searchFilter = new TargetFilter().filterBy("empty", "random");
+        List<Target> targets = service.list(searchFilter).getEntities();
+
+        if (targets.isEmpty()) {
+            Target target = new Target().generate();
+            int response = service.add(target);
+
+            Verify.shouldBe(equals.elements(response, 200));
+
+            targets.add(target);
+        }
+
+        // remove without phone
+        Iterator<Target> i = targets.iterator();
+        while (i.hasNext()) {
+            Target target = i.next();
+            if (target.getPhones().isEmpty()) {
+                i.remove();
+            }
+        }
+
+        context.put("targetList", targets);
     }
 
 }

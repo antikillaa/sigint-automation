@@ -1,4 +1,4 @@
-package data_generator;
+package file_generator;
 
 import abs.EntityList;
 import model.Phonebook;
@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class PhoneBookFile extends FileProcessor {
+public class PhoneBookFile extends FileService {
 
 
     @Override

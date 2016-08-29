@@ -48,7 +48,7 @@ public class RFIService implements EntityService<InformationRequest> {
             log.error(e.getMessage());
             throw new AssertionError("Failed to create json file");
         }
-        List<FileAttachment> attachments = new ArrayList<FileAttachment>();
+        List<FileAttachment> attachments = new ArrayList<>();
         if (entity.getApprovedCopy() != null) {
             attachments.add(entity.getApprovedCopy());
 
@@ -65,10 +65,7 @@ public class RFIService implements EntityService<InformationRequest> {
         }
         Entity payload = Entity.entity(request.getBody(), request.getMediaType());
         log.debug("Sending request to " + sigintHost + request.getURI());
-        Response response = rsClient.client().target(sigintHost + request.getURI())
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .cookie(request.getCookie())
-                .post(payload);
+        Response response = rsClient.post(sigintHost + request.getURI(), payload, request.getCookie());
         readRFIFromResponse(response);
         return response.getStatus();
     }
@@ -111,8 +108,7 @@ public class RFIService implements EntityService<InformationRequest> {
         RFIDetailsRequest request = new RFIDetailsRequest(id);
         Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
         String responseJson = response.readEntity(String.class);
-        InformationRequest RFI = JsonCoverter.fromJsonToObject(responseJson, RFIDetailsResponse.class).getResult();
-        return RFI;
+        return JsonCoverter.fromJsonToObject(responseJson, RFIDetailsResponse.class).getResult();
     }
 
     public int cancel(InformationRequest entity) {
