@@ -1,4 +1,4 @@
-package data_generator;
+package file_generator;
 
 import abs.EntityList;
 import model.Target;
@@ -14,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
-public class TargetFile extends FileProcessor {
+public class TargetFile extends FileService {
 
     @Override
     public File write(EntityList entityList) {

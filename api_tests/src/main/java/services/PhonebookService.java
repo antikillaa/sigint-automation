@@ -2,7 +2,7 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
-import data_generator.PhoneBookFile;
+import file_generator.PhoneBookFile;
 import errors.NullReturnException;
 import http.requests.phonebook.PhonebookRequest;
 import http.requests.phonebook.UnifiedPhonebookSearchRequest;
@@ -103,11 +103,7 @@ public class PhonebookService implements EntityService<Phonebook>{
 
         Entity payload = Entity.entity(request.getBody(), request.getMediaType());
         log.debug("Sending request to " + sigintHost + request.getURI());
-        Response response = rsClient.client()
-                .target(sigintHost + request.getURI())
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .cookie(request.getCookie())
-                .post(payload);
+        Response response = rsClient.post(sigintHost + request.getURI(), payload, request.getCookie());
 
         UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
         if (uploadResult != null) {

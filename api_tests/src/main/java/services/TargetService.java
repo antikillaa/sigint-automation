@@ -13,7 +13,7 @@ import model.targetGroup.TargetGroupSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
-import data_generator.TargetFile;
+import file_generator.TargetFile;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
@@ -56,11 +56,7 @@ public class TargetService implements EntityService<Target> {
 
         Entity payload = Entity.entity(request.getBody(), request.getMediaType());
         log.debug("Sending request to " + sigintHost + request.getURI());
-        Response response = rsClient.client()
-                .target(sigintHost + request.getURI())
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .cookie(request.getCookie())
-                .post(payload);
+        Response response = rsClient.post(sigintHost + request.getURI(), payload, request.getCookie());
 
         UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
         if (uploadResult != null) {
@@ -125,9 +121,7 @@ public class TargetService implements EntityService<Target> {
         TargetRequest request = new TargetRequest().get(id);
         Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
 
-        Target resultTarget = JsonCoverter.readEntityFromResponse(response, Target.class, "result");
-
-        return resultTarget;
+        return JsonCoverter.readEntityFromResponse(response, Target.class, "result");
     }
 
     public List<TargetGroup> getTargetGroups(String id) {
