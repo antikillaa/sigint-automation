@@ -2,6 +2,7 @@ package emailing.report;
 
 import emailing.email.EmailFactory;
 import emailing.email.HtmlEmail;
+import emailing.report.email_senders.EmailSenders;
 import model.AppContext;
 import org.apache.log4j.Logger;
 
@@ -26,7 +27,7 @@ public class EmailWorker {
                 logger.trace(e.getMessage(), e);
                 return;
             }
-            new EmailSender().send_email(htmlEmail.getSubject(), htmlEmail.getHtmlBody());
+            EmailSenders.getEmailSender().send_email(htmlEmail.getHtmlBody(), htmlEmail.getSubject());
             logger.info("Html Email is sent");
         }
     }
