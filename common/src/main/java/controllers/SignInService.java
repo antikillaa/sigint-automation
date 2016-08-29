@@ -1,8 +1,6 @@
 package controllers;
 
-import errors.NullReturnException;
 import http.requests.SignInRequest;
-import json.JsonCoverter;
 import json.RsClient;
 import model.AppContext;
 import org.apache.log4j.Logger;
@@ -19,14 +17,6 @@ public class SignInService {
         SignInRequest signInRequest = new SignInRequest();
         signInRequest.setName(name);
         signInRequest.setPassword(password);
-        try {
-            Response response = rsClient.post(
-                    context.environment().getSigintHost() + signInRequest.getURI(),
-                    JsonCoverter.toJsonString(signInRequest));
-            return response;
-        } catch (NullReturnException e) {
-            e.printStackTrace();
-            throw new AssertionError("Sign in attempt failed!");
-        }
+        return rsClient.post(context.environment().getSigintHost() + signInRequest.getURI(), signInRequest);
     }
 }

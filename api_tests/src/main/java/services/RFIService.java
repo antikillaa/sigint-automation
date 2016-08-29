@@ -13,7 +13,6 @@ import model.rfi.RFISearchResults;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -63,9 +62,9 @@ public class RFIService implements EntityService<InformationRequest> {
                     MediaType.APPLICATION_OCTET_STREAM_TYPE);
             attachment.getFile().deleteOnExit();
         }
-        Entity payload = Entity.entity(request.getBody(), request.getMediaType());
+
         log.debug("Sending request to " + sigintHost + request.getURI());
-        Response response = rsClient.post(sigintHost + request.getURI(), payload, request.getCookie());
+        Response response = rsClient.post(sigintHost + request.getURI(), request.getBody(), request.getCookie());
         readRFIFromResponse(response);
         return response.getStatus();
     }
@@ -113,14 +112,14 @@ public class RFIService implements EntityService<InformationRequest> {
 
     public int cancel(InformationRequest entity) {
         RFICancelRequest request = new RFICancelRequest(entity.getId());
-        Response response = rsClient.post(sigintHost + request.getURI(), null, request.getCookie());
+        Response response = rsClient.post(sigintHost + request.getURI(), request.getCookie());
         readRFIFromResponse(response);
         return response.getStatus();
     }
 
     public int assign(InformationRequest entity) {
         RFIAssignRequest request = new RFIAssignRequest(entity.getId());
-        Response response = rsClient.post(sigintHost + request.getURI(), null, request.getCookie());
+        Response response = rsClient.post(sigintHost + request.getURI(), request.getCookie());
         readRFIFromResponse(response);
         return response.getStatus();
     }
