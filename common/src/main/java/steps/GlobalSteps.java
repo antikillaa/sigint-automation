@@ -1,5 +1,8 @@
 package steps;
 
+import abs.EntityList;
+import app_context.entities.Entities;
+import app_context.entities.UsersList;
 import controllers.APILogin;
 import errors.NullReturnException;
 import http.requests.GetDictionariesRequest;
@@ -8,7 +11,6 @@ import json.RsClient;
 import model.AppContext;
 import model.Dictionary;
 import model.User;
-import model.lists.UsersList;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStories;
 import org.jbehave.core.annotations.BeforeStories;
@@ -36,18 +38,16 @@ public class GlobalSteps {
 
 
     private void initEntities() {
-        log.debug("Start loading pre-defined set of users");
-        UsersList users = new UsersList();
+        log.info("Start loading pre-defined set of users");
+        UsersList users;
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         InputStream users_input = classloader.getResourceAsStream("default_users.json");
         try {
             users = JsonCoverter.fromJsonToObjectsList(users_input, UsersList.class);
+            Entities.get().setUsers(users);
         } catch (NullReturnException e) {
-            log.warn("Entities weren't loaded from config file");
-            e.printStackTrace();
+            log.warn("Users weren't loaded from config file");
         }
-        AppContext context = AppContext.getContext();
-        context.entities().setUsers(users);
     }
 
     private void initDictionary() {
