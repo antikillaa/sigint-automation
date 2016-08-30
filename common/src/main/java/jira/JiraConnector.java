@@ -1,11 +1,12 @@
 package jira;
 
+import app_context.properties.G4Properties;
+import app_context.properties.JiraProperties;
 import errors.NullReturnException;
 import jira.model.*;
-import model.AppContext;
-import org.apache.log4j.Logger;
 import json.JsonCoverter;
 import json.RsClient;
+import org.apache.log4j.Logger;
 
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Response;
@@ -14,10 +15,9 @@ import java.util.List;
 
 public class JiraConnector {
     public static Logger log = Logger.getRootLogger();
-    private AppContext context = AppContext.getContext();
+    private JiraProperties properties = G4Properties.getJiraProperties();
     Cookie sessionCookie;
     private RsClient client = new RsClient();
-    private String jiraServer = context.getJiraConnection().getProperty("server");
 
     public JiraConnector() {
         try {
@@ -33,13 +33,13 @@ public class JiraConnector {
     private Session initSession() throws NullReturnException {
         log.debug("Connecting to jira host...");
         User user = new User();
-        String username = context.getJiraConnection().getProperty("username");
+        String username = properties.getUsername();
         log.debug("Using username:"+username);
-        String password = context.getJiraConnection().getProperty("password");
+        String password = properties.getPassword();
         user.setUsername(username);
         log.debug("Using password:"+password);
         user.setPassword(password);
-        Response response = client.post(jiraServer + "/rest/auth/latest/session",
+        Response response = client.post(properties.getHost() + "/rest/auth/latest/session",
                 JsonCoverter.toJsonString(user));
         SessionInfo sessionInfo = JsonCoverter.fromJsonToObject(
                 response.readEntity(String.class), SessionInfo.class);
@@ -50,7 +50,7 @@ public class JiraConnector {
 
     public String getProjectId(String name) throws NullReturnException {
         log.debug("Getting project id based on name:"+ name);
-        String jsonString = client.get(jiraServer +
+        String jsonString = client.get(properties.getHost() +
                 "/rest/api/latest/project", sessionCookie).readEntity(String.class);
         List<JiraProject> projects = JsonCoverter.fromJsonToObjectsList(
                 jsonString, JiraProject[].class);
@@ -64,7 +64,7 @@ public class JiraConnector {
 
     public String getVersionId(String projectId, String versionName) throws NullReturnException{
         log.debug("Getting version id based on project id:"+projectId+" and version name:"+versionName);
-        String jsonString = client.get(jiraServer + "/rest/api/latest/project/"+projectId+"/versions",
+        String jsonString = client.get(properties.getHost() + "/rest/api/latest/project/"+projectId+"/versions",
                 sessionCookie).readEntity(String.class);
         List<ProjectVersion> versions = JsonCoverter.fromJsonToObjectsList(jsonString, ProjectVersion[].class);
 
@@ -78,7 +78,7 @@ public class JiraConnector {
     
     public Issue getIssue(String issueKey) {
         log.debug("Getting issue by it's key:" + issueKey);
-        Response response = client.get(jiraServer + "/rest/api/latest/issue/"+issueKey,
+        Response response = client.get(properties.getHost() + "/rest/api/latest/issue/"+issueKey,
                 sessionCookie);
         Issue issue = JsonCoverter.readEntityFromResponse(response, Issue.class);
         return issue;

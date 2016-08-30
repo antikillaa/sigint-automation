@@ -1,7 +1,7 @@
 package http.requests;
 
-import model.AppContext;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import services.ContextService;
 
 import javax.ws.rs.core.Cookie;
 
@@ -9,22 +9,20 @@ import javax.ws.rs.core.Cookie;
 public class HttpRequest {
 
     private String URI;
-    private AppContext context = AppContext.getContext();
     private Cookie cookie;
 
     public HttpRequest(String URI) {
         this.URI = URI;
     }
 
+    //todo:Move getCookie to higher level. Remove from model
     public  Cookie getCookie() {
-        if (cookie==null){
-            cookie = new Cookie("t", context.environment().getToken().getValue());
-        }
+        String tokenValue = ContextService.getToken();
+        if (tokenValue == null) {
+                return null;
+            }
+        cookie = new Cookie("t", tokenValue);
         return cookie;
-    }
-
-    public void setCookie(Cookie cookie) {
-        this.cookie = cookie;
     }
 
     public String getURI() {

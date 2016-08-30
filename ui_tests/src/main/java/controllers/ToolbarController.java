@@ -1,6 +1,6 @@
 package controllers;
 
-import model.AppContext;
+import app_context.AppContext;
 import pages.SigintPage;
 
 public abstract class ToolbarController extends PageController {

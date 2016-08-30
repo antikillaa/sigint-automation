@@ -24,8 +24,7 @@ import java.util.List;
 import static conditions.Conditions.isTrue;
 
 public class APIUploadFilesSteps extends APISteps {
-
-    private AppContext context = AppContext.getContext();
+    
     private Logger log = Logger.getLogger(APIUploadFilesSteps.class);
     private UploadFilesService service = new UploadFilesService();
 
@@ -45,7 +44,7 @@ public class APIUploadFilesSteps extends APISteps {
 
     private FileMeta initFileMeta(File file) {
         Source source = context.get("source", Source.class);
-        User user = context.getLoggedUser();
+        LoggedUser user = appContext.getLoggedUser();
 
         Meta meta = new Meta();
         meta.setFileName(file.getName());

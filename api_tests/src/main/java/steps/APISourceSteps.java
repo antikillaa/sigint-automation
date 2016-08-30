@@ -1,8 +1,8 @@
 package steps;
 
+import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
-import model.AppContext;
 import model.RecordType;
 import model.Source;
 import model.SourceType;
@@ -22,7 +22,6 @@ import static conditions.Conditions.isTrue;
 public class APISourceSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APISourceSteps.class);
-    private AppContext context = AppContext.getContext();
     private SourceService service = new SourceService();
 
     @When("I send create new random Source request")
@@ -38,7 +37,7 @@ public class APISourceSteps extends APISteps {
     @Then("Source is correct")
     public void checkSourceIsCorrect() {
         Source source = context.get("source", Source.class);
-        Source latestSource = context.entities().getSources().getLatest();
+        Source latestSource = Entities.getSources().getLatest();
 
         Verify.shouldBe(Conditions.equals.elements(source, latestSource));
     }
@@ -52,7 +51,7 @@ public class APISourceSteps extends APISteps {
 
     @Then("Source $criteria list")
     public void sourceShouldBeInList(String criteria){
-        Source source = context.entities().getSources().getLatest();
+        Source source = Entities.getSources().getLatest();
         List<Source> sources = context.get("sourceList", List.class);
 
         boolean contains = false;
@@ -82,7 +81,7 @@ public class APISourceSteps extends APISteps {
 
     @When("I send view source request")
     public void viewRandomSourceFromList() {
-        Source source = context.entities().getSources().getLatest();
+        Source source = Entities.getSources().getLatest();
 
         Source viewedSource = service.view(source.getId());
 
@@ -91,7 +90,7 @@ public class APISourceSteps extends APISteps {
 
     @When("I send update source request")
     public void updateRandomSourceFromList() {
-        Source source = context.entities().getSources().getLatest();
+        Source source = Entities.getSources().getLatest();
 
         // update all fields
         SourceType type = source.getType();
@@ -115,12 +114,12 @@ public class APISourceSteps extends APISteps {
         }
         Source source = RandomGenerator.getRandomItemFromList(sources);
 
-        context.entities().getSources().addOrUpdateEntity(source);
+        Entities.getSources().addOrUpdateEntity(source);
     }
 
     @When("I send delete Source request")
     public void deleteSource() {
-        Source source = context.entities().getSources().getLatest();
+        Source source = Entities.getSources().getLatest();
 
         int responseCode = service.remove(source);
 

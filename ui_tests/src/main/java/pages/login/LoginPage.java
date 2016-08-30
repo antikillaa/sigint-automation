@@ -1,8 +1,10 @@
 package pages.login;
 
+import app_context.properties.G4Properties;
+import blocks.context.Context;
 import com.codeborne.selenide.SelenideElement;
-import model.AppContext;
 import org.openqa.selenium.By;
+import pages.SigintPage;
 
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Condition.present;
@@ -10,16 +12,12 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
-public class LoginPage {
+public class LoginPage extends SigintPage {
 
-    private final String url = String.format("%s/#/login", AppContext.getContext().environment().getSigintHost());
+    private final String url = String.format("%s/#/login", G4Properties.getRunProperties().getApplicationURL());
 
     public SelenideElement getUsernameField() {
         return $(By.id("inputEmail")).shouldBe(present);
-    }
-
-    public SelenideElement getPageLoading() {
-        return $(By.xpath("//div[@class='page-loading text-center']"));
     }
 
     public SelenideElement getPasswordField() {
@@ -47,13 +45,9 @@ public class LoginPage {
         if (!currentURL.equals(url)) {
             throw new Error("[ERROR] Current Login page url: " + currentURL + ", expected: " + url);
         }
-
         return this;
     }
 
-    public String getUrl() {
-        return url;
-    }
 
     public LoginPage typeUsername(String username) {
         getUsernameField().val(username);
@@ -73,5 +67,9 @@ public class LoginPage {
         return $(By.xpath("//form[@class='form-signin au-target']" +
                 "//span[@class='text-danger m-b-sm']"));
     }
-
+    
+    @Override
+    public Context context() {
+        return null;
+    }
 }

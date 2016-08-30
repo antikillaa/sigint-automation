@@ -1,7 +1,8 @@
 package json;
 
+import app_context.properties.G4Properties;
+import app_context.properties.JiraProperties;
 import errors.NullReturnException;
-import model.AppContext;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -15,15 +16,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Properties;
 
-import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.*;
+import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD;
+import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME;
 
 public class RsClient {
 
     public static Logger log = Logger.getRootLogger();
     private Client client;
-    private Properties connectionProperties = AppContext.getContext().getJiraConnection();
+    private JiraProperties connectionProperties = G4Properties.getJiraProperties();
 
     public RsClient(){
         initClient();
@@ -39,8 +40,8 @@ public class RsClient {
      * <br>user and pass it properties from jiraConnection.properties
      */
     public void initClient(){
-        String user = connectionProperties.getProperty("username");
-        String pass = connectionProperties.getProperty("password");
+        String user = connectionProperties.getUsername();
+        String pass = connectionProperties.getPassword();
         HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(user, pass);
         client = ClientBuilder.newClient();
         client.register(feature);

@@ -1,5 +1,6 @@
 package steps;
 
+import app_context.entities.Entities;
 import conditions.Verify;
 import errors.NullReturnException;
 import json.JsonCoverter;
@@ -22,7 +23,7 @@ public class APIUserSteps extends APISteps {
     @When("I send create a new user with group request")
     public void createNewUserRequest() {
         List<String> userGroupIds = new ArrayList<String>();
-        userGroupIds.add(context.entities().getGroups().getLatest().getId());
+        userGroupIds.add(Entities.getGroups().getLatest().getId());
         User user = new User().generate().setUserGroupIds(userGroupIds);
 
         int responseCode = service.add(user);
@@ -33,7 +34,7 @@ public class APIUserSteps extends APISteps {
 
     @Then("Created user is correct")
     public void createdUserIsCorrect() throws NullReturnException {
-        User createdUser = context.entities().getUsers().getLatest();
+        User createdUser = Entities.getUsers().getLatest();
         User requestUser = context.get("requestUser", User.class);
 
         log.info("requested: " + JsonCoverter.toJsonString(requestUser));

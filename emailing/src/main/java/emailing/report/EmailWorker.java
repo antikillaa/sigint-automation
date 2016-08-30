@@ -3,7 +3,7 @@ package emailing.report;
 import emailing.email.EmailFactory;
 import emailing.email.HtmlEmail;
 import emailing.report.email_senders.EmailSenders;
-import model.AppContext;
+import app_context.AppContext;
 import org.apache.log4j.Logger;
 
 public class EmailWorker {

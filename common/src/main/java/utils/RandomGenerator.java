@@ -1,6 +1,6 @@
 package utils;
 
-import model.AppContext;
+import app_context.AppContext;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
@@ -12,6 +12,7 @@ import java.util.*;
 public class RandomGenerator {
 
     private static Logger log = Logger.getLogger(RandomGenerator.class);
+    private static AppContext context = AppContext.get();
 
     public static LinkedHashSet<String> generatePhones(int maxPhones) {
 
@@ -59,14 +60,14 @@ public class RandomGenerator {
     }
 
     public static String getRandomCountry() {
-        List<String> countries = new LinkedList<>(AppContext.getContext().getCountries().values());
+        List<String> countries = new LinkedList<>(context.getCountries().values());
         String country = countries.get(RandomUtils.nextInt(countries.size()-1));
         return country;
     }
     
 
     public static String getRandomLanguage() {
-        List<String> languages = new LinkedList<>(AppContext.getContext().getLanguages().values());
+        List<String> languages = new LinkedList<>(context.getLanguages().values());
         String language = languages.get(RandomUtils.nextInt(languages.size()-1));
         return language;
     }

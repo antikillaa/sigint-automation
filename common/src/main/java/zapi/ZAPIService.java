@@ -1,9 +1,10 @@
 package zapi;
 
+import app_context.properties.G4Properties;
+import app_context.properties.JiraProperties;
 import errors.NullReturnException;
 import jira.JiraConnector;
 import json.JsonCoverter;
-import model.AppContext;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import reporter.ReportParser;
@@ -16,13 +17,12 @@ import javax.ws.rs.core.Response;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
 
 public class ZAPIService {
 
     private ZAPI zapi = new ZAPI();
     private HashMap<String, Integer> issueIdMap = new HashMap<>();
-    private Properties connectionProperties = AppContext.getContext().getJiraConnection();
+    private JiraProperties connectionProperties = G4Properties.getJiraProperties();
     private Logger log = Logger.getLogger(ReportParser.class);
     private ReportResults reportResults;
     private final String pathToXml = "target/allure-results";
@@ -32,7 +32,7 @@ public class ZAPIService {
             reportResults = new ReportParser().parseXmlReportFiles(pathToXml);
         }
         for (TestCase testCase:reportResults.getFailed()){
-            testCase.setUrl(connectionProperties.getProperty("server") + "/browse/"+
+            testCase.setUrl(connectionProperties.getServer() + "/browse/"+
                     getTestCaseKeyByTitle(testCase.getTitle()));
         }
         return reportResults;
@@ -44,7 +44,7 @@ public class ZAPIService {
     private Cycle createCycle(String projectId, String versionId) {
         log.info("Creating test cycle in Zephyr");
         Cycle cycle = new Cycle()
-                .setName(connectionProperties.getProperty("cycle"))
+                .setName(connectionProperties.getCycleName())
                 .setDescription("")
                 .setStartDate(new Date())
                 .setEndDate(new Date())
@@ -73,10 +73,10 @@ public class ZAPIService {
         Cycle cycle;
         JiraConnector connector = new JiraConnector();
         try {
-            String projectId = connector.getProjectId(connectionProperties.getProperty("project"));
-            String versionId = connector.getVersionId(projectId, connectionProperties.getProperty("version"));
+            String projectId = connector.getProjectId(connectionProperties.getProject());
+            String versionId = connector.getVersionId(projectId, connectionProperties.getVersion());
             CyclesList cycles = zapi.getCycles(projectId, versionId);
-            Cycle foundcycle = cycles.getCycle(connectionProperties.getProperty("cycle"));
+            Cycle foundcycle = cycles.getCycle(connectionProperties.getCycleName());
             if (foundcycle == null) {
                 log.debug("Cycle is not found. Creating new one");
                 cycle = createCycle(projectId, versionId);

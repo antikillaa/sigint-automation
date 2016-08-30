@@ -1,7 +1,9 @@
 package controllers;
 
+import app_context.RunContext;
 import json.JsonCoverter;
-import model.AppContext;
+import app_context.AppContext;
+import model.LoggedUser;
 import model.Token;
 import model.User;
 import org.apache.log4j.Logger;
@@ -12,27 +14,22 @@ import javax.ws.rs.core.Response;
 public class APILogin {
 
     private SignInService signService = new SignInService();
-    private AppContext context = AppContext.getContext();
+    private AppContext context = AppContext.get();
+    private RunContext runContext = RunContext.get();
     Logger log = Logger.getRootLogger();
 
 
-    public void signInWithCrendentials(String validness) {
-        log.info("Signing in...");
+    public void signInAsUser(User user) {
+        log.info("Signing in as user:"+ user);
         Response response;
-        User user = context.get("user", User.class);
-        String password;
-        if (validness.toLowerCase().equals("incorrect")) {
-            password = "incorrect";
-        } else {
-            password = user.getPassword();
-        }
-        response = signService.signIn(user.getName(), password);
-        context.put("code", response.getStatus());
+        
+        response = signService.signIn(user.getName(), user.getPassword());
+        runContext.put("code", response.getStatus());
         if (response.getStatus() == 200) {
             Token token = JsonCoverter.fromJsonToObject(response.readEntity(String.class), Token.class);
-            context.environment().setToken(token);
+            context.setLoggedUser(new LoggedUser(user, token));
         } else {
-            context.put("message", response.readEntity(String.class));
+            runContext.put("message", response.readEntity(String.class));
         }
 
         UserService userService = new UserService();

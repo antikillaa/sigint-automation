@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dm on 3/24/16.
@@ -50,6 +51,23 @@ public class JsonCoverter {
             return null;
         }
         return jsonString;
+    }
+    
+    public static Map<String,String > loadJsonToStringMap(String filename) {
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        InputStream entityList = classloader.getResourceAsStream(filename);
+        if (entityList == null) {
+            log.warn("Unable to get list of entities from file:" + filename);
+            return null;
+        }
+        MapType mapType = JsonCoverter.constructMapTypeToValue(String.class);
+        try {
+            return JsonCoverter.mapper.readValue(entityList, mapType);
+            
+        } catch (IOException e) {
+            log.warn("Cannot load list of entities");
+            return null;
+        }
     }
 
 

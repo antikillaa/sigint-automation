@@ -5,7 +5,7 @@ import emailing.html_elements.HtmlBuilder;
 import emailing.html_elements.HtmlElement;
 import emailing.html_elements.Style;
 import failure_strategy.Statistic;
-import model.AppContext;
+import app_context.AppContext;
 import reporter.ReportResults;
 
 import java.util.Properties;

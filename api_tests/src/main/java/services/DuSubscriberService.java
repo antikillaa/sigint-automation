@@ -3,12 +3,13 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import abs.SearchResult;
-import file_generator.DuFile;
+import app_context.RunContext;
+import app_context.properties.G4Properties;
 import errors.NullReturnException;
+import file_generator.DuFile;
 import http.requests.phonebook.DuSubscriberRequest;
 import json.JsonCoverter;
 import json.RsClient;
-import model.AppContext;
 import model.DuSubscriberEntry;
 import model.UploadResult;
 import model.phonebook.DuSubscriberSearchResult;
@@ -26,8 +27,8 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
 
     private Logger log = Logger.getLogger(DuSubscriberService.class);
     private static RsClient rsClient = new RsClient();
-    private static AppContext context = AppContext.getContext();
-    private final String sigintHost = context.environment().getSigintHost();
+    private RunContext context = RunContext.get();
+    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
 
     public int add(DuSubscriberEntry entity) {
         log.info("Add DuSubscriber Entry..");

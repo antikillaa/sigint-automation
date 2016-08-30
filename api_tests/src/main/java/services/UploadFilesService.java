@@ -1,13 +1,17 @@
 package services;
 
 import abs.SearchFilter;
+import app_context.RunContext;
+import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import http.requests.UploadFilesRequest;
 import http.requests.UploadRequest;
 import json.JsonCoverter;
 import json.RsClient;
-import model.*;
+import model.FileMeta;
 import model.Process;
+import model.UploadDetails;
+import model.UploadSearchResult;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.client.Entity;
@@ -19,9 +23,9 @@ import java.util.List;
 public class UploadFilesService {
 
     private static RsClient rsClient = new RsClient();
-    private static AppContext context = AppContext.getContext();
     private Logger log = Logger.getLogger(UploadFilesService.class);
-    private final String sigintHost = context.environment().getSigintHost();
+    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
+    private RunContext context = RunContext.get();
 
 
     public int upload(File file, FileMeta fileMeta) {

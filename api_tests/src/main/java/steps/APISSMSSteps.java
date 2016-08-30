@@ -1,6 +1,5 @@
 package steps;
 
-import model.AppContext;
 import model.SSMS;
 import model.Target;
 import model.bulders.SSMSGenerator;
@@ -14,7 +13,6 @@ import java.util.List;
 public class APISSMSSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APITargetGroupSteps.class);
-    private AppContext context = AppContext.getContext();
 
     @Given("Generate $count SSMS")
     public void generateSSMS(String count) {

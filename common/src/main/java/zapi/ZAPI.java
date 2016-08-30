@@ -1,9 +1,9 @@
 package zapi;
 
+import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import json.JsonCoverter;
 import json.RsClient;
-import model.AppContext;
 import zapi.model.Cycle;
 import zapi.model.CyclesList;
 import zapi.model.Execution;
@@ -16,7 +16,7 @@ import java.net.URLEncoder;
 public class ZAPI {
 
     private RsClient rsClient = new RsClient();
-    private String server = AppContext.getContext().getJiraConnection().getProperty("server");
+    private String server = G4Properties.getJiraProperties().getServer();
 
     static final String UNEXECUTED = "-1";
     static final String PASS = "1";

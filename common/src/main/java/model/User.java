@@ -29,6 +29,11 @@ public class User extends TeelaEntity {
     private List<String> expandedPermissions;
     @JsonProperty("expanded_roles")
     private List<String> expandedRoles;
+    
+    
+    public String toString() {
+        return String.format("name:%s, password:%s", name, password);
+    }
 
     public boolean hasRole(String role) {
         if (roles == null || role == null) {

@@ -2,13 +2,15 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import app_context.RunContext;
+import app_context.entities.Entities;
+import app_context.properties.G4Properties;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
 import http.requests.targetGroups.TargetGroupRequest;
 import json.JsonCoverter;
 import json.RsClient;
-import model.AppContext;
 import model.Result;
 import model.TargetGroup;
 import model.targetGroup.TargetGroupSearchResult;
@@ -21,9 +23,9 @@ import java.util.List;
 public class TargetGroupService implements EntityService<TargetGroup> {
 
     private static RsClient rsClient = new RsClient();
-    private static AppContext context = AppContext.getContext();
     private Logger log = Logger.getLogger(TargetGroupService.class);
-    private final String sigintHost = context.environment().getSigintHost();
+    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
+    private RunContext context = RunContext.get();
 
 
     public int add(TargetGroup entity) {
@@ -35,7 +37,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         Response response = rsClient.put(sigintHost + request.getURI(), entity, request.getCookie());
         TargetGroup group = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "id");
         if (group != null) {
-            context.entities().getTargetGroups().addOrUpdateEntity(group);
+            Entities.getTargetGroups().addOrUpdateEntity(group);
         }
         return response.getStatus();
     }
@@ -51,7 +53,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         if (response.getStatus() == 200) {
             try {
                 Verify.isTrue(Conditions.equals.elements(result.getResult(), "ok"));
-                context.entities().getTargetGroups().removeEntity(entity);
+                Entities.getTargetGroups().removeEntity(entity);
             } catch (NullReturnException e) {
                 log.warn("Was unable to remove entity with id:" + entity.getId() + " as it doesn't in the list");
             }
@@ -73,7 +75,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         TargetGroup targetGroup = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "result");
         log.debug(Parser.entityToString(targetGroup));
         if (targetGroup != null) {
-            context.entities().getTargetGroups().addOrUpdateEntity(entity);
+            Entities.getTargetGroups().addOrUpdateEntity(entity);
         } else {
             log.error("Error! Update targetGroup process was failed");
             throw new AssertionError("Error! Update targetGroup process was failed");
