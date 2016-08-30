@@ -18,7 +18,6 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -57,9 +56,8 @@ public class TargetService implements EntityService<Target> {
         request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         file.deleteOnExit();
 
-        Entity payload = Entity.entity(request.getBody(), request.getMediaType());
         log.debug("Sending request to " + sigintHost + request.getURI());
-        Response response = rsClient.post(sigintHost + request.getURI(), payload, request.getCookie());
+        Response response = rsClient.post(sigintHost + request.getURI(), request.getBody(), request.getCookie());
 
         UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
         if (uploadResult != null) {

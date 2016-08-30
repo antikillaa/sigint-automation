@@ -5,6 +5,7 @@ import app_context.properties.JiraProperties;
 import errors.NullReturnException;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 import javax.ws.rs.client.Client;
@@ -83,7 +84,7 @@ public class RsClient {
         try {
             payload = Entity.json(JsonCoverter.toJsonString(object));
         } catch (NullReturnException e) {
-            throw new AssertionError("Cannot convert");
+            throw new AssertionError("Cannot convert payload object to JSON");
         }
         return payload;
     }
@@ -142,19 +143,25 @@ public class RsClient {
      * HTTP POST request
      *
      * @param url target URL
-     * @param jsonInString json for POST request
+     * @param multiPart Jersey MultiPart for POST request
      * @return JAX-RS client response
      */
-    public Response post(String url, String jsonInString){
-        log.debug("Sending POST request with payload:" + jsonInString);
-        Entity payload = Entity.json(jsonInString);
-        return buildRequest(url).post(payload);
+    public Response post(String url, MultiPart multiPart, Cookie cookie) {
+        Entity payload = Entity.entity(multiPart, multiPart.getMediaType());
+        log.debug("Sending POST request with Multipart payload:" + payload);
+        return buildRequest(url).cookie(cookie).post(payload);
     }
 
-    public Response post(String url, String jsonInString, Cookie cookie) {
-        log.debug("Sending POST request with payload:" + jsonInString);
-        Entity payload = Entity.json(jsonInString);
+    public Response post(String url, Cookie cookie) {
+        Entity payload = convertToJson(null);
+        log.debug("Sending POST request with payload:" + payload);
         return buildRequest(url).cookie(cookie).post(payload);
+    }
+
+    public Response post(String url, Object object) {
+        Entity payload = convertToJson(object);
+        log.debug("Sending POST request with payload:" + object);
+        return buildRequest(url).post(payload);
     }
 
     public Response post(String url, Object object, Cookie cookie) {
