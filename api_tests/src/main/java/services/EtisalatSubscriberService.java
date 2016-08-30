@@ -15,8 +15,6 @@ import model.UploadResult;
 import model.phonebook.EtisalatSubscriberSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
