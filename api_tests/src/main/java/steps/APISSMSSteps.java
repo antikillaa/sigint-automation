@@ -5,7 +5,6 @@ import model.Target;
 import model.bulders.SSMSGenerator;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
-import utils.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +20,8 @@ public class APISSMSSteps extends APISteps {
 
         for (int i = 0; i < numSSMS; i++ ) {
             Target target = new Target().generate();
-            String targetPhone = RandomGenerator.getRandomItemFromList(new ArrayList<>(target.getPhones()));
 
-            SSMS ssms = new SSMSGenerator()
-                    //.toNumber(targetPhone)
-                    .generateSSMS();
+            SSMS ssms = new SSMSGenerator().setTarget(target).produce();
 
             ssmsList.add(ssms);
         }

@@ -2,10 +2,10 @@ package file_generator;
 
 import abs.EntityList;
 import model.EtisalatSubscriberEntry;
+import model.G4File;
 import utils.FileHelper;
 import utils.RandomGenerator;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -14,21 +14,21 @@ import java.util.TimeZone;
 public class EtisalatSubscriberFile extends FileService {
 
     @Override
-    public EntityList read(File file) {
+    public EntityList read(G4File file) {
         return null;
     }
 
     @Override
-    public File write(EntityList entityList) {
+    public G4File write(EntityList entityList) {
         List<EtisalatSubscriberEntry> entries = entityList.getEntities();
         return write(entries);
     }
 
-    public File write(List<EtisalatSubscriberEntry> entries) {
+    public G4File write(List<EtisalatSubscriberEntry> entries) {
         log.info("Create Etisalat Subscriber file..");
         String fileName = new SimpleDateFormat("yyyyMMdd").format(new Date())
                 + "-etisalat" + new Date().getTime() + "-01." + RandomGenerator.generateCountryCode(); //yyyyMMdd-filename-No.DX
-        File file = new File(fileName);
+        G4File file = new G4File(fileName);
 
         for (EtisalatSubscriberEntry entry : entries) {
             FileHelper.writeLineToFile(file, entryToString(entry));
