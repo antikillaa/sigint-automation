@@ -2,13 +2,15 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import app_context.RunContext;
+import app_context.entities.Entities;
+import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import file_generator.PhoneBookFile;
 import http.requests.phonebook.PhonebookRequest;
 import http.requests.phonebook.UnifiedPhonebookSearchRequest;
 import json.JsonCoverter;
 import json.RsClient;
-import model.AppContext;
 import model.Phonebook;
 import model.UploadResult;
 import model.phonebook.PhonebookSearchResults;
@@ -24,8 +26,8 @@ public class PhonebookService implements EntityService<Phonebook>{
 
     private Logger log = Logger.getLogger(PhonebookService.class);
     private static RsClient rsClient = new RsClient();
-    private static AppContext context = AppContext.getContext();
-    private final String sigintHost = context.environment().getSigintHost();
+    private RunContext context = RunContext.get();
+    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
 
     public int add(Phonebook entity) {
         PhonebookRequest request = new PhonebookRequest().entries();
@@ -39,7 +41,7 @@ public class PhonebookService implements EntityService<Phonebook>{
         Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
         Phonebook createdPhonebook = JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
         if (createdPhonebook != null) {
-            context.entities().getPhonebooks().addOrUpdateEntity(createdPhonebook);
+            Entities.getPhonebooks().addOrUpdateEntity(createdPhonebook);
         }
         return response.getStatus();
     }
@@ -50,7 +52,7 @@ public class PhonebookService implements EntityService<Phonebook>{
         Response response = rsClient.delete(sigintHost + request.getURI() + "/" + entity.getId(), request.getCookie());
         if (response.getStatus() == 200) {
             try {
-                context.entities().getPhonebooks().removeEntity(entity);
+                Entities.getPhonebooks().removeEntity(entity);
             } catch (NullReturnException e) {
                 log.warn("Was unable to remove entity with id:" + entity.getId() + " as it doesn't in the list");
             }
@@ -79,7 +81,7 @@ public class PhonebookService implements EntityService<Phonebook>{
         Response response = rsClient.post(sigintHost + request.getURI() + "/" + entity.getId(), entity, request.getCookie());
         Phonebook createdPhonebook = JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
         if (createdPhonebook != null) {
-            context.entities().getPhonebooks().addOrUpdateEntity(createdPhonebook);
+            Entities.getPhonebooks().addOrUpdateEntity(createdPhonebook);
         }
         return response.getStatus();
     }

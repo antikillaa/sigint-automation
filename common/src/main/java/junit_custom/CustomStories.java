@@ -11,7 +11,7 @@ public abstract class CustomStories extends JUnitStories {
         try {
             super.run();
         } catch (Throwable throwable) {
-            if (Statistic.hasFailuresWithoutBugs()) {
+            if (new Statistic().hasFailuresWithoutBugs()) {
                 throw new RuntimeException();
             }
         }

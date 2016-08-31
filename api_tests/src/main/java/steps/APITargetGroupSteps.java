@@ -1,10 +1,9 @@
 package steps;
 
+import app_context.entities.Entities;
 import conditions.Verify;
 import errors.NullReturnException;
-import model.AppContext;
 import model.TargetGroup;
-import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
@@ -17,9 +16,7 @@ import static conditions.Conditions.equals;
 import static conditions.Conditions.isTrue;
 
 public class APITargetGroupSteps extends APISteps {
-
-    private Logger log = Logger.getLogger(APITargetGroupSteps.class);
-    private AppContext context = AppContext.getContext();
+    
     private TargetGroupService service = new TargetGroupService();
 
     @When("I send create target group $with targets request")
@@ -27,7 +24,7 @@ public class APITargetGroupSteps extends APISteps {
         TargetGroup group = new TargetGroup().generate();
         if (with.toLowerCase().equals("with")) {
             List<String> targets = new ArrayList<>();
-            targets.add(context.entities().getTargets().random().getId());
+            targets.add(Entities.getTargets().random().getId());
             group.setTargets(targets);
         }
         int response = service.add(group);
@@ -38,7 +35,7 @@ public class APITargetGroupSteps extends APISteps {
     @Then("Created target group is correct")
     public void targetGroupCorrect() {
         TargetGroup contextTargetGroup = context.get("requestTargetGroup", TargetGroup.class);
-        TargetGroup createdTargetGroup = context.entities().getTargetGroups().getLatest();
+        TargetGroup createdTargetGroup = Entities.getTargetGroups().getLatest();
 
         Verify.shouldBe(isTrue.element(equalsTargetGroups(createdTargetGroup, contextTargetGroup)));
     }
@@ -51,7 +48,7 @@ public class APITargetGroupSteps extends APISteps {
 
     @When("I send get target group details request")
     public void getTargetGroupRequest() {
-        TargetGroup createdTargetGroup = context.entities().getTargetGroups().getLatest();
+        TargetGroup createdTargetGroup = Entities.getTargetGroups().getLatest();
 
         TargetGroup viewedTargetGroup = service.view(createdTargetGroup.getId());
 
@@ -60,7 +57,7 @@ public class APITargetGroupSteps extends APISteps {
 
     @Then("Viewed target group is correct")
     public void viewedTargetGroupIsCorrect() {
-        TargetGroup createdTarget = context.entities().getTargetGroups().getLatest();
+        TargetGroup createdTarget = Entities.getTargetGroups().getLatest();
 
         TargetGroup viewedTargetGroup = context.get("viewedTargetGroup", TargetGroup.class);
 
@@ -76,7 +73,7 @@ public class APITargetGroupSteps extends APISteps {
 
     @Then("Created target group $criteria list")
     public void targetGroupsContainNewTargetGroup(String criteria) throws NullReturnException {
-        TargetGroup targetGroup = context.entities().getTargetGroups().getLatest();
+        TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
         List<TargetGroup> list = context.get("targetGroupList", List.class);
 
         Boolean contains = false;
@@ -98,7 +95,7 @@ public class APITargetGroupSteps extends APISteps {
 
     @Then("target group $criteria list")
     public void existingTargetGroupContainsInList(String criteria) throws NullReturnException {
-        TargetGroup targetGroup = context.entities().getTargetGroups().getLatest();
+        TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
         List<TargetGroup> list = context.get("targetGroupList", List.class);
 
         Boolean contains = false;
@@ -120,7 +117,7 @@ public class APITargetGroupSteps extends APISteps {
 
     @When("I send delete target group request")
     public void deleteTargetGroupRequest() {
-        TargetGroup targetGroup = context.entities().getTargetGroups().getLatest();
+        TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
 
         int responseCode = service.remove(targetGroup);
 
@@ -139,7 +136,7 @@ public class APITargetGroupSteps extends APISteps {
 
     @When("I send update target group request")
     public void updateTargetGroupRequest() {
-        TargetGroup createdTargetGroup = context.entities().getTargetGroups().getLatest();
+        TargetGroup createdTargetGroup = Entities.getTargetGroups().getLatest();
         TargetGroup updatedTargetGroup = createdTargetGroup.generate();
 
         int responseCode = service.update(updatedTargetGroup);
@@ -151,21 +148,21 @@ public class APITargetGroupSteps extends APISteps {
     @Then("Target group updated correctly")
     public void targetGroupUpdatedCorrectly() {
         TargetGroup updatedTargetGroup = context.get("updatedTargetGroup", TargetGroup.class);
-        TargetGroup responseTargetGroup = context.entities().getTargetGroups().getLatest();
+        TargetGroup responseTargetGroup = Entities.getTargetGroups().getLatest();
 
         equalsTargetGroups(responseTargetGroup, updatedTargetGroup);
     }
 
     @Then("existing group is listed in list only once")
     public void groupNotDuplicated() {
-        List<TargetGroup> targetGroups = context.entities().getTargets().getLatest().getGroups();
+        List<TargetGroup> targetGroups = Entities.getTargets().getLatest().getGroups();
         List<TargetGroup> groups = context.get("targetGroupList", List.class);
 
         for (TargetGroup uploadedGroup : targetGroups) {
             int count = 0;
             for (TargetGroup group : groups) {
                 if (uploadedGroup.getName().equals(group.getName())) {
-                    context.entities().getTargetGroups().updateEntity(uploadedGroup, group);
+                    Entities.getTargetGroups().updateEntity(uploadedGroup, group);
                     count += 1;
                 }
             }

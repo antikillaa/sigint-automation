@@ -2,11 +2,12 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import app_context.entities.Entities;
+import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import http.requests.rfi.*;
 import json.JsonCoverter;
 import json.RsClient;
-import model.AppContext;
 import model.FileAttachment;
 import model.InformationRequest;
 import model.rfi.RFISearchResults;
@@ -23,15 +24,14 @@ import java.util.List;
 public class RFIService implements EntityService<InformationRequest> {
 
     private static RsClient rsClient = new RsClient();
-    private static AppContext context = AppContext.getContext();
     Logger log = Logger.getRootLogger();
-    private final String sigintHost = context.environment().getSigintHost();
+    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();;
 
 
     private void readRFIFromResponse(Response response) {
         InformationRequest createdRFI = JsonCoverter.readEntityFromResponse(response, InformationRequest.class, "result");
         if (createdRFI != null) {
-            context.entities().getRFIs().addOrUpdateEntity(createdRFI);
+            Entities.getRFIs().addOrUpdateEntity(createdRFI);
         }
     }
 
@@ -74,7 +74,7 @@ public class RFIService implements EntityService<InformationRequest> {
         Response response = rsClient.delete(sigintHost + deleteRequest.getURI(), deleteRequest.getCookie());
         if (response.getStatus() == 200) {
             try {
-                context.entities().getRFIs().removeEntity(entity);
+                Entities.getRFIs().removeEntity(entity);
             } catch (NullReturnException e) {
                 log.warn("Was unable to remove entity with id " + entity.getId() + " as it" +
                         "doesn't in the list");

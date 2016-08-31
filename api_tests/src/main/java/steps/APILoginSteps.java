@@ -1,9 +1,10 @@
 package steps;
 
+import app_context.RunContext;
 import controllers.APILogin;
 import http.ErrorResponse;
 import json.JsonCoverter;
-import model.AppContext;
+import model.User;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -15,7 +16,7 @@ import java.io.IOException;
 
 public class APILoginSteps {
 
-    private static AppContext context = AppContext.getContext();
+    private static RunContext runContext = RunContext.get();
     private static Logger log = Logger.getRootLogger();
     private static APILogin login = new APILogin();
     private static GlobalSteps globalSteps = new GlobalSteps();
@@ -23,27 +24,34 @@ public class APILoginSteps {
 
     @Given("I sign in as $role user")
     public void signInGlobal(String role) {
-        setUser(role);
-        signInCreds("correct");
+        signInCreds(role);
         checkResponseCode("200");
-
+    
     }
-
-    @Given("as $role user")
-    public void setUser(String role) {
-        globalSteps.setUserToContext(role);
+    
+    private void signInCreds(String role) {
+        User user = GlobalSteps.getUserByRole(role);
+        login.signInAsUser(user);
     }
-
-    @When("I sent sign in request with $validness credentials")
-    public void signInCreds(String validness) {
-        login.signInWithCrendentials(validness);
+    
+    @When("I sent sign in request as $role user with correct credentials")
+    public void signInasCorrectUser(String role) {
+        signInCreds(role);
+    }
+    
+    @When("I sent sign in request as $role user with incorrect credentials")
+    public void signInAsIncorrectUser(String role) {
+        User user = new User();
+        user.setName("test");
+        user.setPassword("test");
+        login.signInAsUser(user);
     }
 
     @Then("I got response code $real")
     public void checkResponseCode(String real) {
         log.info("Checking response code");
         Integer actual;
-        actual = context.get("code", Integer.class);
+        actual = runContext.get("code", Integer.class);
         Integer expected = Integer.valueOf(real);
         Assert.assertEquals("Incorrect return codes!", expected, actual);
 
@@ -52,7 +60,7 @@ public class APILoginSteps {
     @Then("Error message is $message")
     public void checkErrorMessage(String message) throws IOException {
         log.info("Verifying error message");
-        ErrorResponse response = JsonCoverter.fromJsonToObject(context.get("message", String.class),
+        ErrorResponse response = JsonCoverter.fromJsonToObject(runContext.get("message", String.class),
                 ErrorResponse.class);
         Assert.assertTrue(response.getMessage().toLowerCase().equals(message.toLowerCase()));
 

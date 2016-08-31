@@ -10,8 +10,6 @@ And Generate 3 SSMS
 
 
 Scenario: API.Target matching by phone number
-Meta:
-@wip
 Given I sign in as admin user
 And data source with <sourceType> and <recordType> exists
 And targets with phones exists

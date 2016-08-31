@@ -21,8 +21,7 @@ import static conditions.Conditions.equals;
 import static conditions.Conditions.isTrue;
 
 public class APIUploadFilesSteps extends APISteps {
-
-    private AppContext context = AppContext.getContext();
+    
     private Logger log = Logger.getLogger(APIUploadFilesSteps.class);
     private UploadFilesService service = new UploadFilesService();
 

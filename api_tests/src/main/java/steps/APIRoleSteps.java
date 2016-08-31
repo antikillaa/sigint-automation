@@ -1,5 +1,6 @@
 package steps;
 
+import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
@@ -27,7 +28,7 @@ public class APIRoleSteps extends APISteps {
 
     @Then("Created role is correct")
     public void createdRoleIsCorrect() throws NullReturnException {
-        Role createdRole = context.entities().getRoles().getLatest();
+        Role createdRole = Entities.getRoles().getLatest();
         Role requestRole = context.get("requestRole", Role.class);
 
         Verify.shouldBe(Conditions.equals.elements(createdRole, requestRole));

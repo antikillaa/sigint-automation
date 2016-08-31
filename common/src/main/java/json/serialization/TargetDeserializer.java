@@ -1,13 +1,14 @@
 package json.serialization;
 
+import app_context.entities.Entities;
 import errors.NullReturnException;
-import model.AppContext;
 import model.TargetGroup;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.DeserializationContext;
 import org.codehaus.jackson.map.JsonDeserializer;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,7 +24,7 @@ public class TargetDeserializer extends JsonDeserializer<List<TargetGroup>> {
             JsonNode groupNode = iter.next();
             String targetGroupId = groupNode.get("id").getTextValue();
             try {
-                TargetGroup targetGroup = AppContext.getContext().entities().getTargetGroups().getEntity(targetGroupId);
+                TargetGroup targetGroup = Entities.getTargetGroups().getEntity(targetGroupId);
                 targetGroups.add(targetGroup);
             } catch (NullReturnException e) {
                 throw new AssertionError("Target group with id:"+targetGroupId+" is not found!");

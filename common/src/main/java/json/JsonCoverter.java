@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dm on 3/24/16.
@@ -51,6 +52,23 @@ public class JsonCoverter {
         }
         return jsonString;
     }
+    
+    public static Map<String,String > loadJsonToStringMap(String filename) {
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        InputStream entityList = classloader.getResourceAsStream(filename);
+        if (entityList == null) {
+            log.warn("Unable to get list of entities from file:" + filename);
+            return null;
+        }
+        MapType mapType = JsonCoverter.constructMapTypeToValue(String.class);
+        try {
+            return JsonCoverter.mapper.readValue(entityList, mapType);
+            
+        } catch (IOException e) {
+            log.warn("Cannot load list of entities");
+            return null;
+        }
+    }
 
 
     public static MapType constructMapTypeToValue( Class<?> valueClass){
@@ -69,7 +87,7 @@ public class JsonCoverter {
                     +object.getClass()+"to JSON string");
             e.printStackTrace();
         }
-        throw new NullReturnException("Error converting json string to object");
+        return null;
     }
 
     public static <T> T fromJsonToObject(String jsonString, Class<T> userClass) {
@@ -78,9 +96,9 @@ public class JsonCoverter {
             return mapper.readValue(jsonString, userClass);
         } catch (IOException | NullPointerException e) {
             log.error("Error when converting json string:"+jsonString+" to object:"+userClass);
-            e.printStackTrace();
+            log.trace(e.getMessage(), e);
         }
-        throw new AssertionError("Error converting json string to object");
+        return null;
     }
 
     public  static <T >List<T> fromJsonToObjectsList(String jsonString, Class<T[]> userClass)

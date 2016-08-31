@@ -1,6 +1,6 @@
 package emailing.report.email_senders;
 
-import model.AppContext;
+import app_context.AppContext;
 import org.apache.log4j.Logger;
 
 import javax.mail.Message;

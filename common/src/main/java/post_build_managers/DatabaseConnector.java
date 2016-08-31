@@ -1,6 +1,6 @@
 package post_build_managers;
 
-import model.AppContext;
+import app_context.properties.G4Properties;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -55,7 +55,7 @@ import java.util.Properties;
     private void initVariables() throws IOException {
         Properties database = new Properties();
         database.load(getClass().getClassLoader().getResourceAsStream("database.properties"));
-        this.host = AppContext.getContext().environment().getRemoteHub();
+        this.host = G4Properties.getJenkinsProperties().getHost();
         this.user = database.getProperty("user");
         this.password = database.getProperty("password");
         this.database = database.getProperty("post_build_managers");

@@ -6,7 +6,7 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import controllers.PageControllerFactory;
 import controllers.reports.form_page.ReportFormFactoryController;
-import model.AppContext;
+import app_context.AppContext;
 import model.Record;
 import model.Report;
 import model.User;

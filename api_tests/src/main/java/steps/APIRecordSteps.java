@@ -1,5 +1,6 @@
 package steps;
 
+import app_context.entities.Entities;
 import conditions.Verify;
 import model.Record;
 import org.apache.log4j.Logger;
@@ -18,7 +19,7 @@ public class APIRecordSteps extends APISteps {
     @When("I send create manual record - $recordType")
     public void createManualRecordVoice(String recordType) {
         Record record = new Record();
-        record.setSourceId(RandomGenerator.getRandomItemFromList(context.getDictionary().getSources()).getId());
+        record.setSourceId(RandomGenerator.getRandomItemFromList(appContext.getDictionary().getSources()).getId());
         if (recordType.equals("SMS")) {
             record.generateSMS();
         } else if (recordType.equals("Voice")) {
@@ -37,7 +38,7 @@ public class APIRecordSteps extends APISteps {
     @Then("Created record is correct")
     public void createdRecordIsCorrect() {
         Record requestRecord = context.get("requestRecord", Record.class);
-        Record createdRecord = context.entities().getRecords().getLatest();
+        Record createdRecord = Entities.getRecords().getLatest();
 
         requestRecord.setState("PROCESSED");
         Verify.shouldBe(equals.elements(createdRecord, requestRecord));

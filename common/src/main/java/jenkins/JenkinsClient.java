@@ -1,12 +1,12 @@
 package jenkins;
 
+import app_context.properties.G4Properties;
+import app_context.properties.JenkinsProperties;
 import json.JsonCoverter;
 import json.RsClient;
-import model.AppContext;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.core.Response;
-import java.util.Properties;
 
 class JenkinsClient {
     
@@ -18,11 +18,11 @@ class JenkinsClient {
     private Logger logger = Logger.getLogger(JenkinsClient.class);
     
     JenkinsClient() {
-        Properties jenkinsConfig  = AppContext.getContext().getJenkinsProperties();
-        this.jenkinsURL = jenkinsConfig.getProperty("jenkinsHost");
-        this.jenkinsUsername = jenkinsConfig.getProperty("username");
-        this.jenkinsPassword = jenkinsConfig.getProperty("password");
-        this.jobName = jenkinsConfig.getProperty("jobName");
+        JenkinsProperties jenkinsConfig  = G4Properties.getJenkinsProperties();
+        this.jenkinsURL = jenkinsConfig.getHost();
+        this.jenkinsUsername = jenkinsConfig.getUsername();
+        this.jenkinsPassword = jenkinsConfig.getPassword();
+        this.jobName = jenkinsConfig.getJobName();
     }
     
     

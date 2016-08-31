@@ -2,11 +2,13 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import app_context.RunContext;
+import app_context.entities.Entities;
+import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import http.requests.groups.GroupsRequest;
 import json.JsonCoverter;
 import json.RsClient;
-import model.AppContext;
 import model.Group;
 import model.PegasusMediaType;
 import org.apache.log4j.Logger;
@@ -16,9 +18,9 @@ import javax.ws.rs.core.Response;
 public class GroupService implements EntityService<Group> {
 
     private static RsClient rsClient = new RsClient();
-    private static AppContext context = AppContext.getContext();
+    private static RunContext context = RunContext.get();
     private Logger log = Logger.getLogger(GroupService.class);
-    private final String sigintHost = context.environment().getSigintHost();
+    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
 
     public int add(Group entity) {
         log.info("Creating new Group");
@@ -37,7 +39,7 @@ public class GroupService implements EntityService<Group> {
 
         Group createdGroup = JsonCoverter.fromJsonToObject(jsonString, Group.class);
         if (createdGroup != null) {
-            context.entities().getGroups().addOrUpdateEntity(createdGroup);
+            Entities.getGroups().addOrUpdateEntity(createdGroup);
         }
         return response.getStatus();
     }
@@ -67,7 +69,7 @@ public class GroupService implements EntityService<Group> {
 
         Group updatedGroup = JsonCoverter.fromJsonToObject(jsonString, Group.class);
         if (updatedGroup != null) {
-            context.entities().getGroups().addOrUpdateEntity(updatedGroup);
+            Entities.getGroups().addOrUpdateEntity(updatedGroup);
         }
         return response.getStatus();
     }

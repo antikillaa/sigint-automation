@@ -2,6 +2,9 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import app_context.RunContext;
+import app_context.entities.Entities;
+import app_context.properties.G4Properties;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
@@ -23,9 +26,9 @@ import java.util.List;
 public class TargetService implements EntityService<Target> {
 
     private static RsClient rsClient = new RsClient();
-    private static AppContext context = AppContext.getContext();
     private Logger log = Logger.getLogger(TargetService.class);
-    private final String sigintHost = context.environment().getSigintHost();
+    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
+    private RunContext context = RunContext.get();
 
 
     public int add(Target entity) {
@@ -36,7 +39,7 @@ public class TargetService implements EntityService<Target> {
         Response response = rsClient.put(sigintHost + request.getURI(), entity, request.getCookie());
         Target target = JsonCoverter.readEntityFromResponse(response, Target.class, "id");
         if (target != null) {
-            context.entities().getTargets().addOrUpdateEntity(target);
+            Entities.getTargets().addOrUpdateEntity(target);
         } else {
             log.error("Add new target process was failed");
             throw new AssertionError("Add new target process was failed");
@@ -71,7 +74,7 @@ public class TargetService implements EntityService<Target> {
 
         if (response.getStatus() == 200) {
             try {
-                context.entities().getTargets().removeEntity(entity);
+                Entities.getTargets().removeEntity(entity);
             } catch (NullReturnException e) {
                 log.warn("Was unable to remove entity with id:" + entity.getId() + " as it doesn't in the list");
             }
@@ -105,7 +108,7 @@ public class TargetService implements EntityService<Target> {
         Result result = JsonCoverter.fromJsonToObject(response.readEntity(String.class), Result.class);
         if (result != null) {
             Verify.isTrue(Conditions.equals.elements(result.getResult(), "ok"));
-            context.entities().getTargets().addOrUpdateEntity(entity);
+            Entities.getTargets().addOrUpdateEntity(entity);
         } else {
             log.error("Error! Update target process was failed");
             throw new AssertionError("Error! Update target process was failed");

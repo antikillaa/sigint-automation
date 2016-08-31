@@ -2,11 +2,12 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import app_context.entities.Entities;
+import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import http.requests.UserRequest;
 import json.JsonCoverter;
 import json.RsClient;
-import model.AppContext;
 import model.PegasusMediaType;
 import model.User;
 import org.apache.log4j.Logger;
@@ -18,9 +19,8 @@ import java.util.List;
 public class UserService implements EntityService<User> {
 
     private static RsClient rsClient = new RsClient();
-    private static AppContext context = AppContext.getContext();
     Logger log = Logger.getLogger(UserService.class);
-    private final String sigintHost = context.environment().getSigintHost();
+    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
     private UserRequest request = new UserRequest();
 
     public int add(User entity) {
@@ -42,7 +42,7 @@ public class UserService implements EntityService<User> {
 
         User createdUser = JsonCoverter.fromJsonToObject(jsonString, User.class);
         if (createdUser != null) {
-            context.entities().getUsers().addOrUpdateEntity(createdUser.setPassword(entity.getPassword()));
+            Entities.getUsers().addOrUpdateEntity(createdUser.setPassword(entity.getPassword()));
         }
         return response.getStatus();
     }
@@ -76,8 +76,7 @@ public class UserService implements EntityService<User> {
 
         User user = JsonCoverter.fromJsonToObject(jsonString, User.class);
         if (user != null) {
-            context.entities().getUsers().addOrUpdateEntity(user);
-            context.setLoggedUser(user);
+            Entities.getUsers().addOrUpdateEntity(user);
         }
         return user;
     }

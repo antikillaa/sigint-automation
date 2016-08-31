@@ -1,7 +1,6 @@
 package reporter;
 
 import failure_strategy.Statistic;
-import model.AppContext;
 import model.SelenideContext;
 import org.apache.log4j.Logger;
 import org.jbehave.core.model.*;
@@ -24,7 +23,7 @@ public class AllureReporter implements StoryReporter {
     private final Map<String, String> suites = new HashMap<>();
     private String uid;
     static Logger log = Logger.getRootLogger();
-    private SelenideContext context = AppContext.getContext().getSelenideContext();
+    private SelenideContext context = SelenideContext.get();
     
 
     @Override
@@ -70,7 +69,7 @@ public class AllureReporter implements StoryReporter {
 
     @Override
     public void failed(String step, Throwable cause) {
-        if (!Statistic.hasOpenedBug(context.getScenarioTitle())) {
+        if (!new Statistic().hasOpenedBug(context.getScenarioTitle())) {
             allure.fire(new StepFailureEvent().withThrowable(cause.getCause()));
             makeStepFailedAttachment();
             allure.fire(new TestCaseFailureEvent().withThrowable(cause.getCause()));

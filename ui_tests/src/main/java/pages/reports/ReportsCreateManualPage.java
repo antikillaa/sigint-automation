@@ -3,7 +3,7 @@ package pages.reports;
 import blocks.context.Context;
 import elements.ReportSelect;
 import elements.Select;
-import model.AppContext;
+import app_context.AppContext;
 import org.openqa.selenium.By;
 
 public class ReportsCreateManualPage extends ReportsPage {

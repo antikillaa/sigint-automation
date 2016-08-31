@@ -2,8 +2,8 @@ package steps;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import app_context.entities.Entities;
 import conditions.Verify;
-import model.AppContext;
 import model.InformationRequest;
 import model.rfi.RFISearchFilter;
 import org.apache.log4j.Logger;
@@ -23,14 +23,13 @@ import static conditions.Conditions.isTrue;
 public class APIRFISearchSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APIRFISearchSteps.class);
-    private AppContext context = AppContext.getContext();
     private RFIService service = new RFIService();
 
 
     @When("I search RFI by $criteria and value $value")
     public void SearchRFIbyCriteria(@Named("criteria") String criteria, @Named("value") String value) throws ParseException {
         log.info("Start search by criteria: "+ criteria);
-        InformationRequest RFI = context.entities().getRFIs().getLatest();
+        InformationRequest RFI = Entities.getRFIs().getLatest();
 
         if (criteria.toLowerCase().equals("state")) {
             value = value.equals("random") ? RFI.getState() : value;
@@ -90,7 +89,7 @@ public class APIRFISearchSteps extends APISteps {
 
     @When("I put RFI to search query")
     public void putRFI() {
-        InformationRequest RFI = context.entities().getRFIs().getLatest();
+        InformationRequest RFI = Entities.getRFIs().getLatest();
         context.put("searchRFI", RFI);
     }
 
