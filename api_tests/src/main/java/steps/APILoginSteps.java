@@ -28,10 +28,22 @@ public class APILoginSteps {
         checkResponseCode("200");
     
     }
-
-    @When("I sent sign in request as $role user")
-    public void signInCreds(String role) {
+    
+    private void signInCreds(String role) {
         User user = GlobalSteps.getUserByRole(role);
+        login.signInAsUser(user);
+    }
+    
+    @When("I sent sign in request as $role user with correct credentials")
+    public void signInasCorrectUser(String role) {
+        signInCreds(role);
+    }
+    
+    @When("I sent sign in request as $role user with incorrect credentials")
+    public void signInAsIncorrectUser(String role) {
+        User user = new User();
+        user.setName("test");
+        user.setPassword("test");
         login.signInAsUser(user);
     }
 

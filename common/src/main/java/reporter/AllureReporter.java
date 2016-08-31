@@ -69,7 +69,7 @@ public class AllureReporter implements StoryReporter {
 
     @Override
     public void failed(String step, Throwable cause) {
-        if (!Statistic.hasOpenedBug(context.getScenarioTitle())) {
+        if (!new Statistic().hasOpenedBug(context.getScenarioTitle())) {
             allure.fire(new StepFailureEvent().withThrowable(cause.getCause()));
             makeStepFailedAttachment();
             allure.fire(new TestCaseFailureEvent().withThrowable(cause.getCause()));

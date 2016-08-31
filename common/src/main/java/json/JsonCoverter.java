@@ -87,7 +87,7 @@ public class JsonCoverter {
                     +object.getClass()+"to JSON string");
             e.printStackTrace();
         }
-        throw new NullReturnException("Error converting json string to object");
+        return null;
     }
 
     public static <T> T fromJsonToObject(String jsonString, Class<T> userClass) {
@@ -96,9 +96,9 @@ public class JsonCoverter {
             return mapper.readValue(jsonString, userClass);
         } catch (IOException | NullPointerException e) {
             log.error("Error when converting json string:"+jsonString+" to object:"+userClass);
-            e.printStackTrace();
+            log.trace(e.getMessage(), e);
         }
-        throw new AssertionError("Error converting json string to object");
+        return null;
     }
 
     public  static <T >List<T> fromJsonToObjectsList(String jsonString, Class<T[]> userClass)
