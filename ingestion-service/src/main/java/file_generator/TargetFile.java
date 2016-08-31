@@ -1,6 +1,7 @@
 package file_generator;
 
 import abs.EntityList;
+import model.G4File;
 import model.Target;
 import model.TargetGroup;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -8,7 +9,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,12 +17,12 @@ import java.util.*;
 public class TargetFile extends FileService {
 
     @Override
-    public File write(EntityList entityList) {
+    public G4File write(EntityList entityList) {
         List<Target> targets = entityList.getEntities();
         return write(targets);
     }
 
-    public File write(List<Target> targets) {
+    public G4File write(List<Target> targets) {
 
         Map<Integer, Object[]> data = new HashMap<>();
 
@@ -79,9 +79,9 @@ public class TargetFile extends FileService {
             }
         }
 
-        File file = null;
+        G4File file = null;
         try {
-            file = new File("Targets-" + new Date().getTime() + ".xls");
+            file = new G4File("Targets-" + new Date().getTime() + ".xls");
             log.info("Write targets to xls file: " + file.getAbsolutePath());
             FileOutputStream out = new FileOutputStream(file);
             workbook.write(out);
@@ -94,7 +94,7 @@ public class TargetFile extends FileService {
     }
 
     @Override
-    public EntityList read(File file) {
+    public EntityList read(G4File file) {
         log.info("Read xls file: " + file.getName());
         try {
             FileInputStream inputStream = new FileInputStream(file);
@@ -137,7 +137,7 @@ public class TargetFile extends FileService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // TODO
+        // TODO return list of entity
         return null;
     }
 }

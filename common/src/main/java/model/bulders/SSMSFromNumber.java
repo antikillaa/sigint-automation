@@ -1,8 +1,8 @@
 package model.bulders;
 
-class SSMSFromTarget extends SSMSBuilder {
+class SSMSFromNumber extends SSMSBuilder {
 
-    SSMSFromTarget(String targetPhoneNumber) {
+    SSMSFromNumber(String targetPhoneNumber) {
         setPattern(targetPhoneNumber);
     }
 

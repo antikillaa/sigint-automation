@@ -1,10 +1,11 @@
 package file_generator;
 
 import abs.EntityList;
+import model.G4File;
+import model.PegasusMediaType;
 import model.SSMS;
 import utils.FileHelper;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -40,13 +41,14 @@ public class SSMSFile extends FileService {
     }
 
     @Override
-    public File write(EntityList entityList) {
+    public G4File write(EntityList entityList) {
         List<SSMS> ssmsList = entityList.getEntities();
         return write(ssmsList);
     }
 
-    public File write(List<SSMS> ssmsList) {
-        File file = new File("SSMS" + new Date().getTime() + ".csv");
+    public G4File write(List<SSMS> ssmsList) {
+        G4File file = new G4File("SSMS" + new Date().getTime() + ".csv");
+        file.setMediaType(PegasusMediaType.TEXT_CSV_TYPE);
         log.info("File for s-sms created: " + file.getAbsolutePath());
 
         for (SSMS ssms : ssmsList) {
@@ -58,7 +60,7 @@ public class SSMSFile extends FileService {
     }
 
     @Override
-    public EntityList read(File file) {
+    public EntityList read(G4File file) {
         return null;
     }
 

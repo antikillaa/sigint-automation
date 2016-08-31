@@ -13,7 +13,6 @@ import services.UploadFilesService;
 import utils.DateHelper;
 import utils.Parser;
 
-import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -29,9 +28,9 @@ public class APIUploadFilesSteps extends APISteps {
 
     @When("I send upload $sType - $rType data file request")
     public void uploadFile(String sType, String rType) {
-        File file = context.get("ssmsFile", File.class);
+        G4File file = context.get("ssmsFile", G4File.class);
 
-        int code = service.upload(file, PegasusMediaType.TEXT_CSV_TYPE);
+        int code = service.upload(file);
         context.put("code", code);
 
         Calendar timeout = Calendar.getInstance();

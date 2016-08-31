@@ -2,34 +2,27 @@ package file_generator;
 
 import abs.EntityList;
 import model.DuSubscriberEntry;
+import model.G4File;
 import utils.FileHelper;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 public class DuFile extends FileService {
 
     @Override
-    public EntityList read(File file) {
+    public EntityList read(G4File file) {
         return null;
     }
 
     @Override
-    public File write(EntityList entityList) {
+    public G4File write(EntityList entityList) {
         List<DuSubscriberEntry> duSubscriberEntries = entityList.getEntities();
         return write(duSubscriberEntries);
     }
 
-    public File write(List<DuSubscriberEntry> entries) {
-
-        File file = null;
-        try {
-            file = File.createTempFile("DuSubscriberEntry", ".csv");
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            throw new Error("Unable to create new 'DuSubscriberEntry' .csv file");
-        }
+    public G4File write(List<DuSubscriberEntry> entries) {
+        G4File file = new G4File("DuSubscriberEntry" + new Date() + ".csv");
 
         for (DuSubscriberEntry entry : entries) {
             FileHelper.writeLineToFile(file, entryToString(entry));

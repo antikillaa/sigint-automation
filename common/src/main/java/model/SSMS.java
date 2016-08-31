@@ -464,8 +464,7 @@ public class SSMS extends TeelaEntity {
 
         setPattern("");
 
-        //String toNumber = new ArrayList<>(RandomGenerator.generatePhones(1)).get(0);
-        String toNumber = RandomStringUtils.randomNumeric(12);
+        String toNumber = RandomGenerator.generatePhones(1).iterator().next();
         setCalled(toNumber);
         setCalled_non(1);
         setCalled_mod(toNumber);
@@ -476,8 +475,7 @@ public class SSMS extends TeelaEntity {
         setCalled_cc("");
         setCalled_ac("");
 
-        //String fromNumber = new ArrayList<>(RandomGenerator.generatePhones(1)).get(0);
-        String fromNumber = RandomStringUtils.randomNumeric(12);
+        String fromNumber = RandomGenerator.generatePhones(1).iterator().next();
         setCaller(fromNumber);
         setCaller_non(1);
         setCaller_mod(fromNumber);
@@ -487,8 +485,7 @@ public class SSMS extends TeelaEntity {
         setCaller_cc("");
         setCaller_ac("");
 
-        //String ssmsNumber = new ArrayList<>(RandomGenerator.generatePhones(1)).get(0);
-        String ssmsNumber = RandomStringUtils.randomNumeric(6);
+        String ssmsNumber = RandomGenerator.generatePhones(1).iterator().next();
         setSmsc(ssmsNumber);
         setSmsc_non(1);
         setSmsc_mod(ssmsNumber);
