@@ -1,9 +1,9 @@
 package emailing.report;
 
+import app_context.properties.G4Properties;
 import emailing.email.EmailFactory;
 import emailing.email.HtmlEmail;
 import emailing.report.email_senders.EmailSenders;
-import app_context.AppContext;
 import org.apache.log4j.Logger;
 
 public class EmailWorker {
@@ -11,7 +11,7 @@ public class EmailWorker {
     private static Logger logger = Logger.getLogger(EmailWorker.class);
     
     public static void main(String[] args) {
-        Boolean shouldEmail = Boolean.valueOf(AppContext.getContext().getGeneralProperties().getProperty("email"));
+        Boolean shouldEmail = Boolean.valueOf(G4Properties.getRunProperties().shouldEmail());
         if (shouldEmail) {
             HtmlEmail htmlEmail;
             try {

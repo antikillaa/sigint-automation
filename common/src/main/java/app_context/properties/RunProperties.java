@@ -34,4 +34,6 @@ public class RunProperties extends ApplicationProperty {
     public String getWebBrowser() {
         return getProperty().getProperty("webBrowser");
     }
+    
+    public String getEmailSender() {return getProperty().getProperty("emailSender");}
 }
