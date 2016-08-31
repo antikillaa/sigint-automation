@@ -1,8 +1,8 @@
 package model.bulders;
 
-class SSMSToTarget extends SSMSBuilder {
+class SSMSToNumber extends SSMSBuilder {
 
-    SSMSToTarget(String pattern) {
+    SSMSToNumber(String pattern) {
         setPattern(pattern);
     }
 

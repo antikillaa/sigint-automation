@@ -4,7 +4,16 @@ import abs.EntityList;
 import errors.NullReturnException;
 import model.Target;
 
+import java.util.List;
+
 public class TargetsList extends EntityList<Target> {
+
+    public TargetsList(){
+    }
+
+    public TargetsList(List<Target> targets) {
+        super(targets);
+    }
 
     @Override
     public Target getEntity(String param) throws NullReturnException {

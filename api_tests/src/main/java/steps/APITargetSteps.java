@@ -6,6 +6,7 @@ import errors.NullReturnException;
 import file_generator.TargetFile;
 import json.JsonCoverter;
 import model.*;
+import model.lists.TargetsList;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
@@ -320,15 +321,6 @@ public class APITargetSteps extends APISteps {
         TargetFilter searchFilter = new TargetFilter().filterBy("empty", "random");
         List<Target> targets = service.list(searchFilter).getEntities();
 
-        if (targets.isEmpty()) {
-            Target target = new Target().generate();
-            int response = service.add(target);
-
-            Verify.shouldBe(equals.elements(response, 200));
-
-            targets.add(target);
-        }
-
         // remove without phone
         Iterator<Target> i = targets.iterator();
         while (i.hasNext()) {
@@ -338,7 +330,16 @@ public class APITargetSteps extends APISteps {
             }
         }
 
-        context.put("targetList", targets);
+        if (targets.isEmpty()) {
+            Target target = new Target().generate();
+            int response = service.add(target);
+
+            Verify.shouldBe(equals.elements(response, 200));
+
+            targets.add(target);
+        }
+
+        context.entities().setTargets(new TargetsList(targets));
     }
 
 }
