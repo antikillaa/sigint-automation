@@ -1,6 +1,7 @@
 package services;
 
 import abs.SearchFilter;
+import app_context.AppContext;
 import app_context.RunContext;
 import app_context.properties.G4Properties;
 import errors.NullReturnException;
@@ -8,10 +9,8 @@ import http.requests.UploadFilesRequest;
 import http.requests.UploadRequest;
 import json.JsonCoverter;
 import json.RsClient;
-import model.FileMeta;
+import model.*;
 import model.Process;
-import model.UploadDetails;
-import model.UploadSearchResult;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.core.MediaType;
@@ -56,7 +55,7 @@ public class UploadFilesService {
 
     private FileMeta initFileMeta(G4File file) {
         Source source = context.get("source", Source.class);
-        User user = context.getLoggedUser();
+        LoggedUser user = AppContext.get().getLoggedUser();
 
         Meta meta = new Meta();
         meta.setFileName(file.getName());

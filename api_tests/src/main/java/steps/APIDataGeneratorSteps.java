@@ -2,13 +2,12 @@ package steps;
 
 import abs.EntityList;
 import file_generator.FileGenerator;
-import model.G4File;
-import model.RecordType;
-import model.SSMS;
-import model.SourceType;
+import model.*;
 import model.bulders.SSMSGenerator;
-import model.lists.TargetsList;
 import org.jbehave.core.annotations.Given;
+import utils.RandomGenerator;
+
+import java.util.List;
 
 public class APIDataGeneratorSteps extends APISteps {
 
@@ -26,11 +25,10 @@ public class APIDataGeneratorSteps extends APISteps {
             case Strategic:
                 switch (recordType) {
                     case SMS:
-                        TargetsList targetList = context.entities().getTargets();
-
                         SSMSGenerator ssmsGenerator = new SSMSGenerator();
+                        List<Target> targets = context.get("targets", List.class);
                         EntityList<SSMS> ssmsList = ssmsGenerator
-                                .setTarget(targetList.random())
+                                .setTarget(RandomGenerator.getRandomItemFromList(targets))
                                 .produceList(numRecords, numFromTarget, numToTarget);
 
                         G4File file = fileGenerator.SSMS().write(ssmsList);

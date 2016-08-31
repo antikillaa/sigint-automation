@@ -7,7 +7,6 @@ import errors.NullReturnException;
 import file_generator.TargetFile;
 import json.JsonCoverter;
 import model.*;
-import model.lists.TargetsList;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
@@ -335,11 +334,9 @@ public class APITargetSteps extends APISteps {
             int response = service.add(target);
 
             Verify.shouldBe(equals.elements(response, 200));
-
             targets.add(target);
         }
-
-        context.entities().setTargets(new TargetsList(targets));
+        context.put("targets", targets);
     }
 
 }
