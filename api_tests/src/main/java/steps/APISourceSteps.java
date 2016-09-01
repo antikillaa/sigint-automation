@@ -97,7 +97,7 @@ public class APISourceSteps extends APISteps {
         SourceType sourceType = source.getType();
         source = source.generate()
                 .setType(sourceType)
-                .setName(sourceType.toLetterCode() + source.getRecordType() + new Date().getTime());
+                .setName(sourceType.toLetterCode() + "-" + source.getRecordType() + "-" + new Date().getTime());
 
         int responseCode = service.update(source);
 
