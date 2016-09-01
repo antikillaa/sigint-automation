@@ -64,8 +64,7 @@ public class SourceService implements EntityService<Source> {
 
         Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
 
-        String jsonResponse = response.readEntity(String.class);
-        SourceListResult result = JsonCoverter.fromJsonToObject(jsonResponse, SourceListResult.class);
+        SourceListResult result = JsonCoverter.readEntityFromResponse(response, SourceListResult.class);
 
         return result.getResult();
     }

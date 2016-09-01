@@ -56,7 +56,7 @@ public class APISourceSteps extends APISteps {
 
         boolean contains = false;
         for (Source entity : sources) {
-            if (Conditions.equals.elements(entity, source).check()) {
+            if (entity.getName().equals(source.getName())) {
                 contains = true;
                 break;
             }
@@ -158,9 +158,7 @@ public class APISourceSteps extends APISteps {
         Source source = new Source().generate()
                 .setType(sourceType)
                 .setRecordType(recordType)
-                .setName(
-                        sourceType.toLetterCode() + "-" + recordType.toEnglishName() + "-0"
-                );
+                .setName(sourceType.toLetterCode() + "-" + recordType.toEnglishName());
 
         service.add(source);
         context.put("source", source);
