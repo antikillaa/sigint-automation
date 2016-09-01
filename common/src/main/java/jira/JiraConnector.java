@@ -60,7 +60,7 @@ public class JiraConnector {
 
     public String getProjectId(String name) throws NullReturnException {
         log.debug("Getting project id based on name:"+ name);
-        String jsonString = client.get(properties.getHost() +
+        String jsonString = client.get(properties.getServer() +
                 "/rest/api/latest/project", getCookie()).readEntity(String.class);
         List<JiraProject> projects = JsonCoverter.fromJsonToObjectsList(
                 jsonString, JiraProject[].class);
