@@ -14,6 +14,7 @@ import services.SourceService;
 import utils.RandomGenerator;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static conditions.Conditions.equals;
@@ -93,9 +94,10 @@ public class APISourceSteps extends APISteps {
         Source source = Entities.getSources().getLatest();
 
         // update all fields
-        SourceType type = source.getType();
-        source = source.generate();
-        source.setType(type);
+        SourceType sourceType = source.getType();
+        source = source.generate()
+                .setType(sourceType)
+                .setName(sourceType.toLetterCode() + source.getRecordType() + new Date().getTime());
 
         int responseCode = service.update(source);
 
