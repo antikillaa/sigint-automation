@@ -14,6 +14,7 @@ import services.SourceService;
 import utils.RandomGenerator;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static conditions.Conditions.equals;
@@ -56,7 +57,7 @@ public class APISourceSteps extends APISteps {
 
         boolean contains = false;
         for (Source entity : sources) {
-            if (Conditions.equals.elements(entity, source).check()) {
+            if (entity.getName().equals(source.getName())) {
                 contains = true;
                 break;
             }
@@ -93,9 +94,10 @@ public class APISourceSteps extends APISteps {
         Source source = Entities.getSources().getLatest();
 
         // update all fields
-        SourceType type = source.getType();
-        source = source.generate();
-        source.setType(type);
+        SourceType sourceType = source.getType();
+        source = source.generate()
+                .setType(sourceType)
+                .setName(sourceType.toLetterCode() + "-" + source.getRecordType() + "-" + new Date().getTime());
 
         int responseCode = service.update(source);
 
@@ -158,9 +160,7 @@ public class APISourceSteps extends APISteps {
         Source source = new Source().generate()
                 .setType(sourceType)
                 .setRecordType(recordType)
-                .setName(
-                        sourceType.toLetterCode() + "-" + recordType.toEnglishName() + "-0"
-                );
+                .setName(sourceType.toLetterCode() + "-" + recordType.toEnglishName());
 
         service.add(source);
         context.put("source", source);
