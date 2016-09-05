@@ -1,7 +1,7 @@
 package emailing.email;
 
 import app_context.properties.G4Properties;
-import app_context.properties.JiraProperties;
+import app_context.properties.JenkinsProperties;
 import emailing.html_elements.ElementsFabric;
 import emailing.html_elements.HtmlBuilder;
 import emailing.html_elements.HtmlElement;
@@ -12,7 +12,7 @@ import reporter.ReportResults;
 public abstract class EmailContentBuilder {
     
     protected ReportResults results = new Statistic().getResults();
-    protected static JiraProperties connection = G4Properties.getJiraProperties();
+    protected static JenkinsProperties connection = G4Properties.getJenkinsProperties();
     
     protected abstract HtmlElement buildStatusHeader();
     protected abstract void buildBody(HtmlBuilder builder, ReportResults results);
