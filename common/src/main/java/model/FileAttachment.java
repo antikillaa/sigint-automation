@@ -11,7 +11,7 @@ import java.io.IOException;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class FileAttachment {
-
+    
     private String filename;
     private File file;
 

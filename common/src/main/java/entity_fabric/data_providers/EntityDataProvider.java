@@ -1,5 +1,8 @@
 package entity_fabric.data_providers;
 
 public interface EntityDataProvider {
-    Object generate();
+    
+    int dataLength = 10;
+    
+    Object generate(int length);
 }
