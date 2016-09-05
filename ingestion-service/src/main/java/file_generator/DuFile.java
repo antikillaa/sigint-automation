@@ -22,7 +22,7 @@ public class DuFile extends FileService {
     }
 
     public G4File write(List<DuSubscriberEntry> entries) {
-        G4File file = new G4File("DuSubscriberEntry" + new Date() + ".csv");
+        G4File file = new G4File("DuSubscriber" + new Date().getTime() + ".csv");
 
         for (DuSubscriberEntry entry : entries) {
             FileHelper.writeLineToFile(file, entryToString(entry));

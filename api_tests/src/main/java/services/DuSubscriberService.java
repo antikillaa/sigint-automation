@@ -16,7 +16,6 @@ import model.phonebook.DuSubscriberSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -41,7 +40,7 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
         log.debug("Writing DuSubscriberEntry to csv file...");
         File file = new DuFile().write(entries);
 
-        log.info("Upload file with " + entries.size() + " DuSubscriber entries..");
+        log.info("Upload file: " + file.getName() + " with " + entries.size() + " DuSubscriber entries..");
         DuSubscriberRequest request = new DuSubscriberRequest().upload();
         request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         file.deleteOnExit();
