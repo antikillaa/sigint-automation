@@ -31,8 +31,9 @@ class JenkinsClient {
         Response response = client.get(String.format("%s/job/%s/%s/api/json", jenkinsURL, jobName, jobNumber),
                 jenkinsUsername, jenkinsPassword);
         if (response.getStatus()!=200) {
-            logger.error("Got error from jenkins when trying to get job status." +
+            logger.debug("Got error from jenkins when trying to get job status." +
                     "Got code:"+ response.getStatus());
+            return null;
         }
         String json = response.readEntity(String.class);
         JobInfo jobInfo = JsonCoverter.fromJsonToObject(json, JobInfo.class);
