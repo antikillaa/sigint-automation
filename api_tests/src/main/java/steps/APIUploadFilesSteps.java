@@ -33,7 +33,7 @@ public class APIUploadFilesSteps extends APISteps {
         context.put("code", code);
 
         Calendar timeout = Calendar.getInstance();
-        timeout.add(Calendar.MINUTE, 3);
+        timeout.add(Calendar.MINUTE, 11);
         DateHelper.setTimeout(timeout.getTime());
         //{"status":409,"error":"Conflict","message":"File: /S/S-SMS/2016/08/22/testssms.csv - already exists","reason":"FileAlreadyExistsException"}
     }
@@ -43,7 +43,9 @@ public class APIUploadFilesSteps extends APISteps {
         log.info("Check: uploaded file is processed..");
 
         if (DateHelper.isTimeout()) {
-            throw new AssertionError("Terminate by timeout!");
+            String errorMessage = "Uploaded file is not processed. Failed by timeout";
+            log.error(errorMessage);
+            throw new AssertionError(errorMessage);
         }
 
         // get md5 of uploaded file from fileMeta
@@ -55,6 +57,7 @@ public class APIUploadFilesSteps extends APISteps {
             md5 = fileMeta.getMeta().getMd5_sigint();
         }
 
+        // data range for Upload history filter
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, -1);
         Date minDate = calendar.getTime();
