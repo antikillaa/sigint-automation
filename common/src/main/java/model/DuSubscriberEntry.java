@@ -1,37 +1,55 @@
 package model;
 
 import abs.TeelaEntity;
-import org.apache.commons.lang.RandomStringUtils;
+import data_for_entity.data_providers.AlphaNumeric;
+import data_for_entity.data_providers.CountryName;
+import data_for_entity.data_providers.Numeric;
+import data_for_entity.entity_fields_annotations.DataLength;
+import data_for_entity.entity_fields_annotations.DataProvider;
+import data_for_entity.entity_fields_annotations.Ignore;
+import data_for_entity.entity_fields_annotations.StaticValue;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import utils.RandomGenerator;
 
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class DuSubscriberEntry extends TeelaEntity {
-
+    
+    @StaticValue("du")
     private String sourceId;
     private String fileName;
     private Date fileUploadDate;
+    @DataProvider(provider = Numeric.class)
     private String phoneNumber;
     private String title;
+    @Ignore
     private String name; //firstName + " " + middleName + " " + lastName
     private String firstName;
     private String middleName;
     private String lastName;
     private String poBox;
     private String city;
+    @Ignore
     private String address; //city + ", " + poBox
+    @DataProvider(provider = CountryName.class)
     private String nationality;
+    @DataProvider(provider = AlphaNumeric.class)
+    @DataLength(4)
     private String visaType;
+    @DataProvider(provider = Numeric.class)
     private String visaNumber;
+    @DataLength(4)
     private String idType;
+    @DataProvider(provider = Numeric.class)
     private String idNumber;
     private String status;
     private String customerType;
+    @DataProvider(provider =  AlphaNumeric.class)
+    @DataLength(4)
     private String serviceType;
+    @DataProvider(provider = Numeric.class)
     private String customerCode;
 
     public String getSourceId() {
@@ -71,6 +89,9 @@ public class DuSubscriberEntry extends TeelaEntity {
     }
 
     public String getName() {
+        if (name == null) {
+            return this.getFirstName() + " " + this.getMiddleName() + " " + this.getLastName();
+        }
         return name;
     }
 
@@ -125,6 +146,9 @@ public class DuSubscriberEntry extends TeelaEntity {
     }
 
     public String getAddress() {
+        if (address == null) {
+            return this.getCity() + ", " + this.getPoBox();
+        }
         return address;
     }
 
@@ -223,28 +247,28 @@ public class DuSubscriberEntry extends TeelaEntity {
         return this;
     }
 
-    @Override
-    public DuSubscriberEntry generate() {
-        this
-                .setSourceId("du")
-                .setFirstName(RandomStringUtils.randomAlphabetic(8))
-                .setMiddleName(RandomStringUtils.randomAlphabetic(8))
-                .setLastName(RandomStringUtils.randomAlphabetic(8))
-                .setName(this.getFirstName() + " " + this.getMiddleName() + " " + this.getLastName())
-                .setPoBox(RandomStringUtils.randomAlphabetic(10))
-                .setPhoneNumber(RandomStringUtils.randomNumeric(10))
-                .setTitle(RandomStringUtils.randomAlphabetic(10))
-                .setCity(RandomStringUtils.randomAlphabetic(10))
-                .setAddress(this.getCity() + ", " + this.getPoBox())
-                .setNationality(RandomGenerator.getCountryName(RandomGenerator.generateCountryCode()))
-                .setVisaType(RandomStringUtils.randomAlphanumeric(4))
-                .setVisaNumber(RandomStringUtils.randomNumeric(8))
-                .setIdType(RandomStringUtils.randomAlphanumeric(4))
-                .setIdNumber(RandomStringUtils.randomNumeric(8))
-                .setStatus(RandomStringUtils.randomAlphabetic(8))
-                .setCustomerType(RandomStringUtils.randomAlphanumeric(4))
-                .setCustomerCode(RandomStringUtils.randomNumeric(8))
-                .setServiceType(RandomStringUtils.randomAlphanumeric(4));
-        return this;
-    }
+    //@Override
+    //public DuSubscriberEntry generate() {
+    //    this
+                
+                //.setFirstName(RandomStringUtils.randomAlphabetic(8))
+                //.setMiddleName(RandomStringUtils.randomAlphabetic(8))
+                //.setLastName(RandomStringUtils.randomAlphabetic(8))
+                //.setName(this.getFirstName() + " " + this.getMiddleName() + " " + this.getLastName())
+                //.setPoBox(RandomStringUtils.randomAlphabetic(10))
+                //.setPhoneNumber(RandomStringUtils.randomNumeric(10))
+                //.setTitle(RandomStringUtils.randomAlphabetic(10))
+                //.setCity(RandomStringUtils.randomAlphabetic(10))
+                //.setAddress(this.getCity() + ", " + this.getPoBox())
+                //.setNationality(RandomGenerator.getCountryName(RandomGenerator.generateCountryCode()))
+                //.setVisaType(RandomStringUtils.randomAlphanumeric(4))
+                //.setVisaNumber(RandomStringUtils.randomNumeric(8))
+                //.setIdType(RandomStringUtils.randomAlphanumeric(4))
+                //.setIdNumber(RandomStringUtils.randomNumeric(8))
+                //.setStatus(RandomStringUtils.randomAlphabetic(8))
+                //.setCustomerType(RandomStringUtils.randomAlphanumeric(4))
+               // .setCustomerCode(RandomStringUtils.randomNumeric(8))
+                //.setServiceType(RandomStringUtils.randomAlphanumeric(4));
+    //    return this;
+    //}
 }

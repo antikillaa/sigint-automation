@@ -48,8 +48,6 @@ public abstract class TeelaEntity {
         this.modifiedAt = modifiedAt;
     }
 
-    public abstract <T extends TeelaEntity> T generate();
-
     public <T extends TeelaEntity> Boolean equals(T object)  {
         Boolean equals = TRUE;
         for (Field field: object.getClass().getDeclaredFields()) {
