@@ -8,10 +8,12 @@ import http.requests.UserRequest;
 import json.JsonCoverter;
 import json.RsClient;
 import model.PegasusMediaType;
+import model.Token;
 import model.User;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -66,11 +68,11 @@ public class UserService implements EntityService<User> {
      * Get current user.
      * @return current user
      */
-    public User me() {
+    public User me(Token token) {
         log.info("Get current user...");
         Response response = rsClient.get(
                 sigintHost + request.me().getURI(),
-                request.getCookie(),
+                new Cookie("t", token.getValue()),
                 PegasusMediaType.PEGASUS_JSON
         );
 

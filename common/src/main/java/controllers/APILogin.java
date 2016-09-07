@@ -31,14 +31,12 @@ public class APILogin {
         runContext.put("code", response.getStatus());
         if (response.getStatus() == 200) {
             Token token = JsonCoverter.readEntityFromResponse(response, Token.class);
-            //init logged user
-            LoggedUser loggedUser = new LoggedUser(user, token);
-            context.setLoggedUser(loggedUser);
 
-            //update logged user
-            User me = new UserService().me();
+            //update user
+            User me = new UserService().me(token);
             me.setPassword(user.getPassword());
             me.setRoles(user.getRoles());
+
             context.setLoggedUser(new LoggedUser(me, token));
         } else {
             runContext.put("message", response.readEntity(String.class));
