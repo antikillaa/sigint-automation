@@ -19,21 +19,30 @@ public class APILogin {
     Logger log = Logger.getRootLogger();
 
 
+    /**
+     * Sign in as user and add LoggedUser in AppContext.
+     * @param user User for sign in.
+     */
     public void signInAsUser(User user) {
         log.info("Signing in as user:"+ user);
         Response response;
-        
+
         response = signService.signIn(user.getName(), user.getPassword());
         runContext.put("code", response.getStatus());
         if (response.getStatus() == 200) {
-            Token token = JsonCoverter.fromJsonToObject(response.readEntity(String.class), Token.class);
-            context.setLoggedUser(new LoggedUser(user, token));
+            Token token = JsonCoverter.readEntityFromResponse(response, Token.class);
+            //init logged user
+            LoggedUser loggedUser = new LoggedUser(user, token);
+            context.setLoggedUser(loggedUser);
+
+            //update logged user
+            User me = new UserService().me();
+            me.setPassword(user.getPassword());
+            me.setRoles(user.getRoles());
+            context.setLoggedUser(new LoggedUser(me, token));
         } else {
             runContext.put("message", response.readEntity(String.class));
         }
-
-        UserService userService = new UserService();
-        userService.me();
     }
 
 }

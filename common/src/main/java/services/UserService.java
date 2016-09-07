@@ -4,13 +4,13 @@ import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import app_context.properties.G4Properties;
-import errors.NullReturnException;
 import http.requests.UserRequest;
 import json.JsonCoverter;
 import json.RsClient;
 import model.PegasusMediaType;
 import model.User;
 import org.apache.log4j.Logger;
+import utils.Parser;
 
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -23,13 +23,14 @@ public class UserService implements EntityService<User> {
     private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
     private UserRequest request = new UserRequest();
 
+    /**
+     * Add new User.
+     * @param entity New user
+     * @return Response status code
+     */
     public int add(User entity) {
         log.info("Creating new user");
-        try {
-            log.debug("User: " + JsonCoverter.toJsonString(entity));
-        } catch (NullReturnException e) {
-            log.info(e.getMessage());
-        }
+        log.debug(Parser.entityToString(entity));
 
         Response response = rsClient.post(
                 sigintHost + request.getURI(),
@@ -37,10 +38,8 @@ public class UserService implements EntityService<User> {
                 request.getCookie(),
                 PegasusMediaType.PEGASUS_JSON
         );
-        String jsonString = response.readEntity(String.class);
-        log.debug("Response: " + jsonString);
 
-        User createdUser = JsonCoverter.fromJsonToObject(jsonString, User.class);
+        User createdUser = JsonCoverter.readEntityFromResponse(response, User.class);
         if (createdUser != null) {
             Entities.getUsers().addOrUpdateEntity(createdUser.setPassword(entity.getPassword()));
         }
@@ -63,6 +62,10 @@ public class UserService implements EntityService<User> {
         return null;
     }
 
+    /**
+     * Get current user.
+     * @return current user
+     */
     public User me() {
         log.info("Get current user...");
         Response response = rsClient.get(
@@ -71,16 +74,22 @@ public class UserService implements EntityService<User> {
                 PegasusMediaType.PEGASUS_JSON
         );
 
-        String jsonString = response.readEntity(String.class);
-        log.debug("Response: " + jsonString);
-
-        User user = JsonCoverter.fromJsonToObject(jsonString, User.class);
+        User user = JsonCoverter.readEntityFromResponse(response, User.class);
         if (user != null) {
-            Entities.getUsers().addOrUpdateEntity(user);
+            return user;
+        } else {
+            String errorMessage = "Unable to get current user";
+            log.error(errorMessage);
+            throw new AssertionError(errorMessage);
         }
-        return user;
     }
 
+    /**
+     * Get report role for User.
+     * @param user User
+     * @return 'Report role' for user
+     * <br>ADMIN user has 'approver' role
+     */
     public String getReportRole(User user) {
         List<String> roles = user.getExpandedRoles();
         if (roles.contains("APPROVER") || roles.contains("ADMIN")) {

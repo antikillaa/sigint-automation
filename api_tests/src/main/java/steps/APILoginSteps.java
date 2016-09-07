@@ -1,6 +1,7 @@
 package steps;
 
 import app_context.RunContext;
+import conditions.Verify;
 import controllers.APILogin;
 import http.ErrorResponse;
 import json.JsonCoverter;
@@ -12,6 +13,8 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 
 import java.io.IOException;
+
+import static conditions.Conditions.isTrue;
 
 
 public class APILoginSteps {
@@ -26,7 +29,6 @@ public class APILoginSteps {
     public void signInGlobal(String role) {
         signInCreds(role);
         checkResponseCode("200");
-    
     }
     
     private void signInCreds(String role) {
@@ -62,8 +64,7 @@ public class APILoginSteps {
         log.info("Verifying error message");
         ErrorResponse response = JsonCoverter.fromJsonToObject(runContext.get("message", String.class),
                 ErrorResponse.class);
-        Assert.assertTrue(response.getMessage().toLowerCase().equals(message.toLowerCase()));
-
+        Verify.shouldBe(isTrue.element(response.getMessage().toLowerCase().equals(message.toLowerCase())));
     }
 
 
