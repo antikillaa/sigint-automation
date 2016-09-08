@@ -2,6 +2,8 @@ package model.bulders;
 
 import abs.EntityList;
 import errors.NullReturnException;
+import model.GenerationMatrix;
+import model.GenerationMatrixRow;
 import model.SSMS;
 import model.Target;
 import utils.RandomGenerator;
@@ -12,47 +14,56 @@ import java.util.List;
 public class SSMSGenerator {
 
     private SSMSBuilder ssmsBuilder;
-    private Target target;
+    private GenerationMatrix generationMatrix;
 
     public SSMSGenerator() {
         ssmsBuilder = new SSMSRandom();
     }
 
     /**
-     *
-     * @param target Target object, used for generate records 'to' and 'from' the target
-     * @return this
+     * Set GenerationMatrix for generation list of test data according to matrix
+     * @param generationMatrix GenerationMatrix
+     * @return SSMSGenerator
      */
-    public SSMSGenerator setTarget(Target target) {
-        this.target = target;
+    public SSMSGenerator setGenerationMatrix(GenerationMatrix generationMatrix) {
+        this.generationMatrix = generationMatrix;
         return this;
     }
 
+    /**
+     * Set SSMSRandom S-SMS builder
+     * @return SSMSGenerator
+     */
     public SSMSGenerator random() {
         ssmsBuilder = new SSMSRandom();
         return this;
     }
 
-    public SSMSGenerator toTarget() {
-        ssmsBuilder = new SSMSToNumber(getTargetPhone());
-        return this;
-    }
-
+    /**
+     * Set SSMSToNumber S-SMS builder
+     * @param number target number
+     * @return SSMSGenerator
+     */
     public SSMSGenerator toNumber(String number) {
         ssmsBuilder = new SSMSToNumber(number);
         return this;
     }
 
-    public SSMSGenerator fromTarget() {
-        ssmsBuilder = new SSMSFromNumber(getTargetPhone());
-        return this;
-    }
-
+    /**
+     * Set SSMSFromNumber S-SMS builder
+     * @param number target number
+     * @return SSMSGenerator
+     */
     public SSMSGenerator fromNumber(String number) {
         ssmsBuilder = new SSMSFromNumber(number);
         return this;
     }
 
+    /**
+     * Set SSMSWithTextMention S-SMS builder
+     * @param pattern target mention string (Target name, phone or keyword)
+     * @return SSMSGenerator
+     */
     public SSMSGenerator withTextMention(String pattern) {
         ssmsBuilder = new SSMSWithTextMention(pattern);
         return this;
@@ -62,6 +73,10 @@ public class SSMSGenerator {
         return ssmsBuilder.getSSMS();
     }
 
+    /**
+     * Produce one S-SMS, according SSMSBuilder
+     * @return S-SMS
+     */
     public SSMS produce() {
         ssmsBuilder.createNewSSMS();
         ssmsBuilder.buildFromNumber();
@@ -72,30 +87,60 @@ public class SSMSGenerator {
     }
 
     /**
-     * Produce EntityList of S-SMS
-     *
-     * @param total total records
-     * @param fromCount number records of them 'from' target number
-     * @param toCount number records of them 'to' target number
-     * @return EntityList
+     * Produce EntityList of S-SMS according GenerationMatrix
+     * @return EntityList of S-SMS
      */
-    public EntityList<SSMS> produceList(int total, int fromCount, int toCount) {
+    public EntityList<SSMS> produceList() {
         List<SSMS> ssmsList = new ArrayList<>();
+        GenerationMatrix matrix = generationMatrix;
 
-        int from = 0;
-        int to = 0;
-        for (int i = 0; i < total; i++ ) {
-            SSMS ssms;
-            if (from < fromCount) {
-                ssms = fromTarget().produce();
+        for (GenerationMatrixRow row : matrix.getRows()) {
+            String phone = getTargetPhone(row.getTarget());
+
+            int from = 0;
+            while (from < row.getFromNumberCount()) {
+                ssmsList.add(fromNumber(phone).produce());
                 from++;
-            } else if (to < toCount) {
-                ssms = toTarget().produce();
-                to++;
-            } else {
-                ssms = random().produce();
             }
-            ssmsList.add(ssms);
+
+            int to = 0;
+            while (to < row.getToNumberCount()) {
+                ssmsList.add(toNumber(phone).produce());
+                to++;
+            }
+
+            int toMention = 0;
+            while (toMention < row.getToNumberMention()) {
+                ssmsList.add(withTextMention(phone).produce());
+                toMention++;
+            }
+
+            int fromMention = 0;
+            while (fromMention < row.getFromNumberMention()) {
+                ssmsList.add(withTextMention(phone).produce());
+                fromMention++;
+            }
+
+            int keywordMention = 0;
+            while (keywordMention < row.getKeywordMention()) {
+                List<String> keywords = new ArrayList<>(row.getTarget().getKeywords());
+                String mention = RandomGenerator.getRandomItemFromList(keywords);
+
+                ssmsList.add(withTextMention(mention).produce());
+                keywordMention++;
+            }
+
+            int nameMention = 0;
+            while (nameMention < row.getNameMention()) {
+                ssmsList.add(withTextMention(row.getTarget().getName()).produce());
+                nameMention++;
+            }
+
+            int withoutHitMention = 0;
+            while (withoutHitMention < row.getWithoutHitMention()) {
+                ssmsList.add(random().produce());
+                withoutHitMention++;
+            }
         }
 
         return new EntityList<SSMS>(ssmsList) {
@@ -106,7 +151,27 @@ public class SSMSGenerator {
         };
     }
 
-    private String getTargetPhone() {
+    /**
+     * Generate EntityList of random S-SMS.
+     *
+     * @param count S-SMS count
+     * @return EntityList of S-SMS
+     */
+    public EntityList<SSMS> produceList(int count) {
+        EntityList<SSMS> ssmsEntityList = new EntityList<SSMS>(new ArrayList<SSMS>()) {
+            @Override
+            public SSMS getEntity(String param) throws NullReturnException {
+                return null;
+            }
+        };
+
+        for (int i = 0; i < count; i++) {
+            ssmsEntityList.getEntities().add(random().produce());
+        }
+        return ssmsEntityList;
+    }
+
+    private String getTargetPhone(Target target) {
         return RandomGenerator.getRandomItemFromList(new ArrayList<>(target.getPhones()));
     }
 }

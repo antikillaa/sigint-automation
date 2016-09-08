@@ -12,17 +12,18 @@ And Generate 3 SSMS
 Scenario: API.Target matching by phone number
 Given I sign in as admin user
 And data source with <sourceType> and <recordType> exists
-And targets with phones exists
-And <sourceType> - <recordType> data file with: total <totalRecords> records, <numToTarget> of them toTarget, <numFromTarget> of them fromTarget was generated
+And <targetCount> targets with phones exists
+And <sourceType> - <recordType> data file with records for test targets was generated
 When I send upload <sourceType> - <recordType> data file request
 Then I got response code 201
 When uploaded file is processed
 And ingest matching complete
-Then search results contain <totalRecords> total records with: <targetHitCount> at least hits number and <mentionCount> at least mention number
+Then search results contain correct counts: total records, target hits and mentions
 When I send get upload details request
 Then I got response code 200
-And matching results contain <targetHitCount> hits number and <recordHitCount> matched records and have HIT target result type
+And matching results contain correct Summary: total records, target hits and mentions
+And matching results contain correct Matching results: total hit&Mention records, list of hit/mention targets with hit/mention records counts for each
 
 Examples:
-| sourceType | recordType | totalRecords | numToTarget | numFromTarget | targetHitCount | recordHitCount | mentionCount |
-| Strategic  | SMS        | 3            | 1           | 1             | 1              | 2              | 0            |
+| sourceType | recordType | targetCount |
+| Strategic  | SMS        | 3           |

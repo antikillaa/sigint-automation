@@ -7,7 +7,6 @@ import model.Process;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.junit.Assert;
 import services.RecordService;
 import services.UploadFilesService;
 import utils.DateHelper;
@@ -59,7 +58,7 @@ public class APIUploadFilesSteps extends APISteps {
 
         // data range for Upload history filter
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, -1);
+        calendar.add(Calendar.MINUTE, -5);
         Date minDate = calendar.getTime();
         calendar.add(Calendar.MINUTE, 15);
         Date maxDate = calendar.getTime();
@@ -98,17 +97,15 @@ public class APIUploadFilesSteps extends APISteps {
         Verify.shouldBe(isTrue.element(process.isIngestMatchingComplete()));
     }
 
-    @Then("search results contain $numRecords total records with: $hitCount at least hits number and $mentionCount at least mention number")
-    public void processResultShouldContainCorrectResult(String numRecords, String hitCount, String mentionCount) {
-        Integer totalRecords = Integer.valueOf(numRecords);
-        Integer totalHit = Integer.valueOf(hitCount);
-        Integer totalMention = Integer.valueOf(mentionCount);
-
+    @Then("search results contain correct counts: total records, target hits and mentions")
+    public void processResultShouldContainCorrectResult() {
         Process process = context.get("process", Process.class);
+        GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
 
-        Verify.shouldBe(equals.elements(process.getRecordsCount(), totalRecords));
-        Verify.shouldBe(isTrue.element(process.getTargetHitCount() >= totalHit));
-        //TODO mention count
+        Verify.shouldBe(equals.elements(process.getRecordsCount(), matrix.getTotalRecords()));
+        Verify.shouldBe(equals.elements(process.getTargetHitCount(), matrix.getTotalTargersHit()));
+        Verify.shouldBe(equals.elements(process.getTargetMentionCount(), matrix.getTotalTargetMention()));
+        //TODO SMS/Voice counts
     }
 
     @When("I send get upload details request")
@@ -118,27 +115,36 @@ public class APIUploadFilesSteps extends APISteps {
         context.put("uploadDetails", uploadDetails);
     }
 
-    @Then("matching results contain $targetHitCount hits number and $hitCount matched records and have $targetResultType target result type")
-    public void matchingResultShouldContainCorrectResult(String targetHitCount, String hitCount, String targetResultType) {
-        Integer totalTargets = Integer.valueOf(targetHitCount);
-        Integer hitNum = Integer.valueOf(hitCount);
-        TargetResultType resultType = TargetResultType.valueOf(targetResultType);
-
+    @Then("matching results contain correct Summary: total records, target hits and mentions")
+    public void matchingResultShouldContainCorrectSummary() {
         UploadDetails uploadDetails = context.get("uploadDetails", UploadDetails.class);
+        context.put("process", uploadDetails.getProcess());
+        processResultShouldContainCorrectResult();
+    }
 
-        // hit count
-        Integer hits = 0;
-        Integer targets = 0;
-        List<MatchingResult> matchingResults = uploadDetails.getSearchResults();
-        for (MatchingResult result : matchingResults) {
-            if (result.getSearchResultType().equals(SearchResultType.Target)) {
-                hits += result.getNumRecords();
-                Assert.assertEquals(resultType, result.getTargetResultType());
+    @Then("matching results contain correct Matching results: total hit&Mention records, list of hit/mention targets with hit/mention records counts for each")
+    public void matchingResultShouldContainCorrectMatchingResult() {
+        UploadDetails uploadDetails = context.get("uploadDetails", UploadDetails.class);
+        GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
+
+        for (GenerationMatrixRow row : matrix.getRows()) {
+            MatchingResult result = null;
+            String targetName = row.getTarget().getName();
+
+            if (row.getTotalRecordsHit() > 0) {
+                result = uploadDetails.findMatchingResultByTargetNameAndTargetResultType(targetName, TargetResultType.HIT);
+                Verify.shouldBe(equals.elements(result.getNumRecords(), row.getTotalRecordsHit()));
+            }
+            else if (row.getTotalRecordsMention() > 0) {
+                result = uploadDetails.findMatchingResultByTargetNameAndTargetResultType(targetName, TargetResultType.MENTION);
+                Verify.shouldBe(equals.elements(result.getNumRecords(), row.getTotalRecordsMention()));
+            }
+
+            //TODO add verification for target with group
+            if (result != null) {
+                Verify.shouldBe(equals.elements(result.getSearchResultType(), SearchResultType.Target));
             }
         }
-
-        //Assert.assertTrue(targets >= totalTargets); TODO
-        Verify.shouldBe(equals.elements(hitNum, hits));
     }
 
     @When("I send get an uploaded records details request")
