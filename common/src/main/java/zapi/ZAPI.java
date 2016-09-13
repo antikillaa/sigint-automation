@@ -5,8 +5,6 @@ import errors.NullReturnException;
 import http.G4Response;
 import http.client.G4Client;
 import json.JsonCoverter;
-import json.RsClient;
-import model.AppContext;
 import zapi.model.Cycle;
 import zapi.model.CyclesList;
 import zapi.model.Execution;
@@ -17,10 +15,8 @@ import java.net.URLEncoder;
 
 class ZAPI {
 
-    private RsClient rsClient = new RsClient();
     private String server = G4Properties.getJiraProperties().getServer();
     private G4Client g4Client = new G4Client();
-    private String server = AppContext.getContext().getJiraConnection().getProperty("server");
 
     static final String UNEXECUTED = "-1";
     static final String PASS = "1";
@@ -160,7 +156,7 @@ class ZAPI {
         String url = server + "/rest/zapi/latest/cycle?projectId=" + projectId + "&versionId=" + versionId;
         G4Response response = g4Client.get(url);
 
-        return JsonCoverter.fromJsonToObject(response.getMessage(), CyclesList.class);
+        return JsonCoverter.readEntityFromResponse(response, CyclesList.class);
     }
 
 }

@@ -6,9 +6,7 @@ import errors.NullReturnException;
 import http.G4Response;
 import http.client.G4Client;
 import jira.model.*;
-import org.apache.log4j.Logger;
 import json.JsonCoverter;
-import model.AppContext;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.core.Cookie;
@@ -19,7 +17,7 @@ public class JiraConnector {
     public static Logger log = Logger.getRootLogger();
     private JiraProperties properties = G4Properties.getJiraProperties();
 
-    private RsClient client = new RsClient();
+    private G4Client client = new G4Client();
 
 
     private Cookie getCookie() {
@@ -27,17 +25,6 @@ public class JiraConnector {
         if (session == null) {
             log.debug("jira session wasn't received. Cookie will not be generated");
             return null;
-    private AppContext context = AppContext.getContext();
-    private Cookie sessionCookie;
-    private G4Client client = new G4Client();
-    private String jiraServer = context.getJiraConnection().getProperty("server");
-
-    public JiraConnector() {
-        try {
-            Session session = initSession();
-            sessionCookie = new Cookie(session.getName(), session.getValue());
-        } catch (NullReturnException e) {
-            log.warn("Session info wasn't received from Jira. Using anonymous...");
         }
         return new Cookie(session.getName(), session.getValue());
     }
@@ -52,10 +39,14 @@ public class JiraConnector {
         user.setUsername(username);
         log.debug("Using password:"+password);
         user.setPassword(password);
-
-        String url = jiraServer + "/rest/auth/latest/session";
-        G4Response response = client.post(url, JsonCoverter.toJsonString(user));
-
+        G4Response response;
+        try {
+            response = client.post(properties.getServer() + "/rest/auth/latest/session",
+                    JsonCoverter.toJsonString(user));
+        } catch (NullReturnException e) {
+            log.debug("Cannot convert user to Json!");
+            return null;
+        }
         SessionInfo sessionInfo = JsonCoverter.readEntityFromResponse(response, SessionInfo.class);
         log.debug("Jira session created");
         if (sessionInfo !=null) {
@@ -69,8 +60,7 @@ public class JiraConnector {
     public String getProjectId(String name) throws NullReturnException {
         log.debug("Getting project id based on name:"+ name);
 
-        String url = jiraServer + "/rest/api/latest/project";
-        G4Response response = client.get(url, sessionCookie);
+        G4Response response = client.get(properties.getServer() + "/rest/api/latest/project", getCookie());
 
         List<JiraProject> projects = JsonCoverter.fromJsonToObjectsList(response.getMessage(), JiraProject[].class);
         for (JiraProject project: projects) {
@@ -83,7 +73,10 @@ public class JiraConnector {
 
     public String getVersionId(String projectId, String versionName) throws NullReturnException{
         log.debug("Getting version id based on project id:"+projectId+" and version name:"+versionName);
-        G4Response response = client.get(url, sessionCookie);
+
+        String url = properties.getServer() + "/rest/api/latest/project/"+projectId+"/versions";
+        G4Response response = client.get(url, getCookie());
+
         List<ProjectVersion> versions = JsonCoverter.fromJsonToObjectsList(response.getMessage(), ProjectVersion[].class);
 
         for (ProjectVersion version:versions) {
@@ -93,12 +86,11 @@ public class JiraConnector {
         }
         throw new NullReturnException("There is version with name:"+versionName+" for project id:"+projectId);
     }
-    
+
     public Issue getIssue(String issueKey) {
         log.debug("Getting issue by it's key:" + issueKey);
-
-        String url = jiraServer + "/rest/api/latest/issue/" + issueKey;
-        G4Response response = client.get(url, sessionCookie);
+        String url = properties.getServer() + "/rest/api/latest/issue/" + issueKey;
+        G4Response response = client.get(url, getCookie());
         return JsonCoverter.readEntityFromResponse(response, Issue.class);
     }
 

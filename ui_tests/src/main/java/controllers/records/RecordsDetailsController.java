@@ -1,9 +1,9 @@
 package controllers.records;
 
+import app_context.RunContext;
 import controllers.PageController;
 import controllers.reports.form_page.ReportFormFactoryController;
 import errors.NullReturnException;
-import app_context.AppContext;
 import org.apache.log4j.Logger;
 import pages.Pages;
 import pages.records.RecordDetailsDialog;
@@ -22,7 +22,7 @@ public class RecordsDetailsController extends PageController<RecordDetailsDialog
         getPage().clickAttachButton();
         try {
             getPage().selectReportInAttatchmentsList(reportSubject);
-            AppContext.getContext().put("controller", new ReportFormFactoryController());
+            RunContext.get().put("controller", new ReportFormFactoryController());
         } catch (NullReturnException e) {
             log.error(e.getMessage());
             throw new AssertionError("Cannot find report with subject "+ reportSubject);

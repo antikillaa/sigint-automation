@@ -54,10 +54,8 @@ public class ZAPIService {
         G4Response response = zapi.postCycle(cycle);
 
         if (response.getStatus() == 200) {
-
             cycle = JsonCoverter.readEntityFromResponse(response, Cycle.class);
             log.info("cycle created: " + cycle);
-
         } else {
             log.error("Creating new cycle failed");
             log.error("status: " + response.getStatus());
@@ -142,7 +140,7 @@ public class ZAPIService {
         }
 
         try {
-            IssueList issueList = JsonCoverter.fromJsonToObject(response.getMessage(), IssueList.class);
+            IssueList issueList = JsonCoverter.readEntityFromResponse(response, IssueList.class);
             log.debug("Found issues: "+issueList.getIssues());
             return issueList.getIssues().get(0).getKey();
         }  catch (IndexOutOfBoundsException e) {

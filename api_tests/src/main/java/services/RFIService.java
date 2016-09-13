@@ -9,8 +9,6 @@ import http.G4Response;
 import http.client.G4Client;
 import http.requests.rfi.*;
 import json.JsonCoverter;
-import json.RsClient;
-import model.AppContext;
 import model.FileAttachment;
 import model.InformationRequest;
 import model.rfi.RFISearchResults;
@@ -25,9 +23,7 @@ import java.util.List;
 
 public class RFIService implements EntityService<InformationRequest> {
 
-    private static RsClient rsClient = new RsClient();
     private static G4Client g4Client = new G4Client();
-    private static AppContext context = AppContext.getContext();
     Logger log = Logger.getRootLogger();
     private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();;
 

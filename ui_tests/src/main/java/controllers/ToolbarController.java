@@ -1,11 +1,8 @@
 package controllers;
 
-import app_context.AppContext;
 import pages.SigintPage;
 
 public abstract class ToolbarController extends PageController {
-
-    protected AppContext context = AppContext.getContext();
 
     public ToolbarController(SigintPage page) {
         super(page);

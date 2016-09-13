@@ -1,5 +1,6 @@
 package controllers.records;
 
+import app_context.RunContext;
 import blocks.context.toolbars.records.panels.RecordsActionPanel;
 import blocks.context.toolbars.records.panels.RecordsFilterPanel;
 import controllers.ToolbarController;
@@ -36,11 +37,11 @@ extends ToolbarController {
 
     public void openCreateRecordForm() {
         actionPanel.clickCreateRecord();
-        context.put("controller", new RecordAddController());
+        RunContext.get().put("controller", new RecordAddController());
     }
 
     public void openCreateReportForm() {
         actionPanel.clickCreateReport();
-        context.put("controller", new ReportFormFactoryController());
+        RunContext.get().put("controller", new ReportFormFactoryController());
     }
 }

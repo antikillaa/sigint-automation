@@ -9,12 +9,10 @@ import http.G4Response;
 import http.client.G4Client;
 import http.requests.SourceRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.Result;
 import model.Source;
 import model.SourceListResult;
 import model.SourcesRequest;
-import model.*;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
@@ -22,9 +20,7 @@ import java.util.List;
 
 public class SourceService implements EntityService<Source> {
 
-    private static RsClient rsClient = new RsClient();
     private static G4Client g4Client = new G4Client();
-    private static AppContext context = AppContext.getContext();
     private Logger log = Logger.getLogger(RoleService.class);
     private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
     private RunContext context = RunContext.get();
@@ -69,7 +65,6 @@ public class SourceService implements EntityService<Source> {
         G4Response response = g4Client.get(sigintHost + request.getURI(), request.getCookie());
 
         SourceListResult result = JsonCoverter.readEntityFromResponse(response, SourceListResult.class);
-        SourceListResult result = JsonCoverter.fromJsonToObject(response.getMessage(), SourceListResult.class);
 
         return result.getResult();
     }

@@ -2,7 +2,6 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
-import app_context.RunContext;
 import app_context.entities.Entities;
 import app_context.properties.G4Properties;
 import errors.NullReturnException;
@@ -10,17 +9,13 @@ import http.G4Response;
 import http.client.G4Client;
 import http.requests.groups.GroupsRequest;
 import json.JsonCoverter;
-import model.AppContext;
 import model.Group;
 import model.PegasusMediaType;
 import org.apache.log4j.Logger;
 
 public class GroupService implements EntityService<Group> {
 
-    private static RsClient rsClient = new RsClient();
-    private static RunContext context = RunContext.get();
     private static G4Client g4Client = new G4Client();
-    private static AppContext context = AppContext.getContext();
     private Logger log = Logger.getLogger(GroupService.class);
     private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
 

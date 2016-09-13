@@ -9,8 +9,6 @@ import http.G4Response;
 import http.client.G4Client;
 import http.requests.RecordRequest;
 import json.JsonCoverter;
-import json.RsClient;
-import model.AppContext;
 import model.Record;
 import model.RecordSearchResult;
 import org.apache.commons.lang.NotImplementedException;
@@ -19,11 +17,8 @@ import org.apache.log4j.Logger;
 public class RecordService implements EntityService<Record> {
 
     private Logger log = Logger.getLogger(RecordService.class);
-    private static RsClient rsClient = new RsClient();
     private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
     private static G4Client g4Client = new G4Client();
-    private static AppContext context = AppContext.getContext();
-    private final String sigintHost = context.environment().getSigintHost();
 
     public int add(Record entity) {
         log.info("Creating new record");

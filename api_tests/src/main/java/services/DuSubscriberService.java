@@ -11,7 +11,6 @@ import http.G4Response;
 import http.client.G4Client;
 import http.requests.phonebook.DuSubscriberRequest;
 import json.JsonCoverter;
-import model.AppContext;
 import model.DuSubscriberEntry;
 import model.UploadResult;
 import model.phonebook.DuSubscriberSearchResult;
@@ -27,8 +26,8 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
 
     private Logger log = Logger.getLogger(DuSubscriberService.class);
     private static G4Client g4Client = new G4Client();
-    private static AppContext context = AppContext.getContext();
-    private final String sigintHost = context.environment().getSigintHost();
+    private RunContext context = RunContext.get();
+    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
 
     public int add(DuSubscriberEntry entity) {
         log.info("Add DuSubscriber Entry..");

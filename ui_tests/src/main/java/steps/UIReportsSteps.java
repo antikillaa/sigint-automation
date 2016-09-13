@@ -1,10 +1,10 @@
 package steps;
 
+import app_context.AppContext;
 import conditions.Conditions;
 import conditions.Verify;
 import controllers.TableController;
 import errors.NotFoundException;
-import app_context.AppContext;
 import model.Record;
 import model.Report;
 import org.apache.log4j.Logger;
@@ -16,7 +16,6 @@ import utils.RandomGenerator;
 public class UIReportsSteps extends UISteps {
 
     private static Logger log = Logger.getLogger(UIReportsSteps.class);
-    private AppContext context = AppContext.getContext();
 
     @When("I create new manual draft report")
     public void createManualDraftReport() {
@@ -56,8 +55,8 @@ public class UIReportsSteps extends UISteps {
     public void fillOutRequiredFieldsOnCreateManualReportPage() {
         Report report = new Report().generate();
         report
-                .setRecordType(RandomGenerator.getRandomItemFromList(context.getDictionary().getRecordTypes()).getType())
-                .setSourceType(RandomGenerator.getRandomItemFromList(context.getDictionary().getSources()).getType().name());
+                .setRecordType(RandomGenerator.getRandomItemFromList(AppContext.get().getDictionary().getRecordTypes()).getType())
+                .setSourceType(RandomGenerator.getRandomItemFromList(AppContext.get().getDictionary().getSources()).getType().name());
 
         getReportsFormFactory().getManualForm().fillForm(report);
         context.put("report", report);

@@ -12,7 +12,6 @@ import http.client.G4Client;
 import http.requests.phonebook.PhonebookRequest;
 import http.requests.phonebook.UnifiedPhonebookSearchRequest;
 import json.JsonCoverter;
-import model.AppContext;
 import model.Phonebook;
 import model.UploadResult;
 import model.phonebook.PhonebookSearchResults;
@@ -26,12 +25,9 @@ import java.util.List;
 public class PhonebookService implements EntityService<Phonebook>{
 
     private Logger log = Logger.getLogger(PhonebookService.class);
-    private static RsClient rsClient = new RsClient();
     private RunContext context = RunContext.get();
     private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
     private static G4Client g4Client = new G4Client();
-    private static AppContext context = AppContext.getContext();
-    private final String sigintHost = context.environment().getSigintHost();
 
     public int add(Phonebook entity) {
         PhonebookRequest request = new PhonebookRequest().entries();

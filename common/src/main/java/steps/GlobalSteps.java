@@ -3,18 +3,10 @@ package steps;
 import app_context.entities.Entities;
 import app_context.properties.G4Properties;
 import errors.NullReturnException;
-import http.G4Response;
-import http.client.G4Client;
-import http.requests.GetDictionariesRequest;
-import json.JsonCoverter;
-import model.AppContext;
-import model.Dictionary;
 import model.User;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStories;
 import zapi.ZAPIService;
-
-import java.io.InputStream;
 
 public class GlobalSteps {
 

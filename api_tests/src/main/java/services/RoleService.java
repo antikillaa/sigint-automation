@@ -8,8 +8,6 @@ import http.G4Response;
 import http.client.G4Client;
 import http.requests.roles.RoleRequest;
 import json.JsonCoverter;
-import json.RsClient;
-import model.AppContext;
 import model.PegasusMediaType;
 import model.Role;
 import org.apache.log4j.Logger;
@@ -17,9 +15,7 @@ import utils.Parser;
 
 public class RoleService implements EntityService<Role> {
 
-    private static RsClient rsClient = new RsClient();
     private static G4Client g4Client = new G4Client();
-    private static AppContext context = AppContext.getContext();
     private Logger log = Logger.getLogger(RoleService.class);
     private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
 

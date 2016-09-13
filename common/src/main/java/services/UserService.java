@@ -4,13 +4,10 @@ import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import app_context.properties.G4Properties;
-import errors.NullReturnException;
 import http.G4Response;
 import http.client.G4Client;
 import http.requests.UserRequest;
 import json.JsonCoverter;
-import json.RsClient;
-import model.AppContext;
 import model.PegasusMediaType;
 import model.Token;
 import model.User;
@@ -18,15 +15,12 @@ import org.apache.log4j.Logger;
 import utils.Parser;
 
 import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 
 public class UserService implements EntityService<User> {
 
-    private static RsClient rsClient = new RsClient();
     private static G4Client g4Client = new G4Client();
-    private static AppContext context = AppContext.getContext();
     Logger log = Logger.getLogger(UserService.class);
     private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
     private UserRequest request = new UserRequest();
@@ -76,13 +70,11 @@ public class UserService implements EntityService<User> {
      */
     public User me(Token token) {
         log.info("Get current user...");
-        Response response = rsClient.get(
+        G4Response response = g4Client.get(
                 sigintHost + request.me().getURI(),
                 new Cookie("t", token.getValue()),
                 PegasusMediaType.PEGASUS_JSON
         );
-        String url = sigintHost + request.me().getURI();
-        G4Response response = g4Client.get(url, request.getCookie(), PegasusMediaType.PEGASUS_JSON);
 
         User user = JsonCoverter.readEntityFromResponse(response, User.class);
         if (user != null) {

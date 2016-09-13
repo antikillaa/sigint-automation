@@ -2,13 +2,11 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import app_context.properties.G4Properties;
 import http.G4Response;
 import http.client.G4Client;
-import app_context.properties.G4Properties;
 import http.requests.CategoriesRequest;
 import json.JsonCoverter;
-import model.AppContext;
-import json.RsClient;
 import model.CategoryListResult;
 import model.ReportCategory;
 import org.apache.log4j.Logger;
@@ -19,8 +17,7 @@ public class CategoryService implements EntityService<ReportCategory> {
 
     private Logger log = Logger.getLogger(CategoryService.class);
     private static G4Client g4Client = new G4Client();
-    private static AppContext context = AppContext.getContext();
-    private final String sigintHost = context.environment().getSigintHost();
+    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
 
     @Override
     public int add(ReportCategory entity) {

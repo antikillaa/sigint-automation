@@ -1,12 +1,13 @@
 package steps;
 
+import app_context.RunContext;
+import app_context.properties.G4Properties;
 import blocks.context.factories.RecordsControllerFactory;
 import blocks.context.factories.ReportsControllerFactory;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import controllers.PageControllerFactory;
 import controllers.reports.form_page.ReportFormFactoryController;
-import app_context.AppContext;
 import model.Record;
 import model.Report;
 import model.User;
@@ -28,7 +29,7 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class UISteps {
 
-    static AppContext context = AppContext.getContext();
+    static RunContext context = RunContext.get();
     Pages pages = new Pages();
     static User user;
     static Navigator navigator = new Navigator();
@@ -41,11 +42,10 @@ public class UISteps {
 
     @BeforeStory
     public void InitWebDriver() throws IOException {
-        AppContext.Environment environment = AppContext.getContext().environment();
-        Boolean remoteRun = Boolean.valueOf(AppContext.getContext().getGeneralProperties().getProperty("remoteRun"));
+        Boolean remoteRun = G4Properties.getRunProperties().isRemoteRun();
         if (remoteRun) {
-            String browser = environment.getBrowser();
-            String seleniumHub = environment.getRemoteHub();
+            String browser = G4Properties.getRunProperties().getWebBrowser();
+            String seleniumHub = G4Properties.getRunProperties().getSeleniumHub();
             DesiredCapabilities capabilities = new DesiredCapabilities();
             capabilities.setBrowserName(browser);
             RemoteWebDriver webDriver = new RemoteWebDriver(new URL(String.format("http://%s:4444/wd/hub", seleniumHub)), capabilities);
@@ -81,15 +81,15 @@ public class UISteps {
 
 
     public RecordsControllerFactory getRecordsController() {
-        return AppContext.getContext().get("controller", RecordsControllerFactory.class);
+        return RunContext.get().get("controller", RecordsControllerFactory.class);
     }
 
     public ReportsControllerFactory getReportsController() {
-        return AppContext.getContext().get("controller", ReportsControllerFactory.class);
+        return RunContext.get().get("controller", ReportsControllerFactory.class);
     }
 
     public ReportFormFactoryController getReportsFormFactory() {
-        return AppContext.getContext().get("controller", ReportFormFactoryController.class);
+        return RunContext.get().get("controller", ReportFormFactoryController.class);
     }
 
     public User getUserFromContext() {

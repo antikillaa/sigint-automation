@@ -25,7 +25,8 @@ public class JiraService {
     
     public boolean hasOpenedBugs(String testCaseTitle) {
         Boolean isOpened = false;
-        Issue issue = connector.getIssue(new ZAPIService().getTestCaseKeyByTitle(testCaseTitle));
+        String key = new ZAPIService().getTestCaseKeyByTitle(testCaseTitle);
+        Issue issue = connector.getIssue(key);
         List<IssueLink> issueLinks = issue.getFields().getIssueLinks();
         if (issueLinks.size() == 0) {
             return false;

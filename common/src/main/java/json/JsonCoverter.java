@@ -40,17 +40,6 @@ public class JsonCoverter {
         log.debug("Response: " + response.getMessage());
         return fromJsonToObject(response.getMessage(), entityClass);
     }
-    
-    private static String readJsonStringFromResponse(Response response) {
-        String jsonString = response.readEntity(String.class);
-        log.debug("Response: " + jsonString);
-
-        if (response.getStatus() < 200 || response.getStatus() >= 300) {
-            log.warn("Entity was not found in json due to error in response, status code: " + response.getStatus());
-            return null;
-        }
-        return jsonString;
-    }
 
     public static Map<String,String > loadJsonToStringMap(String filename) {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();

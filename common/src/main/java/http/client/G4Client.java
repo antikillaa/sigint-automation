@@ -1,9 +1,9 @@
 package http.client;
 
+import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import http.G4Response;
 import json.JsonCoverter;
-import model.AppContext;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.media.multipart.MultiPart;
@@ -32,8 +32,8 @@ public class G4Client {
      * <br>user and pass properties defined in the jiraConnection.properties
      */
     public G4Client(){
-        String user = AppContext.getContext().getJiraConnection().getProperty("username");
-        String pass = AppContext.getContext().getJiraConnection().getProperty("password");
+        String user = G4Properties.getJiraProperties().getUsername();
+        String pass = G4Properties.getJiraProperties().getPassword();
         HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(user, pass);
         client = ClientBuilder.newClient();
         client.register(feature);

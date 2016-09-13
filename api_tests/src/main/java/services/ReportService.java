@@ -9,19 +9,14 @@ import http.G4Response;
 import http.client.G4Client;
 import http.requests.ReportRequest;
 import json.JsonCoverter;
-import json.RsClient;
-import model.AppContext;
 import model.Report;
 import org.apache.log4j.Logger;
 
 public class ReportService implements EntityService<Report> {
 
     private Logger log = Logger.getLogger(RecordService.class);
-    private static RsClient rsClient = new RsClient();
     private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
     private static G4Client g4Client = new G4Client();
-    private static AppContext context = AppContext.getContext();
-    private final String sigintHost = context.environment().getSigintHost();
 
     @Override
     public int add(Report entity) {

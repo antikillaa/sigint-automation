@@ -5,10 +5,7 @@ import app_context.properties.JenkinsProperties;
 import http.G4Response;
 import http.client.G4Client;
 import json.JsonCoverter;
-import model.AppContext;
 import org.apache.log4j.Logger;
-
-import java.util.Properties;
 
 class JenkinsClient {
     

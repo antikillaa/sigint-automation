@@ -12,8 +12,6 @@ import http.G4Response;
 import http.client.G4Client;
 import http.requests.targetGroups.TargetGroupRequest;
 import json.JsonCoverter;
-import json.RsClient;
-import model.AppContext;
 import model.Result;
 import model.TargetGroup;
 import model.targetGroup.TargetGroupSearchResult;
@@ -24,9 +22,7 @@ import java.util.List;
 
 public class TargetGroupService implements EntityService<TargetGroup> {
 
-    private static RsClient rsClient = new RsClient();
     private static G4Client g4Client = new G4Client();
-    private static AppContext context = AppContext.getContext();
     private Logger log = Logger.getLogger(TargetGroupService.class);
     private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
     private RunContext context = RunContext.get();
