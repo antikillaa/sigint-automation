@@ -3,9 +3,10 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import errors.NullReturnException;
+import http.G4Response;
+import http.client.G4Client;
 import http.requests.rfi.*;
 import json.JsonCoverter;
-import json.RsClient;
 import model.AppContext;
 import model.FileAttachment;
 import model.InformationRequest;
@@ -14,7 +15,6 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,13 +22,13 @@ import java.util.List;
 
 public class RFIService implements EntityService<InformationRequest> {
 
-    private static RsClient rsClient = new RsClient();
+    private static G4Client g4Client = new G4Client();
     private static AppContext context = AppContext.getContext();
     Logger log = Logger.getRootLogger();
     private final String sigintHost = context.environment().getSigintHost();
 
 
-    private void readRFIFromResponse(Response response) {
+    private void readRFIFromResponse(G4Response response) {
         InformationRequest createdRFI = JsonCoverter.readEntityFromResponse(response, InformationRequest.class, "result");
         if (createdRFI != null) {
             context.entities().getRFIs().addOrUpdateEntity(createdRFI);
@@ -64,14 +64,14 @@ public class RFIService implements EntityService<InformationRequest> {
         }
 
         log.debug("Sending request to " + sigintHost + request.getURI());
-        Response response = rsClient.post(sigintHost + request.getURI(), request.getBody(), request.getCookie());
+        G4Response response = g4Client.post(sigintHost + request.getURI(), request.getBody(), request.getCookie());
         readRFIFromResponse(response);
         return response.getStatus();
     }
 
     public int remove(InformationRequest entity) {
         RFIDeleteRequest deleteRequest = new RFIDeleteRequest(entity.getId());
-        Response response = rsClient.delete(sigintHost + deleteRequest.getURI(), deleteRequest.getCookie());
+        G4Response response = g4Client.delete(sigintHost + deleteRequest.getURI(), deleteRequest.getCookie());
         if (response.getStatus() == 200) {
             try {
                 context.entities().getRFIs().removeEntity(entity);
@@ -85,7 +85,7 @@ public class RFIService implements EntityService<InformationRequest> {
 
     public EntityList<InformationRequest> list(SearchFilter filter) {
         RFISearchRequest request = new RFISearchRequest();
-        Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
+        G4Response response = g4Client.post(sigintHost + request.getURI(), filter, request.getCookie());
         RFISearchResults searchResults = JsonCoverter.readEntityFromResponse(response, RFISearchResults.class, "result");
         if (searchResults == null) {
             throw new AssertionError("Unable to read search results from RFI search");
@@ -105,21 +105,20 @@ public class RFIService implements EntityService<InformationRequest> {
     public InformationRequest view(String id) {
         log.info("Getting details of RFI by id:" + id);
         RFIDetailsRequest request = new RFIDetailsRequest(id);
-        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
-        String responseJson = response.readEntity(String.class);
-        return JsonCoverter.fromJsonToObject(responseJson, RFIDetailsResponse.class).getResult();
+        G4Response response = g4Client.get(sigintHost + request.getURI(), request.getCookie());
+        return JsonCoverter.fromJsonToObject(response.getMessage(), RFIDetailsResponse.class).getResult();
     }
 
     public int cancel(InformationRequest entity) {
         RFICancelRequest request = new RFICancelRequest(entity.getId());
-        Response response = rsClient.post(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4Client.post(sigintHost + request.getURI(), request.getCookie());
         readRFIFromResponse(response);
         return response.getStatus();
     }
 
     public int assign(InformationRequest entity) {
         RFIAssignRequest request = new RFIAssignRequest(entity.getId());
-        Response response = rsClient.post(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4Client.post(sigintHost + request.getURI(), request.getCookie());
         readRFIFromResponse(response);
         return response.getStatus();
     }

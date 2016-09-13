@@ -3,21 +3,21 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import errors.NullReturnException;
+import http.G4Response;
+import http.client.G4Client;
 import http.requests.UserRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.AppContext;
 import model.PegasusMediaType;
 import model.User;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 
 public class UserService implements EntityService<User> {
 
-    private static RsClient rsClient = new RsClient();
+    private static G4Client g4Client = new G4Client();
     private static AppContext context = AppContext.getContext();
     Logger log = Logger.getLogger(UserService.class);
     private final String sigintHost = context.environment().getSigintHost();
@@ -31,16 +31,14 @@ public class UserService implements EntityService<User> {
             log.info(e.getMessage());
         }
 
-        Response response = rsClient.post(
+        G4Response response = g4Client.post(
                 sigintHost + request.getURI(),
                 entity,
                 request.getCookie(),
                 PegasusMediaType.PEGASUS_JSON
         );
-        String jsonString = response.readEntity(String.class);
-        log.debug("Response: " + jsonString);
 
-        User createdUser = JsonCoverter.fromJsonToObject(jsonString, User.class);
+        User createdUser = JsonCoverter.readEntityFromResponse(response, User.class);
         if (createdUser != null) {
             context.entities().getUsers().addOrUpdateEntity(createdUser.setPassword(entity.getPassword()));
         }
@@ -65,16 +63,10 @@ public class UserService implements EntityService<User> {
 
     public User me() {
         log.info("Get current user...");
-        Response response = rsClient.get(
-                sigintHost + request.me().getURI(),
-                request.getCookie(),
-                PegasusMediaType.PEGASUS_JSON
-        );
+        String url = sigintHost + request.me().getURI();
+        G4Response response = g4Client.get(url, request.getCookie(), PegasusMediaType.PEGASUS_JSON);
 
-        String jsonString = response.readEntity(String.class);
-        log.debug("Response: " + jsonString);
-
-        User user = JsonCoverter.fromJsonToObject(jsonString, User.class);
+        User user = JsonCoverter.readEntityFromResponse(response, User.class);
         if (user != null) {
             context.entities().getUsers().addOrUpdateEntity(user);
             context.setLoggedUser(user);

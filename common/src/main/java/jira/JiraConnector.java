@@ -1,22 +1,22 @@
 package jira;
 
 import errors.NullReturnException;
+import http.G4Response;
+import http.client.G4Client;
 import jira.model.*;
+import json.JsonCoverter;
 import model.AppContext;
 import org.apache.log4j.Logger;
-import json.JsonCoverter;
-import json.RsClient;
 
 import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 
 public class JiraConnector {
     public static Logger log = Logger.getRootLogger();
     private AppContext context = AppContext.getContext();
-    Cookie sessionCookie;
-    private RsClient client = new RsClient();
+    private Cookie sessionCookie;
+    private G4Client client = new G4Client();
     private String jiraServer = context.getJiraConnection().getProperty("server");
 
     public JiraConnector() {
@@ -26,7 +26,6 @@ public class JiraConnector {
         } catch (NullReturnException e) {
             log.warn("Session info wasn't received from Jira. Using anonymous...");
         }
-
     }
 
 
@@ -39,10 +38,11 @@ public class JiraConnector {
         user.setUsername(username);
         log.debug("Using password:"+password);
         user.setPassword(password);
-        Response response = client.post(jiraServer + "/rest/auth/latest/session",
-                JsonCoverter.toJsonString(user));
-        SessionInfo sessionInfo = JsonCoverter.fromJsonToObject(
-                response.readEntity(String.class), SessionInfo.class);
+
+        String url = jiraServer + "/rest/auth/latest/session";
+        G4Response response = client.post(url, JsonCoverter.toJsonString(user));
+
+        SessionInfo sessionInfo = JsonCoverter.readEntityFromResponse(response, SessionInfo.class);
         log.debug("Jira session created");
         return sessionInfo.getSession();
 
@@ -50,10 +50,11 @@ public class JiraConnector {
 
     public String getProjectId(String name) throws NullReturnException {
         log.debug("Getting project id based on name:"+ name);
-        String jsonString = client.get(jiraServer +
-                "/rest/api/latest/project", sessionCookie).readEntity(String.class);
-        List<JiraProject> projects = JsonCoverter.fromJsonToObjectsList(
-                jsonString, JiraProject[].class);
+
+        String url = jiraServer + "/rest/api/latest/project";
+        G4Response response = client.get(url, sessionCookie);
+
+        List<JiraProject> projects = JsonCoverter.fromJsonToObjectsList(response.getMessage(), JiraProject[].class);
         for (JiraProject project: projects) {
             if (project.getName().equals(name)) {
                 return project.getId();
@@ -64,9 +65,10 @@ public class JiraConnector {
 
     public String getVersionId(String projectId, String versionName) throws NullReturnException{
         log.debug("Getting version id based on project id:"+projectId+" and version name:"+versionName);
-        String jsonString = client.get(jiraServer + "/rest/api/latest/project/"+projectId+"/versions",
-                sessionCookie).readEntity(String.class);
-        List<ProjectVersion> versions = JsonCoverter.fromJsonToObjectsList(jsonString, ProjectVersion[].class);
+        String url = jiraServer + "/rest/api/latest/project/"+projectId+"/versions";
+
+        G4Response response = client.get(url, sessionCookie);
+        List<ProjectVersion> versions = JsonCoverter.fromJsonToObjectsList(response.getMessage(), ProjectVersion[].class);
 
         for (ProjectVersion version:versions) {
             if (version.getName().equals(versionName)){
@@ -78,10 +80,9 @@ public class JiraConnector {
     
     public Issue getIssue(String issueKey) {
         log.debug("Getting issue by it's key:" + issueKey);
-        Response response = client.get(jiraServer + "/rest/api/latest/issue/"+issueKey,
-                sessionCookie);
-        Issue issue = JsonCoverter.readEntityFromResponse(response, Issue.class);
-        return issue;
+        String url = jiraServer + "/rest/api/latest/issue/" + issueKey;
+        G4Response response = client.get(url, sessionCookie);
+        return JsonCoverter.readEntityFromResponse(response, Issue.class);
     }
 
 }

@@ -2,21 +2,21 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import http.G4Response;
+import http.client.G4Client;
 import http.requests.CategoriesRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.AppContext;
-import model.ReportCategory;
 import model.CategoryListResult;
+import model.ReportCategory;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 public class CategoryService implements EntityService<ReportCategory> {
 
     private Logger log = Logger.getLogger(CategoryService.class);
-    private static RsClient rsClient = new RsClient();
+    private static G4Client g4Client = new G4Client();
     private static AppContext context = AppContext.getContext();
     private final String sigintHost = context.environment().getSigintHost();
 
@@ -39,10 +39,9 @@ public class CategoryService implements EntityService<ReportCategory> {
         log.info("Get categories...");
         CategoriesRequest request = new CategoriesRequest();
 
-        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
-        String jsonResponse = response.readEntity(String.class);
+        G4Response response = g4Client.get(sigintHost + request.getURI(), request.getCookie());
 
-        CategoryListResult result = JsonCoverter.fromJsonToObject(jsonResponse, CategoryListResult.class);
+        CategoryListResult result = JsonCoverter.fromJsonToObject(response.getMessage(), CategoryListResult.class);
         if (result != null) {
             log.debug("Size of categories list: " + result.getResult().size());
             return result.getResult();

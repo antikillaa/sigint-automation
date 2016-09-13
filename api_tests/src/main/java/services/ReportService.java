@@ -3,19 +3,18 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import errors.NullReturnException;
+import http.G4Response;
+import http.client.G4Client;
 import http.requests.ReportRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.AppContext;
 import model.Report;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.core.Response;
-
 public class ReportService implements EntityService<Report> {
 
     private Logger log = Logger.getLogger(RecordService.class);
-    private static RsClient rsClient = new RsClient();
+    private static G4Client g4Client = new G4Client();
     private static AppContext context = AppContext.getContext();
     private final String sigintHost = context.environment().getSigintHost();
 
@@ -30,7 +29,7 @@ public class ReportService implements EntityService<Report> {
         }
 
         ReportRequest request = new ReportRequest();
-        Response response = rsClient.put(sigintHost + request.getURI(), entity, request.getCookie());
+        G4Response response = g4Client.put(sigintHost + request.getURI(), entity, request.getCookie());
         Report report = JsonCoverter.readEntityFromResponse(response, Report.class, "result");
         if (report != null) {
             context.entities().getReports().addOrUpdateEntity(report);

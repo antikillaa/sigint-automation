@@ -3,21 +3,20 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import errors.NullReturnException;
+import http.G4Response;
+import http.client.G4Client;
 import http.requests.RecordRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.AppContext;
 import model.Record;
 import model.RecordSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.core.Response;
-
 public class RecordService implements EntityService<Record> {
 
     private Logger log = Logger.getLogger(RecordService.class);
-    private static RsClient rsClient = new RsClient();
+    private static G4Client g4Client = new G4Client();
     private static AppContext context = AppContext.getContext();
     private final String sigintHost = context.environment().getSigintHost();
 
@@ -31,7 +30,7 @@ public class RecordService implements EntityService<Record> {
         }
 
         RecordRequest request = new RecordRequest().manual();
-        Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
+        G4Response response = g4Client.post(sigintHost + request.getURI(), entity, request.getCookie());
         Record record = JsonCoverter.readEntityFromResponse(response, Record.class, "result");
         if (record != null) {
             context.entities().getRecords().addOrUpdateEntity(record);
@@ -48,7 +47,7 @@ public class RecordService implements EntityService<Record> {
 
     public EntityList<Record> list(SearchFilter filter) {
         RecordRequest request = new RecordRequest().search();
-        Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
+        G4Response response = g4Client.post(sigintHost + request.getURI(), filter, request.getCookie());
 
         RecordSearchResult searchResults = JsonCoverter.readEntityFromResponse(response, RecordSearchResult.class);
         if (searchResults == null) {

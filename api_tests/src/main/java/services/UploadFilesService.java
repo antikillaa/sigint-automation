@@ -2,23 +2,23 @@ package services;
 
 import abs.SearchFilter;
 import errors.NullReturnException;
+import http.G4Response;
+import http.client.G4Client;
 import http.requests.UploadFilesRequest;
 import http.requests.UploadRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.*;
 import model.Process;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 public class UploadFilesService {
 
-    private static RsClient rsClient = new RsClient();
+    private static G4Client g4Client = new G4Client();
     private static AppContext context = AppContext.getContext();
     private Logger log = Logger.getLogger(UploadFilesService.class);
     private final String sigintHost = context.environment().getSigintHost();
@@ -42,7 +42,7 @@ public class UploadFilesService {
         request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         file.deleteOnExit();
 
-        Response response = rsClient.post(sigintHost + request.getURI(), request.getBody(), request.getCookie());
+        G4Response response = g4Client.post(sigintHost + request.getURI(), request.getBody(), request.getCookie());
 
         FileMeta entityFromResponse = JsonCoverter.readEntityFromResponse(response, FileMeta.class);
         context.put("fileMeta", entityFromResponse);
@@ -73,7 +73,7 @@ public class UploadFilesService {
         log.info("Get Meta of uploaded file id:" + id);
         UploadFilesRequest request = new UploadFilesRequest().meta(id);
 
-        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4Client.get(sigintHost + request.getURI(), request.getCookie());
 
         return JsonCoverter.readEntityFromResponse(response, FileMeta.class);
     }
@@ -82,7 +82,7 @@ public class UploadFilesService {
         log.info("Get UploadDetails of uploaded file id:" + id);
         UploadRequest request = new UploadRequest().details(id);
 
-        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4Client.get(sigintHost + request.getURI(), request.getCookie());
         context.put("code", response.getStatus());
 
         return JsonCoverter.readEntityFromResponse(response, UploadDetails.class);
@@ -92,7 +92,7 @@ public class UploadFilesService {
         log.info("Get Ingestion History list..");
         UploadRequest request = new UploadRequest().search();
 
-        Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
+        G4Response response = g4Client.post(sigintHost + request.getURI(), filter, request.getCookie());
 
         UploadSearchResult searchResults = JsonCoverter.readEntityFromResponse(response, UploadSearchResult.class);
         if (searchResults == null) {

@@ -2,9 +2,10 @@ package steps;
 
 import controllers.APILogin;
 import errors.NullReturnException;
+import http.G4Response;
+import http.client.G4Client;
 import http.requests.GetDictionariesRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.AppContext;
 import model.Dictionary;
 import model.User;
@@ -14,7 +15,6 @@ import org.jbehave.core.annotations.AfterStories;
 import org.jbehave.core.annotations.BeforeStories;
 import zapi.ZAPIService;
 
-import javax.ws.rs.core.Response;
 import java.io.InputStream;
 
 public class GlobalSteps {
@@ -54,8 +54,10 @@ public class GlobalSteps {
         setUserToContext("admin");
         new APILogin().signInWithCrendentials("valid");
         GetDictionariesRequest request = new GetDictionariesRequest();
-        Response response = new RsClient().get(context.environment().getSigintHost()+ request.getURI(),
-                request.getCookie());
+
+        String url = context.environment().getSigintHost()+ request.getURI();
+        G4Response response = new G4Client().get(url, request.getCookie());
+
         Dictionary dictionary = JsonCoverter.readEntityFromResponse(response, Dictionary.class, "result");
         context.setDictionary(dictionary);
     }
@@ -65,14 +67,14 @@ public class GlobalSteps {
         ZAPIService service = new ZAPIService();
         Boolean shouldReport = Boolean.valueOf(context.getGeneralProperties().getProperty("report"));
         try {
-        if (shouldReport) {
-            service.reportToZephyr();
-        }
-         }catch (Exception e){
+            if (shouldReport) {
+                service.reportToZephyr();
+            }
+        } catch (Exception e){
             log.error(e.getMessage());
             log.trace(e.getMessage(), e);
         }
-        }
+    }
 
     
 

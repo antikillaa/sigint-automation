@@ -5,9 +5,10 @@ import abs.SearchFilter;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
+import http.G4Response;
+import http.client.G4Client;
 import http.requests.targetGroups.TargetGroupRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.AppContext;
 import model.Result;
 import model.TargetGroup;
@@ -15,12 +16,11 @@ import model.targetGroup.TargetGroupSearchResult;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 public class TargetGroupService implements EntityService<TargetGroup> {
 
-    private static RsClient rsClient = new RsClient();
+    private static G4Client g4Client = new G4Client();
     private static AppContext context = AppContext.getContext();
     private Logger log = Logger.getLogger(TargetGroupService.class);
     private final String sigintHost = context.environment().getSigintHost();
@@ -32,7 +32,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
 
         TargetGroupRequest request = new TargetGroupRequest();
 
-        Response response = rsClient.put(sigintHost + request.getURI(), entity, request.getCookie());
+        G4Response response = g4Client.put(sigintHost + request.getURI(), entity, request.getCookie());
         TargetGroup group = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "id");
         if (group != null) {
             context.entities().getTargetGroups().addOrUpdateEntity(group);
@@ -44,9 +44,9 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         log.info("Deleting target group id:" + entity.getId());
         log.debug(Parser.entityToString(entity));
         TargetGroupRequest request = new TargetGroupRequest().delete(entity.getId());
-        Response response = rsClient.delete(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4Client.delete(sigintHost + request.getURI(), request.getCookie());
 
-        Result result = JsonCoverter.fromJsonToObject(response.readEntity(String.class), Result.class);
+        Result result = JsonCoverter.readEntityFromResponse(response, Result.class);
         log.debug(Parser.entityToString(result));
         if (response.getStatus() == 200) {
             try {
@@ -68,7 +68,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         log.debug(Parser.entityToString(entity));
 
         TargetGroupRequest request = new TargetGroupRequest();
-        Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
+        G4Response response = g4Client.post(sigintHost + request.getURI(), entity, request.getCookie());
 
         TargetGroup targetGroup = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "result");
         log.debug(Parser.entityToString(targetGroup));
@@ -84,7 +84,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
     public TargetGroup view(String id) {
         log.info("View target group id:" + id);
         TargetGroupRequest request = new TargetGroupRequest().get(id);
-        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4Client.get(sigintHost + request.getURI(), request.getCookie());
 
         TargetGroup resultTargetGroup = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "result");
         log.debug(Parser.entityToString(resultTargetGroup));
@@ -95,9 +95,9 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         log.info("Get list of target groups");
 
         TargetGroupRequest request = new TargetGroupRequest();
-        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4Client.get(sigintHost + request.getURI(), request.getCookie());
 
-        TargetGroupSearchResult result = JsonCoverter.fromJsonToObject(response.readEntity(String.class), TargetGroupSearchResult.class);
+        TargetGroupSearchResult result = JsonCoverter.readEntityFromResponse(response, TargetGroupSearchResult.class);
         context.put("code", response.getStatus());
         if (result != null) {
             log.debug("Size of list: " + result.getResult().size());
