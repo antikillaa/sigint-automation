@@ -2,10 +2,18 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import app_context.RunContext;
+import app_context.entities.Entities;
+import app_context.properties.G4Properties;
 import http.G4Response;
 import http.client.G4Client;
 import http.requests.SourceRequest;
 import json.JsonCoverter;
+import json.RsClient;
+import model.Result;
+import model.Source;
+import model.SourceListResult;
+import model.SourcesRequest;
 import model.*;
 import org.apache.log4j.Logger;
 import utils.Parser;
@@ -14,10 +22,12 @@ import java.util.List;
 
 public class SourceService implements EntityService<Source> {
 
+    private static RsClient rsClient = new RsClient();
     private static G4Client g4Client = new G4Client();
     private static AppContext context = AppContext.getContext();
     private Logger log = Logger.getLogger(RoleService.class);
-    private final String sigintHost = context.environment().getSigintHost();
+    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
+    private RunContext context = RunContext.get();
 
     @Override
     public int add(Source entity) {
@@ -28,7 +38,7 @@ public class SourceService implements EntityService<Source> {
         G4Response response = g4Client.put(sigintHost + request.getURI(), entity, request.getCookie());
 
         Source source = JsonCoverter.readEntityFromResponse(response, Source.class, "id");
-        context.entities().getSources().addOrUpdateEntity(source);
+        Entities.getSources().addOrUpdateEntity(source);
 
         return response.getStatus();
     }
@@ -43,7 +53,7 @@ public class SourceService implements EntityService<Source> {
         Result result = JsonCoverter.readEntityFromResponse(response, Result.class);
         if (response.getStatus() == 200) {
             context.put("resultMessage", result.getResult());
-            context.entities().getSources().addOrUpdateEntity(entity);
+            Entities.getSources().addOrUpdateEntity(entity);
         }
         return response.getStatus();
     }
@@ -58,6 +68,7 @@ public class SourceService implements EntityService<Source> {
 
         G4Response response = g4Client.get(sigintHost + request.getURI(), request.getCookie());
 
+        SourceListResult result = JsonCoverter.readEntityFromResponse(response, SourceListResult.class);
         SourceListResult result = JsonCoverter.fromJsonToObject(response.getMessage(), SourceListResult.class);
 
         return result.getResult();
@@ -75,7 +86,7 @@ public class SourceService implements EntityService<Source> {
         Result result = JsonCoverter.readEntityFromResponse(response, Result.class);
         if (result != null) {
             context.put("resultMessage", result.getResult());
-            context.entities().getSources().addOrUpdateEntity(entity);
+            Entities.getSources().addOrUpdateEntity(entity);
         } else {
             log.error("Error! Update target process was failed");
             throw new AssertionError("Error! Update target process was failed");

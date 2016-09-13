@@ -11,5 +11,16 @@ public class SelenideContext {
     }
 
     private String ScenarioTitle;
+    
+    
+    private static SelenideContext instance;
+    
+    
+    public static SelenideContext get() {
+        if (instance == null) {
+            instance = new SelenideContext();
+        }
+        return instance;
+    }
 
 }

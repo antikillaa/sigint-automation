@@ -14,7 +14,7 @@ public abstract class EntityList<T extends TeelaEntity> implements Iterable<T> {
         this.entities = new ArrayList<>(entities);
 
     }
-
+    
     public Integer size() {
         return entities.size();
     }

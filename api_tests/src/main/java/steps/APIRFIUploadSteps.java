@@ -1,21 +1,22 @@
 package steps;
 
-import model.AppContext;
+import app_context.entities.Entities;
+import conditions.Verify;
 import model.FileAttachment;
 import model.InformationRequest;
-import model.User;
+import model.LoggedUser;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.RFIService;
 
+import static conditions.Conditions.equals;
 
 public class APIRFIUploadSteps extends APISteps {
 
     private static Logger log = Logger.getLogger(APIRFIUploadSteps.class);
     private static RFIService service = new RFIService();
-    private AppContext context = AppContext.getContext();
 
     @When("I send create RFI request $withApproved approved copy and $withCopy original document")
     public void createRFI(String withApproved, String withCopy) {
@@ -44,7 +45,7 @@ public class APIRFIUploadSteps extends APISteps {
         InformationRequest etalonRFI;
         InformationRequest createdRFI;
         etalonRFI = context.get("requestRFI", InformationRequest.class);;
-        createdRFI = context.entities().getRFIs().getLatest();
+        createdRFI = Entities.getRFIs().getLatest();
         checkRFIs(etalonRFI, createdRFI);
     }
 
@@ -73,7 +74,7 @@ public class APIRFIUploadSteps extends APISteps {
 
     @When("I update created RFI")
     public void updateCreatedRFI() {
-        InformationRequest RFI = context.entities().getRFIs().getLatest();
+        InformationRequest RFI = Entities.getRFIs().getLatest();
         InformationRequest newRFI = RFI.generate();
         int response = service.add(newRFI);
         context.put("code", response);
@@ -88,7 +89,7 @@ public class APIRFIUploadSteps extends APISteps {
     @When("I get details of created RFI")
     public void rfiDetailsView() {
         log.info("Starting step of getting details of RFI...");
-        InformationRequest createdRFI = context.entities().getRFIs().getLatest();
+        InformationRequest createdRFI = Entities.getRFIs().getLatest();
         InformationRequest requestRFIView = service.view(createdRFI.getId());
         log.debug("received RFI from response:"+requestRFIView);
         context.put("requestRFIView", requestRFIView);
@@ -97,7 +98,7 @@ public class APIRFIUploadSteps extends APISteps {
     @Then("RFI details get via details are correct")
     public void RFIDetailsViewCorrect() {
         log.info("Comparing two RFIs...");
-        InformationRequest createdRFI = context.entities().getRFIs().getLatest();
+        InformationRequest createdRFI = Entities.getRFIs().getLatest();
         InformationRequest requestRFIView = context.get("requestRFIView", InformationRequest.class);
         Assert.assertTrue(createdRFI.equals(requestRFIView));
     }
@@ -111,30 +112,31 @@ public class APIRFIUploadSteps extends APISteps {
 
     @When("I delete created RFI")
     public void deleteRFI() {
-        InformationRequest RFI = context.entities().getRFIs().getLatest();
+        InformationRequest RFI = Entities.getRFIs().getLatest();
         int response = service.remove(RFI);
         context.put("code",  response);
     }
 
     @When("I cancel RFI")
     public void cancelRFI() {
-        InformationRequest RFI = context.entities().getRFIs().getLatest();
+        InformationRequest RFI = Entities.getRFIs().getLatest();
         int response = service.cancel(RFI);
         context.put("code", response);
     }
 
     @When("I take ownership of RFI")
     public void assignRFI() {
-        InformationRequest RFI = context.entities().getRFIs().getLatest();
+        InformationRequest RFI = Entities.getRFIs().getLatest();
         int response = service.assign(RFI);
         context.put("code", response);
     }
 
-    @Then("RFI has status Assigned and assigned to analyst")
+    @Then("RFI has status Assigned and assigned to current user")
     public void checkAssignedRFI(){
-        InformationRequest RFI = context.entities().getRFIs().getLatest();
-        User currentUser = context.getLoggedUser();
-        Assert.assertEquals(RFI.getState(), "ASSIGNED");
-        Assert.assertEquals(RFI.getAssignedTo(), currentUser.getId());
+        InformationRequest RFI = Entities.getRFIs().getLatest();
+        LoggedUser currentUser = appContext.getLoggedUser();
+
+        Verify.shouldBe(equals.elements(RFI.getState(), "ASSIGNED"));
+        Verify.shouldBe(equals.elements(RFI.getAssignedTo(), currentUser.getId()));
     }
 }

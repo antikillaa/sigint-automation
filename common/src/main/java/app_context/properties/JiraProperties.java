@@ -35,7 +35,4 @@ public class JiraProperties extends ApplicationProperty{
         return getProperty().getProperty("project");
     }
     
-    public String getHost() {
-        return getProperty().getProperty("jenkins");
-    }
 }

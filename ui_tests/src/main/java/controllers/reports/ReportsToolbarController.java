@@ -2,7 +2,6 @@ package controllers.reports;
 
 import blocks.context.toolbars.reports.panels.ReportsActionPanel;
 import controllers.ToolbarController;
-import controllers.reports.form_page.ReportFormFactoryController;
 import pages.SigintPage;
 
 public class ReportsToolbarController extends ToolbarController {
@@ -25,7 +24,7 @@ public class ReportsToolbarController extends ToolbarController {
 
     public void openCreateReportForm() {
         actionPanel.clickCreateManualReportBtn();
-        context.put("controller", new ReportFormFactoryController());
+        
     }
 
 }

@@ -2,37 +2,26 @@ package steps;
 
 import abs.EntityList;
 import file_generator.FileGenerator;
-import model.G4File;
-import model.RecordType;
-import model.SSMS;
-import model.SourceType;
+import model.*;
 import model.bulders.SSMSGenerator;
-import model.lists.TargetsList;
 import org.jbehave.core.annotations.Given;
 
 public class APIDataGeneratorSteps extends APISteps {
 
-    @Given("$sType - $rType data file with: total $nTotal records, $numTo of them toTarget, $numFrom of them fromTarget was generated")
-    public void generateEntityList(String sType, String rType, String numTotal, String numTo, String numFrom) {
+    @Given("$sType - $rType data file with records for test targets was generated")
+    public void generateEntityList(String sType, String rType) {
 
         SourceType sourceType = SourceType.valueOf(sType);
         RecordType recordType = RecordType.valueOf(rType);
-        Integer numRecords = Integer.valueOf(numTotal);
-        Integer numToTarget = Integer.valueOf(numTo);
-        Integer numFromTarget = Integer.valueOf(numFrom);
 
         FileGenerator fileGenerator = new FileGenerator();
         switch (sourceType) {
             case Strategic:
                 switch (recordType) {
                     case SMS:
-                        TargetsList targetList = context.entities().getTargets();
+                        GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
 
-                        SSMSGenerator ssmsGenerator = new SSMSGenerator();
-                        EntityList<SSMS> ssmsList = ssmsGenerator
-                                .setTarget(targetList.random())
-                                .produceList(numRecords, numFromTarget, numToTarget);
-
+                        EntityList<SSMS> ssmsList = new SSMSGenerator().produceSSMSListByMatrix(matrix);
                         G4File file = fileGenerator.SSMS().write(ssmsList);
                         context.put("ssmsFile", file);
                         break;

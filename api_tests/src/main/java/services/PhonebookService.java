@@ -2,6 +2,9 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import app_context.RunContext;
+import app_context.entities.Entities;
+import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import file_generator.PhoneBookFile;
 import http.G4Response;
@@ -23,6 +26,9 @@ import java.util.List;
 public class PhonebookService implements EntityService<Phonebook>{
 
     private Logger log = Logger.getLogger(PhonebookService.class);
+    private static RsClient rsClient = new RsClient();
+    private RunContext context = RunContext.get();
+    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
     private static G4Client g4Client = new G4Client();
     private static AppContext context = AppContext.getContext();
     private final String sigintHost = context.environment().getSigintHost();
@@ -39,7 +45,7 @@ public class PhonebookService implements EntityService<Phonebook>{
         G4Response response = g4Client.post(sigintHost + request.getURI(), entity, request.getCookie());
         Phonebook createdPhonebook = JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
         if (createdPhonebook != null) {
-            context.entities().getPhonebooks().addOrUpdateEntity(createdPhonebook);
+            Entities.getPhonebooks().addOrUpdateEntity(createdPhonebook);
         }
         return response.getStatus();
     }
@@ -50,7 +56,7 @@ public class PhonebookService implements EntityService<Phonebook>{
         G4Response response = g4Client.delete(sigintHost + request.getURI() + "/" + entity.getId(), request.getCookie());
         if (response.getStatus() == 200) {
             try {
-                context.entities().getPhonebooks().removeEntity(entity);
+                Entities.getPhonebooks().removeEntity(entity);
             } catch (NullReturnException e) {
                 log.warn("Was unable to remove entity with id:" + entity.getId() + " as it doesn't in the list");
             }
@@ -79,7 +85,7 @@ public class PhonebookService implements EntityService<Phonebook>{
         G4Response response = g4Client.post(sigintHost + request.getURI() + "/" + entity.getId(), entity, request.getCookie());
         Phonebook createdPhonebook = JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
         if (createdPhonebook != null) {
-            context.entities().getPhonebooks().addOrUpdateEntity(createdPhonebook);
+            Entities.getPhonebooks().addOrUpdateEntity(createdPhonebook);
         }
         return response.getStatus();
     }

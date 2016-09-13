@@ -1,5 +1,6 @@
 package steps;
 
+import app_context.entities.Entities;
 import conditions.Verify;
 import errors.NullReturnException;
 import model.Record;
@@ -58,7 +59,7 @@ public class APIReportSteps extends APISteps {
     @When("Add new random record to report")
     public void addRecordToReport() {
         log.info("Generate new random record...");
-        Source source = RandomGenerator.getRandomItemFromList(context.getDictionary().getSources());
+        Source source = RandomGenerator.getRandomItemFromList(appContext.getDictionary().getSources());
         Record record = new Record()
                 .generateReportRecord()
                 .setSourceId(source.getId())
@@ -80,7 +81,7 @@ public class APIReportSteps extends APISteps {
     @Then("Created report is correct")
     public void createdReportIsCorrect() throws NullReturnException {
         Report requestReport = context.get("requestReport", Report.class);
-        Report createdReport = context.entities().getReports().getLatest();
+        Report createdReport = Entities.getReports().getLatest();
 
         Verify.shouldBe(equals.elements(createdReport.getOwner().getRole(), requestReport.getOwner().getRole()));
         Verify.shouldBe(equals.elements(createdReport.getOwner().getUser().getId(), requestReport.getOwner().getUser().getId()));

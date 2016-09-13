@@ -6,6 +6,8 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import utils.RandomGenerator;
 
+import java.util.Date;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Source extends TeelaEntity {
@@ -95,7 +97,7 @@ public class Source extends TeelaEntity {
     public Source generate() {
         setType(SourceType.getRandom());
         setRecordType(RecordType.getRandom());
-        setName(getType().toLetterCode() + "-" + getRecordType().toEnglishName() + "-" + getVersion());
+        setName(getType().toLetterCode() + "-" + getRecordType().toEnglishName() + "-" + new Date().getTime());
         setLocation(RandomGenerator.getRandomCountry());
         setDeleted(false);
         setLatitude(Math.random() * 180 - 90);

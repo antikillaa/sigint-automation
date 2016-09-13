@@ -5,7 +5,7 @@ import blocks.context.tables.reports.ReportRow;
 import controllers.TableController;
 import controllers.reports.form_page.ReportFormFactoryController;
 import errors.NotFoundException;
-import model.AppContext;
+import app_context.AppContext;
 import model.Report;
 import org.apache.log4j.Logger;
 import pages.SigintPage;

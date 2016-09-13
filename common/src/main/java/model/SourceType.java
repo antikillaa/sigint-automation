@@ -14,7 +14,8 @@ public enum SourceType {
     O("O", "Octopus", "Octopus"),
     J("J", "Jernas", "Jernas"),
     HumanInput("H", "HumInt", "HumInt"),
-    Etisalat("E", "External", "External");
+    Etisalat("E", "External", "External"),
+    X("X", "Target Team", "Target Team");
 
     private final String letterCode;
     private final String englishName;

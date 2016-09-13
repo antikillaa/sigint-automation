@@ -1,12 +1,12 @@
 package steps;
 
 import abs.EntityList;
+import app_context.entities.Entities;
 import conditions.Verify;
 import errors.NullReturnException;
 import file_generator.TargetFile;
 import json.JsonCoverter;
 import model.*;
-import model.lists.TargetsList;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
@@ -18,7 +18,6 @@ import utils.Parser;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import static conditions.Conditions.equals;
@@ -26,7 +25,6 @@ import static conditions.Conditions.isTrue;
 
 public class APITargetSteps extends APISteps {
     private Logger log = Logger.getLogger(APITargetGroupSteps.class);
-    private AppContext context = AppContext.getContext();
     private TargetService service = new TargetService();
 
     @When("I send create target $with targets group request")
@@ -34,7 +32,7 @@ public class APITargetSteps extends APISteps {
         Target target = new Target().generate();
         if (with.toLowerCase().equals("with")) {
             List<TargetGroup> groups = new ArrayList<TargetGroup>();
-            groups.add(context.entities().getTargetGroups().random());
+            groups.add(Entities.getTargetGroups().random());
             target.setGroups(groups);
         }
 
@@ -47,7 +45,7 @@ public class APITargetSteps extends APISteps {
     @Then("Created target is correct")
     public void createdTargetCorrect() {
         Target contextTarget = context.get("requestTarget", Target.class);
-        Target createdTarget = context.entities().getTargets().getLatest();
+        Target createdTarget = Entities.getTargets().getLatest();
 
         Assert.assertTrue(createdTarget.getId() != null);
         isEqualsTargets(createdTarget, contextTarget);
@@ -55,7 +53,7 @@ public class APITargetSteps extends APISteps {
 
     @When("I send get target details request")
     public void getTargetDetails() {
-        Target createdTarget = context.entities().getTargets().getLatest();
+        Target createdTarget = Entities.getTargets().getLatest();
 
         Target viewedTarget = service.view(createdTarget.getId());
 
@@ -64,7 +62,7 @@ public class APITargetSteps extends APISteps {
 
     @Then("Viewed target is correct")
     public void viewedTargetIsCorrect() {
-        Target createdTarget = context.entities().getTargets().getLatest();
+        Target createdTarget = Entities.getTargets().getLatest();
 
         Target viewedTarget = context.get("viewedTarget", Target.class);
 
@@ -90,7 +88,7 @@ public class APITargetSteps extends APISteps {
 
     @When("I send update target request")
     public void updateTargetRequest() throws NullReturnException {
-        Target createdTarget = context.entities().getTargets().getLatest();
+        Target createdTarget = Entities.getTargets().getLatest();
         Target updatedTarget = createdTarget.generate();
 
         log.info("Updated target: " + JsonCoverter.toJsonString(updatedTarget));
@@ -111,7 +109,7 @@ public class APITargetSteps extends APISteps {
 
     @When("I send delete target request")
     public void deleteTargetRequest() {
-        Target createdTarget = context.entities().getTargets().getLatest();
+        Target createdTarget = Entities.getTargets().getLatest();
 
         int responseCode = service.remove(createdTarget);
 
@@ -147,7 +145,7 @@ public class APITargetSteps extends APISteps {
             int index = RandomUtils.nextInt(targetGroups.size());
             TargetGroup group = targetGroups.get(index);
             target.addGroup(group);
-            context.entities().getTargetGroups().addOrUpdateEntity(group);
+            Entities.getTargetGroups().addOrUpdateEntity(group);
         }
 
         int responseCode = service.upload(targets);
@@ -159,7 +157,7 @@ public class APITargetSteps extends APISteps {
     @When("I send search targets by $criteria and value $value")
     public void targetSearchByCriteriaAndValue(String criteria, String value) {
         log.info("Start search targets by criteria: " + criteria + ", value: " + value);
-        Target target = context.entities().getTargets().getLatest();
+        Target target = Entities.getTargets().getLatest();
 
         if (criteria.toLowerCase().equals("type")) {
             value = value.equals("random") ? target.getType().toString() : value;
@@ -210,7 +208,7 @@ public class APITargetSteps extends APISteps {
     @Then("searched target entry $criteria list")
     public void searchedTargetInList(String criteria) {
         log.info("Checking if Target entry " + criteria + " list");
-        Target target = context.entities().getTargets().getLatest();
+        Target target = Entities.getTargets().getLatest();
         EntityList<Target> list = context.get("searchResult", EntityList.class);
 
         Boolean contains = list.contains(target);
@@ -226,14 +224,14 @@ public class APITargetSteps extends APISteps {
     @Then("uploaded target $criteria list")
     public void uploadedTargetInList(String criteria) {
         log.info("Checking if Target entry " + criteria + " list");
-        Target target = context.entities().getTargets().getLatest();
+        Target target = Entities.getTargets().getLatest();
         EntityList<Target> list = context.get("searchResult", EntityList.class);
 
         Boolean contains = false;
         for (Target entity : list) {
             if (isEqualsUploadedTargets(target, entity)) {
                 contains = true;
-                context.entities().getTargets().updateEntity(target, entity);
+                Entities.getTargets().updateEntity(target, entity);
                 break;
             }
         }
@@ -276,7 +274,7 @@ public class APITargetSteps extends APISteps {
 
     @When("I send get groups list of new target request")
     public void getTargetGroupsOfNewTarget(){
-        Target target = context.entities().getTargets().getLatest();
+        Target target = Entities.getTargets().getLatest();
         List<TargetGroup> targetGroups = service.getTargetGroups(target.getId());
 
         context.put("targetGroupList", targetGroups);
@@ -289,7 +287,7 @@ public class APITargetSteps extends APISteps {
         for (Target target : targets) {
             TargetGroup targetGroup = new TargetGroup().generate();
             target.addGroup(targetGroup);
-            context.entities().getTargetGroups().addOrUpdateEntity(targetGroup);
+            Entities.getTargetGroups().addOrUpdateEntity(targetGroup);
         }
 
         int responseCode = service.upload(targets);
@@ -307,7 +305,7 @@ public class APITargetSteps extends APISteps {
         if ((result.getRowsAdded() + result.getRowsUpdated()) == numEntries || result.getRowsFailed() == 0) {
             List<Target> targets = context.get("uploadedTargets", ArrayList.class);
             for (Target target : targets) {
-                context.entities().getTargets().addOrUpdateEntity(target);
+                Entities.getTargets().addOrUpdateEntity(target);
             }
         } else {
             log.error("Entry upload result is not correct!");
@@ -316,30 +314,16 @@ public class APITargetSteps extends APISteps {
         }
     }
 
-    @Given("targets with phones exists")
-    public void targetWithPhonesExist(){
-        TargetFilter searchFilter = new TargetFilter().filterBy("empty", "random");
-        List<Target> targets = service.list(searchFilter).getEntities();
+    @Given("$count targets with phones exists")
+    public void targetWithPhonesExist(String count){
+        int targetsCount = Integer.valueOf(count);
 
-        // remove without phone
-        Iterator<Target> i = targets.iterator();
-        while (i.hasNext()) {
-            Target target = i.next();
-            if (target.getPhones().isEmpty()) {
-                i.remove();
-            }
-        }
+        List<Target> targets = new Target().generate(targetsCount);
+        int statusCode = service.upload(targets);
+        Verify.shouldBe(equals.elements(statusCode, 200));
 
-        if (targets.isEmpty()) {
-            Target target = new Target().generate();
-            int response = service.add(target);
-
-            Verify.shouldBe(equals.elements(response, 200));
-
-            targets.add(target);
-        }
-
-        context.entities().setTargets(new TargetsList(targets));
+        GenerationMatrix generationMatrix = new GenerationMatrix(targets);
+        context.put("generationMatrix", generationMatrix);
     }
 
 }

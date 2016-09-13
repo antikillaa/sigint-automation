@@ -31,7 +31,7 @@ public class PhoneBookFile extends FileService {
     public G4File write(List<Phonebook> phonebooks) {
         G4File file = null;
         try {
-            file = new G4File("Phonebooks" + new Date() + ".csv");
+            file = new G4File("Phonebooks" + new Date().getTime() + ".csv");
             log.info("File for phonebooks created: " + file.getAbsolutePath());
         } catch (NullPointerException e) {
             log.error(e.getMessage());

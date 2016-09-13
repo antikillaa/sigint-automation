@@ -20,9 +20,11 @@ public class MailProperties extends ApplicationProperty {
         return getProperty().getProperty("from");
     }
     
-    public String getStmpHost() {
-        return getProperty().getProperty("smtp");
+    public String getSmtpGmailHost() {
+        return getProperty().getProperty("smtp_gmail");
     }
+    
+    public String getSmtpPegasusHost() {return getProperty().getProperty("smtp_pegasus");}
     
     public String getPort() {
         return getProperty().getProperty("port");

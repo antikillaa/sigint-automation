@@ -15,7 +15,7 @@ public class Pages {
         return page(SigintPage.class);
     }
 
-    public LoginPage loginPage() {
+    public static LoginPage loginPage() {
         return page(LoginPage.class);
     }
 

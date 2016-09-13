@@ -3,7 +3,7 @@ package controllers.records;
 import controllers.PageController;
 import controllers.reports.form_page.ReportFormFactoryController;
 import errors.NullReturnException;
-import model.AppContext;
+import app_context.AppContext;
 import org.apache.log4j.Logger;
 import pages.Pages;
 import pages.records.RecordDetailsDialog;

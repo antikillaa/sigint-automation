@@ -1,20 +1,19 @@
 package emailing.report.email_senders;
 
-import model.AppContext;
+import app_context.properties.G4Properties;
+import app_context.properties.RunProperties;
 import org.apache.log4j.Logger;
-
-import java.util.Properties;
 
 public class EmailSenders {
     
-    static Properties general = AppContext.getContext().getGeneralProperties();
+    private static RunProperties runProperties = G4Properties.getRunProperties();
     private static Logger logger = Logger.getLogger(EmailSenders.class);
     
     
     
     private static Reporters getReporterName() {
         Reporters reporter;
-        String propReporter = general.getProperty("emailSender").toUpperCase();
+        String propReporter = runProperties.getEmailSender().toUpperCase();
         if (propReporter == null) {
             reporter = Reporters.PEGASUS;
         } else {

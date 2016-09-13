@@ -10,15 +10,16 @@ import java.util.List;
 
 public class Statistic {
     
-    private static ZAPIService service = new ZAPIService();
-    private static JiraService jiraService = new JiraService();
-    private static Logger log = Logger.getLogger(Statistic.class);
+    private ZAPIService service = new ZAPIService();
+    private JiraService jiraService = new JiraService();
+    private Logger log = Logger.getLogger(Statistic.class);
     
-    public static ReportResults getResults() {
+    
+    public ReportResults getResults() {
         return service.getReportResults();
     }
     
-    public static Boolean hasFailuresWithoutBugs() {
+    public Boolean hasFailuresWithoutBugs() {
         List<TestCase> testCaseList = service.getReportResults().getFailed();
             for (TestCase testCase:testCaseList) {
                 if (!jiraService.hasOpenedBugs(testCase.getTitle())) {
@@ -28,7 +29,7 @@ public class Statistic {
             return false;
         }
     
-    public static Boolean hasOpenedBug(String testCaseTitle) {
+    public Boolean hasOpenedBug(String testCaseTitle) {
         try {
             return jiraService.hasOpenedBugs(testCaseTitle);
         } catch (Exception e) {

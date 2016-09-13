@@ -3,6 +3,8 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import abs.SearchResult;
+import app_context.RunContext;
+import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import file_generator.EtisalatSubscriberFile;
 import http.G4Response;
@@ -15,7 +17,6 @@ import model.UploadResult;
 import model.phonebook.EtisalatSubscriberSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-
 import javax.ws.rs.core.MediaType;
 import java.io.File;
 import java.util.ArrayList;

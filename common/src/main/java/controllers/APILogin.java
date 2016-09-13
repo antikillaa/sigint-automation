@@ -1,8 +1,10 @@
 package controllers;
 
+import app_context.RunContext;
 import http.G4Response;
 import json.JsonCoverter;
-import model.AppContext;
+import app_context.AppContext;
+import model.LoggedUser;
 import model.Token;
 import model.User;
 import org.apache.log4j.Logger;
@@ -11,32 +13,32 @@ import services.UserService;
 public class APILogin {
 
     private SignInService signService = new SignInService();
-    private AppContext context = AppContext.getContext();
+    private AppContext context = AppContext.get();
+    private RunContext runContext = RunContext.get();
     Logger log = Logger.getRootLogger();
 
 
-    public void signInWithCrendentials(String validness) {
-        log.info("Signing in...");
+    /**
+     * Sign in as user and add LoggedUser in AppContext.
+     * @param user User for sign in.
+     */
+    public void signInAsUser(User user) {
+        log.info("Signing in as user:"+ user);
 
-        User user = context.get("user", User.class);
-        String password;
-        if (validness.toLowerCase().equals("incorrect")) {
-            password = "incorrect";
-        } else {
-            password = user.getPassword();
-        }
-
-        G4Response response = signService.signIn(user.getName(), password);
-        context.put("code", response.getStatus());
+        G4Response response = signService.signIn(user.getName(), user.getPassword());
+        runContext.put("code", response.getStatus());
         if (response.getStatus() == 200) {
             Token token = JsonCoverter.readEntityFromResponse(response, Token.class);
-            context.environment().setToken(token);
-        } else {
-            context.put("message", response.getMessage());
-        }
 
-        UserService userService = new UserService();
-        userService.me();
+            //update user
+            User me = new UserService().me(token);
+            me.setPassword(user.getPassword());
+            me.setRoles(user.getRoles());
+
+            context.setLoggedUser(new LoggedUser(me, token));
+        } else {
+            runContext.put("message", response.readEntity(String.class));
+        }
     }
 
 }

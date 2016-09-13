@@ -1,9 +1,12 @@
 package jira;
 
+import app_context.properties.G4Properties;
+import app_context.properties.JiraProperties;
 import errors.NullReturnException;
 import http.G4Response;
 import http.client.G4Client;
 import jira.model.*;
+import org.apache.log4j.Logger;
 import json.JsonCoverter;
 import model.AppContext;
 import org.apache.log4j.Logger;
@@ -14,6 +17,16 @@ import java.util.List;
 
 public class JiraConnector {
     public static Logger log = Logger.getRootLogger();
+    private JiraProperties properties = G4Properties.getJiraProperties();
+
+    private RsClient client = new RsClient();
+
+
+    private Cookie getCookie() {
+        Session session = initSession();
+        if (session == null) {
+            log.debug("jira session wasn't received. Cookie will not be generated");
+            return null;
     private AppContext context = AppContext.getContext();
     private Cookie sessionCookie;
     private G4Client client = new G4Client();
@@ -26,15 +39,16 @@ public class JiraConnector {
         } catch (NullReturnException e) {
             log.warn("Session info wasn't received from Jira. Using anonymous...");
         }
+        return new Cookie(session.getName(), session.getValue());
     }
 
 
-    private Session initSession() throws NullReturnException {
+    private Session initSession()  {
         log.debug("Connecting to jira host...");
         User user = new User();
-        String username = context.getJiraConnection().getProperty("username");
+        String username = properties.getUsername();
         log.debug("Using username:"+username);
-        String password = context.getJiraConnection().getProperty("password");
+        String password = properties.getPassword();
         user.setUsername(username);
         log.debug("Using password:"+password);
         user.setPassword(password);
@@ -44,7 +58,11 @@ public class JiraConnector {
 
         SessionInfo sessionInfo = JsonCoverter.readEntityFromResponse(response, SessionInfo.class);
         log.debug("Jira session created");
-        return sessionInfo.getSession();
+        if (sessionInfo !=null) {
+            return sessionInfo.getSession();
+        }
+        else return null;
+
 
     }
 
@@ -65,8 +83,6 @@ public class JiraConnector {
 
     public String getVersionId(String projectId, String versionName) throws NullReturnException{
         log.debug("Getting version id based on project id:"+projectId+" and version name:"+versionName);
-        String url = jiraServer + "/rest/api/latest/project/"+projectId+"/versions";
-
         G4Response response = client.get(url, sessionCookie);
         List<ProjectVersion> versions = JsonCoverter.fromJsonToObjectsList(response.getMessage(), ProjectVersion[].class);
 
@@ -80,6 +96,7 @@ public class JiraConnector {
     
     public Issue getIssue(String issueKey) {
         log.debug("Getting issue by it's key:" + issueKey);
+
         String url = jiraServer + "/rest/api/latest/issue/" + issueKey;
         G4Response response = client.get(url, sessionCookie);
         return JsonCoverter.readEntityFromResponse(response, Issue.class);

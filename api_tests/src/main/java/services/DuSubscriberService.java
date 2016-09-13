@@ -3,6 +3,8 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import abs.SearchResult;
+import app_context.RunContext;
+import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import file_generator.DuFile;
 import http.G4Response;
@@ -39,7 +41,7 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
         log.debug("Writing DuSubscriberEntry to csv file...");
         File file = new DuFile().write(entries);
 
-        log.info("Upload file with " + entries.size() + " DuSubscriber entries..");
+        log.info("Upload file: " + file.getName() + " with " + entries.size() + " DuSubscriber entries..");
         DuSubscriberRequest request = new DuSubscriberRequest().upload();
         request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         file.deleteOnExit();

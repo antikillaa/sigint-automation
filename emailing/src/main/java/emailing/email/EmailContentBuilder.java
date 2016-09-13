@@ -1,19 +1,18 @@
 package emailing.email;
 
+import app_context.properties.G4Properties;
+import app_context.properties.JenkinsProperties;
 import emailing.html_elements.ElementsFabric;
 import emailing.html_elements.HtmlBuilder;
 import emailing.html_elements.HtmlElement;
 import emailing.html_elements.Style;
 import failure_strategy.Statistic;
-import model.AppContext;
 import reporter.ReportResults;
-
-import java.util.Properties;
 
 public abstract class EmailContentBuilder {
     
-    protected ReportResults results = Statistic.getResults();
-    protected static Properties connection = AppContext.getContext().getJiraConnection();
+    protected ReportResults results = new Statistic().getResults();
+    protected static JenkinsProperties connection = G4Properties.getJenkinsProperties();
     
     protected abstract HtmlElement buildStatusHeader();
     protected abstract void buildBody(HtmlBuilder builder, ReportResults results);
@@ -35,7 +34,7 @@ public abstract class EmailContentBuilder {
         HtmlElement tableRowReportLink = ElementsFabric.tableRow();
         tableRowReportLink.addChild(ElementsFabric.tableColumn("View detailed report:", null));
         tableRowReportLink.addChild(ElementsFabric.tableColumn("", null).addChild(
-                ElementsFabric.link(connection.getProperty("jenkins")+"/job/Tests/allure", "report link")));
+                ElementsFabric.link(connection.getHost()+"/job/Tests/allure", "report link")));
         tableStatistic.addChild(tableRowReportLink);
         return null;
     }

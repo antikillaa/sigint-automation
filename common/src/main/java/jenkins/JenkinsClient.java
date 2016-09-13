@@ -1,5 +1,7 @@
 package jenkins;
 
+import app_context.properties.G4Properties;
+import app_context.properties.JenkinsProperties;
 import http.G4Response;
 import http.client.G4Client;
 import json.JsonCoverter;
@@ -18,13 +20,13 @@ class JenkinsClient {
     private Logger logger = Logger.getLogger(JenkinsClient.class);
     
     JenkinsClient() {
-        Properties jenkinsConfig  = AppContext.getContext().getJenkinsProperties();
-        this.jenkinsURL = jenkinsConfig.getProperty("jenkinsHost");
-        this.jenkinsUsername = jenkinsConfig.getProperty("username");
-        this.jenkinsPassword = jenkinsConfig.getProperty("password");
-        this.jobName = jenkinsConfig.getProperty("jobName");
+        JenkinsProperties jenkinsConfig  = G4Properties.getJenkinsProperties();
+        this.jenkinsURL = jenkinsConfig.getHost();
+        this.jenkinsUsername = jenkinsConfig.getUsername();
+        this.jenkinsPassword = jenkinsConfig.getPassword();
+        this.jobName = jenkinsConfig.getJobName();
     }
-    
+
     JobInfo getJenkinsJobInfo(String jobNumber) {
         logger.debug("Getting jenkins job info by job number:"+jobNumber);
 

@@ -1,6 +1,7 @@
 package steps;
 
 import abs.EntityList;
+import app_context.entities.Entities;
 import conditions.Verify;
 import errors.NullReturnException;
 import json.JsonCoverter;
@@ -12,7 +13,6 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.PhonebookService;
-import utils.Parser;
 import utils.RandomGenerator;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class APIPhonebookSteps extends APISteps {
 
     @When("I send update request for created Phonebook Entry")
     public void updatePhonebookEntry() {
-        Phonebook phonebook = context.entities().getPhonebooks().getLatest();
+        Phonebook phonebook = Entities.getPhonebooks().getLatest();
         Phonebook newPhonebook = phonebook.generate();
 
         int responseCode = service.update(newPhonebook);
@@ -50,7 +50,7 @@ public class APIPhonebookSteps extends APISteps {
     public void checkPhonebookEntry() {
         log.info("Verifying if Phonebook Entry is correct");
         Phonebook etalon = context.get("phonebook", Phonebook.class);
-        Phonebook created = context.entities().getPhonebooks().getLatest();
+        Phonebook created = Entities.getPhonebooks().getLatest();
 
         Assert.assertEquals(etalon.getName(), created.getName());
         Assert.assertEquals(etalon.getPhoneNumber(), created.getPhoneNumber());
@@ -64,7 +64,7 @@ public class APIPhonebookSteps extends APISteps {
 
     @When("I send delete request for created Phonebook Entry")
     public void deletePhonebookEntry() {
-        Phonebook phonebook = context.entities().getPhonebooks().getLatest();
+        Phonebook phonebook = Entities.getPhonebooks().getLatest();
         context.put("id", phonebook.getId());
 
         int responseCode = service.remove(phonebook);
@@ -82,7 +82,7 @@ public class APIPhonebookSteps extends APISteps {
 
     @When("I get details of created Phonebook Entry")
     public void getPhonebookEntry() {
-        Phonebook entity = context.entities().getPhonebooks().getLatest();
+        Phonebook entity = Entities.getPhonebooks().getLatest();
         Phonebook phonebook = service.view(entity.getId());
 
         context.put("phonebook", phonebook);
@@ -91,7 +91,7 @@ public class APIPhonebookSteps extends APISteps {
     @When("I search Phonebook Entry by $criteria and value $value")
     public void searchPhonebookbyCriteria(String criteria, String value) throws NullReturnException {
         log.info("Start search phonebook by criteria: " + criteria + ", value: " + value);
-        Phonebook phonebook = context.entities().getPhonebooks().getLatest();
+        Phonebook phonebook = Entities.getPhonebooks().getLatest();
 
         if (criteria.toLowerCase().equals("address")) {
             value = value.equals("random") ? phonebook.getAddress() : value;
@@ -139,7 +139,7 @@ public class APIPhonebookSteps extends APISteps {
 
     @Then("Searched Phonebook Entry $critera list")
     public void checkPhonebookInResults(String criteria) {
-        Phonebook phonebook = context.entities().getPhonebooks().getLatest();
+        Phonebook phonebook = Entities.getPhonebooks().getLatest();
         EntityList<Phonebook> list = context.get("searchResult", EntityList.class);
         log.info("Checking if phonebook entry " + criteria + " list");
 
@@ -170,7 +170,7 @@ public class APIPhonebookSteps extends APISteps {
         context.put("code", responseCode);
         context.put("uploadedPhonebooks", phonebooks);
         for (Phonebook phonebook : phonebooks){
-            context.entities().getPhonebooks().addOrUpdateEntity(phonebook);
+            Entities.getPhonebooks().addOrUpdateEntity(phonebook);
         }
     }
 
@@ -181,9 +181,11 @@ public class APIPhonebookSteps extends APISteps {
 
         int numEntries = Integer.valueOf(count);
         if (uploadResult.getNumEntries() != numEntries || uploadResult.getFailedEntries() > 0) {
-            log.error("Entry upload result is not correct!");
-            log.error(Parser.entityToString(uploadResult));
-            throw new AssertionError("Entry upload result is not correct!");
+            String errorMessage = "Upload result of Phonebooks entries is not correct!\n" +
+                    "Expected: numEntries <" + numEntries + ">, " + "failedEntries <0>\n" +
+                    "Actual: numEntries <" + uploadResult.getNumEntries() + ">, " + "failedEntries <" + uploadResult.getFailedEntries() + ">";
+            log.error(errorMessage);
+            throw new AssertionError(errorMessage);
         }
     }
 }

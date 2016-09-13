@@ -1,6 +1,7 @@
 package emailing.report.email_senders;
 
-import model.AppContext;
+import app_context.properties.G4Properties;
+import app_context.properties.MailProperties;
 import org.apache.log4j.Logger;
 
 import javax.mail.Message;
@@ -9,12 +10,11 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.Properties;
 
 public abstract class EmailBaseSender {
     
     
-    static Properties mailProperties = AppContext.getContext().getMailProperties();
+    static MailProperties mailProperties = G4Properties.getMailProperties();
     private int tries = 0;
     Logger logger = Logger.getLogger(EmailBaseSender.class);
     
@@ -30,8 +30,8 @@ public abstract class EmailBaseSender {
         }
         try {
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(mailProperties.getProperty("from")));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mailProperties.getProperty("recepients")));
+            message.setFrom(new InternetAddress(mailProperties.getFromAddress()));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(mailProperties.getRecipients()));
             message.setSubject(subject);
             message.setContent(html, "text/html; charset=utf-8");
             Transport.send(message);

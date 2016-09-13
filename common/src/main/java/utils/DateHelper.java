@@ -1,6 +1,6 @@
 package utils;
 
-import model.AppContext;
+import app_context.RunContext;
 import org.apache.log4j.Logger;
 
 import java.text.ParseException;
@@ -12,7 +12,7 @@ import java.util.TimeZone;
 public class DateHelper {
 
     private static Logger log = Logger.getLogger(DateHelper.class);
-    private static AppContext context = AppContext.getContext();
+    private static RunContext context = RunContext.get();
 
     public static Date yesterday() {
         Calendar calendar = Calendar.getInstance();

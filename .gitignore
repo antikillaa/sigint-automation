@@ -7,3 +7,4 @@ target
 .DS_Store
 /htmlEmail
 htmlEmail.html
+*.csv

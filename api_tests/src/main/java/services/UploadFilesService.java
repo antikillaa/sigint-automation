@@ -1,6 +1,9 @@
 package services;
 
 import abs.SearchFilter;
+import app_context.AppContext;
+import app_context.RunContext;
+import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import http.G4Response;
 import http.client.G4Client;
@@ -18,10 +21,12 @@ import java.util.List;
 
 public class UploadFilesService {
 
+    private static RsClient rsClient = new RsClient();
     private static G4Client g4Client = new G4Client();
     private static AppContext context = AppContext.getContext();
     private Logger log = Logger.getLogger(UploadFilesService.class);
-    private final String sigintHost = context.environment().getSigintHost();
+    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
+    private RunContext context = RunContext.get();
 
 
     public int upload(G4File file) {
@@ -52,7 +57,7 @@ public class UploadFilesService {
 
     private FileMeta initFileMeta(G4File file) {
         Source source = context.get("source", Source.class);
-        User user = context.getLoggedUser();
+        LoggedUser user = AppContext.get().getLoggedUser();
 
         Meta meta = new Meta();
         meta.setFileName(file.getName());
