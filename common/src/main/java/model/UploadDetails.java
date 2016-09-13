@@ -32,4 +32,19 @@ public class UploadDetails {
         this.searchResults = searchResults;
     }
 
+    /**
+     * Get matching result by Target name and TargetResultType
+     * @param name target name
+     * @param targetResultType TargetResultType
+     * @return MatchingResult or null if none found
+     */
+    public MatchingResult findMatchingResultByTargetNameAndTargetResultType(String name, TargetResultType targetResultType) {
+        List<MatchingResult> matchingResults = searchResults;
+        for (MatchingResult result : matchingResults) {
+            if (result.getTarget().getName().equals(name) && result.getTargetResultType().equals(targetResultType)) {
+                return result;
+            }
+        }
+        return null;
+    }
 }

@@ -18,7 +18,6 @@ import utils.Parser;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import static conditions.Conditions.equals;
@@ -315,28 +314,16 @@ public class APITargetSteps extends APISteps {
         }
     }
 
-    @Given("targets with phones exists")
-    public void targetWithPhonesExist(){
-        TargetFilter searchFilter = new TargetFilter().filterBy("empty", "random");
-        List<Target> targets = service.list(searchFilter).getEntities();
+    @Given("$count targets with phones exists")
+    public void targetWithPhonesExist(String count){
+        int targetsCount = Integer.valueOf(count);
 
-        // remove without phone
-        Iterator<Target> i = targets.iterator();
-        while (i.hasNext()) {
-            Target target = i.next();
-            if (target.getPhones().isEmpty()) {
-                i.remove();
-            }
-        }
+        List<Target> targets = new Target().generate(targetsCount);
+        int statusCode = service.upload(targets);
+        Verify.shouldBe(equals.elements(statusCode, 200));
 
-        if (targets.isEmpty()) {
-            Target target = new Target().generate();
-            int response = service.add(target);
-
-            Verify.shouldBe(equals.elements(response, 200));
-            targets.add(target);
-        }
-        context.put("targets", targets);
+        GenerationMatrix generationMatrix = new GenerationMatrix(targets);
+        context.put("generationMatrix", generationMatrix);
     }
 
 }

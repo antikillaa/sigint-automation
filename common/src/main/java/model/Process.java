@@ -19,12 +19,13 @@ public class Process extends TeelaEntity {
     private List<String> indexes;
     private Date lmt;
     private MatchingContext matchingContext;
-    private Integer recordsCount;
-    private Integer smsCount;
-    private Integer workload;
+    private int recordsCount;
+    private int smsCount;
+    private int workload;
     private Date earlistRecordTime;
     private Date latestRecordTime;
-    private Integer targetHitCount;
+    private int targetHitCount;
+    private int targetMentionCount;
     private boolean ingestMatchingComplete;
 
 
@@ -92,27 +93,27 @@ public class Process extends TeelaEntity {
         this.matchingContext = matchingContext;
     }
 
-    public Integer getRecordsCount() {
+    public int getRecordsCount() {
         return recordsCount;
     }
 
-    public void setRecordsCount(Integer recordsCount) {
+    public void setRecordsCount(int recordsCount) {
         this.recordsCount = recordsCount;
     }
 
-    public Integer getSmsCount() {
+    public int getSmsCount() {
         return smsCount;
     }
 
-    public void setSmsCount(Integer smsCount) {
+    public void setSmsCount(int smsCount) {
         this.smsCount = smsCount;
     }
 
-    public Integer getWorkload() {
+    public int getWorkload() {
         return workload;
     }
 
-    public void setWorkload(Integer workload) {
+    public void setWorkload(int workload) {
         this.workload = workload;
     }
 
@@ -132,12 +133,20 @@ public class Process extends TeelaEntity {
         this.latestRecordTime = latestRecordTime;
     }
 
-    public Integer getTargetHitCount() {
+    public int getTargetHitCount() {
         return targetHitCount;
     }
 
-    public void setTargetHitCount(Integer targetHitCount) {
+    public void setTargetHitCount(int targetHitCount) {
         this.targetHitCount = targetHitCount;
+    }
+
+    public int getTargetMentionCount() {
+        return targetMentionCount;
+    }
+
+    public void setTargetMentionCount(int targetMentionCount) {
+        this.targetMentionCount = targetMentionCount;
     }
 
     public boolean isIngestMatchingComplete() {
