@@ -88,7 +88,7 @@ public class GenerationMatrix {
     public int getTotalTargetMention() {
         int totalTargetMention = 0;
         for (GenerationMatrixRow row : rows) {
-            int mentionCount = row.getFromNumberMention() + row.getToNumberMention() + row.getKeywordMention() + row.getNameMention();
+            int mentionCount = row.getNumberMention() + row.getKeywordMention() + row.getNameMention();
             if (mentionCount > 0) {
                 totalTargetMention++;
             }

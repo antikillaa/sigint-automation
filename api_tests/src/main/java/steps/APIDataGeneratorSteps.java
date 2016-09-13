@@ -21,7 +21,7 @@ public class APIDataGeneratorSteps extends APISteps {
                     case SMS:
                         GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
 
-                        EntityList<SSMS> ssmsList = new SSMSGenerator().setGenerationMatrix(matrix).produceList();
+                        EntityList<SSMS> ssmsList = new SSMSGenerator().produceSSMSListByMatrix(matrix);
                         G4File file = fileGenerator.SSMS().write(ssmsList);
                         context.put("ssmsFile", file);
                         break;

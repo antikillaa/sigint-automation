@@ -15,7 +15,7 @@ public class APISSMSSteps extends APISteps {
         int numSSMS = Integer.valueOf(count);
         log.info("Generating S-SMS data: " + numSSMS + " records.." );
 
-        EntityList<SSMS> ssms = new SSMSGenerator().produceList(numSSMS);
+        EntityList<SSMS> ssms = new SSMSGenerator().produceSSMSListRandomly(numSSMS);
 
         log.debug("S-SMS data generated");
         context.put("ssmsList", ssms.getEntities());

@@ -8,13 +8,34 @@ import java.util.Random;
  */
 public class GenerationMatrixRow {
 
+    /**
+     * Test target used to generate test records data (SMS & Voice) from/to him,
+     * and records with any mention about this target
+     */
     private Target target;
+    /**
+     * count of 'from target number' records
+     */
     private int fromNumberCount;
+    /**
+     * count of 'to target number' records
+     */
     private int toNumberCount;
-    private int fromNumberMention;
-    private int toNumberMention;
+    /**
+     * count of records with 'target phone' mention in text message
+     */
+    private int numberMention;
+    /**
+     * count of records with 'target keyword' mention in text message
+     */
     private int keywordMention;
+    /**
+     * count of records with 'target name' mention in text message
+     */
     private int nameMention;
+    /**
+     * count of records without any target mention, random records
+     */
     private int withoutHitMention;
 
     /**
@@ -28,8 +49,7 @@ public class GenerationMatrixRow {
         Random random = new Random();
         this.fromNumberCount = random.nextInt(2);
         this.toNumberCount = random.nextInt(2);
-        this.fromNumberMention = random.nextInt(2);
-        this.toNumberMention = random.nextInt(2);
+        this.numberMention = random.nextInt(2);
         this.keywordMention = random.nextInt(2);
         this.nameMention = random.nextInt(2);
         this.withoutHitMention = random.nextInt(5);
@@ -59,20 +79,12 @@ public class GenerationMatrixRow {
         this.toNumberCount = toNumberCount;
     }
 
-    public int getFromNumberMention() {
-        return fromNumberMention;
+    public int getNumberMention() {
+        return numberMention;
     }
 
-    public void setFromNumberMention(int fromNumberMention) {
-        this.fromNumberMention = fromNumberMention;
-    }
-
-    public int getToNumberMention() {
-        return toNumberMention;
-    }
-
-    public void setToNumberMention(int toNumberMention) {
-        this.toNumberMention = toNumberMention;
+    public void setNumberMention(int numberMention) {
+        this.numberMention = numberMention;
     }
 
     public int getKeywordMention() {
@@ -108,8 +120,7 @@ public class GenerationMatrixRow {
 
         totalRecords += fromNumberCount;
         totalRecords += toNumberCount;
-        totalRecords += fromNumberMention;
-        totalRecords += toNumberMention;
+        totalRecords += numberMention;
         totalRecords += keywordMention;
         totalRecords += nameMention;
         totalRecords += withoutHitMention;
@@ -139,8 +150,7 @@ public class GenerationMatrixRow {
     public int getTotalRecordsMention() {
         int totalRecordsMention = 0;
 
-        totalRecordsMention += fromNumberMention;
-        totalRecordsMention += toNumberMention;
+        totalRecordsMention += numberMention;
         totalRecordsMention += keywordMention;
         totalRecordsMention += nameMention;
 
