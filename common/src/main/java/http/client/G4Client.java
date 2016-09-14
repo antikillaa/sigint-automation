@@ -1,8 +1,9 @@
-package json;
+package http.client;
 
 import app_context.properties.G4Properties;
-import app_context.properties.JiraProperties;
 import errors.NullReturnException;
+import http.G4Response;
+import json.JsonCoverter;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.media.multipart.MultiPart;
@@ -21,28 +22,18 @@ import java.net.URISyntaxException;
 import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD;
 import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME;
 
-public class RsClient {
+public class G4Client {
 
-    public static Logger log = Logger.getRootLogger();
+    private static Logger log = Logger.getLogger(G4Client.class);
     private Client client;
-    private JiraProperties connectionProperties = G4Properties.getJiraProperties();
-
-    public RsClient(){
-        initClient();
-    }
-
-    public Client client() {
-        return client;
-    }
-
 
     /**
      * Initialization JAX-RS client with HttpAuthenticationFeature.basic(user, pass)
-     * <br>user and pass it properties from jiraConnection.properties
+     * <br>user and pass properties defined in the jiraConnection.properties
      */
-    public void initClient(){
-        String user = connectionProperties.getUsername();
-        String pass = connectionProperties.getPassword();
+    public G4Client(){
+        String user = G4Properties.getJiraProperties().getUsername();
+        String pass = G4Properties.getJiraProperties().getPassword();
         HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(user, pass);
         client = ClientBuilder.newClient();
         client.register(feature);
@@ -93,50 +84,72 @@ public class RsClient {
      * HTTP GET request
      *
      * @param url target URL
-     * @return JAX-RS client response
+     * @return javax.ws.rs.core.Response
      */
-    public Response get(String url){
-        log.debug("Sending get request...");
-        return buildRequest(url).get();
+    public G4Response get(String url){
+        log.debug("Sending GET request...");
+        Response response = buildRequest(url).get();
+        return new G4Response(response);
     }
 
-    public Response get(String url, Cookie cookie) {
-        log.debug("Sending get request");
-        return buildRequest(url).cookie(cookie).get();
+    /**
+     * HTTP GET request
+     *
+     * @param url target URL
+     * @param cookie cookie
+     * @return javax.ws.rs.core.Response
+     */
+    public G4Response get(String url, Cookie cookie) {
+        log.debug("Sending GET request");
+        Response response = buildRequest(url).cookie(cookie).get();
+        return new G4Response(response);
     }
 
-    public Response get(String url, Cookie cookie, String mediaType) {
+    /**
+     /**
+     * HTTP GET request
+     *
+     * @param url target URL
+     * @param cookie cookie
+     * @param mediaType mediaType
+     * @return javax.ws.rs.core.Response
+     */
+    public G4Response get(String url, Cookie cookie, String mediaType) {
         log.debug("Sending get request");
-        return buildRequest(url, mediaType).cookie(cookie).get();
+        Response response = buildRequest(url, mediaType).cookie(cookie).get();
+        return new G4Response(response);
     }
     
-    public Response get(String url, String username, String password) {
-        return buildRequest(url, username, password).get();
-        
+    public G4Response get(String url, String username, String password) {
+        Response response = buildRequest(url, username, password).get();
+        return new G4Response(response);
     }
 
     /**
      * HTTP PUT request
      *
      * @param url target URL
-     * @return JAX-RS client response
+     * @return javax.ws.rs.core.Response
      */
-    public Response put(String url, Object object){
+    public G4Response put(String url, Object object){
         Entity payload = convertToJson(object);
-        log.debug("Sending PUT request with payload:"+ payload);
-        return buildRequest(url).put(payload);
+        log.debug("Sending PUT request with payload: " + payload);
+        Response response = buildRequest(url).put(payload);
+        return new G4Response(response);
     }
 
-    public Response put(String url, Object object, Cookie cookie) {
+    public G4Response put(String url, Object object, Cookie cookie) {
         Entity payload = convertToJson(object);
-        log.debug("Sending PUT request with payload:"+ payload);
-        return buildRequest(url).cookie(cookie).put(payload);
+        log.debug("Sending PUT request with payload: " + payload);
+        Response response = buildRequest(url).cookie(cookie).put(payload);
+        return new G4Response(response);
     }
 
-    public Response put(String url, Object object, Cookie cookie, String mediaType) {
+    public G4Response put(String url, Object object, Cookie cookie, String mediaType) {
         Entity payload = convertToJson(object);
         log.debug("Sending PUT request with payload:"+ payload);
-        return buildRequest(url, mediaType).cookie(cookie).put(payload);
+        Response response = buildRequest(url, mediaType).cookie(cookie).put(payload);
+        return new G4Response(response);
     }
 
     /**
@@ -144,52 +157,66 @@ public class RsClient {
      *
      * @param url target URL
      * @param multiPart Jersey MultiPart for POST request
-     * @return JAX-RS client response
+     * @return javax.ws.rs.core.Response
      */
-    public Response post(String url, MultiPart multiPart, Cookie cookie) {
+    public G4Response post(String url, MultiPart multiPart, Cookie cookie) {
         Entity payload = Entity.entity(multiPart, multiPart.getMediaType());
         log.debug("Sending POST request with Multipart payload:" + payload);
-        return buildRequest(url).cookie(cookie).post(payload);
+        Response response = buildRequest(url).cookie(cookie).post(payload);
+        return new G4Response(response);
     }
 
-    public Response post(String url, Cookie cookie) {
+    public G4Response post(String url, Cookie cookie) {
         Entity payload = convertToJson(null);
         log.debug("Sending POST request with payload:" + payload);
-        return buildRequest(url).cookie(cookie).post(payload);
+        Response response = buildRequest(url).cookie(cookie).post(payload);
+        return new G4Response(response);
     }
 
-    public Response post(String url, Object object) {
+    public G4Response post(String url, Object object) {
         Entity payload = convertToJson(object);
         log.debug("Sending POST request with payload:" + object);
-        return buildRequest(url).post(payload);
+        Response response = buildRequest(url).post(payload);
+        return new G4Response(response);
     }
 
-    public Response post(String url, Object object, Cookie cookie) {
+    public G4Response post(String url, Object object, Cookie cookie) {
         Entity payload = convertToJson(object);
         log.debug("Sending POST request with payload:" + object);
-        return buildRequest(url).cookie(cookie).post(payload);
+        Response response = buildRequest(url).cookie(cookie).post(payload);
+        return new G4Response(response);
     }
 
-    public Response post(String url, Object object, Cookie cookie, String mediaType) {
+    public G4Response post(String url, Object object, Cookie cookie, String mediaType) {
         Entity payload = convertToJson(object);
         log.debug("Sending POST request with payload:" + object);
-        return buildRequest(url, mediaType).cookie(cookie).post(payload);
+        Response response = buildRequest(url, mediaType).cookie(cookie).post(payload);
+        return new G4Response(response);
     }
 
     /**
      * HTTP DELETE request
      *
      * @param url target URL
-     * @return JAX-RS client response
+     * @return javax.ws.rs.core.Response
      */
-    public Response delete(String url){
+    public G4Response delete(String url){
         log.debug("Sending Delete request");
-        return buildRequest(url).delete();
+        Response response = buildRequest(url).delete();
+        return new G4Response(response);
     }
 
-    public Response delete(String url, Cookie cookie) {
+    /**
+     * HTTP DELETE request
+     *
+     * @param url target URL
+     * @param cookie cookie
+     * @return javax.ws.rs.core.Response
+     */
+    public G4Response delete(String url, Cookie cookie) {
         log.debug("Sending Delete request");
-        return buildRequest(url).cookie(cookie).delete();
+        Response response = buildRequest(url).cookie(cookie).delete();
+        return new G4Response(response);
     }
 
 

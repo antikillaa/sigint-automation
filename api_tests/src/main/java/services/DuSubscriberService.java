@@ -7,9 +7,10 @@ import app_context.RunContext;
 import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import file_generator.DuFile;
+import http.G4Response;
+import http.client.G4Client;
 import http.requests.phonebook.DuSubscriberRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.DuSubscriberEntry;
 import model.UploadResult;
 import model.phonebook.DuSubscriberSearchResult;
@@ -17,7 +18,6 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
 public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
 
     private Logger log = Logger.getLogger(DuSubscriberService.class);
-    private static RsClient rsClient = new RsClient();
+    private static G4Client g4Client = new G4Client();
     private RunContext context = RunContext.get();
     private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
 
@@ -46,7 +46,7 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
         file.deleteOnExit();
 
         log.debug("Sending request to " + sigintHost + request.getURI());
-        Response response = rsClient.post(sigintHost + request.getURI(), request.getBody(), request.getCookie());
+        G4Response response = g4Client.post(sigintHost + request.getURI(), request.getBody(), request.getCookie());
 
         UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
         if (uploadResult != null) {
@@ -61,7 +61,7 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
 
     public EntityList<DuSubscriberEntry> list(SearchFilter filter) {
         DuSubscriberRequest request = new DuSubscriberRequest().search();
-        Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
+        G4Response response = g4Client.post(sigintHost + request.getURI(), filter, request.getCookie());
 
         SearchResult<DuSubscriberEntry> searchResults =
                 JsonCoverter.readEntityFromResponse(response, DuSubscriberSearchResult.class, "result");
@@ -83,7 +83,8 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
     public DuSubscriberEntry view(String id) {
         DuSubscriberRequest request = new DuSubscriberRequest().get(id);
         log.info("Getting derails of DuSubscriber Entry by id: " + id);
-        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
+
+        G4Response response = g4Client.get(sigintHost + request.getURI(), request.getCookie());
         return JsonCoverter.readEntityFromResponse(response, DuSubscriberEntry.class, "result");
     }
 

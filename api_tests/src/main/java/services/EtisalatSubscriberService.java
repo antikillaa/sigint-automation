@@ -7,16 +7,17 @@ import app_context.RunContext;
 import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import file_generator.EtisalatSubscriberFile;
+import http.G4Response;
+import http.client.G4Client;
 import http.requests.phonebook.EtisalatSubscriberRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.EtisalatSubscriberEntry;
 import model.UploadResult;
 import model.phonebook.EtisalatSubscriberSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
+
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +25,9 @@ import java.util.List;
 public class EtisalatSubscriberService implements EntityService<EtisalatSubscriberEntry> {
 
     private Logger log = Logger.getLogger(EtisalatSubscriberService.class);
-    private static RsClient rsClient = new RsClient();
+    private static G4Client g4Client = new G4Client();
+    private static RunContext context = RunContext.get();
     private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
-    private RunContext context = RunContext.get();
 
     @Override
     public int add(EtisalatSubscriberEntry entity) {
@@ -46,7 +47,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
         file.deleteOnExit();
 
         log.debug("Sending request to " + sigintHost + request.getURI());
-        Response response = rsClient.post(sigintHost + request.getURI(), request.getBody(), request.getCookie());
+        G4Response response = g4Client.post(sigintHost + request.getURI(), request.getBody(), request.getCookie());
 
         UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
         if (uploadResult != null) {
@@ -63,7 +64,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
     @Override
     public EntityList<EtisalatSubscriberEntry> list(SearchFilter filter) {
         EtisalatSubscriberRequest request = new EtisalatSubscriberRequest().search();
-        Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
+        G4Response response = g4Client.post(sigintHost + request.getURI(), filter, request.getCookie());
 
         SearchResult<EtisalatSubscriberEntry> searchResults =
                 JsonCoverter.readEntityFromResponse(response, EtisalatSubscriberSearchResult.class, "result");
@@ -87,7 +88,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
     public EtisalatSubscriberEntry view(String id) {
         EtisalatSubscriberRequest request = new EtisalatSubscriberRequest().get(id);
         log.info("Getting derails of Etisalat Subscriber entry by id: " + id);
-        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4Client.get(sigintHost + request.getURI(), request.getCookie());
         return JsonCoverter.readEntityFromResponse(response, EtisalatSubscriberEntry.class, "result");
     }
 

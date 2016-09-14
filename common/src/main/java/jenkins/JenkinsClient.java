@@ -2,15 +2,14 @@ package jenkins;
 
 import app_context.properties.G4Properties;
 import app_context.properties.JenkinsProperties;
+import http.G4Response;
+import http.client.G4Client;
 import json.JsonCoverter;
-import json.RsClient;
 import org.apache.log4j.Logger;
-
-import javax.ws.rs.core.Response;
 
 class JenkinsClient {
     
-    private RsClient client= new RsClient();
+    private G4Client client = new G4Client();
     private String jenkinsURL;
     private String jenkinsUsername;
     private String jenkinsPassword;
@@ -24,20 +23,20 @@ class JenkinsClient {
         this.jenkinsPassword = jenkinsConfig.getPassword();
         this.jobName = jenkinsConfig.getJobName();
     }
-    
-    
+
     JobInfo getJenkinsJobInfo(String jobNumber) {
         logger.debug("Getting jenkins job info by job number:"+jobNumber);
-        Response response = client.get(String.format("%s/job/%s/%s/api/json", jenkinsURL, jobName, jobNumber),
-                jenkinsUsername, jenkinsPassword);
-        if (response.getStatus()!=200) {
-            logger.debug("Got error from jenkins when trying to get job status." +
-                    "Got code:"+ response.getStatus());
-            return null;
+
+        String url = String.format("%s/job/%s/%s/api/json", jenkinsURL, jobName, jobNumber);
+        G4Response response = client.get(url, jenkinsUsername, jenkinsPassword);
+
+        if (response.getStatus() != 200) {
+            logger.error("Got error from jenkins when trying to get job status." +
+                    "Got code:" + response.getStatus());
         }
-        String json = response.readEntity(String.class);
-        JobInfo jobInfo = JsonCoverter.fromJsonToObject(json, JobInfo.class);
-        logger.debug("Received job:"+jobInfo);
+
+        JobInfo jobInfo = JsonCoverter.readEntityFromResponse(response, JobInfo.class);
+        logger.debug("Received job: " + jobInfo);
         return jobInfo;
     }
     

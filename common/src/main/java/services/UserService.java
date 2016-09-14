@@ -4,9 +4,10 @@ import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import app_context.properties.G4Properties;
+import http.G4Response;
+import http.client.G4Client;
 import http.requests.UserRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.PegasusMediaType;
 import model.Token;
 import model.User;
@@ -14,13 +15,12 @@ import org.apache.log4j.Logger;
 import utils.Parser;
 
 import javax.ws.rs.core.Cookie;
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 
 public class UserService implements EntityService<User> {
 
-    private static RsClient rsClient = new RsClient();
+    private static G4Client g4Client = new G4Client();
     Logger log = Logger.getLogger(UserService.class);
     private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
     private UserRequest request = new UserRequest();
@@ -34,7 +34,7 @@ public class UserService implements EntityService<User> {
         log.info("Creating new user");
         log.debug(Parser.entityToString(entity));
 
-        Response response = rsClient.post(
+        G4Response response = g4Client.post(
                 sigintHost + request.getURI(),
                 entity,
                 request.getCookie(),
@@ -70,7 +70,7 @@ public class UserService implements EntityService<User> {
      */
     public User me(Token token) {
         log.info("Get current user...");
-        Response response = rsClient.get(
+        G4Response response = g4Client.get(
                 sigintHost + request.me().getURI(),
                 new Cookie("t", token.getValue()),
                 PegasusMediaType.PEGASUS_JSON
