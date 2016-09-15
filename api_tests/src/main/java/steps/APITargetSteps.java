@@ -14,7 +14,6 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TargetService;
-import utils.FileHelper;
 import utils.Parser;
 
 import java.io.File;
@@ -326,43 +325,6 @@ public class APITargetSteps extends APISteps {
 
         GenerationMatrix generationMatrix = new GenerationMatrix(targets);
         context.put("generationMatrix", generationMatrix);
-    }
-
-    //TODO. Temp tool, remove it
-    @Given("Clean up target keywords (keywords.txt) from DB")
-    public void cleanKeywords(){
-        String text = FileHelper.readTxtFile("keywords.txt");
-        ArrayList<String> keys = new ArrayList<>();
-        if (text != null) {
-            String[] values = text.split(" ");
-            for (String value : values) {
-                value = value.trim().replace(",", "").replace(".", "");
-                if (value.length() > 2) {
-                    keys.add(value);
-                }
-            }
-        }
-
-        int i = 0;
-        for (String key : keys) {
-            TargetFilter filter = new TargetFilter().filterBy("keywords", key);
-            EntityList<Target> targets = service.list(filter);
-            if (targets.getEntities().size() > 0) {
-                log.info("key: " + key);
-                log.info("targets: " + targets.getEntities().size());
-            }
-
-            for (Target target : targets.getEntities()) {
-                log.info(Parser.entityToString(target));
-                if (target.getKeywords().contains(key)) {
-                    i++;
-                    target.getKeywords().remove(key);
-                    int code = service.update(target);
-                    log.info(i);
-                    Assert.assertEquals(200, code);
-                }
-            }
-        }
     }
 
 }
