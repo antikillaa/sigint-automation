@@ -140,14 +140,13 @@ public class Target extends TeelaEntity {
     }
 
     public Target generate() {
-        int keywordsRatio = 20;
         this
                 .setDescription(RandomStringUtils.randomAlphabetic(20))
                 .setName(RandomStringUtils.randomAlphabetic(10))
                 .setType(TargetType.getRandom())
                 .setPhones(RandomGenerator.generatePhones(10))
                 .setLanguages(RandomGenerator.generateLanguagesCodes(5))
-                .setKeywords(RandomGenerator.generateKeywords(3, keywordsRatio)); // (1/keywordsRatio) parts of keywords get from keywords.txt
+                .setKeywords(RandomGenerator.generateKeywords(3));
         return this;
     }
 

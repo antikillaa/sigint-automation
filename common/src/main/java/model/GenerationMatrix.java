@@ -1,5 +1,7 @@
 package model;
 
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,10 @@ public class GenerationMatrix {
      * @param targets list of test targets
      */
     public GenerationMatrix(List<Target> targets) {
+        Logger log = Logger.getLogger(GenerationMatrix.class);
+        log.debug("Generation matrix: ");
+        log.debug("target | from | to | name | phone | keyword |");
+
         for (Target target : targets) {
             rows.add(new GenerationMatrixRow(target));
         }

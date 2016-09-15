@@ -24,6 +24,7 @@ public class JsonCoverter {
     public static ObjectMapper mapper = new ObjectMapper();
 
     public static <T> T readEntityFromResponse(G4Response response, Class<T> entityClass, String id) {
+        log.debug("Response: " + response.getMessage());
         T entity;
         MapType mapType = JsonCoverter.constructMapTypeToValue(entityClass);
         try {

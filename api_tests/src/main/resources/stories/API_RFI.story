@@ -63,8 +63,6 @@ When I search RFI by state and value CANCELLED
 Then Searched RFI in list
 
 Scenario: API.Analyst can take ownership of RFI
-Meta:
-@wip
 Given I sign in as tasker user
 When I send create RFI request without approved copy and without original document
 Then I got response code 200

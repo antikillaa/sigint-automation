@@ -5,7 +5,7 @@ import java.util.List;
 public class UploadDetails {
 
     private Process process;
-    private String matching;
+    private MatchingContext matching;
     private List<MatchingResult> searchResults;
 
     public Process getProcess() {
@@ -16,11 +16,11 @@ public class UploadDetails {
         this.process = process;
     }
 
-    public String getMatching() {
+    public MatchingContext getMatching() {
         return matching;
     }
 
-    public void setMatching(String matching) {
+    public void setMatching(MatchingContext matching) {
         this.matching = matching;
     }
 

@@ -143,35 +143,13 @@ public class RandomGenerator {
         }
     }
 
-    public static LinkedHashSet<String> generateKeywords(int maxNumber, int ratio) {
-
+    public static LinkedHashSet<String> generateKeywords(int maxNumber) {
         LinkedHashSet<String> keys = new LinkedHashSet<>();
         int maxKeywords = RandomUtils.nextInt(maxNumber+1);
 
         int i = 0;
         do {
-            int random = new Random().nextInt(ratio);
-            if (random != 1) {
-                keys.add(RandomStringUtils.randomAlphabetic(6));
-            } else {
-                String text = FileHelper.readTxtFile("keywords.txt");
-                ArrayList<String> strings = new ArrayList<>();
-                if (text != null) {
-                    String[] values = text.split(" ");
-
-                    for (String value : values) {
-                        value = value.trim().replace(",", "").replace(".", "");
-                        if (value.length() > 2) {
-                            strings.add(value);
-                        }
-                    }
-
-                    int index = RandomUtils.nextInt(strings.size());
-                    keys.add(strings.get(index));
-                } else {
-                    keys.add(RandomStringUtils.randomAlphabetic(6));
-                }
-            }
+            keys.add(RandomStringUtils.randomAlphabetic(6));
             i++;
         } while (i < maxKeywords);
 

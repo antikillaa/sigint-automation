@@ -1,5 +1,7 @@
 package model;
 
+import org.apache.log4j.Logger;
+
 import java.util.Random;
 
 /**
@@ -47,12 +49,16 @@ public class GenerationMatrixRow {
         this.target = target;
 
         Random random = new Random();
-        this.fromNumberCount = random.nextInt(2);
-        this.toNumberCount = random.nextInt(2);
-        this.numberMention = random.nextInt(2);
-        this.keywordMention = random.nextInt(2);
-        this.nameMention = random.nextInt(2);
-        this.withoutHitMention = random.nextInt(5);
+        fromNumberCount = random.nextInt(2);
+        toNumberCount = random.nextInt(2);
+        numberMention = random.nextInt(2);
+        keywordMention = random.nextInt(2);
+        nameMention = random.nextInt(2);
+        withoutHitMention = random.nextInt(5);
+
+        Logger log = Logger.getLogger(GenerationMatrixRow.class);
+        log.debug(this.target.getName() + " | " + fromNumberCount + " | " + toNumberCount
+                + " | " + nameMention + " | " + numberMention + " | " + keywordMention);
     }
 
     public Target getTarget() {
