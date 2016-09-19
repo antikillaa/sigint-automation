@@ -1,7 +1,6 @@
 package model;
 
 import abs.TeelaEntity;
-import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -53,11 +52,11 @@ public class Group extends TeelaEntity {
         this.displayName = displayName;
         return this;
     }
-
-    @Override
-    public Group generate() {
-        this
-                .setDisplayName(RandomStringUtils.randomAlphabetic(8).toUpperCase());
-        return this;
-    }
+    
+    
+    //public Group generate() {
+    //    this
+    //            .setDisplayName(RandomStringUtils.randomAlphabetic(8).toUpperCase());
+    //    return this;
+    //}
 }

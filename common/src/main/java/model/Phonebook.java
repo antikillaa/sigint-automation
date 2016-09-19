@@ -1,13 +1,9 @@
 package model;
 
 import abs.TeelaEntity;
-import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import utils.RandomGenerator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
@@ -58,6 +54,9 @@ public class Phonebook extends TeelaEntity {
     }
 
     public String getCountry() {
+        if (country == null) {
+            country = RandomGenerator.getCountryName(this.getCountryCode());
+        }
         return country;
     }
 
@@ -110,25 +109,18 @@ public class Phonebook extends TeelaEntity {
         this.manualEntry = manualEntry;
     }
 
-    @Override
-    public Phonebook generate() {
-        this
-                .setName(RandomStringUtils.randomAlphabetic(10))
-                .setPhoneNumber(RandomStringUtils.randomNumeric(10))
-                .setCountryCode(RandomGenerator.generateCountryCode())
-                .setCountry(RandomGenerator.getCountryName(this.getCountryCode()))
-                .setAddress(RandomStringUtils.randomAlphanumeric(20))
-                .setImsi(RandomStringUtils.randomAlphanumeric(10))
-                .setProvider(RandomStringUtils.randomAlphanumeric(10))
-                .setLocation(RandomStringUtils.randomAlphanumeric(20));
-        return this;
-    }
-
-    public List<Phonebook> generate(int count) {
-        List<Phonebook> list = new ArrayList<>();
-        for (int i = 0; i < count; i++ ) {
-            list.add(new Phonebook().generate());
-        }
-        return list;
-    }
+    
+    //public Phonebook generate() {
+    //    this
+    //            .setName(RandomStringUtils.randomAlphabetic(10))
+    //            .setPhoneNumber(RandomStringUtils.randomNumeric(10))
+    //            .setCountryCode(RandomGenerator.generateCountryCode())
+    //            .setCountry(RandomGenerator.getCountryName(this.getCountryCode()))
+    //            .setAddress(RandomStringUtils.randomAlphanumeric(20))
+    //            .setImsi(RandomStringUtils.randomAlphanumeric(10))
+    //            .setProvider(RandomStringUtils.randomAlphanumeric(10))
+    //.setLocation(RandomStringUtils.randomAlphanumeric(20));
+    //    return this;
+    //}
+    
 }

@@ -15,7 +15,6 @@ public abstract class TeelaEntity {
     private Date modifiedAt;
     private String modifiedBy;
 
-
     public String getId() {
         return id;
     }

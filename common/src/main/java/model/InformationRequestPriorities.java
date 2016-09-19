@@ -1,5 +1,7 @@
 package model;
 
+import data_for_entity.data_providers.EntityDataProvider;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +10,7 @@ import java.util.Random;
 /**
  * Created by dm on 4/15/16.
  */
-public enum InformationRequestPriorities {
+public enum InformationRequestPriorities implements EntityDataProvider {
 
     CRITICAL(2, 1), NORMAL(0, 5), HIGH(1,3);
 
@@ -22,11 +24,14 @@ public enum InformationRequestPriorities {
     InformationRequestPriorities(int priority, int daysSwitch) {
         this.priority = new Priority(priority, daysSwitch);
     }
-
-    public static Priority randomPriorityMap() {
+    
+    
+    @Override
+    public Object generate(int length) {
         return VALUES.get(RANDOM.nextInt(SIZE)).getPrioritiesMap();
-
     }
+    
+    
 
     private Priority getPrioritiesMap() {
         return this.priority;

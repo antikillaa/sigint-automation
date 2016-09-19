@@ -3,7 +3,7 @@ package model;
 import abs.TeelaEntity;
 
 public class MatchingContext extends TeelaEntity {
-
+    
     private Long version;
     private String uploadId;
 
@@ -23,8 +23,5 @@ public class MatchingContext extends TeelaEntity {
         this.uploadId = uploadId;
     }
 
-    @Override
-    public <T extends TeelaEntity> T generate() {
-        return null;
-    }
+    
 }

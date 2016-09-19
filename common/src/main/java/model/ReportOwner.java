@@ -28,9 +28,5 @@ public class ReportOwner extends TeelaEntity {
         this.role = role;
         return this;
     }
-
-    @Override
-    public <T extends TeelaEntity> T generate() {
-        return null;
-    }
+    
 }

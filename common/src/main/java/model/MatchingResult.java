@@ -160,8 +160,5 @@ public class MatchingResult extends TeelaEntity {
         this.searchResultIds = searchResultIds;
     }
 
-    @Override
-    public <T extends TeelaEntity> T generate() {
-        return null;
-    }
+   
 }

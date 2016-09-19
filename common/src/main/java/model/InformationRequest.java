@@ -13,7 +13,7 @@ import java.util.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class InformationRequest extends TeelaEntity {
-
+    
     private String internalRequestNumber;
     private String externalRequestNumber;
     private Integer priority;
@@ -237,7 +237,7 @@ public class InformationRequest extends TeelaEntity {
                 .setRequestSource(RandomStringUtils.randomAlphabetic(10))
                 .setExternalRequestNumber(RandomStringUtils.randomAlphabetic(10))
                 .setState("PENDING")
-                .setPriority(InformationRequestPriorities.randomPriorityMap())
+                .setPriority(InformationRequestPriorities().generate())
                 .setSubject(RandomStringUtils.randomAlphabetic(10))
                 .setDescription(RandomStringUtils.randomAlphabetic(20))
                 .setDistributionList(InformationRequestDistribution.getRandom())

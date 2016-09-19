@@ -147,9 +147,4 @@ public class Process extends TeelaEntity {
     public void setIngestMatchingComplete(boolean ingestMatchingComplete) {
         this.ingestMatchingComplete = ingestMatchingComplete;
     }
-
-    @Override
-    public <T extends TeelaEntity> T generate() {
-        return null;
-    }
 }
