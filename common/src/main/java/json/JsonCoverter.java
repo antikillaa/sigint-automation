@@ -32,7 +32,7 @@ public class JsonCoverter {
             entity = map.get(id);
         } catch (IOException | NullPointerException e) {
             log.error(e.getMessage());
-            throw new AssertionError("Unable to parse entity from response");
+            throw new AssertionError("Unable to parse entity from response: " + response.getMessage());
         }
         return entity;
     }

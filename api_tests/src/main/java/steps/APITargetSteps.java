@@ -230,8 +230,8 @@ public class APITargetSteps extends APISteps {
 
         Boolean contains = false;
         for (Target entity : list) {
-            if (isEqualsUploadedTargets(target, entity)) {
-                contains = true;
+            contains = isEqualsUploadedTargets(target, entity);
+            if (contains) {
                 Entities.getTargets().updateEntity(target, entity);
                 break;
             }

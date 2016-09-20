@@ -1,25 +1,26 @@
 package http.requests.targets;
 
+import abs.SearchFilter;
 import http.requests.HttpRequest;
-import org.apache.log4j.Logger;
-import org.glassfish.jersey.media.multipart.MultiPart;
-import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
+import http.requests.HttpRequestType;
+import model.G4File;
+import model.Target;
 
 import javax.ws.rs.core.MediaType;
-import java.io.File;
 
 public class TargetRequest extends HttpRequest {
 
     private final static String URI = "/api/profile/targets";
-    private MultiPart multiPart = new MultiPart();
-    private Logger log = Logger.getLogger(TargetRequest.class);
 
     public TargetRequest() {
         super(URI);
-        multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
     }
 
-    public TargetRequest add() {
+    public TargetRequest add(Target target) {
+        this
+                .setURI(URI)
+                .setType(HttpRequestType.PUT)
+                .setPayload(target);
         return this;
     }
 
@@ -28,18 +29,34 @@ public class TargetRequest extends HttpRequest {
         return this;
     }
 
+    public TargetRequest update(Target target) {
+        this
+                .setType(HttpRequestType.POST)
+                .setPayload(target);
+        return this;
+    }
+
     public TargetRequest delete(String id) {
-        this.setURI(URI + "/" + id );
+        this
+                .setURI(URI + "/" + id )
+                .setType(HttpRequestType.DELETE);
         return this;
     }
 
-    public TargetRequest upload() {
-        this.setURI(URI + "/upload");
+    public TargetRequest upload(G4File file) {
+        addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
+        file.deleteOnExit();
+        this
+                .setURI(URI + "/upload")
+                .setType(HttpRequestType.POST);
         return this;
     }
 
-    public TargetRequest search() {
-        this.setURI(URI + "/search");
+    public TargetRequest search(SearchFilter filter) {
+        this
+                .setURI(URI + "/search")
+                .setType(HttpRequestType.POST)
+                .setPayload(filter);
         return this;
     }
 
@@ -48,17 +65,4 @@ public class TargetRequest extends HttpRequest {
         return this;
     }
 
-    public void addBodyFile(String name, File file, MediaType type) {
-        log.debug("Adding file to multipart body...");
-        FileDataBodyPart filePart = new FileDataBodyPart(name, file, type);
-        multiPart.bodyPart(filePart);
-    }
-
-    public MediaType getMediaType() {
-        return multiPart.getMediaType();
-    }
-
-    public MultiPart getBody(){
-        return multiPart;
-    }
 }

@@ -1,32 +1,33 @@
 package http.requests.phonebook;
 
+import abs.SearchFilter;
 import http.requests.HttpRequest;
-import org.apache.log4j.Logger;
-import org.glassfish.jersey.media.multipart.MultiPart;
-import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
+import http.requests.HttpRequestType;
+import model.G4File;
 
 import javax.ws.rs.core.MediaType;
-import java.io.File;
 
 public class EtisalatSubscriberRequest extends HttpRequest {
 
     private final static String URI = "/api/profile/etisalat-subscriber-data";
-    private MultiPart multiPart;
-    Logger log = Logger.getLogger(DuSubscriberRequest.class);
 
     public EtisalatSubscriberRequest() {
         super(URI);
-        this.multiPart = new MultiPart();
-        multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
     }
 
-    public EtisalatSubscriberRequest search() {
-        this.setURI(URI + "/search");
+    public EtisalatSubscriberRequest search(SearchFilter filter) {
+        this
+                .setURI(URI + "/search")
+                .setType(HttpRequestType.POST)
+                .setPayload(filter);
         return this;
     }
 
-    public EtisalatSubscriberRequest upload() {
-        this.setURI(URI + "/upload");
+    public EtisalatSubscriberRequest upload(G4File file) {
+        addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
+        this
+                .setURI(URI + "/upload")
+                .setType(HttpRequestType.POST);
         return this;
     }
 
@@ -35,17 +36,4 @@ public class EtisalatSubscriberRequest extends HttpRequest {
         return this;
     }
 
-    public void addBodyFile(String name, File file, MediaType type) {
-        log.debug("Adding file to multipart body...");
-        FileDataBodyPart filePart = new FileDataBodyPart(name, file, type);
-        multiPart.bodyPart(filePart);
-    }
-
-    public MediaType getMediaType() {
-        return multiPart.getMediaType();
-    }
-
-    public MultiPart getBody(){
-        return multiPart;
-    }
 }

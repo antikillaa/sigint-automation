@@ -4,41 +4,36 @@ import abs.EntityList;
 import abs.SearchFilter;
 import app_context.RunContext;
 import app_context.entities.Entities;
-import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import file_generator.PhoneBookFile;
+import http.G4HttpClient;
 import http.G4Response;
-import http.client.G4Client;
 import http.requests.phonebook.PhonebookRequest;
 import http.requests.phonebook.UnifiedPhonebookSearchRequest;
 import json.JsonCoverter;
+import model.G4File;
 import model.Phonebook;
 import model.UploadResult;
 import model.phonebook.PhonebookSearchResults;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
+import utils.Parser;
 
-import javax.ws.rs.core.MediaType;
-import java.io.File;
 import java.util.List;
 
 public class PhonebookService implements EntityService<Phonebook>{
 
     private Logger log = Logger.getLogger(PhonebookService.class);
     private RunContext context = RunContext.get();
-    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
-    private static G4Client g4Client = new G4Client();
+    private static G4HttpClient g4HttpClient = new G4HttpClient();
 
     public int add(Phonebook entity) {
-        PhonebookRequest request = new PhonebookRequest().entries();
         log.info("Creating new Phonebook entry");
-        try {
-            log.debug("entity: " + JsonCoverter.toJsonString(entity));
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("Unable to parse Phonebook entity");
-        }
-        G4Response response = g4Client.post(sigintHost + request.getURI(), entity, request.getCookie());
+        log.debug(Parser.entityToString(entity));
+
+        PhonebookRequest request = new PhonebookRequest().add(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
+
         Phonebook createdPhonebook = JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
         if (createdPhonebook != null) {
             Entities.getPhonebooks().addOrUpdateEntity(createdPhonebook);
@@ -47,9 +42,9 @@ public class PhonebookService implements EntityService<Phonebook>{
     }
 
     public int remove(Phonebook entity) {
-        PhonebookRequest request = new PhonebookRequest().entries();
         log.info("Delete Phonebook entry id:" + entity.getId());
-        G4Response response = g4Client.delete(sigintHost + request.getURI() + "/" + entity.getId(), request.getCookie());
+        PhonebookRequest request = new PhonebookRequest().delete(entity.getId());
+        G4Response response = g4HttpClient.sendRequest(request);
         if (response.getStatus() == 200) {
             try {
                 Entities.getPhonebooks().removeEntity(entity);
@@ -61,8 +56,9 @@ public class PhonebookService implements EntityService<Phonebook>{
     }
 
     public EntityList<Phonebook> list(SearchFilter filter) {
-        UnifiedPhonebookSearchRequest request = new UnifiedPhonebookSearchRequest();
-        G4Response response = g4Client.post(sigintHost + request.getURI(), filter, request.getCookie());
+        UnifiedPhonebookSearchRequest request = new UnifiedPhonebookSearchRequest(filter);
+        G4Response response = g4HttpClient.sendRequest(request);
+
         PhonebookSearchResults searchResults = JsonCoverter.readEntityFromResponse(response, PhonebookSearchResults.class, "result");
         if (searchResults == null) {
             throw new AssertionError("Unable to read search results from Phonebook search");
@@ -76,9 +72,10 @@ public class PhonebookService implements EntityService<Phonebook>{
     }
 
     public int update(Phonebook entity) {
-        PhonebookRequest request = new PhonebookRequest().entries();
         log.info("Updating Phonebook entry id:" + entity.getId());
-        G4Response response = g4Client.post(sigintHost + request.getURI() + "/" + entity.getId(), entity, request.getCookie());
+        PhonebookRequest request = new PhonebookRequest().update(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
+
         Phonebook createdPhonebook = JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
         if (createdPhonebook != null) {
             Entities.getPhonebooks().addOrUpdateEntity(createdPhonebook);
@@ -87,23 +84,21 @@ public class PhonebookService implements EntityService<Phonebook>{
     }
 
     public Phonebook view(String id) {
-        PhonebookRequest request = new PhonebookRequest().entries();
         log.info("View Phonebook entry id:" + id);
-        G4Response response = g4Client.get(sigintHost + request.getURI() + "/" + id, request.getCookie());
+
+        PhonebookRequest request = new PhonebookRequest().get(id);
+        G4Response response = g4HttpClient.sendRequest(request);
+
         return JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
     }
 
     public int upload(List<Phonebook> phonebooks) {
         log.info("Writing Phonebook entries to file..");
-        File file = new PhoneBookFile().write(phonebooks);
+        G4File file = new PhoneBookFile().write(phonebooks);
 
         log.info("Upload file with " + phonebooks.size() + " Phonebook entries..");
-        PhonebookRequest request = new PhonebookRequest().upload();
-        request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
-        file.deleteOnExit();
-
-        log.debug("Sending request to " + sigintHost + request.getURI());
-        G4Response response = g4Client.post(sigintHost + request.getURI(), request.getBody(), request.getCookie());
+        PhonebookRequest request = new PhonebookRequest().upload(file);
+        G4Response response = g4HttpClient.sendRequest(request);
 
         UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
         if (uploadResult != null) {

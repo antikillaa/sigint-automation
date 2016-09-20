@@ -1,42 +1,23 @@
 package http.requests;
 
+import app_context.AppContext;
+import app_context.RunContext;
+import errors.NullReturnException;
+import json.JsonCoverter;
+import model.*;
 import org.apache.log4j.Logger;
-import org.glassfish.jersey.media.multipart.FormDataBodyPart;
-import org.glassfish.jersey.media.multipart.MultiPart;
-import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 
 import javax.ws.rs.core.MediaType;
-import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class UploadFilesRequest extends HttpRequest {
 
     private final static String URI = "/api/upload/files";
-
-    private MultiPart multiPart = new MultiPart();
     private Logger log = Logger.getLogger(UploadFilesRequest.class);
 
     public UploadFilesRequest() {
         super(URI);
-        multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
-    }
-
-    public void addBodyFile(String name, File file, MediaType type) {
-        log.debug("Adding file to multipart body...");
-        FileDataBodyPart filePart = new FileDataBodyPart(name, file, type);
-        multiPart.bodyPart(filePart);
-    }
-
-    public void addBodyString(String fieldName, String value) {
-        FormDataBodyPart part = new FormDataBodyPart(fieldName, value);
-        multiPart.bodyPart(part);
-    }
-
-    public MediaType getMediaType() {
-        return multiPart.getMediaType();
-    }
-
-    public MultiPart getBody(){
-        return multiPart;
     }
 
     public UploadFilesRequest meta(String id) {
@@ -44,4 +25,41 @@ public class UploadFilesRequest extends HttpRequest {
         return this;
     }
 
+    public UploadFilesRequest upload(G4File file) {
+        FileMeta fileMeta = initFileMeta(file);
+        String meta;
+        try {
+            meta = JsonCoverter.toJsonString(fileMeta);
+        } catch (NullReturnException e) {
+            log.error(e.getMessage());
+            log.error(e.getStackTrace());
+            throw new Error("Error! Meta for uploading file is empty!");
+        }
+
+        addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
+        addBodyString("meta", meta);
+        file.deleteOnExit();
+
+        this.setType(HttpRequestType.POST);
+        return this;
+    }
+
+    private FileMeta initFileMeta(G4File file) {
+        Source source = RunContext.get().get("source", Source.class);
+        LoggedUser user = AppContext.get().getLoggedUser();
+
+        Meta meta = new Meta();
+        meta.setFileName(file.getName());
+        meta.setUserId(user.getId());
+        meta.setSourceId(source.getId());
+
+        FileMeta fileMeta = new FileMeta();
+        fileMeta.setMeta(meta);
+        String path = "/" + source.getType() + "/" + source.getName()
+                + new SimpleDateFormat("/yyyy/MM/dd/").format(new Date())  + file.getName();
+        fileMeta.setName(path);
+        fileMeta.setType(file.getMediaType().toString());
+
+        return fileMeta;
+    }
 }
