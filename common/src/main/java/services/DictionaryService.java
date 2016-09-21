@@ -1,8 +1,7 @@
 package services;
 
-import app_context.properties.G4Properties;
+import http.G4HttpClient;
 import http.G4Response;
-import http.client.G4Client;
 import http.requests.GetDictionariesRequest;
 import json.JsonCoverter;
 import model.Dictionary;
@@ -13,10 +12,9 @@ public class DictionaryService {
     private static Logger logger = Logger.getLogger(DictionaryService.class);
     
     public static Dictionary loadDictionary() {
-        Dictionary dictionary = null;
         GetDictionariesRequest request = new GetDictionariesRequest();
-        G4Response response = new G4Client().get(G4Properties.getRunProperties().getApplicationURL()+ request.getURI(),
-                        request.getCookie());
+        G4Response response = new G4HttpClient().sendRequest(request);
+        Dictionary dictionary = null;
         try {
             dictionary = JsonCoverter.readEntityFromResponse(response, Dictionary.class, "result");
         } catch (Exception ex) {

@@ -3,34 +3,29 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
-import app_context.properties.G4Properties;
 import errors.NullReturnException;
+import http.G4HttpClient;
 import http.G4Response;
-import http.client.G4Client;
 import http.requests.RecordRequest;
 import json.JsonCoverter;
 import model.Record;
 import model.RecordSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
+import utils.Parser;
 
 public class RecordService implements EntityService<Record> {
 
     private Logger log = Logger.getLogger(RecordService.class);
-    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
-    private static G4Client g4Client = new G4Client();
+    private static G4HttpClient g4HttpClient = new G4HttpClient();
 
     public int add(Record entity) {
         log.info("Creating new record");
-        try {
-            log.debug("Record: " + JsonCoverter.toJsonString(entity));
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("This is not a record");
-        }
+        log.debug(Parser.entityToString(entity));
 
-        RecordRequest request = new RecordRequest().manual();
-        G4Response response = g4Client.post(sigintHost + request.getURI(), entity, request.getCookie());
+        RecordRequest request = new RecordRequest().manual(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
+
         Record record = JsonCoverter.readEntityFromResponse(response, Record.class, "result");
         if (record != null) {
             Entities.getRecords().addOrUpdateEntity(record);
@@ -46,8 +41,8 @@ public class RecordService implements EntityService<Record> {
     }
 
     public EntityList<Record> list(SearchFilter filter) {
-        RecordRequest request = new RecordRequest().search();
-        G4Response response = g4Client.post(sigintHost + request.getURI(), filter, request.getCookie());
+        RecordRequest request = new RecordRequest().search(filter);
+        G4Response response = g4HttpClient.sendRequest(request);
 
         RecordSearchResult searchResults = JsonCoverter.readEntityFromResponse(response, RecordSearchResult.class);
         if (searchResults == null) {

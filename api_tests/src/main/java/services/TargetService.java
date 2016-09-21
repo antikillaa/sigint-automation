@@ -4,39 +4,34 @@ import abs.EntityList;
 import abs.SearchFilter;
 import app_context.RunContext;
 import app_context.entities.Entities;
-import app_context.properties.G4Properties;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
 import file_generator.TargetFile;
+import http.G4HttpClient;
 import http.G4Response;
-import http.client.G4Client;
 import http.requests.targets.TargetRequest;
 import json.JsonCoverter;
 import model.*;
 import model.targetGroup.TargetGroupSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import utils.Parser;
 
-import javax.ws.rs.core.MediaType;
-import java.io.File;
 import java.util.List;
 
 public class TargetService implements EntityService<Target> {
 
-    private static G4Client g4Client = new G4Client();
+    private static G4HttpClient g4HttpClient = new G4HttpClient();
     private Logger log = Logger.getLogger(TargetService.class);
-    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
     private RunContext context = RunContext.get();
 
 
     public int add(Target entity) {
         log.info("Creating new target");
-        log.debug(Parser.entityToString(entity));
 
-        TargetRequest request = new TargetRequest();
-        G4Response response = g4Client.put(sigintHost + request.getURI(), entity, request.getCookie());
+        TargetRequest request = new TargetRequest().add(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
+
         Target target = JsonCoverter.readEntityFromResponse(response, Target.class, "id");
         if (target != null) {
             Entities.getTargets().addOrUpdateEntity(target);
@@ -49,15 +44,11 @@ public class TargetService implements EntityService<Target> {
 
     public int upload(List<Target> targets) {
         log.info("Writing Targets to file..");
-        File file = new TargetFile().write(targets);
+        G4File file = new TargetFile().write(targets);
 
         log.info("Upload file with " + targets.size() + " targets..");
-        TargetRequest request = new TargetRequest().upload();
-        request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
-        file.deleteOnExit();
-
-        log.debug("Sending request to " + sigintHost + request.getURI());
-        G4Response response = g4Client.post(sigintHost + request.getURI(), request.getBody(), request.getCookie());
+        TargetRequest request = new TargetRequest().upload(file);
+        G4Response response = g4HttpClient.sendRequest(request);
 
         UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
         if (uploadResult != null) {
@@ -70,7 +61,7 @@ public class TargetService implements EntityService<Target> {
         log.info("Deleting target id:" + entity.getId());
 
         TargetRequest request = new TargetRequest().delete(entity.getId());
-        G4Response response = g4Client.delete(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4HttpClient.sendRequest(request);
 
         if (response.getStatus() == 200) {
             try {
@@ -83,9 +74,9 @@ public class TargetService implements EntityService<Target> {
     }
 
     public EntityList<Target> list(SearchFilter filter) {
-        log.debug(filter);
-        TargetRequest request = new TargetRequest().search();
-        G4Response response = g4Client.post(sigintHost + request.getURI(), filter, request.getCookie());
+        TargetRequest request = new TargetRequest().search(filter);
+        G4Response response = g4HttpClient.sendRequest(request);
+
         TargetSearchResults searchResults = JsonCoverter.readEntityFromResponse(response, TargetSearchResults.class, "result");
         if (searchResults == null) {
             throw new AssertionError("Unable to read search results from Targets search");
@@ -100,10 +91,8 @@ public class TargetService implements EntityService<Target> {
 
     public int update(Target entity) {
         log.info("Updating target id: " + entity.getId());
-        log.debug(Parser.entityToString(entity));
-
-        TargetRequest request = new TargetRequest();
-        G4Response response = g4Client.post(sigintHost + request.getURI(), entity, request.getCookie());
+        TargetRequest request = new TargetRequest().update(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
 
         Result result = JsonCoverter.readEntityFromResponse(response, Result.class);
         if (result != null) {
@@ -120,7 +109,7 @@ public class TargetService implements EntityService<Target> {
         log.info("View target entry id:" + id);
 
         TargetRequest request = new TargetRequest().get(id);
-        G4Response response = g4Client.get(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4HttpClient.sendRequest(request);
 
         return JsonCoverter.readEntityFromResponse(response, Target.class, "result");
     }
@@ -129,7 +118,7 @@ public class TargetService implements EntityService<Target> {
         log.info("Get targetGroups of target id:" + id);
 
         TargetRequest request = new TargetRequest().findTargetGroups(id);
-        G4Response response = g4Client.get(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4HttpClient.sendRequest(request);
 
         TargetGroupSearchResult result = JsonCoverter.readEntityFromResponse(response, TargetGroupSearchResult.class);
         context.put("code", response.getStatus());

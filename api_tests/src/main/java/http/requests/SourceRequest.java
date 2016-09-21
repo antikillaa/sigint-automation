@@ -1,5 +1,7 @@
 package http.requests;
 
+import model.Source;
+
 public class SourceRequest extends HttpRequest {
 
     private final static String URI = "/api/sigint/admin/source";
@@ -8,8 +10,11 @@ public class SourceRequest extends HttpRequest {
         super(URI);
     }
 
-    public SourceRequest add() {
-        setURI(URI + "/add");
+    public SourceRequest add(Source source) {
+        this
+                .setURI(URI + "/add")
+                .setType(HttpRequestType.PUT)
+                .setPayload(source);
         return this;
     }
 
@@ -19,7 +24,16 @@ public class SourceRequest extends HttpRequest {
     }
 
     public SourceRequest delete(String id) {
-        setURI(URI + "/" + id);
+        this
+                .setURI(URI + "/" + id)
+                .setType(HttpRequestType.DELETE);
+        return this;
+    }
+
+    public SourceRequest update(Source source) {
+        this
+                .setType(HttpRequestType.POST)
+                .setPayload(source);
         return this;
     }
 

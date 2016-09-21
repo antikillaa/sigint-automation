@@ -73,8 +73,9 @@ public class User extends TeelaEntity {
         return roles;
     }
 
-    public void setRoles(List<String> roles) {
+    public User setRoles(List<String> roles) {
         this.roles = roles;
+        return this;
     }
 
     public String getPhone() {

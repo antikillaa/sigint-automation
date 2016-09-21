@@ -4,12 +4,11 @@ import abs.EntityList;
 import abs.SearchFilter;
 import app_context.RunContext;
 import app_context.entities.Entities;
-import app_context.properties.G4Properties;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
+import http.G4HttpClient;
 import http.G4Response;
-import http.client.G4Client;
 import http.requests.targetGroups.TargetGroupRequest;
 import json.JsonCoverter;
 import model.Result;
@@ -22,9 +21,8 @@ import java.util.List;
 
 public class TargetGroupService implements EntityService<TargetGroup> {
 
-    private static G4Client g4Client = new G4Client();
+    private static G4HttpClient g4HttpClient = new G4HttpClient();
     private Logger log = Logger.getLogger(TargetGroupService.class);
-    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
     private RunContext context = RunContext.get();
 
 
@@ -32,9 +30,9 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         log.info("Creating new target group");
         log.debug(Parser.entityToString(entity));
 
-        TargetGroupRequest request = new TargetGroupRequest();
+        TargetGroupRequest request = new TargetGroupRequest().add(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
 
-        G4Response response = g4Client.put(sigintHost + request.getURI(), entity, request.getCookie());
         TargetGroup group = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "id");
         if (group != null) {
             Entities.getTargetGroups().addOrUpdateEntity(group);
@@ -45,8 +43,9 @@ public class TargetGroupService implements EntityService<TargetGroup> {
     public int remove(TargetGroup entity) {
         log.info("Deleting target group id:" + entity.getId());
         log.debug(Parser.entityToString(entity));
+
         TargetGroupRequest request = new TargetGroupRequest().delete(entity.getId());
-        G4Response response = g4Client.delete(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4HttpClient.sendRequest(request);
 
         Result result = JsonCoverter.readEntityFromResponse(response, Result.class);
         log.debug(Parser.entityToString(result));
@@ -66,11 +65,11 @@ public class TargetGroupService implements EntityService<TargetGroup> {
     }
 
     public int update(TargetGroup entity) {
-        log.info("Updating target group" );
+        log.info("Updating target group");
         log.debug(Parser.entityToString(entity));
 
-        TargetGroupRequest request = new TargetGroupRequest();
-        G4Response response = g4Client.post(sigintHost + request.getURI(), entity, request.getCookie());
+        TargetGroupRequest request = new TargetGroupRequest().update(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
 
         TargetGroup targetGroup = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "result");
         log.debug(Parser.entityToString(targetGroup));
@@ -86,7 +85,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
     public TargetGroup view(String id) {
         log.info("View target group id:" + id);
         TargetGroupRequest request = new TargetGroupRequest().get(id);
-        G4Response response = g4Client.get(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4HttpClient.sendRequest(request);
 
         TargetGroup resultTargetGroup = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "result");
         log.debug(Parser.entityToString(resultTargetGroup));
@@ -97,7 +96,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         log.info("Get list of target groups");
 
         TargetGroupRequest request = new TargetGroupRequest();
-        G4Response response = g4Client.get(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4HttpClient.sendRequest(request);
 
         TargetGroupSearchResult result = JsonCoverter.readEntityFromResponse(response, TargetGroupSearchResult.class);
         context.put("code", response.getStatus());

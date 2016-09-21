@@ -10,6 +10,6 @@ public class RFIDetailsRequest extends HttpRequest {
     private final static String URI = "/api/rfi/";
 
     public RFIDetailsRequest(String rfiID) {
-        super(URI+ rfiID);
+        super(URI + rfiID);
     }
 }

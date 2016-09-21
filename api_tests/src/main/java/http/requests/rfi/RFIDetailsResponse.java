@@ -1,9 +1,12 @@
 package http.requests.rfi;
+
 import model.InformationRequest;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RFIDetailsResponse {
+
+    private InformationRequest result;
 
     public InformationRequest getResult() {
         return result;
@@ -13,5 +16,4 @@ public class RFIDetailsResponse {
         this.result = result;
     }
 
-    InformationRequest result;
 }

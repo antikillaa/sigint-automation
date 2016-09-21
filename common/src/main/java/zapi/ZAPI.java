@@ -3,7 +3,9 @@ package zapi;
 import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import http.G4Response;
-import http.client.G4Client;
+import http.G4HttpClient;
+import http.requests.HttpRequest;
+import http.requests.HttpRequestType;
 import json.JsonCoverter;
 import zapi.model.Cycle;
 import zapi.model.CyclesList;
@@ -16,7 +18,7 @@ import java.net.URLEncoder;
 class ZAPI {
 
     private String server = G4Properties.getJiraProperties().getServer();
-    private G4Client g4Client = new G4Client();
+    private G4HttpClient g4HttpClient = new G4HttpClient().setHost(server);
 
     static final String UNEXECUTED = "-1";
     static final String PASS = "1";
@@ -32,8 +34,9 @@ class ZAPI {
      * @return G4Response
      */
     G4Response getCycle(int cycleId){
-        String url = server + "/rest/zapi/latest/cycle/" + cycleId;
-        return g4Client.get(url);
+        String url = "/rest/zapi/latest/cycle/" + cycleId;
+        HttpRequest request = new HttpRequest(url);
+        return g4HttpClient.sendRequest(request);
     }
 
     /**
@@ -43,8 +46,13 @@ class ZAPI {
      * @return JAX-RS Response
      */
     G4Response postCycle(Cycle cycle){
-        String url = server + "/rest/zapi/latest/cycle";
-        return g4Client.post(url, cycle.postJson());
+        String url = "/rest/zapi/latest/cycle";
+
+        HttpRequest request = new HttpRequest(url)
+                .setType(HttpRequestType.POST)
+                .setPayload(cycle.postJson());
+
+        return g4HttpClient.sendRequest(request);
     }
 
     /**
@@ -56,8 +64,13 @@ class ZAPI {
      * @return JAX-RS Response
      */
     G4Response putCycle(Cycle cycle){
-        String url = server + "/rest/zapi/latest/cycle";
-        return g4Client.put(url, cycle.toString());
+        String url = "/rest/zapi/latest/cycle";
+
+        HttpRequest httpRequest = new HttpRequest(url)
+                .setType(HttpRequestType.PUT)
+                .setPayload(cycle.toString());
+
+        return g4HttpClient.sendRequest(httpRequest);
     }
 
     /**
@@ -67,8 +80,9 @@ class ZAPI {
      * @return JAX-RS Response
      */
     G4Response deleteCycle(int cycleId){
-        String url = server + "/rest/zapi/latest/cycle/" + cycleId;
-        return g4Client.delete(url);
+        String url = "/rest/zapi/latest/cycle/" + cycleId;
+        HttpRequest request = new HttpRequest(url).setType(HttpRequestType.DELETE);
+        return g4HttpClient.sendRequest(request);
     }
 
 
@@ -87,12 +101,13 @@ class ZAPI {
      * @return JAX-RS Response
      */
     G4Response ZQLExecuteSearch(int maxRecords, int offset, String zqlQuery){
-        String url = server + "/rest/zapi/latest/zql/executeSearch" +
+        String url = "/rest/zapi/latest/zql/executeSearch" +
                 "?maxRecords=" + maxRecords +
                 "&offset=" + offset +
                 "&zqlQuery=" +   zqlQuery;
 
-        return g4Client.get(url);
+        HttpRequest request = new HttpRequest(url);
+        return g4HttpClient.sendRequest(request);
     }
 
     /**
@@ -102,8 +117,9 @@ class ZAPI {
      * @return JAX-RS Response
      */
     G4Response getExecution(int issueId){
-        String url = server + "/rest/zapi/latest/execution";
-        return g4Client.get(url);
+        String url = "/rest/zapi/latest/execution";
+        HttpRequest request = new HttpRequest(url);
+        return g4HttpClient.sendRequest(request);
     }
 
     /**
@@ -113,8 +129,13 @@ class ZAPI {
      * @return Response
      */
     G4Response postExecution(Execution execution){
-        String url = server + "/rest/zapi/latest/execution";
-        return g4Client.post(url, execution.toString());
+        String url = "/rest/zapi/latest/execution";
+
+        HttpRequest request = new HttpRequest(url)
+                .setType(HttpRequestType.POST)
+                .setPayload(execution.toString());
+
+        return g4HttpClient.sendRequest(request);
     }
 
     /**
@@ -131,9 +152,13 @@ class ZAPI {
      */
     G4Response putExecution(int executionId, String status){
         ExecutionStatus executionStatus = new ExecutionStatus().setStatus(status);
-        String url = server + "/rest/zapi/latest/execution/" + executionId + "/execute";
+        String url = "/rest/zapi/latest/execution/" + executionId + "/execute";
 
-        return g4Client.put(url, executionStatus);
+        HttpRequest request = new HttpRequest(url)
+                .setType(HttpRequestType.PUT)
+                .setPayload(executionStatus);
+
+        return g4HttpClient.sendRequest(request);
     }
 
     G4Response JQL(int startAt, int maxResults, String fields, String jql) {
@@ -143,18 +168,21 @@ class ZAPI {
             throw new Error("Unable to encode JQL query to UTF-8: " + jql);
         }
 
-        String url = server + "/rest/api/latest/search" +
+        String url = "/rest/api/latest/search" +
                 "?startAt=" + startAt +
                 "&maxResults=" + maxResults +
                 "&fields=" + fields +
                 "&jql=" + jql;
 
-        return g4Client.get(url);
+        HttpRequest request = new HttpRequest(url);
+        return g4HttpClient.sendRequest(request);
     }
 
     CyclesList getCycles(String projectId, String versionId) throws NullReturnException {
-        String url = server + "/rest/zapi/latest/cycle?projectId=" + projectId + "&versionId=" + versionId;
-        G4Response response = g4Client.get(url);
+        String url = "/rest/zapi/latest/cycle?projectId=" + projectId + "&versionId=" + versionId;
+
+        HttpRequest request = new HttpRequest(url);
+        G4Response response = g4HttpClient.sendRequest(request);
 
         return JsonCoverter.readEntityFromResponse(response, CyclesList.class);
     }

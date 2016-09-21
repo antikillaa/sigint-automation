@@ -1,7 +1,6 @@
 package model;
 
 import abs.TeelaEntity;
-import app_context.AppContext;
 import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -351,9 +350,9 @@ public class Report extends TeelaEntity {
         return this;
     }
 
-    public Report initOwner() {
+    private Report initOwner() {
         UserService userService = new UserService();
-        User user = userService.me(AppContext.get().getLoggedUser().getToken());
+        User user = userService.me();
 
         User reportUser = new User();
         reportUser.setId(user.getId());
