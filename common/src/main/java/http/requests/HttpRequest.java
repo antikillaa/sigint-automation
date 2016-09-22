@@ -11,10 +11,19 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
 
-@JsonIgnoreProperties(value={"URI", "context", "cookie", "type", "mediaType", "payload"})
+/**
+ * Http request model.
+ */
+@JsonIgnoreProperties(value = {"URI", "context", "cookie", "type", "mediaType", "payload"})
 public class HttpRequest {
 
+    /**
+     * Path
+     */
     private String URI;
+    /**
+     * HTTP request type, such as: GET/PUT/POST/DELETE
+     */
     private HttpRequestType type;
     private String mediaType;
     private Object payload;
@@ -22,8 +31,10 @@ public class HttpRequest {
     private Logger log = Logger.getLogger(HttpRequest.class);
 
     /**
-     * Build HTTP GET MediaType.APPLICATION_JSON Request
-     * @param URI uri
+     * Build HTTP request.
+     * By Default GET MediaType.APPLICATION_JSON Request.
+     *
+     * @param URI path string
      */
     public HttpRequest(String URI) {
         this.URI = URI;

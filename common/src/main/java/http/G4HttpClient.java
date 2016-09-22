@@ -25,8 +25,8 @@ public class G4HttpClient {
     private String host = G4Properties.getRunProperties().getApplicationURL();
 
     /**
-     * Initialization JAX-RS client with HttpAuthenticationFeature.basic(user, pass)
-     * <br>user and pass properties defined in the jiraConnection.properties
+     * G4HttpClient client with basic access authentication for Jira.
+     * User and pass properties defined in the jiraConnection.properties file.
      */
     public G4HttpClient() {
         String user = G4Properties.getJiraProperties().getUsername();
@@ -37,11 +37,24 @@ public class G4HttpClient {
         client.register(MultiPartFeature.class);
     }
 
+    /**
+     * Set host for API requests.
+     * By Default used 'sigintURL' from general.properties file.
+     *
+     * @param host host for API requests
+     * @return G4HttpClient instance
+     */
     public G4HttpClient setHost(String host) {
         this.host = host;
         return this;
     }
 
+    /**
+     * Build request with initialization: URL, MediaType, [Cookie]
+     *
+     * @param request HTTP request model
+     * @return org.glassfish.jersey.client Builder
+     */
     private Builder buildRequest(HttpRequest request) {
         String URL = host + request.getURI();
         log.debug("Building request to url:" + URL);
@@ -56,6 +69,12 @@ public class G4HttpClient {
         return builder;
     }
 
+    /**
+     * Build request with initialization: URL, MediaType and Username/Password for http basic authentication
+     *
+     * @param request HTTP request model
+     * @return org.glassfish.jersey.client Builder
+     */
     private Builder buildRequest(HttpRequest request, String username, String password) {
         String URL = host + request.getURI();
         log.debug("Building request to url:" + URL);
@@ -66,6 +85,12 @@ public class G4HttpClient {
                 .property(HTTP_AUTHENTICATION_BASIC_PASSWORD, password);
     }
 
+    /**
+     * Convert object to Entity for payload.
+     *
+     * @param object object for payload
+     * @return Entity instance for payload
+     */
     private Entity convertToEntity(Object object) {
 
         Entity payload;
@@ -86,6 +111,12 @@ public class G4HttpClient {
         return payload;
     }
 
+    /**
+     * Send an GET/PUT/POST/DELETE http request [with cookie authentication (optional)].
+     *
+     * @param request HttpRequest
+     * @return G4Response with message string and http status code
+     */
     public G4Response sendRequest(HttpRequest request) {
 
         Builder builder = buildRequest(request);
@@ -114,6 +145,12 @@ public class G4HttpClient {
         return response == null ? null : new G4Response(response);
     }
 
+    /**
+     * Send an GET http request with basic http authentication.
+     *
+     * @param request HttpRequest
+     * @return G4Response with message string and http status code
+     */
     public G4Response sendRequest(HttpRequest request, String username, String password) {
 
         Builder builder = buildRequest(request, username, password);
