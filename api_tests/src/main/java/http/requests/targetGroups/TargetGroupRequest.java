@@ -1,7 +1,7 @@
 package http.requests.targetGroups;
 
 import http.requests.HttpRequest;
-import http.requests.HttpRequestType;
+import http.requests.HttpMethod;
 import model.TargetGroup;
 
 public class TargetGroupRequest extends HttpRequest {
@@ -15,7 +15,7 @@ public class TargetGroupRequest extends HttpRequest {
     public TargetGroupRequest add(TargetGroup targetGroup) {
         this
                 .setURI(URI)
-                .setType(HttpRequestType.PUT)
+                .setHttpMethod(HttpMethod.PUT)
                 .setPayload(targetGroup);
         return this;
     }
@@ -28,13 +28,13 @@ public class TargetGroupRequest extends HttpRequest {
     public TargetGroupRequest delete(String id) {
         this
                 .setURI(URI + "/" + id )
-                .setType(HttpRequestType.DELETE);
+                .setHttpMethod(HttpMethod.DELETE);
         return this;
     }
 
     public TargetGroupRequest update(TargetGroup targetGroup) {
         this
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(targetGroup);
         return this;
     }

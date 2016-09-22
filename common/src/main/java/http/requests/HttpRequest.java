@@ -14,7 +14,7 @@ import java.io.File;
 /**
  * Http request model.
  */
-@JsonIgnoreProperties(value = {"URI", "context", "cookie", "type", "mediaType", "payload"})
+@JsonIgnoreProperties(value = {"URI", "context", "cookie", "httpMethod", "mediaType", "payload"})
 public class HttpRequest {
 
     /**
@@ -22,9 +22,9 @@ public class HttpRequest {
      */
     private String URI;
     /**
-     * HTTP request type, such as: GET/PUT/POST/DELETE
+     * HTTP request httpMethod, such as: GET/PUT/POST/DELETE
      */
-    private HttpRequestType type;
+    private HttpMethod httpMethod;
     private String mediaType;
     private Object payload;
     private MultiPart multiPart;
@@ -38,7 +38,7 @@ public class HttpRequest {
      */
     public HttpRequest(String URI) {
         this.URI = URI;
-        type = HttpRequestType.GET;
+        httpMethod = HttpMethod.GET;
         mediaType = MediaType.APPLICATION_JSON;
         multiPart = new MultiPart();
         multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
@@ -64,12 +64,12 @@ public class HttpRequest {
         return this;
     }
 
-    public HttpRequestType getType() {
-        return type;
+    public HttpMethod getHttpMethod() {
+        return httpMethod;
     }
 
-    public HttpRequest setType(HttpRequestType type) {
-        this.type = type;
+    public HttpRequest setHttpMethod(HttpMethod httpMethod) {
+        this.httpMethod = httpMethod;
         return this;
     }
 

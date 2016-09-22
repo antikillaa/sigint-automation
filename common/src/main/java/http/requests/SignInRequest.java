@@ -14,7 +14,7 @@ public class SignInRequest extends HttpRequest {
         user.setPassword(password);
 
         this
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(user);
     }
 

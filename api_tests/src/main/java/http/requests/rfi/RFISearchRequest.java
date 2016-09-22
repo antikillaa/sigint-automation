@@ -2,7 +2,7 @@ package http.requests.rfi;
 
 import abs.SearchFilter;
 import http.requests.HttpRequest;
-import http.requests.HttpRequestType;
+import http.requests.HttpMethod;
 
 
 public class RFISearchRequest extends HttpRequest {
@@ -12,7 +12,7 @@ public class RFISearchRequest extends HttpRequest {
     public RFISearchRequest(SearchFilter filter) {
         super(URI);
         this
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(filter);
     }
 

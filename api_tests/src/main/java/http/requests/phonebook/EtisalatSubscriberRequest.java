@@ -2,7 +2,7 @@ package http.requests.phonebook;
 
 import abs.SearchFilter;
 import http.requests.HttpRequest;
-import http.requests.HttpRequestType;
+import http.requests.HttpMethod;
 import model.G4File;
 
 import javax.ws.rs.core.MediaType;
@@ -18,7 +18,7 @@ public class EtisalatSubscriberRequest extends HttpRequest {
     public EtisalatSubscriberRequest search(SearchFilter filter) {
         this
                 .setURI(URI + "/search")
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(filter);
         return this;
     }
@@ -27,7 +27,7 @@ public class EtisalatSubscriberRequest extends HttpRequest {
         addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         this
                 .setURI(URI + "/upload")
-                .setType(HttpRequestType.POST);
+                .setHttpMethod(HttpMethod.POST);
         return this;
     }
 

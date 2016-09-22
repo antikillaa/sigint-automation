@@ -5,7 +5,7 @@ import errors.NullReturnException;
 import http.G4Response;
 import http.G4HttpClient;
 import http.requests.HttpRequest;
-import http.requests.HttpRequestType;
+import http.requests.HttpMethod;
 import json.JsonCoverter;
 import zapi.model.Cycle;
 import zapi.model.CyclesList;
@@ -49,7 +49,7 @@ class ZAPI {
         String url = "/rest/zapi/latest/cycle";
 
         HttpRequest request = new HttpRequest(url)
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(cycle.postJson());
 
         return g4HttpClient.sendRequest(request);
@@ -67,7 +67,7 @@ class ZAPI {
         String url = "/rest/zapi/latest/cycle";
 
         HttpRequest httpRequest = new HttpRequest(url)
-                .setType(HttpRequestType.PUT)
+                .setHttpMethod(HttpMethod.PUT)
                 .setPayload(cycle.toString());
 
         return g4HttpClient.sendRequest(httpRequest);
@@ -81,7 +81,7 @@ class ZAPI {
      */
     G4Response deleteCycle(int cycleId){
         String url = "/rest/zapi/latest/cycle/" + cycleId;
-        HttpRequest request = new HttpRequest(url).setType(HttpRequestType.DELETE);
+        HttpRequest request = new HttpRequest(url).setHttpMethod(HttpMethod.DELETE);
         return g4HttpClient.sendRequest(request);
     }
 
@@ -132,7 +132,7 @@ class ZAPI {
         String url = "/rest/zapi/latest/execution";
 
         HttpRequest request = new HttpRequest(url)
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(execution.toString());
 
         return g4HttpClient.sendRequest(request);
@@ -155,7 +155,7 @@ class ZAPI {
         String url = "/rest/zapi/latest/execution/" + executionId + "/execute";
 
         HttpRequest request = new HttpRequest(url)
-                .setType(HttpRequestType.PUT)
+                .setHttpMethod(HttpMethod.PUT)
                 .setPayload(executionStatus);
 
         return g4HttpClient.sendRequest(request);

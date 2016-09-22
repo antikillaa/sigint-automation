@@ -1,6 +1,6 @@
 package http.requests;
 
-public enum HttpRequestType {
+public enum HttpMethod {
 
     GET, PUT, POST, DELETE
 

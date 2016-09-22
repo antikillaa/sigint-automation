@@ -1,7 +1,7 @@
 package http.requests.roles;
 
 import http.requests.HttpRequest;
-import http.requests.HttpRequestType;
+import http.requests.HttpMethod;
 import model.PegasusMediaType;
 import model.Role;
 
@@ -15,7 +15,7 @@ public class RoleRequest extends HttpRequest {
 
     public RoleRequest add(Role role) {
         this
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setMediaType(PegasusMediaType.PEGASUS_JSON)
                 .setPayload(role);
         return this;

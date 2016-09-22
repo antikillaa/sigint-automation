@@ -82,7 +82,7 @@ And searched target entry in list
 
 Examples:
 | criteria | value |
-| type | random |
+| httpMethod | random |
 | name | random |
 | keywords | random |
 | description | random |

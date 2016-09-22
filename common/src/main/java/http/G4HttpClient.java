@@ -123,7 +123,7 @@ public class G4HttpClient {
         Entity payload = convertToEntity(request.getPayload());
         Response response = null;
 
-        switch (request.getType()) {
+        switch (request.getHttpMethod()) {
             case GET:
                 log.info("Sending GET request");
                 response = builder.get();
@@ -156,7 +156,7 @@ public class G4HttpClient {
         Builder builder = buildRequest(request, username, password);
         Response response;
 
-        switch (request.getType()) {
+        switch (request.getHttpMethod()) {
             case GET:
                 response = builder.get();
                 return new G4Response(response);
