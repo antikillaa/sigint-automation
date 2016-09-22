@@ -27,6 +27,13 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
     private static G4HttpClient g4HttpClient = new G4HttpClient();
     private static RunContext context = RunContext.get();
 
+    /**
+     * ADD Etisalat Subscriber entry
+     * API: POST /etisalat-subscriber-data/upload uploadMultipart
+     *
+     * @param entity Etisalat Subscriber entry
+     * @return HTTP status code
+     */
     @Override
     public int add(EtisalatSubscriberEntry entity) {
         log.info("Add Etisalat Subscriber entry..");
@@ -37,6 +44,13 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
         return upload(entries);
     }
 
+    /**
+     * UPLOAD list of Etisalat subscriber entries
+     * POST /etisalat-subscriber-data/upload uploadMultipart
+     *
+     * @param entries of Etisalat subscriber entries
+     * @return HTTP status code
+     */
     public int upload(List<EtisalatSubscriberEntry> entries) {
         log.info("Writing Etisalat Subscriber entries to file..");
         G4File file = new EtisalatSubscriberFile().write(entries);
@@ -57,6 +71,13 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
         return 0;
     }
 
+    /**
+     * GET list of Etisalat subscriber entries
+     * API: POST /etisalat-subscriber-data/search search
+     *
+     * @param filter search filter for payload
+     * @return EntityList of Etisalat subscriber
+     */
     @Override
     public EntityList<EtisalatSubscriberEntry> list(SearchFilter filter) {
         log.info("Getting list of Etisalat Subscriber enries..");
@@ -82,6 +103,13 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
         return 0;
     }
 
+    /**
+     * GET Etisalat subscriber entry
+     * API: GET /etisalat-subscriber-data/entries/{id} getEntry
+     *
+     * @param id id of entity
+     * @return Etisalat subscriber entry
+     */
     @Override
     public EtisalatSubscriberEntry view(String id) {
         log.info("Getting derails of Etisalat Subscriber entry by id: " + id);

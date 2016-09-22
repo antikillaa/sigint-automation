@@ -19,6 +19,14 @@ public class RecordService implements EntityService<Record> {
     private Logger log = Logger.getLogger(RecordService.class);
     private static G4HttpClient g4HttpClient = new G4HttpClient();
 
+    /**
+     * ADD new manual record
+     * API: POST /api/sigint/record/manual
+     *
+     * @param entity entity
+     * @return HTTP status code
+     */
+    @Override
     public int add(Record entity) {
         log.info("Creating new record");
         log.debug(Parser.entityToString(entity));
@@ -36,10 +44,19 @@ public class RecordService implements EntityService<Record> {
         return response.getStatus();
     }
 
+    @Override
     public int remove(Record entity) {
         return 0;
     }
 
+    /**
+     * Search list of records
+     * API: POST "/api/sigint/record/search?withTargets=true"
+     *
+     * @param filter search filter for payload
+     * @return EntityList of record
+     */
+    @Override
     public EntityList<Record> list(SearchFilter filter) {
         RecordRequest request = new RecordRequest().search(filter);
         G4Response response = g4HttpClient.sendRequest(request);
@@ -56,10 +73,12 @@ public class RecordService implements EntityService<Record> {
         }
     }
 
+    @Override
     public int update(Record entity) {
         return 0;
     }
 
+    @Override
     public Record view(String id) {
         return null;
     }

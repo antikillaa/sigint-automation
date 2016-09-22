@@ -26,6 +26,13 @@ public class RFIService implements EntityService<InformationRequest> {
         }
     }
 
+    /**
+     * API: POST "/api/rfi/upload" multipartUpload
+     *
+     * @param entity RFI
+     * @return HTTP status code
+     */
+    @Override
     public int add(InformationRequest entity) {
         RFIUploadRequest request = new RFIUploadRequest(entity);
         G4Response response = g4HttpClient.sendRequest(request);
@@ -34,6 +41,13 @@ public class RFIService implements EntityService<InformationRequest> {
         return response.getStatus();
     }
 
+    /**
+     * API: DELETE /api/rfi/
+     *
+     * @param entity RFI
+     * @return HTTP status code
+     */
+    @Override
     public int remove(InformationRequest entity) {
         RFIDeleteRequest deleteRequest = new RFIDeleteRequest(entity.getId());
         G4Response response = g4HttpClient.sendRequest(deleteRequest);
@@ -49,6 +63,13 @@ public class RFIService implements EntityService<InformationRequest> {
         return response.getStatus();
     }
 
+    /**
+     * API: POST /api/rfi/search
+     *
+     * @param filter search filter for payload
+     * @return EntityList of RFI
+     */
+    @Override
     public EntityList<InformationRequest> list(SearchFilter filter) {
         RFISearchRequest request = new RFISearchRequest(filter);
         G4Response response = g4HttpClient.sendRequest(request);
@@ -65,10 +86,25 @@ public class RFIService implements EntityService<InformationRequest> {
         }
     }
 
+    /**
+     * Used ADD method
+     * API: POST "/api/rfi/upload" multipartUpload
+     *
+     * @param entity entity
+     * @return HTTP status code
+     */
+    @Override
     public int update(InformationRequest entity) {
         return add(entity);
     }
 
+    /**
+     * GET /api/rfi/{id}
+     *
+     * @param id id of entity
+     * @return InformationRequest (RFI)
+     */
+    @Override
     public InformationRequest view(String id) {
         log.info("Getting details of RFI by id:" + id);
         RFIDetailsRequest request = new RFIDetailsRequest(id);
@@ -76,6 +112,12 @@ public class RFIService implements EntityService<InformationRequest> {
         return JsonCoverter.fromJsonToObject(response.getMessage(), RFIDetailsResponse.class).getResult();
     }
 
+    /**
+     * POST /api/rfi/{id}/CANCELLED
+     *
+     * @param entity RFI
+     * @return HTTP status code
+     */
     public int cancel(InformationRequest entity) {
         RFICancelRequest request = new RFICancelRequest(entity.getId());
         G4Response response = g4HttpClient.sendRequest(request);
@@ -83,6 +125,12 @@ public class RFIService implements EntityService<InformationRequest> {
         return response.getStatus();
     }
 
+    /**
+     * POST /api/rfi/{id}/assign
+     *
+     * @param entity RFI
+     * @return HTTP status code
+     */
     public int assign(InformationRequest entity) {
         RFIAssignRequest request = new RFIAssignRequest(entity.getId());
         G4Response response = g4HttpClient.sendRequest(request);

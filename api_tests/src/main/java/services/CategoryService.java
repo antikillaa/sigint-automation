@@ -32,6 +32,10 @@ public class CategoryService implements EntityService<ReportCategory> {
         return null;
     }
 
+    /**
+     * GET list of Report Category
+     * @return list of ReportCategory
+     */
     public List<ReportCategory> list() {
         log.info("Get list of categories...");
 

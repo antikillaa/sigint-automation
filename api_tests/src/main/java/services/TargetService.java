@@ -26,6 +26,20 @@ public class TargetService implements EntityService<Target> {
     private RunContext context = RunContext.get();
 
 
+    /*
+        TODO
+        GET /targets getTargets
+        POST /targets/pageable getTargets
+        POST /targets/{id}/groups updateTargetGroupsForTarget
+     */
+
+    /**
+     * PUT /targets addTarget
+     *
+     * @param entity entity
+     * @return HTTP status code
+     */
+    @Override
     public int add(Target entity) {
         log.info("Creating new target");
 
@@ -42,6 +56,12 @@ public class TargetService implements EntityService<Target> {
         return response.getStatus();
     }
 
+    /**
+     * POST /targets/upload importTargets, multipartUpload
+     *
+     * @param targets list of Targets
+     * @return HTTP status code
+     */
     public int upload(List<Target> targets) {
         log.info("Writing Targets to file..");
         G4File file = new TargetFile().write(targets);
@@ -57,6 +77,13 @@ public class TargetService implements EntityService<Target> {
         return response.getStatus();
     }
 
+    /**
+     * DELETE /targets/{id} removeTarget
+     *
+     * @param entity entity
+     * @return HTTP status code
+     */
+    @Override
     public int remove(Target entity) {
         log.info("Deleting target id:" + entity.getId());
 
@@ -73,6 +100,13 @@ public class TargetService implements EntityService<Target> {
         return response.getStatus();
     }
 
+    /**
+     * POST /targets/search search
+     *
+     * @param filter search filter for payload
+     * @return EntityList of Targets
+     */
+    @Override
     public EntityList<Target> list(SearchFilter filter) {
         TargetRequest request = new TargetRequest().search(filter);
         G4Response response = g4HttpClient.sendRequest(request);
@@ -89,6 +123,13 @@ public class TargetService implements EntityService<Target> {
         }
     }
 
+    /**
+     * POST /targets updateTarget
+     *
+     * @param entity entity
+     * @return HTTP status code
+     */
+    @Override
     public int update(Target entity) {
         log.info("Updating target id: " + entity.getId());
         TargetRequest request = new TargetRequest().update(entity);
@@ -105,6 +146,13 @@ public class TargetService implements EntityService<Target> {
         return response.getStatus();
     }
 
+    /**
+     * GET /targets/{id}/details getTargetDetails
+     *
+     * @param id id of entity
+     * @return Target entity
+     */
+    @Override
     public Target view(String id) {
         log.info("View target entry id:" + id);
 
@@ -114,6 +162,12 @@ public class TargetService implements EntityService<Target> {
         return JsonCoverter.readEntityFromResponse(response, Target.class, "result");
     }
 
+    /**
+     * GET /targets/{id}/groups findTargetGroups
+     *
+     * @param id Target id
+     * @return List of Target groups
+     */
     public List<TargetGroup> getTargetGroups(String id) {
         log.info("Get targetGroups of target id:" + id);
 
