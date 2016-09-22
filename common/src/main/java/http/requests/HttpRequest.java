@@ -18,7 +18,7 @@ import java.io.File;
 public class HttpRequest {
 
     /**
-     * Path
+     * URL path
      */
     private String URI;
     /**
@@ -91,6 +91,14 @@ public class HttpRequest {
         return this;
     }
 
+    /**
+     * Add file to Miltipart payload
+     *
+     * @param name name of FileDataBodyPart
+     * @param file file entity
+     * @param type MediaType of file
+     * @return HttpRequest
+     */
     protected HttpRequest addBodyFile(String name, File file, MediaType type) {
         log.debug("Adding file to multipart body...");
         FileDataBodyPart filePart = new FileDataBodyPart(name, file, type);
@@ -105,6 +113,13 @@ public class HttpRequest {
         return this;
     }
 
+    /**
+     * Add string field to Miltipart payload
+     *
+     * @param fieldName field name
+     * @param value     string value
+     * @return HttpRequest
+     */
     protected HttpRequest addBodyString(String fieldName, String value) {
         FormDataBodyPart part = new FormDataBodyPart(fieldName, value);
         multiPart.bodyPart(part);
