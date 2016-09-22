@@ -2,7 +2,7 @@ package http.requests.phonebook;
 
 import abs.SearchFilter;
 import http.requests.HttpRequest;
-import http.requests.HttpMethod;
+import http.HttpMethod;
 import model.G4File;
 
 import javax.ws.rs.core.MediaType;

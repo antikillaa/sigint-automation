@@ -1,6 +1,7 @@
 package http.requests;
 
 import abs.SearchFilter;
+import http.HttpMethod;
 
 public class UploadRequest extends HttpRequest {
 

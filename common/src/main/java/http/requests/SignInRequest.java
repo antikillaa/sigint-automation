@@ -1,4 +1,5 @@
 package http.requests;
+import http.HttpMethod;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(value = { "URI", "cookie" })

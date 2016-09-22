@@ -3,7 +3,7 @@ package jira;
 import app_context.properties.G4Properties;
 import app_context.properties.JiraProperties;
 import http.requests.HttpRequest;
-import http.requests.HttpMethod;
+import http.HttpMethod;
 import jira.model.User;
 import org.apache.log4j.Logger;
 

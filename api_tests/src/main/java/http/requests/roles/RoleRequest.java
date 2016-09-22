@@ -1,7 +1,7 @@
 package http.requests.roles;
 
 import http.requests.HttpRequest;
-import http.requests.HttpMethod;
+import http.HttpMethod;
 import model.PegasusMediaType;
 import model.Role;
 

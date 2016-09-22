@@ -2,7 +2,7 @@ package http.requests.phonebook;
 
 
 import http.requests.HttpRequest;
-import http.requests.HttpMethod;
+import http.HttpMethod;
 import model.G4File;
 import model.Phonebook;
 

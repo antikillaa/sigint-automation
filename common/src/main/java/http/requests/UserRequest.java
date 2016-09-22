@@ -1,5 +1,6 @@
 package http.requests;
 
+import http.HttpMethod;
 import model.PegasusMediaType;
 import model.User;
 

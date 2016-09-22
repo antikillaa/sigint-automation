@@ -2,7 +2,7 @@ package http.requests.rfi;
 
 import abs.SearchFilter;
 import http.requests.HttpRequest;
-import http.requests.HttpMethod;
+import http.HttpMethod;
 
 
 public class RFISearchRequest extends HttpRequest {

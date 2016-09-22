@@ -1,7 +1,7 @@
 package http.requests.groups;
 
 import http.requests.HttpRequest;
-import http.requests.HttpMethod;
+import http.HttpMethod;
 import model.Group;
 import model.PegasusMediaType;
 

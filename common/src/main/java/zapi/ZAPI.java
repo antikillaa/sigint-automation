@@ -5,7 +5,7 @@ import errors.NullReturnException;
 import http.G4Response;
 import http.G4HttpClient;
 import http.requests.HttpRequest;
-import http.requests.HttpMethod;
+import http.HttpMethod;
 import json.JsonCoverter;
 import zapi.model.Cycle;
 import zapi.model.CyclesList;

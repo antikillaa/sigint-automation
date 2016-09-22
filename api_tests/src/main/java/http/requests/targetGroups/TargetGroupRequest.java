@@ -1,7 +1,7 @@
 package http.requests.targetGroups;
 
 import http.requests.HttpRequest;
-import http.requests.HttpMethod;
+import http.HttpMethod;
 import model.TargetGroup;
 
 public class TargetGroupRequest extends HttpRequest {

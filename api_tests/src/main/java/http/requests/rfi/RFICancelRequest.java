@@ -1,7 +1,7 @@
 package http.requests.rfi;
 
 import http.requests.HttpRequest;
-import http.requests.HttpMethod;
+import http.HttpMethod;
 
 /**
  * Created by dm on 5/18/16.

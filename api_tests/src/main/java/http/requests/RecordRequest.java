@@ -1,6 +1,7 @@
 package http.requests;
 
 import abs.SearchFilter;
+import http.HttpMethod;
 import model.Record;
 
 public class RecordRequest extends HttpRequest {

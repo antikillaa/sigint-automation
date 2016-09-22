@@ -1,6 +1,7 @@
 package http.requests;
 
 import app_context.AppContext;
+import http.HttpMethod;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
