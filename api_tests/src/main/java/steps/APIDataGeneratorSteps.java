@@ -1,10 +1,11 @@
 package steps;
 
-import abs.EntityList;
 import file_generator.FileGenerator;
 import model.*;
 import model.bulders.SSMSGenerator;
 import org.jbehave.core.annotations.Given;
+
+import java.util.List;
 
 public class APIDataGeneratorSteps extends APISteps {
 
@@ -14,15 +15,15 @@ public class APIDataGeneratorSteps extends APISteps {
         SourceType sourceType = SourceType.valueOf(sType);
         RecordType recordType = RecordType.valueOf(rType);
 
-        FileGenerator fileGenerator = new FileGenerator();
         switch (sourceType) {
             case Strategic:
                 switch (recordType) {
                     case SMS:
                         GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
 
-                        EntityList<SSMS> ssmsList = new SSMSGenerator().produceSSMSListByMatrix(matrix);
-                        G4File file = fileGenerator.SSMS().write(ssmsList);
+                        List<SSMS> ssmsList = new SSMSGenerator().produceSSMSListByMatrix(matrix);
+                        G4File file = new FileGenerator(SSMS.class).write(ssmsList);
+
                         context.put("ssmsFile", file);
                         break;
                     default:

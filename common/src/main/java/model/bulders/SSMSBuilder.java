@@ -2,22 +2,25 @@ package model.bulders;
 
 import model.SSMS;
 
+/**
+ * S-SMS Builder
+ */
 abstract class SSMSBuilder {
 
-    protected SSMS ssms;
-    protected String pattern;
+    SSMS ssms;
+    String pattern;
 
-    public SSMSBuilder createNewSSMS() {
+    SSMSBuilder createNewSSMS() {
         ssms = new SSMS().generate();
         return this;
     }
 
-    public SSMSBuilder setPattern(String value) {
+    SSMSBuilder setPattern(String value) {
         pattern = value;
         return this;
     }
 
-    public SSMS getSSMS() {
+    SSMS getSSMS() {
         return ssms;
     }
 

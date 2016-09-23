@@ -6,6 +6,7 @@ import http.requests.HttpRequest;
 import json.JsonCoverter;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 import javax.ws.rs.client.Client;
@@ -98,7 +99,7 @@ public class G4HttpClient {
             return null;
         }
 
-        if (object.getClass().getName().equals("org.glassfish.jersey.media.multipart.MultiPart")) {
+        if (object.getClass().equals(MultiPart.class)) {
             payload = Entity.entity(object, MediaType.MULTIPART_FORM_DATA_TYPE);
         } else {
             try {

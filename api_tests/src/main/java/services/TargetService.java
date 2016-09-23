@@ -7,7 +7,7 @@ import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
-import file_generator.TargetFile;
+import file_generator.FileGenerator;
 import http.G4HttpClient;
 import http.G4Response;
 import http.requests.targets.TargetRequest;
@@ -64,7 +64,7 @@ public class TargetService implements EntityService<Target> {
      */
     public int upload(List<Target> targets) {
         log.info("Writing Targets to file..");
-        G4File file = new TargetFile().write(targets);
+        G4File file = new FileGenerator(Target.class).write(targets);
 
         log.info("Upload file with " + targets.size() + " targets..");
         TargetRequest request = new TargetRequest().upload(file);
