@@ -4,6 +4,9 @@ import javax.ws.rs.core.MediaType;
 import java.io.File;
 import java.net.URI;
 
+/**
+ * G4File extend java.io.File with MediaType field (used in ingestion)
+ */
 public class G4File extends File {
 
     private MediaType mediaType;

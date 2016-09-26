@@ -2,7 +2,7 @@ package http.requests.targets;
 
 import abs.SearchFilter;
 import http.requests.HttpRequest;
-import http.requests.HttpRequestType;
+import http.HttpMethod;
 import model.G4File;
 import model.Target;
 
@@ -19,7 +19,7 @@ public class TargetRequest extends HttpRequest {
     public TargetRequest add(Target target) {
         this
                 .setURI(URI)
-                .setType(HttpRequestType.PUT)
+                .setHttpMethod(HttpMethod.PUT)
                 .setPayload(target);
         return this;
     }
@@ -31,7 +31,7 @@ public class TargetRequest extends HttpRequest {
 
     public TargetRequest update(Target target) {
         this
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(target);
         return this;
     }
@@ -39,7 +39,7 @@ public class TargetRequest extends HttpRequest {
     public TargetRequest delete(String id) {
         this
                 .setURI(URI + "/" + id )
-                .setType(HttpRequestType.DELETE);
+                .setHttpMethod(HttpMethod.DELETE);
         return this;
     }
 
@@ -48,14 +48,14 @@ public class TargetRequest extends HttpRequest {
         file.deleteOnExit();
         this
                 .setURI(URI + "/upload")
-                .setType(HttpRequestType.POST);
+                .setHttpMethod(HttpMethod.POST);
         return this;
     }
 
     public TargetRequest search(SearchFilter filter) {
         this
                 .setURI(URI + "/search")
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(filter);
         return this;
     }

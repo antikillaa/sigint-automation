@@ -60,10 +60,9 @@ public class JsonCoverter {
     }
 
 
-    public static MapType constructMapTypeToValue( Class<?> valueClass){
+    private static MapType constructMapTypeToValue(Class<?> valueClass){
         TypeFactory typeFactory = mapper.getTypeFactory();
-        MapType mapType = typeFactory.constructMapType(HashMap.class, String.class, valueClass);
-        return mapType;
+        return typeFactory.constructMapType(HashMap.class, String.class, valueClass);
     }
 
     public static String toJsonString(Object object) throws NullReturnException {

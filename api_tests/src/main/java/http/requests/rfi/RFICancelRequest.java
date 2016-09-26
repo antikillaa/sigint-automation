@@ -1,7 +1,7 @@
 package http.requests.rfi;
 
 import http.requests.HttpRequest;
-import http.requests.HttpRequestType;
+import http.HttpMethod;
 
 /**
  * Created by dm on 5/18/16.
@@ -13,6 +13,6 @@ public class RFICancelRequest extends HttpRequest {
 
     public RFICancelRequest(String id) {
         super(URI + id + "/CANCELLED");
-        this.setType(HttpRequestType.POST);
+        this.setHttpMethod(HttpMethod.POST);
     }
 }

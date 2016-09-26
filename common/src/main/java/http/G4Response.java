@@ -2,6 +2,9 @@ package http;
 
 import javax.ws.rs.core.Response;
 
+/**
+ * Container for response message string and http status code
+ */
 public class G4Response {
 
     private String message;

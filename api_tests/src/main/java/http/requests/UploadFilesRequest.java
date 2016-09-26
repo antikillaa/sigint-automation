@@ -3,6 +3,7 @@ package http.requests;
 import app_context.AppContext;
 import app_context.RunContext;
 import errors.NullReturnException;
+import http.HttpMethod;
 import json.JsonCoverter;
 import model.*;
 import org.apache.log4j.Logger;
@@ -54,7 +55,7 @@ public class UploadFilesRequest extends HttpRequest {
         addBodyString("meta", meta);
         file.deleteOnExit();
 
-        this.setType(HttpRequestType.POST);
+        this.setHttpMethod(HttpMethod.POST);
         return this;
     }
 

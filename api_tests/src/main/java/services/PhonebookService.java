@@ -5,7 +5,7 @@ import abs.SearchFilter;
 import app_context.RunContext;
 import app_context.entities.Entities;
 import errors.NullReturnException;
-import file_generator.PhoneBookFile;
+import file_generator.FileGenerator;
 import http.G4HttpClient;
 import http.G4Response;
 import http.requests.phonebook.PhonebookRequest;
@@ -151,7 +151,7 @@ public class PhonebookService implements EntityService<Phonebook> {
      */
     public int upload(List<Phonebook> phonebooks) {
         log.info("Writing Phonebook entries to file..");
-        G4File file = new PhoneBookFile().write(phonebooks);
+        G4File file = new FileGenerator(Phonebook.class).write(phonebooks);
 
         log.info("Upload file with " + phonebooks.size() + " Phonebook entries..");
         PhonebookRequest request = new PhonebookRequest().upload(file);

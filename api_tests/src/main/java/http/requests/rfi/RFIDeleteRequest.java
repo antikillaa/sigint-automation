@@ -1,7 +1,7 @@
 package http.requests.rfi;
 
 import http.requests.HttpRequest;
-import http.requests.HttpRequestType;
+import http.HttpMethod;
 
 /**
  * Created by dm on 5/16/16.
@@ -12,6 +12,6 @@ public class RFIDeleteRequest extends HttpRequest {
 
     public RFIDeleteRequest(String rfiID) {
         super(URI + rfiID);
-        this.setType(HttpRequestType.DELETE);
+        this.setHttpMethod(HttpMethod.DELETE);
     }
 }

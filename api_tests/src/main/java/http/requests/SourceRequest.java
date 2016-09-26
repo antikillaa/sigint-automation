@@ -1,5 +1,6 @@
 package http.requests;
 
+import http.HttpMethod;
 import model.Source;
 
 public class SourceRequest extends HttpRequest {
@@ -13,7 +14,7 @@ public class SourceRequest extends HttpRequest {
     public SourceRequest add(Source source) {
         this
                 .setURI(URI + "/add")
-                .setType(HttpRequestType.PUT)
+                .setHttpMethod(HttpMethod.PUT)
                 .setPayload(source);
         return this;
     }
@@ -26,13 +27,13 @@ public class SourceRequest extends HttpRequest {
     public SourceRequest delete(String id) {
         this
                 .setURI(URI + "/" + id)
-                .setType(HttpRequestType.DELETE);
+                .setHttpMethod(HttpMethod.DELETE);
         return this;
     }
 
     public SourceRequest update(Source source) {
         this
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(source);
         return this;
     }

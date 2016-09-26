@@ -3,7 +3,7 @@ package http.requests.phonebook;
 
 import abs.SearchFilter;
 import http.requests.HttpRequest;
-import http.requests.HttpRequestType;
+import http.HttpMethod;
 import model.G4File;
 
 import javax.ws.rs.core.MediaType;
@@ -19,7 +19,7 @@ public class DuSubscriberRequest extends HttpRequest {
     public DuSubscriberRequest search(SearchFilter filter) {
         this
                 .setURI(URI + "/search")
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(filter);
         return this;
     }
@@ -28,7 +28,7 @@ public class DuSubscriberRequest extends HttpRequest {
         addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         this
                 .setURI(URI + "/upload")
-                .setType(HttpRequestType.POST);
+                .setHttpMethod(HttpMethod.POST);
         return this;
     }
 

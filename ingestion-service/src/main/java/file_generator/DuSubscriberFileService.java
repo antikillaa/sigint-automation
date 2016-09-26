@@ -8,7 +8,7 @@ import utils.FileHelper;
 import java.util.Date;
 import java.util.List;
 
-public class DuFile extends FileService {
+class DuSubscriberFileService implements FileService<DuSubscriberEntry> {
 
     @Override
     public EntityList read(G4File file) {
@@ -16,13 +16,9 @@ public class DuFile extends FileService {
     }
 
     @Override
-    public G4File write(EntityList entityList) {
-        List<DuSubscriberEntry> duSubscriberEntries = entityList.getEntities();
-        return write(duSubscriberEntries);
-    }
-
     public G4File write(List<DuSubscriberEntry> entries) {
-        G4File file = new G4File("DuSubscriber" + new Date().getTime() + ".csv");
+        log.info("Create Du Subscriber file..");
+        G4File file = new G4File("duSubscriber" + new Date().getTime() + ".csv");
 
         for (DuSubscriberEntry entry : entries) {
             FileHelper.writeLineToFile(file, entryToString(entry));

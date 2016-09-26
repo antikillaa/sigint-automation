@@ -4,7 +4,7 @@ import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Verify;
 import errors.NullReturnException;
-import file_generator.TargetFile;
+import file_generator.FileGenerator;
 import json.JsonCoverter;
 import model.*;
 import org.apache.commons.lang.math.RandomUtils;
@@ -16,7 +16,6 @@ import org.junit.Assert;
 import services.TargetService;
 import utils.Parser;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class APITargetSteps extends APISteps {
     public void sendCreateRequest(String with) throws NullReturnException {
         Target target = new Target().generate();
         if (with.toLowerCase().equals("with")) {
-            List<TargetGroup> groups = new ArrayList<TargetGroup>();
+            List<TargetGroup> groups = new ArrayList<>();
             groups.add(Entities.getTargetGroups().random());
             target.setGroups(groups);
         }
@@ -268,7 +267,7 @@ public class APITargetSteps extends APISteps {
     @Given("generate XLS with $count target")
     public void generateTargets(String count) {
         List<Target> targets = new Target().generate(Integer.valueOf(count));
-        File file = new TargetFile().write(targets);
+        G4File file = new FileGenerator(Target.class).write(targets);
 
         context.put("targetsXLS", file);
     }

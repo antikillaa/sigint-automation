@@ -2,7 +2,7 @@ package http.requests.phonebook;
 
 import abs.SearchFilter;
 import http.requests.HttpRequest;
-import http.requests.HttpRequestType;
+import http.HttpMethod;
 
 public class UnifiedPhonebookSearchRequest extends HttpRequest {
 
@@ -11,7 +11,7 @@ public class UnifiedPhonebookSearchRequest extends HttpRequest {
     public UnifiedPhonebookSearchRequest(SearchFilter filter) {
         super(URI);
         this
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(filter);
     }
 

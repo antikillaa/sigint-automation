@@ -2,7 +2,7 @@ package http.requests.phonebook;
 
 
 import http.requests.HttpRequest;
-import http.requests.HttpRequestType;
+import http.HttpMethod;
 import model.G4File;
 import model.Phonebook;
 
@@ -19,14 +19,14 @@ public class PhonebookRequest extends HttpRequest {
     public PhonebookRequest delete(String id) {
         this
                 .setURI(URI + "/entries/" + id)
-                .setType(HttpRequestType.DELETE);
+                .setHttpMethod(HttpMethod.DELETE);
         return this;
     }
 
     public PhonebookRequest add(Phonebook phonebook) {
         this
                 .setURI(URI + "/entries")
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(phonebook);
         return this;
     }
@@ -39,7 +39,7 @@ public class PhonebookRequest extends HttpRequest {
     public PhonebookRequest update(Phonebook phonebook) {
         this
                 .setURI(URI + "/entries/" + phonebook.getId())
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(phonebook);
         return this;
     }
@@ -48,7 +48,7 @@ public class PhonebookRequest extends HttpRequest {
         addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         this
                 .setURI(URI + "/upload")
-                .setType(HttpRequestType.POST);
+                .setHttpMethod(HttpMethod.POST);
         return this;
     }
 

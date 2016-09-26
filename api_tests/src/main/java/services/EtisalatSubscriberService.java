@@ -5,7 +5,7 @@ import abs.SearchFilter;
 import abs.SearchResult;
 import app_context.RunContext;
 import errors.NullReturnException;
-import file_generator.EtisalatSubscriberFile;
+import file_generator.FileGenerator;
 import http.G4HttpClient;
 import http.G4Response;
 import http.requests.phonebook.EtisalatSubscriberRequest;
@@ -53,7 +53,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
      */
     public int upload(List<EtisalatSubscriberEntry> entries) {
         log.info("Writing Etisalat Subscriber entries to file..");
-        G4File file = new EtisalatSubscriberFile().write(entries);
+        G4File file = new FileGenerator(EtisalatSubscriberEntry.class).write(entries);
 
         log.info("Upload file with " + entries.size() + " Etisalat Subscriber entries..");
         EtisalatSubscriberRequest request = new EtisalatSubscriberRequest().upload(file);

@@ -1,5 +1,6 @@
 package http.requests;
 
+import http.HttpMethod;
 import model.Report;
 
 public class ReportRequest extends HttpRequest {
@@ -12,7 +13,7 @@ public class ReportRequest extends HttpRequest {
 
     public ReportRequest add(Report report) {
         this
-                .setType(HttpRequestType.PUT)
+                .setHttpMethod(HttpMethod.PUT)
                 .setPayload(report);
         return this;
     }

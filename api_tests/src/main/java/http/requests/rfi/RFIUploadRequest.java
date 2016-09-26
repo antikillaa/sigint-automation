@@ -2,7 +2,7 @@ package http.requests.rfi;
 
 
 import http.requests.HttpRequest;
-import http.requests.HttpRequestType;
+import http.HttpMethod;
 import json.JsonCoverter;
 import model.FileAttachment;
 import model.InformationRequest;
@@ -24,7 +24,7 @@ public class RFIUploadRequest extends HttpRequest {
 
     public RFIUploadRequest(InformationRequest entity) {
         super(URI);
-        this.setType(HttpRequestType.POST);
+        this.setHttpMethod(HttpMethod.POST);
 
         try {
             log.debug("Writing InformationRequest to json file...");

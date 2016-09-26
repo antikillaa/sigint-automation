@@ -1,15 +1,17 @@
 package file_generator;
 
 import abs.EntityList;
+import abs.TeelaEntity;
 import model.G4File;
 import org.apache.log4j.Logger;
 
-public abstract class FileService {
+import java.util.List;
+
+interface FileService<T extends TeelaEntity> {
 
     Logger log = Logger.getLogger(FileService.class);
 
-    public abstract EntityList read(G4File file);
+    EntityList read(G4File file);
 
-    public abstract G4File write(EntityList entityList);
-
+    G4File write(List<T> entities);
 }

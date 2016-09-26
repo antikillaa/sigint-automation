@@ -1,6 +1,7 @@
 package http.requests;
 
 import abs.SearchFilter;
+import http.HttpMethod;
 import model.Record;
 
 public class RecordRequest extends HttpRequest {
@@ -14,7 +15,7 @@ public class RecordRequest extends HttpRequest {
     public RecordRequest manual(Record record) {
         this
                 .setURI(URI + "/manual")
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(record);
         return this;
     }
@@ -22,7 +23,7 @@ public class RecordRequest extends HttpRequest {
     public RecordRequest search(SearchFilter filter) {
         this
                 .setURI(URI + "/search?withTargets=true")
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(filter);
         return this;
     }

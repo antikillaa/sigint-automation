@@ -1,4 +1,5 @@
 package http.requests;
+import http.HttpMethod;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(value = { "URI", "cookie" })
@@ -14,7 +15,7 @@ public class SignInRequest extends HttpRequest {
         user.setPassword(password);
 
         this
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(user);
     }
 

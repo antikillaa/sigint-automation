@@ -1,5 +1,6 @@
 package http.requests;
 
+import http.HttpMethod;
 import model.PegasusMediaType;
 import model.User;
 
@@ -15,13 +16,13 @@ public class UserRequest extends HttpRequest {
     public UserRequest me() {
         this
                 .setURI(URI + "/me")
-                .setType(HttpRequestType.GET);
+                .setHttpMethod(HttpMethod.GET);
         return this;
     }
 
     public UserRequest add(User user) {
         this
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(user);
         return this;
     }

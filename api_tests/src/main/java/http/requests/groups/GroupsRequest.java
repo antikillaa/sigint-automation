@@ -1,7 +1,7 @@
 package http.requests.groups;
 
 import http.requests.HttpRequest;
-import http.requests.HttpRequestType;
+import http.HttpMethod;
 import model.Group;
 import model.PegasusMediaType;
 
@@ -17,7 +17,7 @@ public class GroupsRequest extends HttpRequest {
     public GroupsRequest update(Group group) {
         this
                 .setURI(URI + "/" + group.getId())
-                .setType(HttpRequestType.PUT)
+                .setHttpMethod(HttpMethod.PUT)
                 .setPayload(group);
         return this;
     }
@@ -25,7 +25,7 @@ public class GroupsRequest extends HttpRequest {
     public GroupsRequest add(Group group) {
         this
                 .setURI(URI)
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(group);
         return this;
     }

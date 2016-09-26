@@ -20,7 +20,8 @@ public class UserService implements EntityService<User> {
     Logger log = Logger.getLogger(UserService.class);
 
     /**
-     * Add new User.
+     * Add new G4 User.
+     *
      * @param entity New user
      * @return Response status code
      */
@@ -55,8 +56,10 @@ public class UserService implements EntityService<User> {
     }
 
     /**
-     * Get current user.
-     * @return current user
+     * Get current G4 user.
+     * API: GET "/api/auth/users/me"
+     *
+     * @return current G4 user
      */
     public User me() {
         log.info("Get current user...");
@@ -74,10 +77,11 @@ public class UserService implements EntityService<User> {
     }
 
     /**
-     * Get report role for User.
-     * @param user User
-     * @return 'Report role' for user
-     * <br>ADMIN user has 'approver' role
+     * Get report role for G4 User.
+     *
+     * @param user G4 user
+     * @return 'Report role' for G4 user
+     * <br>note: ADMIN user has 'approver' role
      */
     public String getReportRole(User user) {
         List<String> roles = user.getExpandedRoles();

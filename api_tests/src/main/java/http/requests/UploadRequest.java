@@ -1,6 +1,7 @@
 package http.requests;
 
 import abs.SearchFilter;
+import http.HttpMethod;
 
 public class UploadRequest extends HttpRequest {
 
@@ -13,7 +14,7 @@ public class UploadRequest extends HttpRequest {
     public UploadRequest search(SearchFilter filter) {
         this
                 .setURI(URI + "/search")
-                .setType(HttpRequestType.POST)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(filter);
         return this;
     }

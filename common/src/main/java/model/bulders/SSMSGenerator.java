@@ -1,7 +1,5 @@
 package model.bulders;
 
-import abs.EntityList;
-import errors.NullReturnException;
 import model.GenerationMatrix;
 import model.GenerationMatrixRow;
 import model.SSMS;
@@ -11,59 +9,70 @@ import utils.RandomGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * S-SMS data generator.
+ */
 public class SSMSGenerator {
 
+    /**
+     * S-SMS Builder
+     */
     private SSMSBuilder ssmsBuilder;
 
+    /**
+     * S-SMS data generator.
+     * By default used SSMSRandom builder.
+     */
     public SSMSGenerator() {
         ssmsBuilder = new SSMSRandom();
     }
 
     /**
      * Set SSMSRandom S-SMS builder
+     *
      * @return SSMSGenerator
      */
-    public SSMSGenerator random() {
+    private SSMSGenerator random() {
         ssmsBuilder = new SSMSRandom();
         return this;
     }
 
     /**
      * Set SSMSToNumber S-SMS builder
+     *
      * @param number target number
      * @return SSMSGenerator
      */
-    public SSMSGenerator toNumber(String number) {
+    private SSMSGenerator toNumber(String number) {
         ssmsBuilder = new SSMSToNumber(number);
         return this;
     }
 
     /**
      * Set SSMSFromNumber S-SMS builder
+     *
      * @param number target number
      * @return SSMSGenerator
      */
-    public SSMSGenerator fromNumber(String number) {
+    private SSMSGenerator fromNumber(String number) {
         ssmsBuilder = new SSMSFromNumber(number);
         return this;
     }
 
     /**
      * Set SSMSWithTextMention S-SMS builder
+     *
      * @param pattern target mention string (Target name, phone or keyword)
      * @return SSMSGenerator
      */
-    public SSMSGenerator withTextMention(String pattern) {
+    private SSMSGenerator withTextMention(String pattern) {
         ssmsBuilder = new SSMSWithTextMention(pattern);
         return this;
     }
 
-    public SSMS getSSMS() {
-        return ssmsBuilder.getSSMS();
-    }
-
     /**
      * Produce one S-SMS, according SSMSBuilder
+     *
      * @return S-SMS
      */
     public SSMS produce() {
@@ -76,10 +85,11 @@ public class SSMSGenerator {
     }
 
     /**
-     * Produce EntityList of S-SMS according GenerationMatrix
-     * @return EntityList of S-SMS
+     * Produce List of S-SMS according GenerationMatrix
+     *
+     * @return List of S-SMS
      */
-    public EntityList<SSMS> produceSSMSListByMatrix(GenerationMatrix generationMatrix) {
+    public List<SSMS> produceSSMSListByMatrix(GenerationMatrix generationMatrix) {
         List<SSMS> ssmsList = new ArrayList<>();
 
         /*
@@ -136,30 +146,20 @@ public class SSMSGenerator {
             }
         }
 
-        return new EntityList<SSMS>(ssmsList) {
-            @Override
-            public SSMS getEntity(String param) throws NullReturnException {
-                return null;
-            }
-        };
+        return ssmsList;
     }
 
     /**
-     * Generate EntityList of random S-SMS.
+     * Generate List of random S-SMS.
      *
      * @param count S-SMS count
-     * @return EntityList of S-SMS
+     * @return List of S-SMS
      */
-    public EntityList<SSMS> produceSSMSListRandomly(int count) {
-        EntityList<SSMS> ssmsEntityList = new EntityList<SSMS>(new ArrayList<SSMS>()) {
-            @Override
-            public SSMS getEntity(String param) throws NullReturnException {
-                return null;
-            }
-        };
+    public List<SSMS> produceSSMSListRandomly(int count) {
+        List<SSMS> ssmsEntityList = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {
-            ssmsEntityList.getEntities().add(random().produce());
+            ssmsEntityList.add(random().produce());
         }
         return ssmsEntityList;
     }
