@@ -16,6 +16,12 @@ public class ReportService implements EntityService<Report> {
     private Logger log = Logger.getLogger(RecordService.class);
     private static G4HttpClient g4HttpClient = new G4HttpClient();
 
+    /**
+     * API: PUT /api/reports/
+     *
+     * @param entity entity
+     * @return HTTP status code
+     */
     @Override
     public int add(Report entity) {
         log.info("Sending create new report request...");

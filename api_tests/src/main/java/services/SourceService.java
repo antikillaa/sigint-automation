@@ -23,6 +23,12 @@ public class SourceService implements EntityService<Source> {
     private Logger log = Logger.getLogger(RoleService.class);
     private RunContext context = RunContext.get();
 
+    /**
+     * API: PUT /api/sigint/admin/source/add
+     *
+     * @param entity Source entity
+     * @return HTTP status code
+     */
     @Override
     public int add(Source entity) {
         log.info("Creating new Source..");
@@ -37,6 +43,12 @@ public class SourceService implements EntityService<Source> {
         return response.getStatus();
     }
 
+    /**
+     * API: DELETE /api/sigint/admin/source/{id}
+     *
+     * @param entity Source entity
+     * @return HTTP status code
+     */
     @Override
     public int remove(Source entity) {
         log.info("Deleting Source id:" + entity.getId());
@@ -57,6 +69,12 @@ public class SourceService implements EntityService<Source> {
         return null;
     }
 
+    /**
+     * GET list of Sources
+     * API: GET /api/sigint/sources getSources
+     *
+     * @return HTTP status code
+     */
     public List<Source> list() {
         SourcesRequest request = new SourcesRequest();
 
@@ -67,6 +85,12 @@ public class SourceService implements EntityService<Source> {
         return result.getResult();
     }
 
+    /**
+     * API: POST /api/sigint/admin/source
+     *
+     * @param entity Source entity
+     * @return HTTP status code
+     */
     @Override
     public int update(Source entity) {
         log.info("Updating Source id: " + entity.getId());
@@ -87,6 +111,12 @@ public class SourceService implements EntityService<Source> {
         return response.getStatus();
     }
 
+    /**
+     * API: GET /api/sigint/admin/source/{id}/details
+     *
+     * @param id id of entity
+     * @return Source entity
+     */
     @Override
     public Source view(String id) {
         log.info("View Source details, id:" + id);

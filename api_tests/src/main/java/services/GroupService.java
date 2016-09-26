@@ -16,6 +16,14 @@ public class GroupService implements EntityService<Group> {
     private static G4HttpClient g4HttpClient = new G4HttpClient();
     private Logger log = Logger.getLogger(GroupService.class);
 
+    /**
+     * ADD new Group
+     * API: POST /api/auth/groups
+     *
+     * @param entity group
+     * @return HTTP status code
+     */
+    @Override
     public int add(Group entity) {
         log.info("Creating new Group");
         log.debug(Parser.entityToString(entity));
@@ -30,14 +38,24 @@ public class GroupService implements EntityService<Group> {
         return response.getStatus();
     }
 
+    @Override
     public int remove(Group entity) {
         return 0;
     }
 
+    @Override
     public EntityList<Group> list(SearchFilter filter) {
         return null;
     }
 
+    /**
+     * UPDATE new Group
+     * API: PUT /api/auth/groups
+     *
+     * @param entity group
+     * @return HTTP status code
+     */
+    @Override
     public int update(Group entity) {
         log.info("Updating Group id" + entity.getId());
         log.debug(Parser.entityToString(entity));
@@ -52,6 +70,7 @@ public class GroupService implements EntityService<Group> {
         return response.getStatus();
     }
 
+    @Override
     public Group view(String id) {
         return null;
     }

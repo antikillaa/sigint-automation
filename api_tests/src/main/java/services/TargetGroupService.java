@@ -26,6 +26,13 @@ public class TargetGroupService implements EntityService<TargetGroup> {
     private RunContext context = RunContext.get();
 
 
+    /**
+     * PUT /target-groups createTargetGroup
+     *
+     * @param entity entity
+     * @return HTTP status code
+     */
+    @Override
     public int add(TargetGroup entity) {
         log.info("Creating new target group");
         log.debug(Parser.entityToString(entity));
@@ -40,6 +47,13 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         return response.getStatus();
     }
 
+    /**
+     * DELETE /target-groups/{id} removeTargetGroup
+     *
+     * @param entity entity
+     * @return HTTP status code
+     */
+    @Override
     public int remove(TargetGroup entity) {
         log.info("Deleting target group id:" + entity.getId());
         log.debug(Parser.entityToString(entity));
@@ -60,10 +74,19 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         return response.getStatus();
     }
 
+    // TODO POST /target-groups/search search
+    @Override
     public EntityList<TargetGroup> list(SearchFilter filter) {
         return null;
     }
 
+    /**
+     * POST /target-groups updateTargetGroup
+     *
+     * @param entity entity
+     * @return HTTP status code
+     */
+    @Override
     public int update(TargetGroup entity) {
         log.info("Updating target group");
         log.debug(Parser.entityToString(entity));
@@ -82,6 +105,13 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         return response.getStatus();
     }
 
+    /**
+     * GET /target-groups/{id}/details getTargetGroupDetails
+     *
+     * @param id id of entity
+     * @return TargetGroup entity
+     */
+    @Override
     public TargetGroup view(String id) {
         log.info("View target group id:" + id);
         TargetGroupRequest request = new TargetGroupRequest().get(id);
@@ -92,6 +122,11 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         return resultTargetGroup;
     }
 
+    /**
+     * GET /target-groups getTargetGroups
+     *
+     * @return list of TargetGroup
+     */
     public List<TargetGroup> view() {
         log.info("Get list of target groups");
 
