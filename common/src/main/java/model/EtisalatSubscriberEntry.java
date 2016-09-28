@@ -1,8 +1,12 @@
 package model;
 
 import abs.TeelaEntity;
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.math.RandomUtils;
+import data_for_entity.annotations.*;
+import data_for_entity.data_providers.CountryCode;
+import data_for_entity.data_providers.CountryNameByCode;
+import data_for_entity.data_providers.LongData;
+import data_for_entity.data_providers.ProvisionRegionCode;
+import data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import utils.RandomGenerator;
@@ -14,33 +18,36 @@ import java.util.Date;
 public class EtisalatSubscriberEntry extends TeelaEntity {
 
     
-    
+    @DataStatic("etisalat")
     private String sourceId;
     
-    
+    @DataIgnore
     private Integer fileNumber;
 
     /**
      * Date extracted from uploaded file name
      */
-    
+    @DataIgnore
     private Date fileDate;
 
     /**
      * Region code extracted from uploaded file name
      */
-   
+    @DataIgnore
     private String regionCode;
 
     /**
      * Indicator for the record is added, modified or deleted
      */
     
+    @DataStatic("ADDED")
     private String action;
 
     /**
      * GSM, PSTN or Account No. (Format will be CC-NDC-SN. Example: 971508112562, 9712618XXXX)
      */
+    @WithDataSize(length = 12)
+    @WithFieldDataType(FieldDataType.NUMERIC)
     private String phoneNumber; //nationalNumber
 
     /**
@@ -48,6 +55,8 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
      * is ceased and passed to a 2nd customer the value of this field is 1,
      * and after it is passed to the 3rd customer it is 2 and so on.
      */
+    @WithDataSize(length = 1)
+    @WithFieldDataType(FieldDataType.NUMERIC)
     private String accountSuffix;
 
     /**
@@ -78,6 +87,7 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     /**
      * Installation Address Flat or House No.
      */
+    @WithDataSize(length = 3)
     private String installationFlatNumber;
 
     /**
@@ -93,16 +103,22 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     /**
      * Installation Plot No.
      */
+    @WithDataSize(length = 3)
+    @WithFieldDataType(FieldDataType.NUMERIC)
     private String installationPlotNumber;
 
     /**
      * Installation Map No.
      */
+    @WithDataSize(length = 3)
+    @WithFieldDataType(FieldDataType.NUMERIC)
     private String installationMapNumber;
 
     /**
      * Installation Sector
      */
+    @WithDataSize(length = 4)
+    @WithFieldDataType(FieldDataType.NUMERIC)
     private String installationSector;
 
     /**
@@ -123,7 +139,8 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     /**
      * Combined firstAddressLine + secondAddressLine
      */
-  
+    
+    @WithDataDependencies(fields = {"firstAddressLine", "secondAddressLine"})
     private String address;
 
     /**
@@ -155,27 +172,32 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     /**
      * Date & Time of Installation
      */
+    @WithFieldDataType(FieldDataType.DATE)
     private Date dateOfInstallation;
 
     /**
      * Country Code of the Customer (2 symbols)
      */
-
+    
+    @WithDataDependencies(fields = {"countryCodeOriginal"})
     private String countryCode;
 
     /**
      * Country Code of the Customer (as in source csv files)
      */
+    @DataProvider(CountryCode.class)
     private String countryCodeOriginal; //???
 
     /**
      * Country Name of the Customer
      */
+    @WithDataDependencies(provider = CountryNameByCode.class, fields = "countryCodeOriginal")
     private String country; //countryCodeDescription
 
     /**
      * Customer Account Status Code/ID
      */
+    @DataProvider(LongData.class)
     private Long subscriberAccountStatusCode;
 
     /**
@@ -186,6 +208,7 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     /**
      * The code/id of the group to which this Product belongs.
      */
+    @DataProvider(LongData.class)
     private Long productGroupCode;
 
     /**
@@ -196,6 +219,7 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     /**
      * The code/id of the services associated with this Product.
      */
+    @DataProvider(LongData.class)
     private Long productCode;
 
     /**
@@ -206,11 +230,14 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     /**
      * International Mobile Subscriber Identity
      */
+    @WithDataSize(length = 15)
+    @WithFieldDataType(FieldDataType.NUMERIC)
     private String imsi;
 
     /**
      * The identification type code/id submitted by the subscriber at the time of subscription of a services.
      */
+    @DataProvider(LongData.class)
     private Long identificationTypeCode;
 
     /**
@@ -227,17 +254,21 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     /**
      * The region where this Product was Provisioned From. (e.g. AU, AL, DX, SH, EC, RA)
      */
+    @DataProvider(CountryCode.class)
     private String provisionedRegionCode;
 
     /**
      * The Description of the Provisioned Region Code
      */
+    @WithDataDependencies(provider = ProvisionRegionCode.class, fields = "provisionedRegionCode")
     private String provisionedRegionCodeDesc;
 
     /**
      * The City ID used in the billing Address
      * The ID for City Name.
      */
+    @WithDataSize(length = 2)
+    @WithFieldDataType(FieldDataType.NUMERIC)
     private String cityId;
 
     /**
@@ -248,11 +279,13 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     /**
      * Date of Action
      */
+    @WithFieldDataType(FieldDataType.DATE)
     private Date updatedDate;
 
     /**
      * Date & Time of DeActivation
      */
+    @WithFieldDataType(FieldDataType.DATE)
     private Date dateOfDeactivation;
 
     public String getAction() {
@@ -642,52 +675,53 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     }
 
   
-    public EtisalatSubscriberEntry generate() {
-        Date date = new Date();
-        this.setSourceId("etisalat");
-        this.setAction("ADDED");
-        this.setPhoneNumber(RandomStringUtils.randomNumeric(12));
-        this.setAccountSuffix(RandomStringUtils.randomNumeric(1));
-        this.setPartyId(RandomStringUtils.randomNumeric(8));
-        this.setName(RandomStringUtils.randomAlphabetic(10));
-        this.setAccountNameArabic(RandomStringUtils.randomAlphabetic(10));
-        this.setUserIdOrName(RandomStringUtils.randomAlphanumeric(8));
-        this.setInstallationBuilding(RandomStringUtils.randomAlphabetic(8));
-        this.setInstallationFlatNumber(RandomStringUtils.randomAlphanumeric(3));
-        this.setInstallationFloor(RandomStringUtils.randomAlphanumeric(3));
-        this.setInstallationStreetName(RandomStringUtils.randomAlphanumeric(10));
-        this.setInstallationPlotNumber(RandomStringUtils.randomNumeric(3));
-        this.setInstallationMapNumber(RandomStringUtils.randomNumeric(3));
-        this.setInstallationSector(RandomStringUtils.randomAlphanumeric(4));
-        this.setInstallationTownCode(RandomStringUtils.randomAlphanumeric(6));
-        this.setInstallationTownName(RandomStringUtils.randomAlphabetic(10));
-        this.setInstallationTownEmirate(RandomStringUtils.randomAlphabetic(8));
-        this.setFirstAddressLine(RandomStringUtils.randomAlphanumeric(10));
-        this.setSecondAddressLine(RandomStringUtils.randomAlphanumeric(10));
-        this.setAddress(this.getFirstAddressLine() + " " + this.getSecondAddressLine());
-        this.setPoBoxNumber(RandomStringUtils.randomAlphanumeric(6));
-        this.setCustomerCategoryCode(RandomStringUtils.randomAlphanumeric(4));
-        this.setCustomerCategoryCodeDesc(RandomStringUtils.randomAlphabetic(12));
-        this.setDateOfInstallation(date);
-        this.setCountryCodeOriginal(RandomGenerator.generateCountryCode());
-        this.setCountryCode(this.getCountryCodeOriginal());
-        this.setCountry(RandomGenerator.getCountryName(this.getCountryCodeOriginal()));
-        this.setSubscriberAccountStatusCode(RandomUtils.nextLong());
-        this.setSubscriberAccountStatusDesc(RandomStringUtils.randomAlphanumeric(12));
-        this.setProductGroupCode(RandomUtils.nextLong());
-        this.setProductGroupDesc(RandomStringUtils.randomAlphanumeric(12));
-        this.setProductCode(RandomUtils.nextLong());
-        this.setProductDesc(RandomStringUtils.randomAlphanumeric(12));
-        this.setImsi(RandomStringUtils.randomNumeric(15));
-        this.setIdentificationTypeCode(RandomUtils.nextLong());
-        this.setIdentificationTypeDesc(RandomStringUtils.randomAlphabetic(12));
-        this.setIdentificationInfo(RandomStringUtils.randomAlphabetic(12));
-        this.setProvisionedRegionCode(RandomGenerator.generateCountryCode());
-        this.setProvisionedRegionCodeDesc(RandomGenerator.getCountryName(this.getProvisionedRegionCode()));
-        this.setCityId(RandomStringUtils.randomNumeric(2));
-        this.setCityName(RandomStringUtils.randomAlphabetic(12));
-        this.setUpdatedDate(date);
-        this.setDateOfDeactivation(date);
-        return this;
-    }
+    //public EtisalatSubscriberEntry generate() {
+    //    Date date = new Date();
+        //this.setSourceId("etisalat");
+        //this.setAction("ADDED");
+        //this.setPhoneNumber(RandomStringUtils.randomNumeric(12));
+        //this.setAccountSuffix(RandomStringUtils.randomNumeric(1));
+        //this.setPartyId(RandomStringUtils.randomNumeric(8));
+        //this.setName(RandomStringUtils.randomAlphabetic(10));
+        //this.setAccountNameArabic(RandomStringUtils.randomAlphabetic(10));
+       // this.setUserIdOrName(RandomStringUtils.randomAlphanumeric(8));
+        //this.setInstallationBuilding(RandomStringUtils.randomAlphabetic(8));
+        //this.setInstallationFlatNumber(RandomStringUtils.randomAlphanumeric(3));
+        //this.setInstallationFloor(RandomStringUtils.randomAlphanumeric(3));
+        //this.setInstallationStreetName(RandomStringUtils.randomAlphanumeric(10));
+        //this.setInstallationPlotNumber(RandomStringUtils.randomNumeric(3));
+        //this.setInstallationMapNumber(RandomStringUtils.randomNumeric(3));
+        //this.setInstallationSector(RandomStringUtils.randomAlphanumeric(4));
+        //this.setInstallationTownCode(RandomStringUtils.randomAlphanumeric(6));
+        //this.setInstallationTownName(RandomStringUtils.randomAlphabetic(10));
+        //this.setInstallationTownEmirate(RandomStringUtils.randomAlphabetic(8));
+        //this.setFirstAddressLine(RandomStringUtils.randomAlphanumeric(10));
+        //this.setSecondAddressLine(RandomStringUtils.randomAlphanumeric(10));
+        //this.setAddress(this.getFirstAddressLine() + " " + this.getSecondAddressLine());
+        //this.setPoBoxNumber(RandomStringUtils.randomAlphanumeric(6));
+        //this.setCustomerCategoryCode(RandomStringUtils.randomAlphanumeric(4));
+        //this.setCustomerCategoryCodeDesc(RandomStringUtils.randomAlphabetic(12));
+        //this.setDateOfInstallation(date);
+        //this.setCountryCodeOriginal(RandomGenerator.generateCountryCode());
+        //this.setCountryCode(this.getCountryCodeOriginal());
+        //this.setCountry(RandomGenerator.getCountryName(this.getCountryCodeOriginal()));
+        //this.setSubscriberAccountStatusCode(RandomUtils.nextLong());
+        //this.setSubscriberAccountStatusDesc(RandomStringUtils.randomAlphanumeric(12));
+        //this.setProductGroupCode(RandomUtils.nextLong());
+        //this.setProductGroupDesc(RandomStringUtils.randomAlphanumeric(12));
+        //this.setProductCode(RandomUtils.nextLong());
+        //this.setProductDesc(RandomStringUtils.randomAlphanumeric(12));
+        //this.setImsi(RandomStringUtils.randomNumeric(15));
+        //this.setIdentificationTypeCode(RandomUtils.nextLong());
+        //this.setIdentificationTypeDesc(RandomStringUtils.randomAlphabetic(12));
+        //this.setIdentificationInfo(RandomStringUtils.randomAlphabetic(12));
+        //this.setProvisionedRegionCode(RandomGenerator.generateCountryCode());
+        //this.setProvisionedRegionCodeDesc(RandomGenerator.getCountryName(this.getProvisionedRegionCode()));
+        //this.setCityId(RandomStringUtils.randomNumeric(2));
+        //this.setCityName(RandomStringUtils.randomAlphabetic(12));
+        //this.setUpdatedDate(date);
+        //this.setDateOfDeactivation(date);
+        //return this;
+   // }
 }
+        

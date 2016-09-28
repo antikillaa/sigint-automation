@@ -4,9 +4,7 @@ public class TrueCondition extends ExpectedCondition {
 
     private Boolean element;
 
-    public String toString() {
-        return null;
-    }
+    public String toString() {return "True condition";}
 
     public TrueCondition element(Boolean element) {
         this.element = element;

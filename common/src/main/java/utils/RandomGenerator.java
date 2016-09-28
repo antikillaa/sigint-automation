@@ -126,11 +126,17 @@ public class RandomGenerator {
     }
 
     public static String getCountryName(String countryCode) {
+        if (countryCode == null) {
+            return null;
+        }
         Locale locale = new Locale("", countryCode);
         return locale.getDisplayCountry();
     }
     
     public static String getCountryCode(String countryName) {
+        if (countryName == null) {
+            return null;
+        }
         Map<String, String> countries = new HashMap<>();
         for (String iso : Locale.getISOCountries()) {
             Locale l = new Locale("", iso);

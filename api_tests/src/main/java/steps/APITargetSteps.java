@@ -2,11 +2,16 @@ package steps;
 
 import abs.EntityList;
 import app_context.entities.Entities;
+import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
 import file_generator.TargetFile;
 import json.JsonCoverter;
-import model.*;
+import model.Target;
+import model.TargetFilter;
+import model.TargetGroup;
+import model.UploadResult;
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
@@ -21,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static conditions.Conditions.equals;
 import static conditions.Conditions.isTrue;
 
 public class APITargetSteps extends APISteps {
@@ -30,9 +34,9 @@ public class APITargetSteps extends APISteps {
 
     @When("I send create target $with targets group request")
     public void sendCreateRequest(String with) throws NullReturnException {
-        Target target = new Target().generate();
+        Target target = getRandomTarget();
         if (with.toLowerCase().equals("with")) {
-            List<TargetGroup> groups = new ArrayList<TargetGroup>();
+            ArrayList<TargetGroup> groups = new ArrayList<TargetGroup>();
             groups.add(Entities.getTargetGroups().random());
             target.setGroups(groups);
         }
@@ -71,30 +75,30 @@ public class APITargetSteps extends APISteps {
     }
 
     private boolean isEqualsTargets(Target checkedTarget, Target etalonTarget) {
-        return Verify.isTrue(equals.elements(checkedTarget.getDescription(), etalonTarget.getDescription())) &&
-        Verify.isTrue(equals.elements(checkedTarget.getName(), etalonTarget.getName())) &&
-        Verify.isTrue(equals.elements(checkedTarget.getKeywords(), etalonTarget.getKeywords())) &&
-        Verify.isTrue(equals.elements(checkedTarget.getPhones(), etalonTarget.getPhones())) &&
-        Verify.isTrue(equals.elements(checkedTarget.getLanguages(), etalonTarget.getLanguages())) &&
-        Verify.isTrue(equals.elements(checkedTarget.getGroups(), etalonTarget.getGroups())) &&
-        Verify.isTrue(equals.elements(checkedTarget.getType(), etalonTarget.getType()));
+        return Verify.isTrue(Conditions.equals(checkedTarget.getDescription(), etalonTarget.getDescription())) &&
+        Verify.isTrue(Conditions.equals(checkedTarget.getName(), etalonTarget.getName())) &&
+        Verify.isTrue(Conditions.equals(checkedTarget.getKeywords(), etalonTarget.getKeywords())) &&
+        Verify.isTrue(Conditions.equals(checkedTarget.getPhones(), etalonTarget.getPhones())) &&
+        Verify.isTrue(Conditions.equals(checkedTarget.getLanguages(), etalonTarget.getLanguages())) &&
+        Verify.isTrue(Conditions.equals(checkedTarget.getGroups(), etalonTarget.getGroups())) &&
+        Verify.isTrue(Conditions.equals(checkedTarget.getType(), etalonTarget.getType()));
     }
 
     private boolean isEqualsUploadedTargets(Target checkedTarget, Target etalonTarget) {
-        return Verify.isTrue(equals.elements(checkedTarget.getName(), etalonTarget.getName())) &&
-                Verify.isTrue(equals.elements(checkedTarget.getKeywords(), etalonTarget.getKeywords())) &&
-                Verify.isTrue(equals.elements(checkedTarget.getPhones(), etalonTarget.getPhones())) &&
-                Verify.isTrue(equals.elements(checkedTarget.getType(), etalonTarget.getType()));
+        return Verify.isTrue(Conditions.equals(checkedTarget.getName(), etalonTarget.getName())) &&
+                Verify.isTrue(Conditions.equals(checkedTarget.getKeywords(), etalonTarget.getKeywords())) &&
+                Verify.isTrue(Conditions.equals(checkedTarget.getPhones(), etalonTarget.getPhones())) &&
+                Verify.isTrue(Conditions.equals(checkedTarget.getType(), etalonTarget.getType()));
     }
 
     @When("I send update target request")
     public void updateTargetRequest() throws NullReturnException {
         Target createdTarget = Entities.getTargets().getLatest();
-        Target updatedTarget = createdTarget.generate();
-
+        Target updatedTarget = createdTarget;
+        updatedTarget.setName(RandomStringUtils.randomAlphabetic(10));
+        updatedTarget.setDescription(RandomStringUtils.randomAlphabetic(20));
         log.info("Updated target: " + JsonCoverter.toJsonString(updatedTarget));
         int responseCode = service.update(updatedTarget);
-
         context.put("code", responseCode);
         context.put("updatedTarget", updatedTarget);
     }
@@ -129,7 +133,7 @@ public class APITargetSteps extends APISteps {
 
     @When("I send upload targets request with XLS file containing $count targets without specified id")
     public void targetGeneratedXls(String count){
-        List<Target> targets = new Target().generate(Integer.valueOf(count));
+        List<Target> targets = getRandomTargets(Integer.valueOf(count));
 
         int responseCode = service.upload(targets);
 
@@ -140,7 +144,7 @@ public class APITargetSteps extends APISteps {
     @When("I send upload targets request with XLS file containing $count targets with existing group request")
     public void uploadTargetsWithExistingGroup(String count){
         List<TargetGroup> targetGroups = context.get("targetGroupList", List.class);
-        List<Target> targets = new Target().generate(Integer.valueOf(count));
+        List<Target> targets = getRandomTargets(Integer.valueOf(count));
 
         for (Target target : targets ) {
             int index = RandomUtils.nextInt(targetGroups.size());
@@ -259,7 +263,8 @@ public class APITargetSteps extends APISteps {
     public void uploadUpdatedTarget() {
         List<Target> targets = context.get("uploadedTargets", List.class);
         for (Target target : targets) {
-            target.generate();
+            target.setName(RandomStringUtils.randomAlphabetic(10));
+            target.setDescription(RandomStringUtils.randomAlphabetic(20));
         }
         service.upload(targets);
         context.put("uploadedTargets", targets);
@@ -267,7 +272,7 @@ public class APITargetSteps extends APISteps {
 
     @Given("generate XLS with $count target")
     public void generateTargets(String count) {
-        List<Target> targets = new Target().generate(Integer.valueOf(count));
+        List<Target> targets = getRandomTargets(Integer.valueOf(count));
         File file = new TargetFile().write(targets);
 
         context.put("targetsXLS", file);
@@ -283,10 +288,10 @@ public class APITargetSteps extends APISteps {
 
     @When("I send upload new $count targets with new group request")
     public void uploadTargetWithNewGroup(String count) {
-        List<Target> targets = new Target().generate(Integer.valueOf(count));
+        List<Target> targets = getRandomTargets(Integer.valueOf(count));
 
         for (Target target : targets) {
-            TargetGroup targetGroup = new TargetGroup().generate();
+            TargetGroup targetGroup = (TargetGroup)objectInitializer.generateObject(TargetGroup.class);
             target.addGroup(targetGroup);
             Entities.getTargetGroups().addOrUpdateEntity(targetGroup);
         }
@@ -330,13 +335,26 @@ public class APITargetSteps extends APISteps {
         }
 
         if (targets.isEmpty()) {
-            Target target = new Target().generate();
+            Target target = getRandomTarget();
             int response = service.add(target);
 
-            Verify.shouldBe(equals.elements(response, 200));
+            Verify.shouldBe(Conditions.equals(response, 200));
             targets.add(target);
         }
         context.put("targets", targets);
+    }
+    
+    private List<Target> getRandomTargets(int count) {
+        List<Target> targets = new ArrayList<>();
+        for (int i=1;i<=count; i++) {
+            targets.add(getRandomTarget());
+        }
+        return targets;
+    }
+    
+    
+    static Target getRandomTarget() {
+        return (Target)objectInitializer.generateObject(Target.class);
     }
 
 }

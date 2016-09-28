@@ -17,9 +17,8 @@ import java.text.ParseException;
 
 import static conditions.Conditions.isTrue;
 
-/**
- * Created by dm on 4/26/16.
- */
+
+
 public class APIRFISearchSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APIRFISearchSteps.class);
@@ -29,8 +28,10 @@ public class APIRFISearchSteps extends APISteps {
     @When("I search RFI by $criteria and value $value")
     public void SearchRFIbyCriteria(@Named("criteria") String criteria, @Named("value") String value) throws ParseException {
         log.info("Start search by criteria: "+ criteria);
-        InformationRequest RFI = Entities.getRFIs().getLatest();
-
+        InformationRequest RFI = context.get("searchRFI", InformationRequest.class);
+        if (RFI == null) {
+            throw new AssertionError("There is no RFI in run context!");
+        }
         if (criteria.toLowerCase().equals("state")) {
             value = value.equals("random") ? RFI.getState() : value;
         } else if (criteria.toLowerCase().equals("min priority")){

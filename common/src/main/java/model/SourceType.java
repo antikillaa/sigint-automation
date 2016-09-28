@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public enum SourceType {
+public enum SourceType{
 
     Tactical("T", "Terra", "Terra"),
     Strategic("S", "Speed", "Speed"),
@@ -15,7 +15,8 @@ public enum SourceType {
     J("J", "Jernas", "Jernas"),
     HumanInput("H", "HumInt", "HumInt"),
     Etisalat("E", "External", "External"),
-    G("G", "Target Team", "Target Team");
+    G("G", "Target Team", "Target Team"),
+    X("X", "Target Team", "Target Team");
 
     private final String letterCode;
     private final String englishName;
@@ -42,8 +43,8 @@ public enum SourceType {
     private static final List<SourceType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();
     private static Random RANDOM = new Random();
-
-    public static SourceType getRandom() {
+    
+    public static SourceType random() {
         return VALUES.get(RANDOM.nextInt(SIZE));
     }
 

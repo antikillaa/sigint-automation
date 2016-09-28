@@ -1,9 +1,11 @@
 package steps;
 
 import app_context.entities.Entities;
+import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
 import model.TargetGroup;
+import org.apache.commons.lang.RandomStringUtils;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
@@ -12,7 +14,6 @@ import services.TargetGroupService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static conditions.Conditions.equals;
 import static conditions.Conditions.isTrue;
 
 public class APITargetGroupSteps extends APISteps {
@@ -21,7 +22,7 @@ public class APITargetGroupSteps extends APISteps {
 
     @When("I send create target group $with targets request")
     public void sendCreateRequest(String with){
-        TargetGroup group = new TargetGroup().generate();
+        TargetGroup group = getRandomTargetGroup();
         if (with.toLowerCase().equals("with")) {
             List<String> targets = new ArrayList<>();
             targets.add(Entities.getTargets().random().getId());
@@ -41,9 +42,9 @@ public class APITargetGroupSteps extends APISteps {
     }
 
     private boolean equalsTargetGroups(TargetGroup checkedTargetGroup, TargetGroup etalonTargetGroup) {
-        return Verify.isTrue(equals.elements(checkedTargetGroup.getDescription(), etalonTargetGroup.getDescription())) &&
-                Verify.isTrue(equals.elements(checkedTargetGroup.getName(), etalonTargetGroup.getName())) &&
-                Verify.isTrue(equals.elements(checkedTargetGroup.getTargets(), etalonTargetGroup.getTargets()));
+        return Verify.isTrue(Conditions.equals(checkedTargetGroup.getDescription(), etalonTargetGroup.getDescription())) &&
+                Verify.isTrue(Conditions.equals(checkedTargetGroup.getName(), etalonTargetGroup.getName())) &&
+                Verify.isTrue(Conditions.equals(checkedTargetGroup.getTargets(), etalonTargetGroup.getTargets()));
     }
 
     @When("I send get target group details request")
@@ -137,7 +138,7 @@ public class APITargetGroupSteps extends APISteps {
     @When("I send update target group request")
     public void updateTargetGroupRequest() {
         TargetGroup createdTargetGroup = Entities.getTargetGroups().getLatest();
-        TargetGroup updatedTargetGroup = createdTargetGroup.generate();
+        TargetGroup updatedTargetGroup = updateTargetGroup(createdTargetGroup);
 
         int responseCode = service.update(updatedTargetGroup);
 
@@ -168,5 +169,15 @@ public class APITargetGroupSteps extends APISteps {
             }
             Assert.assertTrue(count == 1);
         }
+    }
+    
+    static TargetGroup getRandomTargetGroup() {
+        return (TargetGroup)objectInitializer.generateObject(TargetGroup.class);
+    }
+    
+    private TargetGroup updateTargetGroup(TargetGroup targetGroup) {
+        targetGroup.setName(RandomStringUtils.randomAlphabetic(10));
+        targetGroup.setDescription(RandomStringUtils.randomAlphabetic(20));
+        return targetGroup;
     }
 }

@@ -16,18 +16,17 @@ import utils.RandomGenerator;
 import java.util.ArrayList;
 import java.util.List;
 
-import static conditions.Conditions.equals;
-import static conditions.Conditions.isTrue;
+//import static conditions.Conditions.equals;
+//import static conditions.Conditions.isTrue;
 
 public class APISourceSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APISourceSteps.class);
     private SourceService service = new SourceService();
-
+    
     @When("I send create new random Source request")
     public void createSource() {
-        Source source = new Source().generate();
-
+        Source source = getRandomSource();
         int responseCode = service.add(source);
 
         context.put("code", responseCode);
@@ -39,13 +38,12 @@ public class APISourceSteps extends APISteps {
         Source source = context.get("source", Source.class);
         Source latestSource = Entities.getSources().getLatest();
 
-        Verify.shouldBe(Conditions.equals.elements(source, latestSource));
+        Verify.shouldBe(Conditions.equals(source, latestSource));
     }
 
     @When("I send get list of sources request")
     public void getListOfSources() {
         List<Source> sources = service.list();
-
         context.put("sourceList", sources);
     }
 
@@ -56,16 +54,16 @@ public class APISourceSteps extends APISteps {
 
         boolean contains = false;
         for (Source entity : sources) {
-            if (Conditions.equals.elements(entity, source).check()) {
+            if (Conditions.equals(entity, source).check()) {
                 contains = true;
                 break;
             }
         }
 
         if (criteria.toLowerCase().equals("in")) {
-            Verify.shouldBe(isTrue.element(contains));
+            Verify.shouldBe(Conditions.isTrue.element(contains));
         } else if (criteria.toLowerCase().equals("not in")) {
-            Verify.shouldNotBe(isTrue.element(contains));
+            Verify.shouldNotBe(Conditions.isTrue.element(contains));
         } else {
             throw new AssertionError("Incorrect argument passed to step");
         }
@@ -76,7 +74,7 @@ public class APISourceSteps extends APISteps {
         int minSize = Integer.valueOf(size);
         List<Source> sources = context.get("sourceList", List.class);
 
-        Verify.shouldBe(isTrue.element(sources.size() > minSize));
+        Verify.shouldBe(Conditions.isTrue.element(sources.size() > minSize));
     }
 
     @When("I send view source request")
@@ -90,15 +88,15 @@ public class APISourceSteps extends APISteps {
 
     @When("I send update source request")
     public void updateRandomSourceFromList() {
-        Source source = Entities.getSources().getLatest();
+        Source generatedSource = Entities.getSources().getLatest();
 
         // update all fields
-        SourceType type = source.getType();
-        source = source.generate();
-        source.setType(type);
+        Source newSource = getRandomSource();
+        generatedSource.setName(newSource.getName());
+        generatedSource.setLocation(newSource.getLocation());
 
-        int responseCode = service.update(source);
-
+        int responseCode = service.update(generatedSource);
+        
         context.put("code", responseCode);
     }
 
@@ -130,15 +128,14 @@ public class APISourceSteps extends APISteps {
     public void sourceShouldBeDeleted() {
         Source source = context.get("source", Source.class);
 
-        Verify.shouldBe(isTrue.element(source.isDeleted()));
-        Verify.shouldBe(isTrue.element(source.getName().contains("DELETED at")));
+        Verify.shouldBe(Conditions.isTrue.element(source.isDeleted()));
+        Verify.shouldBe(Conditions.isTrue.element(source.getName().contains("DELETED at")));
     }
 
     @Then("Result message should be '$result'")
     public void resultMessageShouldBe(String result) {
         String resultMessage = context.get("resultMessage", String.class);
-
-        Verify.shouldBe(equals.elements(resultMessage, result));
+        Verify.shouldBe(Conditions.equals(resultMessage, result));
     }
 
     @Given("data source with $sourceType and $recordType exists")
@@ -155,15 +152,15 @@ public class APISourceSteps extends APISteps {
             }
         }
         // not exist, create source
-        Source source = new Source().generate()
-                .setType(sourceType)
-                .setRecordType(recordType)
-                .setName(
-                        sourceType.toLetterCode() + "-" + recordType.toEnglishName() + "-0"
-                );
-
+        Source source = getRandomSource();
+        source.setType(sourceType);
+        source.setRecordType(recordType);
+        source.setName(sourceType.toLetterCode() + "-" + recordType.toEnglishName() + "-0");
         service.add(source);
         context.put("source", source);
     }
 
+    static Source getRandomSource() {
+        return (Source)objectInitializer.generateObject(Source.class);
+    }
 }

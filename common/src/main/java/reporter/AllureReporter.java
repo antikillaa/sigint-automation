@@ -78,7 +78,7 @@ public class AllureReporter implements StoryReporter {
             
         } else {
             allure.fire(new StepFinishedEvent());
-            allure.fire(new TestCaseFinishedEvent());
+            //allure.fire(new TestCaseFinishedEvent());
         }
         
     }

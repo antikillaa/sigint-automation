@@ -52,7 +52,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         log.debug(Parser.entityToString(result));
         if (response.getStatus() == 200) {
             try {
-                Verify.isTrue(Conditions.equals.elements(result.getResult(), "ok"));
+                Verify.isTrue(Conditions.equals(result.getResult(), "ok"));
                 Entities.getTargetGroups().removeEntity(entity);
             } catch (NullReturnException e) {
                 log.warn("Was unable to remove entity with id:" + entity.getId() + " as it doesn't in the list");

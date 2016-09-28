@@ -1,6 +1,7 @@
 package steps;
 
 import app_context.entities.Entities;
+import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
 import json.JsonCoverter;
@@ -13,8 +14,6 @@ import services.UserService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static conditions.Conditions.equals;
-
 public class APIUserSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APIUserGroupSteps.class);
@@ -24,7 +23,8 @@ public class APIUserSteps extends APISteps {
     public void createNewUserRequest() {
         List<String> userGroupIds = new ArrayList<String>();
         userGroupIds.add(Entities.getGroups().getLatest().getId());
-        User user = new User().generate().setUserGroupIds(userGroupIds);
+        User user = getRandomUser();
+        user.setUserGroupIds(userGroupIds);
 
         int responseCode = service.add(user);
 
@@ -40,7 +40,11 @@ public class APIUserSteps extends APISteps {
         log.info("requested: " + JsonCoverter.toJsonString(requestUser));
         log.info("created: " + JsonCoverter.toJsonString(createdUser));
 
-        Verify.shouldBe(equals.elements(createdUser, requestUser));
+        Verify.shouldBe(Conditions.equals(createdUser, requestUser));
+    }
+    
+    static User getRandomUser() {
+        return (User)objectInitializer.generateObject(User.class);
     }
 
 

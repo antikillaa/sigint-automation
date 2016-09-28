@@ -73,12 +73,10 @@ public class SourceService implements EntityService<Source> {
     @Override
     public int update(Source entity) {
         log.info("Updating Source id: " + entity.getId());
-        entity.incrementVersion();
+        entity.setVersion(entity.getVersion() == null ? 1 : entity.getVersion() + 1);
         log.debug(Parser.entityToString(entity));
-
         SourceRequest request = new SourceRequest();
         Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
-
         Result result = JsonCoverter.fromJsonToObject(response.readEntity(String.class), Result.class);
         if (result != null) {
             context.put("resultMessage", result.getResult());

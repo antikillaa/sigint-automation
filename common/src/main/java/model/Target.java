@@ -1,13 +1,17 @@
 package model;
 
 import abs.TeelaEntity;
+import data_for_entity.annotations.DataIgnore;
+import data_for_entity.annotations.DataProvider;
+import data_for_entity.annotations.WithDataSize;
+import data_for_entity.data_providers.LanguageCodesProvider;
+import data_for_entity.data_providers.PhonesProvider;
+import data_for_entity.data_providers.TargetTypeProvider;
 import json.serialization.TargetDeserializer;
 import json.serialization.TargetJsonSerializer;
-import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import utils.RandomGenerator;
 
 import java.util.*;
 
@@ -18,16 +22,26 @@ public class Target extends TeelaEntity {
     private String description;
     @JsonSerialize(using = TargetJsonSerializer.class)
     @JsonDeserialize(using = TargetDeserializer.class)
-    private List<TargetGroup> groups = new ArrayList<>();
-    private Set<String> keywords = new HashSet<>();
-    private Set<String> languages = new HashSet<>();
+    @DataIgnore
+    private ArrayList<TargetGroup> groups = new ArrayList<>();
+    private HashSet<String> keywords = new HashSet<>();
+    @WithDataSize(length = 5)
+    @DataProvider(LanguageCodesProvider.class)
+    private HashSet<String> languages = new HashSet<>();
     private String name;
-    private Set<String> phones = new HashSet<>();
+    @DataProvider(PhonesProvider.class)
+    private HashSet<String> phones = new HashSet<>();
+    @DataProvider(TargetTypeProvider.class)
     private TargetType type;
+    @DataIgnore
     private String originalName;
+    @DataIgnore
     private int threatScore;
+    @DataIgnore
     private long lmt;
+    @DataIgnore
     private boolean deleted;
+   
     
     
     @Override
@@ -50,16 +64,15 @@ public class Target extends TeelaEntity {
         return description;
     }
 
-    public Target setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
-        return this;
     }
 
     public List<TargetGroup> getGroups() {
         return groups;
     }
 
-    public void setGroups(List<TargetGroup> groups) {
+    public void setGroups(ArrayList<TargetGroup> groups) {
         this.groups = groups;
     }
 
@@ -67,7 +80,7 @@ public class Target extends TeelaEntity {
         return keywords;
     }
 
-    public void setKeywords(Set<String> keywords) {
+    public void setKeywords(HashSet<String> keywords) {
         this.keywords = keywords;
     }
 
@@ -75,36 +88,32 @@ public class Target extends TeelaEntity {
         return languages;
     }
 
-    public Target setLanguages(Set<String> languages) {
+    public void setLanguages(HashSet<String> languages) {
         this.languages = languages;
-        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public Target setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
 
     public Set<String> getPhones() {
         return phones;
     }
 
-    public Target setPhones(Set<String> phones) {
+    public void setPhones(HashSet<String> phones) {
         this.phones = phones;
-        return this;
     }
 
     public TargetType getType() {
         return type;
     }
 
-    public Target setType(TargetType type) {
+    public void setType(TargetType type) {
         this.type = type;
-        return this;
     }
 
     public String getOriginalName() {
@@ -138,7 +147,9 @@ public class Target extends TeelaEntity {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
-
+    
+    
+    /**
     public Target generate() {
         int keywordsRatio = 20;
         this
@@ -150,14 +161,8 @@ public class Target extends TeelaEntity {
                 .setKeywords(RandomGenerator.generateKeywords(3, keywordsRatio)); // (1/keywordsRatio) parts of keywords get from keywords.txt
         return this;
     }
-
-    public List<Target> generate(int count) {
-        List<Target> targets = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            targets.add(new Target().generate());
-        }
-        return targets;
-    }
+     **/
+    
 
     public Target addGroup(TargetGroup targetGroup) {
         List<TargetGroup> groups = getGroups();

@@ -1,8 +1,10 @@
 package model;
 
+import data_for_entity.data_providers.EntityDataProvider;
+
 import java.util.*;
 
-public enum Permission {
+public enum Permission implements EntityDataProvider {
 
     UM_ADMIN,
     RECORDS_READ, RECORDS_ASSIGN, RECORDS_PROCESS, RECORDS_CREATE,
@@ -26,8 +28,10 @@ public enum Permission {
     public static Permission getRandom() {
         return VALUES.get(RANDOM.nextInt(SIZE));
     }
-
-    public static Set<String> getRandomSet() {
+    
+    @Override
+    public Object generate(int length) {
+    
         Set<String> set = new HashSet<>();
         int maxNum = RANDOM.nextInt(SIZE);
         for(int i=0; i< maxNum;i++) {
@@ -35,5 +39,5 @@ public enum Permission {
         }
         return set;
     }
-
+    
 }

@@ -1,14 +1,11 @@
 package model;
 
 import abs.TeelaEntity;
-import org.apache.commons.lang.RandomStringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import services.UserService;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -83,9 +80,8 @@ public class Report extends TeelaEntity {
         return authorName;
     }
 
-    public Report setAuthorName(String authorName) {
+    public void setAuthorName(String authorName) {
         this.authorName = authorName;
-        return this;
     }
 
     public long getSequenceNumber() {
@@ -212,9 +208,8 @@ public class Report extends TeelaEntity {
         return reportRecords;
     }
 
-    public Report setReportRecords(List<Record> reportRecords) {
+    public void setReportRecords(List<Record> reportRecords) {
         this.reportRecords = reportRecords;
-        return this;
     }
 
     public List<String> getReportTeamIds() {
@@ -237,136 +232,96 @@ public class Report extends TeelaEntity {
         return authorId;
     }
 
-    public Report setAuthorId(String authorId) {
+    public void setAuthorId(String authorId) {
         this.authorId = authorId;
-        return this;
     }
 
     public String getRequestNumber() {
         return requestNumber;
     }
 
-    public Report setRequestNumber(String requestNumber) {
+    public void setRequestNumber(String requestNumber) {
         this.requestNumber = requestNumber;
-        return this;
     }
 
     public String getComments() {
         return comments;
     }
 
-    public Report setComments(String comments) {
+    public void setComments(String comments) {
         this.comments = comments;
-        return this;
     }
 
     public List<String> getRecordIds() {
         return recordIds;
     }
 
-    public Report setRecordIds(List<String> recordIds) {
+    public void setRecordIds(List<String> recordIds) {
         this.recordIds = recordIds;
-        return this;
     }
 
     public List<ReportCategory> getCategories() {
         return categories;
     }
 
-    public Report setCategories(List<ReportCategory> categories) {
+    public void setCategories(List<ReportCategory> categories) {
         this.categories = categories;
-        return this;
     }
 
     public ReportStatus getStatus() {
         return status;
     }
 
-    public Report setStatus(ReportStatus status) {
+    public void setStatus(ReportStatus status) {
         this.status = status;
-        return this;
     }
 
     public String getRecordType() {
         return recordType;
     }
 
-    public Report setRecordType(String recordType) {
+    public void setRecordType(String recordType) {
         this.recordType = recordType;
-        return this;
     }
 
     public String getSourceType() {
         return sourceType;
     }
 
-    public Report setSourceType(String sourceType) {
+    public void setSourceType(String sourceType) {
         this.sourceType = sourceType;
-        return this;
     }
 
     public String getSubject() {
         return subject;
     }
 
-    public Report setSubject(String subject) {
+    public void setSubject(String subject) {
         this.subject = subject;
-        return this;
     }
 
     public String getReportID() {
         return reportID;
     }
 
-    public Report setReportID(String reportID) {
+    public void setReportID(String reportID) {
         this.reportID = reportID;
-        return this;
     }
 
     public String getOwnerName() {
         return ownerName;
     }
 
-    public Report setOwnerName(String ownerName) {
+    public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
-        return this;
     }
 
     public ReportOwner getOwner() {
         return owner;
     }
 
-    public Report setOwner(ReportOwner owner) {
+    public void setOwner(ReportOwner owner) {
         this.owner = owner;
-        return this;
     }
-
-    public Report generate() {
-        this
-                .setSubject("subject:" + RandomStringUtils.randomAlphabetic(4))
-                .setStatus(ReportStatus.DRAFT)
-                .initOwner();
-        this.setCreatedAt(new Date());
-        return this;
-    }
-
-    public Report initOwner() {
-        UserService userService = new UserService();
-        User user = userService.me();
-
-        User reportUser = new User();
-        reportUser.setId(user.getId());
-        reportUser.setName(user.getName());
-        reportUser.setStaffId(user.getStaffId());
-
-        ReportOwner owner = new ReportOwner();
-        owner
-                .setRole(userService.getReportRole(user))
-                .setUser(reportUser);
-        this
-                .setAuthorId(user.getId())
-                .setAuthorName(user.getName())
-                .setOwner(owner);
-        return this;
-    }
+    
 }

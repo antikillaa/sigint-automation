@@ -42,7 +42,8 @@ public class UserService implements EntityService<User> {
 
         User createdUser = JsonCoverter.fromJsonToObject(jsonString, User.class);
         if (createdUser != null) {
-            Entities.getUsers().addOrUpdateEntity(createdUser.setPassword(entity.getPassword()));
+            createdUser.setPassword(entity.getPassword());
+            Entities.getUsers().addOrUpdateEntity(createdUser);
         }
         return response.getStatus();
     }

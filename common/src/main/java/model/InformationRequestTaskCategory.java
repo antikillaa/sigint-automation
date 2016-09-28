@@ -1,24 +1,17 @@
 package model;
 
-import data_for_entity.data_providers.EntityDataProvider;
-
 import java.util.*;
 
-public enum InformationRequestTaskCategory implements EntityDataProvider{
+public enum InformationRequestTaskCategory{
     
     
     
 
     TARGET_DEVELOPMENT, ANALYSIS_OSINT, TALENT_DEVELOPMENT, OPERATIONAL_REQUIREMENTS;
     
-    @Override
-    public Object generate(int length) {
-        Set<InformationRequestTaskCategory> set = new HashSet<>();
-        int maxNum = RANDOM.nextInt(SIZE);
-        for(int i=0; i< maxNum;i++) {
-            set.add(VALUES.get(RANDOM.nextInt(SIZE)));
-        }
-        return new ArrayList<>(set);
+    
+    public static Object random() {
+        return VALUES.get(RANDOM.nextInt(SIZE));
     }
     
 

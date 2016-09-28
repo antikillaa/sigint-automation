@@ -1,6 +1,10 @@
 package model;
 
 import abs.TeelaEntity;
+import data_for_entity.annotations.DataProvider;
+import data_for_entity.annotations.WithDataDependencies;
+import data_for_entity.data_providers.CountryCode;
+import data_for_entity.data_providers.PhonebookCountryName;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import utils.RandomGenerator;
@@ -8,16 +12,18 @@ import utils.RandomGenerator;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Phonebook extends TeelaEntity {
-
+    
     private String phoneNumber;
     private String name;
     private String address;
+    @WithDataDependencies(provider = PhonebookCountryName.class, fields = {"countryCode"})
     private String country;
+    @DataProvider(CountryCode.class)
     private String countryCode;
     private String provider;
     private String location;
     private String imsi;
-    private boolean manualEntry;
+    private boolean manualEntry=true;
     
     @Override
     public String toString() {
@@ -30,27 +36,26 @@ public class Phonebook extends TeelaEntity {
         return phoneNumber;
     }
 
-    public Phonebook setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public Phonebook setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
+        
     }
 
     public String getAddress() {
         return address;
     }
 
-    public Phonebook setAddress(String address) {
+    public void setAddress(String address) {
         this.address = address;
-        return this;
+        
     }
 
     public String getCountry() {
@@ -60,45 +65,42 @@ public class Phonebook extends TeelaEntity {
         return country;
     }
 
-    public Phonebook setCountry(String country) {
+    public void setCountry(String country) {
         this.country = country;
-        return this;
+        
     }
 
     public String getCountryCode() {
         return countryCode;
     }
 
-    public Phonebook setCountryCode(String countryCode) {
+    public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
-        return this;
     }
 
     public String getProvider() {
         return provider;
     }
 
-    public Phonebook setProvider(String provider) {
+    public void setProvider(String provider) {
         this.provider = provider;
-        return this;
     }
 
     public String getLocation() {
         return location;
     }
 
-    public Phonebook setLocation(String location) {
+    public void setLocation(String location) {
         this.location = location;
-        return this;
+        
     }
 
     public String getImsi() {
         return imsi;
     }
 
-    public Phonebook setImsi(String imsi) {
+    public void setImsi(String imsi) {
         this.imsi = imsi;
-        return this;
     }
 
     public boolean isManualEntry() {

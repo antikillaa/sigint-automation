@@ -19,10 +19,8 @@ public class APISSMSSteps extends APISteps {
         int numSSMS = Integer.valueOf(count);
 
         for (int i = 0; i < numSSMS; i++ ) {
-            Target target = new Target().generate();
-
+            Target target = APITargetSteps.getRandomTarget();
             SSMS ssms = new SSMSGenerator().setTarget(target).produce();
-
             ssmsList.add(ssms);
         }
 

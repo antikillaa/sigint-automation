@@ -1,6 +1,7 @@
 package steps;
 
 import abs.EntityList;
+import conditions.Conditions;
 import conditions.Verify;
 import model.*;
 import model.Process;
@@ -17,7 +18,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static conditions.Conditions.equals;
 import static conditions.Conditions.isTrue;
 
 public class APIUploadFilesSteps extends APISteps {
@@ -103,7 +103,7 @@ public class APIUploadFilesSteps extends APISteps {
 
         Process process = context.get("process", Process.class);
 
-        Verify.shouldBe(equals.elements(process.getRecordsCount(), totalRecords));
+        Verify.shouldBe(Conditions.equals(process.getRecordsCount(), totalRecords));
         Verify.shouldBe(isTrue.element(process.getTargetHitCount() >= totalHit));
         //TODO mention count
     }
@@ -135,7 +135,7 @@ public class APIUploadFilesSteps extends APISteps {
         }
 
         //Assert.assertTrue(targets >= totalTargets); TODO
-        Verify.shouldBe(equals.elements(hitNum, hits));
+        Verify.shouldBe(Conditions.equals(hitNum, hits));
     }
 
     @When("I send get an uploaded records details request")
