@@ -20,12 +20,15 @@ public class Statistic {
     }
     
     public Boolean hasFailuresWithoutBugs() {
+        log.debug("Checking if there are failures without bugs during the run");
         List<TestCase> testCaseList = service.getReportResults().getFailed();
             for (TestCase testCase:testCaseList) {
                 if (!jiraService.hasOpenedBugs(testCase.getTitle())) {
+                    log.debug("Found failure without opened bug");
                     return true;
                 }
             }
+            log.debug("No failures without opened bugs");
             return false;
         }
     

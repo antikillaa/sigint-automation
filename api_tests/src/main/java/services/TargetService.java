@@ -137,7 +137,7 @@ public class TargetService implements EntityService<Target> {
 
         Result result = JsonCoverter.readEntityFromResponse(response, Result.class);
         if (result != null) {
-            Verify.isTrue(Conditions.equals.elements(result.getResult(), "ok"));
+            Verify.isTrue(Conditions.equals(result.getResult(), "ok"));
             Entities.getTargets().addOrUpdateEntity(entity);
         } else {
             log.error("Error! Update target process was failed");

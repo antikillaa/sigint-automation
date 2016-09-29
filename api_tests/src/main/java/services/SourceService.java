@@ -94,7 +94,7 @@ public class SourceService implements EntityService<Source> {
     @Override
     public int update(Source entity) {
         log.info("Updating Source id: " + entity.getId());
-        entity.incrementVersion();
+        entity.setVersion(entity.getVersion() == null ? 1 : entity.getVersion() + 1);
         log.debug(Parser.entityToString(entity));
 
         SourceRequest request = new SourceRequest().update(entity);

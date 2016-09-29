@@ -9,6 +9,10 @@ import reporter.ReportResults;
 
 public class StableContentBuilder extends EmailContentBuilder {
     
+    public StableContentBuilder(String stand) {
+        super(stand);
+    }
+    
     @Override
     protected HtmlElement buildStatusHeader() {
         HtmlElement tableRowStatus = ElementsFabric.tableRow();
@@ -26,6 +30,6 @@ public class StableContentBuilder extends EmailContentBuilder {
     
     @Override
     protected String buildSubject() {
-        return "Automation build came to stable";
+        return getStand() + ":Automation build came to stable";
     }
 }

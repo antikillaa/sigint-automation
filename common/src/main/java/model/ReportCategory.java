@@ -74,9 +74,5 @@ public class ReportCategory extends TeelaEntity {
     public void setCurrentValue(String currentValue) {
         this.currentValue = currentValue;
     }
-
-    @Override
-    public <T extends TeelaEntity> T generate() {
-        return null;
-    }
+    
 }

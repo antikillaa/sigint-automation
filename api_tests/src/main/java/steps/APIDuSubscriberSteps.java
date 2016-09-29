@@ -1,6 +1,7 @@
 package steps;
 
 import abs.EntityList;
+import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
 import json.JsonCoverter;
@@ -12,7 +13,6 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.DuSubscriberService;
 
-import static conditions.Conditions.equals;
 import static conditions.Conditions.isTrue;
 
 public class APIDuSubscriberSteps extends APISteps {
@@ -23,7 +23,7 @@ public class APIDuSubscriberSteps extends APISteps {
 
     @When("I send upload DuSubscriberEntry request with all fields")
     public void sendUploadDuSubscriberEntryRequest() throws NullReturnException {
-        DuSubscriberEntry duSubscriberEntry = new DuSubscriberEntry().generate();
+        DuSubscriberEntry duSubscriberEntry = getRandomDuEntry();
 
         log.info("Entry:" + JsonCoverter.toJsonString(duSubscriberEntry));
         int responseCode = service.add(duSubscriberEntry);
@@ -98,25 +98,25 @@ public class APIDuSubscriberSteps extends APISteps {
     }
 
     private boolean equalsEntries(DuSubscriberEntry entry, DuSubscriberEntry entity) {
-        return Verify.isTrue(equals.elements(entry.getPhoneNumber(), entity.getPhoneNumber())) &&
-                Verify.isTrue(equals.elements(entry.getFirstName(), entity.getFirstName())) &&
-                Verify.isTrue(equals.elements(entry.getMiddleName(), entity.getMiddleName())) &&
-                Verify.isTrue(equals.elements(entry.getLastName(), entity.getLastName())) &&
-                Verify.isTrue(equals.elements(entry.getName(), entity.getName())) &&
-                Verify.isTrue(equals.elements(entry.getCity(), entity.getCity())) &&
-                Verify.isTrue(equals.elements(entry.getPoBox(), entity.getPoBox())) &&
-                Verify.isTrue(equals.elements(entry.getAddress(), entity.getAddress())) &&
-                Verify.isTrue(equals.elements(entry.getSourceId(), entity.getSourceId())) &&
-                Verify.isTrue(equals.elements(entry.getTitle(), entity.getTitle())) &&
-                Verify.isTrue(equals.elements(entry.getNationality(), entity.getNationality())) &&
-                Verify.isTrue(equals.elements(entry.getVisaType(), entity.getVisaType())) &&
-                Verify.isTrue(equals.elements(entry.getVisaNumber(), entity.getVisaNumber())) &&
-                Verify.isTrue(equals.elements(entry.getIdType(), entity.getIdType())) &&
-                Verify.isTrue(equals.elements(entry.getIdNumber(), entity.getIdNumber())) &&
-                Verify.isTrue(equals.elements(entry.getStatus(), entity.getStatus())) &&
-                Verify.isTrue(equals.elements(entry.getCustomerType(), entity.getCustomerType())) &&
-                Verify.isTrue(equals.elements(entry.getCustomerCode(), entity.getCustomerCode())) &&
-                Verify.isTrue(equals.elements(entry.getServiceType(), entity.getServiceType()));
+        return Verify.isTrue(Conditions.equals(entry.getPhoneNumber(), entity.getPhoneNumber())) &&
+                Verify.isTrue(Conditions.equals(entry.getFirstName(), entity.getFirstName())) &&
+                Verify.isTrue(Conditions.equals(entry.getMiddleName(), entity.getMiddleName())) &&
+                Verify.isTrue(Conditions.equals(entry.getLastName(), entity.getLastName())) &&
+                Verify.isTrue(Conditions.equals(entry.getName(), entity.getName())) &&
+                Verify.isTrue(Conditions.equals(entry.getCity(), entity.getCity())) &&
+                Verify.isTrue(Conditions.equals(entry.getPoBox(), entity.getPoBox())) &&
+                Verify.isTrue(Conditions.equals(entry.getAddress(), entity.getAddress())) &&
+                Verify.isTrue(Conditions.equals(entry.getSourceId(), entity.getSourceId())) &&
+                Verify.isTrue(Conditions.equals(entry.getTitle(), entity.getTitle())) &&
+                Verify.isTrue(Conditions.equals(entry.getNationality(), entity.getNationality())) &&
+                Verify.isTrue(Conditions.equals(entry.getVisaType(), entity.getVisaType())) &&
+                Verify.isTrue(Conditions.equals(entry.getVisaNumber(), entity.getVisaNumber())) &&
+                Verify.isTrue(Conditions.equals(entry.getIdType(), entity.getIdType())) &&
+                Verify.isTrue(Conditions.equals(entry.getIdNumber(), entity.getIdNumber())) &&
+                Verify.isTrue(Conditions.equals(entry.getStatus(), entity.getStatus())) &&
+                Verify.isTrue(Conditions.equals(entry.getCustomerType(), entity.getCustomerType())) &&
+                Verify.isTrue(Conditions.equals(entry.getCustomerCode(), entity.getCustomerCode())) &&
+                Verify.isTrue(Conditions.equals(entry.getServiceType(), entity.getServiceType()));
     }
 
     @When("I send get DuSubscriber Entry request")
@@ -135,7 +135,11 @@ public class APIDuSubscriberSteps extends APISteps {
         DuSubscriberEntry entry = context.get("duSubscriberEntry", DuSubscriberEntry.class);
         DuSubscriberEntry etalonEntry = context.get("etalonEntry", DuSubscriberEntry.class);
 
-        Verify.shouldBe(equals.elements(entry, etalonEntry));
+        Verify.shouldBe(Conditions.equals(entry, etalonEntry));
+    }
+    
+    static DuSubscriberEntry getRandomDuEntry() {
+        return (DuSubscriberEntry)objectInitializer.generateObject(DuSubscriberEntry.class);
     }
 
 }

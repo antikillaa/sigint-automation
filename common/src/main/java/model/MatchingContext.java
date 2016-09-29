@@ -7,7 +7,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class MatchingContext extends TeelaEntity {
-
+    
     private Long version;
     private String uploadId;
 
@@ -27,8 +27,5 @@ public class MatchingContext extends TeelaEntity {
         this.uploadId = uploadId;
     }
 
-    @Override
-    public <T extends TeelaEntity> T generate() {
-        return null;
-    }
+    
 }

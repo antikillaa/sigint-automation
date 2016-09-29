@@ -16,10 +16,6 @@ public class JenkinsProperties extends ApplicationProperty{
         return getProperty().getProperty("jenkinsHost");
     }
     
-    public String getJobName() {
-        return getProperty().getProperty("jobName");
-    }
-    
     public String getUsername() {
         return getProperty().getProperty("username");
     }

@@ -15,7 +15,6 @@ public abstract class TeelaEntity {
     private Date modifiedAt;
     private String modifiedBy;
 
-
     public String getId() {
         return id;
     }
@@ -47,8 +46,6 @@ public abstract class TeelaEntity {
     public void setModifiedAt(Date modifiedAt) {
         this.modifiedAt = modifiedAt;
     }
-
-    public abstract <T extends TeelaEntity> T generate();
 
     public <T extends TeelaEntity> Boolean equals(T object)  {
         Boolean equals = TRUE;

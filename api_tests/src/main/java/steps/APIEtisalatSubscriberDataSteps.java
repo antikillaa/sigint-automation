@@ -1,6 +1,7 @@
 package steps;
 
 import abs.EntityList;
+import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
 import json.JsonCoverter;
@@ -15,7 +16,6 @@ import services.EtisalatSubscriberService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static conditions.Conditions.equals;
 import static conditions.Conditions.isTrue;
 import static utils.DateHelper.dateToFormat;
 
@@ -23,11 +23,11 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APIEtisalatSubscriberDataSteps.class);
     private EtisalatSubscriberService service = new EtisalatSubscriberService();
-
+    
 
     @When("I send upload EtisalatSubscriberData entry request with all fields")
     public void sendUploadEtisalatSubscriberDataEntryRequest() throws NullReturnException {
-        EtisalatSubscriberEntry entry = new EtisalatSubscriberEntry().generate();
+        EtisalatSubscriberEntry entry = getRandomEtisalatEntry();
         log.info("Entry:" + JsonCoverter.toJsonString(entry));
 
         int responseCode = service.add(entry);
@@ -117,57 +117,57 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         String dateTimestring = "dd/MM/yy HH:mm:ss";
         String dateString = "dd/MM/yy";
 
-        return Verify.isTrue(equals.elements(entry.getPhoneNumber(), entity.getPhoneNumber())) &&
-                Verify.isTrue(equals.elements(entry.getName(), entity.getName())) &&
-                Verify.isTrue(equals.elements(entry.getAddress(), entity.getAddress())) &&
-                Verify.isTrue(equals.elements(entry.getSourceId(), entity.getSourceId())) &&
-                Verify.isTrue(equals.elements(entry.getAction(), entity.getAction())) &&
-                Verify.isTrue(equals.elements(entry.getAccountSuffix(), entity.getAccountSuffix())) &&
-                Verify.isTrue(equals.elements(entry.getPartyId(), entity.getPartyId())) &&
-                Verify.isTrue(equals.elements(entry.getAccountNameArabic(), entity.getAccountNameArabic())) &&
-                Verify.isTrue(equals.elements(entry.getUserIdOrName(), entity.getUserIdOrName())) &&
-                Verify.isTrue(equals.elements(entry.getInstallationBuilding(), entity.getInstallationBuilding())) &&
-                Verify.isTrue(equals.elements(entry.getInstallationFlatNumber(), entity.getInstallationFlatNumber())) &&
-                Verify.isTrue(equals.elements(entry.getInstallationFloor(), entity.getInstallationFloor())) &&
-                Verify.isTrue(equals.elements(entry.getInstallationStreetName(), entity.getInstallationStreetName())) &&
-                Verify.isTrue(equals.elements(entry.getInstallationPlotNumber(), entity.getInstallationPlotNumber())) &&
-                Verify.isTrue(equals.elements(entry.getInstallationMapNumber(), entity.getInstallationMapNumber())) &&
-                Verify.isTrue(equals.elements(entry.getInstallationSector(), entity.getInstallationSector())) &&
-                Verify.isTrue(equals.elements(entry.getInstallationTownCode(), entity.getInstallationTownCode())) &&
-                Verify.isTrue(equals.elements(entry.getInstallationTownName(), entity.getInstallationTownName())) &&
-                Verify.isTrue(equals.elements(entry.getInstallationTownEmirate(), entity.getInstallationTownEmirate())) &&
-                Verify.isTrue(equals.elements(entry.getAddress(), entity.getAddress())) &&
-                Verify.isTrue(equals.elements(entry.getFirstAddressLine(), entity.getFirstAddressLine())) &&
-                Verify.isTrue(equals.elements(entry.getSecondAddressLine(), entity.getSecondAddressLine())) &&
-                Verify.isTrue(equals.elements(entry.getPoBoxNumber(), entity.getPoBoxNumber())) &&
-                Verify.isTrue(equals.elements(entry.getCustomerCategoryCode(), entity.getCustomerCategoryCode())) &&
-                Verify.isTrue(equals.elements(entry.getCustomerCategoryCodeDesc(), entity.getCustomerCategoryCodeDesc())) &&
-                Verify.isTrue(equals.elements(
+        return Verify.isTrue(Conditions.equals(entry.getPhoneNumber(), entity.getPhoneNumber())) &&
+                Verify.isTrue(Conditions.equals(entry.getName(), entity.getName())) &&
+                Verify.isTrue(Conditions.equals(entry.getAddress(), entity.getAddress())) &&
+                Verify.isTrue(Conditions.equals(entry.getSourceId(), entity.getSourceId())) &&
+                Verify.isTrue(Conditions.equals(entry.getAction(), entity.getAction())) &&
+                Verify.isTrue(Conditions.equals(entry.getAccountSuffix(), entity.getAccountSuffix())) &&
+                Verify.isTrue(Conditions.equals(entry.getPartyId(), entity.getPartyId())) &&
+                Verify.isTrue(Conditions.equals(entry.getAccountNameArabic(), entity.getAccountNameArabic())) &&
+                Verify.isTrue(Conditions.equals(entry.getUserIdOrName(), entity.getUserIdOrName())) &&
+                Verify.isTrue(Conditions.equals(entry.getInstallationBuilding(), entity.getInstallationBuilding())) &&
+                Verify.isTrue(Conditions.equals(entry.getInstallationFlatNumber(), entity.getInstallationFlatNumber())) &&
+                Verify.isTrue(Conditions.equals(entry.getInstallationFloor(), entity.getInstallationFloor())) &&
+                Verify.isTrue(Conditions.equals(entry.getInstallationStreetName(), entity.getInstallationStreetName())) &&
+                Verify.isTrue(Conditions.equals(entry.getInstallationPlotNumber(), entity.getInstallationPlotNumber())) &&
+                Verify.isTrue(Conditions.equals(entry.getInstallationMapNumber(), entity.getInstallationMapNumber())) &&
+                Verify.isTrue(Conditions.equals(entry.getInstallationSector(), entity.getInstallationSector())) &&
+                Verify.isTrue(Conditions.equals(entry.getInstallationTownCode(), entity.getInstallationTownCode())) &&
+                Verify.isTrue(Conditions.equals(entry.getInstallationTownName(), entity.getInstallationTownName())) &&
+                Verify.isTrue(Conditions.equals(entry.getInstallationTownEmirate(), entity.getInstallationTownEmirate())) &&
+                Verify.isTrue(Conditions.equals(entry.getAddress(), entity.getAddress())) &&
+                Verify.isTrue(Conditions.equals(entry.getFirstAddressLine(), entity.getFirstAddressLine())) &&
+                Verify.isTrue(Conditions.equals(entry.getSecondAddressLine(), entity.getSecondAddressLine())) &&
+                Verify.isTrue(Conditions.equals(entry.getPoBoxNumber(), entity.getPoBoxNumber())) &&
+                Verify.isTrue(Conditions.equals(entry.getCustomerCategoryCode(), entity.getCustomerCategoryCode())) &&
+                Verify.isTrue(Conditions.equals(entry.getCustomerCategoryCodeDesc(), entity.getCustomerCategoryCodeDesc())) &&
+                Verify.isTrue(Conditions.equals(
                         dateToFormat(entry.getDateOfInstallation(), dateTimestring),
                         dateToFormat(entity.getDateOfInstallation(), dateTimestring)
                 )) &&
-                Verify.isTrue(equals.elements(entry.getCountryCode(), entity.getCountryCode())) &&
-                Verify.isTrue(equals.elements(entry.getCountryCodeOriginal(), entity.getCountryCodeOriginal())) &&
-                Verify.isTrue(equals.elements(entry.getCountry(), entity.getCountry())) &&
-                Verify.isTrue(equals.elements(entry.getSubscriberAccountStatusCode(), entity.getSubscriberAccountStatusCode())) &&
-                Verify.isTrue(equals.elements(entry.getSubscriberAccountStatusDesc(), entity.getSubscriberAccountStatusDesc())) &&
-                Verify.isTrue(equals.elements(entry.getProductGroupCode(), entity.getProductGroupCode())) &&
-                Verify.isTrue(equals.elements(entry.getProductGroupDesc(), entity.getProductGroupDesc())) &&
-                Verify.isTrue(equals.elements(entry.getProductCode(), entity.getProductCode())) &&
-                Verify.isTrue(equals.elements(entry.getProductDesc(), entity.getProductDesc())) &&
-                Verify.isTrue(equals.elements(entry.getImsi(), entity.getImsi())) &&
-                Verify.isTrue(equals.elements(entry.getIdentificationTypeCode(), entity.getIdentificationTypeCode())) &&
-                Verify.isTrue(equals.elements(entry.getIdentificationTypeDesc(), entity.getIdentificationTypeDesc())) &&
-                Verify.isTrue(equals.elements(entry.getIdentificationInfo(), entity.getIdentificationInfo())) &&
-                Verify.isTrue(equals.elements(entry.getProvisionedRegionCode(), entity.getProvisionedRegionCode())) &&
-                Verify.isTrue(equals.elements(entry.getProvisionedRegionCodeDesc(), entity.getProvisionedRegionCodeDesc())) &&
-                Verify.isTrue(equals.elements(entry.getCityId(), entity.getCityId())) &&
-                Verify.isTrue(equals.elements(entry.getCityName(), entity.getCityName())) &&
-                Verify.isTrue(equals.elements(
+                Verify.isTrue(Conditions.equals(entry.getCountryCode(), entity.getCountryCode())) &&
+                Verify.isTrue(Conditions.equals(entry.getCountryCodeOriginal(), entity.getCountryCodeOriginal())) &&
+                Verify.isTrue(Conditions.equals(entry.getCountry(), entity.getCountry())) &&
+                Verify.isTrue(Conditions.equals(entry.getSubscriberAccountStatusCode(), entity.getSubscriberAccountStatusCode())) &&
+                Verify.isTrue(Conditions.equals(entry.getSubscriberAccountStatusDesc(), entity.getSubscriberAccountStatusDesc())) &&
+                Verify.isTrue(Conditions.equals(entry.getProductGroupCode(), entity.getProductGroupCode())) &&
+                Verify.isTrue(Conditions.equals(entry.getProductGroupDesc(), entity.getProductGroupDesc())) &&
+                Verify.isTrue(Conditions.equals(entry.getProductCode(), entity.getProductCode())) &&
+                Verify.isTrue(Conditions.equals(entry.getProductDesc(), entity.getProductDesc())) &&
+                Verify.isTrue(Conditions.equals(entry.getImsi(), entity.getImsi())) &&
+                Verify.isTrue(Conditions.equals(entry.getIdentificationTypeCode(), entity.getIdentificationTypeCode())) &&
+                Verify.isTrue(Conditions.equals(entry.getIdentificationTypeDesc(), entity.getIdentificationTypeDesc())) &&
+                Verify.isTrue(Conditions.equals(entry.getIdentificationInfo(), entity.getIdentificationInfo())) &&
+                Verify.isTrue(Conditions.equals(entry.getProvisionedRegionCode(), entity.getProvisionedRegionCode())) &&
+                Verify.isTrue(Conditions.equals(entry.getProvisionedRegionCodeDesc(), entity.getProvisionedRegionCodeDesc())) &&
+                Verify.isTrue(Conditions.equals(entry.getCityId(), entity.getCityId())) &&
+                Verify.isTrue(Conditions.equals(entry.getCityName(), entity.getCityName())) &&
+                Verify.isTrue(Conditions.equals(
                         dateToFormat(entry.getUpdatedDate(), dateString),
                         dateToFormat(entity.getUpdatedDate(), dateString)
                 )) &&
-                Verify.isTrue(equals.elements(
+                Verify.isTrue(Conditions.equals(
                         dateToFormat(entry.getDateOfDeactivation(), dateTimestring),
                         dateToFormat(entity.getDateOfDeactivation(), dateTimestring)
                 ));
@@ -189,7 +189,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         EtisalatSubscriberEntry entry = context.get("etisalatSubscriberEntry", EtisalatSubscriberEntry.class);
         EtisalatSubscriberEntry etalonEntry = context.get("etalonEntry", EtisalatSubscriberEntry.class);
 
-        Verify.shouldBe(equals.elements(entry, etalonEntry));
+        Verify.shouldBe(Conditions.equals(entry, etalonEntry));
     }
 
     @When("I send upload $count EtisalatSubscriber entries request")
@@ -198,7 +198,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
 
         List<EtisalatSubscriberEntry> entries = new ArrayList<>();
         for (int i = 0; i < numEntries; i++) {
-            EtisalatSubscriberEntry entry = new EtisalatSubscriberEntry().generate();
+            EtisalatSubscriberEntry entry = getRandomEtisalatEntry();
             entries.add(entry);
         }
 
@@ -206,5 +206,11 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
 
         context.put("code", responseCode);
         context.put("uploadedEtisalatSubscriberEntries", entries);
+    }
+    
+    
+    static EtisalatSubscriberEntry getRandomEtisalatEntry() {
+        return (EtisalatSubscriberEntry)
+                objectInitializer.generateObject(EtisalatSubscriberEntry.class);
     }
 }

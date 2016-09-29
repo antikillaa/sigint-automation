@@ -32,10 +32,9 @@ public class APILogin {
             context.setLoggedUser(new LoggedUser(user, token));
 
             //update user
-            User me = new UserService()
-                    .me()
-                    .setPassword(user.getPassword())
-                    .setRoles(user.getRoles());
+            User me = new UserService().me();
+            me.setPassword(user.getPassword());
+            me.setRoles(user.getRoles());
 
             context.setLoggedUser(new LoggedUser(me, token));
         } else {

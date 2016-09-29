@@ -1,6 +1,7 @@
 package steps;
 
 import app_context.entities.Entities;
+import conditions.Conditions;
 import conditions.Verify;
 import model.FileAttachment;
 import model.InformationRequest;
@@ -11,17 +12,15 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.RFIService;
 
-import static conditions.Conditions.equals;
-
 public class APIRFIUploadSteps extends APISteps {
 
     private static Logger log = Logger.getLogger(APIRFIUploadSteps.class);
     private static RFIService service = new RFIService();
-
+    
     @When("I send create RFI request $withApproved approved copy and $withCopy original document")
     public void createRFI(String withApproved, String withCopy) {
         log.info("Starting step of creating new RFI");
-        InformationRequest RFI = new InformationRequest().generate();
+        InformationRequest RFI = getRandomRFI();
         if (withApproved.toLowerCase().equals("with")){
             RFI.setApprovedCopy(new FileAttachment(("approved")));
         }
@@ -75,7 +74,7 @@ public class APIRFIUploadSteps extends APISteps {
     @When("I update created RFI")
     public void updateCreatedRFI() {
         InformationRequest RFI = Entities.getRFIs().getLatest();
-        InformationRequest newRFI = RFI.generate();
+        InformationRequest newRFI = getRandomRFI();
         int response = service.add(newRFI);
         context.put("code", response);
         context.put("requestRFI", newRFI);
@@ -105,7 +104,7 @@ public class APIRFIUploadSteps extends APISteps {
 
     @When("I create new RFI in status $status")
     public void createRFIInStatus(String status) {
-        InformationRequest RFI = new InformationRequest().generate();
+        InformationRequest RFI = getRandomRFI();
         RFI.setState(status.toUpperCase());
         sendRFI(RFI);
     }
@@ -115,6 +114,7 @@ public class APIRFIUploadSteps extends APISteps {
         InformationRequest RFI = Entities.getRFIs().getLatest();
         int response = service.remove(RFI);
         context.put("code",  response);
+        context.put("rfi", RFI);
     }
 
     @When("I cancel RFI")
@@ -136,7 +136,12 @@ public class APIRFIUploadSteps extends APISteps {
         InformationRequest RFI = Entities.getRFIs().getLatest();
         LoggedUser currentUser = appContext.getLoggedUser();
 
-        Verify.shouldBe(equals.elements(RFI.getState(), "ASSIGNED"));
-        Verify.shouldBe(equals.elements(RFI.getAssignedTo(), currentUser.getId()));
+        Verify.shouldBe(Conditions.equals(RFI.getState(), "ASSIGNED"));
+        Verify.shouldBe(Conditions.equals(RFI.getAssignedTo(), currentUser.getId()));
+    }
+    
+    
+    static InformationRequest getRandomRFI() {
+        return (InformationRequest)objectInitializer.generateObject(InformationRequest.class);
     }
 }

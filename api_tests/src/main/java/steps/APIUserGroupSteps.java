@@ -1,6 +1,7 @@
 package steps;
 
 import app_context.entities.Entities;
+import conditions.Conditions;
 import conditions.Verify;
 import model.Group;
 import org.apache.log4j.Logger;
@@ -11,8 +12,6 @@ import services.GroupService;
 import java.util.ArrayList;
 import java.util.List;
 
-import static conditions.Conditions.equals;
-
 public class APIUserGroupSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APIUserGroupSteps.class);
@@ -20,7 +19,7 @@ public class APIUserGroupSteps extends APISteps {
 
     @When("I send create a new group without any roles")
     public void createGroupRequest() {
-        Group group = new Group().generate();
+        Group group = createRandomUserGroup();
 
         int responseCode = service.add(group);
 
@@ -33,7 +32,7 @@ public class APIUserGroupSteps extends APISteps {
         Group createdGroup = Entities.getGroups().getLatest();
         Group requestGroup = context.get("requestGroup", Group.class);
 
-        Verify.shouldBe(equals.elements(createdGroup, requestGroup));
+        Verify.shouldBe(Conditions.equals(createdGroup, requestGroup));
     }
 
     @When("I send add a created role to group request")
@@ -53,7 +52,11 @@ public class APIUserGroupSteps extends APISteps {
         Group createdGroup = Entities.getGroups().getLatest();
         Group updatedGroup = context.get("updatedGroup", Group.class);
 
-        Verify.shouldBe(equals.elements(updatedGroup, createdGroup));
+        Verify.shouldBe(Conditions.equals(updatedGroup, createdGroup));
+    }
+    
+    static Group createRandomUserGroup() {
+        return (Group)objectInitializer.generateObject(Group.class);
     }
 
 

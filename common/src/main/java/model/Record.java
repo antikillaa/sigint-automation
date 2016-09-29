@@ -1,10 +1,11 @@
 package model;
 
 import abs.TeelaEntity;
-import org.apache.commons.lang.RandomStringUtils;
+import data_for_entity.annotations.*;
+import data_for_entity.data_providers.*;
+import data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import utils.RandomGenerator;
 import utils.TeelaDate;
 
 import java.util.Date;
@@ -14,36 +15,66 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Record extends TeelaEntity {
-
+    
+    @DataIgnore
     private String sourceId;
+    @DataIgnore
     private String sourceName;
+    @DataIgnore
     private SourceType sourceType;
+    @DataIgnore
     private String sourceLetterCode;
+    @DataIgnore
     private String sourceLocation;
+    @DataIgnore
     private String typeEnglishName;
+    @DataIgnore
     private String typeArabicName;
+    @WithDataSize(length = 12)
+    @WithFieldDataType(FieldDataType.NUMERIC)
     private String fromNumber;
+    @DataIgnore
     private List<String> fromNumberNames;
+    @WithDataSize(length = 12)
+    @WithFieldDataType(FieldDataType.NUMERIC)
     private String toNumber;
+    @DataIgnore
     private List<String> toNumberNames;
+    @DataProvider(CountryProvider.class)
     private String fromCountry;
+    @DataProvider(CountryProvider.class)
     private String toCountry;
+    @DataProvider(LanguageProvider.class)
     private String language;
+    @WithDataSize(length = 15)
     private String tmsi;
+    @WithDataSize(length = 15)
     private String imsi;
     private String originalId;
+    @DataIgnore
     private TeelaDate dateAndTime;
+    @WithFieldDataType(FieldDataType.DATE)
     private Date time;
+    
+    @DataProvider(RecordTypeProvider.class)
     private RecordType type;
+    @WithDataDependencies(provider = RecordBodySMSProvider.class, fields = {"type"})
     private String text;
+    @WithDataDependencies(provider = RecordBodyVoiceProvider.class, fields = {"type"})
     private int duration;
     private boolean manualEntry = true;
-    private int priority;
+    private int priority=0;
+    @DataStatic("READY")
     private String state;
+    @DataIgnore
     private String processedStatus;
+    @DataIgnore
     private int optimizedDuration;
+    @DataIgnore
     private String fileId;
+    @DataIgnore
     private String optimizedFileId;
+    
 
     public String getProcessedStatus() {
         return processedStatus;
@@ -57,135 +88,120 @@ public class Record extends TeelaEntity {
         return sourceName;
     }
 
-    public Record setSourceName(String sourceName) {
+    public void setSourceName(String sourceName) {
         this.sourceName = sourceName;
-        return this;
     }
 
     public String getFromNumber() {
         return fromNumber;
     }
 
-    public Record setFromNumber(String fromNumber) {
+    public void setFromNumber(String fromNumber) {
         this.fromNumber = fromNumber;
-        return this;
     }
 
     public String getFromCountry() {
         return fromCountry;
     }
 
-    public Record setFromCountry(String fromCountry) {
+    public void setFromCountry(String fromCountry) {
         this.fromCountry = fromCountry;
-        return this;
     }
 
     public String getLanguage() {
         return language;
     }
 
-    public Record setLanguage(String language) {
+    public void setLanguage(String language) {
         this.language = language;
-        return this;
     }
 
     public String getTmsi() {
         return tmsi;
     }
 
-    public Record setTmsi(String tmsi) {
+    public void setTmsi(String tmsi) {
         this.tmsi = tmsi;
-        return this;
     }
 
     public String getImsi() {
         return imsi;
     }
 
-    public Record setImsi(String imsi) {
+    public void setImsi(String imsi) {
         this.imsi = imsi;
-        return this;
     }
 
     public String getOriginalId() {
         return originalId;
     }
 
-    public Record setOriginalId(String originalId) {
+    public void setOriginalId(String originalId) {
         this.originalId = originalId;
-        return this;
     }
 
     public TeelaDate getDateAndTime() {
         return dateAndTime;
     }
 
-    public Record setDateAndTime(TeelaDate dateAndTime) {
+    public void setDateAndTime(TeelaDate dateAndTime) {
         this.dateAndTime = dateAndTime;
-        return this;
     }
 
     public String getToNumber() {
         return toNumber;
     }
 
-    public Record setToNumber(String toNumber) {
+    public void setToNumber(String toNumber) {
         this.toNumber = toNumber;
-        return this;
     }
 
     public String getToCountry() {
         return toCountry;
     }
 
-    public Record setToCountry(String toCountry) {
+    public void setToCountry(String toCountry) {
         this.toCountry = toCountry;
-        return this;
     }
 
     public String getText() {
         return text;
     }
 
-    public Record setText(String text) {
+    public void setText(String text) {
         this.text = text;
-        return this;
     }
 
     public int getDuration() {
         return duration;
     }
 
-    public Record setDuration(int duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
-        return this;
     }
 
     public RecordType getType() {
         return type;
     }
 
-    public Record setType(RecordType type) {
+    public void setType(RecordType type) {
         this.type = type;
-        return this;
     }
 
     public Date getTime() {
         return time;
     }
 
-    public Record setTime(Date time) {
+    public void setTime(Date time) {
         this.time = time;
-        return this;
     }
 
     public boolean isManualEntry() {
         return manualEntry;
     }
 
-    public Record setManualEntry(boolean manualEntry) {
+    public void setManualEntry(boolean manualEntry) {
         this.manualEntry = manualEntry;
-        return this;
     }
 
     public int getPriority() {
@@ -200,175 +216,97 @@ public class Record extends TeelaEntity {
         return sourceId;
     }
 
-    public Record setSourceId(String sourceId) {
+    public void setSourceId(String sourceId) {
         this.sourceId = sourceId;
-        return this;
     }
 
     public String getState() {
         return state;
     }
 
-    public Record setState(String state) {
+    public void setState(String state) {
         this.state = state;
-        return this;
     }
 
     public SourceType getSourceType() {
         return sourceType;
     }
 
-    public Record setSourceType(SourceType sourceType) {
+    public void setSourceType(SourceType sourceType) {
         this.sourceType = sourceType;
-        return this;
     }
 
     public String getSourceLetterCode() {
         return sourceLetterCode;
     }
 
-    public Record setSourceLetterCode(String sourceLetterCode) {
+    public void setSourceLetterCode(String sourceLetterCode) {
         this.sourceLetterCode = sourceLetterCode;
-        return this;
     }
 
     public String getSourceLocation() {
         return sourceLocation;
     }
 
-    public Record setSourceLocation(String sourceLocation) {
+    public void setSourceLocation(String sourceLocation) {
         this.sourceLocation = sourceLocation;
-        return this;
     }
 
     public String getTypeEnglishName() {
         return typeEnglishName;
     }
 
-    public Record setTypeEnglishName(String typeEnglishName) {
+    public void setTypeEnglishName(String typeEnglishName) {
         this.typeEnglishName = typeEnglishName;
-        return this;
     }
 
     public String getTypeArabicName() {
         return typeArabicName;
     }
 
-    public Record setTypeArabicName(String typeArabicName) {
+    public void setTypeArabicName(String typeArabicName) {
         this.typeArabicName = typeArabicName;
-        return this;
     }
 
     public List<String> getFromNumberNames() {
         return fromNumberNames;
     }
 
-    public Record setFromNumberNames(List<String> fromNumberNames) {
+    public void setFromNumberNames(List<String> fromNumberNames) {
         this.fromNumberNames = fromNumberNames;
-        return this;
     }
 
     public List<String> getToNumberNames() {
         return toNumberNames;
     }
 
-    public Record setToNumberNames(List<String> toNumberNames) {
+    public void setToNumberNames(List<String> toNumberNames) {
         this.toNumberNames = toNumberNames;
-        return this;
+        
     }
 
     public int getOptimizedDuration() {
         return optimizedDuration;
     }
 
-    public Record setOptimizedDuration(int optimizedDuration) {
+    public void setOptimizedDuration(int optimizedDuration) {
         this.optimizedDuration = optimizedDuration;
-        return this;
     }
 
     public String getFileId() {
         return fileId;
     }
 
-    public Record setFileId(String fileId) {
+    public void  setFileId(String fileId) {
         this.fileId = fileId;
-        return this;
     }
 
     public String getOptimizedFileId() {
         return optimizedFileId;
     }
 
-    public Record setOptimizedFileId(String optimizedFileId) {
+    public void setOptimizedFileId(String optimizedFileId) {
         this.optimizedFileId = optimizedFileId;
-        return this;
     }
-
-    public Record generate() {
-        this
-                .setImsi(RandomStringUtils.randomNumeric(15))
-                .setTmsi(RandomStringUtils.randomNumeric(15))
-                .setFromNumber(RandomStringUtils.randomNumeric(12))
-                .setToNumber(RandomStringUtils.randomNumeric(12))
-                .setOriginalId(RandomStringUtils.randomAlphanumeric(8))
-                .setDateAndTime(new TeelaDate())
-                .setFromCountry(RandomGenerator.getRandomCountry())
-                .setToCountry(RandomGenerator.getRandomCountry())
-                .setLanguage(RandomGenerator.getRandomLanguage());
-        if (type.equals(RecordType.SMS)) {
-            this.setText(RandomStringUtils.randomAlphabetic(30));
-        } else if (type.equals(RecordType.Voice)) {
-            this.setDuration(RandomGenerator.getRandomDuration());
-        }
-        return this;
-    }
-
-    public Record generateReportRecord() {
-        RecordType recordType = RecordType.getRandom();
-        this
-                .setType(recordType)
-                .setTypeEnglishName(recordType.toEnglishName())
-                .setTypeArabicName(recordType.toArabicName())
-                .setImsi(RandomStringUtils.randomNumeric(15))
-                .setTmsi(RandomStringUtils.randomNumeric(15))
-                .setFromNumber(RandomStringUtils.randomNumeric(12))
-                .setToNumber(RandomStringUtils.randomNumeric(12))
-                .setOriginalId(RandomStringUtils.randomAlphanumeric(8))
-                .setTime(new Date())
-                .setOriginalId(RandomStringUtils.randomAlphanumeric(8));
-        return this;
-    }
-
-    public Record generateSMS() {
-        this
-                .setImsi(RandomStringUtils.randomNumeric(15))
-                .setTmsi(RandomStringUtils.randomNumeric(15))
-                .setFromNumber(RandomStringUtils.randomNumeric(12))
-                .setToNumber(RandomStringUtils.randomNumeric(12))
-                .setOriginalId(RandomStringUtils.randomAlphanumeric(8))
-                .setTime(new Date())
-                .setFromCountry(RandomGenerator.getRandomCountry())
-                .setToCountry(RandomGenerator.getRandomCountry())
-                .setLanguage(RandomGenerator.getRandomLanguage())
-                .setType(RecordType.SMS)
-                .setText(RandomStringUtils.randomAlphabetic(30));
-        return this;
-    }
-
-    public Record generateVoice() {
-        this
-                .setImsi(RandomStringUtils.randomNumeric(15))
-                .setTmsi(RandomStringUtils.randomNumeric(15))
-                .setFromNumber(RandomStringUtils.randomNumeric(12))
-                .setToNumber(RandomStringUtils.randomNumeric(12))
-                .setOriginalId(RandomStringUtils.randomAlphanumeric(8))
-                .setTime(new Date())
-                .setFromCountry(RandomGenerator.getRandomCountry())
-                .setToCountry(RandomGenerator.getRandomCountry())
-                .setLanguage(RandomGenerator.getRandomLanguage())
-                .setType(RecordType.Voice)
-                .setDuration(RandomGenerator.getRandomDuration());
-        return this;
-    }
-
+    
 }

@@ -1,0 +1,41 @@
+package services;
+
+import model.Report;
+import model.ReportOwner;
+import model.ReportStatus;
+import model.User;
+import org.apache.commons.lang.RandomStringUtils;
+
+import java.util.Date;
+
+public class ReportCreateService {
+    
+    
+    
+    public static Report generateReport() {
+        Report report = new Report();
+        report.setSubject("subject:" + RandomStringUtils.randomAlphabetic(4));
+        report.setStatus(ReportStatus.DRAFT);
+        initOwner(report);
+        report.setCreatedAt(new Date());
+        return report;
+    }
+    
+    private static void initOwner(Report report) {
+        UserService userService = new UserService();
+        User user = userService.me();
+        User reportUser = new User();
+        reportUser.setId(user.getId());
+        reportUser.setName(user.getName());
+        reportUser.setStaffId(user.getStaffId());
+        
+        ReportOwner owner = new ReportOwner();
+        owner
+                .setRole(userService.getReportRole(user))
+                .setUser(reportUser);
+        report.setAuthorId(user.getId());
+        report.setAuthorName(user.getName());
+        report.setOwner(owner);
+        
+    }
+}

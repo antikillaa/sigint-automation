@@ -15,6 +15,7 @@ import org.junit.Assert;
 import services.PhonebookService;
 import utils.RandomGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static conditions.Conditions.isTrue;
@@ -24,10 +25,9 @@ public class APIPhonebookSteps extends APISteps {
     private Logger log = Logger.getLogger(APIPhonebookSteps.class);
     private PhonebookService service = new PhonebookService();
 
-
     @When("I send create Phonebook Entry request with all fields")
     public void createPhonebookEntry() {
-        Phonebook phonebook = new Phonebook().generate();
+        Phonebook phonebook = getRandomPhonebook();
 
         int responseCode = service.add(phonebook);
 
@@ -38,7 +38,8 @@ public class APIPhonebookSteps extends APISteps {
     @When("I send update request for created Phonebook Entry")
     public void updatePhonebookEntry() {
         Phonebook phonebook = Entities.getPhonebooks().getLatest();
-        Phonebook newPhonebook = phonebook.generate();
+        Phonebook newPhonebook = getRandomPhonebook();
+        newPhonebook.setId(phonebook.getId());
 
         int responseCode = service.update(newPhonebook);
 
@@ -163,10 +164,8 @@ public class APIPhonebookSteps extends APISteps {
     @When("I send upload phonebook request with CSV file containing $count phonebooks")
     public void uploadPhonebookCSVFile(String count) {
         int numPonebooks = Integer.valueOf(count);
-        List<Phonebook> phonebooks = new Phonebook().generate(numPonebooks);
-
+        List<Phonebook> phonebooks = getRandomPhoneBooks(numPonebooks);
         int responseCode = service.upload(phonebooks);
-
         context.put("code", responseCode);
         context.put("uploadedPhonebooks", phonebooks);
         for (Phonebook phonebook : phonebooks){
@@ -187,5 +186,17 @@ public class APIPhonebookSteps extends APISteps {
             log.error(errorMessage);
             throw new AssertionError(errorMessage);
         }
+    }
+    
+    static Phonebook getRandomPhonebook() {
+        return (Phonebook)objectInitializer.generateObject(Phonebook.class);
+    }
+    
+    static List<Phonebook> getRandomPhoneBooks(int count) {
+        List<Phonebook> phoneBooks = new ArrayList<>();
+        for (int i=1; i<=count;i++) {
+            phoneBooks.add(getRandomPhonebook());
+        }
+        return phoneBooks;
     }
 }

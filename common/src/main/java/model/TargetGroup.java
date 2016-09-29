@@ -2,7 +2,7 @@ package model;
 
 
 import abs.TeelaEntity;
-import org.apache.commons.lang.RandomStringUtils;
+import data_for_entity.annotations.DataIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -16,18 +16,21 @@ public class TargetGroup extends TeelaEntity {
     private String description;
     //@JsonSerialize(using= TargetGroupJsonSerializer.class)
     //@JsonDeserialize(using= TargetGroupDeserializer.class)
+    @DataIgnore
     private List<String> targets;
+    @DataIgnore
     private int lmt;
+    @DataIgnore
     private int threatScore;
+    @DataIgnore
     private boolean deleted;
 
     public String getName() {
         return name;
     }
 
-    public TargetGroup setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
 
     public String getDescription() {
@@ -69,12 +72,6 @@ public class TargetGroup extends TeelaEntity {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
-
-    public TargetGroup generate() {
-        this
-                .setName(RandomStringUtils.randomAlphabetic(10))
-                .setDescription(RandomStringUtils.randomAlphabetic(20));
-        return this;
-    }
+    
 
 }
