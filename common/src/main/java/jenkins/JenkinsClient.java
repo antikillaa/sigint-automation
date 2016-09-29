@@ -22,10 +22,9 @@ class JenkinsClient {
         this.jenkinsURL = jenkinsConfig.getHost();
         this.jenkinsUsername = jenkinsConfig.getUsername();
         this.jenkinsPassword = jenkinsConfig.getPassword();
-        this.jobName = jenkinsConfig.getJobName();
     }
 
-    JobInfo getJenkinsJobInfo(String jobNumber) {
+    JobInfo getJenkinsJobInfo(String jobName, String jobNumber) {
         logger.debug("Getting jenkins job info by job number:"+jobNumber);
 
         String url = String.format("%s/job/%s/%s/api/json", jenkinsURL, jobName, jobNumber);

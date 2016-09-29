@@ -11,8 +11,17 @@ import reporter.ReportResults;
 
 public abstract class EmailContentBuilder {
     
-    protected ReportResults results = new Statistic().getResults();
+    private ReportResults results = new Statistic().getResults();
     protected static JenkinsProperties connection = G4Properties.getJenkinsProperties();
+    private String stand;
+    
+    public EmailContentBuilder(String stand) {
+        this.stand = stand;
+    }
+    
+    public String getStand() {
+        return stand;
+    }
     
     protected abstract HtmlElement buildStatusHeader();
     protected abstract void buildBody(HtmlBuilder builder, ReportResults results);

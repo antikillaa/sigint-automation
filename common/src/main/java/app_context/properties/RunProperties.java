@@ -22,6 +22,7 @@ public class RunProperties extends ApplicationProperty {
         return Boolean.parseBoolean(getProperty().getProperty("email"));
     }
     
+    public String getActiveStand() { return getProperty().getProperty("stand");}
     
     public String getApplicationURL() {
         return getProperty().getProperty("sigintURL");

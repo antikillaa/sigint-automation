@@ -11,7 +11,7 @@ public class EmailWorker {
     private static Logger logger = Logger.getLogger(EmailWorker.class);
     
     public static void main(String[] args) {
-        Boolean shouldEmail = Boolean.valueOf(G4Properties.getRunProperties().shouldEmail());
+        Boolean shouldEmail = G4Properties.getRunProperties().shouldEmail();
         if (shouldEmail) {
             HtmlEmail htmlEmail;
             try {
