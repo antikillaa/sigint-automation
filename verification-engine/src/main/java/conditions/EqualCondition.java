@@ -11,48 +11,82 @@ import utils.Parser;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 import static java.lang.Boolean.TRUE;
 
 public class EqualCondition extends ExpectedCondition {
 
-    private ExpectedCondition condition;
+    private List<ExpectedCondition> conditions = new ArrayList<>();
     private Logger log = Logger.getLogger(EqualCondition.class);
 
 
     @Override
     public String toString() {
-        return condition.toString();
+        return conditions.toString();
     }
+    
 
-
-
-
-    public EqualCondition elements(Object obj1, Object obj2) {
-        condition = new ObjectEqualCondition(obj1, obj2);
-        return this;
+    void elements(Object obj1, Object obj2) {
+        ExpectedCondition equalCondition;
+        if (obj1 == null || obj2 == null) {
+            equalCondition = new ObjectEqualCondition(obj1, obj2);
+            conditions.add(equalCondition);
+            return;
+        }
+        if (!obj1.getClass().equals(obj2.getClass())) {
+            equalCondition = new NotEqual();
+        }
+        if (Collection.class.isAssignableFrom(obj1.getClass())) {
+            elements((Collection) obj1, (Collection) obj2);
+            return;
+        }  else if (TeelaEntity.class.isAssignableFrom(obj1.getClass())) {
+            equalCondition = new TeelaEntityEqualCondition<>((TeelaEntity)obj1, (TeelaEntity)obj2);
+            
+        } else {
+            equalCondition = new ObjectEqualCondition(obj1, obj2);
+        }
+        conditions.add(equalCondition);
+        
     }
-
-    public EqualCondition elements(Set set1, Set set2) {
-        condition = new SetEqualCondition(set1, set2);
-        return this;
-    }
-
-    public <T extends TeelaEntity> EqualCondition elements(T obj1, T obj2) {
-        condition = new TeelaEntityEqualCondition<T>(obj1, obj2);
-        return this;
-    }
-
-    public EqualCondition elements(Record record, UIRecord uiRecord) {
-        condition = new RecordToUIRecordEqualCondition(record, uiRecord);
-        return this;
+    
+    private void elements(Collection collection1, Collection collection2) {
+        if (collection1.size() != collection2.size()) {
+            conditions.add(new NotEqual());
+            return;
+        }
+        Object[] collection1ToArray = collection1.toArray();
+        Object[] collection2ToArray = collection2.toArray();
+        for (int i=0; i < collection1.size()-1; i++) {
+            elements(collection1ToArray[i], collection2ToArray[i]);
+        }
+        
     }
 
 
     public Boolean check() {
-        return condition.check();
+        Boolean isConditionApplied = true;
+        for (ExpectedCondition condition:conditions) {
+            isConditionApplied = condition.check();
+            if (!isConditionApplied) {
+                    return isConditionApplied;
+            }
+        }
+        return isConditionApplied;
+    }
+    
+    private class NotEqual extends ExpectedCondition {
+    
+        @Override
+        public String toString() {
+            return "Stub condition for false";
+        }
+    
+        public Boolean check() {
+            return false;
+        }
     }
 
     private class SetEqualCondition extends ExpectedCondition {
@@ -143,7 +177,7 @@ public class EqualCondition extends ExpectedCondition {
                if ((originalValue == null || originalValue.equals(""))  && (requestValue == null || requestValue.equals(""))) {
                    continue;
                }
-               equals = originalValue.trim().equals(requestValue.trim());
+               equals = originalValue.trim().equalsIgnoreCase(requestValue.trim());
                if (!equals) {
                    return equals;
                }

@@ -1,6 +1,7 @@
 package model.bulders;
 
 import model.SSMS;
+import services.SSMSCreator;
 
 /**
  * S-SMS Builder
@@ -10,17 +11,17 @@ abstract class SSMSBuilder {
     SSMS ssms;
     String pattern;
 
-    SSMSBuilder createNewSSMS() {
-        ssms = new SSMS().generate();
+    public SSMSBuilder createNewSSMS() {
+        ssms = SSMSCreator.generateSSMS();
         return this;
     }
 
-    SSMSBuilder setPattern(String value) {
+    public SSMSBuilder setPattern(String value) {
         pattern = value;
         return this;
     }
 
-    SSMS getSSMS() {
+    public SSMS getSSMS() {
         return ssms;
     }
 

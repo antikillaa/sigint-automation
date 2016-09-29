@@ -39,7 +39,7 @@ public class ReportResults {
         log.debug("Getting '" + status + "' tests list");
         List<TestCase> testList = new ArrayList<>();
         for (TestCase test : getTestCases()) {
-            if (test.getStatus().equals(status)) {
+            if (test.getStatus().equalsIgnoreCase(status)) {
                 if (!testList.add(test)) {
                     log.warn("Test: " + test.getTitle() + ", does not added into '" + status + "' list");
                 }
@@ -53,7 +53,9 @@ public class ReportResults {
     }
 
     public List<TestCase> getFailed() {
-        return getTestCasesByStatus("failed");
+        List<TestCase> failedTestCases = getTestCasesByStatus("failed");
+        failedTestCases.addAll(getTestCasesByStatus("broken"));
+        return failedTestCases;
     }
 
     public List<TestCase> getBrokened() {

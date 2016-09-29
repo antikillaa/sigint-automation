@@ -2,7 +2,7 @@ package model;
 
 import java.util.*;
 
-public enum Permission {
+public enum Permission{
 
     UM_ADMIN,
     RECORDS_READ, RECORDS_ASSIGN, RECORDS_PROCESS, RECORDS_CREATE,
@@ -26,14 +26,12 @@ public enum Permission {
     public static Permission getRandom() {
         return VALUES.get(RANDOM.nextInt(SIZE));
     }
-
-    public static Set<String> getRandomSet() {
-        Set<String> set = new HashSet<>();
-        int maxNum = RANDOM.nextInt(SIZE);
-        for(int i=0; i< maxNum;i++) {
-            set.add(VALUES.get(RANDOM.nextInt(SIZE)).toString());
-        }
-        return set;
+    
+   
+    public static Object random() {
+        
+        return VALUES.get(RANDOM.nextInt(SIZE)).toString();
+        
     }
-
+    
 }

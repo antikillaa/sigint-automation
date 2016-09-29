@@ -1,8 +1,8 @@
-package entity_fabric.data_providers;
+package data_for_entity.data_providers;
 
 import org.apache.commons.lang.RandomStringUtils;
 
-public class IntegerDataProvider implements EntityDataProvider{
+public class Numeric implements EntityDataProvider{
     
     @Override
     public Object generate(int length) {

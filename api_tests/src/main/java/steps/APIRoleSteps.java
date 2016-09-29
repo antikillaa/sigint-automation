@@ -18,8 +18,7 @@ public class APIRoleSteps extends APISteps {
 
     @When("I send create a new role request")
     public void createRoleRequest() {
-        Role role = new Role().generate();
-
+        Role role = getRandomRole();
         int responseCode = service.add(role);
 
         context.put("code", responseCode);
@@ -31,6 +30,11 @@ public class APIRoleSteps extends APISteps {
         Role createdRole = Entities.getRoles().getLatest();
         Role requestRole = context.get("requestRole", Role.class);
 
-        Verify.shouldBe(Conditions.equals.elements(createdRole, requestRole));
+        Verify.shouldBe(Conditions.equals(createdRole, requestRole));
+    }
+    
+    
+    static Role getRandomRole() {
+        return (Role)objectInitializer.generateObject(Role.class);
     }
 }

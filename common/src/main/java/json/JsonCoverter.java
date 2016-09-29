@@ -15,9 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by dm on 3/24/16.
- */
 public class JsonCoverter {
 
     private static Logger log = Logger.getRootLogger();

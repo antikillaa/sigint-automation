@@ -72,10 +72,10 @@ public abstract class EntityList<T extends TeelaEntity> implements Iterable<T> {
     public abstract T getEntity(String param) throws NullReturnException;
 
     public T getLatest()  {
-        T entity =  entities.get(entities.size()-1);
-        if (entity == null) {
-            throw new AssertionError("There are no entities in the list");
+        if (entities.size() == 0) {
+            return null;
         }
+        T entity =  entities.get(entities.size()-1);
         return entity;
     }
 

@@ -42,8 +42,9 @@ public enum RecordType {
     private static final List<RecordType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();
     private static Random RANDOM = new Random();
+    
 
-    public static RecordType getRandom() {
+    public static RecordType random() {
         return VALUES.get(RANDOM.nextInt(SIZE));
     }
 }

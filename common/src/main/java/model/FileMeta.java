@@ -110,9 +110,5 @@ public class FileMeta extends TeelaEntity {
     public void setExtension(String extension) {
         this.extension = extension;
     }
-
-    @Override
-    public <T extends TeelaEntity> T generate() {
-        return null;
-    }
+    
 }

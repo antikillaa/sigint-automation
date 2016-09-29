@@ -1,7 +1,9 @@
 package model;
 
 import abs.TeelaEntity;
-import org.apache.commons.lang.RandomStringUtils;
+import data_for_entity.annotations.*;
+import data_for_entity.data_providers.*;
+import data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -13,28 +15,45 @@ import java.util.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class InformationRequest extends TeelaEntity {
-
+    
+    @DataIgnore
     private String internalRequestNumber;
     private String externalRequestNumber;
+    
+    @DataProvider(RFIPrioritiesProvider.class)
     private Integer priority;
+    @DataIgnore
     private String createdBy;
+    @DataIgnore
     private String assignedTo;
     private String subject;
     private String description;
     private String goals;
+    @WithFieldDataType(FieldDataType.DATE)
     private Date createdDate;
+    @DataIgnore
     private Date lastRespondTime;
+    @WithDataDependencies(provider = RFIDueDateProvider.class, fields = {"priority"})
     private Date dueDate;
     private String requestSource;
+    @DataStatic("PENDING")
     private String state;
+    @DataProvider(RFISearchTypeProvider.class)
     private InformationRequestSearchType searchType;
-    private List<InformationRequestDistribution> distributionList = new ArrayList<>();
-    private List<InformationRequestTaskCategory> taskCategories = new ArrayList<>();
-    private List<String> previousRequests;
-    private List<String> targets;
+    @DataProvider(RFIDistributionProvider.class)
+    private ArrayList<InformationRequestDistribution> distributionList = new ArrayList<>();
+    @DataProvider(RFITaskCategoryProvider.class)
+    private ArrayList<InformationRequestTaskCategory> taskCategories = new ArrayList<>();
+    @DataIgnore
+    private ArrayList<String> previousRequests;
+    @DataIgnore
+    private ArrayList<String> targets;
+    @DataIgnore
     private FileAttachment approvedCopy;
+    @DataIgnore
     private FileAttachment originalDocument;
-
+    
+    @DataIgnore
     @JsonIgnore
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:MM:");
 
@@ -82,9 +101,8 @@ public class InformationRequest extends TeelaEntity {
         return externalRequestNumber;
     }
 
-    public InformationRequest setExternalRequestNumber(String externalRequestNumber) {
+    public void setExternalRequestNumber(String externalRequestNumber) {
         this.externalRequestNumber = externalRequestNumber;
-        return this;
     }
 
     public Integer getPriority() {
@@ -97,12 +115,8 @@ public class InformationRequest extends TeelaEntity {
 
     }
 
-    public InformationRequest setPriority(Priority priority) {
-        this.priority = priority.getPriority();
-        Calendar calendar = getCalendar();
-        calendar.add(Calendar.DATE, priority.getDaysSwitch());
-        setDueDate(calendar.getTime());
-        return this;
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
     public String getCreatedBy() {
@@ -125,36 +139,32 @@ public class InformationRequest extends TeelaEntity {
         return subject;
     }
 
-    public InformationRequest setSubject(String subject) {
+    public void setSubject(String subject) {
         this.subject = subject;
-        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public InformationRequest setDescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
-        return this;
     }
 
     public String getGoals() {
         return goals;
     }
 
-    public InformationRequest setGoals(String goals) {
+    public void setGoals(String goals) {
         this.goals = goals;
-        return this;
     }
 
     public Date getCreatedDate() {
         return createdDate;
     }
 
-    public InformationRequest setCreatedDate(Date createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
-        return this;
     }
 
     public Date getLastRespondTime() {
@@ -169,7 +179,7 @@ public class InformationRequest extends TeelaEntity {
         return dueDate;
     }
 
-    private void setDueDate(Date dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -177,18 +187,16 @@ public class InformationRequest extends TeelaEntity {
         return requestSource;
     }
 
-    public InformationRequest setRequestSource(String requestSource) {
+    public void setRequestSource(String requestSource) {
         this.requestSource = requestSource;
-        return this;
     }
 
     public String getState() {
         return state;
     }
 
-    public InformationRequest setState(String state) {
+    public void setState(String state) {
         this.state = state;
-        return this;
     }
 
     public List<InformationRequestDistribution> getDistributionList() {
@@ -198,9 +206,8 @@ public class InformationRequest extends TeelaEntity {
         return distributionList;
     }
 
-    public InformationRequest setDistributionList(List<InformationRequestDistribution> distributionList) {
+    public void setDistributionList(ArrayList<InformationRequestDistribution> distributionList) {
         this.distributionList = distributionList;
-        return this;
     }
 
     public List<InformationRequestTaskCategory> getTaskCategories() {
@@ -210,16 +217,15 @@ public class InformationRequest extends TeelaEntity {
         return taskCategories;
     }
 
-    public InformationRequest setTaskCategories(List<InformationRequestTaskCategory> taskCategories) {
+    public void setTaskCategories(ArrayList<InformationRequestTaskCategory> taskCategories) {
         this.taskCategories = taskCategories;
-        return this;
     }
 
     public List<String> getPreviousRequests() {
         return previousRequests;
     }
 
-    public void setPreviousRequests(List<String> previousRequests) {
+    public void setPreviousRequests(ArrayList<String> previousRequests) {
         this.previousRequests = previousRequests;
     }
 
@@ -227,24 +233,9 @@ public class InformationRequest extends TeelaEntity {
         return targets;
     }
 
-    public void setTargets(List<String> targets) {
+    public void setTargets(ArrayList<String> targets) {
         this.targets = targets;
     }
 
-
-    public InformationRequest generate() {
-        this    .setCreatedDate(new Date())
-                .setRequestSource(RandomStringUtils.randomAlphabetic(10))
-                .setExternalRequestNumber(RandomStringUtils.randomAlphabetic(10))
-                .setState("PENDING")
-                .setPriority(InformationRequestPriorities.randomPriorityMap())
-                .setSubject(RandomStringUtils.randomAlphabetic(10))
-                .setDescription(RandomStringUtils.randomAlphabetic(20))
-                .setDistributionList(InformationRequestDistribution.getRandom())
-                .setTaskCategories(InformationRequestTaskCategory.getRandom())
-                .setGoals(RandomStringUtils.randomAlphabetic(10))
-                .setSearchType(InformationRequestSearchType.getRandom());
-
-        return this;
-    }
+    
 }

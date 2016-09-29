@@ -88,6 +88,7 @@ Examples:
 
 
 Scenario: API.Get details of DuSubscriber entry
+
 Given I sign in as admin user
 When I send upload DuSubscriberEntry request with all fields
 Then I got response code 200
@@ -100,6 +101,7 @@ And DuSubscriber Entry is correct
 
 
 Scenario: API.Upload EtisalatSubscriberData entry with all fields
+
 Given I sign in as admin user
 When I send upload EtisalatSubscriberData entry request with all fields
 Then I got response code 200

@@ -1,36 +1,52 @@
 package model;
 
 import abs.TeelaEntity;
-import org.apache.commons.lang.RandomStringUtils;
+import data_for_entity.DuSubcriberAddressProvider;
+import data_for_entity.annotations.*;
+import data_for_entity.data_providers.CountryName;
+import data_for_entity.data_providers.DuSubscriberNameProvider;
+import data_for_entity.data_providers.PhonesProvider;
+import data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import utils.RandomGenerator;
 
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class DuSubscriberEntry extends TeelaEntity {
-
+    
+    @DataStatic("du")
     private String sourceId;
+    @DataIgnore
     private String fileName;
+    @DataIgnore
     private Date fileUploadDate;
+    @DataProvider(PhonesProvider.class)
     private String phoneNumber;
     private String title;
+    @WithDataDependencies(provider = DuSubscriberNameProvider.class, fields = {"firstName", "middleName", "lastName"})
     private String name; //firstName + " " + middleName + " " + lastName
     private String firstName;
     private String middleName;
     private String lastName;
     private String poBox;
     private String city;
+    @WithDataDependencies(provider = DuSubcriberAddressProvider.class, fields = {"city", "poBox"})
     private String address; //city + ", " + poBox
+    @DataProvider(CountryName.class)
     private String nationality;
+    @WithDataSize(length = 4)
     private String visaType;
+    @WithFieldDataType(FieldDataType.NUMERIC)
     private String visaNumber;
+    @WithDataSize(length = 4)
     private String idType;
     private String idNumber;
     private String status;
+    @WithDataSize(length = 4)
     private String customerType;
+    @WithDataSize(length = 4)
     private String serviceType;
     private String customerCode;
 
@@ -38,213 +54,170 @@ public class DuSubscriberEntry extends TeelaEntity {
         return sourceId;
     }
 
-    public DuSubscriberEntry setSourceId(String sourceId) {
+    public void setSourceId(String sourceId) {
         this.sourceId = sourceId;
-        return this;
+        
     }
 
     public String getFileName() {
         return fileName;
     }
 
-    public DuSubscriberEntry setFileName(String fileName) {
+    public void setFileName(String fileName) {
         this.fileName = fileName;
-        return this;
+        
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public DuSubscriberEntry setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-        return this;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public DuSubscriberEntry setTitle(String title) {
+    public void setTitle(String title) {
         this.title = title;
-        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public DuSubscriberEntry setName(String name) {
+    public void setName(String name) {
         this.name = name;
-        return this;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public DuSubscriberEntry setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
-        return this;
     }
 
     public String getMiddleName() {
         return middleName;
     }
 
-    public DuSubscriberEntry setMiddleName(String middleName) {
+    public void setMiddleName(String middleName) {
         this.middleName = middleName;
-        return this;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public DuSubscriberEntry setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
-        return this;
     }
 
     public String getPoBox() {
         return poBox;
     }
 
-    public DuSubscriberEntry setPoBox(String poBox) {
+    public void setPoBox(String poBox) {
         this.poBox = poBox;
-        return this;
     }
 
     public String getCity() {
         return city;
     }
 
-    public DuSubscriberEntry setCity(String city) {
+    public void setCity(String city) {
         this.city = city;
-        return this;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public DuSubscriberEntry setAddress(String address) {
+    public void setAddress(String address) {
         this.address = address;
-        return this;
     }
 
     public String getNationality() {
         return nationality;
     }
 
-    public DuSubscriberEntry setNationality(String nationality) {
+    public void setNationality(String nationality) {
         this.nationality = nationality;
-        return this;
     }
 
     public String getVisaType() {
         return visaType;
     }
 
-    public DuSubscriberEntry setVisaType(String visaType) {
+    public void setVisaType(String visaType) {
         this.visaType = visaType;
-        return this;
     }
 
     public String getVisaNumber() {
         return visaNumber;
     }
 
-    public DuSubscriberEntry setVisaNumber(String visaNumber) {
+    public void setVisaNumber(String visaNumber) {
         this.visaNumber = visaNumber;
-        return this;
     }
 
     public String getIdType() {
         return idType;
     }
 
-    public DuSubscriberEntry setIdType(String idType) {
+    public void setIdType(String idType) {
         this.idType = idType;
-        return this;
     }
 
     public String getIdNumber() {
         return idNumber;
     }
 
-    public DuSubscriberEntry setIdNumber(String idNumber) {
+    public void setIdNumber(String idNumber) {
         this.idNumber = idNumber;
-        return this;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public DuSubscriberEntry setStatus(String status) {
+    public void setStatus(String status) {
         this.status = status;
-        return this;
     }
 
     public String getCustomerType() {
         return customerType;
     }
 
-    public DuSubscriberEntry setCustomerType(String customerType) {
+    public void setCustomerType(String customerType) {
         this.customerType = customerType;
-        return this;
     }
 
     public String getCustomerCode() {
         return customerCode;
     }
 
-    public DuSubscriberEntry setCustomerCode(String customerCode) {
+    public void setCustomerCode(String customerCode) {
         this.customerCode = customerCode;
-        return this;
     }
 
     public Date getFileUploadDate() {
         return fileUploadDate;
     }
 
-    public DuSubscriberEntry setFileUploadDate(Date fileUploadDate) {
+    public void setFileUploadDate(Date fileUploadDate) {
         this.fileUploadDate = fileUploadDate;
-        return this;
     }
 
     public String getServiceType() {
         return serviceType;
     }
 
-    public DuSubscriberEntry setServiceType(String serviceType) {
+    public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
-        return this;
     }
-
-    @Override
-    public DuSubscriberEntry generate() {
-        this
-                .setSourceId("du")
-                .setFirstName(RandomStringUtils.randomAlphabetic(8))
-                .setMiddleName(RandomStringUtils.randomAlphabetic(8))
-                .setLastName(RandomStringUtils.randomAlphabetic(8))
-                .setName(this.getFirstName() + " " + this.getMiddleName() + " " + this.getLastName())
-                .setPoBox(RandomStringUtils.randomAlphabetic(10))
-                .setPhoneNumber(RandomStringUtils.randomNumeric(10))
-                .setTitle(RandomStringUtils.randomAlphabetic(10))
-                .setCity(RandomStringUtils.randomAlphabetic(10))
-                .setAddress(this.getCity() + ", " + this.getPoBox())
-                .setNationality(RandomGenerator.getCountryName(RandomGenerator.generateCountryCode()))
-                .setVisaType(RandomStringUtils.randomAlphanumeric(4))
-                .setVisaNumber(RandomStringUtils.randomNumeric(8))
-                .setIdType(RandomStringUtils.randomAlphanumeric(4))
-                .setIdNumber(RandomStringUtils.randomNumeric(8))
-                .setStatus(RandomStringUtils.randomAlphabetic(8))
-                .setCustomerType(RandomStringUtils.randomAlphanumeric(4))
-                .setCustomerCode(RandomStringUtils.randomNumeric(8))
-                .setServiceType(RandomStringUtils.randomAlphanumeric(4));
-        return this;
-    }
+    
 }
