@@ -102,9 +102,9 @@ public class APIUploadFilesSteps extends APISteps {
         Process process = context.get("process", Process.class);
         GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
 
-        Verify.shouldBe(equals.elements(process.getRecordsCount(), matrix.getTotalRecords()));
-        Verify.shouldBe(equals.elements(process.getTargetHitCount(), matrix.getTotalTargersHit()));
-        Verify.shouldBe(equals.elements(process.getTargetMentionCount(), matrix.getTotalTargetMention()));
+        Verify.shouldBe(Conditions.equals(process.getRecordsCount(), matrix.getTotalRecords()));
+        Verify.shouldBe(Conditions.equals(process.getTargetHitCount(), matrix.getTotalTargersHit()));
+        Verify.shouldBe(Conditions.equals(process.getTargetMentionCount(), matrix.getTotalTargetMention()));
         //TODO SMS/Voice counts
     }
 
@@ -133,16 +133,16 @@ public class APIUploadFilesSteps extends APISteps {
 
             if (row.getTotalRecordsHit() > 0) {
                 result = uploadDetails.findMatchingResultByTargetNameAndTargetResultType(targetName, TargetResultType.HIT);
-                Verify.shouldBe(equals.elements(result.getNumRecords(), row.getTotalRecordsHit()));
+                Verify.shouldBe(Conditions.equals(result.getNumRecords(), row.getTotalRecordsHit()));
             }
             else if (row.getTotalRecordsMention() > 0) {
                 result = uploadDetails.findMatchingResultByTargetNameAndTargetResultType(targetName, TargetResultType.MENTION);
-                Verify.shouldBe(equals.elements(result.getNumRecords(), row.getTotalRecordsMention()));
+                Verify.shouldBe(Conditions.equals(result.getNumRecords(), row.getTotalRecordsMention()));
             }
 
             //TODO add verification for target with group
             if (result != null) {
-                Verify.shouldBe(equals.elements(result.getSearchResultType(), SearchResultType.Target));
+                Verify.shouldBe(Conditions.equals(result.getSearchResultType(), SearchResultType.Target));
             }
         }
     }

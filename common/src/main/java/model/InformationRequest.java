@@ -237,20 +237,5 @@ public class InformationRequest extends TeelaEntity {
         this.targets = targets;
     }
 
-
-    //public InformationRequest generate() {
-        //this    .setCreatedDate(new Date())
-        //        .setRequestSource(RandomStringUtils.randomAlphabetic(10))
-        //        .setExternalRequestNumber(RandomStringUtils.randomAlphabetic(10))
-        //        .setState("PENDING")
-         //       .setPriority(InformationRequestPriority().generate())
-         //       .setSubject(RandomStringUtils.randomAlphabetic(10))
-         //       .setDescription(RandomStringUtils.randomAlphabetic(20))
-          //      .setDistributionList(InformationRequestDistribution.getRandom())
-          //      .setTaskCategories(InformationRequestTaskCategory.getRandom())
-          //      .setGoals(RandomStringUtils.randomAlphabetic(10))
-          //      .setSearchType(InformationRequestSearchType.getRandom());
-
-        //return this;
-    //}
+    
 }

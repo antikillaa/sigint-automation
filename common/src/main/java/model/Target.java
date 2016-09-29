@@ -150,21 +150,6 @@ public class Target extends TeelaEntity {
         this.deleted = deleted;
     }
     
-    
-    /**
-    public Target generate() {
-        this
-                .setDescription(RandomStringUtils.randomAlphabetic(20))
-                .setName(RandomStringUtils.randomAlphabetic(10))
-                .setType(TargetType.getRandom())
-                .setPhones(RandomGenerator.generatePhones(10))
-                .setLanguages(RandomGenerator.generateLanguagesCodes(5))
-                .setKeywords(RandomGenerator.generateKeywords(3));
-        return this;
-    }
-     **/
-    
-
     public Target addGroup(TargetGroup targetGroup) {
         List<TargetGroup> groups = getGroups();
         groups.add(targetGroup);

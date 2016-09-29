@@ -1,11 +1,11 @@
 package model;
 
 import abs.TeelaEntity;
-import data_for_entity.annotations.DataProvider;
-import data_for_entity.annotations.WithDataDependencies;
-import data_for_entity.annotations.WithDataSize;
-import data_for_entity.annotations.WithFieldDataType;
+import data_for_entity.DuSubcriberAddressProvider;
+import data_for_entity.annotations.*;
 import data_for_entity.data_providers.CountryName;
+import data_for_entity.data_providers.DuSubscriberNameProvider;
+import data_for_entity.data_providers.PhonesProvider;
 import data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -16,19 +16,23 @@ import java.util.Date;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class DuSubscriberEntry extends TeelaEntity {
     
+    @DataStatic("du")
     private String sourceId;
+    @DataIgnore
     private String fileName;
+    @DataIgnore
     private Date fileUploadDate;
+    @DataProvider(PhonesProvider.class)
     private String phoneNumber;
     private String title;
-    @WithDataDependencies(fields = {"firstName", "middleName", "lastName"})
+    @WithDataDependencies(provider = DuSubscriberNameProvider.class, fields = {"firstName", "middleName", "lastName"})
     private String name; //firstName + " " + middleName + " " + lastName
     private String firstName;
     private String middleName;
     private String lastName;
     private String poBox;
     private String city;
-    @WithDataDependencies(fields = {"city", "poBox"})
+    @WithDataDependencies(provider = DuSubcriberAddressProvider.class, fields = {"city", "poBox"})
     private String address; //city + ", " + poBox
     @DataProvider(CountryName.class)
     private String nationality;
@@ -81,9 +85,6 @@ public class DuSubscriberEntry extends TeelaEntity {
     }
 
     public String getName() {
-        if (name == null) {
-            return this.getFirstName() + " " + this.getMiddleName() + " " + this.getLastName();
-        }
         return name;
     }
 
@@ -218,29 +219,5 @@ public class DuSubscriberEntry extends TeelaEntity {
     public void setServiceType(String serviceType) {
         this.serviceType = serviceType;
     }
-
     
-   // public DuSubscriberEntry generate() {
-        //this
-                
-                //.setFirstName(RandomStringUtils.randomAlphabetic(8))
-                //.setMiddleName(RandomStringUtils.randomAlphabetic(8))
-                //.setLastName(RandomStringUtils.randomAlphabetic(8))
-                //.setName(this.getFirstName() + " " + this.getMiddleName() + " " + this.getLastName())
-                //.setPoBox(RandomStringUtils.randomAlphabetic(10))
-                //.setPhoneNumber(RandomStringUtils.randomNumeric(10))
-                //.setTitle(RandomStringUtils.randomAlphabetic(10))
-                //.setCity(RandomStringUtils.randomAlphabetic(10))
-                //.setAddress(this.getCity() + ", " + this.getPoBox())
-                //.setNationality(RandomGenerator.getCountryName(RandomGenerator.generateCountryCode()))
-                //.setVisaType(RandomStringUtils.randomAlphanumeric(4))
-                //.setVisaNumber(RandomStringUtils.randomNumeric(8))
-                //.setIdType(RandomStringUtils.randomAlphanumeric(4))
-                //.setIdNumber(RandomStringUtils.randomNumeric(8))
-                //.setStatus(RandomStringUtils.randomAlphabetic(8))
-                //  .setCustomerType(RandomStringUtils.randomAlphanumeric(4))
-               //.setCustomerCode(RandomStringUtils.randomNumeric(8))
-               // .setServiceType(RandomStringUtils.randomAlphanumeric(4));
-        //return this;
-    //}
 }

@@ -309,27 +309,4 @@ public class Record extends TeelaEntity {
         this.optimizedFileId = optimizedFileId;
     }
     
-    /**
-    public Record generate() {
-        this
-                .setImsi(RandomStringUtils.randomNumeric(15))
-                .setTmsi(RandomStringUtils.randomNumeric(15))
-                .setFromNumber(RandomStringUtils.randomNumeric(12))
-                .setToNumber(RandomStringUtils.randomNumeric(12))
-                .setOriginalId(RandomStringUtils.randomAlphanumeric(8))
-                .setDateAndTime(new TeelaDate())
-                .setFromCountry(RandomGenerator.getRandomCountry())
-                .setToCountry(RandomGenerator.getRandomCountry())
-                .setLanguage(RandomGenerator.getRandomLanguage());
-        if (type.equals(RecordType.SMS)) {
-            this.setText(RandomStringUtils.randomAlphabetic(30));
-        } else if (type.equals(RecordType.Voice)) {
-            this.setDuration(RandomGenerator.getRandomDuration());
-        }
-        return this;
-    }
-     **/
-
-   
-
 }

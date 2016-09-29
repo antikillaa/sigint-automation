@@ -7,10 +7,7 @@ import conditions.Verify;
 import errors.NullReturnException;
 import file_generator.FileGenerator;
 import json.JsonCoverter;
-import model.Target;
-import model.TargetFilter;
-import model.TargetGroup;
-import model.UploadResult;
+import model.*;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
@@ -271,7 +268,7 @@ public class APITargetSteps extends APISteps {
 
     @Given("generate XLS with $count target")
     public void generateTargets(String count) {
-        List<Target> targets = new Target().generate(Integer.valueOf(count));
+        List<Target> targets = getRandomTargets(Integer.valueOf(count));
         G4File file = new FileGenerator(Target.class).write(targets);
 
         context.put("targetsXLS", file);
@@ -323,9 +320,9 @@ public class APITargetSteps extends APISteps {
     public void targetWithPhonesExist(String count){
         int targetsCount = Integer.valueOf(count);
 
-        List<Target> targets = new Target().generate(targetsCount);
+        List<Target> targets = getRandomTargets(targetsCount);
         int statusCode = service.upload(targets);
-        Verify.shouldBe(equals.elements(statusCode, 200));
+        Verify.shouldBe(Conditions.equals(statusCode, 200));
 
         GenerationMatrix generationMatrix = new GenerationMatrix(targets);
         context.put("generationMatrix", generationMatrix);

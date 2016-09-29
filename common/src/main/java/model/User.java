@@ -127,16 +127,5 @@ public class User extends TeelaEntity {
     public void setExpandedRoles(List<String> expandedRoles) {
         this.expandedRoles = expandedRoles;
     }
-
-    /**
-    public User generate() {
-        this
-                .setName(RandomStringUtils.randomAlphabetic(8).toLowerCase())
-                .setDisplayName(RandomStringUtils.randomAlphabetic(8))
-                .setStaffId(RandomStringUtils.randomAlphanumeric(6))
-                .setPassword(RandomStringUtils.randomAlphanumeric(8));
-        return this;
-    }
-     **/
-
+    
 }

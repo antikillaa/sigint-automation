@@ -57,9 +57,4 @@ public class Group extends TeelaEntity {
     }
     
     
-    //public Group generate() {
-    //    this
-    //            .setDisplayName(RandomStringUtils.randomAlphabetic(8).toUpperCase());
-    //    return this;
-    //}
 }

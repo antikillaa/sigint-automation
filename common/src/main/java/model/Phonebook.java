@@ -110,19 +110,5 @@ public class Phonebook extends TeelaEntity {
     public void setManualEntry(boolean manualEntry) {
         this.manualEntry = manualEntry;
     }
-
-    
-    //public Phonebook generate() {
-    //    this
-    //            .setName(RandomStringUtils.randomAlphabetic(10))
-    //            .setPhoneNumber(RandomStringUtils.randomNumeric(10))
-    //            .setCountryCode(RandomGenerator.generateCountryCode())
-    //            .setCountry(RandomGenerator.getCountryName(this.getCountryCode()))
-    //            .setAddress(RandomStringUtils.randomAlphanumeric(20))
-    //            .setImsi(RandomStringUtils.randomAlphanumeric(10))
-    //            .setProvider(RandomStringUtils.randomAlphanumeric(10))
-    //.setLocation(RandomStringUtils.randomAlphanumeric(20));
-    //    return this;
-    //}
     
 }

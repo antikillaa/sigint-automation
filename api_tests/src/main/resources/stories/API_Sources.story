@@ -3,7 +3,6 @@ Meta:
 
 
 Scenario: API.Create Source
-
 Given I sign in as admin user
 When I send create new random Source request
 Then I got response code 200
