@@ -42,6 +42,41 @@ public class DateHelper {
 
         return now.after(deadLine);
     }
+    
+    /**
+     * Checks if param date is already passed in comparision to now
+     * @param deadline this date will be verified against now
+     * @return True if deadline occurred, False otherwise
+     */
+    public static boolean isTimeout(Date deadline) {
+        Calendar now = Calendar.getInstance();
+        return now.after(deadline);
+        
+    }
+    
+    /**
+     * Thread sleep for the specified number of secs.
+     * @param secs Seconds to sleep.
+     */
+    public static void waitTime(int secs) {
+        try {
+            Thread.sleep(secs*1000);
+        } catch (InterruptedException e) {
+            log.debug("Thread sleep was interrupted");
+        }
+    }
+    
+    /**
+     * Helps to receive Date with the passed shift in secs.
+     * @param shiftInSecs shift to the current date in secs.
+     * @return Date with applied time shift in secs.
+     */
+    public static Date getDateWithShift(int shiftInSecs) {
+        Calendar date = Calendar.getInstance();
+        date.add(Calendar.SECOND, shiftInSecs);
+        return date.getTime();
+    }
+    
 
     public static void setTimeout(Date date) {
         context.put("timeout", date);

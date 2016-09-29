@@ -88,7 +88,6 @@ Examples:
 
 
 Scenario: API.Get details of DuSubscriber entry
-
 Given I sign in as admin user
 When I send upload DuSubscriberEntry request with all fields
 Then I got response code 200
