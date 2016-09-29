@@ -52,9 +52,8 @@ public class Group extends TeelaEntity {
         return displayName;
     }
 
-    public Group setDisplayName(String displayName) {
+    public void setDisplayName(String displayName) {
         this.displayName = displayName;
-        return this;
     }
     
     

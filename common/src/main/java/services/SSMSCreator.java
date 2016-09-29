@@ -48,7 +48,7 @@ public class SSMSCreator {
         .setCaller_imsi_hit("")
         .setPattern("");
         
-        String toNumber = RandomGenerator.generatePhones(1).iterator().next();
+        String toNumber = RandomGenerator.generatePhone();
         ssms.setCalled(toNumber)
         .setCalled_non(1)
         .setCalled_mod(toNumber);
@@ -59,7 +59,7 @@ public class SSMSCreator {
         .setCalled_cc("")
         .setCalled_ac("");
         
-        String fromNumber = RandomGenerator.generatePhones(1).iterator().next();
+        String fromNumber = RandomGenerator.generatePhone();
         ssms.setCaller(fromNumber)
         .setCaller_non(1)
         .setCaller_mod(fromNumber)
@@ -69,7 +69,7 @@ public class SSMSCreator {
         .setCaller_cc("")
         .setCaller_ac("");
         
-        String ssmsNumber = RandomGenerator.generatePhones(1).iterator().next();
+        String ssmsNumber = RandomGenerator.generatePhone();
         ssms.setSmsc(ssmsNumber)
         .setSmsc_non(1)
         .setSmsc_mod(ssmsNumber)

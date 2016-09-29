@@ -19,8 +19,10 @@ class DataType {
    }
    
    Class<?> getClassType() {
-       
-       return (Class<?>)field.getGenericType();
+       if (isCollection()) {
+           return Helpers.getCollectionType(field);
+       }
+       return field.getType();
    }
    
    Class<?> getCollectionDataType() {

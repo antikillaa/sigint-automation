@@ -14,7 +14,7 @@ public class RandomGenerator {
     private static Logger log = Logger.getLogger(RandomGenerator.class);
     private static AppContext context = AppContext.get();
 
-    public static LinkedHashSet<String> generatePhones(int maxPhones) {
+    public static String generatePhone() {
 
          class RandomPhone {
             private String num, num1, num2, num3; //3-4 numbers in area code
@@ -36,27 +36,16 @@ public class RandomGenerator {
                 return num+num1+num2+num3+set1+set2+set3;
             }
         }
-        LinkedHashSet<String> phoneNumbers = new LinkedHashSet<>();
-        int phones = RandomUtils.nextInt(maxPhones);
-        int i = 0;
-        do {
-            phoneNumbers.add(new RandomPhone().generate());
-            i++;
-        } while (i < phones);
-
-        return phoneNumbers;
+      
+            return new RandomPhone().generate();
+         
+       
     }
 
-    public static LinkedHashSet<String> generateLanguagesCodes(int maxLanguages) {
-        LinkedHashSet<String> languages = new LinkedHashSet<>();
-        int numLanguages = RandomUtils.nextInt(maxLanguages);
+    public static String getRandomLanguageCode() {
         List<String> countryCodes = Arrays.asList(Locale.getISOCountries());
-        int i = 0;
-        do {
-            languages.add(countryCodes.get(RandomUtils.nextInt(countryCodes.size())));
-            i++;
-        } while (i < numLanguages);
-        return languages;
+        return countryCodes.get(RandomUtils.nextInt(countryCodes.size()));
+        
     }
 
     public static String getRandomCountry() {

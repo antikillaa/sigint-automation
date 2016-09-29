@@ -6,6 +6,6 @@ public class LanguageCodesProvider implements EntityDataProvider {
     
     @Override
     public Object generate(int length) {
-        return RandomGenerator.generateLanguagesCodes(length);
+        return RandomGenerator.getRandomLanguageCode();
     }
 }

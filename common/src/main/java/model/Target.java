@@ -24,7 +24,9 @@ public class Target extends TeelaEntity {
     @JsonDeserialize(using = TargetDeserializer.class)
     @DataIgnore
     private ArrayList<TargetGroup> groups = new ArrayList<>();
+    
     private HashSet<String> keywords = new HashSet<>();
+    
     @WithDataSize(length = 5)
     @DataProvider(LanguageCodesProvider.class)
     private HashSet<String> languages = new HashSet<>();

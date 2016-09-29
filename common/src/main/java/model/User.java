@@ -54,9 +54,8 @@ public class User extends TeelaEntity {
         return displayName;
     }
 
-    public User setDisplayName(String name) {
+    public void setDisplayName(String name) {
         this.displayName = name;
-        return this;
     }
 
     public String getPassword() {

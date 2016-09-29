@@ -80,11 +80,12 @@ public class RsClient {
     }
 
     private Entity convertToJson(Object object) {
-        Entity payload;
+        Entity payload = null;
+    
         try {
             payload = Entity.json(JsonCoverter.toJsonString(object));
         } catch (NullReturnException e) {
-            throw new AssertionError("Cannot convert payload object to JSON");
+            e.printStackTrace();
         }
         return payload;
     }

@@ -30,12 +30,18 @@ public class EqualCondition extends ExpectedCondition {
     
 
     void elements(Object obj1, Object obj2) {
-        ExpectedCondition equalCondition = null;
+        ExpectedCondition equalCondition;
+        if (obj1 == null || obj2 == null) {
+            equalCondition = new ObjectEqualCondition(obj1, obj2);
+            conditions.add(equalCondition);
+            return;
+        }
         if (!obj1.getClass().equals(obj2.getClass())) {
             equalCondition = new NotEqual();
         }
         if (Collection.class.isAssignableFrom(obj1.getClass())) {
             elements((Collection) obj1, (Collection) obj2);
+            return;
         }  else if (TeelaEntity.class.isAssignableFrom(obj1.getClass())) {
             equalCondition = new TeelaEntityEqualCondition<>((TeelaEntity)obj1, (TeelaEntity)obj2);
             
@@ -171,7 +177,7 @@ public class EqualCondition extends ExpectedCondition {
                if ((originalValue == null || originalValue.equals(""))  && (requestValue == null || requestValue.equals(""))) {
                    continue;
                }
-               equals = originalValue.trim().equals(requestValue.trim());
+               equals = originalValue.trim().equalsIgnoreCase(requestValue.trim());
                if (!equals) {
                    return equals;
                }
