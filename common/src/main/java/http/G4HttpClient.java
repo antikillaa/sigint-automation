@@ -9,7 +9,6 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
-import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
@@ -22,20 +21,12 @@ import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeatu
 public class G4HttpClient {
 
     private static Logger log = Logger.getLogger(G4HttpClient.class);
-    private Client client;
     private String host = G4Properties.getRunProperties().getApplicationURL();
 
     /**
-     * G4HttpClient client with basic access authentication for Jira.
-     * User and pass properties defined in the jiraConnection.properties file.
+     * G4HttpClient client.
      */
     public G4HttpClient() {
-        String user = G4Properties.getJiraProperties().getUsername();
-        String pass = G4Properties.getJiraProperties().getPassword();
-        HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(user, pass);
-        client = ClientBuilder.newClient();
-        client.register(feature);
-        client.register(MultiPartFeature.class);
     }
 
     /**
@@ -60,7 +51,8 @@ public class G4HttpClient {
         String URL = host + request.getURI();
         log.debug("Building request to url:" + URL);
 
-        Builder builder = client
+        Builder builder = ClientBuilder.newClient()
+                .register(MultiPartFeature.class)
                 .target(URL)
                 .request(request.getMediaType());
 
@@ -79,7 +71,11 @@ public class G4HttpClient {
     private Builder buildRequest(HttpRequest request, String username, String password) {
         String URL = host + request.getURI();
         log.debug("Building request to url:" + URL);
-        return client
+
+        HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(username, password);
+
+        return ClientBuilder.newClient()
+                .register(feature)
                 .target(URL)
                 .request(request.getMediaType())
                 .property(HTTP_AUTHENTICATION_BASIC_USERNAME, username)
@@ -126,19 +122,19 @@ public class G4HttpClient {
 
         switch (request.getHttpMethod()) {
             case GET:
-                log.info("Sending GET request");
+                log.debug("Sending GET request");
                 response = builder.get();
                 break;
             case PUT:
-                log.info("Sending PUT request with payload: " + payload);
+                log.debug("Sending PUT request with payload: " + payload);
                 response = builder.put(payload);
                 break;
             case POST:
-                log.info("Sending POST request with payload: " + payload);
+                log.debug("Sending POST request with payload: " + payload);
                 response = builder.post(payload);
                 break;
             case DELETE:
-                log.info("Sending DELETE request");
+                log.debug("Sending DELETE request");
                 response = builder.delete();
                 break;
         }
@@ -155,20 +151,28 @@ public class G4HttpClient {
     public G4Response sendRequest(HttpRequest request, String username, String password) {
 
         Builder builder = buildRequest(request, username, password);
-        Response response;
+        Entity payload = convertToEntity(request.getPayload());
+        Response response = null;
 
         switch (request.getHttpMethod()) {
             case GET:
+                log.debug("Sending GET request");
                 response = builder.get();
-                return new G4Response(response);
+                break;
             case PUT:
+                log.debug("Sending PUT request with payload: " + payload);
+                response = builder.put(payload);
                 break;
             case POST:
+                log.debug("Sending POST request with payload: " + payload);
+                response = builder.post(payload);
                 break;
             case DELETE:
+                log.debug("Sending DELETE request");
+                response = builder.delete();
                 break;
         }
-        return null;
+        return response == null ? null : new G4Response(response);
     }
 
 }

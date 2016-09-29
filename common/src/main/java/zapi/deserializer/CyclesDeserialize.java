@@ -28,7 +28,7 @@ public class CyclesDeserialize extends JsonDeserializer<CyclesList> {
             try {
                 Map.Entry<String, JsonNode> foundNode = iter.next();
                 cycle = mapper.readValue(foundNode.getValue(), Cycle.class);
-                cycle.setId(Integer.parseInt(foundNode.getKey()));
+                cycle.setId(foundNode.getKey());
                 cycles.addtoCycle(cycle);
             } catch (JsonMappingException e) {
                 continue;

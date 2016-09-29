@@ -29,6 +29,8 @@ public class HttpRequest {
     private String mediaType;
     private Object payload;
     private MultiPart multiPart;
+    private Cookie cookie;
+
     private Logger log = Logger.getLogger(HttpRequest.class);
 
     /**
@@ -47,13 +49,20 @@ public class HttpRequest {
 
     //todo:Move getCookie to higher level. Remove from model
     public Cookie getCookie() {
-        String tokenValue;
-        try {
-            tokenValue = AppContext.get().getLoggedUser().getToken().getValue();
-        } catch (NullPointerException e) {
-            return null;
+        if (cookie == null) {
+            try {
+                String tokenValue = AppContext.get().getLoggedUser().getToken().getValue();
+                this.cookie = new Cookie("t", tokenValue);
+            } catch (NullPointerException e) {
+                return null;
+            }
         }
-        return new Cookie("t", tokenValue);
+        return cookie;
+    }
+
+    public HttpRequest setCookie(Cookie cookie) {
+        this.cookie = cookie;
+        return this;
     }
 
     public String getURI() {

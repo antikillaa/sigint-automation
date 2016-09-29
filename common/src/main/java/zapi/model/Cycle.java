@@ -8,28 +8,29 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Cycle {
 
-    private int id;
+    private String id;
+    private String clonedCycleId;
     private String name;
     private String build;
     private String environment;
     private String description;
     private String startDate;
     private String endDate;
-    private int projectId;
-    private int versionId;
+    private String projectId;
+    private String versionId;
     private String responseMessage;
 
     public Cycle() {
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public Cycle setId(int id) {
+    public Cycle setId(String id) {
         this.id = id;
         return this;
     }
@@ -70,18 +71,12 @@ public class Cycle {
         return this;
     }
 
-    public int getProjectId() {
+    public String getProjectId() {
         return projectId;
     }
 
-    @JsonProperty("projectId")
-    public Cycle setProjectId(int projectId) {
-        this.projectId = projectId;
-        return this;
-    }
-
     public Cycle setProjectId(String projectId) {
-        this.projectId = Integer.valueOf(projectId);
+        this.projectId = projectId;
         return this;
     }
 
@@ -117,41 +112,30 @@ public class Cycle {
         return this;
     }
 
-    public int getVersionId() {
+    public String getVersionId() {
         return versionId;
     }
 
-    @JsonProperty("versionId")
-    public Cycle setVersionId(int versionId) {
+    public Cycle setVersionId(String versionId) {
         this.versionId = versionId;
         return this;
     }
 
-    public Cycle setVersionId(String versionId) {
-        this.versionId = Integer.valueOf(versionId);
+    public String getClonedCycleId() {
+        return clonedCycleId;
+    }
+
+    public Cycle setClonedCycleId(String clonedCycleId) {
+        this.clonedCycleId = clonedCycleId;
         return this;
     }
 
     public String getResponseMessage() {
-        return this.responseMessage;
+        return responseMessage;
     }
 
-    public Cycle setResponseMessage(String responseMessage) {
+    public void setResponseMessage(String responseMessage) {
         this.responseMessage = responseMessage;
-        return this;
-    }
-
-    public String postJson() {
-        return "{ \"clonedCycleId\" : \"" +
-                "\", \"name\" : \"" + name +
-                "\", \"build\" : \"" + build +
-                "\", \"environment\" : \"" + environment +
-                "\", \"description\" : \"" + description +
-                "\", \"startDate\" : \"" + startDate +
-                "\", \"endDate\" : \"" + endDate +
-                "\", \"projectId\" : " + projectId +
-                ", \"versionId\" : " + versionId +
-                "}";
     }
 
     @Override
