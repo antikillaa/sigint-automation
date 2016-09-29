@@ -1,6 +1,7 @@
 package controllers;
 
 import app_context.RunContext;
+import http.G4Response;
 import json.JsonCoverter;
 import app_context.AppContext;
 import model.LoggedUser;
@@ -9,31 +10,37 @@ import model.User;
 import org.apache.log4j.Logger;
 import services.UserService;
 
-import javax.ws.rs.core.Response;
-
 public class APILogin {
 
     private SignInService signService = new SignInService();
     private AppContext context = AppContext.get();
     private RunContext runContext = RunContext.get();
-    Logger log = Logger.getRootLogger();
+    private Logger log = Logger.getLogger(APILogin.class);
 
-
+    /**
+     * Sign in as user and add LoggedUser in AppContext.
+     *
+     * @param user User for sign in.
+     */
     public void signInAsUser(User user) {
-        log.info("Signing in as user:"+ user);
-        Response response;
-        
-        response = signService.signIn(user.getName(), user.getPassword());
+        log.info("Signing in as user: " + user);
+
+        G4Response response = signService.signIn(user.getName(), user.getPassword());
         runContext.put("code", response.getStatus());
         if (response.getStatus() == 200) {
-            Token token = JsonCoverter.fromJsonToObject(response.readEntity(String.class), Token.class);
+            Token token = JsonCoverter.readEntityFromResponse(response, Token.class);
             context.setLoggedUser(new LoggedUser(user, token));
-        } else {
-            runContext.put("message", response.readEntity(String.class));
-        }
 
-        UserService userService = new UserService();
-        userService.me();
+            //update user
+            User me = new UserService()
+                    .me()
+                    .setPassword(user.getPassword())
+                    .setRoles(user.getRoles());
+
+            context.setLoggedUser(new LoggedUser(me, token));
+        } else {
+            runContext.put("message", response.getMessage());
+        }
     }
 
 }

@@ -19,8 +19,6 @@ public class User extends TeelaEntity {
     private String password;
     @DataIgnore
     private String phone;
-    @DataIgnore
-    private String token;
     @JsonProperty("staff_id")
     private String staffId;
     @DataIgnore
@@ -80,14 +78,6 @@ public class User extends TeelaEntity {
 
     public void setRoles(List<String> roles) {
         this.roles = roles;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public String getPhone() {

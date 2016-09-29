@@ -3,10 +3,13 @@ package model.bulders;
 import model.SSMS;
 import services.SSMSCreator;
 
+/**
+ * S-SMS Builder
+ */
 abstract class SSMSBuilder {
 
-    protected SSMS ssms;
-    protected String pattern;
+    SSMS ssms;
+    String pattern;
 
     public SSMSBuilder createNewSSMS() {
         ssms = SSMSCreator.generateSSMS();

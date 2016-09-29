@@ -323,5 +323,33 @@ public class Report extends TeelaEntity {
     public void setOwner(ReportOwner owner) {
         this.owner = owner;
     }
-    
+
+    public Report generate() {
+        this
+                .setSubject("subject:" + RandomStringUtils.randomAlphabetic(4))
+                .setStatus(ReportStatus.DRAFT)
+                .initOwner();
+        this.setCreatedAt(new Date());
+        return this;
+    }
+
+    private Report initOwner() {
+        UserService userService = new UserService();
+        User user = userService.me();
+
+        User reportUser = new User();
+        reportUser.setId(user.getId());
+        reportUser.setName(user.getName());
+        reportUser.setStaffId(user.getStaffId());
+
+        ReportOwner owner = new ReportOwner();
+        owner
+                .setRole(userService.getReportRole(user))
+                .setUser(reportUser);
+        this
+                .setAuthorId(user.getId())
+                .setAuthorName(user.getName())
+                .setOwner(owner);
+        return this;
+    }
 }

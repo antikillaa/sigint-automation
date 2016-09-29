@@ -1,23 +1,20 @@
 package services;
 
-import app_context.properties.G4Properties;
+import http.G4HttpClient;
+import http.G4Response;
 import http.requests.GetDictionariesRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.Dictionary;
 import org.apache.log4j.Logger;
-
-import javax.ws.rs.core.Response;
 
 public class DictionaryService {
     
     private static Logger logger = Logger.getLogger(DictionaryService.class);
     
     public static Dictionary loadDictionary() {
-        Dictionary dictionary = null;
         GetDictionariesRequest request = new GetDictionariesRequest();
-        Response response = new RsClient().get(G4Properties.getRunProperties().getApplicationURL()+ request.getURI(),
-                        request.getCookie());
+        G4Response response = new G4HttpClient().sendRequest(request);
+        Dictionary dictionary = null;
         try {
             dictionary = JsonCoverter.readEntityFromResponse(response, Dictionary.class, "result");
         } catch (Exception ex) {

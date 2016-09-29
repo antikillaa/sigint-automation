@@ -4,50 +4,57 @@ import abs.EntityList;
 import abs.SearchFilter;
 import abs.SearchResult;
 import app_context.RunContext;
-import app_context.properties.G4Properties;
 import errors.NullReturnException;
-import file_generator.DuFile;
+import file_generator.FileGenerator;
+import http.G4HttpClient;
+import http.G4Response;
 import http.requests.phonebook.DuSubscriberRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.DuSubscriberEntry;
+import model.G4File;
 import model.UploadResult;
 import model.phonebook.DuSubscriberSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
 
     private Logger log = Logger.getLogger(DuSubscriberService.class);
-    private static RsClient rsClient = new RsClient();
+    private static G4HttpClient g4HttpClient = new G4HttpClient();
     private RunContext context = RunContext.get();
-    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
 
+    /**
+     * ADD new Du Subscriber entry.
+     * Used UPLOAD API: POST /du-subscribers/upload uploadMultipart.
+     *
+     * @param entity Du Subscriber entry
+     * @return HTTP status code
+     */
+    @Override
     public int add(DuSubscriberEntry entity) {
-        log.info("Add DuSubscriber Entry..");
+        log.info("Add duSubscriber Entry..");
         List<DuSubscriberEntry> entries = new ArrayList<>();
         entries.add(entity);
         return upload(entries);
     }
 
+    /**
+     * UPLOAD list of Du Subscriber entries.
+     * API: POST /du-subscribers/upload uploadMultipart
+     *
+     * @param entries list of Du Subscriber entries.
+     * @return HTTP status code
+     */
     public int upload(List<DuSubscriberEntry> entries) {
-        log.debug("Writing DuSubscriberEntry to csv file...");
-        File file = new DuFile().write(entries);
+        log.debug("Writing DuSubscriberEntry to csv file..");
+        G4File file = new FileGenerator(DuSubscriberEntry.class).write(entries);
 
-        log.info("Upload file with " + entries.size() + " DuSubscriber entries..");
-        DuSubscriberRequest request = new DuSubscriberRequest().upload();
-        request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
-        file.deleteOnExit();
-
-        log.debug("Sending request to " + sigintHost + request.getURI());
-        Response response = rsClient.post(sigintHost + request.getURI(), request.getBody(), request.getCookie());
+        log.info("Upload file: " + file.getName() + " with " + entries.size() + " duSubscriber entries..");
+        DuSubscriberRequest request = new DuSubscriberRequest().upload(file);
+        G4Response response = g4HttpClient.sendRequest(request);
 
         UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
         if (uploadResult != null) {
@@ -56,18 +63,29 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
         return response.getStatus();
     }
 
+    @Override
     public int remove(DuSubscriberEntry entity) {
         return 0;
     }
 
+    /**
+     * Search list Du Subscriber entries.
+     * API: POST /du-subscribers/search search
+     *
+     * @param filter DuSubscriberFilter search filter
+     * @return EntityList of Du Subscriber entries
+     */
+    @Override
     public EntityList<DuSubscriberEntry> list(SearchFilter filter) {
-        DuSubscriberRequest request = new DuSubscriberRequest().search();
-        Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
+        log.info("Getting list of duSubscriber entries..");
+
+        DuSubscriberRequest request = new DuSubscriberRequest().search(filter);
+        G4Response response = g4HttpClient.sendRequest(request);
 
         SearchResult<DuSubscriberEntry> searchResults =
                 JsonCoverter.readEntityFromResponse(response, DuSubscriberSearchResult.class, "result");
         if (searchResults == null) {
-            throw new AssertionError("Unable to read search results from DuSubscriber search");
+            throw new AssertionError("Unable to read search results from duSubscriber search");
         } else {
             return new EntityList<DuSubscriberEntry>(searchResults.getContent()) {
                 public DuSubscriberEntry getEntity(String param) throws NullReturnException {
@@ -77,14 +95,25 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
         }
     }
 
+    @Override
     public int update(DuSubscriberEntry entity) {
         return 0;
     }
 
+    /**
+     * GET Du Subscriber entry
+     * API: GET /du-subscribers/entries/{id} getEntry
+     *
+     * @param id id of entry
+     * @return Du Subscriber entry
+     */
+    @Override
     public DuSubscriberEntry view(String id) {
+        log.info("Getting derails of duSubscriber Entry by id: " + id);
+
         DuSubscriberRequest request = new DuSubscriberRequest().get(id);
-        log.info("Getting derails of DuSubscriber Entry by id: " + id);
-        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4HttpClient.sendRequest(request);
+
         return JsonCoverter.readEntityFromResponse(response, DuSubscriberEntry.class, "result");
     }
 

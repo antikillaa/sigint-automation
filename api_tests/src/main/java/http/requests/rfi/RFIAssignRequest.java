@@ -1,6 +1,7 @@
 package http.requests.rfi;
 
 import http.requests.HttpRequest;
+import http.HttpMethod;
 
 
 public class RFIAssignRequest extends HttpRequest {
@@ -9,5 +10,6 @@ public class RFIAssignRequest extends HttpRequest {
 
     public RFIAssignRequest(String id) {
         super(URI + id + "/assign");
+        this.setHttpMethod(HttpMethod.POST);
     }
 }

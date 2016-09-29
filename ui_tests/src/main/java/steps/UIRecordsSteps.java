@@ -1,5 +1,6 @@
 package steps;
 
+import app_context.AppContext;
 import conditions.Conditions;
 import conditions.Verify;
 import controllers.records.RecordAddController;
@@ -59,7 +60,7 @@ public class UIRecordsSteps extends UISteps {
     public void fillTheForm(String recordType) {
         Record record = new Record();
         record.setType(RecordType.valueOf(recordType));
-        record.setSourceName(RandomGenerator.getRandomItemFromList(context.getDictionary().getSources()).getName());
+        record.setSourceName(RandomGenerator.getRandomItemFromList(AppContext.get().getDictionary().getSources()).getName());
         record.generate();
 
         addController().fillForm(record);

@@ -121,7 +121,7 @@ public class EqualCondition extends ExpectedCondition {
 
         @Override
         public String toString() {
-            return "Object condition with object1: " + Parser.entityToString(obj1) + " and object2: " + Parser.entityToString(obj1);
+            return "Object condition with object1: " + Parser.entityToString(obj1) + " and object2: " + Parser.entityToString(obj2);
         }
 
         protected Boolean check() {

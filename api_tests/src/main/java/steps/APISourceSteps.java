@@ -54,7 +54,7 @@ public class APISourceSteps extends APISteps {
 
         boolean contains = false;
         for (Source entity : sources) {
-            if (Conditions.equals(entity, source).check()) {
+            if (entity.getName().equals(source.getName())) {
                 contains = true;
                 break;
             }

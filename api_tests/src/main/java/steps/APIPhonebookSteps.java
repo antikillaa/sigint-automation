@@ -13,7 +13,6 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.PhonebookService;
-import utils.Parser;
 import utils.RandomGenerator;
 
 import java.util.ArrayList;
@@ -181,9 +180,11 @@ public class APIPhonebookSteps extends APISteps {
 
         int numEntries = Integer.valueOf(count);
         if (uploadResult.getNumEntries() != numEntries || uploadResult.getFailedEntries() > 0) {
-            log.error("Entry upload result is not correct!");
-            log.error(Parser.entityToString(uploadResult));
-            throw new AssertionError("Entry upload result is not correct!");
+            String errorMessage = "Upload result of Phonebooks entries is not correct!\n" +
+                    "Expected: numEntries <" + numEntries + ">, " + "failedEntries <0>\n" +
+                    "Actual: numEntries <" + uploadResult.getNumEntries() + ">, " + "failedEntries <" + uploadResult.getFailedEntries() + ">";
+            log.error(errorMessage);
+            throw new AssertionError(errorMessage);
         }
     }
     

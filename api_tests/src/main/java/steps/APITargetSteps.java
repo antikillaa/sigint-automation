@@ -5,7 +5,7 @@ import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
-import file_generator.TargetFile;
+import file_generator.FileGenerator;
 import json.JsonCoverter;
 import model.Target;
 import model.TargetFilter;
@@ -21,14 +21,13 @@ import org.junit.Assert;
 import services.TargetService;
 import utils.Parser;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import static conditions.Conditions.isTrue;
 
 public class APITargetSteps extends APISteps {
+
     private Logger log = Logger.getLogger(APITargetGroupSteps.class);
     private TargetService service = new TargetService();
 
@@ -234,8 +233,8 @@ public class APITargetSteps extends APISteps {
 
         Boolean contains = false;
         for (Target entity : list) {
-            if (isEqualsUploadedTargets(target, entity)) {
-                contains = true;
+            contains = isEqualsUploadedTargets(target, entity);
+            if (contains) {
                 Entities.getTargets().updateEntity(target, entity);
                 break;
             }
@@ -272,8 +271,8 @@ public class APITargetSteps extends APISteps {
 
     @Given("generate XLS with $count target")
     public void generateTargets(String count) {
-        List<Target> targets = getRandomTargets(Integer.valueOf(count));
-        File file = new TargetFile().write(targets);
+        List<Target> targets = new Target().generate(Integer.valueOf(count));
+        G4File file = new FileGenerator(Target.class).write(targets);
 
         context.put("targetsXLS", file);
     }
@@ -320,28 +319,16 @@ public class APITargetSteps extends APISteps {
         }
     }
 
-    @Given("targets with phones exists")
-    public void targetWithPhonesExist(){
-        TargetFilter searchFilter = new TargetFilter().filterBy("empty", "random");
-        List<Target> targets = service.list(searchFilter).getEntities();
+    @Given("$count targets with phones exists")
+    public void targetWithPhonesExist(String count){
+        int targetsCount = Integer.valueOf(count);
 
-        // remove without phone
-        Iterator<Target> i = targets.iterator();
-        while (i.hasNext()) {
-            Target target = i.next();
-            if (target.getPhones().isEmpty()) {
-                i.remove();
-            }
-        }
+        List<Target> targets = new Target().generate(targetsCount);
+        int statusCode = service.upload(targets);
+        Verify.shouldBe(equals.elements(statusCode, 200));
 
-        if (targets.isEmpty()) {
-            Target target = getRandomTarget();
-            int response = service.add(target);
-
-            Verify.shouldBe(Conditions.equals(response, 200));
-            targets.add(target);
-        }
-        context.put("targets", targets);
+        GenerationMatrix generationMatrix = new GenerationMatrix(targets);
+        context.put("generationMatrix", generationMatrix);
     }
     
     private List<Target> getRandomTargets(int count) {

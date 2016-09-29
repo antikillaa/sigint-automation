@@ -2,78 +2,75 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
-import app_context.RunContext;
 import app_context.entities.Entities;
-import app_context.properties.G4Properties;
-import errors.NullReturnException;
+import http.G4HttpClient;
+import http.G4Response;
 import http.requests.groups.GroupsRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.Group;
-import model.PegasusMediaType;
 import org.apache.log4j.Logger;
-
-import javax.ws.rs.core.Response;
+import utils.Parser;
 
 public class GroupService implements EntityService<Group> {
 
-    private static RsClient rsClient = new RsClient();
-    private static RunContext context = RunContext.get();
+    private static G4HttpClient g4HttpClient = new G4HttpClient();
     private Logger log = Logger.getLogger(GroupService.class);
-    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
 
+    /**
+     * ADD new Group
+     * API: POST /api/auth/groups
+     *
+     * @param entity group
+     * @return HTTP status code
+     */
+    @Override
     public int add(Group entity) {
         log.info("Creating new Group");
-        try {
-            log.debug("Group: " + JsonCoverter.toJsonString(entity));
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("Unable to parse Group entity");
-        }
+        log.debug(Parser.entityToString(entity));
 
-        GroupsRequest request = new GroupsRequest();
-        Response response = rsClient
-                .post(sigintHost + request.getURI(), entity, request.getCookie(), PegasusMediaType.PEGASUS_JSON);
-        String jsonString = response.readEntity(String.class);
-        log.debug("Response: " + jsonString);
+        GroupsRequest request = new GroupsRequest().add(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
 
-        Group createdGroup = JsonCoverter.fromJsonToObject(jsonString, Group.class);
+        Group createdGroup = JsonCoverter.readEntityFromResponse(response, Group.class);
         if (createdGroup != null) {
             Entities.getGroups().addOrUpdateEntity(createdGroup);
         }
         return response.getStatus();
     }
 
+    @Override
     public int remove(Group entity) {
         return 0;
     }
 
+    @Override
     public EntityList<Group> list(SearchFilter filter) {
         return null;
     }
 
+    /**
+     * UPDATE new Group
+     * API: PUT /api/auth/groups
+     *
+     * @param entity group
+     * @return HTTP status code
+     */
+    @Override
     public int update(Group entity) {
         log.info("Updating Group id" + entity.getId());
-        try {
-            log.debug("Group: " + JsonCoverter.toJsonString(entity));
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("Unable to parse Group entity");
-        }
+        log.debug(Parser.entityToString(entity));
 
-        GroupsRequest request = new GroupsRequest().update(entity.getId());
-        Response response = rsClient
-                .put(sigintHost + request.getURI(), entity, request.getCookie(), PegasusMediaType.PEGASUS_JSON);
-        String jsonString = response.readEntity(String.class);
-        log.debug("Response: " + jsonString);
+        GroupsRequest request = new GroupsRequest().update(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
 
-        Group updatedGroup = JsonCoverter.fromJsonToObject(jsonString, Group.class);
+        Group updatedGroup = JsonCoverter.readEntityFromResponse(response, Group.class);
         if (updatedGroup != null) {
             Entities.getGroups().addOrUpdateEntity(updatedGroup);
         }
         return response.getStatus();
     }
 
+    @Override
     public Group view(String id) {
         return null;
     }

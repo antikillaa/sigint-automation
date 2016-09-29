@@ -257,6 +257,14 @@ public class TargetFilter extends SearchFilter<Target> {
         }
     }
 
+    /**
+     * Init or update target filter.
+     * Filter is used in TargetService for receive list of targets.
+     *
+     * @param criteria field filter
+     * @param value value of filter
+     * @return filter entity for targets
+     */
     public TargetFilter filterBy(String criteria, String value) {
         if (criteria.toLowerCase().equals("name")) {
             this.setActiveFilter(this.new NameFilter(value));

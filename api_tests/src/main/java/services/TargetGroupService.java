@@ -4,37 +4,42 @@ import abs.EntityList;
 import abs.SearchFilter;
 import app_context.RunContext;
 import app_context.entities.Entities;
-import app_context.properties.G4Properties;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
+import http.G4HttpClient;
+import http.G4Response;
 import http.requests.targetGroups.TargetGroupRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.Result;
 import model.TargetGroup;
 import model.targetGroup.TargetGroupSearchResult;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 public class TargetGroupService implements EntityService<TargetGroup> {
 
-    private static RsClient rsClient = new RsClient();
+    private static G4HttpClient g4HttpClient = new G4HttpClient();
     private Logger log = Logger.getLogger(TargetGroupService.class);
-    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
     private RunContext context = RunContext.get();
 
 
+    /**
+     * PUT /target-groups createTargetGroup
+     *
+     * @param entity entity
+     * @return HTTP status code
+     */
+    @Override
     public int add(TargetGroup entity) {
         log.info("Creating new target group");
         log.debug(Parser.entityToString(entity));
 
-        TargetGroupRequest request = new TargetGroupRequest();
+        TargetGroupRequest request = new TargetGroupRequest().add(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
 
-        Response response = rsClient.put(sigintHost + request.getURI(), entity, request.getCookie());
         TargetGroup group = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "id");
         if (group != null) {
             Entities.getTargetGroups().addOrUpdateEntity(group);
@@ -42,13 +47,21 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         return response.getStatus();
     }
 
+    /**
+     * DELETE /target-groups/{id} removeTargetGroup
+     *
+     * @param entity entity
+     * @return HTTP status code
+     */
+    @Override
     public int remove(TargetGroup entity) {
         log.info("Deleting target group id:" + entity.getId());
         log.debug(Parser.entityToString(entity));
-        TargetGroupRequest request = new TargetGroupRequest().delete(entity.getId());
-        Response response = rsClient.delete(sigintHost + request.getURI(), request.getCookie());
 
-        Result result = JsonCoverter.fromJsonToObject(response.readEntity(String.class), Result.class);
+        TargetGroupRequest request = new TargetGroupRequest().delete(entity.getId());
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        Result result = JsonCoverter.readEntityFromResponse(response, Result.class);
         log.debug(Parser.entityToString(result));
         if (response.getStatus() == 200) {
             try {
@@ -61,16 +74,25 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         return response.getStatus();
     }
 
+    // TODO POST /target-groups/search search
+    @Override
     public EntityList<TargetGroup> list(SearchFilter filter) {
         return null;
     }
 
+    /**
+     * POST /target-groups updateTargetGroup
+     *
+     * @param entity entity
+     * @return HTTP status code
+     */
+    @Override
     public int update(TargetGroup entity) {
-        log.info("Updating target group" );
+        log.info("Updating target group");
         log.debug(Parser.entityToString(entity));
 
-        TargetGroupRequest request = new TargetGroupRequest();
-        Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
+        TargetGroupRequest request = new TargetGroupRequest().update(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
 
         TargetGroup targetGroup = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "result");
         log.debug(Parser.entityToString(targetGroup));
@@ -83,23 +105,35 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         return response.getStatus();
     }
 
+    /**
+     * GET /target-groups/{id}/details getTargetGroupDetails
+     *
+     * @param id id of entity
+     * @return TargetGroup entity
+     */
+    @Override
     public TargetGroup view(String id) {
         log.info("View target group id:" + id);
         TargetGroupRequest request = new TargetGroupRequest().get(id);
-        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4HttpClient.sendRequest(request);
 
         TargetGroup resultTargetGroup = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "result");
         log.debug(Parser.entityToString(resultTargetGroup));
         return resultTargetGroup;
     }
 
+    /**
+     * GET /target-groups getTargetGroups
+     *
+     * @return list of TargetGroup
+     */
     public List<TargetGroup> view() {
         log.info("Get list of target groups");
 
         TargetGroupRequest request = new TargetGroupRequest();
-        Response response = rsClient.get(sigintHost + request.getURI(), request.getCookie());
+        G4Response response = g4HttpClient.sendRequest(request);
 
-        TargetGroupSearchResult result = JsonCoverter.fromJsonToObject(response.readEntity(String.class), TargetGroupSearchResult.class);
+        TargetGroupSearchResult result = JsonCoverter.readEntityFromResponse(response, TargetGroupSearchResult.class);
         context.put("code", response.getStatus());
         if (result != null) {
             log.debug("Size of list: " + result.getResult().size());

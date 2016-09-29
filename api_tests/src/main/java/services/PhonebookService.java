@@ -4,41 +4,58 @@ import abs.EntityList;
 import abs.SearchFilter;
 import app_context.RunContext;
 import app_context.entities.Entities;
-import app_context.properties.G4Properties;
 import errors.NullReturnException;
-import file_generator.PhoneBookFile;
+import file_generator.FileGenerator;
+import http.G4HttpClient;
+import http.G4Response;
 import http.requests.phonebook.PhonebookRequest;
 import http.requests.phonebook.UnifiedPhonebookSearchRequest;
 import json.JsonCoverter;
-import json.RsClient;
+import model.G4File;
 import model.Phonebook;
 import model.UploadResult;
 import model.phonebook.PhonebookSearchResults;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
+import utils.Parser;
 
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.File;
 import java.util.List;
 
-public class PhonebookService implements EntityService<Phonebook>{
+public class PhonebookService implements EntityService<Phonebook> {
 
     private Logger log = Logger.getLogger(PhonebookService.class);
-    private static RsClient rsClient = new RsClient();
     private RunContext context = RunContext.get();
-    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
+    private static G4HttpClient g4HttpClient = new G4HttpClient();
 
+    /*
+        TODO
+        POST /phonebook/search search
+
+        GET /phonebook/sources getAll
+        POST /phonebook/sources create
+        POST /phonebook/sources/search search
+        DELETE /phonebook/sources/{id} delete
+        GET /phonebook/sources/{id} get
+        POST /phonebook/sources/{id} update
+        POST /phonebook/sources/{id}/undelete undelete
+
+        PUT /phonebook/uploadBinary uploadBinary
+    */
+
+    /**
+     * POST /phonebook/entries addEntry
+     *
+     * @param entity Phonebook entry
+     * @return * @return HTTP status code
+     */
+    @Override
     public int add(Phonebook entity) {
-        PhonebookRequest request = new PhonebookRequest().entries();
         log.info("Creating new Phonebook entry");
-        try {
-            log.debug("entity: " + JsonCoverter.toJsonString(entity));
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("Unable to parse Phonebook entity");
-        }
-        Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
+        log.debug(Parser.entityToString(entity));
+
+        PhonebookRequest request = new PhonebookRequest().add(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
+
         Phonebook createdPhonebook = JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
         if (createdPhonebook != null) {
             Entities.getPhonebooks().addOrUpdateEntity(createdPhonebook);
@@ -46,10 +63,17 @@ public class PhonebookService implements EntityService<Phonebook>{
         return response.getStatus();
     }
 
+    /**
+     * DELETE /phonebook/entries/{id} deleteEntry
+     *
+     * @param entity Phonebook entity
+     * @return HTTP status code
+     */
+    @Override
     public int remove(Phonebook entity) {
-        PhonebookRequest request = new PhonebookRequest().entries();
         log.info("Delete Phonebook entry id:" + entity.getId());
-        Response response = rsClient.delete(sigintHost + request.getURI() + "/" + entity.getId(), request.getCookie());
+        PhonebookRequest request = new PhonebookRequest().delete(entity.getId());
+        G4Response response = g4HttpClient.sendRequest(request);
         if (response.getStatus() == 200) {
             try {
                 Entities.getPhonebooks().removeEntity(entity);
@@ -60,9 +84,18 @@ public class PhonebookService implements EntityService<Phonebook>{
         return response.getStatus();
     }
 
+    /**
+     * GET list of Unified Phonebook subscriber entries: Phonebook, Du and Etisalat subscriber.
+     * API: POST /unified-phonebook/search search
+     *
+     * @param filter search filter for payload
+     * @return EntityList of Unified Phonebook subscriber entries
+     */
+    @Override
     public EntityList<Phonebook> list(SearchFilter filter) {
-        UnifiedPhonebookSearchRequest request = new UnifiedPhonebookSearchRequest();
-        Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
+        UnifiedPhonebookSearchRequest request = new UnifiedPhonebookSearchRequest(filter);
+        G4Response response = g4HttpClient.sendRequest(request);
+
         PhonebookSearchResults searchResults = JsonCoverter.readEntityFromResponse(response, PhonebookSearchResults.class, "result");
         if (searchResults == null) {
             throw new AssertionError("Unable to read search results from Phonebook search");
@@ -75,10 +108,18 @@ public class PhonebookService implements EntityService<Phonebook>{
         }
     }
 
+    /**
+     * POST /phonebook/entries/{id} updateEntry
+     *
+     * @param entity entity
+     * @return HTTP status code
+     */
+    @Override
     public int update(Phonebook entity) {
-        PhonebookRequest request = new PhonebookRequest().entries();
         log.info("Updating Phonebook entry id:" + entity.getId());
-        Response response = rsClient.post(sigintHost + request.getURI() + "/" + entity.getId(), entity, request.getCookie());
+        PhonebookRequest request = new PhonebookRequest().update(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
+
         Phonebook createdPhonebook = JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
         if (createdPhonebook != null) {
             Entities.getPhonebooks().addOrUpdateEntity(createdPhonebook);
@@ -86,24 +127,35 @@ public class PhonebookService implements EntityService<Phonebook>{
         return response.getStatus();
     }
 
+    /**
+     * GET /phonebook/entries/{id} getEntry
+     *
+     * @param id id of entity
+     * @return Phonebook entry
+     */
+    @Override
     public Phonebook view(String id) {
-        PhonebookRequest request = new PhonebookRequest().entries();
         log.info("View Phonebook entry id:" + id);
-        Response response = rsClient.get(sigintHost + request.getURI() + "/" + id, request.getCookie());
+
+        PhonebookRequest request = new PhonebookRequest().get(id);
+        G4Response response = g4HttpClient.sendRequest(request);
+
         return JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
     }
 
+    /**
+     * POST /phonebook/upload uploadMultipart
+     *
+     * @param phonebooks list of Phonebook entries
+     * @return HTTP status code
+     */
     public int upload(List<Phonebook> phonebooks) {
         log.info("Writing Phonebook entries to file..");
-        File file = new PhoneBookFile().write(phonebooks);
+        G4File file = new FileGenerator(Phonebook.class).write(phonebooks);
 
         log.info("Upload file with " + phonebooks.size() + " Phonebook entries..");
-        PhonebookRequest request = new PhonebookRequest().upload();
-        request.addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
-        file.deleteOnExit();
-
-        log.debug("Sending request to " + sigintHost + request.getURI());
-        Response response = rsClient.post(sigintHost + request.getURI(), request.getBody(), request.getCookie());
+        PhonebookRequest request = new PhonebookRequest().upload(file);
+        G4Response response = g4HttpClient.sendRequest(request);
 
         UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
         if (uploadResult != null) {

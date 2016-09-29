@@ -1,6 +1,7 @@
 package steps;
 
 import app_context.entities.Entities;
+import conditions.Verify;
 import model.FileAttachment;
 import model.InformationRequest;
 import model.LoggedUser;
@@ -10,6 +11,7 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.RFIService;
 
+import static conditions.Conditions.equals;
 
 public class APIRFIUploadSteps extends APISteps {
 
@@ -130,12 +132,13 @@ public class APIRFIUploadSteps extends APISteps {
         context.put("code", response);
     }
 
-    @Then("RFI has status Assigned and assigned to analyst")
+    @Then("RFI has status Assigned and assigned to current user")
     public void checkAssignedRFI(){
         InformationRequest RFI = Entities.getRFIs().getLatest();
         LoggedUser currentUser = appContext.getLoggedUser();
-        Assert.assertEquals(RFI.getState(), "ASSIGNED");
-        Assert.assertEquals(RFI.getAssignedTo(), currentUser.getId());
+
+        Verify.shouldBe(equals.elements(RFI.getState(), "ASSIGNED"));
+        Verify.shouldBe(equals.elements(RFI.getAssignedTo(), currentUser.getId()));
     }
     
     

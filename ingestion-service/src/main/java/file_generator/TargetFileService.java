@@ -14,14 +14,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
-public class TargetFile extends FileService {
+class TargetFileService implements FileService<Target> {
 
     @Override
-    public G4File write(EntityList entityList) {
-        List<Target> targets = entityList.getEntities();
-        return write(targets);
-    }
-
     public G4File write(List<Target> targets) {
 
         Map<Integer, Object[]> data = new HashMap<>();

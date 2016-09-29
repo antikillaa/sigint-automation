@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class EtisalatSubscriberFile extends FileService {
+class EtisalatSubscriberFileService implements FileService<EtisalatSubscriberEntry> {
 
     @Override
     public EntityList read(G4File file) {
@@ -19,11 +19,6 @@ public class EtisalatSubscriberFile extends FileService {
     }
 
     @Override
-    public G4File write(EntityList entityList) {
-        List<EtisalatSubscriberEntry> entries = entityList.getEntities();
-        return write(entries);
-    }
-
     public G4File write(List<EtisalatSubscriberEntry> entries) {
         log.info("Create Etisalat Subscriber file..");
         String fileName = new SimpleDateFormat("yyyyMMdd").format(new Date())

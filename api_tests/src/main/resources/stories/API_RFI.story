@@ -68,4 +68,4 @@ When I send create RFI request without approved copy and without original docume
 Then I got response code 200
 Given I sign in as analyst user
 When I take ownership of RFI
-Then RFI has status Assigned and assigned to analyst
+Then RFI has status Assigned and assigned to current user

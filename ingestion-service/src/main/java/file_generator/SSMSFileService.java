@@ -10,9 +10,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class SSMSFile extends FileService {
+class SSMSFileService implements FileService<SSMS> {
 
-    public String entityToCSVString(SSMS ssms) {
+    private String entityToCSVString(SSMS ssms) {
 
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -41,11 +41,6 @@ public class SSMSFile extends FileService {
     }
 
     @Override
-    public G4File write(EntityList entityList) {
-        List<SSMS> ssmsList = entityList.getEntities();
-        return write(ssmsList);
-    }
-
     public G4File write(List<SSMS> ssmsList) {
         G4File file = new G4File("SSMS" + new Date().getTime() + ".csv");
         file.setMediaType(PegasusMediaType.TEXT_CSV_TYPE);

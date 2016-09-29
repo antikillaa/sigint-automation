@@ -1,15 +1,15 @@
 package pages.reports;
 
+import app_context.properties.G4Properties;
 import blocks.context.Context;
 import elements.ReportSelect;
 import elements.Select;
-import app_context.AppContext;
 import org.openqa.selenium.By;
 
 public class ReportsCreateManualPage extends ReportsPage {
 
     public static final String url = String.format("%s/#/app/reports/create-manual",
-            AppContext.getContext().environment().getSigintHost());
+            G4Properties.getRunProperties().getApplicationURL());
 
     @Override
     public Context context() {

@@ -1,11 +1,11 @@
 package controllers.reports;
 
+import app_context.RunContext;
 import blocks.context.tables.Row;
 import blocks.context.tables.reports.ReportRow;
 import controllers.TableController;
 import controllers.reports.form_page.ReportFormFactoryController;
 import errors.NotFoundException;
-import app_context.AppContext;
 import model.Report;
 import org.apache.log4j.Logger;
 import pages.SigintPage;
@@ -71,7 +71,7 @@ public class ReportsTableController extends TableController {
             throw new AssertionError();
         }
         row.clickShowInfoButton();
-        AppContext.getContext().put("controller", new ReportFormFactoryController());
+        RunContext.get().put("controller", new ReportFormFactoryController());
 
     }
 
@@ -84,7 +84,7 @@ public class ReportsTableController extends TableController {
             throw new AssertionError();
         }
         row.clickEditReportButton();
-        AppContext.getContext().put("controller", new ReportFormFactoryController());
+        RunContext.get().put("controller", new ReportFormFactoryController());
     }
 
 

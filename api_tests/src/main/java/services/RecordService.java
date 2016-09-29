@@ -3,35 +3,37 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
-import app_context.properties.G4Properties;
 import errors.NullReturnException;
+import http.G4HttpClient;
+import http.G4Response;
 import http.requests.RecordRequest;
 import json.JsonCoverter;
-import json.RsClient;
 import model.Record;
 import model.RecordSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-
-import javax.ws.rs.core.Response;
+import utils.Parser;
 
 public class RecordService implements EntityService<Record> {
 
     private Logger log = Logger.getLogger(RecordService.class);
-    private static RsClient rsClient = new RsClient();
-    private final String sigintHost = G4Properties.getRunProperties().getApplicationURL();
+    private static G4HttpClient g4HttpClient = new G4HttpClient();
 
+    /**
+     * ADD new manual record
+     * API: POST /api/sigint/record/manual
+     *
+     * @param entity entity
+     * @return HTTP status code
+     */
+    @Override
     public int add(Record entity) {
         log.info("Creating new record");
-        try {
-            log.debug("Record: " + JsonCoverter.toJsonString(entity));
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("This is not a record");
-        }
+        log.debug(Parser.entityToString(entity));
 
-        RecordRequest request = new RecordRequest().manual();
-        Response response = rsClient.post(sigintHost + request.getURI(), entity, request.getCookie());
+        RecordRequest request = new RecordRequest().manual(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
+
         Record record = JsonCoverter.readEntityFromResponse(response, Record.class, "result");
         if (record != null) {
             Entities.getRecords().addOrUpdateEntity(record);
@@ -42,13 +44,22 @@ public class RecordService implements EntityService<Record> {
         return response.getStatus();
     }
 
+    @Override
     public int remove(Record entity) {
         return 0;
     }
 
+    /**
+     * Search list of records
+     * API: POST "/api/sigint/record/search?withTargets=true"
+     *
+     * @param filter search filter for payload
+     * @return EntityList of record
+     */
+    @Override
     public EntityList<Record> list(SearchFilter filter) {
-        RecordRequest request = new RecordRequest().search();
-        Response response = rsClient.post(sigintHost + request.getURI(), filter, request.getCookie());
+        RecordRequest request = new RecordRequest().search(filter);
+        G4Response response = g4HttpClient.sendRequest(request);
 
         RecordSearchResult searchResults = JsonCoverter.readEntityFromResponse(response, RecordSearchResult.class);
         if (searchResults == null) {
@@ -62,10 +73,12 @@ public class RecordService implements EntityService<Record> {
         }
     }
 
+    @Override
     public int update(Record entity) {
         return 0;
     }
 
+    @Override
     public Record view(String id) {
         return null;
     }
