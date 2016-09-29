@@ -25,14 +25,18 @@ public class ZAPIService {
     private JiraProperties connectionProperties = G4Properties.getJiraProperties();
     private Logger log = Logger.getLogger(ReportParser.class);
     private ReportResults reportResults;
-    private final String pathToXml = "target/allure-results";
-    
-    public ReportResults getReportResults(){
-        if (reportResults==null){
-            reportResults = new ReportParser().parseXmlReportFiles(pathToXml);
+
+    /**
+     * Return report results
+     *
+     * @return ReportResults
+     */
+    public ReportResults getReportResults() {
+        if (reportResults == null) {
+            reportResults = new ReportParser().parseXmlReportFiles("target/allure-results");
         }
-        for (TestCase testCase:reportResults.getFailed()){
-            testCase.setUrl(connectionProperties.getServer() + "/browse/"+
+        for (TestCase testCase : reportResults.getFailed()) {
+            testCase.setUrl(connectionProperties.getJiraServer() + "/browse/" +
                     getTestCaseKeyByTitle(testCase.getTitle()));
         }
         return reportResults;
@@ -44,7 +48,10 @@ public class ZAPIService {
     private Cycle createCycle(String projectId, String versionId) {
         log.info("Creating test cycle in Zephyr");
         Cycle cycle = new Cycle()
+                .setClonedCycleId("")
                 .setName(connectionProperties.getCycleName())
+                .setBuild("")
+                .setEnvironment("")
                 .setDescription("")
                 .setStartDate(new Date())
                 .setEndDate(new Date())
@@ -55,32 +62,40 @@ public class ZAPIService {
 
         if (response.getStatus() == 200) {
             cycle = JsonCoverter.readEntityFromResponse(response, Cycle.class);
-            log.info("cycle created: " + cycle);
+            log.info(response.getMessage());
         } else {
             log.error("Creating new cycle failed");
             log.error("status: " + response.getStatus());
             log.error("body: " + response.getMessage());
         }
         return cycle;
-
     }
 
-    private Cycle getCycle(){
+    /**
+     * Get current test cycle or create new one if cycle missing in Jira.
+     *
+     * @return test cycle
+     */
+    private Cycle getCycle() {
         log.info("Getting execution cycle...");
         Cycle cycle;
         JiraConnector connector = new JiraConnector();
         try {
             String projectId = connector.getProjectId(connectionProperties.getProject());
             String versionId = connector.getVersionId(projectId, connectionProperties.getVersion());
-            CyclesList cycles = zapi.getCycles(projectId, versionId);
+
+            G4Response response = zapi.getCycles(projectId, versionId);
+
+            CyclesList cycles = JsonCoverter.readEntityFromResponse(response, CyclesList.class);
             Cycle foundcycle = cycles.getCycle(connectionProperties.getCycleName());
             if (foundcycle == null) {
                 log.debug("Cycle is not found. Creating new one");
-                cycle = createCycle(projectId, versionId);
-            }
-            else {
+                cycle = createCycle(projectId, versionId)
+                        .setProjectId(projectId)
+                        .setVersionId(versionId);
+            } else {
                 cycle = foundcycle;
-                log.debug("Cycle is found. ID="+cycle.getId()+" Name="+cycle.getName());
+                log.debug("Cycle is found. ID=" + cycle.getId() + " Name=" + cycle.getName());
             }
         } catch (NullReturnException e) {
             log.warn(e.getMessage());
@@ -91,11 +106,18 @@ public class ZAPIService {
         return cycle;
     }
 
-    private Execution addTestToCycle(Cycle cycle, int issueId){
+    /**
+     * Create new Execution for Jira issue.
+     *
+     * @param cycle   cycle
+     * @param issueId issueId
+     * @return Execution
+     */
+    private Execution addTestToCycle(Cycle cycle, int issueId) {
         // Arrange
         Execution execution = new Execution()
                 .setCycleId(cycle.getId())
-                .setIssueId(issueId)
+                .setIssueId(String.valueOf(issueId))
                 .setProjectId(cycle.getProjectId())
                 .setVersionId(cycle.getVersionId());
 
@@ -117,7 +139,18 @@ public class ZAPIService {
         return execution;
     }
 
-    private void setExecutionResult(Execution execution, String result){
+    /**
+     * Set execution result.
+     *
+     * @param execution Execution
+     * @param result    result status of execution:
+     *                  ZAPI.UNEXECUTED = "-1"
+     *                  ZAPI.PASS = "1"
+     *                  ZAPI.FAIL = "2"
+     *                  ZAPI.WIP = "3"
+     *                  ZAPI.BLOCKED = "4"
+     */
+    private void setExecutionResult(Execution execution, String result) {
         log.debug("Set execution result for: " + execution.getIssueKey() + ", result: " + result);
 
         G4Response response = zapi.putExecution(execution.getId(), result);
@@ -128,11 +161,16 @@ public class ZAPIService {
         }
     }
 
-
+    /**
+     * Return test key.
+     *
+     * @param title Test key title (summary)
+     * @return test key, ex: GQ-123, TEEL-1234
+     */
     public String getTestCaseKeyByTitle(String title) {
-        log.debug("Finding test case by it's title "+title);
+        log.debug("Finding test case by it's title " + title);
 
-        G4Response response = zapi.JQL(0,1000,"key", String.format("summary~\"%s\"", title));
+        G4Response response = zapi.JQL(0, 1000, "key", String.format("summary~\"%s\"", title));
 
         if (response.getStatus() != 200) {
             log.error("Was unable to complete request to JIRA");
@@ -141,13 +179,12 @@ public class ZAPIService {
 
         try {
             IssueList issueList = JsonCoverter.readEntityFromResponse(response, IssueList.class);
-            log.debug("Found issues: "+issueList.getIssues());
+            log.debug("Found issues: " + issueList.getIssues());
             return issueList.getIssues().get(0).getKey();
-        }  catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             log.error("Cannot find test case by it's name " + title);
             return "";
         }
-
     }
 
     /**
@@ -171,8 +208,10 @@ public class ZAPIService {
         }
     }
 
-
-    public void reportToZephyr(){
+    /**
+     * Export auto-tests results run report to Zephyr (Jira).
+     */
+    public void reportToZephyr() {
         log.info("Reporting results to Zephyr...");
         getTestCasesFromProject("GQ");
 
@@ -192,7 +231,7 @@ public class ZAPIService {
                 }
 
                 // set test result
-                switch ( testCase.getStatus() ) {
+                switch (testCase.getStatus()) {
                     case "passed":
                         setExecutionResult(execution, ZAPI.PASS);
                         break;

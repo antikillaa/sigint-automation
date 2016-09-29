@@ -4,10 +4,6 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Execution {
@@ -18,13 +14,13 @@ public class Execution {
     private String comment;
     private String htmlComment;
     private String cycleName;
-    private int versionId;
-    private int cycleId;
+    private String versionId;
+    private String cycleId;
     private String versionName;
-    private int projectId;
+    private String projectId;
     private String createdBy;
     private String modifiedBy;
-    private int issueId;
+    private String issueId;
     private String issueKey;
     private String summary;
     private String issueDescription;
@@ -41,83 +37,39 @@ public class Execution {
         this.id = id;
     }
 
-    public int getIssueId() {
+    public String getIssueId() {
         return issueId;
     }
 
-    @JsonProperty("issueId")
-    public Execution setIssueId(int issueId) {
+    public Execution setIssueId(String issueId) {
         this.issueId = issueId;
         return this;
     }
 
-    public int getVersionId() {
+    public String getVersionId() {
         return versionId;
     }
 
-    @JsonProperty("versionId")
-    public Execution setVersionId(int versionId) {
+    public Execution setVersionId(String versionId) {
         this.versionId = versionId;
         return this;
     }
 
-    public Execution setVersionId(String version) {
-        try {
-            String propFileName = "versionId.properties";
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
-
-            Properties properties = new Properties();
-            properties.load(inputStream);
-
-            this.versionId = Integer.valueOf(
-                    properties.getProperty(version)
-            );
-        }
-        catch (IOException e) {
-            System.err.println("IOException! versionId.property file is missing!");
-            e.printStackTrace();
-
-            this.versionId = -1;
-        }
-        return this;
-    }
-
-    public int getCycleId() {
+    public String getCycleId() {
         return cycleId;
     }
 
-    public Execution setCycleId(int cycleId) {
+    public Execution setCycleId(String cycleId) {
         this.cycleId = cycleId;
         return this;
     }
 
-    public int getProjectId() {
+    public String getProjectId() {
         return projectId;
     }
 
-    @JsonProperty("projectId")
-    public Execution setProjectId(int projectId) {
+    public Execution setProjectId(String projectId) {
         this.projectId = projectId;
-        return this;
-    }
-
-    public Execution setProjectId(String projectKey) {
-        try {
-            String propFileName = "projectId.properties";
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
-
-            Properties properties = new Properties();
-            properties.load(inputStream);
-
-            this.projectId = Integer.valueOf(
-                    properties.getProperty(projectKey)
-            );
-        }
-        catch (IOException e) {
-            System.err.println("IOException! projectId.property file is missing!");
-            e.printStackTrace();
-            this.projectId = -1;
-        }
         return this;
     }
 
@@ -235,12 +187,4 @@ public class Execution {
         this.projectKey = projectKey;
     }
 
-    @Override
-    public String toString(){
-        return "{ \"issueId\" : " + issueId +
-                ", \"versionId\" : " + versionId +
-                ", \"cycleId\" : " + cycleId +
-                ", \"projectId\" : " + projectId +
-                "}";
-    }
 }

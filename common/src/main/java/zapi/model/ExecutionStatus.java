@@ -8,7 +8,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 public class ExecutionStatus {
 
     private String status;
-    private boolean changeAssignee = false;
+    private boolean changeAssignee;
 
     public String getStatus() {
         return status;

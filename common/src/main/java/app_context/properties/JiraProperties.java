@@ -11,7 +11,7 @@ public class JiraProperties extends ApplicationProperty{
         return getClass().getClassLoader().getResourceAsStream("jiraConnection.properties");
     }
     
-    public String getServer() {
+    public String getJiraServer() {
         return getProperty().getProperty("server");
     }
     
