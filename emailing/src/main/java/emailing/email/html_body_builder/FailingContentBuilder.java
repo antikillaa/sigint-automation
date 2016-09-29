@@ -15,7 +15,7 @@ public class FailingContentBuilder extends EmailContentBuilder {
     protected HtmlElement buildStatusHeader() {
         HtmlElement tableRowStatus = ElementsFabric.tableRow();
         tableRowStatus.addChild(ElementsFabric.tableColumn("", new Style().setAlign("right")).
-                addChild(ElementsFabric.image(connection.getServer()+"/static/e59dfe28/images/32x32/red.gif")));
+                addChild(ElementsFabric.image(connection.getHost()+"/static/e59dfe28/images/32x32/red.gif")));
         tableRowStatus.addChild(ElementsFabric.tableColumn("", new Style().setValign("center")).
                 addChild(ElementsFabric.bold("BUILD FAILURE", new Style().setFontSize("200%"))));
         return tableRowStatus;

@@ -34,7 +34,7 @@ public abstract class EmailContentBuilder {
         HtmlElement tableRowReportLink = ElementsFabric.tableRow();
         tableRowReportLink.addChild(ElementsFabric.tableColumn("View detailed report:", null));
         tableRowReportLink.addChild(ElementsFabric.tableColumn("", null).addChild(
-                ElementsFabric.link(connection.getServer()+"/job/Tests/allure", "report link")));
+                ElementsFabric.link(connection.getHost()+"/job/Tests/allure", "report link")));
         tableStatistic.addChild(tableRowReportLink);
         return null;
     }
