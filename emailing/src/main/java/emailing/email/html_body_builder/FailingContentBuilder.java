@@ -11,6 +11,10 @@ import reporter.TestCase;
 
 public class FailingContentBuilder extends EmailContentBuilder {
     
+    public FailingContentBuilder(String stand) {
+        super(stand);
+    }
+    
     @Override
     protected HtmlElement buildStatusHeader() {
         HtmlElement tableRowStatus = ElementsFabric.tableRow();
@@ -46,6 +50,6 @@ public class FailingContentBuilder extends EmailContentBuilder {
     
     @Override
     protected String buildSubject() {
-        return "Automation build failed";
+        return getStand() + ":Automation build failed";
     }
 }
