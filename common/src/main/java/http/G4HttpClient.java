@@ -11,7 +11,6 @@ import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import utils.DateHelper;
 
-import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -26,23 +25,15 @@ import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeatu
 public class G4HttpClient {
 
     private static Logger log = Logger.getLogger(G4HttpClient.class);
-    private Client client;
     private String host = G4Properties.getRunProperties().getApplicationURL();
     private final int requestTimeout = 30;
     private final int waitTime = 15;
     private final int maxTryCount = 3;
 
     /**
-     * G4HttpClient client with basic access authentication for Jira.
-     * User and pass properties defined in the jiraConnection.properties file.
+     * G4HttpClient.
      */
     public G4HttpClient() {
-        String user = G4Properties.getJiraProperties().getUsername();
-        String pass = G4Properties.getJiraProperties().getPassword();
-        HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(user, pass);
-        client = ClientBuilder.newClient();
-        client.register(feature);
-        client.register(MultiPartFeature.class);
     }
 
     /**
@@ -67,7 +58,8 @@ public class G4HttpClient {
         String URL = host + request.getURI();
         log.debug("Building request to url:" + URL);
 
-        Builder builder = client
+        Builder builder = ClientBuilder.newClient()
+                .register(MultiPartFeature.class)
                 .target(URL)
                 .request(request.getMediaType());
 
@@ -86,7 +78,11 @@ public class G4HttpClient {
     private Builder buildRequest(HttpRequest request, String username, String password) {
         String URL = host + request.getURI();
         log.debug("Building request to url:" + URL);
-        return client
+
+        HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(username, password);
+
+        return ClientBuilder.newClient()
+                .register(feature)
                 .target(URL)
                 .request(request.getMediaType())
                 .property(HTTP_AUTHENTICATION_BASIC_USERNAME, username)
@@ -118,11 +114,12 @@ public class G4HttpClient {
 
         return payload;
     }
-    
+
     /**
      * Internal method to invoke passed request within the given time frame.
      * If 503 error occurred (usually due to server restart), request will be
      * sent again after waitTime unless try counter reaches maxTryCount.
+     *
      * @param invocation request that should be invoked.
      * @return {@link G4Response} formed from request
      */
@@ -137,8 +134,8 @@ public class G4HttpClient {
                 DateHelper.waitTime(waitTime);
             }
         }
-        while ((response.getStatus()==503) && (tryCount <= maxTryCount) && (!DateHelper.isTimeout(timeoutDate)));
-        
+        while ((response.getStatus() == 503) && (tryCount <= maxTryCount) && (!DateHelper.isTimeout(timeoutDate)));
+
         return new G4Response(response);
     }
 
@@ -156,32 +153,31 @@ public class G4HttpClient {
 
         switch (request.getHttpMethod()) {
             case GET:
-                log.info("Sending GET request");
+                log.debug("Sending GET request");
                 invocation = builder.buildGet();
                 break;
             case PUT:
-                log.info("Sending PUT request with payload: " + payload);
+                log.debug("Sending PUT request with payload: " + payload);
                 invocation = builder.buildPut(payload);
                 break;
             case POST:
-                log.info("Sending POST request with payload: " + payload);
+                log.debug("Sending POST request with payload: " + payload);
                 invocation = builder.buildPost(payload);
                 break;
             case DELETE:
-                log.info("Sending DELETE request");
+                log.debug("Sending DELETE request");
                 invocation = builder.buildDelete();
                 break;
             default:
-                ErrorReporter.raiseError("Unknown request type passed: "+ request.getHttpMethod());
+                ErrorReporter.raiseError("Unknown request type passed: " + request.getHttpMethod());
                 invocation = null;
                 break;
         }
         return invokeRequest(invocation);
-        
     }
 
     /**
-     * Send an GET http request with basic http authentication.
+     * Send an GET/PUT/POST/DELETE http request with basic http authentication.
      *
      * @param request HttpRequest
      * @return G4Response with message string and http status code
@@ -189,16 +185,29 @@ public class G4HttpClient {
     public G4Response sendRequest(HttpRequest request, String username, String password) {
 
         Builder builder = buildRequest(request, username, password);
-        Invocation invocation = null;
+        Entity payload = convertToEntity(request.getPayload());
+        Invocation invocation;
 
         switch (request.getHttpMethod()) {
             case GET:
+                log.debug("Sending GET request");
                 invocation = builder.buildGet();
+                break;
             case PUT:
+                log.debug("Sending PUT request with payload: " + payload);
+                invocation = builder.buildPut(payload);
                 break;
             case POST:
+                log.debug("Sending POST request with payload: " + payload);
+                invocation = builder.buildPost(payload);
                 break;
             case DELETE:
+                log.debug("Sending DELETE request");
+                invocation = builder.buildDelete();
+                break;
+            default:
+                ErrorReporter.raiseError("Unknown request type passed: " + request.getHttpMethod());
+                invocation = null;
                 break;
         }
         return invokeRequest(invocation);
