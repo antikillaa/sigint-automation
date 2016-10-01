@@ -24,6 +24,10 @@ public class EmailFactory {
         JenkinsService jenkinsService = new JenkinsService();
         JobStatus latestJobStatus = jenkinsService.getLatestJobStatus(jobName);
         JobStatus previousJobStatus = jenkinsService.getPreviousJobStatus(jobName);
+        if ((latestJobStatus == null) || (previousJobStatus == null)) {
+            ErrorReporter.raiseError("Either latest or previous job status wasn't received." +
+                    "Email will not be sent due to error");
+        }
         HtmlEmail email;
         if (previousJobStatus.equals(JobStatus.FAILURE)) {
             email = (latestJobStatus.equals(JobStatus.FAILURE)) ? new HtmlEmail(new StillFailingContentBuilder(standBranch)) :
