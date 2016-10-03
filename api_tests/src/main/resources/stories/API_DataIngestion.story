@@ -9,10 +9,10 @@ Given I sign in as admin user
 And Generate 3 SSMS
 
 
-Scenario: API.Target matching by phone number
+Scenario: API.S-SMS ingestion. Target matching by phone number, name and keywords.
 Given I sign in as admin user
 And data source with <sourceType> and <recordType> exists
-And <targetCount> targets with phones exists
+And <targetCount> targets with phones generated and added
 And <sourceType> - <recordType> data file with records for test targets was generated
 When I send upload <sourceType> - <recordType> data file request
 Then I got response code 201
