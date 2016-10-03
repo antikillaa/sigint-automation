@@ -316,7 +316,7 @@ public class APITargetSteps extends APISteps {
         }
     }
 
-    @Given("$count targets with phones exists")
+    @Given("$count targets with phones generated and added")
     public void targetWithPhonesExist(String count){
         int targetsCount = Integer.valueOf(count);
 

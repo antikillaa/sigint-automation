@@ -15,6 +15,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Date;
@@ -63,8 +64,12 @@ public class G4HttpClient {
                 .target(URL)
                 .request(request.getMediaType());
 
+        Cookie cookie = request.getCookie();
         if (request.getCookie() != null) {
-            builder.cookie(request.getCookie());
+            builder.cookie(cookie);
+            log.debug("Cookie: " + cookie.getName() + "=" + cookie.getValue());
+        } else {
+            log.debug("Without authentication.");
         }
         return builder;
     }
@@ -80,6 +85,7 @@ public class G4HttpClient {
         log.debug("Building request to url:" + URL);
 
         HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(username, password);
+        log.debug("http basic authentication, username: " + username + " password: " + password);
 
         return ClientBuilder.newClient()
                 .register(feature)

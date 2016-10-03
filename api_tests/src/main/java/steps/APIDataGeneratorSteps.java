@@ -4,6 +4,7 @@ import file_generator.FileGenerator;
 import model.*;
 import model.bulders.SSMSGenerator;
 import org.jbehave.core.annotations.Given;
+import org.junit.Assert;
 
 import java.util.List;
 
@@ -14,17 +15,25 @@ public class APIDataGeneratorSteps extends APISteps {
 
         SourceType sourceType = SourceType.valueOf(sType);
         RecordType recordType = RecordType.valueOf(rType);
+        GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
+        G4File file = null;
 
         switch (sourceType) {
             case Strategic:
                 switch (recordType) {
                     case SMS:
-                        GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
-
-                        List<SSMS> ssmsList = new SSMSGenerator().produceSSMSListByMatrix(matrix);
-                        G4File file = new FileGenerator(SSMS.class).write(ssmsList);
-
-                        context.put("ssmsFile", file);
+                        List<SSMS> list = new SSMSGenerator().produceSSMSListByMatrix(matrix);
+                        file = new FileGenerator(SSMS.class).write(list);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case X:
+                switch (recordType) {
+                    case SMS:
+                        List<XSMS> list = new XSMS().produceListByMatrix(matrix);
+                        file = new FileGenerator(XSMS.class).write(list);
                         break;
                     default:
                         break;
@@ -33,6 +42,9 @@ public class APIDataGeneratorSteps extends APISteps {
             default:
                 break;
         }
+
+        context.put("g4file", file);
+        Assert.assertNotNull("Data file does not create!", file);
     }
 
 }

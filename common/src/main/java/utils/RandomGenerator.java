@@ -16,7 +16,7 @@ public class RandomGenerator {
 
     public static String generatePhone() {
 
-         class RandomPhone {
+        class RandomPhone {
             private String num, num1, num2, num3; //3-4 numbers in area code
             private String set1, set2, set3; //sequence 2 and 3 of the phone number
 
@@ -33,31 +33,28 @@ public class RandomGenerator {
                 set2 = Integer.toString(generator.nextInt(643) + 100);
                 set3 = Integer.toString(generator.nextInt(8999) + 1000);
 
-                return num+num1+num2+num3+set1+set2+set3;
+                return num + num1 + num2 + num3 + set1 + set2 + set3;
             }
         }
-      
-            return new RandomPhone().generate();
-         
-       
+
+        return new RandomPhone().generate();
     }
 
     public static String getRandomLanguageCode() {
         List<String> countryCodes = Arrays.asList(Locale.getISOCountries());
         return countryCodes.get(RandomUtils.nextInt(countryCodes.size()));
-        
+
     }
 
     public static String getRandomCountry() {
         List<String> countries = new LinkedList<>(context.getCountries().values());
-        String country = countries.get(RandomUtils.nextInt(countries.size()-1));
+        String country = countries.get(RandomUtils.nextInt(countries.size() - 1));
         return country;
     }
-    
 
     public static String getRandomLanguage() {
         List<String> languages = new LinkedList<>(context.getLanguages().values());
-        String language = languages.get(RandomUtils.nextInt(languages.size()-1));
+        String language = languages.get(RandomUtils.nextInt(languages.size() - 1));
         return language;
     }
 
@@ -72,7 +69,7 @@ public class RandomGenerator {
         return strings;
     }
 
-    public static <T>T getRandomItemFromList(List<T> list) {
+    public static <T> T getRandomItemFromList(List<T> list) {
         int index = RandomUtils.nextInt(list.size());
         return list.get(index);
     }
@@ -81,20 +78,20 @@ public class RandomGenerator {
 
         Date currDate = new Date();
         Date startTime = getStartDate(currDate);
-        Date endTime =  getEndDate(currDate);
+        Date endTime = getEndDate(currDate);
         DateFormat format = new SimpleDateFormat("dd.MM.YYYY HH:MM:ss");
         return format.format(startTime) + " - " + format.format(endTime);
     }
 
     public static int getRandomDuration() {
-        return (RandomUtils.nextInt(120)+1)*60;
+        return (RandomUtils.nextInt(120) + 1) * 60;
     }
 
     private static Date getStartDate(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.set(Calendar.HOUR_OF_DAY, 00);
-        calendar.set(Calendar.MINUTE,01);
+        calendar.set(Calendar.MINUTE, 01);
         calendar.set(Calendar.SECOND, 00);
         return calendar.getTime();
     }
@@ -121,7 +118,7 @@ public class RandomGenerator {
         Locale locale = new Locale("", countryCode);
         return locale.getDisplayCountry();
     }
-    
+
     public static String getCountryCode(String countryName) {
         if (countryName == null) {
             return null;
@@ -140,7 +137,7 @@ public class RandomGenerator {
 
     public static LinkedHashSet<String> generateKeywords(int maxNumber) {
         LinkedHashSet<String> keys = new LinkedHashSet<>();
-        int maxKeywords = RandomUtils.nextInt(maxNumber+1);
+        int maxKeywords = RandomUtils.nextInt(maxNumber + 1);
 
         int i = 0;
         do {
@@ -167,8 +164,25 @@ public class RandomGenerator {
                 return "";
             }
         } else {
-            return RandomStringUtils.randomAlphabetic(10);
+            return RandomStringUtils.randomAlphanumeric(12);
         }
+    }
+
+    /**
+     * Generate random string with 'mention' substring
+     *
+     * @param mention substring
+     * @return random string with 'mention' substring
+     */
+    public static String generateSMSText(String mention) {
+        Random random = new Random();
+        String prefix = RandomStringUtils.randomAlphanumeric(random.nextInt(8));
+        String suffix = random.nextBoolean() ? " " : "" + RandomStringUtils.randomAlphanumeric(random.nextInt(8));
+        return prefix +
+                (random.nextBoolean() ? " " : "") +
+                mention +
+                (random.nextBoolean() ? " " : "") +
+                suffix;
     }
 
 }
