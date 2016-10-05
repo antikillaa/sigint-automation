@@ -57,7 +57,7 @@ public class GenerationMatrixRow {
         withoutHitMention = random.nextInt(5);
 
         Logger log = Logger.getLogger(GenerationMatrixRow.class);
-        log.debug(this.target.getName() + " | " + fromNumberCount + " | " + toNumberCount
+        log.info(this.target.getName() + " | " + fromNumberCount + " | " + toNumberCount
                 + " | " + nameMention + " | " + numberMention + " | " + keywordMention);
     }
 
@@ -132,6 +132,10 @@ public class GenerationMatrixRow {
         totalRecords += withoutHitMention;
 
         return totalRecords;
+    }
+
+    public int getTotalRandomRecords() {
+        return withoutHitMention;
     }
 
     /**

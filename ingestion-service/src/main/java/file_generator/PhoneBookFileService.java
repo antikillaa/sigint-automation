@@ -1,6 +1,5 @@
 package file_generator;
 
-import abs.EntityList;
 import model.G4File;
 import model.Phonebook;
 import utils.FileHelper;
@@ -54,8 +53,4 @@ class PhoneBookFileService implements FileService<Phonebook> {
         );
     }
 
-    @Override
-    public EntityList read(G4File file) {
-        return null;
-    }
 }

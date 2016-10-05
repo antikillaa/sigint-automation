@@ -1,6 +1,5 @@
 package file_generator;
 
-import abs.EntityList;
 import model.DuSubscriberEntry;
 import model.G4File;
 import utils.FileHelper;
@@ -9,11 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 class DuSubscriberFileService implements FileService<DuSubscriberEntry> {
-
-    @Override
-    public EntityList read(G4File file) {
-        return null;
-    }
 
     @Override
     public G4File write(List<DuSubscriberEntry> entries) {
@@ -28,7 +22,7 @@ class DuSubscriberFileService implements FileService<DuSubscriberEntry> {
 
     private String entryToString(DuSubscriberEntry entry) {
         String DELIMETER = "~";
-        return  entry.getPhoneNumber() + DELIMETER +
+        return entry.getPhoneNumber() + DELIMETER +
                 entry.getTitle() + DELIMETER +
                 entry.getFirstName() + DELIMETER +
                 entry.getMiddleName() + DELIMETER +

@@ -1,6 +1,5 @@
 package file_generator;
 
-import abs.EntityList;
 import abs.TeelaEntity;
 import model.*;
 
@@ -30,20 +29,11 @@ public class FileGenerator implements FileService {
             fileService = new SSMSFileService();
         } else if (entityClass.equals(XSMS.class)) {
             fileService = new XSMSFileService();
+        } else if (entityClass.equals(XVoiceMetadata.class)) {
+            fileService = new XVoiceMetadataFileService();
         } else {
             throw new Error("Unknown TeelaEntity. Unable to initialize FileGenerator instance!");
         }
-    }
-
-    /**
-     * Read G4 entities from G4File
-     *
-     * @param file G4File
-     * @return EntityList
-     */
-    @Override
-    public EntityList read(G4File file) {
-        return fileService.read(file);
     }
 
     /**
@@ -52,6 +42,7 @@ public class FileGenerator implements FileService {
      * @param entities list of entities
      * @return G4File
      */
+    @SuppressWarnings("unchecked")
     @Override
     public G4File write(List entities) {
         return fileService.write(entities);

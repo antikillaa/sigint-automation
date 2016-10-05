@@ -100,10 +100,20 @@ public class APIUploadFilesSteps extends APISteps {
     public void processResultShouldContainCorrectResult() {
         Process process = context.get("process", Process.class);
         GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
+        Source source = context.get("source", Source.class);
 
-        Verify.shouldBe(Conditions.equals(process.getRecordsCount(), matrix.getTotalRecords()));
-        Verify.shouldBe(Conditions.equals(process.getTargetHitCount(), matrix.getTotalTargersHit()));
-        Verify.shouldBe(Conditions.equals(process.getTargetMentionCount(), matrix.getTotalTargetMention()));
+        switch (source.getRecordType()) {
+            case SMS:
+                Verify.shouldBe(Conditions.equals(process.getRecordsCount(), matrix.getTotalRecords()));
+                Verify.shouldBe(Conditions.equals(process.getTargetHitCount(), matrix.getTotalTargersHit()));
+                Verify.shouldBe(Conditions.equals(process.getTargetMentionCount(), matrix.getTotalTargetMention()));
+                break;
+            case Voice:
+                Verify.shouldBe(Conditions.equals(process.getRecordsCount(), matrix.getTotalRecordsHit() + matrix.getTotalRandomRecords()));
+                Verify.shouldBe(Conditions.equals(process.getTargetHitCount(), matrix.getTotalTargersHit()));
+                Verify.shouldBe(Conditions.equals(process.getTargetMentionCount(), 0));
+                break;
+        }
         //TODO SMS/Voice counts
     }
 

@@ -2,7 +2,7 @@ package file_generator;
 
 import model.G4File;
 import model.PegasusMediaType;
-import model.XSMS;
+import model.XVoiceMetadata;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -14,30 +14,30 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * X-SMS file service.
- * Used for generate X-SMS.xls files
+ * X-VoiceMetadata file service.
+ * Used for generate X-VoiceMetadata.xls files
  */
-class XSMSFileService implements FileService<XSMS> {
+class XVoiceMetadataFileService implements FileService<XVoiceMetadata> {
 
     @Override
-    public G4File write(List<XSMS> list) {
+    public G4File write(List<XVoiceMetadata> list) {
 
-        log.info("X-SMS size: " + list.size());
+        log.info("X-VoiceMetadata size: " + list.size());
 
         // Map <row number, fields array> for XLS table
         Map<Integer, Object[]> data = new HashMap<>();
         // Columns headers
-        data.put(1, new Object[] {"EventTime", "CallerMod", "CalledMod", "Txt", ""});
+        data.put(1, new Object[] {"EventTime", "Sender", "Receiver", "", ""});
 
         // fill data map
         for (int i = 0; i < list.size(); i++) {
             List<String> fields = new ArrayList<>();
 
-            //"EventTime", "CallerMod", "CalledMod", "Txt"
+            //"EventTime", "Sender", "Receiver"
             fields.add(new SimpleDateFormat("yy.MM.dd HH:mm:ss").format(list.get(i).getEventTime()));
-            fields.add(list.get(i).getCallerMod());
-            fields.add(list.get(i).getCalledMod());
-            fields.add(list.get(i).getTxt());
+            fields.add(list.get(i).getSender());
+            fields.add(list.get(i).getReceiver());
+            fields.add("");
             fields.add("");
 
             Object[] array = new Object[fields.size()];
@@ -49,7 +49,7 @@ class XSMSFileService implements FileService<XSMS> {
 
         // Create and fill XSSFWorkbook
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("XSMS sheet");
+        HSSFSheet sheet = workbook.createSheet("XVoice sheet");
 
         Set<Integer> keyset = data.keySet();
         int rownum = 0;
@@ -74,10 +74,10 @@ class XSMSFileService implements FileService<XSMS> {
         // write XSSFWorkbook to XLS G4File
         G4File file = null;
         try {
-            file = new G4File("X-SMS-" + new Date().getTime() + ".xls");
+            file = new G4File("X-VoiceMetadata-" + new Date().getTime() + ".xls");
             file.setMediaType(PegasusMediaType.MS_EXCEL_TYPE);
 
-            log.info("Write X-SMS entries to XLS file: " + file.getAbsolutePath());
+            log.info("Write X-VoiceMetadata entries to XLS file: " + file.getAbsolutePath());
             FileOutputStream out = new FileOutputStream(file);
             workbook.write(out);
             out.close();

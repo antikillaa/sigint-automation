@@ -1,12 +1,13 @@
 package model;
 
 import abs.TeelaEntity;
-import org.apache.commons.lang.RandomStringUtils;
-import utils.RandomGenerator;
+import data_for_entity.annotations.DataProvider;
+import data_for_entity.annotations.WithFieldDataType;
+import data_for_entity.data_providers.PhonesProvider;
+import data_for_entity.data_providers.SMSTextProvider;
+import data_for_entity.data_types.FieldDataType;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Target teams. X-SMS source.
@@ -18,9 +19,13 @@ import java.util.List;
  */
 public class XSMS extends TeelaEntity {
 
+    @WithFieldDataType(FieldDataType.DATE)
     private Date eventTime;
+    @DataProvider(PhonesProvider.class)
     private String callerMod;
+    @DataProvider(PhonesProvider.class)
     private String calledMod;
+    @DataProvider(SMSTextProvider.class)
     private String txt;
 
     public Date getEventTime() {
@@ -55,96 +60,4 @@ public class XSMS extends TeelaEntity {
         this.txt = txt;
     }
 
-    public XSMS generate() {
-        eventTime = new Date();
-        callerMod = RandomStringUtils.randomNumeric(12);
-        calledMod = RandomStringUtils.randomNumeric(12);
-        txt = RandomGenerator.generateSMSText(false);
-        return this;
-    }
-
-    public List<XSMS> generateList(int count){
-        List<XSMS> list = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            XSMS xsms = new XSMS().generate();
-            list.add(xsms);
-        }
-        return list;
-    }
-
-    public List<XSMS> produceListByMatrix(GenerationMatrix generationMatrix) {
-        List<XSMS> list = new ArrayList<>();
-
-        /*
-            Generate X-SMS list for each target from GenerationMatrix,
-            according to the current Generation matrix row with target and 'from/to' target records,
-            or any mention about this target parameters for him
-         */
-        for (GenerationMatrixRow row : generationMatrix.getRows()) {
-            String phone = getTargetPhone(row.getTarget());
-            XSMS xsms;
-
-            // generate X-SMS list 'from' current target phone
-            int from = 0;
-            while (from < row.getFromNumberCount()) {
-                xsms = new XSMS().generate();
-                xsms.setCallerMod(phone);
-                list.add(xsms);
-                from++;
-            }
-
-            // generate X-SMS list 'to' current target phone
-            int to = 0;
-            while (to < row.getToNumberCount()) {
-                xsms = new XSMS().generate();
-                xsms.setCallerMod(phone);
-                list.add(xsms);
-                to++;
-            }
-
-            // generate X-SMS list with 'target phone' mention in the text message
-            int fromMention = 0;
-            while (fromMention < row.getNumberMention()) {
-                xsms = new XSMS().generate();
-                xsms.setTxt(RandomGenerator.generateSMSText(phone));
-                list.add(xsms);
-                fromMention++;
-            }
-
-            // generate X-SMS list with 'target keyword' mention in the text message
-            int keywordMention = 0;
-            while (keywordMention < row.getKeywordMention()) {
-                List<String> keywords = new ArrayList<>(row.getTarget().getKeywords());
-                String mention = RandomGenerator.getRandomItemFromList(keywords);
-
-                xsms = new XSMS().generate();
-                xsms.setTxt(RandomGenerator.generateSMSText(mention));
-                list.add(xsms);
-                keywordMention++;
-            }
-
-            // generate X-SMS list with 'target name' mention in the text message
-            int nameMention = 0;
-            while (nameMention < row.getNameMention()) {
-                xsms = new XSMS().generate();
-                xsms.setTxt(RandomGenerator.generateSMSText(row.getTarget().getName()));
-                list.add(xsms);
-                nameMention++;
-            }
-
-            // generate randomly X-SMS list without any target mention in the text message
-            int withoutHitMention = 0;
-            while (withoutHitMention < row.getWithoutHitMention()) {
-                xsms = new XSMS().generate();
-                list.add(xsms);
-                withoutHitMention++;
-            }
-        }
-
-        return list;
-    }
-
-    private String getTargetPhone(Target target) {
-        return RandomGenerator.getRandomItemFromList(new ArrayList<>(target.getPhones()));
-    }
 }
