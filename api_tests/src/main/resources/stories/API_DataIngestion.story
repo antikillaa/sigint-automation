@@ -1,5 +1,5 @@
 Meta:
-component ingestion
+@component ingestion
 
 
 Scenario: API.Generate SSMS
