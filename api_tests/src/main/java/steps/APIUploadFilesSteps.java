@@ -28,6 +28,15 @@ public class APIUploadFilesSteps extends APISteps {
     public void uploadFile(String sType, String rType) {
         G4File file = context.get("g4file", G4File.class);
 
+        log.info("Wait 31 sec, while targets index updated in ingest service");
+        //wait 35 sec, for targets index update in ingest service
+        try {
+            Thread.sleep(31000);
+        } catch (InterruptedException e) {
+            log.error(e.getMessage());
+            log.trace(e);
+        }
+
         int code = service.upload(file);
         context.put("code", code);
 
