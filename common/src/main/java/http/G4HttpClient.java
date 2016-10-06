@@ -15,6 +15,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Date;
@@ -63,8 +64,12 @@ public class G4HttpClient {
                 .target(URL)
                 .request(request.getMediaType());
 
+        Cookie cookie = request.getCookie();
         if (request.getCookie() != null) {
-            builder.cookie(request.getCookie());
+            builder.cookie(cookie);
+            log.debug("Cookie: " + cookie.getName() + "=" + cookie.getValue());
+        } else {
+            log.debug("Without authentication.");
         }
         return builder;
     }
@@ -80,6 +85,7 @@ public class G4HttpClient {
         log.debug("Building request to url:" + URL);
 
         HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(username, password);
+        log.debug("http basic authentication, username: " + username + " password: " + password);
 
         return ClientBuilder.newClient()
                 .register(feature)
@@ -115,7 +121,7 @@ public class G4HttpClient {
         return payload;
     }
 
-   
+
     /**
      * Send an GET/PUT/POST/DELETE http request [with cookie authentication (optional)].
      *
@@ -137,8 +143,8 @@ public class G4HttpClient {
         Builder builder = buildRequest(request, username, password);
         return sendRequest(builder, request);
     }
-    
-    
+
+
     /**
      * Internal method to invoke passed request within the given time frame.
      * If 503 error occurred (usually due to server restart), request will be
@@ -161,13 +167,13 @@ public class G4HttpClient {
             if (response.getStatus() == 503) {
                 DateHelper.waitTime(waitTime);
             }
-            
+
         } while ((response.getStatus() == 503) && (tryCount <= maxTryCount) && (!DateHelper.isTimeout(timeoutDate)));
-        
+
         return new G4Response(response.readEntity(String.class), response.getStatus());
     }
-    
-    
+
+
     /**
      * Internal method to build request that can be executed
      * @param httpMethod {@link HttpMethod}. Based on this creates appropriate {@link Invocation}
@@ -200,7 +206,7 @@ public class G4HttpClient {
                 break;
         }
         return invocation;
-        
+
     }
 
 }

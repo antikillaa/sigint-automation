@@ -26,7 +26,7 @@ public class APIUploadFilesSteps extends APISteps {
 
     @When("I send upload $sType - $rType data file request")
     public void uploadFile(String sType, String rType) {
-        G4File file = context.get("ssmsFile", G4File.class);
+        G4File file = context.get("g4file", G4File.class);
 
         int code = service.upload(file);
         context.put("code", code);
@@ -34,7 +34,6 @@ public class APIUploadFilesSteps extends APISteps {
         Calendar timeout = Calendar.getInstance();
         timeout.add(Calendar.MINUTE, 11);
         DateHelper.setTimeout(timeout.getTime());
-        //{"status":409,"error":"Conflict","message":"File: /S/S-SMS/2016/08/22/testssms.csv - already exists","reason":"FileAlreadyExistsException"}
     }
 
     @When("uploaded file is processed")

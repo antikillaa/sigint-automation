@@ -15,6 +15,7 @@ import model.SourcesRequest;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class SourceService implements EntityService<Source> {
@@ -70,18 +71,24 @@ public class SourceService implements EntityService<Source> {
     }
 
     /**
-     * GET list of Sources
+     * GET list of Sources. Filter {"deleted":false}
      * API: GET /api/sigint/sources getSources
      *
      * @return HTTP status code
      */
     public List<Source> list() {
         SourcesRequest request = new SourcesRequest();
-
         G4Response response = g4HttpClient.sendRequest(request);
 
         SourceListResult result = JsonCoverter.readEntityFromResponse(response, SourceListResult.class);
 
+        // filter {"deleted":false}
+        Iterator<Source> iterator = result.getResult().iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().isDeleted()) {
+                iterator.remove();
+            }
+        }
         return result.getResult();
     }
 
