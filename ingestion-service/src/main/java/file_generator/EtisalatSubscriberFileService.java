@@ -1,6 +1,5 @@
 package file_generator;
 
-import abs.EntityList;
 import model.EtisalatSubscriberEntry;
 import model.G4File;
 import utils.FileHelper;
@@ -12,11 +11,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 class EtisalatSubscriberFileService implements FileService<EtisalatSubscriberEntry> {
-
-    @Override
-    public EntityList read(G4File file) {
-        return null;
-    }
 
     @Override
     public G4File write(List<EtisalatSubscriberEntry> entries) {
@@ -39,7 +33,7 @@ class EtisalatSubscriberFileService implements FileService<EtisalatSubscriberEnt
         dateTimeFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-        return  entry.getAction() + DELIMETER +
+        return entry.getAction() + DELIMETER +
                 entry.getPhoneNumber() + DELIMETER +
                 entry.getAccountSuffix() + DELIMETER +
                 entry.getPartyId() + DELIMETER +
@@ -78,7 +72,7 @@ class EtisalatSubscriberFileService implements FileService<EtisalatSubscriberEnt
                 entry.getProvisionedRegionCodeDesc() + DELIMETER +
                 entry.getCityId() + DELIMETER +
                 entry.getCityName() + DELIMETER +
-                ((entry.getUpdatedDate() != null) ? dateFormat.format(entry.getUpdatedDate()) : "") + DELIMETER  +
+                ((entry.getUpdatedDate() != null) ? dateFormat.format(entry.getUpdatedDate()) : "") + DELIMETER +
                 ((entry.getDateOfDeactivation() != null) ? dateTimeFormat.format(entry.getDateOfDeactivation()) : "");
     }
 }

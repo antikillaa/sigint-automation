@@ -176,9 +176,10 @@ public class G4HttpClient {
 
     /**
      * Internal method to build request that can be executed
+     *
      * @param httpMethod {@link HttpMethod}. Based on this creates appropriate {@link Invocation}
-     * @param payload String representation of request's body.
-     * @param builder {@link Builder} instance. Used to build {@link Invocation}.
+     * @param payload    String representation of request's body.
+     * @param builder    {@link Builder} instance. Used to build {@link Invocation}.
      * @return {@link Invocation} instance.
      */
     private Invocation buildInvocation(HttpMethod httpMethod, Entity payload, Builder builder) {

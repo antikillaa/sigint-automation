@@ -100,10 +100,20 @@ public class APIUploadFilesSteps extends APISteps {
     public void processResultShouldContainCorrectResult() {
         Process process = context.get("process", Process.class);
         GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
+        Source source = context.get("source", Source.class);
 
-        Verify.shouldBe(Conditions.equals(process.getRecordsCount(), matrix.getTotalRecords()));
-        Verify.shouldBe(Conditions.equals(process.getTargetHitCount(), matrix.getTotalTargersHit()));
-        Verify.shouldBe(Conditions.equals(process.getTargetMentionCount(), matrix.getTotalTargetMention()));
+        switch (source.getRecordType()) {
+            case SMS:
+                Verify.shouldBe(Conditions.equals(process.getRecordsCount(), matrix.getTotalRecords()));
+                Verify.shouldBe(Conditions.equals(process.getTargetHitCount(), matrix.getTotalTargersHit()));
+                Verify.shouldBe(Conditions.equals(process.getTargetMentionCount(), matrix.getTotalTargetMention()));
+                break;
+            case Voice:
+                Verify.shouldBe(Conditions.equals(process.getRecordsCount(), matrix.getTotalRecordsHit() + matrix.getTotalRandomRecords()));
+                Verify.shouldBe(Conditions.equals(process.getTargetHitCount(), matrix.getTotalTargersHit()));
+                Verify.shouldBe(Conditions.equals(process.getTargetMentionCount(), 0));
+                break;
+        }
         //TODO SMS/Voice counts
     }
 
@@ -130,13 +140,21 @@ public class APIUploadFilesSteps extends APISteps {
             MatchingResult result = null;
             String targetName = row.getTarget().getName();
 
+            // verify target HIT
             if (row.getTotalRecordsHit() > 0) {
                 result = uploadDetails.findMatchingResultByTargetNameAndTargetResultType(targetName, TargetResultType.HIT);
                 Verify.shouldBe(Conditions.equals(result.getNumRecords(), row.getTotalRecordsHit()));
             }
-            else if (row.getTotalRecordsMention() > 0) {
-                result = uploadDetails.findMatchingResultByTargetNameAndTargetResultType(targetName, TargetResultType.MENTION);
-                Verify.shouldBe(Conditions.equals(result.getNumRecords(), row.getTotalRecordsMention()));
+
+            // verify target Mention
+            Source source = context.get("source", Source.class);
+            switch (source.getRecordType()) {
+                case SMS:
+                    if (row.getTotalRecordsMention() > 0) {
+                        result = uploadDetails.findMatchingResultByTargetNameAndTargetResultType(targetName, TargetResultType.MENTION);
+                        Verify.shouldBe(Conditions.equals(result.getNumRecords(), row.getTotalRecordsMention()));
+                    }
+                    break;
             }
 
             //TODO add verification for target with group
