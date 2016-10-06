@@ -1,6 +1,5 @@
 package file_generator;
 
-import abs.EntityList;
 import model.G4File;
 import model.PegasusMediaType;
 import model.SSMS;
@@ -52,11 +51,6 @@ class SSMSFileService implements FileService<SSMS> {
 
         log.info("SSMS list written successfully to cvs file..");
         return file;
-    }
-
-    @Override
-    public EntityList read(G4File file) {
-        return null;
     }
 
 }

@@ -33,8 +33,8 @@ public class ReportService implements EntityService<Report> {
         if (report != null) {
             Entities.getReports().addOrUpdateEntity(report);
         } else {
-            log.warn("Failed to create report");
-            throw new AssertionError("Failed to create report");
+            log.error("Failed to create report. Response: " + response.getMessage());
+            throw new AssertionError("Failed to create report. Response: " + response.getMessage());
         }
         return response.getStatus();
     }

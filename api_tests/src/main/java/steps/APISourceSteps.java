@@ -11,13 +11,12 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import services.SourceService;
+import utils.Parser;
 import utils.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//import static conditions.Conditions.equals;
-//import static conditions.Conditions.isTrue;
 
 public class APISourceSteps extends APISteps {
 
@@ -146,16 +145,24 @@ public class APISourceSteps extends APISteps {
         // if exist, return source
         List<Source> sources = service.list();
         for (Source source : sources) {
-            if (source.getType().equals(sourceType) && source.getRecordType().equals(recordType)) {
-                context.put("source", source);
-                return;
+            if (source.getType().equals(sourceType)) {
+                try {
+                    RecordType entityRecordType = source.getRecordType();
+                    if (entityRecordType.equals(recordType)) {
+                        context.put("source", source);
+                        return;
+                    }
+                } catch (NullPointerException e) {
+                    log.warn("Source without recordType: " + Parser.entityToString(source));
+                }
             }
         }
+
         // not exist, create source
         Source source = getRandomSource();
         source.setType(sourceType);
         source.setRecordType(recordType);
-        source.setName(sourceType.toLetterCode() + "-" + recordType.toEnglishName() + "-0");
+        source.setName(sourceType.toLetterCode() + "-" + recordType.toEnglishName());
         service.add(source);
         context.put("source", source);
     }

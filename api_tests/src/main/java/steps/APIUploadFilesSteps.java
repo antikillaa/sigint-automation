@@ -26,7 +26,7 @@ public class APIUploadFilesSteps extends APISteps {
 
     @When("I send upload $sType - $rType data file request")
     public void uploadFile(String sType, String rType) {
-        G4File file = context.get("ssmsFile", G4File.class);
+        G4File file = context.get("g4file", G4File.class);
 
         int code = service.upload(file);
         context.put("code", code);
@@ -34,7 +34,6 @@ public class APIUploadFilesSteps extends APISteps {
         Calendar timeout = Calendar.getInstance();
         timeout.add(Calendar.MINUTE, 11);
         DateHelper.setTimeout(timeout.getTime());
-        //{"status":409,"error":"Conflict","message":"File: /S/S-SMS/2016/08/22/testssms.csv - already exists","reason":"FileAlreadyExistsException"}
     }
 
     @When("uploaded file is processed")
@@ -101,10 +100,20 @@ public class APIUploadFilesSteps extends APISteps {
     public void processResultShouldContainCorrectResult() {
         Process process = context.get("process", Process.class);
         GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
+        Source source = context.get("source", Source.class);
 
-        Verify.shouldBe(Conditions.equals(process.getRecordsCount(), matrix.getTotalRecords()));
-        Verify.shouldBe(Conditions.equals(process.getTargetHitCount(), matrix.getTotalTargersHit()));
-        Verify.shouldBe(Conditions.equals(process.getTargetMentionCount(), matrix.getTotalTargetMention()));
+        switch (source.getRecordType()) {
+            case SMS:
+                Verify.shouldBe(Conditions.equals(process.getRecordsCount(), matrix.getTotalRecords()));
+                Verify.shouldBe(Conditions.equals(process.getTargetHitCount(), matrix.getTotalTargersHit()));
+                Verify.shouldBe(Conditions.equals(process.getTargetMentionCount(), matrix.getTotalTargetMention()));
+                break;
+            case Voice:
+                Verify.shouldBe(Conditions.equals(process.getRecordsCount(), matrix.getTotalRecordsHit() + matrix.getTotalRandomRecords()));
+                Verify.shouldBe(Conditions.equals(process.getTargetHitCount(), matrix.getTotalTargersHit()));
+                Verify.shouldBe(Conditions.equals(process.getTargetMentionCount(), 0));
+                break;
+        }
         //TODO SMS/Voice counts
     }
 
@@ -131,13 +140,21 @@ public class APIUploadFilesSteps extends APISteps {
             MatchingResult result = null;
             String targetName = row.getTarget().getName();
 
+            // verify target HIT
             if (row.getTotalRecordsHit() > 0) {
                 result = uploadDetails.findMatchingResultByTargetNameAndTargetResultType(targetName, TargetResultType.HIT);
                 Verify.shouldBe(Conditions.equals(result.getNumRecords(), row.getTotalRecordsHit()));
             }
-            else if (row.getTotalRecordsMention() > 0) {
-                result = uploadDetails.findMatchingResultByTargetNameAndTargetResultType(targetName, TargetResultType.MENTION);
-                Verify.shouldBe(Conditions.equals(result.getNumRecords(), row.getTotalRecordsMention()));
+
+            // verify target Mention
+            Source source = context.get("source", Source.class);
+            switch (source.getRecordType()) {
+                case SMS:
+                    if (row.getTotalRecordsMention() > 0) {
+                        result = uploadDetails.findMatchingResultByTargetNameAndTargetResultType(targetName, TargetResultType.MENTION);
+                        Verify.shouldBe(Conditions.equals(result.getNumRecords(), row.getTotalRecordsMention()));
+                    }
+                    break;
             }
 
             //TODO add verification for target with group
