@@ -121,30 +121,7 @@ public class G4HttpClient {
         return payload;
     }
 
-    /**
-     * Internal method to invoke passed request within the given time frame.
-     * If 503 error occurred (usually due to server restart), request will be
-     * sent again after waitTime unless try counter reaches maxTryCount.
-     *
-     * @param invocation request that should be invoked.
-     * @return {@link G4Response} formed from request
-     */
-    private G4Response invokeRequest(Invocation invocation) {
-        int tryCount = 0;
-        Response response;
-        Date timeoutDate = DateHelper.getDateWithShift(requestTimeout);
-        do {
-            tryCount++;
-            response = invocation.invoke();
-            if (response.getStatus() == 503) {
-                DateHelper.waitTime(waitTime);
-            }
-        }
-        while ((response.getStatus() == 503) && (tryCount <= maxTryCount) && (!DateHelper.isTimeout(timeoutDate)));
-
-        return new G4Response(response);
-    }
-
+   
     /**
      * Send an GET/PUT/POST/DELETE http request [with cookie authentication (optional)].
      *
@@ -152,34 +129,8 @@ public class G4HttpClient {
      * @return G4Response with message string and http status code
      */
     public G4Response sendRequest(HttpRequest request) {
-
         Builder builder = buildRequest(request);
-        Entity payload = convertToEntity(request.getPayload());
-        Invocation invocation;
-
-        switch (request.getHttpMethod()) {
-            case GET:
-                log.debug("Sending GET request");
-                invocation = builder.buildGet();
-                break;
-            case PUT:
-                log.debug("Sending PUT request with payload: " + payload);
-                invocation = builder.buildPut(payload);
-                break;
-            case POST:
-                log.debug("Sending POST request with payload: " + payload);
-                invocation = builder.buildPost(payload);
-                break;
-            case DELETE:
-                log.debug("Sending DELETE request");
-                invocation = builder.buildDelete();
-                break;
-            default:
-                ErrorReporter.raiseError("Unknown request type passed: " + request.getHttpMethod());
-                invocation = null;
-                break;
-        }
-        return invokeRequest(invocation);
+        return sendRequest(builder, request);
     }
 
     /**
@@ -189,12 +140,50 @@ public class G4HttpClient {
      * @return G4Response with message string and http status code
      */
     public G4Response sendRequest(HttpRequest request, String username, String password) {
-
         Builder builder = buildRequest(request, username, password);
+        return sendRequest(builder, request);
+    }
+    
+    
+    /**
+     * Internal method to invoke passed request within the given time frame.
+     * If 503 error occurred (usually due to server restart), request will be
+     * sent again after waitTime unless try counter reaches maxTryCount.
+     *
+     * @param builder {@link Builder} instance with set options.
+     * @param request {@link HttpRequest} instance.
+     * @return {@link G4Response} formed from request
+     */
+    private G4Response sendRequest(Builder builder, HttpRequest request) {
         Entity payload = convertToEntity(request.getPayload());
         Invocation invocation;
-
-        switch (request.getHttpMethod()) {
+        int tryCount = 0;
+        Response response;
+        Date timeoutDate = DateHelper.getDateWithShift(requestTimeout);
+        do {
+            invocation = buildInvocation(request.getHttpMethod(), payload, builder);
+            tryCount++;
+            response = invocation.invoke();
+            if (response.getStatus() == 503) {
+                DateHelper.waitTime(waitTime);
+            }
+            
+        } while ((response.getStatus() == 503) && (tryCount <= maxTryCount) && (!DateHelper.isTimeout(timeoutDate)));
+        
+        return new G4Response(response.readEntity(String.class), response.getStatus());
+    }
+    
+    
+    /**
+     * Internal method to build request that can be executed
+     * @param httpMethod {@link HttpMethod}. Based on this creates appropriate {@link Invocation}
+     * @param payload String representation of request's body.
+     * @param builder {@link Builder} instance. Used to build {@link Invocation}.
+     * @return {@link Invocation} instance.
+     */
+    private Invocation buildInvocation(HttpMethod httpMethod, Entity payload, Builder builder) {
+        Invocation invocation;
+        switch (httpMethod) {
             case GET:
                 log.debug("Sending GET request");
                 invocation = builder.buildGet();
@@ -212,11 +201,12 @@ public class G4HttpClient {
                 invocation = builder.buildDelete();
                 break;
             default:
-                ErrorReporter.raiseError("Unknown request type passed: " + request.getHttpMethod());
+                ErrorReporter.raiseError("Unknown request type passed: " + httpMethod);
                 invocation = null;
                 break;
         }
-        return invokeRequest(invocation);
+        return invocation;
+        
     }
 
 }

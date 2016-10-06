@@ -29,12 +29,12 @@ public class EmailFactory {
                     "Email will not be sent due to error");
         }
         HtmlEmail email;
-        if (previousJobStatus.equals(JobStatus.FAILURE)) {
-            email = (latestJobStatus.equals(JobStatus.FAILURE)) ? new HtmlEmail(new StillFailingContentBuilder(standBranch)) :
-                    new HtmlEmail(new StableContentBuilder(standBranch));
+        if (previousJobStatus.equals(JobStatus.SUCCESS)) {
+            email = (latestJobStatus.equals(JobStatus.FAILURE)) ? new HtmlEmail(new FailingContentBuilder(jobName)): null;
         }
-        else if (previousJobStatus.equals(JobStatus.SUCCESS)) {
-            email = (latestJobStatus.equals(JobStatus.FAILURE)) ? new HtmlEmail(new FailingContentBuilder(standBranch)): null;
+        else if (previousJobStatus.equals(JobStatus.FAILURE)) {
+            email = (latestJobStatus.equals(JobStatus.FAILURE)) ? new HtmlEmail(new StillFailingContentBuilder(jobName)) :
+                    new HtmlEmail(new StableContentBuilder(jobName));
         }
         else {
             throw new AssertionError("Email status is not recognized");
