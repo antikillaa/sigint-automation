@@ -121,7 +121,7 @@ public class G4HttpClient {
         return payload;
     }
 
-   
+
     /**
      * Send an GET/PUT/POST/DELETE http request [with cookie authentication (optional)].
      *
@@ -143,8 +143,8 @@ public class G4HttpClient {
         Builder builder = buildRequest(request, username, password);
         return sendRequest(builder, request);
     }
-    
-    
+
+
     /**
      * Internal method to invoke passed request within the given time frame.
      * If 503 error occurred (usually due to server restart), request will be
@@ -167,13 +167,13 @@ public class G4HttpClient {
             if (response.getStatus() == 503) {
                 DateHelper.waitTime(waitTime);
             }
-            
+
         } while ((response.getStatus() == 503) && (tryCount <= maxTryCount) && (!DateHelper.isTimeout(timeoutDate)));
-        
+
         return new G4Response(response.readEntity(String.class), response.getStatus());
     }
-    
-    
+
+
     /**
      * Internal method to build request that can be executed
      * @param httpMethod {@link HttpMethod}. Based on this creates appropriate {@link Invocation}
@@ -206,7 +206,7 @@ public class G4HttpClient {
                 break;
         }
         return invocation;
-        
+
     }
 
 }
