@@ -7,13 +7,18 @@ import emailing.html_elements.HtmlBuilder;
 import emailing.html_elements.HtmlElement;
 import emailing.html_elements.Style;
 import failure_strategy.Statistic;
+import org.apache.log4j.Logger;
 import reporter.ReportResults;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public abstract class EmailContentBuilder {
     
     private ReportResults results = new Statistic().getResults();
     protected static JenkinsProperties connection = G4Properties.getJenkinsProperties();
     private String stand;
+    private Logger logger = Logger.getLogger(EmailContentBuilder.class);
     
     public EmailContentBuilder(String stand) {
         this.stand = stand;
@@ -42,8 +47,15 @@ public abstract class EmailContentBuilder {
         tableStatistic.addChild(tableRowFailed);
         HtmlElement tableRowReportLink = ElementsFabric.tableRow();
         tableRowReportLink.addChild(ElementsFabric.tableColumn("View detailed report:", null));
+        String reportUrl = null;
+        try {
+            URI uri = new URI(connection.getHost(), String.format("/job/%s/allure", getStand()), null);
+            reportUrl = uri.toASCIIString();
+        } catch (URISyntaxException e) {
+            logger.debug("Error occurred while encoding URL string. Empty url will be used");
+        }
         tableRowReportLink.addChild(ElementsFabric.tableColumn("", null).addChild(
-                ElementsFabric.link(connection.getHost()+"/job/Tests/allure", "report link")));
+                ElementsFabric.link(reportUrl, "report link")));
         tableStatistic.addChild(tableRowReportLink);
         return null;
     }
