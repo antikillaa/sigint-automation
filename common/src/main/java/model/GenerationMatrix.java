@@ -21,7 +21,7 @@ public class GenerationMatrix {
     public GenerationMatrix(List<Target> targets) {
         Logger log = Logger.getLogger(GenerationMatrix.class);
         log.info("Generation matrix: ");
-        log.info("target | from | to | name | phone | keyword |");
+        log.info("target | from | to | name | phone | keyword | random |");
 
         for (Target target : targets) {
             rows.add(new GenerationMatrixRow(target));
