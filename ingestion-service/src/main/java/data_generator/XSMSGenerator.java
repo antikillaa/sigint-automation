@@ -41,7 +41,7 @@ class XSMSGenerator extends DataGenerator {
             int to = 0;
             while (to < row.getToNumberCount()) {
                 xsms = (XSMS) produce();
-                xsms.setCallerMod(phone);
+                xsms.setCalledMod(phone);
                 list.add(xsms);
                 to++;
             }

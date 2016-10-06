@@ -39,7 +39,7 @@ class XVoiceMetadataGenerator extends DataGenerator{
             int to = 0;
             while (to < row.getToNumberCount()) {
                 xVoiceMetadata = (XVoiceMetadata) produce();
-                xVoiceMetadata.setSender(phone);
+                xVoiceMetadata.setReceiver(phone);
                 list.add(xVoiceMetadata);
                 to++;
             }

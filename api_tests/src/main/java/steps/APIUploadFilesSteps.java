@@ -140,13 +140,21 @@ public class APIUploadFilesSteps extends APISteps {
             MatchingResult result = null;
             String targetName = row.getTarget().getName();
 
+            // verify target HIT
             if (row.getTotalRecordsHit() > 0) {
                 result = uploadDetails.findMatchingResultByTargetNameAndTargetResultType(targetName, TargetResultType.HIT);
                 Verify.shouldBe(Conditions.equals(result.getNumRecords(), row.getTotalRecordsHit()));
             }
-            else if (row.getTotalRecordsMention() > 0) {
-                result = uploadDetails.findMatchingResultByTargetNameAndTargetResultType(targetName, TargetResultType.MENTION);
-                Verify.shouldBe(Conditions.equals(result.getNumRecords(), row.getTotalRecordsMention()));
+
+            // verify target Mention
+            Source source = context.get("source", Source.class);
+            switch (source.getRecordType()) {
+                case SMS:
+                    if (row.getTotalRecordsMention() > 0) {
+                        result = uploadDetails.findMatchingResultByTargetNameAndTargetResultType(targetName, TargetResultType.MENTION);
+                        Verify.shouldBe(Conditions.equals(result.getNumRecords(), row.getTotalRecordsMention()));
+                    }
+                    break;
             }
 
             //TODO add verification for target with group
