@@ -82,7 +82,9 @@ public class TestCase {
     }
 
     public List<Step> getFailedSteps() {
-        return getStepsByStatus("failed");
+        List<Step> failedSteps = getStepsByStatus("failed");
+        failedSteps.addAll(getBrokenSteps());
+        return failedSteps;
     }
 
     public List<Step> getPassedSteps() {
