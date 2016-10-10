@@ -32,8 +32,13 @@ public class UploadFilesService {
         UploadFilesRequest request = new UploadFilesRequest().upload(file);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        FileMeta entityFromResponse = JsonCoverter.readEntityFromResponse(response, FileMeta.class);
-        context.put("fileMeta", entityFromResponse);
+        FileMeta fileMeta = JsonCoverter.readEntityFromResponse(response, FileMeta.class);
+        if (fileMeta == null) {
+            throw new AssertionError("Error during upload file. Response: " + response.getMessage());
+        } else {
+            context.put("fileMeta", fileMeta);
+            context.put("uploadDate", fileMeta.getDate());
+        }
 
         return response.getStatus();
     }
@@ -51,7 +56,13 @@ public class UploadFilesService {
 
         G4Response response = g4HttpClient.sendRequest(request);
 
-        return JsonCoverter.readEntityFromResponse(response, FileMeta.class);
+        if (response.getStatus() != 200) {
+            String errorMessage = "Unable to get meta of uploaded file. Response: " + response.getMessage();
+            log.error(errorMessage);
+            return null;
+        } else {
+            return JsonCoverter.readEntityFromResponse(response, FileMeta.class);
+        }
     }
 
     /**
