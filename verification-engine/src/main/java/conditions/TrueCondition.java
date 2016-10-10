@@ -1,6 +1,6 @@
 package conditions;
 
-public class TrueCondition extends ExpectedCondition {
+public class TrueCondition implements ExpectedCondition {
 
     private Boolean element;
 
@@ -11,8 +11,7 @@ public class TrueCondition extends ExpectedCondition {
         return this;
     }
 
-
-    protected Boolean check() {
+    public Boolean check() {
         return element;
     }
 }
