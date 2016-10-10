@@ -59,7 +59,7 @@ public class UploadFilesService {
         if (response.getStatus() != 200) {
             String errorMessage = "Unable to get meta of uploaded file. Response: " + response.getMessage();
             log.error(errorMessage);
-            return null;
+            throw new AssertionError(errorMessage);
         } else {
             return JsonCoverter.readEntityFromResponse(response, FileMeta.class);
         }

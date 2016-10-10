@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 public class APIUploadFilesSteps extends APISteps {
-    
+
     private Logger log = Logger.getLogger(APIUploadFilesSteps.class);
     private UploadFilesService service = new UploadFilesService();
 
@@ -47,6 +47,15 @@ public class APIUploadFilesSteps extends APISteps {
 
     @When("uploaded file is processed")
     public void fileIsProcessed() {
+        // if file isn't processed
+        // wait, update meta and check again
+        while (!isProcessed()) {
+            log.info("Uploaded file isn't processed yet..");
+            DateHelper.waitTime(5);
+        }
+    }
+
+    private boolean isProcessed() {
         log.info("Check: uploaded file is processed..");
 
         Date deadline = context.get("timeout", Date.class);
@@ -56,27 +65,28 @@ public class APIUploadFilesSteps extends APISteps {
             throw new AssertionError(errorMessage);
         }
 
-        // get md5 of uploaded file from fileMeta
+        // update file meta
         FileMeta fileMeta = context.get("fileMeta", FileMeta.class);
+        fileMeta = service.meta(fileMeta.getIdentifier());
+        context.put("fileMeta", fileMeta);
+
         boolean isProcessed = fileMeta.getMeta().getIsProcessed();
         String md5 = fileMeta.getMeta().getMd5_sigint();
-        if (!isProcessed || md5 == null) {
-            DateHelper.waitTime(5);
 
-            log.info("Uploaded file not processed yet..");
-            fileMeta = service.meta(fileMeta.getIdentifier());
-            if (fileMeta != null) {
-                context.put("fileMeta", fileMeta);
-            }
-
-            fileIsProcessed();
-        } else {
-            log.info("Uploaded file is processed");
-        }
+        return (isProcessed && md5 != null);
     }
 
     @When("ingest matching complete")
     public void waitForIngestMatchingComplete() {
+        // if target matching isn't complete
+        // wait, update meta and check again
+        while (!isIngestMatchingComplete()) {
+            log.info("Uploaded file isn't matching yet..");
+            DateHelper.waitTime(1);
+        }
+    }
+
+    private boolean isIngestMatchingComplete() {
         // data range for Upload history filter
         Date minDate = context.get("uploadDate", Date.class);
         Date maxDate = context.get("timeout", Date.class);
@@ -89,19 +99,16 @@ public class APIUploadFilesSteps extends APISteps {
         FileMeta fileMeta = context.get("fileMeta", FileMeta.class);
         for (Process process : processList) {
             if (process.getMd5().equals(fileMeta.getMeta().getMd5_sigint())) {
-                log.info("Check processing status");
+                log.info("Check uploaded file processing status..");
                 log.debug(Parser.entityToString(process));
                 if (process.getState().equals(State.Complete) && process.isIngestMatchingComplete()) {
                     log.info("File is processed");
                     context.put("process", process);
-                    return;
+                    return true;
                 }
-            } else {
-                log.info("Matching process isn't complete");
-                DateHelper.waitTime(1);
-                waitForIngestMatchingComplete();
             }
         }
+        return false;
     }
 
     @Then("search results contain correct counts: total records, target hits and mentions")
