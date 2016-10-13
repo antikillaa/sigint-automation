@@ -2,9 +2,9 @@ package data_for_entity.data_providers;
 
 public class StaticData implements EntityDataProvider {
     
-    private String value;
+    private Object value;
     
-    public StaticData(String value) {
+    public StaticData(Object value) {
         this.value = value;
     }
     

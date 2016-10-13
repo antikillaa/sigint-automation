@@ -1,11 +1,9 @@
 package data_for_entity;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.*;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Util class to do background operation for {@link Field}
@@ -15,6 +13,10 @@ public class Helpers {
     static boolean isCollection(Class<?> userClass) {
         return Collection.class.isAssignableFrom(userClass) ||
                 Array.class.isAssignableFrom(userClass);
+    }
+    
+    static boolean isMap(Class<?> userClass) {
+        return Map.class.isAssignableFrom(userClass);
     }
     
     @SuppressWarnings("unchecked")
@@ -35,6 +37,16 @@ public class Helpers {
             innerClass = null;
         }
         return innerClass;
+    }
+    
+    static Class<?>[] getMapTypes(Field field) {
+        Class<?>[] classTypes;
+        classTypes = new Class<?>[2];
+        ParameterizedType stringListType = (ParameterizedType) field.getGenericType();
+        Type[] types = stringListType.getActualTypeArguments();
+        classTypes[0] = (Class<?>)types[0];
+        classTypes[1] = (Class<?>)types[1];
+        return classTypes;
     }
     
     

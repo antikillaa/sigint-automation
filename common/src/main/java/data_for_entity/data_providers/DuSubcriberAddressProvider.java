@@ -1,7 +1,4 @@
-package data_for_entity;
-
-import data_for_entity.data_providers.DependencyData;
-import data_for_entity.data_providers.DependencyDataProvider;
+package data_for_entity.data_providers;
 
 public class DuSubcriberAddressProvider extends DependencyDataProvider {
     @Override

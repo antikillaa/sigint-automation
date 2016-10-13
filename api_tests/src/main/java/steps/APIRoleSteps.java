@@ -35,6 +35,6 @@ public class APIRoleSteps extends APISteps {
     
     
     static Role getRandomRole() {
-        return (Role)objectInitializer.generateObject(Role.class);
+        return (Role)objectInitializer.randomEntity(Role.class);
     }
 }

@@ -10,15 +10,14 @@ import java.lang.reflect.Field;
 /**
  * Encapsulates the way field's options are loaded into system.
  */
-class RunOptionsManager {
+class AnnotationReader {
     
     private Field field;
     
     
-    RunOptionsManager(Field field) {
+    AnnotationReader(Field field) {
         this.field = field;
     }
-    
     
     
     /**

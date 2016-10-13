@@ -1,6 +1,6 @@
 package services;
 
-import data_for_entity.ObjectInitializer;
+import data_for_entity.RandomEntities;
 import model.Record;
 import model.RecordType;
 import org.apache.commons.lang.RandomStringUtils;
@@ -12,8 +12,8 @@ public class RecordEntityService {
     
     public Record createVoiceRecord() {
     
-        ObjectInitializer objectInitializer = new ObjectInitializer();
-        Record record = (Record)objectInitializer.generateObject(Record.class);
+        RandomEntities objectInitializer = new RandomEntities();
+        Record record = (Record)objectInitializer.randomEntity(Record.class);
         if (record.getType() != RecordType.Voice) {
             record.setType(RecordType.Voice);
             record.setDuration(RandomGenerator.getRandomDuration());
@@ -23,8 +23,8 @@ public class RecordEntityService {
     }
     
     public Record createSMSRecord() {
-        ObjectInitializer objectInitializer = new ObjectInitializer();
-        Record record = (Record)objectInitializer.generateObject(Record.class);
+        RandomEntities objectInitializer = new RandomEntities();
+        Record record = (Record)objectInitializer.randomEntity(Record.class);
         if (record.getType() != RecordType.SMS) {
             record.setType(RecordType.SMS);
             record.setText(RandomStringUtils.randomAlphabetic(30));
@@ -34,8 +34,8 @@ public class RecordEntityService {
     }
     
     public Record createReportRecord() {
-        ObjectInitializer objectInitializer = new ObjectInitializer();
-        Record record = (Record)objectInitializer.generateObject(Record.class);
+        RandomEntities objectInitializer = new RandomEntities();
+        Record record = (Record)objectInitializer.randomEntity(Record.class);
         record.setTypeEnglishName(record.getType().toEnglishName());
         record.setTypeArabicName(record.getType().toArabicName());
         return record;

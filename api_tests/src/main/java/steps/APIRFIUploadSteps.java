@@ -142,6 +142,6 @@ public class APIRFIUploadSteps extends APISteps {
     
     
     static InformationRequest getRandomRFI() {
-        return (InformationRequest)objectInitializer.generateObject(InformationRequest.class);
+        return (InformationRequest)objectInitializer.randomEntity(InformationRequest.class);
     }
 }

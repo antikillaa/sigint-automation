@@ -1,6 +1,6 @@
 package data_generator;
 
-import data_for_entity.ObjectInitializer;
+import data_for_entity.RandomEntities;
 import data_for_entity.data_providers.SMSTextProvider;
 import model.GenerationMatrix;
 import model.Target;
@@ -35,16 +35,16 @@ public class DataGenerator implements DataGeneratorService {
     }
 
     public List produceList(int size) {
-        return new ObjectInitializer().generateObjects(aClass, size);
+        return new RandomEntities().generateObjects(aClass, size);
     }
 
     public Object produce() {
-        return new ObjectInitializer().generateObject(aClass);
+        return new RandomEntities().randomEntity(aClass);
     }
 
     public Object produceSMSWithMention(String mention) {
         SMSTextProvider.setMention(mention);
-        Object sms = new ObjectInitializer().generateObject(aClass);
+        Object sms = new RandomEntities().randomEntity(aClass);
         SMSTextProvider.setMention("");
         return sms;
     }

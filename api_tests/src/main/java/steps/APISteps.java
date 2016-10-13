@@ -2,7 +2,7 @@ package steps;
 
 import app_context.AppContext;
 import app_context.RunContext;
-import data_for_entity.ObjectInitializer;
+import data_for_entity.RandomEntities;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.junit.Assert;
@@ -11,7 +11,7 @@ public abstract class APISteps {
 
     static RunContext context = RunContext.get();
     static AppContext appContext = AppContext.get();
-    static ObjectInitializer objectInitializer = new ObjectInitializer();
+    static RandomEntities objectInitializer = new RandomEntities();
     Logger log = Logger.getLogger(APISteps.class);
 
     @Then("I got response code $expected")

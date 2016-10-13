@@ -1,7 +1,7 @@
 package model;
 
 import abs.TeelaEntity;
-import data_for_entity.DuSubcriberAddressProvider;
+import data_for_entity.data_providers.DuSubcriberAddressProvider;
 import data_for_entity.annotations.*;
 import data_for_entity.data_providers.CountryName;
 import data_for_entity.data_providers.DuSubscriberNameProvider;

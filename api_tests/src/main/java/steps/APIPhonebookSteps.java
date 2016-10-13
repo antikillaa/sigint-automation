@@ -189,7 +189,7 @@ public class APIPhonebookSteps extends APISteps {
     }
     
     static Phonebook getRandomPhonebook() {
-        return (Phonebook)objectInitializer.generateObject(Phonebook.class);
+        return (Phonebook)objectInitializer.randomEntity(Phonebook.class);
     }
     
     static List<Phonebook> getRandomPhoneBooks(int count) {

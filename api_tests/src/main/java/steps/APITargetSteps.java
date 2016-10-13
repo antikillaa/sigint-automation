@@ -287,7 +287,7 @@ public class APITargetSteps extends APISteps {
         List<Target> targets = getRandomTargets(Integer.valueOf(count));
 
         for (Target target : targets) {
-            TargetGroup targetGroup = (TargetGroup)objectInitializer.generateObject(TargetGroup.class);
+            TargetGroup targetGroup = (TargetGroup)objectInitializer.randomEntity(TargetGroup.class);
             target.addGroup(targetGroup);
             Entities.getTargetGroups().addOrUpdateEntity(targetGroup);
         }
@@ -338,7 +338,7 @@ public class APITargetSteps extends APISteps {
     
     
     static Target getRandomTarget() {
-        return (Target)objectInitializer.generateObject(Target.class);
+        return (Target)objectInitializer.randomEntity(Target.class);
     }
 
 }

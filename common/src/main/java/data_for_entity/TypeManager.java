@@ -50,8 +50,6 @@ class TypeManager {
         return fields.stream().map(ObjectField::new).collect(Collectors.toList());
     }
     
-    
-    
     FieldsFilter createFieldsFilter() {
         return  new FieldsFilter();
     }
@@ -63,7 +61,8 @@ class TypeManager {
             if (objectFields == null) {
                 return null;
             }
-            return objectFields.stream().filter(field -> !field.shouldBeIgnored()).collect(Collectors.toList());
+            return objectFields.stream().filter(field -> !new DataOptionsManager(field.getField()).shouldBeIgnored())
+                    .collect(Collectors.toList());
             
         }
         
