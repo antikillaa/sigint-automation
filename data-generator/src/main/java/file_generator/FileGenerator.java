@@ -45,7 +45,25 @@ public class FileGenerator implements FileService {
     @SuppressWarnings("unchecked")
     @Override
     public G4File write(List entities) {
+        mkDirs();
         return fileService.write(entities);
+    }
+
+    private void mkDirs() {
+        G4File file = new G4File(path);
+
+        try {
+            boolean newDir = file.mkdirs();
+            if (newDir) {
+                log.info("Dir: " + file.getAbsolutePath() + " was created");
+            } else {
+                log.info("Dir: " + file.getAbsolutePath() + " already exist");
+            }
+        } catch (SecurityException e) {
+            log.error(e.getMessage());
+            log.trace(e);
+            throw e;
+        }
     }
 
 }

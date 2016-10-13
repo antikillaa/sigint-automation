@@ -41,15 +41,15 @@ class SSMSFileService implements FileService<SSMS> {
 
     @Override
     public G4File write(List<SSMS> ssmsList) {
-        G4File file = new G4File("SSMS" + new Date().getTime() + ".csv");
+        String fileName = "SSMS" + new Date().getTime() + ".csv";
+        G4File file = new G4File(path + fileName);
         file.setMediaType(PegasusMediaType.TEXT_CSV_TYPE);
-        log.info("File for s-sms created: " + file.getAbsolutePath());
 
         for (SSMS ssms : ssmsList) {
             FileHelper.writeLineToFile(file, entityToCSVString(ssms));
         }
 
-        log.info("SSMS list written successfully to cvs file..");
+        log.info("SSMS list written successfully to cvs file: " + file.getAbsolutePath());
         return file;
     }
 

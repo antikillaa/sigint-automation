@@ -74,12 +74,12 @@ class TargetFileService implements FileService<Target> {
 
         G4File file = null;
         try {
-            file = new G4File("Targets-" + new Date().getTime() + ".xls");
-            log.info("Write targets to xls file: " + file.getAbsolutePath());
+            String fileName = "Targets-" + new Date().getTime() + ".xls";
+            file = new G4File(path + fileName);
             FileOutputStream out = new FileOutputStream(file);
             workbook.write(out);
             out.close();
-            log.info("Excel written successfully..");
+            log.info("Excel file with targets written successfully: " + file.getAbsolutePath());
         } catch (IOException e) {
             log.error(e.getMessage());
         }

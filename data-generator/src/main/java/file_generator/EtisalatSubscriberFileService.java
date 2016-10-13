@@ -15,9 +15,11 @@ class EtisalatSubscriberFileService implements FileService<EtisalatSubscriberEnt
     @Override
     public G4File write(List<EtisalatSubscriberEntry> entries) {
         log.info("Create Etisalat Subscriber file..");
-        String fileName = new SimpleDateFormat("yyyyMMdd").format(new Date())
-                + "-etisalat" + new Date().getTime() + "-01." + RandomGenerator.generateCountryCode(); //yyyyMMdd-filename-No.DX
-        G4File file = new G4File(fileName);
+
+        //yyyyMMdd-filename-No.DX
+        String fileName = new SimpleDateFormat("yyyyMMdd").format(new Date()) + "-etisalat"
+                + new Date().getTime() + "-01." + RandomGenerator.generateCountryCode();
+        G4File file = new G4File(path + fileName);
 
         for (EtisalatSubscriberEntry entry : entries) {
             FileHelper.writeLineToFile(file, entryToString(entry));

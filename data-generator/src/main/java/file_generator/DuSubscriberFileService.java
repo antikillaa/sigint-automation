@@ -12,7 +12,9 @@ class DuSubscriberFileService implements FileService<DuSubscriberEntry> {
     @Override
     public G4File write(List<DuSubscriberEntry> entries) {
         log.info("Create Du Subscriber file..");
-        G4File file = new G4File("duSubscriber" + new Date().getTime() + ".csv");
+
+        String fileName = "duSubscriber" + new Date().getTime() + ".csv";
+        G4File file = new G4File(path + fileName);
 
         for (DuSubscriberEntry entry : entries) {
             FileHelper.writeLineToFile(file, entryToString(entry));
