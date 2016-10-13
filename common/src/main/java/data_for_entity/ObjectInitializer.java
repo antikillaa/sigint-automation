@@ -116,12 +116,14 @@ class ObjectInitializer {
                         return;
                     }
                     for (ObjectField field : dependenceFields) {
-                        Task task = executor.submitTask(new FieldPopulator(field, instance));
-                        task.waitToComplete();
+                        executor.startTask(new FieldPopulator(field, instance));
+                        //Task task = executor.submitTask(new FieldPopulator(field, instance));
+                        //task.waitToComplete();
                     }
                     DependencyDataProvider dependencyProvider = fieldOptions.getDependencies().getProvider();
                     dependencyProvider.setDependencyData(createDependencyData(dependenceFields, instance));
                     provider = dependencyProvider;
+                    logger.error("I provider for field:" + field.getName());
                 } else if (fieldOptions.hasDataType()) {
                     provider = DataTypesProviders.getDataTypeProvider(fieldOptions.getFieldDataType());
                 } else if (fieldOptions.hasDataProvider()) {

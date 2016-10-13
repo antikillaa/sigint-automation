@@ -35,7 +35,7 @@ public class DataGenerator implements DataGeneratorService {
     }
 
     public List produceList(int size) {
-        return new RandomEntities().generateObjects(aClass, size);
+        return new RandomEntities().randomEntities(aClass, size);
     }
 
     public Object produce() {
