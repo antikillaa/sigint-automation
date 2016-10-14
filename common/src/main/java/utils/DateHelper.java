@@ -1,6 +1,5 @@
 package utils;
 
-import app_context.RunContext;
 import org.apache.log4j.Logger;
 
 import java.text.ParseException;
@@ -12,7 +11,6 @@ import java.util.TimeZone;
 public class DateHelper {
 
     private static Logger log = Logger.getLogger(DateHelper.class);
-    private static RunContext context = RunContext.get();
 
     public static Date yesterday() {
         Calendar calendar = Calendar.getInstance();
@@ -35,39 +33,34 @@ public class DateHelper {
         return null;
     }
 
-    public static boolean isTimeout() {
-        Calendar now = Calendar.getInstance();
-        Calendar deadLine = Calendar.getInstance();
-        deadLine.setTime(context.get("timeout", Date.class));
-
-        return now.after(deadLine);
-    }
-    
     /**
      * Checks if param date is already passed in comparision to now
+     *
      * @param deadline this date will be verified against now
      * @return True if deadline occurred, False otherwise
      */
     public static boolean isTimeout(Date deadline) {
         Calendar now = Calendar.getInstance();
         return now.after(deadline);
-        
+
     }
-    
+
     /**
      * Thread sleep for the specified number of secs.
+     *
      * @param secs Seconds to sleep.
      */
     public static void waitTime(int secs) {
         try {
-            Thread.sleep(secs*1000);
+            Thread.sleep(secs * 1000);
         } catch (InterruptedException e) {
             log.debug("Thread sleep was interrupted");
         }
     }
-    
+
     /**
      * Helps to receive Date with the passed shift in secs.
+     *
      * @param shiftInSecs shift to the current date in secs.
      * @return Date with applied time shift in secs.
      */
@@ -75,11 +68,6 @@ public class DateHelper {
         Calendar date = Calendar.getInstance();
         date.add(Calendar.SECOND, shiftInSecs);
         return date.getTime();
-    }
-    
-
-    public static void setTimeout(Date date) {
-        context.put("timeout", date);
     }
 
 }
