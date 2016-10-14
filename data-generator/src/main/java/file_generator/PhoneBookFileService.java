@@ -24,8 +24,8 @@ class PhoneBookFileService implements FileService<Phonebook> {
     public G4File write(List<Phonebook> phonebooks) {
         G4File file;
         try {
-            file = new G4File("Phonebooks" + new Date().getTime() + ".csv");
-            log.info("File for phonebooks created: " + file.getAbsolutePath());
+            String fileName = "Phonebooks" + new Date().getTime() + ".csv";
+            file = new G4File(path + fileName);
         } catch (NullPointerException e) {
             log.error(e.getMessage());
             throw new Error("Unable to create Phonebook CVS file!");
@@ -35,7 +35,7 @@ class PhoneBookFileService implements FileService<Phonebook> {
             FileHelper.writeLineToFile(file, toCSVString(phonebook));
         }
 
-        log.info("Phonebook written successfully to cvs file..");
+        log.info("Phonebook written successfully to cvs file: " + file.getAbsolutePath());
         return file;
     }
 

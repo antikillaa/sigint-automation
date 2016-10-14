@@ -44,7 +44,7 @@ public class ObjectInitializer {
      * @return object with passed type with filled fields.
      */
     public Object generateObject(Class<?> objectType) {
-        logger.info("Creating object with type: "+ objectType);
+        logger.debug("Creating object with type: "+ objectType);
         typeManager.setObjectType(objectType);
         
         Object instance = instanceManager.createInstance(objectType);
@@ -56,7 +56,7 @@ public class ObjectInitializer {
             return instance;
         }
         generateValues(requiredFields, instance);
-        logger.info("Object is created with filled fields");
+        logger.debug("Object is created with filled fields");
         return instance;
     }
     
