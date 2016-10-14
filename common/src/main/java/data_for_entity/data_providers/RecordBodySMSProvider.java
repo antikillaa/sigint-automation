@@ -4,15 +4,14 @@ import model.RecordType;
 import org.apache.commons.lang.RandomStringUtils;
 
 public class RecordBodySMSProvider extends DependencyDataProvider {
-    
+
     @Override
     public Object generate(int length) {
         DependencyData dependencyData = getDependencyData();
-        String type = (String)dependencyData.getData("type");
-    
-        if (type.equals(RecordType.SMS)) {
+        String type = (String) dependencyData.getData("type");
+
+        if (type.equals(RecordType.SMS.name())) {
             return RandomStringUtils.randomAlphabetic(30);
         } else return null;
-        
     }
 }
