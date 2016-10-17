@@ -34,7 +34,7 @@ class XSMSFileService implements FileService<XSMS> {
             List<String> fields = new ArrayList<>();
 
             //"EventTime", "CallerMod", "CalledMod", "Txt"
-            fields.add(new SimpleDateFormat("yy.MM.dd HH:mm:ss").format(list.get(i).getEventTime()));
+            fields.add(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getEventTime()));
             fields.add(list.get(i).getCallerMod());
             fields.add(list.get(i).getCalledMod());
             fields.add(list.get(i).getTxt());

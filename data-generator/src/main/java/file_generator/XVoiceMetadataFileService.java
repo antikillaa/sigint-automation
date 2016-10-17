@@ -34,7 +34,7 @@ class XVoiceMetadataFileService implements FileService<XVoiceMetadata> {
             List<String> fields = new ArrayList<>();
 
             //"EventTime", "Sender", "Receiver"
-            fields.add(new SimpleDateFormat("yy.MM.dd HH:mm:ss").format(list.get(i).getEventTime()));
+            fields.add(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getEventTime()));
             fields.add(list.get(i).getSender());
             fields.add(list.get(i).getReceiver());
             fields.add("");
