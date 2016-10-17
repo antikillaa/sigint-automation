@@ -51,19 +51,22 @@ public class APIUploadFilesSteps extends APISteps {
         // wait, update meta and check again
         while (!isProcessed()) {
             log.info("Uploaded file isn't processed yet..");
+            checkTimeout();
             DateHelper.waitTime(5);
         }
     }
 
-    private boolean isProcessed() {
-        log.info("Check: uploaded file is processed..");
-
+    private void checkTimeout() {
         Date deadline = context.get("timeout", Date.class);
         if (DateHelper.isTimeout(deadline)) {
             String errorMessage = "Uploaded file is not processed. Failed by timeout";
             log.error(errorMessage);
             throw new AssertionError(errorMessage);
         }
+    }
+
+    private boolean isProcessed() {
+        log.info("Check: uploaded file is processed..");
 
         // update file meta
         FileMeta fileMeta = context.get("fileMeta", FileMeta.class);
@@ -82,6 +85,7 @@ public class APIUploadFilesSteps extends APISteps {
         // wait, update meta and check again
         while (!isIngestMatchingComplete()) {
             log.info("Uploaded file isn't matching yet..");
+            checkTimeout();
             DateHelper.waitTime(1);
         }
     }
