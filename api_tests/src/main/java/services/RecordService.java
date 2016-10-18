@@ -7,7 +7,7 @@ import errors.NullReturnException;
 import http.G4HttpClient;
 import http.G4Response;
 import http.requests.RecordRequest;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.Record;
 import model.RecordSearchResult;
 import org.apache.commons.lang.NotImplementedException;
@@ -34,7 +34,7 @@ public class RecordService implements EntityService<Record> {
         RecordRequest request = new RecordRequest().manual(entity);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        Record record = JsonCoverter.readEntityFromResponse(response, Record.class, "result");
+        Record record = JsonConverter.readEntityFromResponse(response, Record.class, "result");
         if (record != null) {
             Entities.getRecords().addOrUpdateEntity(record);
         } else {
@@ -61,7 +61,7 @@ public class RecordService implements EntityService<Record> {
         RecordRequest request = new RecordRequest().search(filter);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        RecordSearchResult searchResults = JsonCoverter.readEntityFromResponse(response, RecordSearchResult.class);
+        RecordSearchResult searchResults = JsonConverter.readEntityFromResponse(response, RecordSearchResult.class);
         if (searchResults == null) {
             throw new AssertionError("Unable to read search records results");
         } else {

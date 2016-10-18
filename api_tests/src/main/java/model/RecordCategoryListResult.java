@@ -6,6 +6,6 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class CategoryListResult extends EntityListResult<ReportCategory> {
+public class RecordCategoryListResult extends EntityListResult<RecordCategory> {
 
 }

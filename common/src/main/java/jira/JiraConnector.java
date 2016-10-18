@@ -6,7 +6,7 @@ import http.G4HttpClient;
 import http.G4Response;
 import http.requests.HttpRequest;
 import jira.model.*;
-import json.JsonCoverter;
+import json.JsonConverter;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.core.Cookie;
@@ -56,7 +56,7 @@ public class JiraConnector {
         JiraSessionRequest request = new JiraSessionRequest();
         G4Response response = client.sendRequest(request);
 
-        SessionInfo sessionInfo = JsonCoverter.readEntityFromResponse(response, SessionInfo.class);
+        SessionInfo sessionInfo = JsonConverter.readEntityFromResponse(response, SessionInfo.class);
         log.debug("Jira session created");
         if (sessionInfo != null) {
             return sessionInfo.getSession();
@@ -68,7 +68,7 @@ public class JiraConnector {
      *
      * @param name Project name
      * @return project id
-     * @throws NullReturnException if project id is not received.
+     * @throws AssertionError if project id is not received.
      */
     public String getProjectId(String name) throws NullReturnException {
         log.debug("Getting project id based on name:" + name);
@@ -77,13 +77,13 @@ public class JiraConnector {
         HttpRequest request = new HttpRequest(URL).setCookie(cookie);
         G4Response response = client.sendRequest(request);
 
-        List<JiraProject> projects = JsonCoverter.fromJsonToObjectsList(response.getMessage(), JiraProject[].class);
+        List<JiraProject> projects = JsonConverter.fromJsonToObjectsList(response.getMessage(), JiraProject[].class);
         for (JiraProject project : projects) {
             if (project.getName().equals(name)) {
                 return project.getId();
             }
         }
-        throw new NullReturnException("Project id is not received");
+        throw new AssertionError("Project id is not received");
     }
 
     /**
@@ -92,7 +92,7 @@ public class JiraConnector {
      * @param projectId   projectId of current Jira project
      * @param versionName version name of current JIra project
      * @return versionId of current Jira project
-     * @throws NullReturnException There is version with name:versionName for project id:projectId)
+     * @throws AssertionError There is version with name:versionName for project id:projectId)
      */
     public String getVersionId(String projectId, String versionName) throws NullReturnException {
         log.debug("Getting version id based on project id:" + projectId + " and version name:" + versionName);
@@ -101,14 +101,14 @@ public class JiraConnector {
         HttpRequest request = new HttpRequest(URL).setCookie(cookie);
         G4Response response = client.sendRequest(request);
 
-        List<ProjectVersion> versions = JsonCoverter.fromJsonToObjectsList(response.getMessage(), ProjectVersion[].class);
+        List<ProjectVersion> versions = JsonConverter.fromJsonToObjectsList(response.getMessage(), ProjectVersion[].class);
 
         for (ProjectVersion version : versions) {
             if (version.getName().equals(versionName)) {
                 return version.getId();
             }
         }
-        throw new NullReturnException("There is version with name:" + versionName + " for project id:" + projectId);
+        throw new AssertionError("There is version with name:" + versionName + " for project id:" + projectId);
     }
 
     /**
@@ -122,7 +122,7 @@ public class JiraConnector {
         String url = "/rest/api/latest/issue/" + issueKey;
         HttpRequest request = new HttpRequest(url).setCookie(cookie);
         G4Response response = client.sendRequest(request);
-        return JsonCoverter.readEntityFromResponse(response, Issue.class);
+        return JsonConverter.readEntityFromResponse(response, Issue.class);
     }
 
 }

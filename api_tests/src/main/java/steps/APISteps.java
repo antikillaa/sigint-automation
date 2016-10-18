@@ -2,6 +2,8 @@ package steps;
 
 import app_context.AppContext;
 import app_context.RunContext;
+import conditions.Conditions;
+import conditions.Verify;
 import data_for_entity.ObjectInitializer;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -20,6 +22,12 @@ public abstract class APISteps {
         Integer actual = context.get("code", Integer.class);
         Assert.assertEquals("Incorrect return codes!", Integer.valueOf(expected), actual);
         
+    }
+
+    @Then("Result message should be '$result'")
+    public void resultMessageShouldBe(String result) {
+        String resultMessage = context.get("resultMessage", String.class);
+        Verify.shouldBe(Conditions.equals(resultMessage, result));
     }
 
 }

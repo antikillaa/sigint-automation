@@ -6,7 +6,7 @@ import app_context.entities.Entities;
 import http.G4HttpClient;
 import http.G4Response;
 import http.requests.UserRequest;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.User;
 import org.apache.log4j.Logger;
 import utils.Parser;
@@ -32,7 +32,7 @@ public class UserService implements EntityService<User> {
         UserRequest request = new UserRequest().add(entity);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        User createdUser = JsonCoverter.readEntityFromResponse(response, User.class);
+        User createdUser = JsonConverter.readEntityFromResponse(response, User.class);
         if (createdUser != null) {
             createdUser.setPassword(entity.getPassword());
             Entities.getUsers().addOrUpdateEntity(createdUser);
@@ -67,7 +67,7 @@ public class UserService implements EntityService<User> {
         UserRequest request = new UserRequest().me();
         G4Response response = g4HttpClient.sendRequest(request);
 
-        User user = JsonCoverter.readEntityFromResponse(response, User.class);
+        User user = JsonConverter.readEntityFromResponse(response, User.class);
         if (user != null) {
             return user;
         } else {

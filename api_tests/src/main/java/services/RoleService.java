@@ -6,7 +6,7 @@ import app_context.entities.Entities;
 import http.G4HttpClient;
 import http.G4Response;
 import http.requests.roles.RoleRequest;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.Role;
 import org.apache.log4j.Logger;
 import utils.Parser;
@@ -29,7 +29,7 @@ public class RoleService implements EntityService<Role> {
         RoleRequest request = new RoleRequest().add(entity);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        Role createdRole = JsonCoverter.readEntityFromResponse(response, Role.class);
+        Role createdRole = JsonConverter.readEntityFromResponse(response, Role.class);
         log.debug(Parser.entityToString(createdRole));
         if (createdRole != null) {
             Entities.getRoles().addOrUpdateEntity(createdRole);

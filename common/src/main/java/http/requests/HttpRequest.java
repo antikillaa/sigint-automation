@@ -35,7 +35,7 @@ public class HttpRequest {
 
     /**
      * Build HTTP request.
-     * By Default GET MediaType.APPLICATION_JSON Request.
+     * By Default: HttpMethod = GET, MediaType = APPLICATION_JSON.
      *
      * @param URI path string
      */

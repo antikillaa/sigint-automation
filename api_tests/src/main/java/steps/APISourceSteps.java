@@ -131,12 +131,6 @@ public class APISourceSteps extends APISteps {
         Verify.shouldBe(Conditions.isTrue.element(source.getName().contains("DELETED at")));
     }
 
-    @Then("Result message should be '$result'")
-    public void resultMessageShouldBe(String result) {
-        String resultMessage = context.get("resultMessage", String.class);
-        Verify.shouldBe(Conditions.equals(resultMessage, result));
-    }
-
     @Given("data source with $sourceType and $recordType exists")
     public void getDataSourceWithSourceTypeAndRecordType(String sType, String rType) {
         SourceType sourceType = SourceType.valueOf(sType);

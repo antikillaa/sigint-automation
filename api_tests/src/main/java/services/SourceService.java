@@ -7,7 +7,7 @@ import app_context.entities.Entities;
 import http.G4HttpClient;
 import http.G4Response;
 import http.requests.SourceRequest;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.Result;
 import model.Source;
 import model.SourceListResult;
@@ -38,7 +38,7 @@ public class SourceService implements EntityService<Source> {
         SourceRequest request = new SourceRequest().add(entity);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        Source source = JsonCoverter.readEntityFromResponse(response, Source.class, "id");
+        Source source = JsonConverter.readEntityFromResponse(response, Source.class, "id");
         Entities.getSources().addOrUpdateEntity(source);
 
         return response.getStatus();
@@ -57,7 +57,7 @@ public class SourceService implements EntityService<Source> {
         SourceRequest request = new SourceRequest().delete(entity.getId());
         G4Response response = g4HttpClient.sendRequest(request);
 
-        Result result = JsonCoverter.readEntityFromResponse(response, Result.class);
+        Result result = JsonConverter.readEntityFromResponse(response, Result.class);
         if (response.getStatus() == 200) {
             context.put("resultMessage", result.getResult());
             Entities.getSources().addOrUpdateEntity(entity);
@@ -80,7 +80,7 @@ public class SourceService implements EntityService<Source> {
         SourcesRequest request = new SourcesRequest();
         G4Response response = g4HttpClient.sendRequest(request);
 
-        SourceListResult result = JsonCoverter.readEntityFromResponse(response, SourceListResult.class);
+        SourceListResult result = JsonConverter.readEntityFromResponse(response, SourceListResult.class);
 
         // filter {"deleted":false}
         Iterator<Source> iterator = result.getResult().iterator();
@@ -107,7 +107,7 @@ public class SourceService implements EntityService<Source> {
         SourceRequest request = new SourceRequest().update(entity);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        Result result = JsonCoverter.readEntityFromResponse(response, Result.class);
+        Result result = JsonConverter.readEntityFromResponse(response, Result.class);
         if (result != null) {
             context.put("resultMessage", result.getResult());
             Entities.getSources().addOrUpdateEntity(entity);
@@ -131,6 +131,6 @@ public class SourceService implements EntityService<Source> {
         SourceRequest request = new SourceRequest().get(id);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        return JsonCoverter.readEntityFromResponse(response, Source.class, "result");
+        return JsonConverter.readEntityFromResponse(response, Source.class, "result");
     }
 }

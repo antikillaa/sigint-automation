@@ -6,7 +6,7 @@ import app_context.entities.Entities;
 import http.G4HttpClient;
 import http.G4Response;
 import http.requests.ReportRequest;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.Report;
 import org.apache.log4j.Logger;
 import utils.Parser;
@@ -29,7 +29,7 @@ public class ReportService implements EntityService<Report> {
 
         ReportRequest request = new ReportRequest().add(entity);
         G4Response response = g4HttpClient.sendRequest(request);
-        Report report = JsonCoverter.readEntityFromResponse(response, Report.class, "result");
+        Report report = JsonConverter.readEntityFromResponse(response, Report.class, "result");
         if (report != null) {
             Entities.getReports().addOrUpdateEntity(report);
         } else {

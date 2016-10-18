@@ -1,8 +1,7 @@
 package conditions;
 
 import abs.TeelaEntity;
-import errors.NullReturnException;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.Record;
 import model.UIRecord;
 import org.apache.commons.beanutils.BeanUtils;
@@ -27,7 +26,7 @@ public class EqualCondition implements ExpectedCondition {
     public String toString() {
         return conditions.toString();
     }
-    
+
 
     void elements(Object obj1, Object obj2) {
         ExpectedCondition equalCondition;
@@ -42,16 +41,16 @@ public class EqualCondition implements ExpectedCondition {
         if (Collection.class.isAssignableFrom(obj1.getClass())) {
             elements((Collection) obj1, (Collection) obj2);
             return;
-        }  else if (TeelaEntity.class.isAssignableFrom(obj1.getClass())) {
-            equalCondition = new TeelaEntityEqualCondition<>((TeelaEntity)obj1, (TeelaEntity)obj2);
-            
+        } else if (TeelaEntity.class.isAssignableFrom(obj1.getClass())) {
+            equalCondition = new TeelaEntityEqualCondition<>((TeelaEntity) obj1, (TeelaEntity) obj2);
+
         } else {
             equalCondition = new ObjectEqualCondition(obj1, obj2);
         }
         conditions.add(equalCondition);
-        
+
     }
-    
+
     private void elements(Collection collection1, Collection collection2) {
         if (collection1.size() != collection2.size()) {
             conditions.add(new NotEqual());
@@ -59,31 +58,31 @@ public class EqualCondition implements ExpectedCondition {
         }
         Object[] collection1ToArray = collection1.toArray();
         Object[] collection2ToArray = collection2.toArray();
-        for (int i=0; i < collection1.size()-1; i++) {
+        for (int i = 0; i < collection1.size() - 1; i++) {
             elements(collection1ToArray[i], collection2ToArray[i]);
         }
-        
+
     }
 
 
     public Boolean check() {
         Boolean isConditionApplied = true;
-        for (ExpectedCondition condition:conditions) {
+        for (ExpectedCondition condition : conditions) {
             isConditionApplied = condition.check();
             if (!isConditionApplied) {
-                    return isConditionApplied;
+                return isConditionApplied;
             }
         }
         return isConditionApplied;
     }
-    
+
     private class NotEqual implements ExpectedCondition {
-    
+
         @Override
         public String toString() {
             return "Stub condition for false";
         }
-    
+
         public Boolean check() {
             return false;
         }
@@ -103,7 +102,7 @@ public class EqualCondition implements ExpectedCondition {
         }
 
         public Boolean check() {
-            if ((set1==null || set1.size()==0) && (set2==null || set2.size()==0)) {
+            if ((set1 == null || set1.size() == 0) && (set2 == null || set2.size() == 0)) {
                 return true;
             }
             return set1.equals(set2);
@@ -128,63 +127,57 @@ public class EqualCondition implements ExpectedCondition {
             if ((obj1 == null) && (obj2 == null)) {
                 return true;
             }
-            String json1 = "";
-            String json2 = "";
-            try {
-                json1 = JsonCoverter.toJsonString(obj1);
-                json2 = JsonCoverter.toJsonString(obj2);
-            } catch (NullReturnException e) {
-                log.error(e.getMessage());
-                log.error(e.getStackTrace());
-            }
+            String json1 = JsonConverter.toJsonString(obj1);
+            String json2 = JsonConverter.toJsonString(obj2);
+
             return json1.equals(json2);
         }
     }
 
-   private class TeelaEntityEqualCondition<T extends TeelaEntity> implements ExpectedCondition {
-       private T obj1;
-       private T obj2;
+    private class TeelaEntityEqualCondition<T extends TeelaEntity> implements ExpectedCondition {
+        private T obj1;
+        private T obj2;
 
-       private  TeelaEntityEqualCondition(T obj1, T obj2) {
-           this.obj1 = obj1;
-           this.obj2 = obj2;
+        private TeelaEntityEqualCondition(T obj1, T obj2) {
+            this.obj1 = obj1;
+            this.obj2 = obj2;
 
-       }
+        }
 
-       public String toString() {
-           return String.format("Compare two Teela entities: %s and %s", obj1.toString(), obj2.toString());
-       }
+        public String toString() {
+            return String.format("Compare two Teela entities: %s and %s", obj1.toString(), obj2.toString());
+        }
 
-       public Boolean check() {
-           log.debug("Comparing two teela entities with type:"+ obj2.getClass().getName());
-           Boolean equals = TRUE;
-           for (Field field: obj2.getClass().getDeclaredFields()) {
-               if (Modifier.isStatic(field.getModifiers())) {
-                   continue;
-               }
-               String originalValue;
-               String requestValue;
-               log.debug("Checking field with name:"+field.getName());
-               try {
-                   originalValue = BeanUtils.getProperty(obj1, field.getName());
-                   log.debug("Value of object 1 is:"+originalValue);
-                   requestValue = BeanUtils.getProperty(obj2, field.getName());
-                   log.debug("Value of object 2 is:"+requestValue);
-               } catch (Exception e) {
-                   log.trace(e.getMessage(), e);
-                   throw new AssertionError(e.getMessage());
-               }
-               if ((originalValue == null || originalValue.equals(""))  && (requestValue == null || requestValue.equals(""))) {
-                   continue;
-               }
-               equals = originalValue.trim().equalsIgnoreCase(requestValue.trim());
-               if (!equals) {
-                   return equals;
-               }
-           }
-           return equals;
-       }
-   }
+        public Boolean check() {
+            log.debug("Comparing two teela entities with type:" + obj2.getClass().getName());
+            Boolean equals = TRUE;
+            for (Field field : obj2.getClass().getDeclaredFields()) {
+                if (Modifier.isStatic(field.getModifiers())) {
+                    continue;
+                }
+                String originalValue;
+                String requestValue;
+                log.debug("Checking field with name:" + field.getName());
+                try {
+                    originalValue = BeanUtils.getProperty(obj1, field.getName());
+                    log.debug("Value of object 1 is:" + originalValue);
+                    requestValue = BeanUtils.getProperty(obj2, field.getName());
+                    log.debug("Value of object 2 is:" + requestValue);
+                } catch (Exception e) {
+                    log.trace(e.getMessage(), e);
+                    throw new AssertionError(e.getMessage());
+                }
+                if ((originalValue == null || originalValue.equals("")) && (requestValue == null || requestValue.equals(""))) {
+                    continue;
+                }
+                equals = originalValue.trim().equalsIgnoreCase(requestValue.trim());
+                if (!equals) {
+                    return equals;
+                }
+            }
+            return equals;
+        }
+    }
 
     private class RecordToUIRecordEqualCondition implements ExpectedCondition {
 

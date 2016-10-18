@@ -4,7 +4,7 @@ import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.User;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -37,8 +37,8 @@ public class APIUserSteps extends APISteps {
         User createdUser = Entities.getUsers().getLatest();
         User requestUser = context.get("requestUser", User.class);
 
-        log.info("requested: " + JsonCoverter.toJsonString(requestUser));
-        log.info("created: " + JsonCoverter.toJsonString(createdUser));
+        log.info("requested: " + JsonConverter.toJsonString(requestUser));
+        log.info("created: " + JsonConverter.toJsonString(createdUser));
 
         Verify.shouldBe(Conditions.equals(createdUser, requestUser));
     }

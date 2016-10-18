@@ -4,7 +4,7 @@ import abs.EntityList;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.DuSubscriberEntry;
 import model.phonebook.DuSubscriberFilter;
 import org.apache.log4j.Logger;
@@ -25,7 +25,7 @@ public class APIDuSubscriberSteps extends APISteps {
     public void sendUploadDuSubscriberEntryRequest() throws NullReturnException {
         DuSubscriberEntry duSubscriberEntry = getRandomDuEntry();
 
-        log.info("Entry:" + JsonCoverter.toJsonString(duSubscriberEntry));
+        log.info("Entry:" + JsonConverter.toJsonString(duSubscriberEntry));
         int responseCode = service.add(duSubscriberEntry);
 
         context.put("code", responseCode);
@@ -50,7 +50,7 @@ public class APIDuSubscriberSteps extends APISteps {
         }
 
         DuSubscriberFilter searchFilter = new DuSubscriberFilter().filterBy(criteria, value);
-        log.info("Search isAppliedToEntity: " + JsonCoverter.toJsonString(searchFilter));
+        log.info("Search isAppliedToEntity: " + JsonConverter.toJsonString(searchFilter));
         EntityList<DuSubscriberEntry> duSubscriberList = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
@@ -69,12 +69,12 @@ public class APIDuSubscriberSteps extends APISteps {
             log.info("Search result size: " + searchResults.size());
         }
         for (DuSubscriberEntry entry : searchResults) {
-            log.info("Checking result: " + JsonCoverter.toJsonString(entry));
+            log.info("Checking result: " + JsonConverter.toJsonString(entry));
             Assert.assertTrue(searchFilter.isAppliedToEntity(entry));
         }
     }
 
-    @Then("Searched DuSubscriber Entry $critera list")
+    @Then("Searched DuSubscriber Entry $criteria list")
     public void checkDuSubscriberInResults(String criteria) throws NullReturnException {
         DuSubscriberEntry entry = context.get("duSubscriberEntry", DuSubscriberEntry.class);
         EntityList<DuSubscriberEntry> entityList = context.get("searchResult", EntityList.class);

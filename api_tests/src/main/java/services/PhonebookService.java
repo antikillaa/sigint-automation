@@ -10,7 +10,7 @@ import http.G4HttpClient;
 import http.G4Response;
 import http.requests.phonebook.PhonebookRequest;
 import http.requests.phonebook.UnifiedPhonebookSearchRequest;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.G4File;
 import model.Phonebook;
 import model.UploadResult;
@@ -56,7 +56,7 @@ public class PhonebookService implements EntityService<Phonebook> {
         PhonebookRequest request = new PhonebookRequest().add(entity);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        Phonebook createdPhonebook = JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
+        Phonebook createdPhonebook = JsonConverter.readEntityFromResponse(response, Phonebook.class, "result");
         if (createdPhonebook != null) {
             Entities.getPhonebooks().addOrUpdateEntity(createdPhonebook);
         }
@@ -96,7 +96,7 @@ public class PhonebookService implements EntityService<Phonebook> {
         UnifiedPhonebookSearchRequest request = new UnifiedPhonebookSearchRequest(filter);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        PhonebookSearchResults searchResults = JsonCoverter.readEntityFromResponse(response, PhonebookSearchResults.class, "result");
+        PhonebookSearchResults searchResults = JsonConverter.readEntityFromResponse(response, PhonebookSearchResults.class, "result");
         if (searchResults == null) {
             throw new AssertionError("Unable to read search results from Phonebook search");
         } else {
@@ -120,7 +120,7 @@ public class PhonebookService implements EntityService<Phonebook> {
         PhonebookRequest request = new PhonebookRequest().update(entity);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        Phonebook createdPhonebook = JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
+        Phonebook createdPhonebook = JsonConverter.readEntityFromResponse(response, Phonebook.class, "result");
         if (createdPhonebook != null) {
             Entities.getPhonebooks().addOrUpdateEntity(createdPhonebook);
         }
@@ -140,7 +140,7 @@ public class PhonebookService implements EntityService<Phonebook> {
         PhonebookRequest request = new PhonebookRequest().get(id);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        return JsonCoverter.readEntityFromResponse(response, Phonebook.class, "result");
+        return JsonConverter.readEntityFromResponse(response, Phonebook.class, "result");
     }
 
     /**
@@ -157,7 +157,7 @@ public class PhonebookService implements EntityService<Phonebook> {
         PhonebookRequest request = new PhonebookRequest().upload(file);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
+        UploadResult uploadResult = JsonConverter.readEntityFromResponse(response, UploadResult.class, "result");
         if (uploadResult != null) {
             context.put("uploadResult", uploadResult);
         }

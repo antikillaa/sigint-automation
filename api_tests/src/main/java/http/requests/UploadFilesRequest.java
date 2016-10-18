@@ -2,9 +2,8 @@ package http.requests;
 
 import app_context.AppContext;
 import app_context.RunContext;
-import errors.NullReturnException;
 import http.HttpMethod;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.*;
 import org.apache.log4j.Logger;
 
@@ -42,14 +41,7 @@ public class UploadFilesRequest extends HttpRequest {
      */
     public UploadFilesRequest upload(G4File file) {
         FileMeta fileMeta = initFileMeta(file);
-        String meta;
-        try {
-            meta = JsonCoverter.toJsonString(fileMeta);
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            log.error(e.getStackTrace());
-            throw new Error("Error! Meta for uploading file is empty!");
-        }
+        String meta = JsonConverter.toJsonString(fileMeta);
 
         addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         addBodyString("meta", meta);
