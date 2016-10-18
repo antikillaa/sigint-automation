@@ -15,7 +15,6 @@ import org.junit.Assert;
 import services.PhonebookService;
 import utils.RandomGenerator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static conditions.Conditions.isTrue;
@@ -189,14 +188,10 @@ public class APIPhonebookSteps extends APISteps {
     }
     
     static Phonebook getRandomPhonebook() {
-        return (Phonebook)objectInitializer.randomEntity(Phonebook.class);
+        return objectInitializer.randomEntity(Phonebook.class);
     }
     
     static List<Phonebook> getRandomPhoneBooks(int count) {
-        List<Phonebook> phoneBooks = new ArrayList<>();
-        for (int i=1; i<=count;i++) {
-            phoneBooks.add(getRandomPhonebook());
-        }
-        return phoneBooks;
+        return objectInitializer.randomEntities(Phonebook.class, count);
     }
 }

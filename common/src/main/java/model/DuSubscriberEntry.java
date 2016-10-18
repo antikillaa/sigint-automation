@@ -16,7 +16,6 @@ import java.util.Date;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class DuSubscriberEntry extends TeelaEntity {
     
-    @DataStatic("du")
     private String sourceId;
     @DataIgnore
     private String fileName;
@@ -36,17 +35,17 @@ public class DuSubscriberEntry extends TeelaEntity {
     private String address; //city + ", " + poBox
     @DataProvider(CountryName.class)
     private String nationality;
-    @WithDataSize(length = 4)
+    @WithDataSize(4)
     private String visaType;
     @WithFieldDataType(FieldDataType.NUMERIC)
     private String visaNumber;
-    @WithDataSize(length = 4)
+    @WithDataSize(4)
     private String idType;
     private String idNumber;
     private String status;
-    @WithDataSize(length = 4)
+    @WithDataSize(4)
     private String customerType;
-    @WithDataSize(length = 4)
+    @WithDataSize(4)
     private String serviceType;
     private String customerCode;
 

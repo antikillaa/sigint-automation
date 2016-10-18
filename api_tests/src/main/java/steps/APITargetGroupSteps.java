@@ -172,7 +172,7 @@ public class APITargetGroupSteps extends APISteps {
     }
     
     static TargetGroup getRandomTargetGroup() {
-        return (TargetGroup)objectInitializer.randomEntity(TargetGroup.class);
+        return objectInitializer.randomEntity(TargetGroup.class);
     }
     
     private TargetGroup updateTargetGroup(TargetGroup targetGroup) {

@@ -9,7 +9,6 @@ public class RecordBodySMSProvider extends DependencyDataProvider {
     public Object generate(int length) {
         DependencyData dependencyData = getDependencyData();
         String type = (String)dependencyData.getData("type");
-    
         if (type.equals(RecordType.SMS)) {
             return RandomStringUtils.randomAlphabetic(30);
         } else return null;

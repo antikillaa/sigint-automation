@@ -329,16 +329,12 @@ public class APITargetSteps extends APISteps {
     }
     
     private List<Target> getRandomTargets(int count) {
-        List<Target> targets = new ArrayList<>();
-        for (int i=1;i<=count; i++) {
-            targets.add(getRandomTarget());
-        }
-        return targets;
+        return objectInitializer.randomEntities(Target.class, count);
     }
     
     
     static Target getRandomTarget() {
-        return (Target)objectInitializer.randomEntity(Target.class);
+        return objectInitializer.randomEntity(Target.class);
     }
 
 }

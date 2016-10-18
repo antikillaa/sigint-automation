@@ -19,19 +19,6 @@ class TasksExecutor {
         return new Task(executor.submit(task));
     }
     
-    boolean isShutDown() {
-        return executor.isShutdown();
-    }
-    
-    Task submitTask(Callable task) {
-        return new Task(executor.submit(task));
-    }
-    
-    void startTask(Runnable task) {
-        executor.execute(task);
-    }
-    
-    
     boolean waitForCompletion() {
         executor.shutdown();
         try {

@@ -56,7 +56,7 @@ public class APIUserGroupSteps extends APISteps {
     }
     
     static Group createRandomUserGroup() {
-        return (Group)objectInitializer.randomEntity(Group.class);
+        return objectInitializer.randomEntity(Group.class);
     }
 
 

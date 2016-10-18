@@ -139,7 +139,7 @@ public class APIDuSubscriberSteps extends APISteps {
     }
     
     static DuSubscriberEntry getRandomDuEntry() {
-        return (DuSubscriberEntry)objectInitializer.randomEntity(DuSubscriberEntry.class);
+        return objectInitializer.randomEntity(DuSubscriberEntry.class);
     }
 
 }

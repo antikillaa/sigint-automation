@@ -3,8 +3,6 @@ Meta:
 
 
 Scenario: API.Create PhoneBook with all fields
-Meta:
-@wip
 Given I sign in as admin user
 When I send create Phonebook Entry request with all fields
 Then I got response code 200

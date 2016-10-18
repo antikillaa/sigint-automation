@@ -30,12 +30,12 @@ public class Record extends TeelaEntity {
     private String typeEnglishName;
     @DataIgnore
     private String typeArabicName;
-    @WithDataSize(length = 12)
+    @WithDataSize(12)
     @WithFieldDataType(FieldDataType.NUMERIC)
     private String fromNumber;
     @DataIgnore
     private List<String> fromNumberNames;
-    @WithDataSize(length = 12)
+    @WithDataSize(12)
     @WithFieldDataType(FieldDataType.NUMERIC)
     private String toNumber;
     @DataIgnore
@@ -46,9 +46,9 @@ public class Record extends TeelaEntity {
     private String toCountry;
     @DataProvider(LanguageProvider.class)
     private String language;
-    @WithDataSize(length = 15)
+    @WithDataSize(15)
     private String tmsi;
-    @WithDataSize(length = 15)
+    @WithDataSize(15)
     private String imsi;
     private String originalId;
     @DataIgnore
@@ -64,7 +64,6 @@ public class Record extends TeelaEntity {
     private int duration;
     private boolean manualEntry = true;
     private int priority=0;
-    @DataStatic("READY")
     private String state;
     @DataIgnore
     private String processedStatus;

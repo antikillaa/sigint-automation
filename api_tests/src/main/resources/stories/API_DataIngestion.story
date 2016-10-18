@@ -49,6 +49,8 @@ Examples:
 | X          | SMS        | 2           |
 
 Scenario: API.X-VoiceMetadata ingestion. Target matching by phone number, name and keywords.
+Meta:
+@wip
 Given I sign in as admin user
 And data source with <sourceType> and <recordType> exists
 And <targetCount> targets with phones generated and added

@@ -19,7 +19,6 @@ public class InformationRequest extends TeelaEntity {
     @DataIgnore
     private String internalRequestNumber;
     private String externalRequestNumber;
-    
     @DataProvider(RFIPrioritiesProvider.class)
     private Integer priority;
     @DataIgnore
@@ -36,7 +35,6 @@ public class InformationRequest extends TeelaEntity {
     @WithDataDependencies(provider = RFIDueDateProvider.class, fields = {"priority"})
     private Date dueDate;
     private String requestSource;
-    @DataStatic("PENDING")
     private String state;
     @DataProvider(RFISearchTypeProvider.class)
     private InformationRequestSearchType searchType;

@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Util class to do background operation for {@link Field}
  */
-public class Helpers {
+class Helpers {
     
     static boolean isCollection(Class<?> userClass) {
         return Collection.class.isAssignableFrom(userClass) ||

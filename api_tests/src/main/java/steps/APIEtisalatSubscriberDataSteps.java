@@ -210,7 +210,6 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
     
     
     static EtisalatSubscriberEntry getRandomEtisalatEntry() {
-        return (EtisalatSubscriberEntry)
-                objectInitializer.randomEntity(EtisalatSubscriberEntry.class);
+        return objectInitializer.randomEntity(EtisalatSubscriberEntry.class);
     }
 }

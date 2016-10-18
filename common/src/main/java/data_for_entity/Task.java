@@ -2,9 +2,7 @@ package data_for_entity;
 
 import error_reporter.ErrorReporter;
 import org.apache.log4j.Logger;
-import utils.DateHelper;
 
-import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -31,14 +29,4 @@ class Task {
         }
     }
     
-    void waitToComplete() {
-        Date deadline = DateHelper.getDateWithShift((int)timeout);
-        while ((!future.isDone()) && (!DateHelper.isTimeout(deadline))) {
-            DateHelper.waitTime(1);
-        }
-        if (!future.isDone()) {
-            ErrorReporter.raiseError("Error occurred waiting for task to complete. See details in debug log");
-        }
-        
-    }
 }

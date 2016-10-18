@@ -2,6 +2,9 @@ package data_for_entity;
 
 import data_for_entity.annotations.*;
 import data_for_entity.annotations.WithFieldDataType;
+import data_for_entity.data_providers.DependencyDataProvider;
+import data_for_entity.data_providers.EntityDataProvider;
+import data_for_entity.data_types.FieldDataType;
 import error_reporter.ErrorReporter;
 
 import java.lang.annotation.Annotation;
@@ -29,24 +32,26 @@ class AnnotationReader {
     }
     
     
-    /**
-     * Gets static value for field if defined.
-     * @return String representation of static value or null if not defined.
-     */
-    DataStatic getStatic() {
-        DataStatic staticAnnotation = readAnnotation(DataStatic.class);
-        return staticAnnotation;
-    }
-    
     
     /**
      * Reads an array of fieldNames current field is depends on.
      * @return Array of field names or null if there are no dependencies.
      */
-    WithDataDependencies getDependencies() {
+    DependencyDataProvider getDependencyProvider() {
         WithDataDependencies dataDependencies = readAnnotation(WithDataDependencies.class);
-        return dataDependencies;
+        if (dataDependencies!=null) {
+            dataDependencies.provider();
+        }
+        return null;
         
+    }
+    
+    String[] getDependencyFields() {
+        WithDataDependencies dataDependencies = readAnnotation(WithDataDependencies.class);
+        if (dataDependencies!=null) {
+            return dataDependencies.fields();
+        }
+        return null;
     }
     
     /**
@@ -55,22 +60,37 @@ class AnnotationReader {
      * @return {@link WithDataSize} object or null if not present
      * or error occurred while processing.
      */
-    WithDataSize getDataSize() {
+    Integer getDataSize() {
         WithDataSize dataOptions = readAnnotation(WithDataSize.class);
-        return dataOptions;
+        if (dataOptions!=null) {
+            return dataOptions.value();
+        }
+        return null;
     }
     
-    DataProvider getDataProvider() {
+    Integer getCollectionSize() {
+        WithCollectionSize collectionSize = readAnnotation(WithCollectionSize.class);
+        if (collectionSize!=null) {
+            return collectionSize.value();
+        }
+        return null;
+    }
+    
+    Class<? extends EntityDataProvider> getDataProvider() {
         DataProvider dataProvider = readAnnotation(DataProvider.class);
-        return dataProvider;
+        if (dataProvider!=null) {
+            return dataProvider.value();
+        }
+        return null;
     }
     
-    WithFieldDataType getFieldDataType() {
+    FieldDataType getFieldDataType() {
         WithFieldDataType dataType = readAnnotation(WithFieldDataType.class);
-        return dataType;
+        if (dataType !=null) {
+            dataType.value();
+        }
+        return null;
     }
-    
-    
     
     /**
      * Internal method to read annotation object from field.
@@ -86,7 +106,7 @@ class AnnotationReader {
         }
         try {
             Annotation annotation = field.getAnnotation(annotationClass);
-            return (T) annotation;
+            return annotationClass.cast(annotation);
         } catch (ClassCastException e) {
             ErrorReporter.reportError(e);
             return null;

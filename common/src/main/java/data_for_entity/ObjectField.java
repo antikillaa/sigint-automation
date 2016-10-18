@@ -34,7 +34,6 @@ class ObjectField {
         return field.getName();
     }
     
-    
     /**
      * Set value for the object on this field.
      * @param object Object to set value for.
@@ -50,7 +49,6 @@ class ObjectField {
             }
         }
     }
-    
     
     /**
      * Get value of this field for the passed object

@@ -9,7 +9,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface WithDataSize {
-    
-    int collectionSize() default 1;
-    int length() default 10;
+    int value();
 }

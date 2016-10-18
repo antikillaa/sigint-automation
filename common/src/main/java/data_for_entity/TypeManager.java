@@ -26,7 +26,7 @@ class TypeManager {
         return fieldsToObjectFields(listFields);
     }
     
-    List<ObjectField> getFields(String... fieldNames) {
+    private List<ObjectField> getFields(String... fieldNames) {
         List<Field> foundFields = new ArrayList<>();
         for (String fieldname: fieldNames) {
             try {
@@ -55,7 +55,7 @@ class TypeManager {
     }
     
     
-    class FieldsFilter {
+     class FieldsFilter {
         
         List<ObjectField> filterByRequired(List<ObjectField> objectFields) {
             if (objectFields == null) {
@@ -64,6 +64,11 @@ class TypeManager {
             return objectFields.stream().filter(field -> !new DataOptionsManager(field.getField()).shouldBeIgnored())
                     .collect(Collectors.toList());
             
+        }
+        
+        List<ObjectField> filterByDependend(ObjectField field) {
+            String[] objectFields = new DataOptionsManager(field.getField()).getDependencies().getFields();
+            return getFields(objectFields);
         }
         
         
