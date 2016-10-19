@@ -2,7 +2,7 @@ package controllers;
 
 import app_context.RunContext;
 import http.G4Response;
-import json.JsonCoverter;
+import json.JsonConverter;
 import app_context.AppContext;
 import model.LoggedUser;
 import model.Token;
@@ -28,7 +28,7 @@ public class APILogin {
         G4Response response = signService.signIn(user.getName(), user.getPassword());
         runContext.put("code", response.getStatus());
         if (response.getStatus() == 200) {
-            Token token = JsonCoverter.readEntityFromResponse(response, Token.class);
+            Token token = JsonConverter.readEntityFromResponse(response, Token.class);
             context.setLoggedUser(new LoggedUser(user, token));
 
             //update user

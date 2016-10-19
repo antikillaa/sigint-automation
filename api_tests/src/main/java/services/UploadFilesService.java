@@ -6,7 +6,7 @@ import http.G4HttpClient;
 import http.G4Response;
 import http.requests.UploadFilesRequest;
 import http.requests.UploadRequest;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.*;
 import model.Process;
 import org.apache.log4j.Logger;
@@ -32,7 +32,7 @@ public class UploadFilesService {
         UploadFilesRequest request = new UploadFilesRequest().upload(file);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        FileMeta fileMeta = JsonCoverter.readEntityFromResponse(response, FileMeta.class);
+        FileMeta fileMeta = JsonConverter.readEntityFromResponse(response, FileMeta.class);
         if (fileMeta == null) {
             throw new AssertionError("Error during upload file. Response: " + response.getMessage());
         } else {
@@ -61,7 +61,7 @@ public class UploadFilesService {
             log.error(errorMessage);
             throw new AssertionError(errorMessage);
         } else {
-            return JsonCoverter.readEntityFromResponse(response, FileMeta.class);
+            return JsonConverter.readEntityFromResponse(response, FileMeta.class);
         }
     }
 
@@ -79,7 +79,7 @@ public class UploadFilesService {
         G4Response response = g4HttpClient.sendRequest(request);
         context.put("code", response.getStatus());
 
-        return JsonCoverter.readEntityFromResponse(response, UploadDetails.class);
+        return JsonConverter.readEntityFromResponse(response, UploadDetails.class);
     }
 
     /**
@@ -93,7 +93,7 @@ public class UploadFilesService {
         UploadRequest request = new UploadRequest().search(filter);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        UploadSearchResult searchResults = JsonCoverter.readEntityFromResponse(response, UploadSearchResult.class);
+        UploadSearchResult searchResults = JsonConverter.readEntityFromResponse(response, UploadSearchResult.class);
         if (searchResults == null) {
             throw new AssertionError("Unable to read search results from Upload search");
         } else {

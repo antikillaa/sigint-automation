@@ -1,7 +1,6 @@
 package utils;
 
-import errors.NullReturnException;
-import json.JsonCoverter;
+import json.JsonConverter;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -56,12 +55,7 @@ public class Parser {
     }
 
     public static String entityToString(Object entity) {
-        try {
-            return entity.getClass().getName() + ": " + JsonCoverter.toJsonString(entity);
-        } catch (NullReturnException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("Unable to parse entity");
-        }
+        return entity.getClass().getName() + ": " + JsonConverter.toJsonString(entity);
     }
 
 }

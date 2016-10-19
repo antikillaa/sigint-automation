@@ -5,7 +5,7 @@ import app_context.properties.JenkinsProperties;
 import http.G4Response;
 import http.G4HttpClient;
 import http.requests.HttpRequest;
-import json.JsonCoverter;
+import json.JsonConverter;
 import org.apache.log4j.Logger;
 
 class JenkinsClient {
@@ -36,7 +36,7 @@ class JenkinsClient {
                     "Got code:" + response.getStatus());
         }
 
-        JobInfo jobInfo = JsonCoverter.readEntityFromResponse(response, JobInfo.class);
+        JobInfo jobInfo = JsonConverter.readEntityFromResponse(response, JobInfo.class);
         logger.debug("Received job: " + jobInfo);
         return jobInfo;
     }

@@ -11,7 +11,7 @@ import model.Source;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import services.CategoryService;
+import services.ReportCategoryService;
 import services.RecordEntityService;
 import services.ReportCreateService;
 import services.ReportService;
@@ -23,7 +23,7 @@ public class APIReportSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APIReportSteps.class);
     private ReportService service = new ReportService();
-    private CategoryService categoryService = new CategoryService();
+    private ReportCategoryService reportCategoryService = new ReportCategoryService();
     
     
     @When("I send create manual report")
@@ -43,7 +43,7 @@ public class APIReportSteps extends APISteps {
 
     @When("Add categories to report")
     public void addCategoriesToReport() {
-        List<ReportCategory> categories = categoryService.list();
+        List<ReportCategory> categories = reportCategoryService.list();
         for (ReportCategory reportCategory : categories) {
             reportCategory.setCurrentValue("--");
         }

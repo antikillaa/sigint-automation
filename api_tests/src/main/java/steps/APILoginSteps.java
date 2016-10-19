@@ -4,7 +4,7 @@ import app_context.RunContext;
 import conditions.Verify;
 import controllers.APILogin;
 import http.ErrorResponse;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.User;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
@@ -62,7 +62,7 @@ public class APILoginSteps {
     @Then("Error message is $message")
     public void checkErrorMessage(String message) throws IOException {
         log.info("Verifying error message");
-        ErrorResponse response = JsonCoverter.fromJsonToObject(runContext.get("message", String.class),
+        ErrorResponse response = JsonConverter.fromJsonToObject(runContext.get("message", String.class),
                 ErrorResponse.class);
         Verify.shouldBe(isTrue.element(response.getMessage().toLowerCase().equals(message.toLowerCase())));
     }

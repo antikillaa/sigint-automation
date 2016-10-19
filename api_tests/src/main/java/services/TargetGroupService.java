@@ -10,7 +10,7 @@ import errors.NullReturnException;
 import http.G4HttpClient;
 import http.G4Response;
 import http.requests.targetGroups.TargetGroupRequest;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.Result;
 import model.TargetGroup;
 import model.targetGroup.TargetGroupSearchResult;
@@ -40,7 +40,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         TargetGroupRequest request = new TargetGroupRequest().add(entity);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        TargetGroup group = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "id");
+        TargetGroup group = JsonConverter.readEntityFromResponse(response, TargetGroup.class, "id");
         if (group != null) {
             Entities.getTargetGroups().addOrUpdateEntity(group);
         }
@@ -61,7 +61,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         TargetGroupRequest request = new TargetGroupRequest().delete(entity.getId());
         G4Response response = g4HttpClient.sendRequest(request);
 
-        Result result = JsonCoverter.readEntityFromResponse(response, Result.class);
+        Result result = JsonConverter.readEntityFromResponse(response, Result.class);
         log.debug(Parser.entityToString(result));
         if (response.getStatus() == 200) {
             try {
@@ -94,7 +94,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         TargetGroupRequest request = new TargetGroupRequest().update(entity);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        TargetGroup targetGroup = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "result");
+        TargetGroup targetGroup = JsonConverter.readEntityFromResponse(response, TargetGroup.class, "result");
         log.debug(Parser.entityToString(targetGroup));
         if (targetGroup != null) {
             Entities.getTargetGroups().addOrUpdateEntity(entity);
@@ -117,7 +117,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         TargetGroupRequest request = new TargetGroupRequest().get(id);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        TargetGroup resultTargetGroup = JsonCoverter.readEntityFromResponse(response, TargetGroup.class, "result");
+        TargetGroup resultTargetGroup = JsonConverter.readEntityFromResponse(response, TargetGroup.class, "result");
         log.debug(Parser.entityToString(resultTargetGroup));
         return resultTargetGroup;
     }
@@ -133,7 +133,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         TargetGroupRequest request = new TargetGroupRequest();
         G4Response response = g4HttpClient.sendRequest(request);
 
-        TargetGroupSearchResult result = JsonCoverter.readEntityFromResponse(response, TargetGroupSearchResult.class);
+        TargetGroupSearchResult result = JsonConverter.readEntityFromResponse(response, TargetGroupSearchResult.class);
         context.put("code", response.getStatus());
         if (result != null) {
             log.debug("Size of list: " + result.getResult().size());

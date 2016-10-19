@@ -1,7 +1,6 @@
 package json;
 
 import abs.EntityList;
-import errors.NullReturnException;
 import http.G4Response;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -15,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JsonCoverter {
+public class JsonConverter {
 
     private static Logger log = Logger.getRootLogger();
     public static ObjectMapper mapper = new ObjectMapper();
@@ -23,55 +22,61 @@ public class JsonCoverter {
     public static <T> T readEntityFromResponse(G4Response response, Class<T> entityClass, String id) {
         log.debug("Response: " + response.getMessage());
         T entity;
-        MapType mapType = JsonCoverter.constructMapTypeToValue(entityClass);
+        MapType mapType = JsonConverter.constructMapTypeToValue(entityClass);
         try {
             HashMap<String, T> map = mapper.readValue(response.getMessage(), mapType);
             entity = map.get(id);
+            return entity;
         } catch (IOException | NullPointerException e) {
-            log.error(e.getMessage());
-            throw new AssertionError("Unable to parse entity from response: " + response.getMessage());
+            String error = "Unable to parse entity from response: " + response.getMessage() + ", status: " + response.getStatus();
+            log.error(error);
+            log.trace(e.getMessage(), e);
+            throw new Error(error);
         }
-        return entity;
     }
-    
-    public static<T>T readEntityFromResponse(G4Response response, Class<T> entityClass) {
+
+    public static <T> T readEntityFromResponse(G4Response response, Class<T> entityClass) {
         log.debug("Response: " + response.getMessage());
         return fromJsonToObject(response.getMessage(), entityClass);
     }
 
-    public static Map<String,String > loadJsonToStringMap(String filename) {
+    public static Map<String, String> loadJsonToStringMap(String filename) {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+
         InputStream entityList = classloader.getResourceAsStream(filename);
         if (entityList == null) {
-            log.warn("Unable to get list of entities from file:" + filename);
-            return null;
+            String error = "Unable to get list of entities from file:" + filename;
+            log.error(error);
+            throw new Error(error);
         }
-        MapType mapType = JsonCoverter.constructMapTypeToValue(String.class);
-        try {
-            return JsonCoverter.mapper.readValue(entityList, mapType);
 
+        MapType mapType = JsonConverter.constructMapTypeToValue(String.class);
+        try {
+            return JsonConverter.mapper.readValue(entityList, mapType);
         } catch (IOException e) {
-            log.warn("Cannot load list of entities");
-            return null;
+            String error = "Cannot load list of entities";
+            log.error(error);
+            log.trace(e.getMessage(), e);
+            throw new Error(error);
         }
     }
 
-
-    private static MapType constructMapTypeToValue(Class<?> valueClass){
+    private static MapType constructMapTypeToValue(Class<?> valueClass) {
         TypeFactory typeFactory = mapper.getTypeFactory();
         return typeFactory.constructMapType(HashMap.class, String.class, valueClass);
     }
 
-    public static String toJsonString(Object object) throws NullReturnException {
+    public static String toJsonString(Object object) {
         log.debug("Converting to json string Object " + object);
         try {
             return mapper.writeValueAsString(object);
         } catch (IOException | NullPointerException e) {
-            log.error("Error occurred when trying to convert object with class"
-                    + object.getClass() + " to JSON string");
-            log.error(e.getStackTrace());
+            String error = "Error occurred when trying to convert object with class:"
+                    + object.getClass() + " to JSON string";
+            log.error(error);
+            log.trace(e.getMessage(), e);
+            throw new Error(error, e);
         }
-        return null;
     }
 
     public static <T> T fromJsonToObject(String jsonString, Class<T> userClass) {
@@ -79,34 +84,35 @@ public class JsonCoverter {
         try {
             return mapper.readValue(jsonString, userClass);
         } catch (IOException | NullPointerException e) {
-            log.error("Error when converting json string:"+jsonString+" to object:"+userClass);
+            String error = "Error when converting json string:" + jsonString + " to object:" + userClass;
+            log.error(error);
             log.trace(e.getMessage(), e);
+            throw new Error(error);
         }
-        return null;
     }
 
-    public  static <T >List<T> fromJsonToObjectsList(String jsonString, Class<T[]> userClass)
-            throws NullReturnException {
+    public static <T> List<T> fromJsonToObjectsList(String jsonString, Class<T[]> userClass) {
         log.debug("Converting json: " + jsonString + " to object list: " + userClass);
         try {
             return Arrays.asList(mapper.readValue(jsonString, userClass));
         } catch (IOException | NullPointerException e) {
-            log.error("Error occurred when converting json: " + jsonString + " to object list: " + userClass);
-            log.error(e.getStackTrace());
+            String error = "Error occurred when converting json: " + jsonString + " to object list: " + userClass;
+            log.error(error);
+            log.trace(e.getMessage(), e);
+            throw new Error(error);
         }
-        throw new NullReturnException("Error when converting json string to user class: " + userClass);
     }
 
-    public  static <T extends EntityList>T fromJsonToObjectsList(InputStream stream, Class<T> userClass)
-            throws NullReturnException {
+    public static <T extends EntityList> T fromJsonToObjectsList(InputStream stream, Class<T> userClass) {
         log.debug("Converting from Input stream to user:" + userClass);
         try {
             return mapper.readValue(stream, userClass);
         } catch (IOException | NullPointerException e) {
-            log.error("Error occurred when converting from Input stream to user: " + userClass);
-            log.error(e.getStackTrace());
+            String error = "Error occurred when converting from Input stream to user: " + userClass;
+            log.error(error);
+            log.trace(e.getMessage(), e);
+            throw new Error(error);
         }
-        throw new NullReturnException("Error occurred when converting to user class: " + userClass);
     }
 
 }

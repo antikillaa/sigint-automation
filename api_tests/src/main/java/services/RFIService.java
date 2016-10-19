@@ -7,7 +7,7 @@ import errors.NullReturnException;
 import http.G4HttpClient;
 import http.G4Response;
 import http.requests.rfi.*;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.InformationRequest;
 import model.rfi.RFISearchResults;
 import org.apache.commons.lang.NotImplementedException;
@@ -20,7 +20,7 @@ public class RFIService implements EntityService<InformationRequest> {
 
 
     private void readRFIFromResponse(G4Response response) {
-        InformationRequest createdRFI = JsonCoverter.readEntityFromResponse(response, InformationRequest.class, "result");
+        InformationRequest createdRFI = JsonConverter.readEntityFromResponse(response, InformationRequest.class, "result");
         if (createdRFI != null) {
             Entities.getRFIs().addOrUpdateEntity(createdRFI);
         }
@@ -74,7 +74,7 @@ public class RFIService implements EntityService<InformationRequest> {
         RFISearchRequest request = new RFISearchRequest(filter);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        RFISearchResults searchResults = JsonCoverter.readEntityFromResponse(response, RFISearchResults.class, "result");
+        RFISearchResults searchResults = JsonConverter.readEntityFromResponse(response, RFISearchResults.class, "result");
         if (searchResults == null) {
             throw new AssertionError("Unable to read search results from RFI search");
         } else {
@@ -109,7 +109,7 @@ public class RFIService implements EntityService<InformationRequest> {
         log.info("Getting details of RFI by id:" + id);
         RFIDetailsRequest request = new RFIDetailsRequest(id);
         G4Response response = g4HttpClient.sendRequest(request);
-        return JsonCoverter.fromJsonToObject(response.getMessage(), RFIDetailsResponse.class).getResult();
+        return JsonConverter.fromJsonToObject(response.getMessage(), RFIDetailsResponse.class).getResult();
     }
 
     /**

@@ -1,6 +1,6 @@
 package app_context;
 
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.Dictionary;
 import model.LoggedUser;
 import services.DictionaryService;
@@ -36,14 +36,14 @@ public class AppContext {
     
     public Map<String, String> getLanguages() {
         if (languages == null) {
-            languages = JsonCoverter.loadJsonToStringMap("languages.json");
+            languages = JsonConverter.loadJsonToStringMap("languages.json");
         }
         return languages;
     }
 
     public Map<String, String> getCountries() {
         if (countries == null) {
-            countries = JsonCoverter.loadJsonToStringMap("countries.json");
+            countries = JsonConverter.loadJsonToStringMap("countries.json");
         }
         return countries;
     }

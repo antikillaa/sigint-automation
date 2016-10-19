@@ -6,7 +6,7 @@ import app_context.entities.Entities;
 import http.G4HttpClient;
 import http.G4Response;
 import http.requests.groups.GroupsRequest;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.Group;
 import org.apache.log4j.Logger;
 import utils.Parser;
@@ -31,7 +31,7 @@ public class GroupService implements EntityService<Group> {
         GroupsRequest request = new GroupsRequest().add(entity);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        Group createdGroup = JsonCoverter.readEntityFromResponse(response, Group.class);
+        Group createdGroup = JsonConverter.readEntityFromResponse(response, Group.class);
         if (createdGroup != null) {
             Entities.getGroups().addOrUpdateEntity(createdGroup);
         }
@@ -63,7 +63,7 @@ public class GroupService implements EntityService<Group> {
         GroupsRequest request = new GroupsRequest().update(entity);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        Group updatedGroup = JsonCoverter.readEntityFromResponse(response, Group.class);
+        Group updatedGroup = JsonConverter.readEntityFromResponse(response, Group.class);
         if (updatedGroup != null) {
             Entities.getGroups().addOrUpdateEntity(updatedGroup);
         }

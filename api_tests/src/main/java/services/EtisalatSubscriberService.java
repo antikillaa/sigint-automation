@@ -9,7 +9,7 @@ import file_generator.FileGenerator;
 import http.G4HttpClient;
 import http.G4Response;
 import http.requests.phonebook.EtisalatSubscriberRequest;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.EtisalatSubscriberEntry;
 import model.G4File;
 import model.UploadResult;
@@ -59,7 +59,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
         EtisalatSubscriberRequest request = new EtisalatSubscriberRequest().upload(file);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
+        UploadResult uploadResult = JsonConverter.readEntityFromResponse(response, UploadResult.class, "result");
         if (uploadResult != null) {
             context.put("uploadResult", uploadResult);
         }
@@ -86,7 +86,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
         G4Response response = g4HttpClient.sendRequest(request);
 
         SearchResult<EtisalatSubscriberEntry> searchResults =
-                JsonCoverter.readEntityFromResponse(response, EtisalatSubscriberSearchResult.class, "result");
+                JsonConverter.readEntityFromResponse(response, EtisalatSubscriberSearchResult.class, "result");
         if (searchResults == null) {
             throw new AssertionError("Unable to read search results from Etisalat Subscriber search");
         } else {
@@ -117,7 +117,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
         EtisalatSubscriberRequest request = new EtisalatSubscriberRequest().get(id);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        return JsonCoverter.readEntityFromResponse(response, EtisalatSubscriberEntry.class, "result");
+        return JsonConverter.readEntityFromResponse(response, EtisalatSubscriberEntry.class, "result");
     }
 
 }

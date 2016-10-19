@@ -9,7 +9,7 @@ import file_generator.FileGenerator;
 import http.G4HttpClient;
 import http.G4Response;
 import http.requests.phonebook.DuSubscriberRequest;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.DuSubscriberEntry;
 import model.G4File;
 import model.UploadResult;
@@ -56,7 +56,7 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
         DuSubscriberRequest request = new DuSubscriberRequest().upload(file);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        UploadResult uploadResult = JsonCoverter.readEntityFromResponse(response, UploadResult.class, "result");
+        UploadResult uploadResult = JsonConverter.readEntityFromResponse(response, UploadResult.class, "result");
         if (uploadResult != null) {
             context.put("uploadResult", uploadResult);
         }
@@ -83,7 +83,7 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
         G4Response response = g4HttpClient.sendRequest(request);
 
         SearchResult<DuSubscriberEntry> searchResults =
-                JsonCoverter.readEntityFromResponse(response, DuSubscriberSearchResult.class, "result");
+                JsonConverter.readEntityFromResponse(response, DuSubscriberSearchResult.class, "result");
         if (searchResults == null) {
             throw new AssertionError("Unable to read search results from duSubscriber search");
         } else {
@@ -114,7 +114,7 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
         DuSubscriberRequest request = new DuSubscriberRequest().get(id);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        return JsonCoverter.readEntityFromResponse(response, DuSubscriberEntry.class, "result");
+        return JsonConverter.readEntityFromResponse(response, DuSubscriberEntry.class, "result");
     }
 
 }

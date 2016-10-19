@@ -5,7 +5,7 @@ import app_context.properties.JiraProperties;
 import errors.NullReturnException;
 import http.G4Response;
 import jira.JiraConnector;
-import json.JsonCoverter;
+import json.JsonConverter;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import reporter.ReportParser;
@@ -61,7 +61,7 @@ public class ZAPIService {
         G4Response response = zapi.postCycle(cycle);
 
         if (response.getStatus() == 200) {
-            cycle = JsonCoverter.readEntityFromResponse(response, Cycle.class);
+            cycle = JsonConverter.readEntityFromResponse(response, Cycle.class);
             log.info(response.getMessage());
         } else {
             log.error("Creating new cycle failed");
@@ -86,7 +86,7 @@ public class ZAPIService {
 
             G4Response response = zapi.getCycles(projectId, versionId);
 
-            CyclesList cycles = JsonCoverter.readEntityFromResponse(response, CyclesList.class);
+            CyclesList cycles = JsonConverter.readEntityFromResponse(response, CyclesList.class);
             Cycle foundcycle = cycles.getCycle(connectionProperties.getCycleName());
             if (foundcycle == null) {
                 log.debug("Cycle is not found. Creating new one");
@@ -129,7 +129,7 @@ public class ZAPIService {
         if (response.getStatus() == 200) {
             String message = response.getMessage();
             String json = message.substring(message.lastIndexOf("{"), message.indexOf("}") + 1);
-            execution = JsonCoverter.fromJsonToObject(json, Execution.class);
+            execution = JsonConverter.fromJsonToObject(json, Execution.class);
             log.debug(execution + " executionId = " + execution.getId());
         } else {
             log.error("Failed to add test case to cycle");
@@ -178,7 +178,7 @@ public class ZAPIService {
         }
 
         try {
-            IssueList issueList = JsonCoverter.readEntityFromResponse(response, IssueList.class);
+            IssueList issueList = JsonConverter.readEntityFromResponse(response, IssueList.class);
             log.debug("Found issues: " + issueList.getIssues());
             return issueList.getIssues().get(0).getKey();
         } catch (IndexOutOfBoundsException e) {
@@ -196,7 +196,7 @@ public class ZAPIService {
         G4Response response = zapi.JQL(0, 1000, "id,key,summary", "project=" + projectKey + " and issuetype = Test");
 
         if (response.getStatus() == 200) {
-            IssueList issueList = JsonCoverter.fromJsonToObject(response.getMessage(), IssueList.class);
+            IssueList issueList = JsonConverter.readEntityFromResponse(response, IssueList.class);
             log.info("Tests downloaded: " + issueList.getIssues().size());
             for (Issue issue : issueList.getIssues()) {
                 issueIdMap.put(issue.getFields().getSummary(), issue.getId());
