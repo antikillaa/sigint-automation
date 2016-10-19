@@ -3,7 +3,7 @@ package conditions;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 
-public class UICondition extends ExpectedCondition {
+public class UICondition implements ExpectedCondition {
 
     private Condition condition;
     private SelenideElement element;
@@ -21,7 +21,7 @@ public class UICondition extends ExpectedCondition {
         return condition.toString();
     }
 
-    protected Boolean check() {
+    public Boolean check() {
         if (element == null) {
             throw new AssertionError("Cannot check condition due to empty element!");
         }

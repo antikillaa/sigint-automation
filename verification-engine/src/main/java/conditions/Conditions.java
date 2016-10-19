@@ -11,10 +11,6 @@ public class Conditions {
         condition.elements(element1, element2);
         return condition;
     }
-    
-    
-    
-    
-    
+
     public static TrueCondition isTrue = new TrueCondition();
 }

@@ -1,14 +1,16 @@
 package model;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Meta {
 
+    @JsonProperty("isProcessed")
     private boolean isProcessed;
     private String fileName;
     private String sourceId;
@@ -16,14 +18,6 @@ public class Meta {
     private Date process_timestamp;
     private String md5_sigint;
     private boolean finished;
-
-    public boolean getIsProcessed() {
-        return isProcessed;
-    }
-
-    public void setIsProcessed(boolean processed) {
-        isProcessed = processed;
-    }
 
     public String getFileName() {
         return fileName;
@@ -47,14 +41,6 @@ public class Meta {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public boolean isProcessed() {
-        return isProcessed;
-    }
-
-    public void setProcessed(boolean processed) {
-        isProcessed = processed;
     }
 
     public Date getProcess_timestamp() {
@@ -81,4 +67,11 @@ public class Meta {
         this.finished = finished;
     }
 
+    public Boolean getIsProcessed() {
+        return isProcessed;
+    }
+
+    public void setIsProcessed(Boolean processed) {
+        isProcessed = processed;
+    }
 }

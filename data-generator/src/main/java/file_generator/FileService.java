@@ -9,6 +9,7 @@ import java.util.List;
 interface FileService<T extends TeelaEntity> {
 
     Logger log = Logger.getLogger(FileService.class);
+    String path = "data/";
 
     G4File write(List<T> entities);
 }

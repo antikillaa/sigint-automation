@@ -17,7 +17,7 @@ import java.util.List;
 
 import static java.lang.Boolean.TRUE;
 
-public class EqualCondition extends ExpectedCondition {
+public class EqualCondition implements ExpectedCondition {
 
     private List<ExpectedCondition> conditions = new ArrayList<>();
     private Logger log = Logger.getLogger(EqualCondition.class);
@@ -77,7 +77,7 @@ public class EqualCondition extends ExpectedCondition {
         return isConditionApplied;
     }
     
-    private class NotEqual extends ExpectedCondition {
+    private class NotEqual implements ExpectedCondition {
     
         @Override
         public String toString() {
@@ -89,7 +89,7 @@ public class EqualCondition extends ExpectedCondition {
         }
     }
 
-    private class SetEqualCondition extends ExpectedCondition {
+    private class SetEqualCondition implements ExpectedCondition {
         private Collection set1;
         private Collection set2;
 
@@ -110,7 +110,7 @@ public class EqualCondition extends ExpectedCondition {
         }
     }
 
-    private class ObjectEqualCondition extends ExpectedCondition {
+    private class ObjectEqualCondition implements ExpectedCondition {
         private Object obj1;
         private Object obj2;
 
@@ -124,7 +124,7 @@ public class EqualCondition extends ExpectedCondition {
             return "Object condition with object1: " + Parser.entityToString(obj1) + " and object2: " + Parser.entityToString(obj2);
         }
 
-        protected Boolean check() {
+        public Boolean check() {
             if ((obj1 == null) && (obj2 == null)) {
                 return true;
             }
@@ -141,7 +141,7 @@ public class EqualCondition extends ExpectedCondition {
         }
     }
 
-   private class TeelaEntityEqualCondition<T extends TeelaEntity> extends ExpectedCondition {
+   private class TeelaEntityEqualCondition<T extends TeelaEntity> implements ExpectedCondition {
        private T obj1;
        private T obj2;
 
@@ -155,7 +155,7 @@ public class EqualCondition extends ExpectedCondition {
            return String.format("Compare two Teela entities: %s and %s", obj1.toString(), obj2.toString());
        }
 
-       protected Boolean check() {
+       public Boolean check() {
            log.debug("Comparing two teela entities with type:"+ obj2.getClass().getName());
            Boolean equals = TRUE;
            for (Field field: obj2.getClass().getDeclaredFields()) {
@@ -186,7 +186,7 @@ public class EqualCondition extends ExpectedCondition {
        }
    }
 
-    private class RecordToUIRecordEqualCondition extends ExpectedCondition {
+    private class RecordToUIRecordEqualCondition implements ExpectedCondition {
 
         private Record record;
         private UIRecord uiRecord;
@@ -203,7 +203,7 @@ public class EqualCondition extends ExpectedCondition {
         }
 
         @Override
-        protected Boolean check() {
+        public Boolean check() {
             String.format("Checking records...");
             return record.getTmsi().equals(uiRecord.getTmsi()) &&
                     record.getLanguage().equals(uiRecord.getLanguage()) &&

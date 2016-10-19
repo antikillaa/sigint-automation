@@ -1,11 +1,9 @@
 package data_generator;
 
-import data_for_entity.RandomEntities;
-import data_for_entity.data_providers.target.SMSTextProvider;
-import model.GenerationMatrix;
-import model.Target;
-import model.XSMS;
-import model.XVoiceMetadata;
+import data_for_entity.ObjectInitializer;
+import data_for_entity.data_providers.SMSTextProvider;
+import model.*;
+import model.bulders.SSMSGenerator;
 import utils.RandomGenerator;
 
 import java.util.ArrayList;
@@ -35,7 +33,10 @@ public class DataGenerator implements DataGeneratorService {
     }
 
     public List produceList(int size) {
-        return new RandomEntities().randomEntities(aClass, size);
+        if (aClass == SSMS.class) {
+            return new SSMSGenerator().produceSSMSListRandomly(size);
+        }
+        return new ObjectInitializer().generateObjects(aClass, size);
     }
 
     public Object produce() {
