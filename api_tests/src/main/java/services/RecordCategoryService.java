@@ -72,8 +72,18 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
         return 0;
     }
 
+    /**
+     * Get record-category by id
+     *
+     * @param id id of entity
+     * @return RecordCategory
+     */
     @Override
     public RecordCategory view(String id) {
-        return null;
+        RecordCategoriesRequest request = new RecordCategoriesRequest().view(id);
+
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        return JsonConverter.readEntityFromResponse(response, RecordCategory.class, "result");
     }
 }

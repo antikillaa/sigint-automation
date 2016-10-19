@@ -39,4 +39,17 @@ public class RecordCategoriesRequest extends HttpRequest {
         this.setHttpMethod(HttpMethod.GET);
         return this;
     }
+
+    /**
+     * View details of record-category request.
+     * HttpMethod: GET
+     * @param id id of record-category
+     * @return RecordCategoriesRequest
+     */
+    public RecordCategoriesRequest view(String id) {
+        this
+                .setURI(URI + "/" + id)
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
 }

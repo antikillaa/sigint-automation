@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import services.RecordCategoryService;
+import utils.RandomGenerator;
 
 import java.util.List;
 
@@ -62,4 +63,31 @@ public class APIRecordCategorySteps extends APISteps {
         }
     }
 
+    @When("I get random record category from list")
+    @SuppressWarnings("unchecked")
+    public void getRandomRecordCategoryfromList() {
+        List<RecordCategory> categories = context.get("recordCategories", List.class);
+        RecordCategory recordCategory = RandomGenerator.getRandomItemFromList(categories);
+
+        Verify.shouldBe(Conditions.isTrue.element(recordCategory != null));
+        context.put("recordCategory", recordCategory);
+    }
+
+    @When("I send view record category request")
+    public void viewRecordCategory() {
+        RecordCategory category = context.get("recordCategory", RecordCategory.class);
+
+        RecordCategory recordCategory = service.view(category.getId());
+
+        Verify.shouldBe(Conditions.isTrue.element(recordCategory != null));
+        context.put("requestRecordCategory", recordCategory);
+    }
+
+    @Then("Record category is correct")
+    public void recordCategoryShouldBeCorrect() {
+        RecordCategory category = context.get("recordCategory", RecordCategory.class);
+        RecordCategory recordCategory = context.get("requestRecordCategory", RecordCategory.class);
+
+        Verify.shouldBe(Conditions.equals(category, recordCategory));
+    }
 }
