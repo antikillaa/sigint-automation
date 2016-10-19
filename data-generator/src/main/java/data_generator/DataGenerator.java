@@ -1,7 +1,7 @@
 package data_generator;
 
-import data_for_entity.ObjectInitializer;
-import data_for_entity.data_providers.SMSTextProvider;
+import data_for_entity.RandomEntities;
+import data_for_entity.data_providers.target.SMSTextProvider;
 import model.*;
 import model.bulders.SSMSGenerator;
 import utils.RandomGenerator;
@@ -36,7 +36,7 @@ public class DataGenerator implements DataGeneratorService {
         if (aClass == SSMS.class) {
             return new SSMSGenerator().produceSSMSListRandomly(size);
         }
-        return new ObjectInitializer().generateObjects(aClass, size);
+        return new RandomEntities().randomEntities(aClass, size);
     }
 
     public Object produce() {
