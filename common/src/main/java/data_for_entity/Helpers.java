@@ -1,7 +1,9 @@
 package data_for_entity;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Map;
 
@@ -19,11 +21,6 @@ class Helpers {
         return Map.class.isAssignableFrom(userClass);
     }
     
-    @SuppressWarnings("unchecked")
-    static<T> T getAnnotationDefault(Class<? extends Annotation> annotationClass, String element) throws Exception {
-        Method method = annotationClass.getMethod(element,(Class[])null);
-        return((T)method.getDefaultValue());
-    }
     
     static Class<?> getCollectionType(Field field) {
         Class<?> innerClass;

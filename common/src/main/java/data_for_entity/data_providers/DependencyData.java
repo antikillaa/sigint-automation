@@ -11,7 +11,6 @@ public class DependencyData {
     
     private HashMap<String, String> fieldValues = new HashMap<>();
     
-    
     public Collection<String> getValues() {
         return fieldValues.values();
     }

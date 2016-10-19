@@ -2,7 +2,7 @@ package model;
 
 import abs.TeelaEntity;
 import data_for_entity.annotations.*;
-import data_for_entity.data_providers.*;
+import data_for_entity.data_providers.rfi.*;
 import data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;

@@ -22,6 +22,10 @@ class AnnotationReader {
         this.field = field;
     }
     
+    void setField(Field field) {
+        this.field = field;
+    }
+    
     
     /**
      * Returns true if field is marked with annotation {@link DataIgnore}
@@ -34,10 +38,10 @@ class AnnotationReader {
     
     
     /**
-     * Reads an array of fieldNames current field is depends on.
+     * Reads {@link DependencyDataProvider} class provided by {@link WithDataDependencies}
      * @return Array of field names or null if there are no dependencies.
      */
-    DependencyDataProvider getDependencyProvider() {
+    Class<? extends DependencyDataProvider> getDependencyProvider() {
         WithDataDependencies dataDependencies = readAnnotation(WithDataDependencies.class);
         if (dataDependencies!=null) {
             dataDependencies.provider();
@@ -46,6 +50,10 @@ class AnnotationReader {
         
     }
     
+    /**
+     * Reads an array of fieldNames current field is depends on.
+     * @return Array of field names or null if there are no dependencies.
+     */
     String[] getDependencyFields() {
         WithDataDependencies dataDependencies = readAnnotation(WithDataDependencies.class);
         if (dataDependencies!=null) {
@@ -55,9 +63,9 @@ class AnnotationReader {
     }
     
     /**
-     * Gets {@link WithDataSize} object if present.
+     * Gets Integer representation of assigned length of object if present.
      * Otherwise null is returned.
-     * @return {@link WithDataSize} object or null if not present
+     * @return Integer value of data size.
      * or error occurred while processing.
      */
     Integer getDataSize() {
@@ -68,6 +76,12 @@ class AnnotationReader {
         return null;
     }
     
+    /**
+     * Gets Integer representation of assigned collection ength of object if present.
+     * Otherwise null is returned.
+     * @return Integer value of collection size.
+     * or error occurred while processing.
+     */
     Integer getCollectionSize() {
         WithCollectionSize collectionSize = readAnnotation(WithCollectionSize.class);
         if (collectionSize!=null) {
@@ -76,6 +90,10 @@ class AnnotationReader {
         return null;
     }
     
+    /**
+     * Reads {@link EntityDataProvider} class if assigned to a field.
+     * @return {@link EntityDataProvider} class or null if not defined
+     */
     Class<? extends EntityDataProvider> getDataProvider() {
         DataProvider dataProvider = readAnnotation(DataProvider.class);
         if (dataProvider!=null) {
@@ -84,10 +102,14 @@ class AnnotationReader {
         return null;
     }
     
+    /**
+     * Reads {@link FieldDataType} value if assigned to a field.
+     * @return {@link FieldDataType} value or null if not defined.
+     */
     FieldDataType getFieldDataType() {
         WithFieldDataType dataType = readAnnotation(WithFieldDataType.class);
         if (dataType !=null) {
-            dataType.value();
+            return dataType.value();
         }
         return null;
     }
@@ -97,7 +119,7 @@ class AnnotationReader {
      * @param annotationClass Annotation class from {@link data_for_entity.annotations}
      * @param <T> object with type annotationClass
      * @return object with type annotationClass or null if annotation is not present
-     * or error occured while downcasting to type annotationClass.
+     * or error occurred while downcasting to type annotationClass.
      */
     private <T extends Annotation>T readAnnotation(Class<T> annotationClass) {
         boolean annotationPresent = field.isAnnotationPresent(annotationClass);

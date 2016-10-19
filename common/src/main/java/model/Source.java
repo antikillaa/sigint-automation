@@ -5,7 +5,11 @@ import abs.TeelaEntity;
 import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.DataProvider;
 import data_for_entity.annotations.WithDataDependencies;
-import data_for_entity.data_providers.*;
+import data_for_entity.data_providers.coordinates.CoordinateProvider;
+import data_for_entity.data_providers.country_info.CountryProvider;
+import data_for_entity.data_providers.record.RecordTypeProvider;
+import data_for_entity.data_providers.source.SourceNameProvider;
+import data_for_entity.data_providers.source.SourceTypeProvider;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 

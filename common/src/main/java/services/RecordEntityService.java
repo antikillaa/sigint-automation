@@ -13,7 +13,7 @@ public class RecordEntityService {
     public Record createVoiceRecord() {
     
         RandomEntities objectInitializer = new RandomEntities();
-        Record record = (Record)objectInitializer.randomEntity(Record.class);
+        Record record = objectInitializer.randomEntity(Record.class);
         if (record.getType() != RecordType.Voice) {
             record.setType(RecordType.Voice);
             record.setDuration(RandomGenerator.getRandomDuration());
@@ -24,7 +24,7 @@ public class RecordEntityService {
     
     public Record createSMSRecord() {
         RandomEntities objectInitializer = new RandomEntities();
-        Record record = (Record)objectInitializer.randomEntity(Record.class);
+        Record record = objectInitializer.randomEntity(Record.class);
         if (record.getType() != RecordType.SMS) {
             record.setType(RecordType.SMS);
             record.setText(RandomStringUtils.randomAlphabetic(30));

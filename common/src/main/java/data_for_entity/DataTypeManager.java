@@ -5,14 +5,21 @@ import data_for_entity.data_types.FieldDataType;
 
 import java.util.HashMap;
 
+/**
+ * Should be user to get {@link EntityDataProvider} based on {@link FieldDataType}
+ */
 public class DataTypeManager {
     
     static EntityDataProvider getDataTypeProvider(FieldDataType fieldDataType) {
+        if (!DataTypesProviders.providerHashMap.containsKey(fieldDataType)) {
+            return null;
+        }
         return DataTypesProviders.providerHashMap.get(fieldDataType);
         
     }
     
     public static void putToProviders(FieldDataType dataType, EntityDataProvider provider) {
+        
         DataTypesProviders.providerHashMap.put(dataType, provider);
     }
     

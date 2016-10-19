@@ -3,15 +3,13 @@ package data_for_entity;
 import error_reporter.ErrorReporter;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
 
 /**
  * High level representation of {@link Field} in terms of Data.
- * Provides interface to read run options applied to a field and
- * other properties
+ * Provides interface  a field. Is used to synchronize Future tasks.
  */
 class ObjectField {
     

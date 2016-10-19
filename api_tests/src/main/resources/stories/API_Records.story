@@ -3,6 +3,8 @@ Meta:
 
 
 Scenario: API.User creates manual record - SMS
+Meta:
+@wip
 Given I sign in as admin user
 When I send create manual record - SMS
 Then I got response code 200

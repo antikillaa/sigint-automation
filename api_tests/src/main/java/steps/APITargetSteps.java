@@ -328,6 +328,12 @@ public class APITargetSteps extends APISteps {
         context.put("generationMatrix", generationMatrix);
     }
     
+    
+    @Given("I create test entity")
+    public void createTestEntitity() {
+        XVoiceMetadata metadata = getRandomMetaData();
+    }
+    
     private List<Target> getRandomTargets(int count) {
         return objectInitializer.randomEntities(Target.class, count);
     }
@@ -336,5 +342,9 @@ public class APITargetSteps extends APISteps {
     static Target getRandomTarget() {
         return objectInitializer.randomEntity(Target.class);
     }
-
+    
+    
+    private XVoiceMetadata getRandomMetaData() {
+        return objectInitializer.randomEntity(XVoiceMetadata.class);
+    }
 }

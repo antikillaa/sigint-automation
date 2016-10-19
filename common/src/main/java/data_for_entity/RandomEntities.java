@@ -24,7 +24,7 @@ public class RandomEntities {
     
     
     private Logger logger = Logger.getLogger(RandomEntities.class);
-    private ObjectInitializer objectInitializer = new ObjectInitializer();
+    private ObjectAggregator objectInitializer = new ObjectAggregator();
     
     /**
      * Sets passed InstanceManager. Object is used to create instance by passed

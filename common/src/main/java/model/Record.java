@@ -2,7 +2,11 @@ package model;
 
 import abs.TeelaEntity;
 import data_for_entity.annotations.*;
-import data_for_entity.data_providers.*;
+import data_for_entity.data_providers.country_info.CountryProvider;
+import data_for_entity.data_providers.custom.LanguageProvider;
+import data_for_entity.data_providers.record.RecordBodySMSProvider;
+import data_for_entity.data_providers.record.RecordBodyVoiceProvider;
+import data_for_entity.data_providers.record.RecordTypeProvider;
 import data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;

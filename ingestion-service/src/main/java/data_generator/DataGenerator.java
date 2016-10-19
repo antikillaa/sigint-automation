@@ -1,7 +1,7 @@
 package data_generator;
 
 import data_for_entity.RandomEntities;
-import data_for_entity.data_providers.SMSTextProvider;
+import data_for_entity.data_providers.target.SMSTextProvider;
 import model.GenerationMatrix;
 import model.Target;
 import model.XSMS;

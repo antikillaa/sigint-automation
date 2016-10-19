@@ -1,10 +1,10 @@
 package model;
 
 import abs.TeelaEntity;
-import data_for_entity.data_providers.DuSubcriberAddressProvider;
+import data_for_entity.data_providers.du_subscriber.DuSubcriberAddressProvider;
 import data_for_entity.annotations.*;
-import data_for_entity.data_providers.CountryName;
-import data_for_entity.data_providers.DuSubscriberNameProvider;
+import data_for_entity.data_providers.country_info.CountryName;
+import data_for_entity.data_providers.du_subscriber.DuSubscriberNameProvider;
 import data_for_entity.data_providers.PhonesProvider;
 import data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;

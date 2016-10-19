@@ -8,5 +8,6 @@ target
 /htmlEmail
 htmlEmail.html
 *.csv
+*.xls
 *.CF
 *.NC

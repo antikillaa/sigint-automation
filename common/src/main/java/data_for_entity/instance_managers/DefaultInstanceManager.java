@@ -5,7 +5,7 @@ import error_reporter.ErrorReporter;
 public class DefaultInstanceManager implements InstanceManager{
     
     @Override
-    public Object createInstance(Class<?> classType) throws Error {
+    public <T>T createInstance(Class<T> classType) throws Error {
         try {
             return  classType.newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassCastException | Error e) {
