@@ -13,7 +13,7 @@ And Record categories list size more than 0
 And Record category is not in list
 
 
-Scenario: API.Get list of re category
+Scenario: API.Get list of record categories
 Given I sign in as admin user
 When I send get list of record categories request
 Then I got response code 200
