@@ -16,7 +16,7 @@ import java.util.Date;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class DuSubscriberEntry extends TeelaEntity {
     
-    private String sourceId;
+    private String sourceId="du";
     @DataIgnore
     private String fileName;
     @DataIgnore

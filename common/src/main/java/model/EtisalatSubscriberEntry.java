@@ -18,7 +18,7 @@ import java.util.Date;
 public class EtisalatSubscriberEntry extends TeelaEntity {
     
     
-    private String sourceId;
+    private String sourceId="etisalat";
     
     @DataIgnore
     private Integer fileNumber;
@@ -39,7 +39,7 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
      * Indicator for the record is added, modified or deleted
      */
     
-    private String action;
+    private String action = "ADDED";
     
     /**
      * GSM, PSTN or Account No. (Format will be CC-NDC-SN. Example: 971508112562, 9712618XXXX)
@@ -189,7 +189,7 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     /**
      * Country Name of the Customer
      */
-    @WithDataDependencies(provider = CountryNameByCode.class, fields = "countryCodeOriginal")
+    @WithDataDependencies(provider = CountryNameByCode.class, fields = {"countryCodeOriginal"})
     private String country; //countryCodeDescription
     
     /**

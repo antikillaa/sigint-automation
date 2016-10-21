@@ -68,7 +68,7 @@ public class Record extends TeelaEntity {
     private int duration;
     private boolean manualEntry = true;
     private int priority=0;
-    private String state;
+    private String state = "READY";
     @DataIgnore
     private String processedStatus;
     @DataIgnore

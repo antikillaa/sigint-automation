@@ -17,6 +17,13 @@ public class IssueLink {
         this.id = id;
     }
     
+    public Issue getInnerIssue() {
+        if (outwardIssue !=null) {
+            return  outwardIssue;
+        }
+        else return inwardIssue;
+    }
+    
     public Issue getOutwardIssue() {
         return outwardIssue;
     }
@@ -28,6 +35,13 @@ public class IssueLink {
     private Issue outwardIssue;
     
     
+    private Issue inwardIssue;
     
+    public Issue getInwardIssue() {
+        return inwardIssue;
+    }
     
+    public void setInwardIssue(Issue inwardIssue) {
+        this.inwardIssue = inwardIssue;
+    }
 }

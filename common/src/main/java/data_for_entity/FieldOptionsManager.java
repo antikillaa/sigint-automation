@@ -66,7 +66,7 @@ class FieldOptionsManager {
      * @return {@link DataDependencies} instance that encapsulates {@link WithDataDependencies}
      */
     DataDependencies getDependencies() {
-        DataDependencies dataDependencies;
+        DataDependencies dataDependencies = null;
         String[] dependencyFields = annotationReader.getDependencyFields();
         if (dependencyFields != null) {
             dataDependencies = new DataDependencies();
@@ -74,8 +74,7 @@ class FieldOptionsManager {
             Class<? extends DependencyDataProvider> providerClass = annotationReader.getDependencyProvider();
             DependencyDataProvider provider = new DefaultInstanceManager().createInstance(providerClass);
             dataDependencies.setProvider(provider);
-        } else {
-            dataDependencies = null;
+            
         }
         return dataDependencies;
         

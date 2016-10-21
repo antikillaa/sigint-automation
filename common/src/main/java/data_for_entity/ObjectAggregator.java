@@ -8,6 +8,7 @@ import data_for_entity.instance_managers.DefaultInstanceManager;
 import data_for_entity.instance_managers.InstanceManager;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,15 @@ class ObjectAggregator {
     private Logger logger = Logger.getLogger(ObjectAggregator.class);
     private TypeInformation typeInformation = new TypeInformation();
     private InstanceManager instanceManager = new DefaultInstanceManager();
+    private List<ObjectField> fields = new ArrayList<>();
+    
+    private void setFields(List<ObjectField> fields) {
+        this.fields = fields;
+    }
+    
+    private List<ObjectField> getFields() {
+        return this.fields;
+    }
     
     void setInstanceManager(InstanceManager manager) {
         this.instanceManager = manager;
@@ -43,8 +53,9 @@ class ObjectAggregator {
                     "Instance will be returned as it is");
             return instance;
         }
+        setFields(requiredFields);
         TasksExecutor executor = new TasksExecutor();
-        for (ObjectField objectField:requiredFields) {
+        for (ObjectField objectField:getFields()) {
             FieldAggregator fieldAggregator = new FieldAggregator(objectField, instance);
             executor.submitTask(fieldAggregator);
             
@@ -62,7 +73,7 @@ class ObjectAggregator {
      * based on field's options or field type. Fields options have higher priority in defining of a value.
      */
     private class FieldAggregator implements Runnable {
-        
+    
         private final ObjectField field;
         private Object instance;
         private FieldOptionsManager fieldOptions;
@@ -104,7 +115,7 @@ class ObjectAggregator {
                 //if field has dependencies, first those fields will initialized with values
                 if (fieldOptions.getDependencies()!=null) {
                     logger.debug("Found dependencies flag for field.");
-                    List<ObjectField> dependenceFields = typeInformation.createFieldsFilter().filterByDependent(field);
+                    List<ObjectField> dependenceFields = typeInformation.createFieldsFilter().filterByDependent(field, getFields());
                     if (dependenceFields == null) {
                         logger.debug("Cannot fill in dependencies as fields are not found!");
                         logger.debug(String.format("Field %s is skipped", field.getName()));
@@ -153,7 +164,7 @@ class ObjectAggregator {
                 if (fieldOptions.getDependencies()!=null) {
                     logger.debug("Generating dependency data and provider");
                     DependencyDataProvider dependencyProvider = fieldOptions.getDependencies().getProvider();
-                    List<ObjectField> dependencyFields = typeInformation.createFieldsFilter().filterByDependent(field);
+                    List<ObjectField> dependencyFields = typeInformation.createFieldsFilter().filterByDependent(field, getFields());
                     dependencyProvider.setDependencyData(createDependencyData(dependencyFields, instance));
                     logger.debug("Dependency provider is successfully set");
                     resultProvider = dependencyProvider;
