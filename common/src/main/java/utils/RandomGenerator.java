@@ -13,6 +13,12 @@ public class RandomGenerator {
 
     private static Logger log = Logger.getLogger(RandomGenerator.class);
     private static AppContext context = AppContext.get();
+    
+    
+    public static int generateRandomInteger(int minNumber, int maxNumber) {
+        Random random = new Random();
+        return random.nextInt((maxNumber-minNumber)+1) + minNumber;
+    }
 
     public static String generatePhone() {
 

@@ -2,10 +2,10 @@ package model;
 
 import abs.TeelaEntity;
 import data_for_entity.annotations.*;
-import data_for_entity.data_providers.CountryCode;
-import data_for_entity.data_providers.CountryNameByCode;
-import data_for_entity.data_providers.LongData;
-import data_for_entity.data_providers.ProvisionRegionCode;
+import data_for_entity.data_providers.*;
+import data_for_entity.data_providers.country_info.CountryCode;
+import data_for_entity.data_providers.country_info.CountryNameByCode;
+import data_for_entity.data_providers.provision.ProvisionRegionCode;
 import data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -18,8 +18,7 @@ import java.util.Date;
 public class EtisalatSubscriberEntry extends TeelaEntity {
     
     
-    @DataStatic("etisalat")
-    private String sourceId;
+    private String sourceId="etisalat";
     
     @DataIgnore
     private Integer fileNumber;
@@ -40,13 +39,12 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
      * Indicator for the record is added, modified or deleted
      */
     
-    @DataStatic("ADDED")
-    private String action;
+    private String action = "ADDED";
     
     /**
      * GSM, PSTN or Account No. (Format will be CC-NDC-SN. Example: 971508112562, 9712618XXXX)
      */
-    @WithDataSize(length = 12)
+    @WithDataSize(12)
     @WithFieldDataType(FieldDataType.NUMERIC)
     private String phoneNumber; //nationalNumber
     
@@ -55,7 +53,7 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
      * is ceased and passed to a 2nd customer the value of this field is 1,
      * and after it is passed to the 3rd customer it is 2 and so on.
      */
-    @WithDataSize(length = 1)
+    @WithDataSize(1)
     @WithFieldDataType(FieldDataType.NUMERIC)
     private String accountSuffix;
     
@@ -87,7 +85,7 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     /**
      * Installation Address Flat or House No.
      */
-    @WithDataSize(length = 3)
+    @WithDataSize(3)
     private String installationFlatNumber;
     
     /**
@@ -103,21 +101,21 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     /**
      * Installation Plot No.
      */
-    @WithDataSize(length = 3)
+    @WithDataSize(3)
     @WithFieldDataType(FieldDataType.NUMERIC)
     private String installationPlotNumber;
     
     /**
      * Installation Map No.
      */
-    @WithDataSize(length = 3)
+    @WithDataSize(3)
     @WithFieldDataType(FieldDataType.NUMERIC)
     private String installationMapNumber;
     
     /**
      * Installation Sector
      */
-    @WithDataSize(length = 4)
+    @WithDataSize(4)
     @WithFieldDataType(FieldDataType.NUMERIC)
     private String installationSector;
     
@@ -140,7 +138,7 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
      * Combined firstAddressLine + secondAddressLine
      */
     
-    @WithDataDependencies(fields = {"firstAddressLine", "secondAddressLine"})
+    @WithDataDependencies(provider = SequenceDataProvider.class, fields = {"firstAddressLine", "secondAddressLine"})
     private String address;
     
     /**
@@ -179,7 +177,7 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
      * Country Code of the Customer (2 symbols)
      */
     
-    @WithDataDependencies(fields = {"countryCodeOriginal"})
+    @WithDataDependencies(provider = SequenceDataProvider.class, fields = {"countryCodeOriginal"})
     private String countryCode;
     
     /**
@@ -191,7 +189,7 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     /**
      * Country Name of the Customer
      */
-    @WithDataDependencies(provider = CountryNameByCode.class, fields = "countryCodeOriginal")
+    @WithDataDependencies(provider = CountryNameByCode.class, fields = {"countryCodeOriginal"})
     private String country; //countryCodeDescription
     
     /**
@@ -230,7 +228,7 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
     /**
      * International Mobile Subscriber Identity
      */
-    @WithDataSize(length = 15)
+    @WithDataSize(15)
     @WithFieldDataType(FieldDataType.NUMERIC)
     private String imsi;
     
@@ -267,7 +265,7 @@ public class EtisalatSubscriberEntry extends TeelaEntity {
      * The City ID used in the billing Address
      * The ID for City Name.
      */
-    @WithDataSize(length = 2)
+    @WithDataSize(2)
     @WithFieldDataType(FieldDataType.NUMERIC)
     private String cityId;
     

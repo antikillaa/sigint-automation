@@ -2,7 +2,7 @@ package model;
 
 import abs.TeelaEntity;
 import data_for_entity.annotations.*;
-import data_for_entity.data_providers.*;
+import data_for_entity.data_providers.rfi.*;
 import data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -19,7 +19,6 @@ public class InformationRequest extends TeelaEntity {
     @DataIgnore
     private String internalRequestNumber;
     private String externalRequestNumber;
-    
     @DataProvider(RFIPrioritiesProvider.class)
     private Integer priority;
     @DataIgnore
@@ -36,7 +35,6 @@ public class InformationRequest extends TeelaEntity {
     @WithDataDependencies(provider = RFIDueDateProvider.class, fields = {"priority"})
     private Date dueDate;
     private String requestSource;
-    @DataStatic("PENDING")
     private String state;
     @DataProvider(RFISearchTypeProvider.class)
     private InformationRequestSearchType searchType;

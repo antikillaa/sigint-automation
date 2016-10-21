@@ -287,7 +287,7 @@ public class APITargetSteps extends APISteps {
         List<Target> targets = getRandomTargets(Integer.valueOf(count));
 
         for (Target target : targets) {
-            TargetGroup targetGroup = (TargetGroup)objectInitializer.generateObject(TargetGroup.class);
+            TargetGroup targetGroup = (TargetGroup)objectInitializer.randomEntity(TargetGroup.class);
             target.addGroup(targetGroup);
             Entities.getTargetGroups().addOrUpdateEntity(targetGroup);
         }
@@ -328,17 +328,23 @@ public class APITargetSteps extends APISteps {
         context.put("generationMatrix", generationMatrix);
     }
     
+    
+    @Given("I create test entity")
+    public void createTestEntitity() {
+        XVoiceMetadata metadata = getRandomMetaData();
+    }
+    
     private List<Target> getRandomTargets(int count) {
-        List<Target> targets = new ArrayList<>();
-        for (int i=1;i<=count; i++) {
-            targets.add(getRandomTarget());
-        }
-        return targets;
+        return objectInitializer.randomEntities(Target.class, count);
     }
     
     
     static Target getRandomTarget() {
-        return (Target)objectInitializer.generateObject(Target.class);
+        return objectInitializer.randomEntity(Target.class);
     }
-
+    
+    
+    private XVoiceMetadata getRandomMetaData() {
+        return objectInitializer.randomEntity(XVoiceMetadata.class);
+    }
 }

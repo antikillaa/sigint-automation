@@ -2,7 +2,11 @@ package model;
 
 import abs.TeelaEntity;
 import data_for_entity.annotations.*;
-import data_for_entity.data_providers.*;
+import data_for_entity.data_providers.country_info.CountryProvider;
+import data_for_entity.data_providers.custom.LanguageProvider;
+import data_for_entity.data_providers.record.RecordBodySMSProvider;
+import data_for_entity.data_providers.record.RecordBodyVoiceProvider;
+import data_for_entity.data_providers.record.RecordTypeProvider;
 import data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -30,12 +34,12 @@ public class Record extends TeelaEntity {
     private String typeEnglishName;
     @DataIgnore
     private String typeArabicName;
-    @WithDataSize(length = 12)
+    @WithDataSize(12)
     @WithFieldDataType(FieldDataType.NUMERIC)
     private String fromNumber;
     @DataIgnore
     private List<String> fromNumberNames;
-    @WithDataSize(length = 12)
+    @WithDataSize(12)
     @WithFieldDataType(FieldDataType.NUMERIC)
     private String toNumber;
     @DataIgnore
@@ -46,9 +50,9 @@ public class Record extends TeelaEntity {
     private String toCountry;
     @DataProvider(LanguageProvider.class)
     private String language;
-    @WithDataSize(length = 15)
+    @WithDataSize(15)
     private String tmsi;
-    @WithDataSize(length = 15)
+    @WithDataSize(15)
     private String imsi;
     private String originalId;
     @DataIgnore
@@ -64,8 +68,7 @@ public class Record extends TeelaEntity {
     private int duration;
     private boolean manualEntry = true;
     private int priority=0;
-    @DataStatic("READY")
-    private String state;
+    private String state = "READY";
     @DataIgnore
     private String processedStatus;
     @DataIgnore

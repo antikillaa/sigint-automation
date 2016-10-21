@@ -4,9 +4,9 @@ import abs.TeelaEntity;
 import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.DataProvider;
 import data_for_entity.annotations.WithDataSize;
-import data_for_entity.data_providers.LanguageCodesProvider;
+import data_for_entity.data_providers.custom.LanguageCodesProvider;
 import data_for_entity.data_providers.PhonesProvider;
-import data_for_entity.data_providers.TargetTypeProvider;
+import data_for_entity.data_providers.target.TargetTypeProvider;
 import json.serialization.TargetDeserializer;
 import json.serialization.TargetJsonSerializer;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -24,10 +24,8 @@ public class Target extends TeelaEntity {
     @JsonDeserialize(using = TargetDeserializer.class)
     @DataIgnore
     private ArrayList<TargetGroup> groups = new ArrayList<>();
-    
     private HashSet<String> keywords = new HashSet<>();
-    
-    @WithDataSize(length = 5)
+    @WithDataSize(5)
     @DataProvider(LanguageCodesProvider.class)
     private HashSet<String> languages = new HashSet<>();
     private String name;

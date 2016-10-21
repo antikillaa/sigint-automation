@@ -1,10 +1,10 @@
 package model;
 
 import abs.TeelaEntity;
-import data_for_entity.DuSubcriberAddressProvider;
+import data_for_entity.data_providers.du_subscriber.DuSubcriberAddressProvider;
 import data_for_entity.annotations.*;
-import data_for_entity.data_providers.CountryName;
-import data_for_entity.data_providers.DuSubscriberNameProvider;
+import data_for_entity.data_providers.country_info.CountryName;
+import data_for_entity.data_providers.du_subscriber.DuSubscriberNameProvider;
 import data_for_entity.data_providers.PhonesProvider;
 import data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -16,8 +16,7 @@ import java.util.Date;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class DuSubscriberEntry extends TeelaEntity {
     
-    @DataStatic("du")
-    private String sourceId;
+    private String sourceId="du";
     @DataIgnore
     private String fileName;
     @DataIgnore
@@ -36,17 +35,17 @@ public class DuSubscriberEntry extends TeelaEntity {
     private String address; //city + ", " + poBox
     @DataProvider(CountryName.class)
     private String nationality;
-    @WithDataSize(length = 4)
+    @WithDataSize(4)
     private String visaType;
     @WithFieldDataType(FieldDataType.NUMERIC)
     private String visaNumber;
-    @WithDataSize(length = 4)
+    @WithDataSize(4)
     private String idType;
     private String idNumber;
     private String status;
-    @WithDataSize(length = 4)
+    @WithDataSize(4)
     private String customerType;
-    @WithDataSize(length = 4)
+    @WithDataSize(4)
     private String serviceType;
     private String customerCode;
 

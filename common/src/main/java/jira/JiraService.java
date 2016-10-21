@@ -32,13 +32,13 @@ public class JiraService {
             return false;
         }
         for (IssueLink issueLink: issue.getFields().getIssueLinks()) {
-                Issue outwardIssue = issueLink.getOutwardIssue();
-            if (outwardIssue == null) {
-                return false;
+                Issue innerIssue = issueLink.getInnerIssue();
+            if (innerIssue == null) {
+                continue;
             }
-            if (outwardIssue.getFields().getIssueType().getName().equalsIgnoreCase("bug")){
-                String status = outwardIssue.getFields().getStatus().getName().toLowerCase();
-                isOpened = activeStatuses.contains(status);
+            if (innerIssue.getFields().getIssueType().getName().equalsIgnoreCase("bug")){
+                String status = innerIssue.getFields().getStatus().getName().toLowerCase();
+                isOpened = isOpened || activeStatuses.contains(status);
             }
         }
         return isOpened;

@@ -10,4 +10,5 @@ public enum FieldDataType {
     COLLECTION,
     DATE,
     LONG
+    
 }

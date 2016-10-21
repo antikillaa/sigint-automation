@@ -2,8 +2,8 @@ package model;
 
 import abs.TeelaEntity;
 import data_for_entity.annotations.DataProvider;
-import data_for_entity.annotations.WithDataSize;
-import data_for_entity.data_providers.UserPermissionProvider;
+import data_for_entity.annotations.WithCollectionSize;
+import data_for_entity.data_providers.user_permissions.UserPermissionProvider;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -19,7 +19,7 @@ public class Role extends TeelaEntity {
     @JsonProperty("display_name")
     private String displayName;
     @DataProvider(UserPermissionProvider.class)
-    @WithDataSize(collectionSize = 6)
+    @WithCollectionSize(6)
     private HashSet<String> permissions;
 
     public String getName() {

@@ -13,7 +13,7 @@ public abstract class APISteps {
 
     static RunContext context = RunContext.get();
     static AppContext appContext = AppContext.get();
-    static ObjectInitializer objectInitializer = new ObjectInitializer();
+    static RandomEntities objectInitializer = new RandomEntities();
     Logger log = Logger.getLogger(APISteps.class);
 
     @Then("I got response code $expected")

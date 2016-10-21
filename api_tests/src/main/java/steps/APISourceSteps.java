@@ -162,6 +162,6 @@ public class APISourceSteps extends APISteps {
     }
 
     static Source getRandomSource() {
-        return (Source)objectInitializer.generateObject(Source.class);
+        return objectInitializer.randomEntity(Source.class);
     }
 }

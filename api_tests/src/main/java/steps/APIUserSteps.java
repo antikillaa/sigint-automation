@@ -44,7 +44,7 @@ public class APIUserSteps extends APISteps {
     }
     
     static User getRandomUser() {
-        return (User)objectInitializer.generateObject(User.class);
+        return objectInitializer.randomEntity(User.class);
     }
 
 
