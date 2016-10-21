@@ -4,7 +4,7 @@ import abs.EntityList;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.EtisalatSubscriberEntry;
 import model.phonebook.EtisalatSubscriberFilter;
 import org.apache.log4j.Logger;
@@ -28,7 +28,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
     @When("I send upload EtisalatSubscriberData entry request with all fields")
     public void sendUploadEtisalatSubscriberDataEntryRequest() throws NullReturnException {
         EtisalatSubscriberEntry entry = getRandomEtisalatEntry();
-        log.info("Entry:" + JsonCoverter.toJsonString(entry));
+        log.info("Entry:" + JsonConverter.toJsonString(entry));
 
         int responseCode = service.add(entry);
 
@@ -66,7 +66,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         }
 
         EtisalatSubscriberFilter searchFilter = new EtisalatSubscriberFilter().filterBy(criteria, value);
-        log.info("Search isAppliedToEntity: " + JsonCoverter.toJsonString(searchFilter));
+        log.info("Search isAppliedToEntity: " + JsonConverter.toJsonString(searchFilter));
         EntityList<EtisalatSubscriberEntry> entityList = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
@@ -85,7 +85,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
             log.info("Search result size: " + searchResults.size());
         }
         for (EtisalatSubscriberEntry entry : searchResults) {
-            log.info("Checking result: " + JsonCoverter.toJsonString(entry));
+            log.info("Checking result: " + JsonConverter.toJsonString(entry));
             Assert.assertTrue(searchFilter.isAppliedToEntity(entry));
         }
     }

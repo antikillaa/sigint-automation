@@ -6,7 +6,7 @@ import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
 import file_generator.FileGenerator;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.*;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
@@ -93,7 +93,7 @@ public class APITargetSteps extends APISteps {
         Target updatedTarget = createdTarget;
         updatedTarget.setName(RandomStringUtils.randomAlphabetic(10));
         updatedTarget.setDescription(RandomStringUtils.randomAlphabetic(20));
-        log.info("Updated target: " + JsonCoverter.toJsonString(updatedTarget));
+        log.info("Updated target: " + JsonConverter.toJsonString(updatedTarget));
         int responseCode = service.update(updatedTarget);
         context.put("code", responseCode);
         context.put("updatedTarget", updatedTarget);

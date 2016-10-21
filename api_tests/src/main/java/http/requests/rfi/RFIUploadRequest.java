@@ -3,7 +3,7 @@ package http.requests.rfi;
 
 import http.requests.HttpRequest;
 import http.HttpMethod;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.FileAttachment;
 import model.InformationRequest;
 import org.apache.log4j.Logger;
@@ -29,7 +29,7 @@ public class RFIUploadRequest extends HttpRequest {
         try {
             log.debug("Writing InformationRequest to json file...");
             File file = File.createTempFile("blob", ".json");
-            JsonCoverter.mapper.writeValue(file, entity);
+            JsonConverter.mapper.writeValue(file, entity);
             addBodyFile("json", file, MediaType.APPLICATION_JSON_TYPE);
             file.deleteOnExit();
         } catch (IOException e) {

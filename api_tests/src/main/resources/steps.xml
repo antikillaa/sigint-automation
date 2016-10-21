@@ -39,4 +39,6 @@
     </bean>
     <bean id="uploadFilesSteps" class="steps.APIUploadFilesSteps">
     </bean>
+    <bean id="recordCategorySteps" class="steps.APIRecordCategorySteps">
+    </bean>
 </beans>

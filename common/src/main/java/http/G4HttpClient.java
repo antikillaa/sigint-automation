@@ -2,9 +2,8 @@ package http;
 
 import app_context.properties.G4Properties;
 import error_reporter.ErrorReporter;
-import errors.NullReturnException;
 import http.requests.HttpRequest;
-import json.JsonCoverter;
+import json.JsonConverter;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.media.multipart.MultiPart;
@@ -111,11 +110,7 @@ public class G4HttpClient {
         if (object.getClass().equals(MultiPart.class)) {
             payload = Entity.entity(object, MediaType.MULTIPART_FORM_DATA_TYPE);
         } else {
-            try {
-                payload = Entity.json(JsonCoverter.toJsonString(object));
-            } catch (NullReturnException e) {
-                throw new AssertionError("Cannot convert payload to JSON");
-            }
+            payload = Entity.json(JsonConverter.toJsonString(object));
         }
 
         return payload;

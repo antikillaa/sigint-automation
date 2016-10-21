@@ -4,7 +4,7 @@ import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Verify;
 import errors.NullReturnException;
-import json.JsonCoverter;
+import json.JsonConverter;
 import model.Phonebook;
 import model.UploadResult;
 import model.phonebook.PhonebookSearchFilter;
@@ -113,7 +113,7 @@ public class APIPhonebookSteps extends APISteps {
         }
 
         PhonebookSearchFilter searchFilter = new PhonebookSearchFilter().filterBy(criteria, value);
-        log.info("Search isAppliedToEntity: " + JsonCoverter.toJsonString(searchFilter));
+        log.info("Search isAppliedToEntity: " + JsonConverter.toJsonString(searchFilter));
         EntityList<Phonebook> phonebookList = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
