@@ -6,7 +6,7 @@ import data_for_entity.annotations.DataProvider;
 import data_for_entity.annotations.WithDataSize;
 import data_for_entity.data_providers.custom.LanguageCodesProvider;
 import data_for_entity.data_providers.PhonesProvider;
-import data_for_entity.data_providers.target.TargetTypeProvider;
+import data_for_entity.data_providers.data_target.TargetTypeProvider;
 import json.serialization.TargetDeserializer;
 import json.serialization.TargetJsonSerializer;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;

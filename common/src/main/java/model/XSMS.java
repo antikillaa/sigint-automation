@@ -4,7 +4,7 @@ import abs.TeelaEntity;
 import data_for_entity.annotations.DataProvider;
 import data_for_entity.annotations.WithFieldDataType;
 import data_for_entity.data_providers.PhonesProvider;
-import data_for_entity.data_providers.target.SMSTextProvider;
+import data_for_entity.data_providers.data_target.SMSTextProvider;
 import data_for_entity.data_types.FieldDataType;
 
 import java.util.Date;
