@@ -4,7 +4,7 @@ import app_context.AppContext;
 import app_context.RunContext;
 import conditions.Conditions;
 import conditions.Verify;
-import data_for_entity.ObjectInitializer;
+import data_for_entity.RandomEntities;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.junit.Assert;
