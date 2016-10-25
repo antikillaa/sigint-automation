@@ -3,6 +3,7 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.RunContext;
+import app_context.entities.Entities;
 import http.G4HttpClient;
 import http.G4Response;
 import http.requests.RecordCategoriesRequest;
@@ -17,9 +18,9 @@ import java.util.List;
 
 public class RecordCategoryService implements EntityService<RecordCategory> {
 
-    Logger logger = Logger.getLogger(RecordCategoryService.class);
-    G4HttpClient g4HttpClient = new G4HttpClient();
-    RunContext context = RunContext.get();
+    private Logger logger = Logger.getLogger(RecordCategoryService.class);
+    private G4HttpClient g4HttpClient = new G4HttpClient();
+    private RunContext context = RunContext.get();
 
     /**
      * Add a new one record-category.
@@ -30,7 +31,7 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
     @Override
     public int add(RecordCategory entity) {
         logger.info("Add new one record category..");
-        logger.info("Entity: " + Parser.entityToString(entity));
+        logger.info(Parser.entityToString(entity));
 
         RecordCategoriesRequest request = new RecordCategoriesRequest().add(entity);
         G4Response response = g4HttpClient.sendRequest(request);
@@ -38,6 +39,9 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
         Result result = JsonConverter.readEntityFromResponse(response, Result.class);
         context.put("resultMessage", result.getResult());
 
+        if (result.getResult().equals("ok")) {
+            Entities.getRecordCategories().addOrUpdateEntity(entity);
+        }
         return response.getStatus();
     }
 
@@ -69,11 +73,38 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
 
     @Override
     public int update(RecordCategory entity) {
-        return 0;
+        logger.info("Updating record-category id:" + entity.getId());
+        logger.debug(Parser.entityToString(entity));
+
+        RecordCategoriesRequest request = new RecordCategoriesRequest().update(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        Result result = JsonConverter.readEntityFromResponse(response, Result.class);
+        context.put("resultMessage", result.getResult());
+
+        if (result.getResult().equals("ok")) {
+            Entities.getRecordCategories().addOrUpdateEntity(entity);
+        }
+        return response.getStatus();
     }
 
+    /**
+     * Get record-category by id
+     *
+     * @param id id of entity
+     * @return RecordCategory
+     */
     @Override
     public RecordCategory view(String id) {
-        return null;
+        RecordCategoriesRequest request = new RecordCategoriesRequest().view(id);
+
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        RecordCategory recordCategory = JsonConverter.readEntityFromResponse(response, RecordCategory.class, "result");
+        if (response.getStatus() == 200) {
+            Entities.getRecordCategories().addOrUpdateEntity(recordCategory);
+        }
+
+        return recordCategory;
     }
 }
