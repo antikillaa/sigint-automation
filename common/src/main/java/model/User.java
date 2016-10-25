@@ -2,6 +2,7 @@ package model;
 
 import abs.TeelaEntity;
 import data_for_entity.annotations.DataIgnore;
+import data_for_entity.annotations.WithDataSize;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -16,6 +17,7 @@ public class User extends TeelaEntity {
     private String name;
     @JsonProperty("display_name")
     private String displayName;
+    @WithDataSize(10)
     private String password;
     @DataIgnore
     private String phone;
