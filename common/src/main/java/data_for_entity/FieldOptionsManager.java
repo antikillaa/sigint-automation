@@ -61,6 +61,15 @@ class FieldOptionsManager {
         return provider;
     }
     
+    
+    /**
+     * If field has assigned dependencies.
+     * @return True if field has dependency, false otherwise.
+     */
+    boolean hasDependencies() {
+        return annotationReader.getDependencyFields() != null;
+    }
+    
     /**
      * Reads an array of fieldNames current field is depends on.
      * @return {@link DataDependencies} instance that encapsulates {@link WithDataDependencies}
