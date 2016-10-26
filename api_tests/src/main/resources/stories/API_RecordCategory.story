@@ -10,7 +10,7 @@ And Result message should be 'ok'
 When I send get list of record categories request
 Then I got response code 200
 And Record categories list size more than 0
-And Record category is not in list
+And Record category is in list
 
 
 Scenario: API.Get list of record categories
