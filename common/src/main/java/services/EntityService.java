@@ -1,11 +1,11 @@
 package services;
 
+import abs.AbstractEntity;
 import abs.EntityList;
 import abs.SearchFilter;
-import abs.TeelaEntity;
 
 
-public interface EntityService<T extends TeelaEntity> {
+public interface EntityService<T extends AbstractEntity> {
 
     /**
      * ADD new entity
@@ -13,33 +13,33 @@ public interface EntityService<T extends TeelaEntity> {
      * @param entity entity
      * @return HTTP status code
      */
-    public int add(T entity);
+    int add(T entity);
 
     /**
      * DELETE entity
      * @param entity entity
      * @return HTTP status code
      */
-    public int remove(T entity);
+    int remove(T entity);
 
     /**
      * GET list of entities
      * @param filter search filter for payload
      * @return EntityList of entity
      */
-    public EntityList<T> list(SearchFilter filter);
+    EntityList<T> list(SearchFilter filter);
 
     /**
      * UPDATE entity
      * @param entity entity
      * @return HTTP status code
      */
-    public int update(T entity);
+    int update(T entity);
 
     /**
      * GET entity
      * @param id id of entity
      * @return entity
      */
-    public T view(String id);
+    T view(String id);
 }
