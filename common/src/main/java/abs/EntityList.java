@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class EntityList<T extends TeelaEntity> implements Iterable<T> {
+public abstract class EntityList<T extends AbstractEntity> implements Iterable<T> {
 
     protected List <T> entities;
 
@@ -75,8 +75,7 @@ public abstract class EntityList<T extends TeelaEntity> implements Iterable<T> {
         if (entities.size() == 0) {
             return null;
         }
-        T entity =  entities.get(entities.size()-1);
-        return entity;
+        return entities.get(entities.size()-1);
     }
 
     public T random() {

@@ -1,7 +1,7 @@
 package model.rfi;
 
+import abs.AbstractEntity;
 import abs.SearchFilter;
-import abs.TeelaEntity;
 import model.InformationRequest;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -24,7 +24,7 @@ public class RFISearchFilter extends SearchFilter {
     private String requestSource;
     private Date minDueDate;
     private Date maxDueDate;
-    private final List<RFIStates> states = new ArrayList<RFIStates>(Arrays.asList(RFIStates.values()));
+    private final List<RFIStates> states = new ArrayList<>(Arrays.asList(RFIStates.values()));
 
 
     public String getRequestSource() {
@@ -93,8 +93,8 @@ public class RFISearchFilter extends SearchFilter {
 
 
 
-
-    public boolean isAppliedToEntity(TeelaEntity entity) {
+    @SuppressWarnings("unchecked")
+    public boolean isAppliedToEntity(AbstractEntity entity) {
         return activeFilter.isAppliedToEntity(entity);
     }
 
