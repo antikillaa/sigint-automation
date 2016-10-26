@@ -31,7 +31,7 @@ public abstract class AbstractEntity {
                 originalValue = BeanUtils.getProperty(this, field.getName());
                 requestValue = BeanUtils.getProperty(object, field.getName());
             } catch (Exception e) {
-                throw new AssertionError();
+                throw new AssertionError(e.getMessage(), e);
             }
             if (originalValue == null && requestValue == null) {
                 continue;
