@@ -4,7 +4,7 @@ import model.Sort;
 
 import java.util.List;
 
-public abstract class EntityListResult <T extends TeelaEntity> {
+public abstract class EntityListResult <T extends AbstractEntity> {
 
     private List<T> result;
     private int totalPages;

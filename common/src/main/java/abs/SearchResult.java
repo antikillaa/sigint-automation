@@ -2,7 +2,7 @@ package abs;
 
 import java.util.List;
 
-public abstract class SearchResult <T extends TeelaEntity> {
+public abstract class SearchResult <T extends AbstractEntity> {
 
     private List<T> content;
 

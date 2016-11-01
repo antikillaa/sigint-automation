@@ -2,7 +2,7 @@ package abs;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-public abstract class SearchFilter <T extends TeelaEntity> {
+public abstract class SearchFilter <T extends AbstractEntity> {
 
     @JsonIgnore
     protected SearchFilter activeFilter;
