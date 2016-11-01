@@ -40,9 +40,7 @@ public class DateHelper {
      * @return True if deadline occurred, False otherwise
      */
     public static boolean isTimeout(Date deadline) {
-        Calendar now = Calendar.getInstance();
-        return now.after(deadline);
-
+        return new Date().compareTo(deadline) > 0;
     }
 
     /**
