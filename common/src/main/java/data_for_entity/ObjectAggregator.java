@@ -180,7 +180,10 @@ class ObjectAggregator {
                 int collectionSize = fieldOptions.getCollectionSize();
                 Class<?> collectionGenericType = Helpers.getCollectionType(field.getField());
                 for (int i=1; i <= collectionSize; i++) {
-                    collection.add(generateSingleData(collectionGenericType));
+                    Object object = generateSingleData(collectionGenericType);
+                    if (object != null) {
+                        collection.add(object);
+                    }
                 }
                 return objectClass.cast(collection);
             }
