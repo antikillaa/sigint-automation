@@ -5,11 +5,16 @@ import error_reporter.ErrorReporter;
 import http.requests.HttpRequest;
 import json.JsonConverter;
 import org.apache.log4j.Logger;
+import org.glassfish.jersey.SslConfigurator;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.HttpUrlConnectorProvider;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import utils.DateHelper;
 
+import javax.net.ssl.SSLContext;
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -30,10 +35,64 @@ public class G4HttpClient {
     private final int waitTime = 15;
     private final int maxTryCount = 3;
 
+    private static final String TRUSTORE_CLIENT_FILE = "truststore_client";
+    private static final String TRUSTSTORE_CLIENT_PWD = "123456";
+    private static final String KEYSTORE_CLIENT_FILE = "keystore_client";
+    private static final String KEYSTORE_CLIENT_PWD = "123456";
+
+    private Protocol protocol;
+
     /**
-     * G4HttpClient.
+     * G4HttpClient, by default use http client
      */
     public G4HttpClient() {
+        http();
+    }
+
+    private enum Protocol {
+        HTTP, HTTPS
+    }
+
+    public G4HttpClient http() {
+        protocol = Protocol.HTTP;
+        return this;
+    }
+
+    public G4HttpClient https() {
+        protocol = Protocol.HTTPS;
+        return this;
+    }
+
+    private Client buildClient() {
+        switch (protocol) {
+            case HTTP:
+                return httpClient();
+            case HTTPS:
+                return httpsClient();
+            default:
+                log.warn("Http/Https protocol not defined in G4HttpClient. Use http client");
+                return httpClient();
+        }
+    }
+
+    private Client httpClient() {
+        return ClientBuilder.newClient();
+    }
+
+    private Client httpsClient() {
+        ClientConfig clientConfig = new ClientConfig().connectorProvider(new HttpUrlConnectorProvider());
+
+        SslConfigurator sslConfig = SslConfigurator.newInstance()
+                .trustStoreFile(TRUSTORE_CLIENT_FILE)
+                .trustStorePassword(TRUSTSTORE_CLIENT_PWD)
+                .keyStoreFile(KEYSTORE_CLIENT_FILE)
+                .keyPassword(KEYSTORE_CLIENT_PWD);
+
+        final SSLContext sslContext = sslConfig.createSSLContext();
+        return ClientBuilder.newBuilder()
+                .withConfig(clientConfig)
+                .sslContext(sslContext)
+                .build();
     }
 
     /**
@@ -58,7 +117,7 @@ public class G4HttpClient {
         String URL = host + request.getURI();
         log.debug("Building request to url:" + URL);
 
-        Builder builder = ClientBuilder.newClient()
+        Builder builder = buildClient()
                 .register(MultiPartFeature.class)
                 .target(URL)
                 .request(request.getMediaType());
@@ -86,7 +145,7 @@ public class G4HttpClient {
         HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(username, password);
         log.debug("http basic authentication, username: " + username + " password: " + password);
 
-        return ClientBuilder.newClient()
+        return buildClient()
                 .register(feature)
                 .target(URL)
                 .request(request.getMediaType())
