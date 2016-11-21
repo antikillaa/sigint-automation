@@ -10,6 +10,7 @@ import json.JsonConverter;
 import model.*;
 import model.Process;
 import org.apache.log4j.Logger;
+import utils.DateHelper;
 
 import java.util.List;
 
@@ -26,10 +27,9 @@ public class UploadFilesService {
      * @param file G4file (File with MediaType field)
      * @return HTTP status code
      */
-    public int upload(G4File file) {
+    public int upload(G4File file, Source source, String ownerId) {
         log.info("Upload file" + file.getAbsolutePath() + " with 'meta' string..");
-
-        UploadFilesRequest request = new UploadFilesRequest().upload(file);
+        UploadFilesRequest request = new UploadFilesRequest().upload(file, source, ownerId);
         G4Response response = g4HttpClient.sendRequest(request);
 
         FileMeta fileMeta = JsonConverter.readEntityFromResponse(response, FileMeta.class);
@@ -37,7 +37,7 @@ public class UploadFilesService {
             throw new AssertionError("Error during upload file. Response: " + response.getMessage());
         } else {
             context.put("fileMeta", fileMeta);
-            context.put("uploadDate", fileMeta.getDate());
+            context.put("uploadDate", DateHelper.getDateFromUnixTimestamp(fileMeta.getTime()));
         }
 
         return response.getStatus();

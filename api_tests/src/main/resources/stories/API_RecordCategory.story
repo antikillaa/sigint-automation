@@ -3,6 +3,8 @@ Meta:
 
 
 Scenario: API.Create record category
+Meta:
+@performance
 Given I sign in as admin user
 When I send create new random record category request
 Then I got response code 200

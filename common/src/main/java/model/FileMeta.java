@@ -11,18 +11,35 @@ import java.util.Date;
 public class FileMeta extends TeelaEntity {
 
     private Meta meta;
+    private String sourceId;
+    private String owner;
     private String name; // Strategic/S-SMS/2016/08/22/SSMS1471876167632.csv
     private String type; // "text/csv"
-    private Date date;
-    private String identifier;
+    private Long time;
+    private String id;
     private String bucket; // "2016-08-19-5"
     private Long length;
-    private String etag;
     private Date timestamp;
     private String path; // "/S/S-SMS/2016/08/19"
     private String file; // SSMS1471876167632
     private String extension; // ".csv"
-
+    
+    public String getSourceId() {
+        return sourceId;
+    }
+    
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
+    }
+    
+    public String getOwner() {
+        return owner;
+    }
+    
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+    
     public Meta getMeta() {
         return meta;
     }
@@ -47,20 +64,20 @@ public class FileMeta extends TeelaEntity {
         this.type = type;
     }
 
-    public Date getDate() {
-        return date;
+    public Long getTime() {
+        return time;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTime(Long time) {
+        this.time = time;
     }
 
-    public String getIdentifier() {
-        return identifier;
+    public String getId() {
+        return id;
     }
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public void setId(String identifier) {
+        this.id = identifier;
     }
 
     public String getBucket() {

@@ -1,6 +1,8 @@
 package steps;
 
 import abs.EntityList;
+import app_context.AppContext;
+import app_context.RunContext;
 import conditions.Conditions;
 import conditions.Verify;
 import model.*;
@@ -34,8 +36,9 @@ public class APIUploadFilesSteps extends APISteps {
             log.error(e.getMessage());
             log.trace(e);
         }
-
-        int code = service.upload(file);
+        Source source = RunContext.get().get("source", Source.class);
+        LoggedUser user = AppContext.get().getLoggedUser();
+        int code = service.upload(file, source, user.getId());
         context.put("code", code);
 
         Date minDate = context.get("uploadDate", Date.class);
@@ -70,13 +73,11 @@ public class APIUploadFilesSteps extends APISteps {
 
         // update file meta
         FileMeta fileMeta = context.get("fileMeta", FileMeta.class);
-        fileMeta = service.meta(fileMeta.getIdentifier());
+        fileMeta = service.meta(fileMeta.getId());
         context.put("fileMeta", fileMeta);
 
-        boolean isProcessed = fileMeta.getMeta().getIsProcessed();
-        String md5 = fileMeta.getMeta().getMd5_sigint();
-
-        return (isProcessed && md5 != null);
+        return fileMeta.getMeta().getIsProcessed();
+        
     }
 
     @When("ingest matching complete")

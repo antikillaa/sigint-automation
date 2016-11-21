@@ -1,7 +1,5 @@
 package http.requests;
 
-import app_context.AppContext;
-import app_context.RunContext;
 import http.HttpMethod;
 import json.JsonConverter;
 import model.*;
@@ -36,13 +34,14 @@ public class UploadFilesRequest extends HttpRequest {
      * Multipart UPLOAD file request
      * API: POST /api/upload/files
      *
-     * @param file file for upload
+     * @param file file for upload;
+     * @param source of file;
+     * @param ownerId of file;
      * @return UploadFilesRequest
      */
-    public UploadFilesRequest upload(G4File file) {
-        FileMeta fileMeta = initFileMeta(file);
+    public UploadFilesRequest upload(G4File file, Source source, String ownerId) {
+        FileMeta fileMeta = initFileMeta(file, source, ownerId);
         String meta = JsonConverter.toJsonString(fileMeta);
-
         addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         addBodyString("meta", meta);
         file.deleteOnExit();
@@ -57,19 +56,20 @@ public class UploadFilesRequest extends HttpRequest {
      * @param file file for upload
      * @return FileMeta model for uploaded file
      */
-    private FileMeta initFileMeta(G4File file) {
-        Source source = RunContext.get().get("source", Source.class);
-        LoggedUser user = AppContext.get().getLoggedUser();
-
-        Meta meta = new Meta();
-        meta.setFileName(file.getName());
-        meta.setUserId(user.getId());
-        meta.setSourceId(source.getId());
-
+    private FileMeta initFileMeta(G4File file, Source source, String ownerId) {
         FileMeta fileMeta = new FileMeta();
+        fileMeta.setName(file.getName());
+        fileMeta.setOwner(ownerId);
+        fileMeta.setSourceId(source.getId());
+        Meta meta = new Meta();
+        MetaProperties properties = new MetaProperties();
+        properties.setRecordType(source.getRecordType());
+        properties.setSourceType(source.getType());
+        meta.setProperties(properties);
         fileMeta.setMeta(meta);
-        String path = "/" + source.getType() + "/" + source.getName()
-                + new SimpleDateFormat("/yyyy/MM/dd/").format(new Date()) + file.getName();
+        String path = "/" + source.getType().toLetterCode() + "/" + source.getName()
+                + new SimpleDateFormat("/yyyy/MM/dd/").format(new Date()) + "/" + source.getType()
+                .toString().toLowerCase() + "/" + file.getName();
         fileMeta.setName(path);
         fileMeta.setType(file.getMediaType().toString());
 

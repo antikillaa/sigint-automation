@@ -32,7 +32,11 @@ public class DateHelper {
         }
         return null;
     }
-
+    
+    public static Date getDateFromUnixTimestamp(long timeStamp) {
+        return new Date(timeStamp*1000);
+    }
+    
     /**
      * Checks if param date is already passed in comparision to now
      *
