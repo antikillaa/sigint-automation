@@ -1,6 +1,8 @@
 package model;
 
 import abs.TeelaEntity;
+import data_for_entity.annotations.DataProvider;
+import data_for_entity.data_providers.PhonesProvider;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 public class RecordCategory extends TeelaEntity {
 
     private String name;
+    @DataProvider(PhonesProvider.class)
     private ArrayList<String> phones;
 
 
