@@ -30,7 +30,8 @@ public class APIRecordCategorySteps extends APISteps {
         context.put("code", responseCode);
         context.put("requestRecordCategory", recordCategory);
     }
-
+    
+    
     @When("I send get list of record categories request")
     public void getListOfRecordCategory() {
         List<RecordCategory> categories = service.list();

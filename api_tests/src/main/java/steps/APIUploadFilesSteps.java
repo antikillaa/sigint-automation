@@ -13,7 +13,6 @@ import org.jbehave.core.annotations.When;
 import services.RecordService;
 import services.UploadFilesService;
 import utils.DateHelper;
-import utils.Parser;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -102,17 +101,17 @@ public class APIUploadFilesSteps extends APISteps {
 
         // find uploaded file in history list
         FileMeta fileMeta = context.get("fileMeta", FileMeta.class);
-        for (Process process : processList) {
-            if (process.getMd5().equals(fileMeta.getMeta().getMd5_sigint())) {
-                log.info("Check uploaded file processing status..");
-                log.debug(Parser.entityToString(process));
-                if (process.getState().equals(State.Complete) && process.isIngestMatchingComplete()) {
-                    log.info("File is processed");
-                    context.put("process", process);
-                    return true;
-                }
-            }
-        }
+        //for (Process process : processList) {
+        //    if (process.getMd5().equals(fileMeta.getMeta().getMd5_sigint())) {
+        //        log.info("Check uploaded file processing status..");
+        //        log.debug(Parser.entityToString(process));
+        //        if (process.getState().equals(State.Complete) && process.isIngestMatchingComplete()) {
+        //            log.info("File is processed");
+        //            context.put("process", process);
+        //            return true;
+        //        }
+        //    }
+        //}
         return false;
     }
 

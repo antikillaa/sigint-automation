@@ -12,6 +12,7 @@ import model.RecordCategory;
 import model.RecordCategoryListResult;
 import model.Result;
 import org.apache.log4j.Logger;
+import org.junit.Assert;
 import utils.Parser;
 
 import java.util.List;
@@ -43,6 +44,17 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
             Entities.getRecordCategories().addOrUpdateEntity(entity);
         }
         return response.getStatus();
+    }
+    
+    public void addAll(List<RecordCategory> catList) {
+        
+        for (RecordCategory category: catList) {
+            RecordCategoriesRequest request = new RecordCategoriesRequest().add(category);
+            G4Response response = g4HttpClient.sendRequest(request);
+    
+            Result result = JsonConverter.readEntityFromResponse(response, Result.class);
+            Assert.assertTrue(result.getResult().equals("ok"));
+        }
     }
 
     @Override
