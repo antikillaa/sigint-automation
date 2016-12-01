@@ -2,6 +2,7 @@ package model;
 
 import abs.TeelaEntity;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Date;
 public class FileMeta extends TeelaEntity {
 
     private Meta meta;
+    @JsonProperty("source_id")
     private String sourceId;
     private String owner;
     private String name; // Strategic/S-SMS/2016/08/22/SSMS1471876167632.csv

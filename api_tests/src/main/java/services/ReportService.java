@@ -3,11 +3,10 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
-import http.G4HttpClient;
-import http.G4Response;
+import http.*;
 import http.requests.ReportRequest;
-import json.JsonConverter;
 import model.Report;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
@@ -23,40 +22,39 @@ public class ReportService implements EntityService<Report> {
      * @return HTTP status code
      */
     @Override
-    public int add(Report entity) {
+    public OperationResult<Report> add(Report entity) {
         log.info("Sending create new report request...");
         log.debug(Parser.entityToString(entity));
-
         ReportRequest request = new ReportRequest().add(entity);
         G4Response response = g4HttpClient.sendRequest(request);
         Report report = JsonConverter.readEntityFromResponse(response, Report.class, "result");
+        OperationResult<Report> operationResult = new OperationResult<>(response, report);
         if (report != null) {
             Entities.getReports().addOrUpdateEntity(report);
         } else {
-            log.error("Failed to create report. Response: " + response.getMessage());
-            throw new AssertionError("Failed to create report. Response: " + response.getMessage());
+            OperationsResults.throwError(operationResult);
         }
-        return response.getStatus();
+        return operationResult;
     }
 
     @Override
-    public int remove(Report entity) {
-        return 0;
+    public OperationResult remove(Report entity) {
+        throw new NotImplementedException();
     }
 
     @Override
-    public EntityList<Report> list(SearchFilter filter) {
-        return null;
+    public OperationResult<EntityList<Report>> list(SearchFilter filter) {
+        throw new NotImplementedException();
     }
 
     @Override
-    public int update(Report entity) {
-        return 0;
+    public OperationResult<Report> update(Report entity) {
+        throw new NotImplementedException();
     }
 
     @Override
-    public Report view(String id) {
-        return null;
+    public OperationResult<Report> view(String id) {
+        throw new NotImplementedException();
     }
 
 }

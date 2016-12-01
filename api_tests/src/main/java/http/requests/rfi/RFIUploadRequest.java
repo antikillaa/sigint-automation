@@ -3,7 +3,7 @@ package http.requests.rfi;
 
 import http.requests.HttpRequest;
 import http.HttpMethod;
-import json.JsonConverter;
+import http.JsonConverter;
 import model.FileAttachment;
 import model.InformationRequest;
 import org.apache.log4j.Logger;

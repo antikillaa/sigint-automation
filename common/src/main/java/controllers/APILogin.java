@@ -1,9 +1,8 @@
 package controllers;
 
-import app_context.RunContext;
-import http.G4Response;
-import json.JsonConverter;
 import app_context.AppContext;
+import http.OperationResult;
+import http.OperationsResults;
 import model.LoggedUser;
 import model.Token;
 import model.User;
@@ -14,32 +13,29 @@ public class APILogin {
 
     private SignInService signService = new SignInService();
     private AppContext context = AppContext.get();
-    private RunContext runContext = RunContext.get();
     private Logger log = Logger.getLogger(APILogin.class);
 
     /**
      * Sign in as user and add LoggedUser in AppContext.
-     *
      * @param user User for sign in.
      */
-    public void signInAsUser(User user) {
+    public OperationResult<Token> signInAsUser(User user) {
         log.info("Signing in as user: " + user);
 
-        G4Response response = signService.signIn(user.getName(), user.getPassword());
-        runContext.put("code", response.getStatus());
-        if (response.getStatus() == 200) {
-            Token token = JsonConverter.readEntityFromResponse(response, Token.class);
+        OperationResult<Token> operationResult = signService.signIn(user.getName(), user.getPassword());
+        OperationsResults.setResult(operationResult);
+        if (operationResult.isSuccess()) {
+            Token token = operationResult.getResult();
             context.setLoggedUser(new LoggedUser(user, token));
-
             //update user
-            User me = new UserService().me();
+            OperationResult<User> meResult = new UserService().me();
+            User me = meResult.getResult();
             me.setPassword(user.getPassword());
             me.setRoles(user.getRoles());
 
             context.setLoggedUser(new LoggedUser(me, token));
-        } else {
-            runContext.put("message", response.getMessage());
         }
+        return operationResult;
     }
 
 }

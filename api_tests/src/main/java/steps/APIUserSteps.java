@@ -4,7 +4,9 @@ import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
-import json.JsonConverter;
+import http.JsonConverter;
+import http.OperationResult;
+import http.OperationsResults;
 import model.User;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -25,11 +27,9 @@ public class APIUserSteps extends APISteps {
         userGroupIds.add(Entities.getGroups().getLatest().getId());
         User user = getRandomUser();
         user.setUserGroupIds(userGroupIds);
-
-        int responseCode = service.add(user);
-
-        context.put("code", responseCode);
-        context.put("requestUser", user);
+        OperationResult<User> operationResult = service.add(user);
+        OperationsResults.setResult(operationResult);
+        context.put("requestUser", operationResult.getResult());
     }
 
     @Then("Created user is correct")
@@ -37,10 +37,10 @@ public class APIUserSteps extends APISteps {
         User createdUser = Entities.getUsers().getLatest();
         User requestUser = context.get("requestUser", User.class);
 
-        log.info("requested: " + JsonConverter.toJsonString(requestUser));
-        log.info("created: " + JsonConverter.toJsonString(createdUser));
+        log.debug("requested: " + JsonConverter.toJsonString(requestUser));
+        log.debug("created: " + JsonConverter.toJsonString(createdUser));
 
-        Verify.shouldBe(Conditions.equals(createdUser, requestUser));
+        Verify.shouldBe(Conditions.equals(createdUser.getName(), requestUser.getName()));
     }
     
     static User getRandomUser() {

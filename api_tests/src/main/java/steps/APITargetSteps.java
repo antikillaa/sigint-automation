@@ -6,7 +6,9 @@ import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
 import file_generator.FileGenerator;
-import json.JsonConverter;
+import http.JsonConverter;
+import http.OperationResult;
+import http.OperationsResults;
 import model.*;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
@@ -37,17 +39,15 @@ public class APITargetSteps extends APISteps {
             target.setGroups(groups);
         }
 
-        int response = service.add(target);
-
-        context.put("code", response);
-        context.put("requestTarget", target);
+        OperationResult<Target> operationResult = service.add(target);
+        OperationsResults.setResult(operationResult);
+        context.put("requestTarget", operationResult.getResult());
     }
 
     @Then("Created target is correct")
     public void createdTargetCorrect() {
         Target contextTarget = context.get("requestTarget", Target.class);
         Target createdTarget = Entities.getTargets().getLatest();
-
         Assert.assertTrue(createdTarget.getId() != null);
         isEqualsTargets(createdTarget, contextTarget);
     }
@@ -55,10 +55,8 @@ public class APITargetSteps extends APISteps {
     @When("I send get target details request")
     public void getTargetDetails() {
         Target createdTarget = Entities.getTargets().getLatest();
-
-        Target viewedTarget = service.view(createdTarget.getId());
-
-        context.put("viewedTarget", viewedTarget);
+        OperationResult<Target> operationResult = service.view(createdTarget.getId());
+        context.put("viewedTarget", operationResult.getResult());
     }
 
     @Then("Viewed target is correct")
@@ -94,65 +92,59 @@ public class APITargetSteps extends APISteps {
         updatedTarget.setName(RandomStringUtils.randomAlphabetic(10));
         updatedTarget.setDescription(RandomStringUtils.randomAlphabetic(20));
         log.info("Updated target: " + JsonConverter.toJsonString(updatedTarget));
-        int responseCode = service.update(updatedTarget);
-        context.put("code", responseCode);
-        context.put("updatedTarget", updatedTarget);
+        OperationResult<Target> operationResult = service.update(updatedTarget);
+        OperationsResults.setResult(operationResult);
+        context.put("updatedTarget", operationResult.getResult());
     }
 
     @Then("Target updated correctly")
     public void targetUpdatedCorrectly() throws NullReturnException {
         Target updatedTarget = context.get("updatedTarget", Target.class);
-
-        Target resultTarget = service.view(updatedTarget.getId());
-
-        Verify.shouldBe(isTrue.element(isEqualsTargets(updatedTarget, resultTarget)));
+        OperationResult<Target> operationResult = service.view(updatedTarget.getId());
+        Verify.shouldBe(isTrue.element(isEqualsTargets(updatedTarget, operationResult.getResult())));
     }
 
     @When("I send delete target request")
     public void deleteTargetRequest() {
         Target createdTarget = Entities.getTargets().getLatest();
 
-        int responseCode = service.remove(createdTarget);
-
+        OperationResult operationResult = service.remove(createdTarget);
+        OperationsResults.setResult(operationResult);
         context.put("deletedTarget", createdTarget);
-        context.put("code", responseCode);
     }
 
     @Then("Target deleted correctly")
     public void targetDeletedCorrectly() throws NullReturnException {
         Target deletedTarget = context.get("deletedTarget", Target.class);
-
-        Target resultTarget = service.view(deletedTarget.getId());
-
-        Verify.shouldBe(isTrue.element(resultTarget.getName().contains("DELETED at")));
+        OperationResult<Target> operationResult = service.view(deletedTarget.getId());
+        Verify.shouldBe(isTrue.element(operationResult.getResult().getName().contains("DELETED at")));
     }
 
     @When("I send upload targets request with XLS file containing $count targets without specified id")
     public void targetGeneratedXls(String count){
         List<Target> targets = getRandomTargets(Integer.valueOf(count));
-
-        int responseCode = service.upload(targets);
-
-        context.put("code", responseCode);
+        OperationResult<UploadResult> operationResult = service.upload(targets);
+        OperationsResults.setResult(operationResult);
         context.put("uploadedTargets", targets);
+        context.put("uploadResult", operationResult.getResult());
     }
 
     @When("I send upload targets request with XLS file containing $count targets with existing group request")
     public void uploadTargetsWithExistingGroup(String count){
-        List<TargetGroup> targetGroups = context.get("targetGroupList", List.class);
+        EntityList<TargetGroup> targetGroups = context.get("targetGroupList", EntityList.class);
         List<Target> targets = getRandomTargets(Integer.valueOf(count));
 
         for (Target target : targets ) {
             int index = RandomUtils.nextInt(targetGroups.size());
-            TargetGroup group = targetGroups.get(index);
+            TargetGroup group = targetGroups.getEntities().get(index);
             target.addGroup(group);
             Entities.getTargetGroups().addOrUpdateEntity(group);
         }
 
-        int responseCode = service.upload(targets);
-
-        context.put("code", responseCode);
+        OperationResult<UploadResult> operationResult = service.upload(targets);
+        OperationsResults.setResult(operationResult);
         context.put("uploadedTargets", targets);
+        context.put("uploadResult", operationResult.getResult());
     }
 
     @When("I send search targets by $criteria and value $value")
@@ -183,8 +175,7 @@ public class APITargetSteps extends APISteps {
         }
 
         TargetFilter searchFilter = new TargetFilter().filterBy(criteria, value);
-        EntityList<Target> targets = service.list(searchFilter);
-
+        EntityList<Target> targets = service.list(searchFilter).getResult();
         context.put("searchFilter", searchFilter);
         context.put("searchResult", targets);
     }
@@ -277,8 +268,7 @@ public class APITargetSteps extends APISteps {
     @When("I send get groups list of new target request")
     public void getTargetGroupsOfNewTarget(){
         Target target = Entities.getTargets().getLatest();
-        List<TargetGroup> targetGroups = service.getTargetGroups(target.getId());
-
+        EntityList<TargetGroup> targetGroups = service.getTargetGroups(target.getId()).getResult();
         context.put("targetGroupList", targetGroups);
     }
 
@@ -287,15 +277,15 @@ public class APITargetSteps extends APISteps {
         List<Target> targets = getRandomTargets(Integer.valueOf(count));
 
         for (Target target : targets) {
-            TargetGroup targetGroup = (TargetGroup)objectInitializer.randomEntity(TargetGroup.class);
+            TargetGroup targetGroup = objectInitializer.randomEntity(TargetGroup.class);
             target.addGroup(targetGroup);
             Entities.getTargetGroups().addOrUpdateEntity(targetGroup);
         }
 
-        int responseCode = service.upload(targets);
-
-        context.put("code", responseCode);
+        OperationResult<UploadResult> operationResult = service.upload(targets);
+        OperationsResults.setResult(operationResult);
         context.put("uploadedTargets", targets);
+        context.put("uploadResult", operationResult.getResult());
     }
 
     @Then("Upload result of $count targets is successful")
@@ -319,10 +309,9 @@ public class APITargetSteps extends APISteps {
     @Given("$count targets with phones generated and added")
     public void targetWithPhonesExist(String count){
         int targetsCount = Integer.valueOf(count);
-
         List<Target> targets = getRandomTargets(targetsCount);
-        int statusCode = service.upload(targets);
-        Verify.shouldBe(Conditions.equals(statusCode, 200));
+        OperationResult operationResult = service.upload(targets);
+        Verify.shouldBe(Conditions.isTrue.element(operationResult.isSuccess()));
 
         GenerationMatrix generationMatrix = new GenerationMatrix(targets);
         context.put("generationMatrix", generationMatrix);

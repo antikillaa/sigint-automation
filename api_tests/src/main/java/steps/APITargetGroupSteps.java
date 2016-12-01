@@ -1,9 +1,12 @@
 package steps;
 
+import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
+import http.OperationResult;
+import http.OperationsResults;
 import model.TargetGroup;
 import org.apache.commons.lang.RandomStringUtils;
 import org.jbehave.core.annotations.Then;
@@ -28,9 +31,9 @@ public class APITargetGroupSteps extends APISteps {
             targets.add(Entities.getTargets().random().getId());
             group.setTargets(targets);
         }
-        int response = service.add(group);
-        context.put("code", response);
-        context.put("requestTargetGroup", group);
+        OperationResult<TargetGroup> operationResult = service.add(group);
+        OperationsResults.setResult(operationResult);
+        context.put("requestTargetGroup", operationResult.getResult());
     }
 
     @Then("Created target group is correct")
@@ -50,33 +53,27 @@ public class APITargetGroupSteps extends APISteps {
     @When("I send get target group details request")
     public void getTargetGroupRequest() {
         TargetGroup createdTargetGroup = Entities.getTargetGroups().getLatest();
-
-        TargetGroup viewedTargetGroup = service.view(createdTargetGroup.getId());
-
-        context.put("viewedTargetGroup", viewedTargetGroup);
+        OperationResult<TargetGroup> operationResult = service.view(createdTargetGroup.getId());
+        context.put("viewedTargetGroup", operationResult.getResult());
     }
 
     @Then("Viewed target group is correct")
     public void viewedTargetGroupIsCorrect() {
         TargetGroup createdTarget = Entities.getTargetGroups().getLatest();
-
         TargetGroup viewedTargetGroup = context.get("viewedTargetGroup", TargetGroup.class);
-
         equalsTargetGroups(viewedTargetGroup, createdTarget);
     }
 
     @When("I send get list of target group request")
     public void getListOfTargetGroupsRequest() throws NullReturnException {
-        List<TargetGroup> targetGroupList = service.view();
-
+        EntityList<TargetGroup> targetGroupList = service.view().getResult().getResult();
         context.put("targetGroupList", targetGroupList);
     }
 
     @Then("Created target group $criteria list")
     public void targetGroupsContainNewTargetGroup(String criteria) throws NullReturnException {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
-        List<TargetGroup> list = context.get("targetGroupList", List.class);
-
+        EntityList<TargetGroup> list = context.get("targetGroupList", EntityList.class);
         Boolean contains = false;
         for (TargetGroup entity : list) {
             if (Verify.isTrue(isTrue.element(equalsTargetGroups(targetGroup, entity)))) {
@@ -84,7 +81,6 @@ public class APITargetGroupSteps extends APISteps {
                 break;
             }
         }
-
         if (criteria.toLowerCase().equals("in")) {
             Verify.shouldBe(isTrue.element(contains));
         } else if (criteria.toLowerCase().equals("not in")) {
@@ -97,8 +93,7 @@ public class APITargetGroupSteps extends APISteps {
     @Then("target group $criteria list")
     public void existingTargetGroupContainsInList(String criteria) throws NullReturnException {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
-        List<TargetGroup> list = context.get("targetGroupList", List.class);
-
+        EntityList<TargetGroup> list = context.get("targetGroupList", EntityList.class);
         Boolean contains = false;
         for (TargetGroup entity : list) {
             if (targetGroup.getName().equals(entity.getName())) {
@@ -119,38 +114,31 @@ public class APITargetGroupSteps extends APISteps {
     @When("I send delete target group request")
     public void deleteTargetGroupRequest() {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
-
-        int responseCode = service.remove(targetGroup);
-
+        OperationResult operationResult = service.remove(targetGroup);
+        OperationsResults.setResult(operationResult);
         context.put("deletedTargetGroup", targetGroup);
-        context.put("code", responseCode);
     }
 
     @Then("Target group deleted correctly")
     public void targetGroupDeletedCorrectly() {
         TargetGroup deletedTargetGroup = context.get("deletedTargetGroup", TargetGroup.class);
-
-        TargetGroup resultTargetGroup = service.view(deletedTargetGroup.getId());
-
-        Verify.shouldBe(isTrue.element(resultTargetGroup.getName().contains("DELETED at")));
+        OperationResult<TargetGroup> operationResult = service.view(deletedTargetGroup.getId());
+        Verify.shouldBe(isTrue.element(operationResult.getResult().getName().contains("DELETED at")));
     }
 
     @When("I send update target group request")
     public void updateTargetGroupRequest() {
         TargetGroup createdTargetGroup = Entities.getTargetGroups().getLatest();
         TargetGroup updatedTargetGroup = updateTargetGroup(createdTargetGroup);
-
-        int responseCode = service.update(updatedTargetGroup);
-
-        context.put("code", responseCode);
-        context.put("updatedTargetGroup", updatedTargetGroup);
+        OperationResult<TargetGroup> operationResult = service.update(updatedTargetGroup);
+        OperationsResults.setResult(operationResult);
+        context.put("updatedTargetGroup", operationResult.getResult());
     }
 
     @Then("Target group updated correctly")
     public void targetGroupUpdatedCorrectly() {
         TargetGroup updatedTargetGroup = context.get("updatedTargetGroup", TargetGroup.class);
         TargetGroup responseTargetGroup = Entities.getTargetGroups().getLatest();
-
         equalsTargetGroups(responseTargetGroup, updatedTargetGroup);
     }
 
@@ -158,7 +146,6 @@ public class APITargetGroupSteps extends APISteps {
     public void groupNotDuplicated() {
         List<TargetGroup> targetGroups = Entities.getTargets().getLatest().getGroups();
         List<TargetGroup> groups = context.get("targetGroupList", List.class);
-
         for (TargetGroup uploadedGroup : targetGroups) {
             int count = 0;
             for (TargetGroup group : groups) {

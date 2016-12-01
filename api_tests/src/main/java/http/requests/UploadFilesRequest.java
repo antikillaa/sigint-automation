@@ -1,7 +1,7 @@
 package http.requests;
 
 import http.HttpMethod;
-import json.JsonConverter;
+import http.JsonConverter;
 import model.*;
 import org.apache.log4j.Logger;
 
@@ -27,6 +27,19 @@ public class UploadFilesRequest extends HttpRequest {
      */
     public UploadFilesRequest meta(String id) {
         setURI(URI + "/" + id + "/meta");
+        return this;
+    }
+    
+    /**
+     * Send POST request to notify sigint that file is uploaded
+     * @param fileMeta {@link FileMeta} of the file to be notified
+     * @return formed notify request
+     */
+    public UploadFilesRequest notify(FileMeta fileMeta) {
+        setURI("/api/sigint/upload/notify")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(fileMeta);
+        
         return this;
     }
 
@@ -68,7 +81,7 @@ public class UploadFilesRequest extends HttpRequest {
         meta.setProperties(properties);
         fileMeta.setMeta(meta);
         String path = "/" + source.getType().toLetterCode() + "/" + source.getName()
-                + new SimpleDateFormat("/yyyy/MM/dd/").format(new Date()) + "/" + source.getType()
+                + new SimpleDateFormat("/yyyy/MM/dd/").format(new Date()) + source.getType()
                 .toString().toLowerCase() + "/" + file.getName();
         fileMeta.setName(path);
         fileMeta.setType(file.getMediaType().toString());

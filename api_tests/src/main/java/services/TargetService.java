@@ -2,19 +2,15 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
-import app_context.RunContext;
 import app_context.entities.Entities;
-import conditions.Conditions;
-import conditions.Verify;
-import errors.NullReturnException;
 import file_generator.FileGenerator;
 import http.G4HttpClient;
 import http.G4Response;
+import http.JsonConverter;
+import http.OperationResult;
 import http.requests.targets.TargetRequest;
-import json.JsonConverter;
 import model.*;
 import model.targetGroup.TargetGroupSearchResult;
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -23,9 +19,6 @@ public class TargetService implements EntityService<Target> {
 
     private static G4HttpClient g4HttpClient = new G4HttpClient();
     private Logger log = Logger.getLogger(TargetService.class);
-    private RunContext context = RunContext.get();
-
-
     /*
         TODO
         GET /targets getTargets
@@ -40,20 +33,20 @@ public class TargetService implements EntityService<Target> {
      * @return HTTP status code
      */
     @Override
-    public int add(Target entity) {
+    public OperationResult<Target> add(Target entity) {
         log.info("Creating new target");
 
         TargetRequest request = new TargetRequest().add(entity);
         G4Response response = g4HttpClient.sendRequest(request);
 
         Target target = JsonConverter.readEntityFromResponse(response, Target.class, "id");
-        if (target != null) {
+        OperationResult<Target> operationResult = new OperationResult<>(response, target);
+        if (operationResult.isSuccess()) {
             Entities.getTargets().addOrUpdateEntity(target);
         } else {
             log.error("Add new target process was failed");
-            throw new AssertionError("Add new target process was failed");
         }
-        return response.getStatus();
+        return operationResult;
     }
 
     /**
@@ -62,19 +55,16 @@ public class TargetService implements EntityService<Target> {
      * @param targets list of Targets
      * @return HTTP status code
      */
-    public int upload(List<Target> targets) {
+    public OperationResult<UploadResult> upload(List<Target> targets) {
         log.info("Writing Targets to file..");
         G4File file = new FileGenerator(Target.class).write(targets);
 
         log.info("Upload file with " + targets.size() + " targets..");
         TargetRequest request = new TargetRequest().upload(file);
         G4Response response = g4HttpClient.sendRequest(request);
-
         UploadResult uploadResult = JsonConverter.readEntityFromResponse(response, UploadResult.class, "result");
-        if (uploadResult != null) {
-            context.put("uploadResult", uploadResult);
-        }
-        return response.getStatus();
+        return new OperationResult<>(response, uploadResult);
+        
     }
 
     /**
@@ -84,20 +74,16 @@ public class TargetService implements EntityService<Target> {
      * @return HTTP status code
      */
     @Override
-    public int remove(Target entity) {
+    public OperationResult remove(Target entity) {
         log.info("Deleting target id:" + entity.getId());
-
         TargetRequest request = new TargetRequest().delete(entity.getId());
         G4Response response = g4HttpClient.sendRequest(request);
-
-        if (response.getStatus() == 200) {
-            try {
-                Entities.getTargets().removeEntity(entity);
-            } catch (NullReturnException e) {
-                log.warn("Was unable to remove entity with id:" + entity.getId() + " as it doesn't in the list");
-            }
+        OperationResult operationResult = new OperationResult(response);
+        if (operationResult.isSuccess()) {
+            Entities.getTargets().removeEntity(entity);
         }
-        return response.getStatus();
+        
+        return operationResult;
     }
 
     /**
@@ -107,20 +93,18 @@ public class TargetService implements EntityService<Target> {
      * @return EntityList of Targets
      */
     @Override
-    public EntityList<Target> list(SearchFilter filter) {
+    public OperationResult<EntityList<Target>> list(SearchFilter filter) {
         TargetRequest request = new TargetRequest().search(filter);
         G4Response response = g4HttpClient.sendRequest(request);
-
-        TargetSearchResults searchResults = JsonConverter.readEntityFromResponse(response, TargetSearchResults.class, "result");
-        if (searchResults == null) {
-            throw new AssertionError("Unable to read search results from Targets search");
+        TargetSearchResults searchResults = JsonConverter.readEntityFromResponse(
+                response, TargetSearchResults.class, "result");
+        EntityList<Target> targets;
+        if (searchResults != null) {
+            targets = new EntityList<>(searchResults.getContent());
         } else {
-            return new EntityList<Target>(searchResults.getContent()) {
-                public Target getEntity(String param) throws NullReturnException {
-                    throw new NotImplementedException();
+            targets = null;
                 }
-            };
-        }
+        return new OperationResult<>(response, targets);
     }
 
     /**
@@ -130,20 +114,19 @@ public class TargetService implements EntityService<Target> {
      * @return HTTP status code
      */
     @Override
-    public int update(Target entity) {
+    public OperationResult<Target> update(Target entity) {
         log.info("Updating target id: " + entity.getId());
         TargetRequest request = new TargetRequest().update(entity);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        Result result = JsonConverter.readEntityFromResponse(response, Result.class);
-        if (result != null) {
-            Verify.isTrue(Conditions.equals(result.getResult(), "ok"));
+        OperationResult<Target> operationResult = new OperationResult<>(response, entity);
+        if (operationResult.isSuccess()) {
             Entities.getTargets().addOrUpdateEntity(entity);
         } else {
             log.error("Error! Update target process was failed");
-            throw new AssertionError("Error! Update target process was failed");
+            
         }
-        return response.getStatus();
+        return operationResult;
     }
 
     /**
@@ -153,13 +136,12 @@ public class TargetService implements EntityService<Target> {
      * @return Target entity
      */
     @Override
-    public Target view(String id) {
+    public OperationResult<Target> view(String id) {
         log.info("View target entry id:" + id);
-
         TargetRequest request = new TargetRequest().get(id);
         G4Response response = g4HttpClient.sendRequest(request);
-
-        return JsonConverter.readEntityFromResponse(response, Target.class, "result");
+        Target target = JsonConverter.readEntityFromResponse(response, Target.class, "result");
+        return new OperationResult<>(response, target);
     }
 
     /**
@@ -168,20 +150,22 @@ public class TargetService implements EntityService<Target> {
      * @param id Target id
      * @return List of Target groups
      */
-    public List<TargetGroup> getTargetGroups(String id) {
+    public OperationResult<EntityList<TargetGroup>> getTargetGroups(String id) {
         log.info("Get targetGroups of target id:" + id);
 
         TargetRequest request = new TargetRequest().findTargetGroups(id);
         G4Response response = g4HttpClient.sendRequest(request);
 
         TargetGroupSearchResult result = JsonConverter.readEntityFromResponse(response, TargetGroupSearchResult.class);
-        context.put("code", response.getStatus());
+        EntityList<TargetGroup> targetGroups;
         if (result != null) {
             log.debug("Count of found groups: " + result.getResult().size());
-            return result.getResult();
+            targetGroups = result.getResult();
         } else {
-            throw new AssertionError("Unable to get list of target groups");
+            log.debug("Unable to get list of target groups");
+            targetGroups = null;
         }
+        return new OperationResult<>(response, targetGroups);
     }
 
 }

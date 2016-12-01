@@ -4,7 +4,9 @@ import abs.EntityList;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
-import json.JsonConverter;
+import http.JsonConverter;
+import http.OperationResult;
+import http.OperationsResults;
 import model.DuSubscriberEntry;
 import model.phonebook.DuSubscriberFilter;
 import org.apache.log4j.Logger;
@@ -24,19 +26,17 @@ public class APIDuSubscriberSteps extends APISteps {
     @When("I send upload DuSubscriberEntry request with all fields")
     public void sendUploadDuSubscriberEntryRequest() throws NullReturnException {
         DuSubscriberEntry duSubscriberEntry = getRandomDuEntry();
-
         log.info("Entry:" + JsonConverter.toJsonString(duSubscriberEntry));
-        int responseCode = service.add(duSubscriberEntry);
-
-        context.put("code", responseCode);
+        OperationResult operationResult = service.add(duSubscriberEntry);
+        OperationsResults.setResult(operationResult);
         context.put("duSubscriberEntry", duSubscriberEntry);
+        context.put("uploadResult", operationResult.getResult());
     }
 
     @When("I send search DuSubscribers by $criteria and value $value")
     public void sendSearchDuSubscriberListByCriteriaAndValue(String criteria, String value) throws NullReturnException {
         log.info("Searching DuSubscribers by criteria:" + criteria + " and value:" + value);
         DuSubscriberEntry duSubscriberEntry = context.get("duSubscriberEntry", DuSubscriberEntry.class);
-
         if (criteria.toLowerCase().equals("address")) {
             value = value.equals("random") ? duSubscriberEntry.getAddress() : value;
         } else if (criteria.toLowerCase().equals("name")) {
@@ -51,10 +51,10 @@ public class APIDuSubscriberSteps extends APISteps {
 
         DuSubscriberFilter searchFilter = new DuSubscriberFilter().filterBy(criteria, value);
         log.info("Search isAppliedToEntity: " + JsonConverter.toJsonString(searchFilter));
-        EntityList<DuSubscriberEntry> duSubscriberList = service.list(searchFilter);
-
+        OperationResult<EntityList<DuSubscriberEntry>> operationResult = service.list(searchFilter);
+        OperationsResults.setResult(operationResult);
         context.put("searchFilter", searchFilter);
-        context.put("searchResult", duSubscriberList);
+        context.put("searchResult", operationResult.getResult());
     }
 
     @Then("DuSubscriber search result are correct")
@@ -124,9 +124,9 @@ public class APIDuSubscriberSteps extends APISteps {
         EntityList<DuSubscriberEntry> searchResults = context.get("searchResult", EntityList.class);
         DuSubscriberEntry etalonEntry = searchResults.getLatest();
 
-        DuSubscriberEntry entry = service.view(etalonEntry.getId());
+        OperationResult<DuSubscriberEntry> operationResult = service.view(etalonEntry.getId());
 
-        context.put("duSubscriberEntry", entry);
+        context.put("duSubscriberEntry", operationResult.getResult());
         context.put("etalonEntry", etalonEntry);
     }
 

@@ -1,8 +1,11 @@
 package steps;
 
+import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
+import http.OperationResult;
+import http.OperationsResults;
 import model.RecordType;
 import model.Source;
 import model.SourceType;
@@ -26,10 +29,9 @@ public class APISourceSteps extends APISteps {
     @When("I send create new random Source request")
     public void createSource() {
         Source source = getRandomSource();
-        int responseCode = service.add(source);
-
-        context.put("code", responseCode);
-        context.put("source", source);
+        OperationResult<Source> operationResult = service.add(source);
+        OperationsResults.setResult(operationResult);
+        context.put("source", operationResult.getResult());
     }
 
     @Then("Source is correct")
@@ -42,15 +44,15 @@ public class APISourceSteps extends APISteps {
 
     @When("I send get list of sources request")
     public void getListOfSources() {
-        List<Source> sources = service.list();
+       
+        EntityList<Source> sources = service.list().getResult();
         context.put("sourceList", sources);
     }
 
     @Then("Source $criteria list")
     public void sourceShouldBeInList(String criteria){
         Source source = Entities.getSources().getLatest();
-        List<Source> sources = context.get("sourceList", List.class);
-
+        EntityList<Source> sources = context.get("sourceList", EntityList.class);
         boolean contains = false;
         for (Source entity : sources) {
             if (entity.getName().equals(source.getName())) {
@@ -58,7 +60,6 @@ public class APISourceSteps extends APISteps {
                 break;
             }
         }
-
         if (criteria.toLowerCase().equals("in")) {
             Verify.shouldBe(Conditions.isTrue.element(contains));
         } else if (criteria.toLowerCase().equals("not in")) {
@@ -71,18 +72,15 @@ public class APISourceSteps extends APISteps {
     @Then("Source list size more than $size")
     public void sourseListSizeMoreThan(String size) {
         int minSize = Integer.valueOf(size);
-        List<Source> sources = context.get("sourceList", List.class);
-
+        EntityList<Source> sources = context.get("sourceList", EntityList.class);
         Verify.shouldBe(Conditions.isTrue.element(sources.size() > minSize));
     }
 
     @When("I send view source request")
     public void viewRandomSourceFromList() {
         Source source = Entities.getSources().getLatest();
-
-        Source viewedSource = service.view(source.getId());
-
-        context.put("source", viewedSource);
+        OperationResult<Source> operationResult = service.view(source.getId());
+        context.put("source", operationResult.getResult());
     }
 
     @When("I send update source request")
@@ -93,16 +91,13 @@ public class APISourceSteps extends APISteps {
         Source newSource = getRandomSource();
         generatedSource.setName(newSource.getName());
         generatedSource.setLocation(newSource.getLocation());
-
-        int responseCode = service.update(generatedSource);
-        
-        context.put("code", responseCode);
+        OperationResult<Source> operationResult = service.update(generatedSource);
+        OperationsResults.setResult(operationResult);
     }
 
     @Given("Get random source from list")
     public void getRandomSourceFrolList() {
-        List<Source> sourceList = context.get("sourceList", List.class);
-
+        EntityList<Source> sourceList = context.get("sourceList", EntityList.class);
         List<Source> sources = new ArrayList<>();
         for (Source source : sourceList) {
             if (!source.isDeleted()) {
@@ -110,23 +105,19 @@ public class APISourceSteps extends APISteps {
             }
         }
         Source source = RandomGenerator.getRandomItemFromList(sources);
-
         Entities.getSources().addOrUpdateEntity(source);
     }
 
     @When("I send delete Source request")
     public void deleteSource() {
         Source source = Entities.getSources().getLatest();
-
-        int responseCode = service.remove(source);
-
-        context.put("code", responseCode);
+        OperationResult operationResult = service.remove(source);
+        OperationsResults.setResult(operationResult);
     }
 
     @Then("Source is deleted")
     public void sourceShouldBeDeleted() {
         Source source = context.get("source", Source.class);
-
         Verify.shouldBe(Conditions.isTrue.element(source.isDeleted()));
         Verify.shouldBe(Conditions.isTrue.element(source.getName().contains("DELETED at")));
     }
@@ -137,7 +128,7 @@ public class APISourceSteps extends APISteps {
         RecordType recordType = RecordType.valueOf(rType);
 
         // if exist, return source
-        List<Source> sources = service.list();
+        EntityList<Source> sources = service.list().getResult();
         for (Source source : sources) {
             if (source.getType().equals(sourceType)) {
                 try {

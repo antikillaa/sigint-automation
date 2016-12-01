@@ -18,6 +18,11 @@ public class ErrorReporter {
         throw new Error(message);
     }
     
+    public static void reportAndRaiseError(String message) {
+        logger.error(message);
+        throw new Error(message);
+    }
+    
     public static void raiseError(String message) {
         throw new Error(message);
     }

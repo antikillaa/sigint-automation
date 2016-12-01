@@ -5,9 +5,10 @@ import abs.SearchFilter;
 import app_context.entities.Entities;
 import http.G4HttpClient;
 import http.G4Response;
+import http.OperationResult;
 import http.requests.UserRequest;
-import json.JsonConverter;
 import model.User;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
@@ -25,34 +26,33 @@ public class UserService implements EntityService<User> {
      * @param entity New user
      * @return Response status code
      */
-    public int add(User entity) {
+    public OperationResult<User> add(User entity) {
         log.info("Creating new user");
         log.debug(Parser.entityToString(entity));
 
         UserRequest request = new UserRequest().add(entity);
         G4Response response = g4HttpClient.sendRequest(request);
-
-        User createdUser = JsonConverter.readEntityFromResponse(response, User.class);
-        if (createdUser != null) {
-            createdUser.setPassword(entity.getPassword());
-            Entities.getUsers().addOrUpdateEntity(createdUser);
+        OperationResult<User> operationResult = new OperationResult<>(response, User.class);
+        if (operationResult.isSuccess()) {
+            Entities.getUsers().addOrUpdateEntity(operationResult.getResult());
         }
-        return response.getStatus();
+        return operationResult;
     }
 
-    public int remove(User entity) {
-        return 0;
+    public OperationResult<User> remove(User entity) {
+        throw new NotImplementedException();
     }
 
-    public EntityList<User> list(SearchFilter filter) {
-        return null;
+    public OperationResult<EntityList<User>> list(SearchFilter filter) {
+        throw new NotImplementedException();
     }
 
-    public int update(User entity) {
-        return 0;
+    public OperationResult<User> update(User entity) {
+        
+        throw new NotImplementedException();
     }
 
-    public User view(String id) {
+    public OperationResult<User> view(String id) {
         return null;
     }
 
@@ -62,19 +62,11 @@ public class UserService implements EntityService<User> {
      *
      * @return current G4 user
      */
-    public User me() {
+    public OperationResult<User> me() {
         log.info("Get current user...");
         UserRequest request = new UserRequest().me();
         G4Response response = g4HttpClient.sendRequest(request);
-
-        User user = JsonConverter.readEntityFromResponse(response, User.class);
-        if (user != null) {
-            return user;
-        } else {
-            String errorMessage = "Unable to get current user";
-            log.error(errorMessage);
-            throw new AssertionError(errorMessage);
-        }
+        return new OperationResult<>(response, User.class);
     }
 
     /**

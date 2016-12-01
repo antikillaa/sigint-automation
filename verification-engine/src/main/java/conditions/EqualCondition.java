@@ -1,7 +1,7 @@
 package conditions;
 
 import abs.TeelaEntity;
-import json.JsonConverter;
+import http.JsonConverter;
 import model.Record;
 import model.UIRecord;
 import org.apache.commons.beanutils.BeanUtils;

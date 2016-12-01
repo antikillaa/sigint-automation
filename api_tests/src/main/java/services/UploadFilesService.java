@@ -1,16 +1,12 @@
 package services;
 
 import abs.SearchFilter;
-import app_context.RunContext;
-import http.G4HttpClient;
-import http.G4Response;
+import http.*;
 import http.requests.UploadFilesRequest;
 import http.requests.UploadRequest;
-import json.JsonConverter;
 import model.*;
 import model.Process;
 import org.apache.log4j.Logger;
-import utils.DateHelper;
 
 import java.util.List;
 
@@ -18,30 +14,34 @@ public class UploadFilesService {
 
     private static G4HttpClient g4HttpClient = new G4HttpClient();
     private Logger log = Logger.getLogger(UploadFilesService.class);
-    private RunContext context = RunContext.get();
-
-
+    
     /**
      * UPLOAD new G4File
      *
      * @param file G4file (File with MediaType field)
-     * @return HTTP status code
+     * @return {@link OperationResult}
      */
-    public int upload(G4File file, Source source, String ownerId) {
+    public OperationResult<FileMeta> upload(G4File file, Source source, String ownerId) {
         log.info("Upload file" + file.getAbsolutePath() + " with 'meta' string..");
-        UploadFilesRequest request = new UploadFilesRequest().upload(file, source, ownerId);
-        G4Response response = g4HttpClient.sendRequest(request);
-
-        FileMeta fileMeta = JsonConverter.readEntityFromResponse(response, FileMeta.class);
-        if (fileMeta == null) {
-            throw new AssertionError("Error during upload file. Response: " + response.getMessage());
-        } else {
-            context.put("fileMeta", fileMeta);
-            context.put("uploadDate", DateHelper.getDateFromUnixTimestamp(fileMeta.getTime()));
+        UploadFilesRequest uploadRequest = new UploadFilesRequest().upload(file, source, ownerId);
+        G4Response uploadResponse = g4HttpClient.sendRequest(uploadRequest);
+        OperationResult<FileMeta> uploadResult = new OperationResult<>(uploadResponse, FileMeta.class);
+        
+        if (!uploadResult.isSuccess()) {
+            OperationsResults.throwError(uploadResult);
         }
-
-        return response.getStatus();
+        G4Response notifyResponse = sendNotify(uploadResult.getResult());
+        return new OperationResult<>(notifyResponse, uploadResult.getResult());
+        
     }
+    
+    
+    private G4Response sendNotify(FileMeta fileMeta) {
+        UploadFilesRequest notifyRequest = new UploadFilesRequest().notify(fileMeta);
+        G4Response notifyResponse = g4HttpClient.sendRequest(notifyRequest);
+        return notifyResponse;
+    }
+    
 
     /**
      * GET meta of uploaded file
@@ -50,19 +50,12 @@ public class UploadFilesService {
      * @param id id of uploaded file
      * @return meta of uploaded file
      */
-    public FileMeta meta(String id) {
+    public OperationResult<FileMeta> meta(String id) {
         log.info("Get Meta of uploaded file id:" + id);
         UploadFilesRequest request = new UploadFilesRequest().meta(id);
-
         G4Response response = g4HttpClient.sendRequest(request);
-
-        if (response.getStatus() != 200) {
-            String errorMessage = "Unable to get meta of uploaded file. Response: " + response.getMessage();
-            log.error(errorMessage);
-            throw new AssertionError(errorMessage);
-        } else {
-            return JsonConverter.readEntityFromResponse(response, FileMeta.class);
-        }
+        return new OperationResult<>(response, FileMeta.class);
+        
     }
 
     /**
@@ -72,14 +65,12 @@ public class UploadFilesService {
      * @param id file id
      * @return upload details model
      */
-    public UploadDetails details(String id) {
+    public OperationResult<UploadDetails> details(String id) {
         log.info("Get UploadDetails of uploaded file id:" + id);
         UploadRequest request = new UploadRequest().details(id);
-
         G4Response response = g4HttpClient.sendRequest(request);
-        context.put("code", response.getStatus());
-
-        return JsonConverter.readEntityFromResponse(response, UploadDetails.class);
+        UploadDetails details = JsonConverter.readEntityFromResponse(response, UploadDetails.class);
+        return new OperationResult<>(response, details);
     }
 
     /**

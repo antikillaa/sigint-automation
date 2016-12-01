@@ -3,21 +3,21 @@ package steps;
 import app_context.RunContext;
 import conditions.Verify;
 import controllers.APILogin;
-import http.ErrorResponse;
-import json.JsonConverter;
+import http.OperationResult;
+import http.OperationsResults;
+import model.Token;
 import model.User;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.junit.Assert;
 
 import java.io.IOException;
 
 import static conditions.Conditions.isTrue;
 
 
-public class APILoginSteps {
+public class APILoginSteps extends APISteps {
 
     private static RunContext runContext = RunContext.get();
     private static Logger log = Logger.getRootLogger();
@@ -27,13 +27,14 @@ public class APILoginSteps {
 
     @Given("I sign in as $role user")
     public void signInGlobal(String role) {
-        signInCreds(role);
-        checkResponseCode("200");
+        OperationResult operationResult = signInCreds(role);
+        OperationsResults.setResult(operationResult);
+        checkResultSuccess();
     }
     
-    private void signInCreds(String role) {
+    private OperationResult<Token> signInCreds(String role) {
         User user = GlobalSteps.getUserByRole(role);
-        login.signInAsUser(user);
+        return login.signInAsUser(user);
     }
     
     @When("I sent sign in request as $role user with correct credentials")
@@ -48,7 +49,7 @@ public class APILoginSteps {
         user.setPassword("test");
         login.signInAsUser(user);
     }
-
+    /**
     @Then("I got response code $real")
     public void checkResponseCode(String real) {
         log.info("Checking response code");
@@ -58,13 +59,13 @@ public class APILoginSteps {
         Assert.assertEquals("Incorrect return codes!", expected, actual);
 
     }
+     **/
 
     @Then("Error message is $message")
     public void checkErrorMessage(String message) throws IOException {
         log.info("Verifying error message");
-        ErrorResponse response = JsonConverter.fromJsonToObject(runContext.get("message", String.class),
-                ErrorResponse.class);
-        Verify.shouldBe(isTrue.element(response.getMessage().toLowerCase().equals(message.toLowerCase())));
+        OperationResult operationResult = OperationsResults.getResult();
+        Verify.shouldBe(isTrue.element(operationResult.getMessage().toLowerCase().contains(message.toLowerCase())));
     }
 
 

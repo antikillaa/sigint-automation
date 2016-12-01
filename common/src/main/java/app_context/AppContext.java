@@ -1,6 +1,6 @@
 package app_context;
 
-import json.JsonConverter;
+import http.JsonConverter;
 import model.Dictionary;
 import model.LoggedUser;
 import services.DictionaryService;

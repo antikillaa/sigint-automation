@@ -3,6 +3,8 @@ package steps;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
+import http.OperationResult;
+import http.OperationsResults;
 import model.Record;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -29,9 +31,8 @@ public class APIRecordSteps extends APISteps {
             throw new AssertionError("Unknown record type passed:" + recordType);
         }
         record.setSourceId(RandomGenerator.getRandomItemFromList(appContext.getDictionary().getSources()).getId());
-        int responseCode = service.add(record);
-
-        context.put("code", responseCode);
+        OperationResult<Record> operationResult = service.add(record);
+        OperationsResults.setResult(operationResult);
         context.put("requestRecord", record);
     }
 

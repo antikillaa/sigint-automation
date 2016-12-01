@@ -6,17 +6,18 @@ import app_context.RunContext;
 import app_context.entities.Entities;
 import http.G4HttpClient;
 import http.G4Response;
+import http.JsonConverter;
+import http.OperationResult;
 import http.requests.SourceRequest;
-import json.JsonConverter;
 import model.Result;
 import model.Source;
 import model.SourceListResult;
 import model.SourcesRequest;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
 import java.util.Iterator;
-import java.util.List;
 
 public class SourceService implements EntityService<Source> {
 
@@ -31,17 +32,18 @@ public class SourceService implements EntityService<Source> {
      * @return HTTP status code
      */
     @Override
-    public int add(Source entity) {
+    public OperationResult<Source> add(Source entity) {
         log.info("Creating new Source..");
         log.debug(Parser.entityToString(entity));
 
         SourceRequest request = new SourceRequest().add(entity);
         G4Response response = g4HttpClient.sendRequest(request);
-
         Source source = JsonConverter.readEntityFromResponse(response, Source.class, "id");
-        Entities.getSources().addOrUpdateEntity(source);
-
-        return response.getStatus();
+        OperationResult<Source> operationResult = new OperationResult<>(response, source);
+        if (operationResult.isSuccess()) {
+            Entities.getSources().addOrUpdateEntity(source);
+        }
+        return operationResult;
     }
 
     /**
@@ -51,23 +53,22 @@ public class SourceService implements EntityService<Source> {
      * @return HTTP status code
      */
     @Override
-    public int remove(Source entity) {
+    public OperationResult remove(Source entity) {
         log.info("Deleting Source id:" + entity.getId());
 
         SourceRequest request = new SourceRequest().delete(entity.getId());
         G4Response response = g4HttpClient.sendRequest(request);
 
-        Result result = JsonConverter.readEntityFromResponse(response, Result.class);
-        if (response.getStatus() == 200) {
-            context.put("resultMessage", result.getResult());
+        OperationResult<Result> operationResult = new OperationResult<>(response, Result.class);
+        if (operationResult.isSuccess()) {
             Entities.getSources().addOrUpdateEntity(entity);
         }
-        return response.getStatus();
+        return operationResult;
     }
 
     @Override
-    public EntityList<Source> list(SearchFilter filter) {
-        return null;
+    public OperationResult<EntityList<Source>> list(SearchFilter filter) {
+        throw new NotImplementedException();
     }
 
     /**
@@ -76,12 +77,10 @@ public class SourceService implements EntityService<Source> {
      *
      * @return HTTP status code
      */
-    public List<Source> list() {
+    public OperationResult<EntityList<Source>> list() {
         SourcesRequest request = new SourcesRequest();
         G4Response response = g4HttpClient.sendRequest(request);
-
         SourceListResult result = JsonConverter.readEntityFromResponse(response, SourceListResult.class);
-
         // filter {"deleted":false}
         Iterator<Source> iterator = result.getResult().iterator();
         while (iterator.hasNext()) {
@@ -89,7 +88,8 @@ public class SourceService implements EntityService<Source> {
                 iterator.remove();
             }
         }
-        return result.getResult();
+        EntityList<Source> sourceEntityList = result.getResult();
+        return new OperationResult<>(response, sourceEntityList);
     }
 
     /**
@@ -99,23 +99,19 @@ public class SourceService implements EntityService<Source> {
      * @return HTTP status code
      */
     @Override
-    public int update(Source entity) {
+    public OperationResult<Source> update(Source entity) {
         log.info("Updating Source id: " + entity.getId());
         entity.setVersion(entity.getVersion() == null ? 1 : entity.getVersion() + 1);
         log.debug(Parser.entityToString(entity));
-
         SourceRequest request = new SourceRequest().update(entity);
         G4Response response = g4HttpClient.sendRequest(request);
-
-        Result result = JsonConverter.readEntityFromResponse(response, Result.class);
-        if (result != null) {
-            context.put("resultMessage", result.getResult());
+        OperationResult<Source> operationResult = new OperationResult<>(response, entity);
+        if (operationResult.isSuccess()) {
             Entities.getSources().addOrUpdateEntity(entity);
         } else {
             log.error("Error! Update target process was failed");
-            throw new AssertionError("Error! Update target process was failed");
         }
-        return response.getStatus();
+        return operationResult;
     }
 
     /**
@@ -125,12 +121,11 @@ public class SourceService implements EntityService<Source> {
      * @return Source entity
      */
     @Override
-    public Source view(String id) {
+    public OperationResult<Source> view(String id) {
         log.info("View Source details, id:" + id);
-
         SourceRequest request = new SourceRequest().get(id);
         G4Response response = g4HttpClient.sendRequest(request);
-
-        return JsonConverter.readEntityFromResponse(response, Source.class, "result");
+        Source source =  JsonConverter.readEntityFromResponse(response, Source.class, "result");
+        return new OperationResult<>(response, source);
     }
 }

@@ -1,6 +1,6 @@
 package utils;
 
-import json.JsonConverter;
+import http.JsonConverter;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;

@@ -5,9 +5,10 @@ import abs.SearchFilter;
 import app_context.entities.Entities;
 import http.G4HttpClient;
 import http.G4Response;
+import http.OperationResult;
 import http.requests.groups.GroupsRequest;
-import json.JsonConverter;
 import model.Group;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
@@ -24,28 +25,27 @@ public class GroupService implements EntityService<Group> {
      * @return HTTP status code
      */
     @Override
-    public int add(Group entity) {
+    public OperationResult<Group> add(Group entity) {
         log.info("Creating new Group");
         log.debug(Parser.entityToString(entity));
 
         GroupsRequest request = new GroupsRequest().add(entity);
         G4Response response = g4HttpClient.sendRequest(request);
-
-        Group createdGroup = JsonConverter.readEntityFromResponse(response, Group.class);
-        if (createdGroup != null) {
-            Entities.getGroups().addOrUpdateEntity(createdGroup);
+        OperationResult<Group> operationResult = new OperationResult<>(response, Group.class);
+        if (operationResult.isSuccess()) {
+            Entities.getGroups().addOrUpdateEntity(operationResult.getResult());
         }
-        return response.getStatus();
+        return operationResult;
     }
 
     @Override
-    public int remove(Group entity) {
-        return 0;
+    public OperationResult remove(Group entity) {
+        throw new NotImplementedException();
     }
 
     @Override
-    public EntityList<Group> list(SearchFilter filter) {
-        return null;
+    public OperationResult<EntityList<Group>> list(SearchFilter filter) {
+        throw new NotImplementedException();
     }
 
     /**
@@ -56,22 +56,21 @@ public class GroupService implements EntityService<Group> {
      * @return HTTP status code
      */
     @Override
-    public int update(Group entity) {
+    public OperationResult<Group> update(Group entity) {
         log.info("Updating Group id" + entity.getId());
         log.debug(Parser.entityToString(entity));
 
         GroupsRequest request = new GroupsRequest().update(entity);
         G4Response response = g4HttpClient.sendRequest(request);
-
-        Group updatedGroup = JsonConverter.readEntityFromResponse(response, Group.class);
-        if (updatedGroup != null) {
-            Entities.getGroups().addOrUpdateEntity(updatedGroup);
+        OperationResult<Group> operationResult = new OperationResult<Group>(response, Group.class);
+        if (operationResult.isSuccess()) {
+            Entities.getGroups().addOrUpdateEntity(operationResult.getResult());
         }
-        return response.getStatus();
+        return operationResult;
     }
 
     @Override
-    public Group view(String id) {
-        return null;
+    public OperationResult<Group> view(String id) {
+        throw new NotImplementedException();
     }
 }

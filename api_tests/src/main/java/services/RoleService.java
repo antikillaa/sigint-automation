@@ -5,9 +5,10 @@ import abs.SearchFilter;
 import app_context.entities.Entities;
 import http.G4HttpClient;
 import http.G4Response;
+import http.OperationResult;
 import http.requests.roles.RoleRequest;
-import json.JsonConverter;
 import model.Role;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
@@ -22,38 +23,36 @@ public class RoleService implements EntityService<Role> {
      * @return HTTP status code
      */
     @Override
-    public int add(Role entity) {
+    public OperationResult<Role> add(Role entity) {
         log.info("Creating new Role");
         log.debug(Parser.entityToString(entity));
 
         RoleRequest request = new RoleRequest().add(entity);
         G4Response response = g4HttpClient.sendRequest(request);
-
-        Role createdRole = JsonConverter.readEntityFromResponse(response, Role.class);
-        log.debug(Parser.entityToString(createdRole));
-        if (createdRole != null) {
-            Entities.getRoles().addOrUpdateEntity(createdRole);
+        OperationResult<Role> roleOperationResult = new OperationResult<>(response, Role.class);
+        if (roleOperationResult.isSuccess()) {
+            Entities.getRoles().addOrUpdateEntity(roleOperationResult.getResult());
         }
-        return response.getStatus();
+        return roleOperationResult;
     }
 
     @Override
-    public int remove(Role entity) {
-        return 0;
+    public OperationResult remove(Role entity) {
+        throw new NotImplementedException();
     }
 
     @Override
-    public EntityList<Role> list(SearchFilter filter) {
-        return null;
+    public OperationResult<EntityList<Role>> list(SearchFilter filter) {
+        throw new NotImplementedException();
     }
 
     @Override
-    public int update(Role entity) {
-        return 0;
+    public OperationResult<Role> update(Role entity) {
+        throw new NotImplementedException();
     }
 
     @Override
-    public Role view(String id) {
-        return null;
+    public OperationResult<Role> view(String id) {
+        throw new NotImplementedException();
     }
 }

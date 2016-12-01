@@ -4,6 +4,7 @@ import app_context.properties.G4Properties;
 import http.G4HttpClient;
 import http.G4Response;
 import http.HttpMethod;
+import http.OperationResult;
 import http.requests.HttpRequest;
 import zapi.model.Cycle;
 import zapi.model.Execution;
@@ -47,14 +48,15 @@ class ZAPI {
      * @param cycle test cycle
      * @return G4Response
      */
-    G4Response postCycle(Cycle cycle) {
+    OperationResult<Cycle> postCycle(Cycle cycle) {
         String url = "/rest/zapi/latest/cycle";
 
         HttpRequest request = new HttpRequest(url)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(cycle);
 
-        return g4HttpClient.sendRequest(request, username, password);
+        G4Response response = g4HttpClient.sendRequest(request, username, password);
+        return new OperationResult<>(response, Cycle.class);
     }
 
     /**
@@ -130,14 +132,14 @@ class ZAPI {
      * @param execution objectToJson
      * @return G4Response
      */
-    G4Response postExecution(Execution execution) {
+    OperationResult<String> postExecution(Execution execution) {
         String url = "/rest/zapi/latest/execution";
 
         HttpRequest request = new HttpRequest(url)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(execution);
-
-        return g4HttpClient.sendRequest(request, username, password);
+        G4Response response = g4HttpClient.sendRequest(request, username, password);
+        return new OperationResult<>(response, String.class);
     }
 
     /**
@@ -152,18 +154,18 @@ class ZAPI {
      *
      * @return G4Response
      */
-    G4Response putExecution(int executionId, String status) {
+    OperationResult putExecution(int executionId, String status) {
         ExecutionStatus executionStatus = new ExecutionStatus().setStatus(status);
         String url = "/rest/zapi/latest/execution/" + executionId + "/execute";
 
         HttpRequest request = new HttpRequest(url)
                 .setHttpMethod(HttpMethod.PUT)
                 .setPayload(executionStatus);
-
-        return g4HttpClient.sendRequest(request, username, password);
+        G4Response response = g4HttpClient.sendRequest(request, username, password);
+        return new OperationResult(response, null);
     }
 
-    G4Response JQL(int startAt, int maxResults, String fields, String jql) {
+    <T>OperationResult<T> JQL(int startAt, int maxResults, String fields, String jql, Class<T> tClass) {
         try {
             jql = URLEncoder.encode(jql, "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -178,7 +180,8 @@ class ZAPI {
 
         HttpRequest request = new HttpRequest(url);
 
-        return g4HttpClient.sendRequest(request, username, password);
+        G4Response response = g4HttpClient.sendRequest(request, username, password);
+        return new OperationResult(response, tClass);
     }
 
     /**

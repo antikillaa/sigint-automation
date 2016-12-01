@@ -1,5 +1,6 @@
 package services;
 
+import http.OperationResult;
 import model.Report;
 import model.ReportOwner;
 import model.ReportStatus;
@@ -23,7 +24,8 @@ public class ReportCreateService {
     
     private static void initOwner(Report report) {
         UserService userService = new UserService();
-        User user = userService.me();
+        OperationResult<User> operationResult = userService.me();
+        User user = operationResult.getResult();
         User reportUser = new User();
         reportUser.setId(user.getId());
         reportUser.setName(user.getName());

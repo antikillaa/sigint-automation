@@ -1,7 +1,7 @@
 package app_context.entities;
 
 import abs.EntityList;
-import json.JsonConverter;
+import http.JsonConverter;
 import model.*;
 import org.apache.log4j.Logger;
 

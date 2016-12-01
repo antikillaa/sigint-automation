@@ -1,9 +1,12 @@
 package steps;
 
+import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import data_generator.DataGenerator;
+import http.OperationResult;
+import http.OperationsResults;
 import model.RecordCategory;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -11,8 +14,6 @@ import org.jbehave.core.annotations.When;
 import services.RecordCategoryService;
 import utils.Parser;
 import utils.RandomGenerator;
-
-import java.util.List;
 
 @SuppressWarnings("unused")
 public class APIRecordCategorySteps extends APISteps {
@@ -25,24 +26,24 @@ public class APIRecordCategorySteps extends APISteps {
         DataGenerator dataGenerator = new DataGenerator(RecordCategory.class);
         RecordCategory recordCategory = (RecordCategory) dataGenerator.produce();
 
-        int responseCode = service.add(recordCategory);
-
-        context.put("code", responseCode);
-        context.put("requestRecordCategory", recordCategory);
+        OperationResult<RecordCategory> operationResult = service.add(recordCategory);
+        OperationsResults.setResult(operationResult);
+        RecordCategory recordCategory1 = operationResult.getResult();
+        context.put("requestRecordCategory", operationResult.getResult());
     }
     
     
     @When("I send get list of record categories request")
     public void getListOfRecordCategory() {
-        List<RecordCategory> categories = service.list();
-        context.put("recordCategories", categories);
+        OperationResult<EntityList<RecordCategory>> operationResult = service.list();
+        context.put("recordCategories", operationResult.getResult());
     }
 
     @Then("Record categories list size more than $size")
     @SuppressWarnings("unchecked")
     public void recordCategoriesListSizeShouldbeMoroThan(String size) {
         int lessSize = Integer.valueOf(size);
-        List<RecordCategory> categories = context.get("recordCategories", List.class);
+        EntityList<RecordCategory> categories = context.get("recordCategories", EntityList.class);
         Verify.shouldBe(Conditions.isTrue.element(categories.size() > lessSize));
     }
 
@@ -50,11 +51,11 @@ public class APIRecordCategorySteps extends APISteps {
     @SuppressWarnings("unchecked")
     public void recordcateroryShouldBeInList(String criteria) {
         RecordCategory category = context.get("requestRecordCategory", RecordCategory.class);
-        List<RecordCategory> categories = context.get("recordCategories", List.class);
+        EntityList<RecordCategory> categories = context.get("recordCategories", EntityList.class);
 
         boolean contained = false;
         for (RecordCategory recordCategory : categories) {
-            if (recordCategory.equals(category)) {
+            if (recordCategory.getName().equals(category.getName())) {
                 contained = true;
                 break;
             }
@@ -70,9 +71,8 @@ public class APIRecordCategorySteps extends APISteps {
     @When("I get random record category from list")
     @SuppressWarnings("unchecked")
     public void getRandomRecordCategoryfromList() {
-        List<RecordCategory> categories = context.get("recordCategories", List.class);
-        RecordCategory recordCategory = RandomGenerator.getRandomItemFromList(categories);
-
+        EntityList<RecordCategory> categories = context.get("recordCategories", EntityList.class);
+        RecordCategory recordCategory = RandomGenerator.getRandomItemFromList((categories.getEntities()));
         Verify.shouldBe(Conditions.isTrue.element(recordCategory != null));
         context.put("recordCategory", recordCategory);
     }
@@ -81,10 +81,10 @@ public class APIRecordCategorySteps extends APISteps {
     public void viewRecordCategory() {
         RecordCategory category = context.get("recordCategory", RecordCategory.class);
 
-        RecordCategory recordCategory = service.view(category.getId());
+        OperationResult<RecordCategory> operationResult = service.view(category.getId());
 
-        Verify.shouldBe(Conditions.isTrue.element(recordCategory != null));
-        context.put("requestRecordCategory", recordCategory);
+        Verify.shouldBe(Conditions.isTrue.element(operationResult.getResult() != null));
+        context.put("requestRecordCategory", operationResult.getResult());
     }
 
     @Then("Record category is correct")
@@ -99,14 +99,11 @@ public class APIRecordCategorySteps extends APISteps {
     public void updateRecordCategory() {
         RecordCategory category = context.get("recordCategory", RecordCategory.class);
         logger.debug("Update record-category: " + Parser.entityToString(category));
-
         DataGenerator dataGenerator = new DataGenerator(RecordCategory.class);
         RecordCategory recordCategory = (RecordCategory) dataGenerator.produce();
         recordCategory.setId(category.getId());
-
-        int status = service.update(recordCategory);
-        Verify.shouldBe(Conditions.isTrue.element(status == 200));
-
+        OperationResult operationResult = service.update(recordCategory);
+        Verify.shouldBe(Conditions.isTrue.element(operationResult.isSuccess()));
         context.put("requestRecordCategory", recordCategory);
     }
 }

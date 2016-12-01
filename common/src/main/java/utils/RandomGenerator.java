@@ -79,6 +79,7 @@ public class RandomGenerator {
         int index = RandomUtils.nextInt(list.size());
         return list.get(index);
     }
+    
 
     public static String todayDateInterval() {
 

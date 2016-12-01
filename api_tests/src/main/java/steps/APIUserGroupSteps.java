@@ -3,6 +3,8 @@ package steps;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
+import http.OperationResult;
+import http.OperationsResults;
 import model.Group;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -21,10 +23,9 @@ public class APIUserGroupSteps extends APISteps {
     public void createGroupRequest() {
         Group group = createRandomUserGroup();
 
-        int responseCode = service.add(group);
-
-        context.put("code", responseCode);
-        context.put("requestGroup", group);
+        OperationResult<Group> operationResult = service.add(group);
+        OperationsResults.setResult(operationResult);
+        context.put("requestGroup", operationResult.getResult());
     }
 
     @Then("Created group is correct")
@@ -41,10 +42,9 @@ public class APIUserGroupSteps extends APISteps {
         roles.add(Entities.getRoles().getLatest().getName());
 
         Group group = Entities.getGroups().getLatest().setRoles(roles);
-        int responseCode = service.update(group);
-
-        context.put("code", responseCode);
-        context.put("updatedGroup", group);
+        OperationResult<Group> operationResult = service.update(group);
+        OperationsResults.setResult(operationResult);
+        context.put("updatedGroup", operationResult.getResult());
     }
 
     @Then("Updated group is correct")

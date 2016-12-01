@@ -2,10 +2,10 @@ package jenkins;
 
 import app_context.properties.G4Properties;
 import app_context.properties.JenkinsProperties;
-import http.G4Response;
 import http.G4HttpClient;
+import http.G4Response;
+import http.OperationResult;
 import http.requests.HttpRequest;
-import json.JsonConverter;
 import org.apache.log4j.Logger;
 
 class JenkinsClient {
@@ -30,13 +30,12 @@ class JenkinsClient {
         String url = String.format("%s/job/%s/%s/api/json", jenkinsURL, jobName, jobNumber);
         HttpRequest request = new HttpRequest(url);
         G4Response response = g4HttpClient.sendRequest(request, jenkinsUsername, jenkinsPassword);
-
-        if (response.getStatus() != 200) {
-            logger.error("Got error from jenkins when trying to get job status." +
-                    "Got code:" + response.getStatus());
+        OperationResult<JobInfo> operationResult = new OperationResult<>(response, JobInfo.class);
+        if (!operationResult.isSuccess()) {
+            logger.error("Got error from jenkins when trying to get job status");
         }
 
-        JobInfo jobInfo = JsonConverter.readEntityFromResponse(response, JobInfo.class);
+        JobInfo jobInfo = operationResult.getResult();
         logger.debug("Received job: " + jobInfo);
         return jobInfo;
     }

@@ -1,24 +1,20 @@
 package http;
 
-/**
- * Container for response message string and http status code
- */
 public class G4Response {
-
-    private String message;
-    private int status;
-
-    public G4Response(String message, int status) {
-        this.message = message;
-        this.status = status;
+    
+    private String jsonResponseString;
+    private int code;
+    
+    G4Response(String jsonResponseString, int code) {
+        this.jsonResponseString = jsonResponseString;
+        this.code = code;
     }
-
-    public String getMessage() {
-        return message;
+    
+    int getCode() {
+        return code;
     }
-
-    public int getStatus() {
-        return status;
+    
+    String getMessage() {
+        return jsonResponseString;
     }
-
 }

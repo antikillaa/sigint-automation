@@ -4,7 +4,9 @@ import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Verify;
 import errors.NullReturnException;
-import json.JsonConverter;
+import http.JsonConverter;
+import http.OperationResult;
+import http.OperationsResults;
 import model.Phonebook;
 import model.UploadResult;
 import model.phonebook.PhonebookSearchFilter;
@@ -28,10 +30,9 @@ public class APIPhonebookSteps extends APISteps {
     public void createPhonebookEntry() {
         Phonebook phonebook = getRandomPhonebook();
 
-        int responseCode = service.add(phonebook);
-
-        context.put("code", responseCode);
-        context.put("phonebook", phonebook);
+        OperationResult<Phonebook> operationResult = service.add(phonebook);
+        OperationsResults.setResult(operationResult);
+        context.put("phonebook", operationResult.getResult());
     }
 
     @When("I send update request for created Phonebook Entry")
@@ -39,11 +40,9 @@ public class APIPhonebookSteps extends APISteps {
         Phonebook phonebook = Entities.getPhonebooks().getLatest();
         Phonebook newPhonebook = getRandomPhonebook();
         newPhonebook.setId(phonebook.getId());
-
-        int responseCode = service.update(newPhonebook);
-
-        context.put("code", responseCode);
-        context.put("phonebook", newPhonebook);
+        OperationResult<Phonebook> operationResult = service.update(newPhonebook);
+        OperationsResults.setResult(operationResult);
+        context.put("phonebook", operationResult.getResult());
     }
 
     @Then("Phonebook Entry is correct")
@@ -51,7 +50,6 @@ public class APIPhonebookSteps extends APISteps {
         log.info("Verifying if Phonebook Entry is correct");
         Phonebook etalon = context.get("phonebook", Phonebook.class);
         Phonebook created = Entities.getPhonebooks().getLatest();
-
         Assert.assertEquals(etalon.getName(), created.getName());
         Assert.assertEquals(etalon.getPhoneNumber(), created.getPhoneNumber());
         Assert.assertEquals(etalon.getCountry(), created.getCountry());
@@ -66,26 +64,22 @@ public class APIPhonebookSteps extends APISteps {
     public void deletePhonebookEntry() {
         Phonebook phonebook = Entities.getPhonebooks().getLatest();
         context.put("id", phonebook.getId());
-
-        int responseCode = service.remove(phonebook);
-
-        context.put("code", responseCode);
+        OperationResult operationResult = service.remove(phonebook);
+        OperationsResults.setResult(operationResult);
     }
 
     @Then("Phonebook Entry was deleted")
     public void checkPhonebookWasDeleted() {
         String id = context.get("id", String.class);
-        Phonebook phonebook = service.view(id);
-
-        Assert.assertNull("Phonebook was not deleted", phonebook);
+        OperationResult<Phonebook> operationResult = service.view(id);
+        Assert.assertNull("Phonebook was not deleted", operationResult.getResult());
     }
 
     @When("I get details of created Phonebook Entry")
     public void getPhonebookEntry() {
         Phonebook entity = Entities.getPhonebooks().getLatest();
-        Phonebook phonebook = service.view(entity.getId());
-
-        context.put("phonebook", phonebook);
+        OperationResult<Phonebook> operationResult = service.view(entity.getId());
+        context.put("phonebook", operationResult.getResult());
     }
 
     @When("I search Phonebook Entry by $criteria and value $value")
@@ -111,13 +105,12 @@ public class APIPhonebookSteps extends APISteps {
         } else {
             throw new AssertionError("Unknown isAppliedToEntity type");
         }
-
         PhonebookSearchFilter searchFilter = new PhonebookSearchFilter().filterBy(criteria, value);
         log.info("Search isAppliedToEntity: " + JsonConverter.toJsonString(searchFilter));
-        EntityList<Phonebook> phonebookList = service.list(searchFilter);
+        OperationResult<EntityList<Phonebook>> operationResult = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
-        context.put("searchResult", phonebookList);
+        context.put("searchResult", operationResult.getResult());
     }
 
     @Then("Search Phonebook results are correct")
@@ -164,8 +157,11 @@ public class APIPhonebookSteps extends APISteps {
     public void uploadPhonebookCSVFile(String count) {
         int numPonebooks = Integer.valueOf(count);
         List<Phonebook> phonebooks = getRandomPhoneBooks(numPonebooks);
-        int responseCode = service.upload(phonebooks);
-        context.put("code", responseCode);
+        OperationResult<UploadResult> operationResult = service.upload(phonebooks);
+        if (operationResult.getResult() != null) {
+            context.put("uploadResult", operationResult.getResult());
+        }
+        OperationsResults.setResult(operationResult);
         context.put("uploadedPhonebooks", phonebooks);
         for (Phonebook phonebook : phonebooks){
             Entities.getPhonebooks().addOrUpdateEntity(phonebook);

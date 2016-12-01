@@ -4,6 +4,8 @@ import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
+import http.OperationResult;
+import http.OperationsResults;
 import model.Role;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -19,10 +21,9 @@ public class APIRoleSteps extends APISteps {
     @When("I send create a new role request")
     public void createRoleRequest() {
         Role role = getRandomRole();
-        int responseCode = service.add(role);
-
-        context.put("code", responseCode);
-        context.put("requestRole", role);
+        OperationResult<Role> operationResult = service.add(role);
+        OperationsResults.setResult(operationResult);
+        context.put("requestRole", operationResult.getResult());
     }
 
     @Then("Created role is correct")

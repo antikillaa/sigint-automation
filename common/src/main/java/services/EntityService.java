@@ -3,6 +3,7 @@ package services;
 import abs.AbstractEntity;
 import abs.EntityList;
 import abs.SearchFilter;
+import http.OperationResult;
 
 
 public interface EntityService<T extends AbstractEntity> {
@@ -11,35 +12,35 @@ public interface EntityService<T extends AbstractEntity> {
      * ADD new entity
      *
      * @param entity entity
-     * @return HTTP status code
+     * @return {@link OperationResult}
      */
-    int add(T entity);
+    OperationResult<?> add(T entity);
 
     /**
      * DELETE entity
      * @param entity entity
-     * @return HTTP status code
+     * @return {@link OperationResult}
      */
-    int remove(T entity);
+    OperationResult remove(T entity);
 
     /**
      * GET list of entities
      * @param filter search filter for payload
-     * @return EntityList of entity
+     * @return {@link OperationResult}
      */
-    EntityList<T> list(SearchFilter filter);
+    OperationResult<EntityList<T>> list(SearchFilter filter);
 
     /**
      * UPDATE entity
      * @param entity entity
-     * @return HTTP status code
+     * @return {@link OperationResult}
      */
-    int update(T entity);
+    OperationResult<T> update(T entity);
 
     /**
      * GET entity
      * @param id id of entity
-     * @return entity
+     * @return {@link OperationResult}
      */
-    T view(String id);
+    OperationResult<T> view(String id);
 }

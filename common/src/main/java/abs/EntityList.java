@@ -1,12 +1,11 @@
 package abs;
 import errors.NullReturnException;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.math.RandomUtils;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-public abstract class EntityList<T extends AbstractEntity> implements Iterable<T> {
+public class EntityList<T extends AbstractEntity> implements Iterable<T> {
 
     protected List <T> entities;
 
@@ -24,7 +23,7 @@ public abstract class EntityList<T extends AbstractEntity> implements Iterable<T
     }
 
     public List<T> getEntities() {
-        return entities;
+        return Collections.unmodifiableList(entities);
     }
 
     public Iterator<T> iterator() {
@@ -59,17 +58,18 @@ public abstract class EntityList<T extends AbstractEntity> implements Iterable<T
         entities.set(index, newEntity);
     }
 
-    public void removeEntity(T entity) throws NullReturnException {
+    public void removeEntity(T entity) {
         for (T exEntity: entities) {
             if (exEntity.getId().equals(entity.getId())) {
                 entities.remove(entity);
                 return;
             }
         }
-        throw new NullReturnException("There was no entity to delete");
     }
 
-    public abstract T getEntity(String param) throws NullReturnException;
+    public T getEntity(String param) throws NullReturnException {
+        throw new NotImplementedException();
+    };
 
     public T getLatest()  {
         if (entities.size() == 0) {

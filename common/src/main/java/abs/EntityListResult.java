@@ -16,8 +16,8 @@ public abstract class EntityListResult <T extends AbstractEntity> {
     private int number;
     private List<Sort> sort;
 
-    public List<T> getResult() {
-        return result;
+    public EntityList<T> getResult() {
+        return new EntityList<>(result);
     }
 
     public void setResult(List<T> result) {

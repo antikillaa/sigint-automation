@@ -6,7 +6,7 @@ import http.G4HttpClient;
 import http.G4Response;
 import http.requests.HttpRequest;
 import jira.model.*;
-import json.JsonConverter;
+import http.JsonConverter;
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.core.Cookie;
@@ -77,7 +77,7 @@ public class JiraConnector {
         HttpRequest request = new HttpRequest(URL).setCookie(cookie);
         G4Response response = client.sendRequest(request);
 
-        List<JiraProject> projects = JsonConverter.fromJsonToObjectsList(response.getMessage(), JiraProject[].class);
+        List<JiraProject> projects = JsonConverter.readEntitiesFromResponse(response, JiraProject[].class);
         for (JiraProject project : projects) {
             if (project.getName().equals(name)) {
                 return project.getId();
@@ -101,7 +101,7 @@ public class JiraConnector {
         HttpRequest request = new HttpRequest(URL).setCookie(cookie);
         G4Response response = client.sendRequest(request);
 
-        List<ProjectVersion> versions = JsonConverter.fromJsonToObjectsList(response.getMessage(), ProjectVersion[].class);
+        List<ProjectVersion> versions = JsonConverter.readEntitiesFromResponse(response, ProjectVersion[].class);
 
         for (ProjectVersion version : versions) {
             if (version.getName().equals(versionName)) {

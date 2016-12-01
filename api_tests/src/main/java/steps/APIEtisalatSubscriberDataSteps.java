@@ -4,7 +4,9 @@ import abs.EntityList;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
-import json.JsonConverter;
+import http.JsonConverter;
+import http.OperationResult;
+import http.OperationsResults;
 import model.EtisalatSubscriberEntry;
 import model.phonebook.EtisalatSubscriberFilter;
 import org.apache.log4j.Logger;
@@ -28,11 +30,10 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
     @When("I send upload EtisalatSubscriberData entry request with all fields")
     public void sendUploadEtisalatSubscriberDataEntryRequest() throws NullReturnException {
         EtisalatSubscriberEntry entry = getRandomEtisalatEntry();
-        log.info("Entry:" + JsonConverter.toJsonString(entry));
-
-        int responseCode = service.add(entry);
-
-        context.put("code", responseCode);
+        log.info("Uploading etisalat subscriber");
+        log.debug("Entry:" + JsonConverter.toJsonString(entry));
+        OperationResult<EtisalatSubscriberEntry> operationResult = service.add(entry);
+        OperationsResults.setResult(operationResult);
         context.put("etisalatSubscriberEntry", entry);
     }
 
@@ -67,10 +68,10 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
 
         EtisalatSubscriberFilter searchFilter = new EtisalatSubscriberFilter().filterBy(criteria, value);
         log.info("Search isAppliedToEntity: " + JsonConverter.toJsonString(searchFilter));
-        EntityList<EtisalatSubscriberEntry> entityList = service.list(searchFilter);
+        OperationResult<EntityList<EtisalatSubscriberEntry>> operationResult = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
-        context.put("searchResult", entityList);
+        context.put("searchResult", operationResult.getResult());
     }
 
     @Then("EtisalatSubscriberData search result are correct")
@@ -85,7 +86,8 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
             log.info("Search result size: " + searchResults.size());
         }
         for (EtisalatSubscriberEntry entry : searchResults) {
-            log.info("Checking result: " + JsonConverter.toJsonString(entry));
+            log.info("Checking search result");
+            log.debug("Search result: " + JsonConverter.toJsonString(entry));
             Assert.assertTrue(searchFilter.isAppliedToEntity(entry));
         }
     }
@@ -178,9 +180,9 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         EntityList<EtisalatSubscriberEntry> searchResults = context.get("searchResult", EntityList.class);
         EtisalatSubscriberEntry etalonEntry = searchResults.getLatest();
 
-        EtisalatSubscriberEntry entry = service.view(etalonEntry.getId());
+        OperationResult<EtisalatSubscriberEntry> operationResult = service.view(etalonEntry.getId());
 
-        context.put("etisalatSubscriberEntry", entry);
+        context.put("etisalatSubscriberEntry", operationResult.getResult());
         context.put("etalonEntry", etalonEntry);
     }
 
@@ -195,16 +197,13 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
     @When("I send upload $count EtisalatSubscriber entries request")
     public void uploadMultipleEtisalatSubscriberEntries(String count) {
         int numEntries = Integer.valueOf(count);
-
         List<EtisalatSubscriberEntry> entries = new ArrayList<>();
         for (int i = 0; i < numEntries; i++) {
             EtisalatSubscriberEntry entry = getRandomEtisalatEntry();
             entries.add(entry);
         }
-
-        int responseCode = service.upload(entries);
-
-        context.put("code", responseCode);
+        OperationResult<List<EtisalatSubscriberEntry>> operationResult = service.add(entries);
+        OperationsResults.setResult(operationResult);
         context.put("uploadedEtisalatSubscriberEntries", entries);
     }
     

@@ -5,6 +5,9 @@ import app_context.AppContext;
 import app_context.RunContext;
 import conditions.Conditions;
 import conditions.Verify;
+import error_reporter.ErrorReporter;
+import http.OperationResult;
+import http.OperationsResults;
 import model.*;
 import model.Process;
 import org.apache.log4j.Logger;
@@ -14,7 +17,6 @@ import services.RecordService;
 import services.UploadFilesService;
 import utils.DateHelper;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -37,45 +39,39 @@ public class APIUploadFilesSteps extends APISteps {
         }
         Source source = RunContext.get().get("source", Source.class);
         LoggedUser user = AppContext.get().getLoggedUser();
-        int code = service.upload(file, source, user.getId());
-        context.put("code", code);
-
-        Date minDate = context.get("uploadDate", Date.class);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(minDate);
-        calendar.add(Calendar.MINUTE, 12);
-        context.put("timeout", calendar.getTime());
+        OperationResult<FileMeta> uploadResult = service.upload(file, source, user.getId());
+        OperationsResults.setResult(uploadResult);
+        context.put("meta", uploadResult.getResult());
     }
+    
 
     @When("uploaded file is processed")
     public void fileIsProcessed() {
         // if file isn't processed
         // wait, update meta and check again
-        while (!isProcessed()) {
-            log.info("Uploaded file isn't processed yet..");
-            checkTimeout();
+        Date deadline = DateHelper.getDateWithShift(5*60);
+        FileMeta fileMeta = context.get("meta", FileMeta.class);
+        String fileId = fileMeta.getId();
+        Boolean fileProcessed = isProcessed(fileId);
+        while (!fileProcessed && !isTimeout(deadline)) {
+            log.info("Checking is file is processed..");
             DateHelper.waitTime(5);
+            fileProcessed = isProcessed(fileId);
         }
-    }
-
-    private void checkTimeout() {
-        Date deadline = context.get("timeout", Date.class);
-        if (DateHelper.isTimeout(deadline)) {
+        if (!fileProcessed) {
             String errorMessage = "Uploaded file is not processed. Failed by timeout";
-            log.error(errorMessage);
-            throw new AssertionError(errorMessage);
+            ErrorReporter.reportAndRaiseError(errorMessage);
         }
     }
 
-    private boolean isProcessed() {
+    private boolean isTimeout(Date deadline) {
+        return DateHelper.isTimeout(deadline);
+    }
+
+    private boolean isProcessed(String fileId) {
         log.info("Check: uploaded file is processed..");
-
-        // update file meta
-        FileMeta fileMeta = context.get("fileMeta", FileMeta.class);
-        fileMeta = service.meta(fileMeta.getId());
-        context.put("fileMeta", fileMeta);
-
-        return fileMeta.getMeta().getIsProcessed();
+        OperationResult<FileMeta> fileMetaOperationResult = service.meta(fileId);
+        return fileMetaOperationResult.getResult().getMeta().getIsProcessed();
         
     }
 
@@ -83,10 +79,16 @@ public class APIUploadFilesSteps extends APISteps {
     public void waitForIngestMatchingComplete() {
         // if target matching isn't complete
         // wait, update meta and check again
-        while (!isIngestMatchingComplete()) {
+        Date deadline = DateHelper.getDateWithShift(5*60);
+        boolean ingestCompleted = isIngestMatchingComplete();
+        while (!ingestCompleted && isTimeout(deadline)) {
             log.info("Uploaded file isn't matching yet..");
-            checkTimeout();
             DateHelper.waitTime(1);
+            ingestCompleted = isIngestMatchingComplete();
+        }
+        if (!ingestCompleted) {
+            String errorMessage = "Ingest matching was not completed";
+            ErrorReporter.reportAndRaiseError(errorMessage);
         }
     }
 
@@ -139,7 +141,7 @@ public class APIUploadFilesSteps extends APISteps {
     @When("I send get upload details request")
     public void getUploadDetails() {
         Process process = context.get("process", Process.class);
-        UploadDetails uploadDetails = service.details(process.getId());
+        UploadDetails uploadDetails = service.details(process.getId()).getResult();
         context.put("uploadDetails", uploadDetails);
     }
 
@@ -190,7 +192,7 @@ public class APIUploadFilesSteps extends APISteps {
         RecordFilter filter = new RecordFilter();
 
         filter.getProcessIds().add(process.getId());
-        EntityList<Record> records = recordService.list(filter);
+        EntityList<Record> records = recordService.list(filter).getResult();
     }
 
 }

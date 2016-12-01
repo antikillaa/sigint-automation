@@ -4,12 +4,12 @@ import abs.EntityList;
 import abs.SearchFilter;
 import abs.SearchResult;
 import app_context.RunContext;
-import errors.NullReturnException;
 import file_generator.FileGenerator;
 import http.G4HttpClient;
 import http.G4Response;
+import http.JsonConverter;
+import http.OperationResult;
 import http.requests.phonebook.EtisalatSubscriberRequest;
-import json.JsonConverter;
 import model.EtisalatSubscriberEntry;
 import model.G4File;
 import model.UploadResult;
@@ -35,14 +35,22 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
      * @return HTTP status code
      */
     @Override
-    public int add(EtisalatSubscriberEntry entity) {
+    public OperationResult<EtisalatSubscriberEntry> add(EtisalatSubscriberEntry  entity) {
         log.info("Add Etisalat Subscriber entry..");
         log.debug(Parser.entityToString(entity));
-
         List<EtisalatSubscriberEntry> entries = new ArrayList<>();
         entries.add(entity);
-        return upload(entries);
+        G4Response response = upload(entries);
+        return new OperationResult<>(response, entity);
     }
+    
+    public OperationResult<List<EtisalatSubscriberEntry>> add(List<EtisalatSubscriberEntry> entities) {
+        log.info("Adding Etisalat Subscriber entries..");
+        log.debug(Parser.entityToString(entities));
+        G4Response response = upload(entities);
+        return new OperationResult<>(response, entities);
+    }
+    
 
     /**
      * UPLOAD list of Etisalat subscriber entries
@@ -51,7 +59,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
      * @param entries of Etisalat subscriber entries
      * @return HTTP status code
      */
-    public int upload(List<EtisalatSubscriberEntry> entries) {
+    private G4Response upload(List<EtisalatSubscriberEntry> entries) {
         log.info("Writing Etisalat Subscriber entries to file..");
         G4File file = new FileGenerator(EtisalatSubscriberEntry.class).write(entries);
 
@@ -61,14 +69,15 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
 
         UploadResult uploadResult = JsonConverter.readEntityFromResponse(response, UploadResult.class, "result");
         if (uploadResult != null) {
+            //TODO: get rid of context manipulation in services
             context.put("uploadResult", uploadResult);
         }
-        return response.getStatus();
+        return response;
     }
 
     @Override
-    public int remove(EtisalatSubscriberEntry entity) {
-        return 0;
+    public OperationResult remove(EtisalatSubscriberEntry entity) {
+        throw new NotImplementedException();
     }
 
     /**
@@ -79,28 +88,25 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
      * @return EntityList of Etisalat subscriber
      */
     @Override
-    public EntityList<EtisalatSubscriberEntry> list(SearchFilter filter) {
+    public OperationResult<EntityList<EtisalatSubscriberEntry>> list(SearchFilter filter) {
         log.info("Getting list of Etisalat Subscriber enries..");
-
         EtisalatSubscriberRequest request = new EtisalatSubscriberRequest().search(filter);
         G4Response response = g4HttpClient.sendRequest(request);
 
         SearchResult<EtisalatSubscriberEntry> searchResults =
                 JsonConverter.readEntityFromResponse(response, EtisalatSubscriberSearchResult.class, "result");
-        if (searchResults == null) {
-            throw new AssertionError("Unable to read search results from Etisalat Subscriber search");
+        EntityList<EtisalatSubscriberEntry> etisalatSubscriberEntries;
+        if (searchResults != null) {
+            etisalatSubscriberEntries =  new EntityList<>(searchResults.getContent());
         } else {
-            return new EntityList<EtisalatSubscriberEntry>(searchResults.getContent()) {
-                public EtisalatSubscriberEntry getEntity(String param) throws NullReturnException {
-                    throw new NotImplementedException();
-                }
-            };
+            throw new RuntimeException("Unable to read search results from Etisalat Subscriber search");
         }
+        return new OperationResult<>(response, etisalatSubscriberEntries);
     }
 
     @Override
-    public int update(EtisalatSubscriberEntry entity) {
-        return 0;
+    public OperationResult<EtisalatSubscriberEntry> update(EtisalatSubscriberEntry entity) {
+        throw new NotImplementedException();
     }
 
     /**
@@ -111,13 +117,14 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
      * @return Etisalat subscriber entry
      */
     @Override
-    public EtisalatSubscriberEntry view(String id) {
+    public OperationResult<EtisalatSubscriberEntry> view(String id) {
         log.info("Getting derails of Etisalat Subscriber entry by id: " + id);
 
         EtisalatSubscriberRequest request = new EtisalatSubscriberRequest().get(id);
         G4Response response = g4HttpClient.sendRequest(request);
-
-        return JsonConverter.readEntityFromResponse(response, EtisalatSubscriberEntry.class, "result");
+    
+        EtisalatSubscriberEntry entry = JsonConverter.readEntityFromResponse(response, EtisalatSubscriberEntry.class, "result");
+        return new OperationResult<>(response, entry);
     }
 
 }

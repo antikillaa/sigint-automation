@@ -1,18 +1,18 @@
 package steps;
 
+import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import errors.NullReturnException;
-import model.Record;
-import model.Report;
-import model.ReportCategory;
-import model.Source;
+import http.OperationResult;
+import http.OperationsResults;
+import model.*;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import services.ReportCategoryService;
 import services.RecordEntityService;
+import services.ReportCategoryService;
 import services.ReportCreateService;
 import services.ReportService;
 import utils.RandomGenerator;
@@ -29,9 +29,9 @@ public class APIReportSteps extends APISteps {
     @When("I send create manual report")
     public void createManualReport() {
         Report report = context.get("report", Report.class);
-        int responseCode = service.add(report);
-        context.put("code", responseCode);
-        context.put("requestReport", report);
+        OperationResult<Report> operationResult = service.add(report);
+        OperationsResults.setResult(operationResult);
+        context.put("requestReport", operationResult.getResult());
     }
 
     @When("Generate new report with logged user as owner")
@@ -43,14 +43,14 @@ public class APIReportSteps extends APISteps {
 
     @When("Add categories to report")
     public void addCategoriesToReport() {
-        List<ReportCategory> categories = reportCategoryService.list();
+        OperationResult<ReportCategoryListResult> operationResult = reportCategoryService.list();
+        EntityList<ReportCategory> categories = operationResult.getResult().getResult();
         for (ReportCategory reportCategory : categories) {
             reportCategory.setCurrentValue("--");
         }
-
         Report report = context.get("report", Report.class);
         log.info("Set categories to report...");
-        report.setCategories(categories);
+        report.setCategories(categories.getEntities());
 
         context.put("report", report);
     }

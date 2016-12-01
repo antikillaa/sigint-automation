@@ -7,10 +7,6 @@
     </bean>
     <bean id="testSteps" class="steps.GlobalSteps">
     </bean>
-    <bean id="rfiSteps" class="steps.APIRFIUploadSteps">
-    </bean>
-    <bean id="rfiSearchSteps" class="steps.APIRFISearchSteps">
-    </bean>
     <bean id="targetGroupSteps" class="steps.APITargetGroupSteps">
     </bean>
     <bean id="targetSteps" class="steps.APITargetSteps">
