@@ -26,7 +26,7 @@ public class TargetGroup extends TeelaEntity {
     private boolean deleted;
 
     public String getName() {
-        return name;
+        return name.trim();
     }
 
     public void setName(String name) {

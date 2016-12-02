@@ -36,8 +36,6 @@ And Phonebook Entry was deleted
 
 
 Scenario: API.User can find Phonebook Entry using search filters
-Meta:
-@wip
 Given I sign in as admin user
 When I send create Phonebook Entry request with all fields
 Then Request is successful
@@ -73,8 +71,6 @@ And Searched DuSubscriber Entry in list
 
 
 Scenario: API.Search DuSubscriber entries using search filters
-Meta:
-@wip
 Given I sign in as admin user
 When I send upload DuSubscriberEntry request with all fields
 Then Request is successful
@@ -121,8 +117,6 @@ And Upload result of 5 'Phonebook' entries is successful
 
 
 Scenario: API.Search EtisalatSubscriberData entry using search filters
-Meta:
-@wip
 Given I sign in as admin user
 When I send upload EtisalatSubscriberData entry request with all fields
 Then Request is successful

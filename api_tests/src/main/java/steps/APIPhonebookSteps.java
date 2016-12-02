@@ -4,6 +4,7 @@ import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Verify;
 import errors.NullReturnException;
+import errors.OperationResultError;
 import http.JsonConverter;
 import http.OperationResult;
 import http.OperationsResults;
@@ -72,7 +73,13 @@ public class APIPhonebookSteps extends APISteps {
     public void checkPhonebookWasDeleted() {
         String id = context.get("id", String.class);
         OperationResult<Phonebook> operationResult = service.view(id);
-        Assert.assertNull("Phonebook was not deleted", operationResult.getResult());
+        try {
+            operationResult.getResult();
+        } catch (OperationResultError ex) {
+            log.debug("Entry cannot be found in response. Delete was successfully");
+            return;
+        }
+        throw new AssertionError("Deleted entry was found via view request");
     }
 
     @When("I get details of created Phonebook Entry")

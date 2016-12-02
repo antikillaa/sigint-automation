@@ -11,7 +11,6 @@ import http.OperationResult;
 import http.OperationsResults;
 import model.*;
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.math.RandomUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -19,6 +18,7 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TargetService;
 import utils.Parser;
+import utils.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,8 +135,7 @@ public class APITargetSteps extends APISteps {
         List<Target> targets = getRandomTargets(Integer.valueOf(count));
 
         for (Target target : targets ) {
-            int index = RandomUtils.nextInt(targetGroups.size());
-            TargetGroup group = targetGroups.getEntities().get(index);
+            TargetGroup group = RandomGenerator.getRandomItemFromList(targetGroups.getEntities());
             target.addGroup(group);
             Entities.getTargetGroups().addOrUpdateEntity(group);
         }

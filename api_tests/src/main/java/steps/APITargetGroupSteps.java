@@ -93,9 +93,11 @@ public class APITargetGroupSteps extends APISteps {
     @Then("target group $criteria list")
     public void existingTargetGroupContainsInList(String criteria) throws NullReturnException {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
+        log.debug("Requested target group: " +targetGroup.getName());
         EntityList<TargetGroup> list = context.get("targetGroupList", EntityList.class);
         Boolean contains = false;
         for (TargetGroup entity : list) {
+            log.debug("Comparing with target group: " + entity.getName());
             if (targetGroup.getName().equals(entity.getName())) {
                 contains = true;
                 break;
@@ -145,7 +147,7 @@ public class APITargetGroupSteps extends APISteps {
     @Then("existing group is listed in list only once")
     public void groupNotDuplicated() {
         List<TargetGroup> targetGroups = Entities.getTargets().getLatest().getGroups();
-        List<TargetGroup> groups = context.get("targetGroupList", List.class);
+        EntityList<TargetGroup> groups = context.get("targetGroupList", EntityList.class);
         for (TargetGroup uploadedGroup : targetGroups) {
             int count = 0;
             for (TargetGroup group : groups) {
