@@ -24,7 +24,8 @@ public class Statistic {
         List<TestCase> testCaseList = service.getReportResults().getFailed();
             for (TestCase testCase:testCaseList) {
                 if (!jiraService.hasOpenedBugs(testCase.getTitle())) {
-                    log.debug("Found failure without opened bug");
+                    log.debug("Found failure without opened bug for test case:/n" +
+                            " "+testCase.getTitle());
                     return true;
                 }
             }
