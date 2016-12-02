@@ -14,17 +14,14 @@ public class EmailSenders {
     private static Reporters getReporterName() {
         Reporters reporter;
         String propReporter = runProperties.getEmailSender().toUpperCase();
-        if (propReporter == null) {
-            reporter = Reporters.PEGASUS;
-        } else {
-            try {
-                reporter = Reporters.valueOf(propReporter);
-            } catch (IllegalArgumentException e) {
-                logger.error("Type of email sender is not recognized as valid:"+ propReporter +
+        try {
+            reporter = Reporters.valueOf(propReporter);
+        } catch (IllegalArgumentException e) {
+            logger.error("Type of email sender is not recognized as valid:"+ propReporter +
                         "Valid senders types:"+ Reporters.values().toString()+ " .Default value will be used - Pegasus");
-                reporter = Reporters.PEGASUS;
-            }
+            reporter = Reporters.PEGASUS;
         }
+        
         return reporter;
         
     }
