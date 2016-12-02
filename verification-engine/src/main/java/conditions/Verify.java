@@ -1,19 +1,21 @@
 package conditions;
 
+import errors.VerificationError;
 import org.apache.log4j.Logger;
-import org.junit.Assert;
 
 public class Verify {
 
     private static Logger log = Logger.getLogger(Verify.class);
 
     public static void shouldBe(ExpectedCondition condition) {
-        try {
-        Assert.assertTrue(condition.check()); }
-        catch (AssertionError e) {
-            log.error("Error comparing with condition: " + condition + ". Should be true but got false");
-            throw e;
+        
+        Boolean isSuccessful = condition.check();
+        if(!isSuccessful) {
+            String message = "Error comparing with condition: " + condition + ". Should be true but got false";
+            log.error(message);
+            throw new VerificationError(message);
         }
+        
     }
 
     public static Boolean isTrue(ExpectedCondition condition) {
@@ -21,10 +23,12 @@ public class Verify {
     }
 
     public static void shouldNotBe(ExpectedCondition condition) {
-        try {
-            Assert.assertFalse(condition.check());
-        } catch (AssertionError e) {
-            log.error(String.format("Error comparing with condition %s. Should be false but got true", condition));
+        Boolean isFalse = condition.check();
+        if (!isFalse) {
+            String message = String.format("Error comparing with condition %s. Should be false but got true", condition);
+            log.error(message);
+            throw new VerificationError(message);
         }
+        
     }
 }
