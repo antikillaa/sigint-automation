@@ -21,7 +21,7 @@
     <report>true</report>
     <email>true</email>
     <stand>develop</stand>
-    <emailSender>pegasus</emailSender>
+    <emailSender>gmail</emailSender>
     <stories>**/*Launcher.java</stories>
     <metaFilters>-TEEL *</metaFilters>
     <reportBuildStatus>false</reportBuildStatus>
