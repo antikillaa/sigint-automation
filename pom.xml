@@ -22,7 +22,7 @@
     <email>true</email>
     <stand>develop</stand>
     <emailSender>gmail</emailSender>
-    <stories>**/*Launcgher.java</stories>
+    <stories>**/*Launcher.java</stories>
     <metaFilters>-TEEL *</metaFilters>
     <reportBuildStatus>false</reportBuildStatus>
   </properties>
