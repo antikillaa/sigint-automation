@@ -49,6 +49,12 @@ public class DuSubscriberFilter extends SearchFilter<DuSubscriberEntry> {
     }
 
     @Override
+    public String toString() {
+        return String.format("phoneNumber: %s, name: %s, address: %s, queryString: %s",
+                phoneNumber, name, address, queryString);
+    }
+
+    @Override
     public boolean isAppliedToEntity(DuSubscriberEntry entity) {
         return activeFilter.isAppliedToEntity(entity);
     }
