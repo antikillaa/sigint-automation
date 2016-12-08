@@ -10,7 +10,6 @@ import java.util.HashMap;
 public class DependencyData {
     
     private HashMap<String, Object> fieldValues = new HashMap<>();
-    
 
     public Collection<Object> getValues() {
         return fieldValues.values();

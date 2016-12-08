@@ -6,6 +6,7 @@ import data_for_entity.annotations.DataIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -24,6 +25,12 @@ public class TargetGroup extends TeelaEntity {
     private int threatScore;
     @DataIgnore
     private boolean deleted;
+
+    @Override
+    public String toString() {
+        return String.format("name: %s, description: %s, targets: %s," +
+                "lmt: %s, deleted: %s", name, description, targets, lmt, threatScore, deleted);
+    }
 
     public String getName() {
         return name.trim();

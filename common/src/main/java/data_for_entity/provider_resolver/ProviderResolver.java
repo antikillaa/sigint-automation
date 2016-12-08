@@ -17,7 +17,6 @@ public abstract class ProviderResolver {
     
     protected abstract EntityDataProvider getInternalProvider();
     
-    
     public EntityDataProvider getProvider() {
         EntityDataProvider provider = getInternalProvider();
         if (provider != null) {

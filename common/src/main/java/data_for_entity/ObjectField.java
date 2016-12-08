@@ -41,7 +41,6 @@ class ObjectField {
             try {
                 BeanUtils.setProperty(object, field.getName(), value);
             } catch (IllegalAccessException | InvocationTargetException e) {
-                ErrorReporter.reportError(e);
                 logger.debug(String.format("Cannot set value %s for field: %s due to error", value, field.getName()));
             }
     }
@@ -56,7 +55,6 @@ class ObjectField {
             try {
                 return BeanUtils.getProperty(object, field.getName());
             } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                ErrorReporter.reportError(e);
                 logger.debug(String.format("Cannot get value of field with name: %s for object: %s",
                         field.getName(), object));
                 return null;
