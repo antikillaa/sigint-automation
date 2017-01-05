@@ -54,9 +54,8 @@ public class UIReportsSteps extends UISteps {
     @When("I fill out required fields on 'Create Manual Report' page")
     public void fillOutRequiredFieldsOnCreateManualReportPage() {
         Report report = new Report().generate();
-        report
-                .setRecordType(RandomGenerator.getRandomItemFromList(AppContext.get().getDictionary().getRecordTypes()).getType())
-                .setSourceType(RandomGenerator.getRandomItemFromList(AppContext.get().getDictionary().getSources()).getType().name());
+        report.setRecordType(RandomGenerator.getRandomItemFromList(AppContext.get().getDictionary().getRecordTypes()).getType());
+        report.setSourceType(RandomGenerator.getRandomItemFromList(AppContext.get().getDictionary().getSources()).getType().name());
 
         getReportsFormFactory().getManualForm().fillForm(report);
         context.put("report", report);
@@ -75,7 +74,7 @@ public class UIReportsSteps extends UISteps {
                 throw new AssertionError(e.getMessage());
             }
         }
-        Verify.shouldBe(Conditions.equals.elements(report.getSubject(), reportRow.getSubject()));
+        Verify.shouldBe(Conditions.equals(report.getSubject(), reportRow.getSubject()));
     }
 
     @Then("report status is '$status' on 'Reports->All' page")
@@ -88,7 +87,7 @@ public class UIReportsSteps extends UISteps {
         } catch (NotFoundException e) {
             throw new AssertionError(e.getMessage());
         }
-        Verify.shouldBe(Conditions.equals.elements(reportRow.getStatus(), status));
+        Verify.shouldBe(Conditions.equals(reportRow.getStatus(), status));
     }
 
 
@@ -142,7 +141,7 @@ public class UIReportsSteps extends UISteps {
         if (owner.equalsIgnoreCase("empty")) {
             owner = "";
         }
-        Verify.shouldBe(Conditions.equals.elements(owner, rowReport.getOwnerName()));
+        Verify.shouldBe(Conditions.equals(owner, rowReport.getOwnerName()));
     }
 
     @When("I select a report in $status status and owner is $owner")
