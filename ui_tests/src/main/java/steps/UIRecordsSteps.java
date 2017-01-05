@@ -81,7 +81,7 @@ public class UIRecordsSteps extends UISteps {
                 throw new AssertionError(e.getMessage());
             }
         }
-        Verify.shouldBe(Conditions.equals.elements(record, foundRecord));
+        Verify.shouldBe(Conditions.equals(record, foundRecord));
     }
 
     @When("I checked checkbox on record with $status status")
@@ -110,7 +110,7 @@ public class UIRecordsSteps extends UISteps {
             log.trace(e);
             throw new AssertionError(e.getMessage());
         }
-        Verify.shouldBe(Conditions.equals.elements(recordRow.getProcessedStatus(), status));
+        Verify.shouldBe(Conditions.equals(recordRow.getProcessedStatus(), status));
     }
 
     @When("I press 'Create report' button against it")

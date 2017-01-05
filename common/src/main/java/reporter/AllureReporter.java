@@ -63,6 +63,11 @@ public class AllureReporter implements StoryReporter {
     }
 
     @Override
+    public void comment(String s) {
+
+    }
+
+    @Override
     public void notPerformed(String step) {
         allure.fire(new StepCanceledEvent());
     }
