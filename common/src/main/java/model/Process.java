@@ -19,14 +19,14 @@ public class Process extends TeelaEntity {
     private List<String> indexes;
     private Date lmt;
     private MatchingContext matchingContext;
-    private int recordsCount;
-    private int smsCount;
-    private int workload;
+    private Integer recordsCount;
+    private Integer smsCount;
+    private Long workload;
     private Date earlistRecordTime;
     private Date latestRecordTime;
-    private int targetHitCount;
-    private int targetMentionCount;
-    private boolean ingestMatchingComplete;
+    private Integer targetHitCount;
+    private Integer targetMentionCount;
+    private Boolean ingestMatchingComplete;
 
 
     public Integer getVersion() {
@@ -93,27 +93,27 @@ public class Process extends TeelaEntity {
         this.matchingContext = matchingContext;
     }
 
-    public int getRecordsCount() {
+    public Integer getRecordsCount() {
         return recordsCount;
     }
 
-    public void setRecordsCount(int recordsCount) {
+    public void setRecordsCount(Integer recordsCount) {
         this.recordsCount = recordsCount;
     }
 
-    public int getSmsCount() {
+    public Integer getSmsCount() {
         return smsCount;
     }
 
-    public void setSmsCount(int smsCount) {
+    public void setSmsCount(Integer smsCount) {
         this.smsCount = smsCount;
     }
 
-    public int getWorkload() {
+    public Long getWorkload() {
         return workload;
     }
 
-    public void setWorkload(int workload) {
+    public void setWorkload(Long workload) {
         this.workload = workload;
     }
 
@@ -133,27 +133,27 @@ public class Process extends TeelaEntity {
         this.latestRecordTime = latestRecordTime;
     }
 
-    public int getTargetHitCount() {
+    public Integer getTargetHitCount() {
         return targetHitCount;
     }
 
-    public void setTargetHitCount(int targetHitCount) {
+    public void setTargetHitCount(Integer targetHitCount) {
         this.targetHitCount = targetHitCount;
     }
 
-    public int getTargetMentionCount() {
+    public Integer getTargetMentionCount() {
         return targetMentionCount;
     }
 
-    public void setTargetMentionCount(int targetMentionCount) {
+    public void setTargetMentionCount(Integer targetMentionCount) {
         this.targetMentionCount = targetMentionCount;
     }
 
-    public boolean isIngestMatchingComplete() {
+    public Boolean isIngestMatchingComplete() {
         return ingestMatchingComplete;
     }
 
-    public void setIngestMatchingComplete(boolean ingestMatchingComplete) {
+    public void setIngestMatchingComplete(Boolean ingestMatchingComplete) {
         this.ingestMatchingComplete = ingestMatchingComplete;
     }
 }
