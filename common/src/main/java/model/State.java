@@ -2,6 +2,6 @@ package model;
 
 public enum State {
 
-    Complete, Pending
+    Complete, Pending, Enriching
 
 }

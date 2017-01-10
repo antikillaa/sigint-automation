@@ -92,6 +92,7 @@ public class JsonConverter {
         } catch (IOException | NullPointerException e) {
             String error = "Error when converting json string:" + jsonString + " to object:" + userClass;
             log.error(error);
+            log.error(e.getMessage());
             log.trace(e.getMessage(), e);
             throw new RuntimeException(error);
         }
