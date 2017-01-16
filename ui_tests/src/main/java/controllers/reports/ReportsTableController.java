@@ -43,7 +43,7 @@ public class ReportsTableController extends TableController {
         try {
             row = getRowBySubject(reportSubject);
         } catch (NotFoundException e) {
-            log.trace(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new AssertionError();
         }
         selectRecordInTable(row);
@@ -67,7 +67,7 @@ public class ReportsTableController extends TableController {
         try {
             row = getRowBySubject(reportSubject);
         } catch (NotFoundException e) {
-            log.trace(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new AssertionError();
         }
         row.clickShowInfoButton();
@@ -80,7 +80,7 @@ public class ReportsTableController extends TableController {
         try {
             row = getRowBySubject(reportSubject);
         } catch (NotFoundException e) {
-            log.trace(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new AssertionError();
         }
         row.clickEditReportButton();

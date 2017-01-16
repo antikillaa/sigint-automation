@@ -77,7 +77,7 @@ public class UIRecordsSteps extends UISteps {
             if (see.startsWith("not")) {
                 return;
             } else {
-                log.trace(e.getMessage());
+                log.error(e.getMessage(), e);
                 throw new AssertionError(e.getMessage());
             }
         }
@@ -107,7 +107,7 @@ public class UIRecordsSteps extends UISteps {
         try {
             recordRow = getRecordsController().getTableController().findRecordById(record.getOriginalId());
         } catch (NotFoundException e) {
-            log.trace(e);
+            log.error(e.getMessage(), e);
             throw new AssertionError(e.getMessage());
         }
         Verify.shouldBe(Conditions.equals(recordRow.getProcessedStatus(), status));

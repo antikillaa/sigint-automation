@@ -60,8 +60,7 @@ public class FileGenerator implements FileService {
                 log.info("Dir: " + file.getAbsolutePath() + " already exist");
             }
         } catch (SecurityException e) {
-            log.error(e.getMessage());
-            log.trace(e);
+            log.error(e.getMessage(), e);
             throw e;
         }
     }
