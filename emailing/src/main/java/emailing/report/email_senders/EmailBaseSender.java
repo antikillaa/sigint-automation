@@ -40,9 +40,7 @@ public abstract class EmailBaseSender {
                 tries++;
                 send_email(html, subject);
             }
-            logger.error(e.getMessage());
-            logger.trace("Cannot send email", e);
-            
+            logger.error("Cannot send email", e);
         }
     }
 }

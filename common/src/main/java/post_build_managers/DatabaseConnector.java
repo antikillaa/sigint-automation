@@ -1,6 +1,7 @@
 package post_build_managers;
 
 import app_context.properties.G4Properties;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -13,6 +14,8 @@ import java.util.Properties;
     private String host;
     private String database;
     private String user;
+
+    private Logger log = Logger.getLogger(DatabaseConnector.class);
     
     DatabaseConnector() throws IOException {
         initVariables();
@@ -66,7 +69,7 @@ import java.util.Properties;
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return DriverManager.getConnection(String.format("jdbc:mysql://%s:3306/%s",host, database), user, password);
     }

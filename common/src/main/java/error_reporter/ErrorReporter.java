@@ -9,8 +9,7 @@ public class ErrorReporter {
     
     
     public static void reportError(Throwable e){
-        logger.error(e.getMessage());
-        logger.trace(e.getMessage(), e);
+        logger.error(e.getMessage(), e);
     }
     
     public static void reportAndRaiseError(String message, Throwable e) {

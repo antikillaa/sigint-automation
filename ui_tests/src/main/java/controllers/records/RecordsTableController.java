@@ -59,7 +59,7 @@ public abstract class RecordsTableController extends TableController {
             TeelaDate date = new TeelaDate(new SimpleDateFormat("d MMM, HH:mm yyyy").parse(row.getDate().replace("GMT", "") + "2016"));
             newRecord.setDateAndTime(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new AssertionError("Was unable to set teela date from ui Row date");
         }
         newRecord.setTmsi(row.getTMSI());

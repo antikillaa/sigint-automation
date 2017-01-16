@@ -12,8 +12,7 @@ class PegasusSender extends EmailBaseSender {
         try {
             session = Session.getDefaultInstance(prop);
         } catch (Exception e) {
-            logger.error(e.getMessage());
-            logger.trace(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
         return session;
     }

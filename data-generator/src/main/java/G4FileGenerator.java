@@ -83,7 +83,7 @@ public class G4FileGenerator {
                 System.out.println(line);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 

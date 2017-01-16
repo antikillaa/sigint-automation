@@ -1,12 +1,14 @@
 package http;
 
 import errors.OperationResultError;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OperationResult<T> {
-    
+
+    private Logger log = Logger.getLogger(OperationResult.class);
     private static final List<Integer> successfulCodes = new ArrayList<>();
     static {
         successfulCodes.add(200);
@@ -35,7 +37,7 @@ public class OperationResult<T> {
             responseObject = JsonConverter.fromJsonToObject(response.getMessage(), castType);
             return responseObject;
         } catch (Exception e) {
-            e.fillInStackTrace();
+            log.error(e.getMessage(), e);
             throw new OperationResultError("Cannot get result of type:" + castType, e);
         }
     }

@@ -81,7 +81,7 @@ public class ReportParser {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return results;
     }

@@ -38,8 +38,7 @@ public class Statistic {
             return jiraService.hasOpenedBugs(testCaseTitle);
         } catch (Exception e) {
             log.warn("Error during jira connection. Unable to check opened bugs on the issue: " + testCaseTitle);
-            log.warn(e.getMessage());
-            log.warn(e.getStackTrace());
+            log.error(e.getMessage(), e);
             return false;
         }
     }

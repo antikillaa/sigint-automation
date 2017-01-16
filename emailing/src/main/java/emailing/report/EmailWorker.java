@@ -23,8 +23,7 @@ public class EmailWorker {
                 }
             } catch (AssertionError e) {
                 logger.warn("Email will not be sent due to the error occurred while forming email");
-                logger.debug(e.getMessage());
-                logger.trace(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
                 return;
             }
             EmailSenders.getEmailSender().send_email(htmlEmail.getHtmlBody(), htmlEmail.getSubject());
