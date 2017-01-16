@@ -33,7 +33,7 @@ public abstract class RecordsTableController extends TableController {
         try {
             recordRow = table.getRecordByColumnNameAndValue("Status", status);
         } catch (NotFoundException e) {
-            log.trace(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new AssertionError(e.getMessage());
         }
         selectRecordInTable(recordRow);
@@ -46,7 +46,7 @@ public abstract class RecordsTableController extends TableController {
         try {
             recordRow = (RecordRow)table.getRecordByColumnNameAndValue("Record ID", recordId);
         } catch (NotFoundException e) {
-            log.trace(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new AssertionError(e.getMessage());
         }
         recordRow.clickCreateReportButton();

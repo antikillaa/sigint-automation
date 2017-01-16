@@ -73,7 +73,7 @@ public class EqualCondition implements ExpectedCondition {
                 return isConditionApplied;
             }
         }
-        return isConditionApplied;
+        return true;
     }
 
     private class NotEqual implements ExpectedCondition {
@@ -164,18 +164,23 @@ public class EqualCondition implements ExpectedCondition {
                     requestValue = BeanUtils.getProperty(obj2, field.getName());
                     log.debug("Value of object 2 is:" + requestValue);
                 } catch (Exception e) {
-                    log.trace(e.getMessage(), e);
+                    log.error(e.getMessage(), e);
                     throw new AssertionError(e.getMessage());
                 }
+
+                // both null or empty string
                 if ((originalValue == null || originalValue.equals("")) && (requestValue == null || requestValue.equals(""))) {
                     continue;
                 }
-                equals = originalValue.trim().equalsIgnoreCase(requestValue.trim());
+                // if one of them null return false, else equals them
+                equals = !(originalValue == null || requestValue == null) &&
+                        originalValue.trim().equalsIgnoreCase(requestValue.trim());
+
                 if (!equals) {
-                    return equals;
+                    return false;
                 }
             }
-            return equals;
+            return true;
         }
     }
 

@@ -34,8 +34,7 @@ public class APIUploadFilesSteps extends APISteps {
         try {
             Thread.sleep(31000);
         } catch (InterruptedException e) {
-            log.error(e.getMessage());
-            log.trace(e);
+            log.error(e.getMessage(), e);
         }
         Source source = RunContext.get().get("source", Source.class);
         LoggedUser user = AppContext.get().getLoggedUser();

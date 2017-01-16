@@ -20,7 +20,7 @@ public class UIReporter extends AllureReporter {
         try {
             allure.fire(new MakeAttachmentEvent(screenshot(), "Page screenshot", "image/png"));
         } catch (Exception e) {
-            log.trace("Was unable to take screenshot", e);
+            log.error("Was unable to take screenshot", e);
 
         }
 

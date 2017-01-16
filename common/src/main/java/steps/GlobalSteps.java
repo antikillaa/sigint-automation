@@ -22,8 +22,7 @@ public class GlobalSteps {
                 service.reportToZephyr();
             }
         } catch (Exception e){
-            log.error(e.getMessage());
-            log.trace(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 

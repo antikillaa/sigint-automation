@@ -30,7 +30,7 @@ public class JsonConverter {
         } catch (IOException | NullPointerException e) {
             String error = "Unable to parse entity from response: " + message + ", status: " + response.getCode();
             log.error(error);
-            log.trace(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new Error(error);
         }
     }
@@ -62,7 +62,7 @@ public class JsonConverter {
         } catch (IOException e) {
             String error = "Cannot load list of entities";
             log.error(error);
-            log.trace(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new Error(error);
         }
     }
@@ -80,19 +80,20 @@ public class JsonConverter {
             String error = "Error occurred when trying to convert object with class:"
                     + object.getClass() + " to JSON string";
             log.error(error);
-            log.trace(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new Error(error, e);
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T fromJsonToObject(String jsonString, Class<T> userClass) {
         log.debug("Converting json string: " + jsonString + " to user class: " + userClass);
         try {
-            return mapper.readValue(jsonString, userClass);
+            return userClass == String.class ? (T) jsonString : mapper.readValue(jsonString, userClass);
         } catch (IOException | NullPointerException e) {
             String error = "Error when converting json string:" + jsonString + " to object:" + userClass;
             log.error(error);
-            log.trace(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new RuntimeException(error);
         }
     }
@@ -104,7 +105,7 @@ public class JsonConverter {
         } catch (IOException | NullPointerException e) {
             String error = "Error occurred when converting json: " + jsonString + " to object list: " + userClass;
             log.error(error);
-            log.trace(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new RuntimeException(error);
         }
     }
@@ -116,7 +117,7 @@ public class JsonConverter {
         } catch (IOException | NullPointerException e) {
             String error = "Error occurred when converting from Input stream to user: " + userClass;
             log.error(error);
-            log.trace(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             throw new Error(error);
         }
     }
