@@ -5,7 +5,7 @@ import model.RecordCategory;
 
 public class RecordCategoriesRequest extends HttpRequest {
 
-    private static final String URI = "/api/sigint/admin/record-categories/";
+    private static final String URI = "/api/sigint/record-categories/";
 
     /**
      * Build HTTP request.
