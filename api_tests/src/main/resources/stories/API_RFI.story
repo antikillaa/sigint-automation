@@ -1,16 +1,13 @@
 Meta:
 @component RFI
+@deprecated
 
 Scenario: API.Tasker can create new RFI with all fields
-Meta:
-@deprecated
 Given I sign in as tasker user
 When I send create RFI request with approved copy and with original document
 Then I got response code 200
 
 Scenario: API.Tasker can update existing RFI
-Meta:
-@deprecated
 Given I sign in as tasker user
 When I send create RFI request without approved copy and without original document
 Then I got response code 200
@@ -20,8 +17,6 @@ And RFI is updated
 
 
 Scenario: API.Tasker can find RFI using search filters
-Meta:
-@deprecated
 Given I sign in as tasker user
 When I send create RFI request without approved copy and without original document
 And I put RFI to search query
@@ -40,8 +35,6 @@ Examples:
 
 
 Scenario: API.Tasker can get details of RFI
-Meta:
-@deprecated
 Given I sign in as tasker user
 When I send create RFI request without approved copy and without original document
 Then I got response code 200
@@ -50,8 +43,6 @@ Then RFI details get via details are correct
 
 
 Scenario: API.Tasker can delete RFI in status Draft
-Meta:
-@deprecated
 Given I sign in as tasker user
 When I create new RFI in status draft
 And I put RFI to search query
@@ -62,8 +53,6 @@ Then Search results are correct
 And Searched RFI not in list
 
 Scenario: API.Admin can cancel sended RFI
-Meta:
-@deprecated
 Given I sign in as tasker user
 When I send create RFI request without approved copy and without original document
 Then I got response code 200
@@ -75,8 +64,6 @@ When I search RFI by state and value CANCELLED
 Then Searched RFI in list
 
 Scenario: API.Analyst can take ownership of RFI
-Meta:
-@deprecated
 Given I sign in as tasker user
 When I send create RFI request without approved copy and without original document
 Then I got response code 200

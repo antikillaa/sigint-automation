@@ -1,5 +1,6 @@
 Meta:
 @component ingestion
+@deprecated
 
 
 Scenario: API.Generate SSMS

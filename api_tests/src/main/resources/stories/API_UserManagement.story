@@ -3,6 +3,8 @@ Meta:
 
 
 Scenario: API.Create a new role
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send create a new role request
 Then Request is successful
@@ -15,6 +17,8 @@ Then Request is successful
 And Created group is correct
 
 Scenario: API.Adding user roles to user groups
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send create a new group without any roles
 Then Request is successful
