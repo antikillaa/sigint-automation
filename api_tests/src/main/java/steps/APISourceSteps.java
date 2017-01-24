@@ -91,6 +91,10 @@ public class APISourceSteps extends APISteps {
         Source newSource = getRandomSource();
         generatedSource.setName(newSource.getName());
         generatedSource.setLocation(newSource.getLocation());
+        generatedSource.setRecordType(newSource.getRecordType());
+        generatedSource.setLatitude(newSource.getLatitude());
+        generatedSource.setLongitude(newSource.getLongitude());
+
         OperationResult<Source> operationResult = service.update(generatedSource);
         OperationsResults.setResult(operationResult);
     }

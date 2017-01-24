@@ -11,8 +11,6 @@ And Generate 3 SSMS
 
 
 Scenario: API.S-SMS ingestion. Target matching by phone number, name and keywords.
-Meta:
-@wip
 Given I sign in as admin user
 And data source with <sourceType> and <recordType> exists
 And <targetCount> targets with phones generated and added
@@ -33,8 +31,6 @@ Examples:
 
 
 Scenario: API.X-SMS ingestion. Target matching by phone number, name and keywords.
-Meta:
-@wip
 Given I sign in as admin user
 And data source with <sourceType> and <recordType> exists
 And <targetCount> targets with phones generated and added
@@ -56,8 +52,6 @@ Examples:
 Scenario: API.X-VoiceMetadata ingestion. Target matching by phone number, name and keywords.
 
 Given I sign in as admin user
-Meta:
-@wip
 And data source with <sourceType> and <recordType> exists
 And <targetCount> targets with phones generated and added
 And <sourceType> - <recordType> data file with records for test targets was generated
