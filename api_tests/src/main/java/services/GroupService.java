@@ -6,8 +6,9 @@ import app_context.entities.Entities;
 import http.G4HttpClient;
 import http.G4Response;
 import http.OperationResult;
-import http.requests.groups.GroupsRequest;
+import http.requests.GroupsRequest;
 import model.Group;
+import model.RequestResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
@@ -39,8 +40,17 @@ public class GroupService implements EntityService<Group> {
     }
 
     @Override
-    public OperationResult remove(Group entity) {
-        throw new NotImplementedException();
+    public OperationResult<RequestResult> remove(Group entity) {
+        log.info("Deleting Group, id:" + entity.getId());
+
+        GroupsRequest request = new GroupsRequest().delete(entity.getId());
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        OperationResult<RequestResult> operationResult = new OperationResult<>(response, RequestResult.class);
+        if (operationResult.isSuccess()) {
+            Entities.getGroups().removeEntity(entity);
+        }
+        return operationResult;
     }
 
     @Override

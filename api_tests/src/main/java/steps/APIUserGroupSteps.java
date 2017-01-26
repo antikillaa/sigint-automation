@@ -6,6 +6,7 @@ import conditions.Verify;
 import http.OperationResult;
 import http.OperationsResults;
 import model.Group;
+import model.RequestResult;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -25,13 +26,13 @@ public class APIUserGroupSteps extends APISteps {
 
         OperationResult<Group> operationResult = service.add(group);
         OperationsResults.setResult(operationResult);
-        context.put("requestGroup", operationResult.getResult());
+        context.put("group", operationResult.getResult());
     }
 
     @Then("Created group is correct")
     public void createdGroupIsCorrect() {
         Group createdGroup = Entities.getGroups().getLatest();
-        Group requestGroup = context.get("requestGroup", Group.class);
+        Group requestGroup = context.get("group", Group.class);
 
         Verify.shouldBe(Conditions.equals(createdGroup, requestGroup));
     }
@@ -44,13 +45,13 @@ public class APIUserGroupSteps extends APISteps {
         Group group = Entities.getGroups().getLatest().setRoles(roles);
         OperationResult<Group> operationResult = service.update(group);
         OperationsResults.setResult(operationResult);
-        context.put("updatedGroup", operationResult.getResult());
+        context.put("group", operationResult.getResult());
     }
 
     @Then("Updated group is correct")
     public void updatedGroupIsCorrect() {
         Group createdGroup = Entities.getGroups().getLatest();
-        Group updatedGroup = context.get("updatedGroup", Group.class);
+        Group updatedGroup = context.get("group", Group.class);
 
         Verify.shouldBe(Conditions.equals(updatedGroup, createdGroup));
     }
@@ -59,5 +60,12 @@ public class APIUserGroupSteps extends APISteps {
         return objectInitializer.randomEntity(Group.class);
     }
 
+    @When("I send delete group request")
+    public void deleteGroup() {
+        Group group = context.get("group", Group.class);
+        OperationResult<RequestResult> operationResult = service.remove(group);
+
+        context.put("requestResult", operationResult.getResult());
+    }
 
 }

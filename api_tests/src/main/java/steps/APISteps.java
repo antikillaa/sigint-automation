@@ -7,6 +7,7 @@ import conditions.Verify;
 import data_for_entity.RandomEntities;
 import http.OperationResult;
 import http.OperationsResults;
+import model.RequestResult;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.junit.Assert;
@@ -44,10 +45,10 @@ public abstract class APISteps {
         }
     }
 
-    @Then("Result message should be '$result'")
+    @Then("Request message should be '$result'")
     public void resultMessageShouldBe(String result) {
-        String resultMessage = context.get("resultMessage", String.class);
-        Verify.shouldBe(Conditions.equals(resultMessage, result));
+        RequestResult requestResult = context.get("requestResult", RequestResult.class);
+        Verify.shouldBe(Conditions.equals(requestResult.getMessage(), result));
     }
 
 }

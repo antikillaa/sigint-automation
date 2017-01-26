@@ -33,7 +33,7 @@ public class EntityList<T extends AbstractEntity> implements Iterable<T> {
 
     public void addOrUpdateEntity(T entity) {
         for (T oldEntity: entities) {
-            if(oldEntity.getId() == entity.getId()) {
+            if(Objects.equals(oldEntity.getId(), entity.getId())) {
                 updateEntity(oldEntity, entity);
                 return;
             }
@@ -45,7 +45,7 @@ public class EntityList<T extends AbstractEntity> implements Iterable<T> {
     public boolean contains(T searchEntity) {
         Boolean exist = false;
         for(T entity: entities) {
-            if (entity.getId().equals(searchEntity.getId())) {
+            if (Objects.equals(entity.getId(), searchEntity.getId())) {
                 exist = true;
                 break;
             }
@@ -60,7 +60,7 @@ public class EntityList<T extends AbstractEntity> implements Iterable<T> {
 
     public void removeEntity(T entity) {
         for (T exEntity: entities) {
-            if (exEntity.getId().equals(entity.getId())) {
+            if (Objects.equals(exEntity.getId(), entity.getId())) {
                 entities.remove(entity);
                 return;
             }

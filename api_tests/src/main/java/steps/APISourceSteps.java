@@ -1,14 +1,13 @@
 package steps;
 
 import abs.EntityList;
+import app_context.AppContext;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import http.OperationResult;
 import http.OperationsResults;
-import model.RecordType;
-import model.Source;
-import model.SourceType;
+import model.*;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -117,11 +116,12 @@ public class APISourceSteps extends APISteps {
         Source source = Entities.getSources().getLatest();
         OperationResult operationResult = service.remove(source);
         OperationsResults.setResult(operationResult);
+        context.put("removedSource", source);
     }
 
     @Then("Source is deleted")
     public void sourceShouldBeDeleted() {
-        Source source = context.get("source", Source.class);
+        Source source = context.get("removedSource", Source.class);
         Verify.shouldBe(Conditions.isTrue.element(source.isDeleted()));
         Verify.shouldBe(Conditions.isTrue.element(source.getName().contains("DELETED at")));
     }
@@ -158,5 +158,38 @@ public class APISourceSteps extends APISteps {
 
     static Source getRandomSource() {
         return objectInitializer.randomEntity(Source.class);
+    }
+
+    /**
+     * cleanup data on env
+     * TODO remove after moved to CB
+     */
+    @Then("delete all old sources")
+    public void deleteOldSources(){
+        EntityList<Source> sourceList = context.get("sourceList", EntityList.class);
+        List<DictionarySourceType> sourceTypes = AppContext.get().getDictionary().getSourceTypes();
+        List<DictionaryRecordType> recordTypes = AppContext.get().getDictionary().getRecordTypes();
+
+        for (Source source : sourceList) {
+            if (!source.isDeleted()) {
+                String[] strings = source.getName().split("-");
+                if (strings.length == 3) {
+                    for (DictionarySourceType sourceType : sourceTypes) {
+                        if (sourceType.getLetterCode().equals(strings[0])) {
+                            for (DictionaryRecordType recordType : recordTypes) {
+                                if (recordType.getEnglishName().equals(strings[1])) {
+                                    if (strings[2].length() == 10) {
+                                        OperationResult operationResult = service.remove(source);
+                                        if (!operationResult.isSuccess()) throw new Error("Unable to remove source: " + source.getName());
+                                        break;
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

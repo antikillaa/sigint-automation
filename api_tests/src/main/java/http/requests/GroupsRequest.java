@@ -1,6 +1,5 @@
-package http.requests.groups;
+package http.requests;
 
-import http.requests.HttpRequest;
 import http.HttpMethod;
 import model.Group;
 import model.PegasusMediaType;
@@ -29,4 +28,12 @@ public class GroupsRequest extends HttpRequest {
                 .setPayload(group);
         return this;
     }
+
+    public GroupsRequest delete(String groupId) {
+        this
+                .setURI(URI + "/" + groupId)
+                .setHttpMethod(HttpMethod.DELETE);
+        return this;
+    }
+
 }
