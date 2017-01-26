@@ -112,7 +112,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
      *
      * @return list of TargetGroup
      */
-    public OperationResult<TargetGroupSearchResult> view() {
+    public OperationResult<TargetGroupSearchResult> list() {
         log.info("Get list of target groups");
         TargetGroupRequest request = new TargetGroupRequest();
         G4Response response = g4HttpClient.sendRequest(request);

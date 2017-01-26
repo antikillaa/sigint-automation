@@ -5,6 +5,7 @@ import abs.SearchFilter;
 import app_context.entities.Entities;
 import http.G4HttpClient;
 import http.G4Response;
+import http.JsonConverter;
 import http.OperationResult;
 import http.requests.GroupsRequest;
 import model.Group;
@@ -12,6 +13,8 @@ import model.RequestResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
+
+import java.util.List;
 
 public class GroupService implements EntityService<Group> {
 
@@ -55,7 +58,11 @@ public class GroupService implements EntityService<Group> {
 
     @Override
     public OperationResult<EntityList<Group>> list(SearchFilter filter) {
-        throw new NotImplementedException();
+        GroupsRequest request = new GroupsRequest().list();
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        List<Group> groups = JsonConverter.readEntitiesFromResponse(response, Group[].class);
+        return new OperationResult<>(response, new EntityList<>(groups));
     }
 
     /**

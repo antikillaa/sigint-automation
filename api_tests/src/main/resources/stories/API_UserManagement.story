@@ -44,3 +44,8 @@ When I send create a new user with group request
 Then Request is successful
 And Created user is correct
 
+Scenario: Get list of user groups
+Given I sign in as admin user
+When I send get list of users group
+Then Request is successful
+And Users group list size more than 0

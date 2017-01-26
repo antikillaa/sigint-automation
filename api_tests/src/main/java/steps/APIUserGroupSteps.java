@@ -1,5 +1,6 @@
 package steps;
 
+import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
@@ -10,6 +11,7 @@ import model.RequestResult;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import org.junit.Assert;
 import services.GroupService;
 
 import java.util.ArrayList;
@@ -68,4 +70,16 @@ public class APIUserGroupSteps extends APISteps {
         context.put("requestResult", operationResult.getResult());
     }
 
+    @When("I send get list of users group")
+    public void getListOfGroups(){
+        OperationResult<EntityList<Group>> operationResult = service.list(null);
+        context.put("groupEntityList", operationResult.getResult());
+    }
+
+    @Then("Users group list size more than 0")
+    public void groupListIsNotEmpty() {
+        EntityList<Group> groupEntityList = context.get("groupEntityList", EntityList.class);
+
+        Assert.assertFalse(groupEntityList.getEntities().isEmpty());
+    }
 }

@@ -66,7 +66,7 @@ public class APITargetGroupSteps extends APISteps {
 
     @When("I send get list of target group request")
     public void getListOfTargetGroupsRequest() throws NullReturnException {
-        EntityList<TargetGroup> targetGroupList = service.view().getResult().getResult();
+        EntityList<TargetGroup> targetGroupList = service.list().getResult().getResult();
         context.put("targetGroupList", targetGroupList);
     }
 
