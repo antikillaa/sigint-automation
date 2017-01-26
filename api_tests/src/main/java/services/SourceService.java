@@ -53,7 +53,7 @@ public class SourceService implements EntityService<Source> {
      * @return HTTP status code
      */
     @Override
-    public OperationResult remove(Source entity) {
+    public OperationResult<Result> remove(Source entity) {
         log.info("Deleting Source id:" + entity.getId());
 
         SourceRequest request = new SourceRequest().delete(entity.getId());

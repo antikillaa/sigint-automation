@@ -116,12 +116,12 @@ public class APISourceSteps extends APISteps {
         Source source = Entities.getSources().getLatest();
         OperationResult operationResult = service.remove(source);
         OperationsResults.setResult(operationResult);
-        context.put("removedSource", source);
+        context.put("source", source);
     }
 
     @Then("Source is deleted")
     public void sourceShouldBeDeleted() {
-        Source source = context.get("removedSource", Source.class);
+        Source source = context.get("source", Source.class);
         Verify.shouldBe(Conditions.isTrue.element(source.isDeleted()));
         Verify.shouldBe(Conditions.isTrue.element(source.getName().contains("DELETED at")));
     }

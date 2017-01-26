@@ -5,7 +5,7 @@ Meta:
 
 Scenario: API.Generate SSMS
 Meta:
-@TEEL
+@deprecated
 Given I sign in as admin user
 And Generate 3 SSMS
 
