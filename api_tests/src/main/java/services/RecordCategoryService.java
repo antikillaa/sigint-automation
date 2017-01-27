@@ -3,7 +3,6 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
-import http.G4HttpClient;
 import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
@@ -21,7 +20,6 @@ import java.util.List;
 public class RecordCategoryService implements EntityService<RecordCategory> {
 
     private Logger logger = Logger.getLogger(RecordCategoryService.class);
-    private G4HttpClient g4HttpClient = new G4HttpClient();
 
     /**
      * Add a new one record-category.

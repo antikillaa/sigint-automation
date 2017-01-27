@@ -3,7 +3,6 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
-import http.G4HttpClient;
 import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
@@ -16,7 +15,6 @@ import utils.Parser;
 
 public class TargetGroupService implements EntityService<TargetGroup> {
 
-    private static G4HttpClient g4HttpClient = new G4HttpClient();
     private Logger log = Logger.getLogger(TargetGroupService.class);
     
     /**

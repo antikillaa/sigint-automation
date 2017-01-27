@@ -4,7 +4,6 @@ import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import file_generator.FileGenerator;
-import http.G4HttpClient;
 import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
@@ -17,7 +16,6 @@ import java.util.List;
 
 public class TargetService implements EntityService<Target> {
 
-    private static G4HttpClient g4HttpClient = new G4HttpClient();
     private Logger log = Logger.getLogger(TargetService.class);
     /*
         TODO

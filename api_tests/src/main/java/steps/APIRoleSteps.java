@@ -29,7 +29,7 @@ public class APIRoleSteps extends APISteps {
         context.put("role", operationResult.getResult());
     }
 
-    @Then("Created role is correct")
+    @Then("Role is correct")
     public void createdRoleIsCorrect() throws NullReturnException {
         Role createdRole = Entities.getRoles().getLatest();
         Role requestRole = context.get("role", Role.class);
@@ -64,5 +64,16 @@ public class APIRoleSteps extends APISteps {
                 throw new AssertionError("Role wasn't removed, name: " + role.getName());
             }
         }
+    }
+
+    @When("I send update role request")
+    public void updateRole() {
+        Role role = Entities.getRoles().getLatest();
+        Role updatedRole = getRandomRole();
+        updatedRole.setName(role.getName());
+
+        OperationResult<Role> result = service.update(updatedRole);
+
+        context.put("role", result.getResult());
     }
 }

@@ -3,7 +3,6 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
-import http.G4HttpClient;
 import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
@@ -18,7 +17,6 @@ import java.util.List;
 
 public class RoleService implements EntityService<Role> {
 
-    private static G4HttpClient g4HttpClient = new G4HttpClient();
     private Logger log = Logger.getLogger(RoleService.class);
 
     /**
@@ -72,7 +70,19 @@ public class RoleService implements EntityService<Role> {
 
     @Override
     public OperationResult<Role> update(Role entity) {
-        throw new NotImplementedException();
+        log.info("Updating Role, name: " + entity.getName());
+        log.debug(Parser.entityToString(entity));
+
+        RoleRequest request = new RoleRequest().update(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        OperationResult<Role> operationResult = new OperationResult<>(response, Role.class);
+        if (operationResult.isSuccess()) {
+            Entities.getRoles().addOrUpdateEntity(entity);
+        } else {
+            log.error("Error! Update role was failed");
+        }
+        return operationResult;
     }
 
     @Override

@@ -2,11 +2,17 @@ Meta:
 @component userManagement
 
 
-Scenario: API.Create a new role
+Scenario: API.CRUD role
 Given I sign in as admin user
+
 When I send create a new role request
 Then Request is successful
-And Created role is correct
+And Role is correct
+
+When I send update role request
+Then Request is successful
+And Role is correct
+
 When I send delete Role request
 Then Request is successful
 When I send get list of Roles request
@@ -18,6 +24,8 @@ Given I sign in as admin user
 When I send create a new group without any roles
 Then Request is successful
 And Created group is correct
+When I send delete group request
+Then Request message should be 'success'
 
 Scenario: API.Adding user roles to user groups
 Given I sign in as admin user
@@ -49,3 +57,10 @@ Given I sign in as admin user
 When I send get list of users group
 Then Request is successful
 And Users group list size more than 0
+
+Scenario: Cleanup
+Meta:
+@deprecated
+Given I sign in as admin user
+When I send get list of users group
+Then delete all old groups

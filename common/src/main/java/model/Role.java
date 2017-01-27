@@ -44,7 +44,6 @@ public class Role extends TeelaEntity {
 
     public void setPermissions(HashSet<String> permissions) {
         this.permissions = permissions;
-        
     }
     
 }

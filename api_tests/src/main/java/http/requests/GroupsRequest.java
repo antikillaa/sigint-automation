@@ -38,6 +38,7 @@ public class GroupsRequest extends HttpRequest {
 
     public GroupsRequest list() {
         this
+                .setURI(URI)
                 .setHttpMethod(HttpMethod.GET);
         return this;
     }

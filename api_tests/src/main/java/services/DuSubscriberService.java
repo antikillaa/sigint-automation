@@ -5,7 +5,6 @@ import abs.SearchFilter;
 import abs.SearchResult;
 import app_context.entities.Entities;
 import file_generator.FileGenerator;
-import http.G4HttpClient;
 import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
@@ -23,7 +22,6 @@ import java.util.List;
 public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
 
     private Logger log = Logger.getLogger(DuSubscriberService.class);
-    private static G4HttpClient g4HttpClient = new G4HttpClient();
 
     /**
      * ADD new Du Subscriber entry.

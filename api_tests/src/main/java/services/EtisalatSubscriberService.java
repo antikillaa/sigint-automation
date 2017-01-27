@@ -5,7 +5,6 @@ import abs.SearchFilter;
 import abs.SearchResult;
 import app_context.RunContext;
 import file_generator.FileGenerator;
-import http.G4HttpClient;
 import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
@@ -24,7 +23,6 @@ import java.util.List;
 public class EtisalatSubscriberService implements EntityService<EtisalatSubscriberEntry> {
 
     private Logger log = Logger.getLogger(EtisalatSubscriberService.class);
-    private static G4HttpClient g4HttpClient = new G4HttpClient();
     private static RunContext context = RunContext.get();
 
     /**

@@ -3,10 +3,13 @@ package services;
 import abs.AbstractEntity;
 import abs.EntityList;
 import abs.SearchFilter;
+import http.G4HttpClient;
 import http.OperationResult;
 
 
 public interface EntityService<T extends AbstractEntity> {
+
+    G4HttpClient g4HttpClient = new G4HttpClient();
 
     /**
      * ADD new entity

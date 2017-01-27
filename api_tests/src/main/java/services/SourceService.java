@@ -2,9 +2,7 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
-import app_context.RunContext;
 import app_context.entities.Entities;
-import http.G4HttpClient;
 import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
@@ -21,9 +19,7 @@ import java.util.Iterator;
 
 public class SourceService implements EntityService<Source> {
 
-    private static G4HttpClient g4HttpClient = new G4HttpClient();
     private Logger log = Logger.getLogger(RoleService.class);
-    private RunContext context = RunContext.get();
 
     /**
      * API: PUT /api/sigint/admin/source/add
@@ -109,7 +105,7 @@ public class SourceService implements EntityService<Source> {
         if (operationResult.isSuccess()) {
             Entities.getSources().addOrUpdateEntity(entity);
         } else {
-            log.error("Error! Update target process was failed");
+            log.error("Error! Update source was failed");
         }
         return operationResult;
     }

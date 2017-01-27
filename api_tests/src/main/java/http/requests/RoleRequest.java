@@ -52,5 +52,18 @@ public class RoleRequest extends HttpRequest {
         return this;
     }
 
+    /**
+     * Update role request
+     *
+     * @param role updated role
+     * @return Update role request
+     */
+    public RoleRequest update(Role role) {
+        this
+                .setURI(URI)
+                .setHttpMethod(HttpMethod.PUT)
+                .setPayload(role);
+        return this;
+    }
 
 }

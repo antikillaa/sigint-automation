@@ -57,7 +57,7 @@ public class APIUserGroupSteps extends APISteps {
 
         Verify.shouldBe(Conditions.equals(updatedGroup, createdGroup));
     }
-    
+
     static Group createRandomUserGroup() {
         return objectInitializer.randomEntity(Group.class);
     }
@@ -71,7 +71,7 @@ public class APIUserGroupSteps extends APISteps {
     }
 
     @When("I send get list of users group")
-    public void getListOfGroups(){
+    public void getListOfGroups() {
         OperationResult<EntityList<Group>> operationResult = service.list(null);
         context.put("groupEntityList", operationResult.getResult());
     }
@@ -81,5 +81,16 @@ public class APIUserGroupSteps extends APISteps {
         EntityList<Group> groupEntityList = context.get("groupEntityList", EntityList.class);
 
         Assert.assertFalse(groupEntityList.getEntities().isEmpty());
+    }
+
+    @Then("delete all old groups")
+    public void deleteAllOldGroups() {
+        EntityList<Group> groupEntityList = context.get("groupEntityList", EntityList.class);
+        for (Group group : groupEntityList.getEntities()) {
+            if (group.getRoles().isEmpty() && group.getUsers() == null) {
+                OperationResult<RequestResult> operationResult = service.remove(group);
+                Assert.assertEquals( "success", operationResult.getResult().getMessage());
+            }
+        }
     }
 }

@@ -2,10 +2,8 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
-import app_context.RunContext;
 import app_context.entities.Entities;
 import file_generator.FileGenerator;
-import http.G4HttpClient;
 import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
@@ -23,8 +21,6 @@ import java.util.List;
 public class PhonebookService implements EntityService<Phonebook> {
 
     private Logger log = Logger.getLogger(PhonebookService.class);
-    private RunContext context = RunContext.get();
-    private static G4HttpClient g4HttpClient = new G4HttpClient();
 
     /*
         TODO
