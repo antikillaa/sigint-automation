@@ -72,12 +72,12 @@ public class GroupService implements EntityService<Group> {
      */
     @Override
     public OperationResult<Group> update(Group entity) {
-        log.info("Updating Group id" + entity.getId());
+        log.info("Updating Group id:" + entity.getId() + " display_name:" + entity.getDisplayName());
         log.debug(Parser.entityToString(entity));
 
         GroupsRequest request = new GroupsRequest().update(entity);
         G4Response response = g4HttpClient.sendRequest(request);
-        OperationResult<Group> operationResult = new OperationResult<Group>(response, Group.class);
+        OperationResult<Group> operationResult = new OperationResult<>(response, Group.class);
         if (operationResult.isSuccess()) {
             Entities.getGroups().addOrUpdateEntity(operationResult.getResult());
         }
