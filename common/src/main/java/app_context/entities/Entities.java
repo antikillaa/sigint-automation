@@ -22,6 +22,7 @@ public class Entities {
     private static ReportList reports;
     private static SourceList sources;
     private static RecordCategoriesList recordCategories;
+    private static ReportCategoriesList reportCategories;
 
 
     public static EntityList<Target> getTargets() {
@@ -113,6 +114,13 @@ public class Entities {
             recordCategories = new RecordCategoriesList();
         }
         return recordCategories;
+    }
+
+    public static EntityList<ReportCategory> getReportCategories() {
+        if (reportCategories == null) {
+            reportCategories = new ReportCategoriesList();
+        }
+        return reportCategories;
     }
 
 }

@@ -1,29 +1,36 @@
 package model;
 
 import abs.TeelaEntity;
+import data_for_entity.annotations.DataIgnore;
+import data_for_entity.annotations.WithFieldDataType;
+import data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.util.List;
+import java.util.ArrayList;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class ReportCategory extends TeelaEntity {
 
-    private int version;
+    @DataIgnore
+    private Integer version;
     private String name;
-    private List<String> values;
-    private int order;
-    private boolean hidden;
-    private boolean deleted;
+    private ArrayList<String> values = new ArrayList<>();
+    private Integer order;
+    @WithFieldDataType(FieldDataType.BOOLEAN)
+    private Boolean hidden;
+    @WithFieldDataType(FieldDataType.BOOLEAN)
+    private Boolean deleted;
+    @DataIgnore
     private String currentValue;
 
-    public int getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
-    public void setVersion(int version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 
@@ -35,35 +42,35 @@ public class ReportCategory extends TeelaEntity {
         this.name = name;
     }
 
-    public List<String> getValues() {
+    public ArrayList<String> getValues() {
         return values;
     }
 
-    public void setValues(List<String> values) {
+    public void setValues(ArrayList<String> values) {
         this.values = values;
     }
 
-    public int getOrder() {
+    public Integer getOrder() {
         return order;
     }
 
-    public void setOrder(int order) {
+    public void setOrder(Integer order) {
         this.order = order;
     }
 
-    public boolean isHidden() {
+    public Boolean getHidden() {
         return hidden;
     }
 
-    public void setHidden(boolean hidden) {
+    public void setHidden(Boolean hidden) {
         this.hidden = hidden;
     }
 
-    public boolean isDeleted() {
+    public Boolean getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
+    public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
 
@@ -74,5 +81,5 @@ public class ReportCategory extends TeelaEntity {
     public void setCurrentValue(String currentValue) {
         this.currentValue = currentValue;
     }
-    
+
 }

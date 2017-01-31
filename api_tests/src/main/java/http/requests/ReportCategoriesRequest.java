@@ -1,5 +1,8 @@
 package http.requests;
 
+import http.HttpMethod;
+import model.ReportCategory;
+
 public class ReportCategoriesRequest extends HttpRequest {
 
     private static final String URI = "/api/reports/categories";
@@ -10,5 +13,13 @@ public class ReportCategoriesRequest extends HttpRequest {
      */
     public ReportCategoriesRequest() {
         super(URI);
+    }
+
+    public ReportCategoriesRequest create(ReportCategory reportCategory) {
+        this
+                .setURI("/api/reports/admin/categories")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(reportCategory);
+        return this;
     }
 }
