@@ -1,9 +1,6 @@
 package model.bulders;
 
-import model.GenerationMatrix;
-import model.GenerationMatrixRow;
-import model.SSMS;
-import model.Target;
+import model.*;
 import utils.RandomGenerator;
 
 import java.util.ArrayList;
@@ -89,8 +86,8 @@ public class SSMSGenerator {
      *
      * @return List of S-SMS
      */
-    public List<SSMS> produceSSMSListByMatrix(GenerationMatrix generationMatrix) {
-        List<SSMS> ssmsList = new ArrayList<>();
+    public List<G4Record> produceSSMSListByMatrix(GenerationMatrix generationMatrix) {
+        List<G4Record> ssmsList = new ArrayList<>();
 
         /*
             Generate S-SMS list for each target from GenerationMatrix,

@@ -183,13 +183,13 @@ public class RandomGenerator {
      */
     public static String generateSMSText(String mention) {
         Random random = new Random();
-        String prefix = RandomStringUtils.randomAlphanumeric(random.nextInt(8));
-        String suffix = random.nextBoolean() ? " " : "" + RandomStringUtils.randomAlphanumeric(random.nextInt(8));
+        String prefix = RandomStringUtils.randomAlphanumeric(random.nextInt(15));
+        String suffix = random.nextBoolean() ? " " : "" + RandomStringUtils.randomAlphanumeric(random.nextInt(15));
         return prefix +
                 (random.nextBoolean() ? " " : "") +
                 mention +
                 (random.nextBoolean() ? " " : "") +
-                suffix;
+                suffix.trim();
     }
 
 }

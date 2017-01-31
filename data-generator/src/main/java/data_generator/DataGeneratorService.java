@@ -1,11 +1,12 @@
 package data_generator;
 
+import model.G4Record;
 import model.GenerationMatrix;
 
 import java.util.List;
 
 interface DataGeneratorService {
 
-    List produceListByMatrix(GenerationMatrix matrix);
+    List<G4Record> produceListByMatrix(GenerationMatrix matrix);
 
 }

@@ -2,7 +2,7 @@ package file_generator;
 
 import model.G4File;
 import model.PegasusMediaType;
-import model.XVoiceMetadata;
+import model.FVoiceMetadata;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -17,10 +17,10 @@ import java.util.*;
  * X-VoiceMetadata file service.
  * Used for generate X-VoiceMetadata.xls files
  */
-class XVoiceMetadataFileService implements FileService<XVoiceMetadata> {
+class FVoiceMetadataFileService implements FileService<FVoiceMetadata> {
 
     @Override
-    public G4File write(List<XVoiceMetadata> list) {
+    public G4File write(List<FVoiceMetadata> list) {
 
         log.info("X-VoiceMetadata size: " + list.size());
 
@@ -35,8 +35,8 @@ class XVoiceMetadataFileService implements FileService<XVoiceMetadata> {
 
             //"EventTime", "Sender", "Receiver"
             fields.add(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(list.get(i).getEventTime()));
-            fields.add(list.get(i).getSender());
-            fields.add(list.get(i).getReceiver());
+            fields.add(list.get(i).getFromNumber());
+            fields.add(list.get(i).getToNumber());
             fields.add("");
             fields.add("");
 
@@ -49,7 +49,7 @@ class XVoiceMetadataFileService implements FileService<XVoiceMetadata> {
 
         // Create and fill XSSFWorkbook
         HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("XVoice sheet");
+        HSSFSheet sheet = workbook.createSheet("FVoice sheet");
 
         Set<Integer> keyset = data.keySet();
         int rownum = 0;

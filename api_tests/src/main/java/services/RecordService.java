@@ -49,23 +49,27 @@ public class RecordService implements EntityService<Record> {
 
     /**
      * Search list of records
-     * API: POST "/api/sigint/record/search?withTargets=true"
+     * API: POST "/api/sigint/records/search?withTargets=true"
      *
      * @param filter search filter for payload
      * @return EntityList of record
      */
     @Override
     public OperationResult<EntityList<Record>> list(SearchFilter filter) {
+        log.info("Search records by filter:" + JsonConverter.toJsonString(filter));
+
         RecordRequest request = new RecordRequest().search(filter);
         G4Response response = g4HttpClient.sendRequest(request);
 
         RecordSearchResult searchResults = JsonConverter.readEntityFromResponse(response, RecordSearchResult.class);
         EntityList<Record> records;
-        if (searchResults != null) {
+        if (searchResults.getResult() != null) {
             records = searchResults.getResult();
         } else {
             throw new RuntimeException("Unable to read search records results");
         }
+
+        log.info("Founded " + records.size() + " records");
         return new OperationResult<>(response, records);
     }
 

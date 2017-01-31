@@ -1,6 +1,5 @@
 package steps;
 
-import abs.EntityList;
 import app_context.AppContext;
 import app_context.RunContext;
 import conditions.Conditions;
@@ -13,7 +12,6 @@ import model.Process;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import services.RecordService;
 import services.UploadFilesService;
 import utils.DateHelper;
 import utils.Parser;
@@ -30,13 +28,11 @@ public class APIUploadFilesSteps extends APISteps {
     public void uploadFile(String sType, String rType) {
         G4File file = context.get("g4file", G4File.class);
 
-        log.info("Wait 31 sec, while targets index updated in ingest service");
-        //wait 31 sec, for targets index update in ingest service
-        try {
-            Thread.sleep(31000);
-        } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
-        }
+        //wait for targets index update in ingest service
+        int targetUpdateDelayInSec = 61;
+        log.info("Wait " + targetUpdateDelayInSec + " sec, while targets index updated in ingest service");
+        DateHelper.waitTime(targetUpdateDelayInSec);
+
         Source source = RunContext.get().get("source", Source.class);
         LoggedUser user = AppContext.get().getLoggedUser();
         OperationResult<FileMeta> uploadResult = service.upload(file, source, user.getId());
@@ -68,13 +64,18 @@ public class APIUploadFilesSteps extends APISteps {
     }
 
     private boolean isProcessed(String fileId) {
-        log.info("Check: uploaded file is processed..");
         OperationResult<FileMeta> fileMetaOperationResult = service.meta(fileId);
-
         FileMeta fileMeta = fileMetaOperationResult.getResult();
-        context.put("meta", fileMeta);
 
-        return (fileMeta.getEtag().length() > 0 & fileMeta.getMeta().getIsProcessed()); // FileMeta.etag == Process.md5
+        if (fileMeta != null && fileMeta.getMeta() != null) {
+            if (fileMeta.getMeta().getProperties().getError() != null) {
+                ErrorReporter.reportAndRaiseError(fileMeta.getMeta().getProperties().getError());
+            }
+            log.info("meta: {'etag': '" + fileMeta.getEtag() + "', isProcessed: " + fileMeta.getMeta().getIsProcessed() + '}');
+            return (fileMeta.getEtag().length() > 0 & fileMeta.getMeta().getIsProcessed()); // FileMeta.etag == Process.md5
+        } else {
+            return false;
+        }
     }
 
     @When("ingest matching complete")
@@ -84,8 +85,8 @@ public class APIUploadFilesSteps extends APISteps {
         Date deadline = DateHelper.getDateWithShift(6 * 60);
         boolean ingestCompleted = isIngestMatchingComplete();
         while (!ingestCompleted && !isTimeout(deadline)) {
-            log.info("Uploaded file isn't matching yet..");
-            DateHelper.waitTime(1);
+            log.info("Uploaded file isn't processed yet..");
+            DateHelper.waitTime(5);
             ingestCompleted = isIngestMatchingComplete();
         }
         if (!ingestCompleted) {
@@ -106,55 +107,46 @@ public class APIUploadFilesSteps extends APISteps {
         FileMeta fileMeta = context.get("meta", FileMeta.class);
         for (Process process : processList) {
             if (process.getMd5().equals(fileMeta.getEtag())) {
-                log.info("Check uploaded file processing status..");
+                log.info("Check process status of uploaded file..");
                 log.debug(Parser.entityToString(process));
-                if (process.isIngestMatchingComplete()) {
+                if (process.isIngestMatchingComplete() && (process.getRecordsCount() != null)) {
                     log.info("File is processed");
-                    if (process.getRecordsCount() != null) {
-                        if (process.getTargetHitCount() != null & process.getTargetMentionCount() != null) {
-                            log.info("target hit and mention counts available in upload result");
-                            context.put("process", process);
-                            return true;
-                        } else {
-                            log.info("Target HIT & Mention results unavailable");
-                            return false;
-                        }
-                    }
+                    context.put("process", process);
+                    return true;
                 }
             }
         }
         return false;
     }
 
-    @Then("search results contain correct counts: total records, target hits and mentions")
+    @Then("search results contain correct counts: total records")
     public void processResultShouldContainCorrectResult() {
         Process process = context.get("process", Process.class);
         GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
         Source source = context.get("source", Source.class);
 
         Integer actualRecordsCount = process.getRecordsCount();
-        Integer actualTargetHits = process.getTargetHitCount();
-        Integer actualTargetMentions = process.getTargetMentionCount();
-
-        Integer expectedTargetHits = matrix.getTotalTargersHit();
-        Integer expectedTargetMentions = matrix.getTotalTargetMention();
+//        Integer actualTargetHits = process.getTargetHitCount();
+//        Integer actualTargetMentions = process.getTargetMentionCount();
+//
+//        Integer expectedTargetHits = matrix.getTotalTargersHit();
+//        Integer expectedTargetMentions = matrix.getTotalTargetMention();
         Integer expectedRecordsCount = matrix.getTotalRecords();
 
         switch (source.getRecordType()) {
             case SMS:
                 Verify.shouldBe(Conditions.equals(actualRecordsCount, expectedRecordsCount));
-                Verify.shouldBe(Conditions.equals(actualTargetHits, expectedTargetHits));
-                Verify.shouldBe(Conditions.equals(actualTargetMentions, expectedTargetMentions));
+                //Verify.shouldBe(Conditions.equals(actualTargetHits, expectedTargetHits));
+                //Verify.shouldBe(Conditions.equals(actualTargetMentions, expectedTargetMentions));
                 break;
             case Voice:
                 expectedRecordsCount = matrix.getTotalRecordsHit() + matrix.getTotalRandomRecords();
 
                 Verify.shouldBe(Conditions.equals(actualRecordsCount, expectedRecordsCount));
-                Verify.shouldBe(Conditions.equals(actualTargetHits, expectedTargetHits));
-                Verify.shouldBe(Conditions.equals(actualTargetMentions, 0));
+                //Verify.shouldBe(Conditions.equals(actualTargetHits, expectedTargetHits));
+                //Verify.shouldBe(Conditions.equals(actualTargetMentions, 0));
                 break;
         }
-        //TODO SMS/Voice counts
     }
 
     @When("I send get upload details request")
@@ -164,7 +156,7 @@ public class APIUploadFilesSteps extends APISteps {
         context.put("uploadDetails", uploadDetails);
     }
 
-    @Then("matching results contain correct Summary: total records, target hits and mentions")
+    @Then("matching results contain correct Summary: total records")
     public void matchingResultShouldContainCorrectSummary() {
         UploadDetails uploadDetails = context.get("uploadDetails", UploadDetails.class);
         context.put("process", uploadDetails.getProcess());
@@ -202,16 +194,6 @@ public class APIUploadFilesSteps extends APISteps {
                 Verify.shouldBe(Conditions.equals(result.getSearchResultType(), SearchResultType.Target));
             }
         }
-    }
-
-    @When("I send get an uploaded records details request")
-    public void getAnUploadedRecordsDetails() {
-        Process process = context.get("process", Process.class);
-        RecordService recordService = new RecordService();
-        RecordFilter filter = new RecordFilter();
-
-        filter.getProcessIds().add(process.getId());
-        EntityList<Record> records = recordService.list(filter).getResult();
     }
 
 }

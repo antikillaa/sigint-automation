@@ -50,12 +50,12 @@ public class GenerationMatrixRow {
         this.target = target;
 
         Random random = new Random();
-        fromNumberCount = random.nextInt(3);
-        toNumberCount = random.nextInt(3);
+        fromNumberCount = random.nextInt(2);
+        toNumberCount = random.nextInt(2);
         numberMention = random.nextInt(2);
         keywordMention = random.nextInt(2);
         nameMention = random.nextInt(2);
-        withoutHitMention = random.nextInt(5);
+        withoutHitMention = random.nextInt(3);
 
         Logger log = Logger.getLogger(GenerationMatrixRow.class);
         log.info(this.target.getName() + " | " + fromNumberCount + " | " + toNumberCount + " | " + nameMention +

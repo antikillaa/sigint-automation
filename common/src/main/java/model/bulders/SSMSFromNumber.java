@@ -17,7 +17,7 @@ class SSMSFromNumber extends SSMSBuilder {
     }
 
     public SSMSBuilder buildFromNumber() {
-        ssms.setCaller_mod(pattern);
+        ssms.setFromNumber(pattern);
         return this;
     }
 }

@@ -1,5 +1,6 @@
 package file_generator;
 
+import http.JsonConverter;
 import model.G4File;
 import model.Target;
 import model.TargetGroup;
@@ -23,6 +24,8 @@ class TargetFileService implements FileService<Target> {
 
         for (int i = 0; i < targets.size(); i++) {
             List<String> targetFields = new ArrayList<>();
+
+            log.info("Write target to file: " + JsonConverter.toJsonString(targets.get(i)));
 
             //ID	Name	Type	Phones	Keywords    Target Groups
             targetFields.add(targets.get(i).getId());
