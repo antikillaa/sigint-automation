@@ -50,8 +50,8 @@ public class GenerationMatrixRow {
         this.target = target;
 
         Random random = new Random();
-        fromNumberCount = random.nextInt(2);
-        toNumberCount = random.nextInt(2);
+        fromNumberCount = random.nextInt(3);
+        toNumberCount = random.nextInt(3);
         numberMention = random.nextInt(2);
         keywordMention = random.nextInt(2);
         nameMention = random.nextInt(2);
