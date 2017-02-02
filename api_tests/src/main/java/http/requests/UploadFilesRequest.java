@@ -70,8 +70,13 @@ public class UploadFilesRequest extends HttpRequest {
      * @return FileMeta model for uploaded file
      */
     private FileMeta initFileMeta(G4File file, Source source, String ownerId) {
+
+        String path = "/" + source.getType().toLetterCode() + "/" + source.getName()
+                + new SimpleDateFormat("/yyyy/MM/dd/").format(new Date()) +
+                file.getName().substring(0, file.getName().lastIndexOf(".")) + "/" + file.getName();
+
         FileMeta fileMeta = new FileMeta();
-        fileMeta.setName(file.getName());
+        fileMeta.setName(path);
         fileMeta.setOwner(ownerId);
         fileMeta.setSourceId(source.getId());
         Meta meta = new Meta();
@@ -80,10 +85,6 @@ public class UploadFilesRequest extends HttpRequest {
         properties.setSourceType(source.getType());
         meta.setProperties(properties);
         fileMeta.setMeta(meta);
-        String path = "/" + source.getType().toLetterCode() + "/" + source.getName()
-                + new SimpleDateFormat("/yyyy/MM/dd/").format(new Date()) + source.getType()
-                .toString().toLowerCase() + "/" + file.getName();
-        fileMeta.setName(path);
         fileMeta.setType(file.getMediaType().toString());
 
         return fileMeta;

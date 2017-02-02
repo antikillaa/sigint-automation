@@ -15,7 +15,7 @@ import utils.Parser;
 
 public class RecordService implements EntityService<Record> {
 
-    private Logger log = Logger.getLogger(RecordService.class);
+    private static Logger LOGGER = Logger.getLogger(RecordService.class);
 
     /**
      * ADD new manual record
@@ -26,19 +26,15 @@ public class RecordService implements EntityService<Record> {
      */
     @Override
     public OperationResult<Record> add(Record entity) {
-        log.info("Creating new record");
-        log.debug(Parser.entityToString(entity));
+        LOGGER.info("Creating new record");
+        LOGGER.debug(Parser.entityToString(entity));
 
         RecordRequest request = new RecordRequest().manual(entity);
         G4Response response = g4HttpClient.sendRequest(request);
 
         Record record = JsonConverter.readEntityFromResponse(response, Record.class, "result");
-        if (record != null) {
-            Entities.getRecords().addOrUpdateEntity(record);
-        } else {
-            log.error("Add new record process was failed");
-            throw new AssertionError("Add new record process was failed");
-        }
+        Entities.getRecords().addOrUpdateEntity(record);
+
         return new OperationResult<>(response, record);
     }
 
@@ -49,23 +45,22 @@ public class RecordService implements EntityService<Record> {
 
     /**
      * Search list of records
-     * API: POST "/api/sigint/record/search?withTargets=true"
+     * API: POST "/api/sigint/records/search?withTargets=true"
      *
      * @param filter search filter for payload
      * @return EntityList of record
      */
     @Override
     public OperationResult<EntityList<Record>> list(SearchFilter filter) {
+        LOGGER.info("Search records by filter:" + JsonConverter.toJsonString(filter));
+
         RecordRequest request = new RecordRequest().search(filter);
         G4Response response = g4HttpClient.sendRequest(request);
 
         RecordSearchResult searchResults = JsonConverter.readEntityFromResponse(response, RecordSearchResult.class);
-        EntityList<Record> records;
-        if (searchResults != null) {
-            records = searchResults.getResult();
-        } else {
-            throw new RuntimeException("Unable to read search records results");
-        }
+        EntityList<Record> records = searchResults.getResult();
+
+        LOGGER.info("Founded " + records.size() + " records");
         return new OperationResult<>(response, records);
     }
 

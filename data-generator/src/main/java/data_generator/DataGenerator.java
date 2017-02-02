@@ -19,12 +19,10 @@ public class DataGenerator implements DataGeneratorService {
     }
 
     @Override
-    public List produceListByMatrix(GenerationMatrix matrix) {
+    public List<G4Record> produceListByMatrix(GenerationMatrix matrix) {
 
-        if (aClass.equals(XSMS.class)) {
-            dataGeneratorService = new XSMSGenerator();
-        } else if (aClass.equals(XVoiceMetadata.class)) {
-            dataGeneratorService = new XVoiceMetadataGenerator();
+        if (aClass.equals(FSMS.class)) {
+            dataGeneratorService = new FSMSGenerator();
         } else {
             throw new Error("Unknown TeelaEntity. Unable to initialize DataGenerator instance!");
         }

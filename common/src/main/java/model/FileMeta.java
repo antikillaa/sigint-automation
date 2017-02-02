@@ -20,6 +20,7 @@ public class FileMeta extends TeelaEntity {
     private Long time;
     private String id;
     private String bucket; // "2016-08-19-5"
+    private String etag;
     private Long length;
     private Date timestamp;
     private String path; // "/S/S-SMS/2016/08/19"
@@ -129,5 +130,12 @@ public class FileMeta extends TeelaEntity {
     public void setExtension(String extension) {
         this.extension = extension;
     }
-    
+
+    public String getEtag() {
+        return etag;
+    }
+
+    public void setEtag(String etag) {
+        this.etag = etag;
+    }
 }

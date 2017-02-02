@@ -17,18 +17,21 @@ public class APIRecordSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APIRecordSteps.class);
     private RecordService service = new RecordService();
-    static RecordEntityService recordEntityService = new RecordEntityService();
+    private static RecordEntityService recordEntityService = new RecordEntityService();
 
     @When("I send create manual record - $recordType")
     public void createManualRecordVoice(String recordType) {
         Record record;
-        if (recordType.equals("SMS")) {
-            record = recordEntityService.createSMSRecord();
-        } else if (recordType.equals("Voice")) {
-            record = recordEntityService.createVoiceRecord();
-        } else {
-            log.error("Unknown record type");
-            throw new AssertionError("Unknown record type passed:" + recordType);
+        switch (recordType) {
+            case "SMS":
+                record = recordEntityService.createSMSRecord();
+                break;
+            case "Voice":
+                record = recordEntityService.createVoiceRecord();
+                break;
+            default:
+                log.error("Unknown record type");
+                throw new AssertionError("Unknown record type passed:" + recordType);
         }
         record.setSourceId(RandomGenerator.getRandomItemFromList(appContext.getDictionary().getSources()).getId());
         OperationResult<Record> operationResult = service.add(record);
@@ -44,4 +47,5 @@ public class APIRecordSteps extends APISteps {
         requestRecord.setState("PROCESSED");
         Verify.shouldBe(Conditions.equals(createdRecord, requestRecord));
     }
+
 }

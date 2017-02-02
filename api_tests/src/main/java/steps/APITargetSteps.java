@@ -314,25 +314,15 @@ public class APITargetSteps extends APISteps {
 
         GenerationMatrix generationMatrix = new GenerationMatrix(targets);
         context.put("generationMatrix", generationMatrix);
-    }
-    
-    
-    @Given("I create test entity")
-    public void createTestEntitity() {
-        XVoiceMetadata metadata = getRandomMetaData();
+        context.put("targets", targets);
     }
     
     private List<Target> getRandomTargets(int count) {
         return objectInitializer.randomEntities(Target.class, count);
     }
     
-    
     static Target getRandomTarget() {
         return objectInitializer.randomEntity(Target.class);
     }
     
-    
-    private XVoiceMetadata getRandomMetaData() {
-        return objectInitializer.randomEntity(XVoiceMetadata.class);
-    }
 }

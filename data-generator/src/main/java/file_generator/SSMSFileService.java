@@ -30,9 +30,9 @@ class SSMSFileService implements FileService<SSMS> {
                 ssms.getCalled_imsi(), ssms.getCalled_imsi_cc(), ssms.getCalled_imsi_ac(), ssms.getCalled_imsi_hit(),
                 ssms.getCaller_imsi(), ssms.getCaller_imsi_cc(), ssms.getCaller_imsi_ac(), ssms.getCaller_imsi_hit(),
                 ssms.getPattern(),
-                ssms.getCalled(), ssms.getCalled_non(), ssms.getCalled_mod(),
+                ssms.getCalled(), ssms.getCalled_non(), ssms.getToNumber(),
                 ssms.getCalled_rule(), ssms.getCalled_hit(), ssms.getCalled_cc(), ssms.getCalled_ac(),
-                ssms.getCaller(), ssms.getCaller_non(), ssms.getCaller_mod(),
+                ssms.getCaller(), ssms.getCaller_non(), ssms.getFromNumber(),
                 ssms.getCaller_rule(), ssms.getCaller_hit(), ssms.getCaller_cc(), ssms.getCaller_ac(),
                 ssms.getSmsc(), ssms.getSmsc_non(), ssms.getSmsc_mod(),
                 ssms.getSmsc_rule(), ssms.getSmsc_hit(), ssms.getSmsc_cc(), ssms.getSmsc_ac()
