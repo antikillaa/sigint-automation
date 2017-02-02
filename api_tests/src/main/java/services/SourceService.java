@@ -10,7 +10,7 @@ import http.requests.SourceRequest;
 import model.Result;
 import model.Source;
 import model.SourceListResult;
-import model.SourcesRequest;
+import http.requests.SourcesRequest;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;

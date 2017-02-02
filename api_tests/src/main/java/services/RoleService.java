@@ -62,6 +62,10 @@ public class RoleService implements EntityService<Role> {
 
     @Override
     public OperationResult<EntityList<Role>> list(SearchFilter filter) {
+        throw new NotImplementedException();
+    }
+
+    public OperationResult<EntityList<Role>> list() {
         RoleRequest request = new RoleRequest().list();
         G4Response response = g4HttpClient.sendRequest(request);
         List<Role> roles = JsonConverter.readEntitiesFromResponse(response, Role[].class);

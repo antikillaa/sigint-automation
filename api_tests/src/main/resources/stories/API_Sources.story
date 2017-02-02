@@ -2,7 +2,7 @@ Meta:
 @component source
 
 
-Scenario: API.CRUD source
+Scenario: API.Create, Read, Update, Delete source
 
 Given I sign in as admin user
 

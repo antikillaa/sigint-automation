@@ -1,6 +1,4 @@
-package model;
-
-import http.requests.HttpRequest;
+package http.requests;
 
 public class SourcesRequest extends HttpRequest {
 

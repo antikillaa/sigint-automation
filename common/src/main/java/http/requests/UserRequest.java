@@ -26,4 +26,19 @@ public class UserRequest extends HttpRequest {
                 .setPayload(user);
         return this;
     }
+
+    public UserRequest delete(String id) {
+        this
+                .setURI(URI + "/" + id)
+                .setHttpMethod(HttpMethod.DELETE);
+        return this;
+    }
+
+    public UserRequest list() {
+        this
+                .setURI(URI)
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
 }
