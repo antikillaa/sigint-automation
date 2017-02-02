@@ -1,5 +1,6 @@
 package steps;
 
+import abs.EntityList;
 import app_context.AppContext;
 import app_context.RunContext;
 import conditions.Conditions;
@@ -12,12 +13,16 @@ import model.Process;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import org.junit.Assert;
+import services.RecordService;
 import services.UploadFilesService;
 import utils.DateHelper;
 import utils.Parser;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class APIUploadFilesSteps extends APISteps {
 
@@ -126,25 +131,31 @@ public class APIUploadFilesSteps extends APISteps {
         Source source = context.get("source", Source.class);
 
         Integer actualRecordsCount = process.getRecordsCount();
-//        Integer actualTargetHits = process.getTargetHitCount();
-//        Integer actualTargetMentions = process.getTargetMentionCount();
-//
-//        Integer expectedTargetHits = matrix.getTotalTargersHit();
-//        Integer expectedTargetMentions = matrix.getTotalTargetMention();
+        /* FIXME for validation Target Hit&Mention counts now we use workaround with records search for processId
+           SEE: @Then("all uploaded records ingested to system")
+         * Integer actualTargetHits = process.getTargetHitCount();
+         * Integer actualTargetMentions = process.getTargetMentionCount();
+         * Integer expectedTargetHits = matrix.getTotalTargersHit();
+         * Integer expectedTargetMentions = matrix.getTotalTargetMention();
+         */
         Integer expectedRecordsCount = matrix.getTotalRecords();
 
         switch (source.getRecordType()) {
             case SMS:
                 Verify.shouldBe(Conditions.equals(actualRecordsCount, expectedRecordsCount));
-                //Verify.shouldBe(Conditions.equals(actualTargetHits, expectedTargetHits));
-                //Verify.shouldBe(Conditions.equals(actualTargetMentions, expectedTargetMentions));
+                /* FIXME workaround
+                 * Verify.shouldBe(Conditions.equals(actualTargetHits, expectedTargetHits));
+                 * Verify.shouldBe(Conditions.equals(actualTargetMentions, expectedTargetMentions));
+                 */
                 break;
             case Voice:
                 expectedRecordsCount = matrix.getTotalRecordsHit() + matrix.getTotalRandomRecords();
 
                 Verify.shouldBe(Conditions.equals(actualRecordsCount, expectedRecordsCount));
-                //Verify.shouldBe(Conditions.equals(actualTargetHits, expectedTargetHits));
-                //Verify.shouldBe(Conditions.equals(actualTargetMentions, 0));
+                /* FIXME workaround
+                 * Verify.shouldBe(Conditions.equals(actualTargetHits, expectedTargetHits));
+                 * Verify.shouldBe(Conditions.equals(actualTargetMentions, 0));
+                 */
                 break;
         }
     }
@@ -194,6 +205,50 @@ public class APIUploadFilesSteps extends APISteps {
                 Verify.shouldBe(Conditions.equals(result.getSearchResultType(), SearchResultType.Target));
             }
         }
+    }
+
+    @Then("all uploaded records ingested to system with targets Hits & Mentions")
+    public void allRecordsIngestedToSystem() {
+        List<G4Record> uploadedRecords = context.get("entitiesList", List.class);
+        GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
+        Process process = context.get("process", Process.class);
+
+        int totalRecordsHit = 0;
+        int totalMentionsHit = 0;
+
+        RecordFilter filter = new RecordFilter();
+        ArrayList<String> ids = new ArrayList<>();
+        ids.add(process.getId());
+        filter.setProcessIds(ids);
+
+        RecordService recordService = new RecordService();
+        OperationResult<EntityList<Record>> searchResult = recordService.list(filter);
+        List<Record> ingestedRecords = searchResult.getResult().getEntities();
+
+        // for each uploaded records
+        for (G4Record g4Record : uploadedRecords) {
+            boolean isIngested = false;
+            // for each founded records
+            for (Record record : ingestedRecords) {
+                // check uploaded record isFound
+                if (Objects.equals(record.getFromNumber(), g4Record.getFromNumber())) {
+                    isIngested = true;
+
+                    // for each ingested record check and calculate target Hits & Mention
+                    if (record.getTargetHitIds() != null && record.getTargetHitIds().size() > 0) {
+                        totalRecordsHit++;
+                    }
+                    if (record.getTargetMentionIds() != null && record.getTargetMentionIds().size() > 0) {
+                        totalMentionsHit++;
+                    }
+                    break;
+                }
+            }
+            Assert.assertTrue("Uploaded record does not found after ingest," +
+                    " fromNumber=" + g4Record.getFromNumber(), isIngested);
+        }
+        Assert.assertEquals("totalRecordsHit value is not correct", matrix.getTotalRecordsHit(), totalRecordsHit);
+        Assert.assertEquals("totalMentionsHit value is not correct", matrix.getTotalRecordsMention(), totalMentionsHit);
     }
 
 }
