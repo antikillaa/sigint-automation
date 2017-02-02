@@ -54,6 +54,10 @@ public class UserService implements EntityService<User> {
     }
 
     public OperationResult<EntityList<User>> list(SearchFilter filter) {
+        throw new NotImplementedException();
+    }
+
+    public OperationResult<EntityList<User>> list() {
         log.info("Getting users list");
 
         UserRequest request = new UserRequest().list();

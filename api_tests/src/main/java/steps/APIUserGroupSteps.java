@@ -75,7 +75,7 @@ public class APIUserGroupSteps extends APISteps {
 
     @When("I send get list of users group")
     public void getListOfGroups() {
-        OperationResult<EntityList<Group>> operationResult = service.list(null);
+        OperationResult<EntityList<Group>> operationResult = service.list();
         context.put("groupEntityList", operationResult.getResult());
     }
 

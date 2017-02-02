@@ -56,6 +56,10 @@ public class GroupService implements EntityService<Group> {
 
     @Override
     public OperationResult<EntityList<Group>> list(SearchFilter filter) {
+        throw new NotImplementedException();
+    }
+
+    public OperationResult<EntityList<Group>> list() {
         GroupsRequest request = new GroupsRequest().list();
         G4Response response = g4HttpClient.sendRequest(request);
 
