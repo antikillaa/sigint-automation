@@ -1,6 +1,5 @@
 Meta:
 @component ingestion
-@deprecated
 
 
 Scenario: API.Generate SSMS
@@ -50,6 +49,8 @@ Examples:
 | F          | SMS        | 2           |
 
 Scenario: API.F-VoiceMetadata ingestion. Target matching by phone number, name and keywords.
+Meta:
+@deprecated
 Given I sign in as admin user
 And data source with <sourceType> and <recordType> exists
 And <targetCount> targets with phones generated and added

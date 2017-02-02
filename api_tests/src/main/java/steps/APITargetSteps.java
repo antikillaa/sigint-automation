@@ -317,23 +317,12 @@ public class APITargetSteps extends APISteps {
         context.put("targets", targets);
     }
     
-    
-    @Given("I create test entity")
-    public void createTestEntitity() {
-        FVoiceMetadata metadata = getRandomMetaData();
-    }
-    
     private List<Target> getRandomTargets(int count) {
         return objectInitializer.randomEntities(Target.class, count);
     }
-    
     
     static Target getRandomTarget() {
         return objectInitializer.randomEntity(Target.class);
     }
     
-    
-    private FVoiceMetadata getRandomMetaData() {
-        return objectInitializer.randomEntity(FVoiceMetadata.class);
-    }
 }

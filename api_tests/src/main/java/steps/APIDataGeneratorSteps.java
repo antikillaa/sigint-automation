@@ -39,10 +39,6 @@ public class APIDataGeneratorSteps extends APISteps {
                         list = new DataGenerator(FSMS.class).produceListByMatrix(matrix);
                         file = new FileGenerator(FSMS.class).write(list);
                         break;
-                    case Voice:
-                        list = new DataGenerator(FVoiceMetadata.class).produceListByMatrix(matrix);
-                        file = new FileGenerator(FVoiceMetadata.class).write(list);
-                        break;
                     default:
                         break;
                 }

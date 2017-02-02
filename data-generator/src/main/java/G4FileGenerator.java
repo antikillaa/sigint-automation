@@ -54,9 +54,6 @@ public class G4FileGenerator {
                 case "f_sms":
                     entityClass = FSMS.class;
                     break;
-                case "f_voice":
-                    entityClass = FVoiceMetadata.class;
-                    break;
                 case "phonebook":
                     entityClass = Phonebook.class;
                     break;

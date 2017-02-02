@@ -7,6 +7,7 @@ import conditions.Verify;
 import http.OperationResult;
 import http.OperationsResults;
 import model.*;
+import model.Process;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -15,7 +16,9 @@ import services.RecordEntityService;
 import services.RecordService;
 import utils.RandomGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class APIRecordSteps extends APISteps {
 
@@ -51,26 +54,28 @@ public class APIRecordSteps extends APISteps {
 
     @Then("all uploaded records ingested to system")
     public void allRecordsIngestedToSystem() {
-        List<G4Record> list = context.get("entitiesList", List.class);
+        List<G4Record> uploadedRecords = context.get("entitiesList", List.class);
         GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
+        Process process = context.get("process", Process.class);
 
         int totalRecordsHit = 0;
         int totalMentionsHit = 0;
 
         RecordFilter filter = new RecordFilter();
+        ArrayList<String> ids = new ArrayList<>();
+        ids.add(process.getId());
+        filter.setProcessIds(ids);
+
+        OperationResult<EntityList<Record>> searchResult = service.list(filter);
+        List<Record> ingestedRecords = searchResult.getResult().getEntities();
 
         // for each uploaded records
-        for (G4Record g4Record : list) {
-            // search by fromNumber
-            filter.setFromPhoneNumber(g4Record.getFromNumber());
-            OperationResult<EntityList<Record>> searchResult = service.list(filter);
-            List<Record> records = searchResult.getResult().getEntities();
-
+        for (G4Record g4Record : uploadedRecords) {
             boolean isIngested = false;
             // for each founded records
-            for (Record record : records) {
+            for (Record record : ingestedRecords) {
                 // check uploaded record isFound
-                if (record.getFromNumber().equals(g4Record.getFromNumber())) {
+                if (Objects.equals(record.getFromNumber(), g4Record.getFromNumber())) {
                     isIngested = true;
 
                     // for each ingested record check and calculate target Hits & Mention
@@ -80,6 +85,7 @@ public class APIRecordSteps extends APISteps {
                     if (record.getTargetMentionIds() != null && record.getTargetMentionIds().size() > 0) {
                         totalMentionsHit++;
                     }
+                    break;
                 }
             }
             Assert.assertTrue("Uploaded record does not found after ingest," +

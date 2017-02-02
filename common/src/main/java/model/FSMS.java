@@ -19,6 +19,20 @@ import java.util.Date;
  * Example:
  * "ID","Calling Number Raw","Called Number Raw","SMS Text","IMSI","IMEI","Datetime","Datetime End","call_length","opc_raw","Original TMSI","Target Number","calling_global_title"
  * 66860345,"750353256509","750353256777","kEqDwaBCZY",4927540264,72991,"2017-01-12 12:18:51","2017-01-12 12:18:51","1970-01-01 00:00:00","AD",6535105053,750353256509,379225174486
+ *
+ //        record.setOriginalId(items[titleMap.get("id")]);
+ //        record.setTime2(parseDate(items[titleMap.get("datetime end")]));
+ //        record.setOlDFrom(items[titleMap.get("calling number raw")]);
+ //        record.setOldTo(items[titleMap.get("called number raw")]);
+ //        record.setText(items[titleMap.get("sms text")]);
+ //        record.setImei(items[titleMap.get("imei")]);
+ //        record.setImsi(items[titleMap.get("imsi")]);
+ //        record.setTime(parseDate(items[titleMap.get("datetime")]));
+ //        record.setDuration(parseDate(items[titleMap.get("call_length")]).getTime());
+ //        record.setFromLocCountry(items[titleMap.get("opc_raw")]);
+ //        record.setTmsi(items[titleMap.get("original tmsi")]);
+ //        record.setToNumber(items[titleMap.get("target number")]);
+ //        record.setFromNumber(items[titleMap.get("calling_global_title")]);
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -44,7 +58,7 @@ public class FSMS extends G4Record {
     @WithDataSize(12)
     @WithFieldDataType(FieldDataType.NUMERIC)
     private String originalTmsi;
-    @WithDataDependencies(provider = TargetNumberProvider.class, fields = {"fromNumber"})
+    @WithDataDependencies(provider = TargetNumberProvider.class, fields = {"toNumber"})
     private String targetNumber;
     @WithDataDependencies(provider = TargetNumberProvider.class, fields = {"fromNumber"})
     private String callingGlobalTitle;

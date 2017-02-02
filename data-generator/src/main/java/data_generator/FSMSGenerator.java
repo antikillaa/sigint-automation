@@ -34,6 +34,7 @@ class FSMSGenerator extends DataGenerator {
             while (from < row.getFromNumberCount()) {
                 fsms = (FSMS) produce();
                 fsms.setFromNumber(phone);
+                fsms.setCallingGlobalTitle(phone);
                 list.add(fsms);
                 from++;
             }
@@ -43,6 +44,7 @@ class FSMSGenerator extends DataGenerator {
             while (to < row.getToNumberCount()) {
                 fsms = (FSMS) produce();
                 fsms.setToNumber(phone);
+                fsms.setTargetNumber(phone);
                 list.add(fsms);
                 to++;
             }

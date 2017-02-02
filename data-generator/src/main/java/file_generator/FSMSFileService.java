@@ -21,10 +21,10 @@ class FSMSFileService implements FileService<FSMS> {
 
         return String.format("%s,%s,%s,\"%s\",%s,%s," +
                         "\"%s\",\"%s\",\"%s\"," +
-                        "%s,%s,%s,%s,%s",
+                        "\"%s\",%s,%s,%s",
                 fsms.getId(), fsms.getFromNumber(), fsms.getToNumber(), fsms.getTxt(), fsms.getImsi(), fsms.getImei(),
                 df.format(fsms.getDatetime()), df.format(fsms.getDateTimeEnd()), df.format(fsms.getCallLength()),
-                fsms.getOpcRaw(), fsms.getOriginalTmsi(), fsms.getOriginalTmsi(), fsms.getTargetNumber(), fsms.getCallingGlobalTitle()
+                fsms.getOpcRaw(), fsms.getOriginalTmsi(), fsms.getToNumber(), fsms.getFromNumber()
         );
     }
 
@@ -38,7 +38,9 @@ class FSMSFileService implements FileService<FSMS> {
         FileHelper.writeLineToFile(file, fields);
 
         for (FSMS fsms : fsmsList) {
-            FileHelper.writeLineToFile(file, entityToCSVString(fsms));
+            String entity = entityToCSVString(fsms);
+            log.debug("write fsms to file: " + entity);
+            FileHelper.writeLineToFile(file, entity);
         }
 
         log.info("FSMS list written successfully to cvs file: " + file.getAbsolutePath());

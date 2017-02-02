@@ -23,8 +23,6 @@ public class DataGenerator implements DataGeneratorService {
 
         if (aClass.equals(FSMS.class)) {
             dataGeneratorService = new FSMSGenerator();
-        } else if (aClass.equals(FVoiceMetadata.class)) {
-            dataGeneratorService = new FVoiceMetadataGenerator();
         } else {
             throw new Error("Unknown TeelaEntity. Unable to initialize DataGenerator instance!");
         }
