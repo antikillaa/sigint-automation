@@ -43,8 +43,8 @@ public class APIReportSteps extends APISteps {
 
     @When("Add categories to report")
     public void addCategoriesToReport() {
-        OperationResult<ReportCategoryListResult> operationResult = reportCategoryService.list();
-        EntityList<ReportCategory> categories = operationResult.getResult().getResult();
+        OperationResult<EntityList<ReportCategory>> operationResult = reportCategoryService.list();
+        EntityList<ReportCategory> categories = operationResult.getResult();
         for (ReportCategory reportCategory : categories) {
             reportCategory.setCurrentValue("--");
         }

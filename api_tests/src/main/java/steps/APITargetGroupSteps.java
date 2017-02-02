@@ -9,6 +9,7 @@ import http.OperationResult;
 import http.OperationsResults;
 import model.TargetGroup;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
@@ -19,9 +20,11 @@ import java.util.List;
 
 import static conditions.Conditions.isTrue;
 
+@SuppressWarnings("unchecked")
 public class APITargetGroupSteps extends APISteps {
     
     private TargetGroupService service = new TargetGroupService();
+    private static Logger LOGGER = Logger.getLogger(APITargetGroupSteps.class);
 
     @When("I send create target group $with targets request")
     public void sendCreateRequest(String with){
@@ -93,11 +96,11 @@ public class APITargetGroupSteps extends APISteps {
     @Then("target group $criteria list")
     public void existingTargetGroupContainsInList(String criteria) throws NullReturnException {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
-        log.debug("Requested target group: " +targetGroup.getName());
+        LOGGER.debug("Requested target group: " +targetGroup.getName());
         EntityList<TargetGroup> list = context.get("targetGroupList", EntityList.class);
         Boolean contains = false;
         for (TargetGroup entity : list) {
-            log.debug("Comparing with target group: " + entity.getName());
+            LOGGER.debug("Comparing with target group: " + entity.getName());
             if (targetGroup.getName().equals(entity.getName())) {
                 contains = true;
                 break;

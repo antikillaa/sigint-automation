@@ -37,4 +37,6 @@
     </bean>
     <bean id="recordCategorySteps" class="steps.APIRecordCategorySteps">
     </bean>
+    <bean id="reportCategorySteps" class="steps.APIReportCategorySteps" >
+    </bean>
 </beans>
