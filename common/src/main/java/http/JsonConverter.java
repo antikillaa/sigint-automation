@@ -40,6 +40,11 @@ public class JsonConverter {
         return fromJsonToObjectsList(jsonString, userClass);
     }
 
+    public static <T> List<T> readEntitiesFromResponse(G4Response response, Class<T[]> userClass, String wrapperField) {
+        String jsonString = response.getMessage();
+        return fromJsonToObjectsList(jsonString, userClass, wrapperField);
+    }
+
     public static <T> T readEntityFromResponse(G4Response response, Class<T> entityClass) {
         String message = response.getMessage();
         log.debug("Response: " + message);
@@ -119,6 +124,21 @@ public class JsonConverter {
             log.error(error);
             log.error(e.getMessage(), e);
             throw new Error(error);
+        }
+    }
+
+    private static <T> List<T> fromJsonToObjectsList(String jsonString, Class<T[]> userClass, String wrapperField) {
+        log.debug("Converting json: " + jsonString + " to object list: " + userClass);
+        MapType mapType = JsonConverter.constructMapTypeToValue(userClass);
+
+        try {
+            HashMap<String, T[]> map = mapper.readValue(jsonString, mapType);
+            return Arrays.asList(map.get(wrapperField));
+        } catch (IOException | NullPointerException e) {
+            String error = "Error occurred when converting json: " + jsonString + " to object list: " + userClass;
+            log.error(error);
+            log.error(e.getMessage(), e);
+            throw new RuntimeException(error);
         }
     }
 

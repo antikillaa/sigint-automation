@@ -3,12 +3,14 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import http.G4Response;
+import http.JsonConverter;
 import http.OperationResult;
 import http.requests.ReportCategoriesRequest;
 import model.ReportCategory;
-import model.ReportCategoryListResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class ReportCategoryService implements EntityService<ReportCategory> {
 
@@ -33,12 +35,16 @@ public class ReportCategoryService implements EntityService<ReportCategory> {
      * GET list of Report Category
      * @return list of ReportCategory
      */
-    public OperationResult<ReportCategoryListResult> list() {
+    public OperationResult<EntityList<ReportCategory>> list() {
         log.info("Get list of categories...");
 
         ReportCategoriesRequest request = new ReportCategoriesRequest();
         G4Response response = g4HttpClient.sendRequest(request);
-        return new OperationResult<>(response, ReportCategoryListResult.class);
+
+        List<ReportCategory> reportCategories =
+                JsonConverter.readEntitiesFromResponse(response, ReportCategory[].class, "result");
+
+        return new OperationResult<>(response, new EntityList<>(reportCategories));
     }
 
     @Override
