@@ -96,7 +96,6 @@ public class APIUserSteps extends APISteps {
         User user = Entities.getUsers().getLatest();
         User updatedUser = getRandomUser();
         updatedUser.setId(user.getId());
-        //updatedUser.setUserGroupIds(user.getUserGroupIds());
 
         OperationResult<User> result = service.update(updatedUser);
 
