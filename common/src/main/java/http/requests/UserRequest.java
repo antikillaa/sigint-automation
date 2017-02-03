@@ -27,6 +27,14 @@ public class UserRequest extends HttpRequest {
         return this;
     }
 
+    public UserRequest update(User user) {
+        this
+                .setURI(URI + "/" + user.getId())
+                .setHttpMethod(HttpMethod.PUT)
+                .setPayload(user);
+        return this;
+    }
+
     public UserRequest delete(String id) {
         this
                 .setURI(URI + "/" + id)

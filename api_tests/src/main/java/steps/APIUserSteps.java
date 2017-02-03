@@ -2,8 +2,6 @@ package steps;
 
 import abs.EntityList;
 import app_context.entities.Entities;
-import conditions.Conditions;
-import conditions.Verify;
 import errors.NullReturnException;
 import http.JsonConverter;
 import http.OperationResult;
@@ -19,6 +17,7 @@ import services.UserService;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class APIUserSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APIUserGroupSteps.class);
@@ -32,18 +31,26 @@ public class APIUserSteps extends APISteps {
         user.setUserGroupIds(userGroupIds);
         OperationResult<User> operationResult = service.add(user);
         OperationsResults.setResult(operationResult);
-        context.put("requestUser", operationResult.getResult());
+        context.put("user", operationResult.getResult());
     }
 
     @Then("Created user is correct")
     public void createdUserIsCorrect() throws NullReturnException {
         User createdUser = Entities.getUsers().getLatest();
-        User requestUser = context.get("requestUser", User.class);
+        User requestUser = context.get("user", User.class);
 
         log.debug("requested: " + JsonConverter.toJsonString(requestUser));
         log.debug("created: " + JsonConverter.toJsonString(createdUser));
 
-        Verify.shouldBe(Conditions.equals(createdUser.getName(), requestUser.getName()));
+        Assert.assertEquals(createdUser.getName().toLowerCase(), requestUser.getName().toLowerCase());
+        Assert.assertEquals(createdUser.getDisplayName(), requestUser.getDisplayName());
+        Assert.assertEquals(createdUser.getRoles(), requestUser.getRoles());
+        Assert.assertEquals(createdUser.getLanguages(), requestUser.getLanguages());
+        Assert.assertEquals(createdUser.getPhone(), requestUser.getPhone());
+        Assert.assertEquals(createdUser.getStaffId(), requestUser.getStaffId());
+        Assert.assertEquals(createdUser.getUserGroupIds(), requestUser.getUserGroupIds());
+        Assert.assertEquals(createdUser.getExpandedPermissions(), requestUser.getExpandedPermissions());
+        Assert.assertEquals(createdUser.getExpandedRoles(), requestUser.getExpandedRoles());
     }
     
     static User getRandomUser() {
@@ -83,4 +90,17 @@ public class APIUserSteps extends APISteps {
             }
         }
     }
+
+    @When("I send update user request")
+    public void updateUser() {
+        User user = Entities.getUsers().getLatest();
+        User updatedUser = getRandomUser();
+        updatedUser.setId(user.getId());
+        //updatedUser.setUserGroupIds(user.getUserGroupIds());
+
+        OperationResult<User> result = service.update(updatedUser);
+
+        context.put("user", result.getResult());
+    }
+
 }
