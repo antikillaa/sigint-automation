@@ -2,6 +2,7 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
+import app_context.entities.Entities;
 import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
@@ -18,7 +19,17 @@ public class ReportCategoryService implements EntityService<ReportCategory> {
 
     @Override
     public OperationResult<ReportCategory> add(ReportCategory entity) {
-        throw new NotImplementedException();
+        log.info("Report category creating");
+
+        ReportCategoriesRequest request = new ReportCategoriesRequest().create(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        ReportCategory reportCategory = JsonConverter.readEntityFromResponse(response, ReportCategory.class, "result");
+        OperationResult<ReportCategory> operationResult = new OperationResult<>(response, reportCategory);
+        if (operationResult.isSuccess()) {
+            Entities.getReportCategories().addOrUpdateEntity(entity);
+        }
+        return operationResult;
     }
 
     @Override
