@@ -9,6 +9,7 @@ import utils.Parser;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -56,6 +57,8 @@ public class EqualCondition implements ExpectedCondition {
         }
         Object[] collection1ToArray = collection1.toArray();
         Object[] collection2ToArray = collection2.toArray();
+        Arrays.sort(collection1ToArray);
+        Arrays.sort(collection2ToArray);
         for (int i = 0; i < collection1.size() - 1; i++) {
             elements(collection1ToArray[i], collection2ToArray[i]);
         }
@@ -64,7 +67,7 @@ public class EqualCondition implements ExpectedCondition {
 
 
     public Boolean check() {
-        Boolean isConditionApplied = true;
+        Boolean isConditionApplied;
         for (ExpectedCondition condition : conditions) {
             isConditionApplied = condition.check();
             if (!isConditionApplied) {
@@ -148,13 +151,14 @@ public class EqualCondition implements ExpectedCondition {
 
         public Boolean check() {
             log.debug("Comparing two teela entities with type:" + obj2.getClass().getName());
-            Boolean equals = TRUE;
+            Boolean equals;
             for (Field field : obj2.getClass().getDeclaredFields()) {
                 if (Modifier.isStatic(field.getModifiers())) {
                     continue;
                 }
                 Object originalValue;
                 Object requestValue;
+                field.setAccessible(true);
                 log.debug("Checking field with name:" + field.getName());
                 try {
                     originalValue = field.get(obj1);
@@ -167,12 +171,13 @@ public class EqualCondition implements ExpectedCondition {
                 }
 
                 // both null or empty string
-                if ((originalValue == null || originalValue.equals("")) && (requestValue == null || requestValue.equals(""))) {
+                if (originalValue.equals("") && requestValue.equals("")) {
                     continue;
                 }
+                EqualCondition condition = new EqualCondition();
+                condition.elements(obj1, obj2);
+                equals = condition.check();
                 // if one of them null return false, else equals them
-                equals = !(originalValue == null || requestValue == null) &&
-                        originalValue.equals(requestValue);
 
                 if (!equals) {
                     return false;
