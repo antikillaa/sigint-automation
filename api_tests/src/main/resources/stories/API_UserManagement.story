@@ -19,12 +19,18 @@ When I send get list of Roles request
 Then Request is successful
 Then Role is deleted
 
-Scenario: API.Create user group without role
+Scenario: API.Create, Update, Delete user group without role
 Given I sign in as admin user
 When I send create a new group without any roles
 Then Request is successful
-And Created group is correct
+And CreatedOrUpdated group is correct
+
+When I send update user group request
+Then Request is successful
+And CreatedOrUpdated group is correct
+
 When I send delete group request
+Then Request is successful
 Then Request message should be 'success'
 
 Scenario: API.Adding user roles to user groups

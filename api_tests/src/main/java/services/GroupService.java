@@ -83,7 +83,7 @@ public class GroupService implements EntityService<Group> {
         G4Response response = g4HttpClient.sendRequest(request);
         OperationResult<Group> operationResult = new OperationResult<>(response, Group.class);
         if (operationResult.isSuccess()) {
-            Entities.getGroups().addOrUpdateEntity(operationResult.getResult());
+            Entities.getGroups().addOrUpdateEntity(entity);
         }
         return operationResult;
     }
