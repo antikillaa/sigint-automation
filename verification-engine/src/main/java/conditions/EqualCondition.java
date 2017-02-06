@@ -35,11 +35,11 @@ public class EqualCondition implements ExpectedCondition {
         }
         if (!obj1.getClass().equals(obj2.getClass())) {
             equalCondition = new NotEqual();
-            return;
         }
         if (Collection.class.isAssignableFrom(obj1.getClass())) {
-            elements((Collection) obj1, (Collection) obj2);
-            return;
+            equalCondition = new SetEqualCondition((Collection)obj1, (Collection)obj2);
+            //elements((Collection) obj1, (Collection) obj2);
+
         } else if (TeelaEntity.class.isAssignableFrom(obj1.getClass())) {
             equalCondition = new TeelaEntityEqualCondition<>((TeelaEntity) obj1, (TeelaEntity) obj2);
 
@@ -106,6 +106,10 @@ public class EqualCondition implements ExpectedCondition {
             if ((set1 == null || set1.size() == 0) && (set2 == null || set2.size() == 0)) {
                 return true;
             }
+            Object[] collection1ToArray = set1.toArray();
+            Object[] collection2ToArray = set2.toArray();
+            Arrays.sort(collection1ToArray);
+            Arrays.sort(collection2ToArray);
             return set1.equals(set2);
         }
     }
@@ -177,7 +181,6 @@ public class EqualCondition implements ExpectedCondition {
                 EqualCondition condition = new EqualCondition();
                 condition.elements(originalValue, requestValue);
                 equals = condition.check();
-                // if one of them null return false, else equals them
 
                 if (!equals) {
                     return false;

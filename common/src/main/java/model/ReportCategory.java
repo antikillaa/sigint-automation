@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class ReportCategory extends TeelaEntity {
+public class ReportCategory extends TeelaEntity implements Comparable {
 
     @DataIgnore
     private Integer version;
@@ -82,4 +82,9 @@ public class ReportCategory extends TeelaEntity {
         this.currentValue = currentValue;
     }
 
+    @Override
+    public int compareTo(Object o) {
+        ReportCategory compareWith = (ReportCategory)o;
+        return this.getName().compareTo(compareWith.getName());
+    }
 }
