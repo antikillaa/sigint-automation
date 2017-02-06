@@ -18,7 +18,7 @@ import java.util.List;
 
 public class UserService implements EntityService<User> {
 
-    Logger log = Logger.getLogger(UserService.class);
+    private Logger log = Logger.getLogger(UserService.class);
 
     /**
      * Add new G4 User.
@@ -68,7 +68,16 @@ public class UserService implements EntityService<User> {
     }
 
     public OperationResult<User> update(User entity) {
-        throw new NotImplementedException();
+        log.info("Update user id:" + entity.getId() + " name:" + entity.getName());
+
+        UserRequest request = new UserRequest().update(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        OperationResult<User> operationResult = new OperationResult<>(response, User.class);
+        if (operationResult.isSuccess()) {
+            Entities.getUsers().addOrUpdateEntity(entity);
+        }
+        return operationResult;
     }
 
     public OperationResult<User> view(String id) {
