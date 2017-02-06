@@ -4,15 +4,12 @@ import abs.TeelaEntity;
 import http.JsonConverter;
 import model.Record;
 import model.UIRecord;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import utils.Parser;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import static java.lang.Boolean.TRUE;
