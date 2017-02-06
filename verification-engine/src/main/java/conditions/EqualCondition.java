@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static java.lang.Boolean.TRUE;
@@ -155,14 +156,14 @@ public class EqualCondition implements ExpectedCondition {
                 if (Modifier.isStatic(field.getModifiers())) {
                     continue;
                 }
-                String originalValue;
-                String requestValue;
+                Object originalValue;
+                Object requestValue;
                 log.debug("Checking field with name:" + field.getName());
                 try {
-                    originalValue = BeanUtils.getProperty(obj1, field.getName());
-                    log.debug("Value of object 1 is:" + originalValue);
-                    requestValue = BeanUtils.getProperty(obj2, field.getName());
-                    log.debug("Value of object 2 is:" + requestValue);
+                    originalValue = field.get(obj1);
+                    log.debug("Value of object 1 is:" + originalValue.toString());
+                    requestValue = field.get(obj2);
+                    log.debug("Value of object 2 is:" + requestValue.toString());
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                     throw new AssertionError(e.getMessage());
@@ -174,7 +175,7 @@ public class EqualCondition implements ExpectedCondition {
                 }
                 // if one of them null return false, else equals them
                 equals = !(originalValue == null || requestValue == null) &&
-                        originalValue.trim().equalsIgnoreCase(requestValue.trim());
+                        originalValue.equals(requestValue);
 
                 if (!equals) {
                     return false;
