@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static java.lang.Boolean.TRUE;
 
 public class EqualCondition implements ExpectedCondition {
 
@@ -36,6 +35,7 @@ public class EqualCondition implements ExpectedCondition {
         }
         if (!obj1.getClass().equals(obj2.getClass())) {
             equalCondition = new NotEqual();
+            return;
         }
         if (Collection.class.isAssignableFrom(obj1.getClass())) {
             elements((Collection) obj1, (Collection) obj2);
@@ -162,20 +162,20 @@ public class EqualCondition implements ExpectedCondition {
                 log.debug("Checking field with name:" + field.getName());
                 try {
                     originalValue = field.get(obj1);
-                    log.debug("Value of object 1 is:" + originalValue.toString());
+                    log.debug("Value of object 1 is:" + originalValue);
                     requestValue = field.get(obj2);
-                    log.debug("Value of object 2 is:" + requestValue.toString());
+                    log.debug("Value of object 2 is:" + requestValue);
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                     throw new AssertionError(e.getMessage());
                 }
 
                 // both null or empty string
-                if (originalValue.equals("") && requestValue.equals("")) {
+                if ((originalValue == null || originalValue.equals("")) && (requestValue == null || requestValue.equals(""))) {
                     continue;
                 }
                 EqualCondition condition = new EqualCondition();
-                condition.elements(obj1, obj2);
+                condition.elements(originalValue, requestValue);
                 equals = condition.check();
                 // if one of them null return false, else equals them
 
@@ -185,6 +185,8 @@ public class EqualCondition implements ExpectedCondition {
             }
             return true;
         }
+
+
     }
 
     private class RecordToUIRecordEqualCondition implements ExpectedCondition {
