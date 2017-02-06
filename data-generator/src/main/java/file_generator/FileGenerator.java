@@ -27,10 +27,8 @@ public class FileGenerator implements FileService {
             fileService = new PhoneBookFileService();
         } else if (entityClass.equals(SSMS.class)) {
             fileService = new SSMSFileService();
-        } else if (entityClass.equals(XSMS.class)) {
-            fileService = new XSMSFileService();
-        } else if (entityClass.equals(XVoiceMetadata.class)) {
-            fileService = new XVoiceMetadataFileService();
+        } else if (entityClass.equals(FSMS.class)) {
+            fileService = new FSMSFileService();
         } else {
             throw new Error("Unknown TeelaEntity. Unable to initialize FileGenerator instance!");
         }

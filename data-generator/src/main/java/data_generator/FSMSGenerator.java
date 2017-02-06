@@ -1,85 +1,88 @@
 package data_generator;
 
 
+import model.FSMS;
+import model.G4Record;
 import model.GenerationMatrix;
 import model.GenerationMatrixRow;
-import model.XSMS;
 import utils.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class XSMSGenerator extends DataGenerator {
+class FSMSGenerator extends DataGenerator {
 
-    XSMSGenerator() {
-        super(XSMS.class);
+    FSMSGenerator() {
+        super(FSMS.class);
     }
 
     @Override
-    public List<XSMS> produceListByMatrix(GenerationMatrix generationMatrix) {
-        List<XSMS> list = new ArrayList<>();
+    public List<G4Record> produceListByMatrix(GenerationMatrix generationMatrix) {
+        List<G4Record> list = new ArrayList<>();
 
         /*
-            Generate X-SMS list for each target from GenerationMatrix,
+            Generate F-SMS list for each target from GenerationMatrix,
             according to the current Generation matrix row with target and 'from/to' target records,
             or any mention about this target parameters for him
          */
         for (GenerationMatrixRow row : generationMatrix.getRows()) {
             String phone = getTargetPhone(row.getTarget());
-            XSMS xsms;
+            FSMS fsms;
 
-            // generate X-SMS list 'from' current target phone
+            // generate F-SMS list 'from' current target phone
             int from = 0;
             while (from < row.getFromNumberCount()) {
-                xsms = (XSMS) produce();
-                xsms.setCallerMod(phone);
-                list.add(xsms);
+                fsms = (FSMS) produce();
+                fsms.setFromNumber(phone);
+                fsms.setCallingGlobalTitle(phone);
+                list.add(fsms);
                 from++;
             }
 
-            // generate X-SMS list 'to' current target phone
+            // generate F-SMS list 'to' current target phone
             int to = 0;
             while (to < row.getToNumberCount()) {
-                xsms = (XSMS) produce();
-                xsms.setCalledMod(phone);
-                list.add(xsms);
+                fsms = (FSMS) produce();
+                fsms.setToNumber(phone);
+                fsms.setTargetNumber(phone);
+                list.add(fsms);
                 to++;
             }
 
-            // generate X-SMS list with 'target phone' mention in the text message
+            // generate F-SMS list with 'target phone' mention in the text message
             int fromMention = 0;
             while (fromMention < row.getNumberMention()) {
-                xsms = (XSMS) produceSMSWithMention(phone);
-                list.add(xsms);
+                fsms = (FSMS) produceSMSWithMention(phone);
+                list.add(fsms);
                 fromMention++;
             }
 
-            // generate X-SMS list with 'target keyword' mention in the text message
+            // generate F-SMS list with 'target keyword' mention in the text message
             int keywordMention = 0;
             while (keywordMention < row.getKeywordMention()) {
                 List<String> keywords = new ArrayList<>(row.getTarget().getKeywords());
                 String mention = RandomGenerator.getRandomItemFromList(keywords);
 
-                xsms = (XSMS) produceSMSWithMention(mention);
-                list.add(xsms);
+                fsms = (FSMS) produceSMSWithMention(mention);
+                list.add(fsms);
                 keywordMention++;
             }
 
-            // generate X-SMS list with 'target name' mention in the text message
+            // generate F-SMS list with 'target name' mention in the text message
             int nameMention = 0;
             while (nameMention < row.getNameMention()) {
                 String mention = row.getTarget().getName();
 
-                xsms = (XSMS) produceSMSWithMention(mention);
-                list.add(xsms);
+                fsms = (FSMS) produceSMSWithMention(mention);
+                list.add(fsms);
                 nameMention++;
             }
 
-            // generate randomly X-SMS list without any target mention in the text message
+            // generate randomly F-SMS list without any target mention in the text message
             int withoutHitMention = 0;
             while (withoutHitMention < row.getWithoutHitMention()) {
-                xsms = (XSMS) produce();
-                list.add(xsms);
+                fsms = (FSMS) produce();
+                list.add(fsms);
                 withoutHitMention++;
             }
         }

@@ -2,7 +2,7 @@ Meta:
 @component source
 
 
-Scenario: API.CRUD source
+Scenario: API.Create, Read, Update, Delete source
 
 Given I sign in as admin user
 
@@ -26,6 +26,7 @@ Then Source is deleted
 
 
 Scenario: API.Get list of sources
+Given I sign in as admin user
 When I send get list of sources request
 Then Request is successful
 And Source list size more than 0

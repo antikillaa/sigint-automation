@@ -55,7 +55,7 @@ public class SSMSCreator {
         ssms
                 .setCalled(toNumber)
                 .setCalled_non(1)
-                .setCalled_mod(toNumber);
+                .setToNumber(toNumber);
 
         List<String> list = new ArrayList<>(Arrays.asList("", "imsi"));
         ssms
@@ -68,11 +68,11 @@ public class SSMSCreator {
         ssms
                 .setCaller(fromNumber)
                 .setCaller_non(1)
-                .setCaller_mod(fromNumber)
                 .setCaller_rule("")
                 .setCaller_hit("")
                 .setCaller_cc("")
-                .setCaller_ac("");
+                .setCaller_ac("")
+                .setFromNumber(fromNumber);
 
         String ssmsNumber = RandomGenerator.generatePhone();
         ssms

@@ -12,6 +12,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import utils.TeelaDate;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -77,6 +78,9 @@ public class Record extends TeelaEntity {
     private String fileId;
     @DataIgnore
     private String optimizedFileId;
+
+    private ArrayList<String> targetMentionIds;
+    private ArrayList<String> targetHitIds;
     
 
     public String getProcessedStatus() {
@@ -311,5 +315,20 @@ public class Record extends TeelaEntity {
     public void setOptimizedFileId(String optimizedFileId) {
         this.optimizedFileId = optimizedFileId;
     }
-    
+
+    public ArrayList<String> getTargetMentionIds() {
+        return targetMentionIds;
+    }
+
+    public void setTargetMentionIds(ArrayList<String> targetMentionIds) {
+        this.targetMentionIds = targetMentionIds;
+    }
+
+    public ArrayList<String> getTargetHitIds() {
+        return targetHitIds;
+    }
+
+    public void setTargetHitIds(ArrayList<String> targetHitIds) {
+        this.targetHitIds = targetHitIds;
+    }
 }

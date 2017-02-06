@@ -1,11 +1,9 @@
 package model;
 
-import abs.TeelaEntity;
-
 import java.util.Date;
 
 
-public class SSMS extends TeelaEntity {
+public class SSMS extends G4Record {
 
     private int cdr_id;
     private Date event_time;
@@ -34,14 +32,12 @@ public class SSMS extends TeelaEntity {
     private String pattern;
     private String called;
     private int called_non;
-    private String called_mod;
     private String called_rule;
     private String called_hit;
     private String called_cc;
     private String called_ac;
     private String caller;
     private int caller_non;
-    private String caller_mod;
     private String caller_rule;
     private String caller_hit;
     private String caller_cc;
@@ -295,15 +291,6 @@ public class SSMS extends TeelaEntity {
         return this;
     }
 
-    public String getCalled_mod() {
-        return called_mod;
-    }
-
-    public SSMS setCalled_mod(String called_mod) {
-        this.called_mod = called_mod;
-        return this;
-    }
-
     public String getCalled_rule() {
         return called_rule;
     }
@@ -355,15 +342,6 @@ public class SSMS extends TeelaEntity {
 
     public SSMS setCaller_non(int caller_non) {
         this.caller_non = caller_non;
-        return this;
-    }
-
-    public String getCaller_mod() {
-        return caller_mod;
-    }
-
-    public SSMS setCaller_mod(String caller_mod) {
-        this.caller_mod = caller_mod;
         return this;
     }
 

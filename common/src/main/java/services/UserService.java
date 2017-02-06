@@ -3,10 +3,11 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
-import http.G4HttpClient;
 import http.G4Response;
+import http.JsonConverter;
 import http.OperationResult;
 import http.requests.UserRequest;
+import model.RequestResult;
 import model.User;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
@@ -17,8 +18,7 @@ import java.util.List;
 
 public class UserService implements EntityService<User> {
 
-    private static G4HttpClient g4HttpClient = new G4HttpClient();
-    Logger log = Logger.getLogger(UserService.class);
+    private Logger log = Logger.getLogger(UserService.class);
 
     /**
      * Add new G4 User.
@@ -32,6 +32,7 @@ public class UserService implements EntityService<User> {
 
         UserRequest request = new UserRequest().add(entity);
         G4Response response = g4HttpClient.sendRequest(request);
+
         OperationResult<User> operationResult = new OperationResult<>(response, User.class);
         if (operationResult.isSuccess()) {
             Entities.getUsers().addOrUpdateEntity(operationResult.getResult());
@@ -39,21 +40,48 @@ public class UserService implements EntityService<User> {
         return operationResult;
     }
 
-    public OperationResult<User> remove(User entity) {
-        throw new NotImplementedException();
+    public OperationResult<RequestResult> remove(User entity) {
+        log.info("Deleting user, id:" + entity.getId() + " name:" + entity.getName());
+
+        UserRequest request = new UserRequest().delete(entity.getId());
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        OperationResult<RequestResult> operationResult = new OperationResult<>(response, RequestResult.class);
+        if (operationResult.isSuccess()) {
+            Entities.getUsers().removeEntity(entity);
+        }
+        return operationResult;
     }
 
     public OperationResult<EntityList<User>> list(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
+    public OperationResult<EntityList<User>> list() {
+        log.info("Getting users list");
+
+        UserRequest request = new UserRequest().list();
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        List<User> users = JsonConverter.readEntitiesFromResponse(response, User[].class);
+        return new OperationResult<>(response, new EntityList<>(users));
+    }
+
     public OperationResult<User> update(User entity) {
-        
-        throw new NotImplementedException();
+        log.info("Update user id:" + entity.getId() + " name:" + entity.getName());
+
+        UserRequest request = new UserRequest().update(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        OperationResult<User> operationResult = new OperationResult<>(response, User.class);
+        if (operationResult.isSuccess()) {
+            Entities.getUsers().addOrUpdateEntity(entity);
+        }
+        return operationResult;
     }
 
     public OperationResult<User> view(String id) {
-        return null;
+        throw new NotImplementedException();
     }
 
     /**

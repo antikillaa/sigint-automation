@@ -1,6 +1,5 @@
 package steps;
 
-import app_context.RunContext;
 import conditions.Verify;
 import controllers.APILogin;
 import http.OperationResult;
@@ -19,11 +18,8 @@ import static conditions.Conditions.isTrue;
 
 public class APILoginSteps extends APISteps {
 
-    private static RunContext runContext = RunContext.get();
-    private static Logger log = Logger.getRootLogger();
+    private static Logger LOGGER = Logger.getLogger(APILoginSteps.class);
     private static APILogin login = new APILogin();
-    private static GlobalSteps globalSteps = new GlobalSteps();
-
 
     @Given("I sign in as $role user")
     public void signInGlobal(String role) {
@@ -52,7 +48,7 @@ public class APILoginSteps extends APISteps {
     /**
     @Then("I got response code $real")
     public void checkResponseCode(String real) {
-        log.info("Checking response code");
+        LOGGER.info("Checking response code");
         Integer actual;
         actual = runContext.get("code", Integer.class);
         Integer expected = Integer.valueOf(real);
@@ -63,7 +59,7 @@ public class APILoginSteps extends APISteps {
 
     @Then("Error message is $message")
     public void checkErrorMessage(String message) throws IOException {
-        log.info("Verifying error message");
+        LOGGER.info("Verifying error message");
         OperationResult operationResult = OperationsResults.getResult();
         Verify.shouldBe(isTrue.element(operationResult.getMessage().toLowerCase().contains(message.toLowerCase())));
     }

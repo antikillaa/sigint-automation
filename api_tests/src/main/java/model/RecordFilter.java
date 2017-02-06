@@ -17,6 +17,24 @@ public class RecordFilter extends SearchFilter<Record> {
     private String radius;
     private int minSpeechLength;
     private String mentionsAndHits;
+    private String fromPhoneNumber;
+    private String toPhoneNumber;
+
+    public String getFromPhoneNumber() {
+        return fromPhoneNumber;
+    }
+
+    public void setFromPhoneNumber(String fromPhoneNumber) {
+        this.fromPhoneNumber = fromPhoneNumber;
+    }
+
+    public String getToPhoneNumber() {
+        return toPhoneNumber;
+    }
+
+    public void setToPhoneNumber(String toPhoneNumber) {
+        this.toPhoneNumber = toPhoneNumber;
+    }
 
     public int getMinDuration() {
         return minDuration;

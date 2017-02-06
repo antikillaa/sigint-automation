@@ -7,11 +7,12 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class User extends TeelaEntity {
 
     private String name;
@@ -24,18 +25,18 @@ public class User extends TeelaEntity {
     @JsonProperty("staff_id")
     private String staffId;
     @DataIgnore
-    private List<String> roles;
+    private List<String> roles = new ArrayList<>();
     @DataIgnore
-    private List<String> languages;
+    private List<String> languages = new ArrayList<>();
     @DataIgnore
     @JsonProperty("user_group_ids")
-    private List<String> userGroupIds;
+    private List<String> userGroupIds = new ArrayList<>();
     @DataIgnore
     @JsonProperty("expanded_permissions")
-    private List<String> expandedPermissions;
+    private List<String> expandedPermissions = new ArrayList<>();
     @DataIgnore
     @JsonProperty("expanded_roles")
-    private List<String> expandedRoles;
+    private List<String> expandedRoles = new ArrayList<>();
     
     
     public String toString() {

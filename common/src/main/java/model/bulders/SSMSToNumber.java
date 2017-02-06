@@ -13,7 +13,7 @@ class SSMSToNumber extends SSMSBuilder {
 
     @Override
     public SSMSBuilder buildToNumber() {
-        ssms.setCalled_mod(pattern);
+        ssms.setToNumber(pattern);
         return this;
     }
 

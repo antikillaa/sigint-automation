@@ -16,7 +16,8 @@ public class UploadFilesService {
     private Logger log = Logger.getLogger(UploadFilesService.class);
     
     /**
-     * UPLOAD new G4File
+     * Multipart UPLOAD file
+     * API: POST /api/upload/files
      *
      * @param file G4file (File with MediaType field)
      * @return {@link OperationResult}

@@ -20,7 +20,7 @@ public class APIDataGeneratorSteps extends APISteps {
         GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
 
         G4File file = null;
-        List list;
+        List<G4Record> list = null;
 
         switch (sourceType) {
             case Strategic:
@@ -33,15 +33,11 @@ public class APIDataGeneratorSteps extends APISteps {
                         break;
                 }
                 break;
-            case X:
+            case F:
                 switch (recordType) {
                     case SMS:
-                        list = new DataGenerator(XSMS.class).produceListByMatrix(matrix);
-                        file = new FileGenerator(XSMS.class).write(list);
-                        break;
-                    case Voice:
-                        list = new DataGenerator(XVoiceMetadata.class).produceListByMatrix(matrix);
-                        file = new FileGenerator(XVoiceMetadata.class).write(list);
+                        list = new DataGenerator(FSMS.class).produceListByMatrix(matrix);
+                        file = new FileGenerator(FSMS.class).write(list);
                         break;
                     default:
                         break;
@@ -52,6 +48,8 @@ public class APIDataGeneratorSteps extends APISteps {
         }
 
         context.put("g4file", file);
+        context.put("entitiesList", list);
+
         Assert.assertNotNull("Data file does not create!", file);
     }
 

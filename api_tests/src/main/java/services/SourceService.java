@@ -10,12 +10,13 @@ import http.requests.SourceRequest;
 import model.Result;
 import model.Source;
 import model.SourceListResult;
-import model.SourcesRequest;
+import http.requests.SourcesRequest;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SourceService implements EntityService<Source> {
 
@@ -77,15 +78,12 @@ public class SourceService implements EntityService<Source> {
         SourcesRequest request = new SourcesRequest();
         G4Response response = g4HttpClient.sendRequest(request);
         SourceListResult result = JsonConverter.readEntityFromResponse(response, SourceListResult.class);
+
         // filter {"deleted":false}
-        Iterator<Source> iterator = result.getResult().iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().isDeleted()) {
-                iterator.remove();
-            }
-        }
-        EntityList<Source> sourceEntityList = result.getResult();
-        return new OperationResult<>(response, sourceEntityList);
+        List<Source> sources = new ArrayList<>(result.getResult().getEntities());
+        sources.removeIf(Source::isDeleted);
+
+        return new OperationResult<>(response, new EntityList<>(sources));
     }
 
     /**
