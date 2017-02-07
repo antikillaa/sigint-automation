@@ -8,10 +8,7 @@ import org.apache.log4j.Logger;
 import utils.Parser;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 
 public class EqualCondition implements ExpectedCondition {
@@ -110,7 +107,7 @@ public class EqualCondition implements ExpectedCondition {
             Object[] collection2ToArray = set2.toArray();
             Arrays.sort(collection1ToArray);
             Arrays.sort(collection2ToArray);
-            return set1.equals(set2);
+            return Arrays.equals(collection1ToArray, collection2ToArray);
         }
     }
 
