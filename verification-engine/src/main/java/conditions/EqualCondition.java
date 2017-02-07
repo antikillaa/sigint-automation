@@ -183,6 +183,7 @@ public class EqualCondition implements ExpectedCondition {
                 equals = condition.check();
 
                 if (!equals) {
+                    log.debug(String.format("Not equaled values: %s and %s", originalValue, requestValue));
                     return false;
                 }
             }
