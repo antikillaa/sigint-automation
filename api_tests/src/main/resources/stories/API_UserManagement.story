@@ -46,6 +46,7 @@ When I send get list of Roles request
 Then Request is successful
 Then Role is deleted
 
+
 Scenario: API.Create, Update, Delete new user with group
 Given I sign in as admin user
 When I send create a new group without any roles
@@ -78,6 +79,22 @@ Given I sign in as admin user
 When I send get list of users
 Then Request is successful
 And Users list size more than 0
+
+
+Scenario: API.User as <role> is able to sign out
+Given I sign in as <role> user
+When I send get current user request
+Then Request is successful
+
+When I send sing out request
+Then Request is successful
+
+When I send get current user request
+Then Request is unsuccessful
+
+Examples:
+| role  |
+| admin |
 
 
 Scenario: Cleanup groups
