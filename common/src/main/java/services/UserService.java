@@ -18,7 +18,8 @@ import java.util.List;
 
 public class UserService implements EntityService<User> {
 
-    private Logger log = Logger.getLogger(UserService.class);
+    private static final Logger log = Logger.getLogger(UserService.class);
+    private static final UserRequest request = new UserRequest();
 
     /**
      * Add new G4 User.
@@ -30,12 +31,15 @@ public class UserService implements EntityService<User> {
         log.info("Creating new user");
         log.debug(Parser.entityToString(entity));
 
-        UserRequest request = new UserRequest().add(entity);
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.add(entity));
 
         OperationResult<User> operationResult = new OperationResult<>(response, User.class);
         if (operationResult.isSuccess()) {
-            Entities.getUsers().addOrUpdateEntity(operationResult.getResult());
+            User user = operationResult.getResult();
+            if (entity.getPassword() != null) {
+                user.setPassword(entity.getPassword());
+            }
+            Entities.getUsers().addOrUpdateEntity(user);
         }
         return operationResult;
     }
@@ -43,8 +47,7 @@ public class UserService implements EntityService<User> {
     public OperationResult<RequestResult> remove(User entity) {
         log.info("Deleting user, id:" + entity.getId() + " name:" + entity.getName());
 
-        UserRequest request = new UserRequest().delete(entity.getId());
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.delete(entity.getId()));
 
         OperationResult<RequestResult> operationResult = new OperationResult<>(response, RequestResult.class);
         if (operationResult.isSuccess()) {
@@ -60,8 +63,7 @@ public class UserService implements EntityService<User> {
     public OperationResult<EntityList<User>> list() {
         log.info("Getting users list");
 
-        UserRequest request = new UserRequest().list();
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.list());
 
         List<User> users = JsonConverter.readEntitiesFromResponse(response, User[].class);
         return new OperationResult<>(response, new EntityList<>(users));
@@ -70,12 +72,15 @@ public class UserService implements EntityService<User> {
     public OperationResult<User> update(User entity) {
         log.info("Update user id:" + entity.getId() + " name:" + entity.getName());
 
-        UserRequest request = new UserRequest().update(entity);
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.update(entity));
 
         OperationResult<User> operationResult = new OperationResult<>(response, User.class);
         if (operationResult.isSuccess()) {
-            Entities.getUsers().addOrUpdateEntity(entity);
+            User user = operationResult.getResult();
+            if (entity.getNewPassword() != null) {
+                user.setPassword(entity.getNewPassword());
+            }
+            Entities.getUsers().addOrUpdateEntity(user);
         }
         return operationResult;
     }
@@ -92,9 +97,14 @@ public class UserService implements EntityService<User> {
      */
     public OperationResult<User> me() {
         log.info("Get current user...");
-        UserRequest request = new UserRequest().me();
-        G4Response response = g4HttpClient.sendRequest(request);
-        return new OperationResult<>(response, User.class);
+
+        G4Response response = g4HttpClient.sendRequest(request.me());
+
+        OperationResult<User> operationResult = new OperationResult<>(response, User.class);
+        if (operationResult.isSuccess()) {
+            Entities.getUsers().addOrUpdateEntity(operationResult.getResult());
+        }
+        return operationResult;
     }
 
     /**

@@ -1,5 +1,6 @@
 package http;
 
+import app_context.AppContext;
 import app_context.properties.G4Properties;
 import error_reporter.ErrorReporter;
 import http.requests.HttpRequest;
@@ -28,11 +29,12 @@ import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeatu
 
 public class G4HttpClient {
 
-    private static Logger log = Logger.getLogger(G4HttpClient.class);
+    private static final Logger log = Logger.getLogger(G4HttpClient.class);
     private String host = G4Properties.getRunProperties().getApplicationURL();
-    private final int requestTimeout = 30;
-    private final int waitTime = 15;
-    private final int maxTryCount = 3;
+    private static final int REQUEST_TIMEOUT = 30;
+    private static final int WAIT_TIME = 15;
+    private static final int MAX_TRY_COUNT = 3;
+    private static ThreadLocal<Cookie> cookies = new ThreadLocal<>();
 
     private static final String TRUSTORE_CLIENT_FILE = "truststore_client";
     private static final String TRUSTSTORE_CLIENT_PWD = "123456";
@@ -107,6 +109,39 @@ public class G4HttpClient {
     }
 
     /**
+     * @return {@link Cookie}
+     */
+    private Cookie getCookie() {
+        Cookie cookie = cookies.get();
+        if (cookie == null) {
+            try {
+                String tokenValue = AppContext.get().getLoggedUser().getToken().getValue();
+                cookie = new Cookie("t", tokenValue);
+                cookies.set(cookie);
+            } catch (NullPointerException e) {
+                return null;
+            }
+        }
+        return cookies.get();
+    }
+
+    public G4HttpClient setCookie(Cookie cookie) {
+        if (cookie != null) {
+            cookies.set(cookie);
+        } else {
+            cookies.remove();
+        }
+        return this;
+    }
+
+    public G4HttpClient removeCookie() {
+        while (cookies.get() != null) {
+            cookies.remove();
+        }
+        return this;
+    }
+
+    /**
      * Build request with initialization: URL, MediaType, [Cookie]
      *
      * @param request HTTP request model
@@ -121,8 +156,8 @@ public class G4HttpClient {
                 .target(URL)
                 .request(request.getMediaType());
 
-        Cookie cookie = request.getCookie();
-        if (request.getCookie() != null) {
+        Cookie cookie = getCookie();
+        if (cookie != null) {
             builder.cookie(cookie);
             log.debug("Cookie: " + cookie.getName() + "=" + cookie.getValue());
         } else {
@@ -201,7 +236,7 @@ public class G4HttpClient {
     /**
      * Internal method to invoke passed request within the given time frame.
      * If 503 error occurred (usually due to server restart), request will be
-     * sent again after waitTime unless try counter reaches maxTryCount.
+     * sent again after WAIT_TIME unless try counter reaches MAX_TRY_COUNT.
      *
      * @param builder {@link Builder} instance with set options.
      * @param request {@link HttpRequest} instance.
@@ -212,13 +247,13 @@ public class G4HttpClient {
         Invocation invocation;
         int tryCount = 0;
         Response response;
-        Date timeoutDate = DateHelper.getDateWithShift(requestTimeout);
+        Date timeoutDate = DateHelper.getDateWithShift(REQUEST_TIMEOUT);
         do {
             invocation = buildInvocation(request.getHttpMethod(), payload, builder);
             tryCount++;
             response = invocation.invoke();
             if (response.getStatus() == 503) {
-                DateHelper.waitTime(waitTime);
+                DateHelper.waitTime(WAIT_TIME);
             }
 
         } while ((response.getStatus() == 503) && (tryCount <= maxTryCount) && (!DateHelper.isTimeout(timeoutDate)));

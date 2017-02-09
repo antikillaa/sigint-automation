@@ -74,8 +74,8 @@ public class JiraConnector {
         log.debug("Getting project id based on name:" + name);
 
         String URL = "/rest/api/latest/project";
-        HttpRequest request = new HttpRequest(URL).setCookie(cookie);
-        G4Response response = client.sendRequest(request);
+        HttpRequest request = new HttpRequest(URL);
+        G4Response response = client.setCookie(cookie).sendRequest(request);
 
         List<JiraProject> projects = JsonConverter.readEntitiesFromResponse(response, JiraProject[].class);
         for (JiraProject project : projects) {
@@ -98,8 +98,8 @@ public class JiraConnector {
         log.debug("Getting version id based on project id:" + projectId + " and version name:" + versionName);
 
         String URL = "/rest/api/latest/project/" + projectId + "/versions";
-        HttpRequest request = new HttpRequest(URL).setCookie(cookie);
-        G4Response response = client.sendRequest(request);
+        HttpRequest request = new HttpRequest(URL);
+        G4Response response = client.setCookie(cookie).sendRequest(request);
 
         List<ProjectVersion> versions = JsonConverter.readEntitiesFromResponse(response, ProjectVersion[].class);
 
@@ -120,8 +120,9 @@ public class JiraConnector {
     public Issue getIssue(String issueKey) {
         log.debug("Getting issue by it's key:" + issueKey);
         String url = "/rest/api/latest/issue/" + issueKey;
-        HttpRequest request = new HttpRequest(url).setCookie(cookie);
-        G4Response response = client.sendRequest(request);
+
+        HttpRequest request = new HttpRequest(url);
+        G4Response response = client.setCookie(cookie).sendRequest(request);
         return JsonConverter.readEntityFromResponse(response, Issue.class);
     }
 

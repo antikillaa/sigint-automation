@@ -22,6 +22,7 @@ public class UserRequest extends HttpRequest {
 
     public UserRequest add(User user) {
         this
+                .setURI(URI)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(user);
         return this;
