@@ -102,4 +102,12 @@ public class APIUserSteps extends APISteps {
         context.put("user", result.getResult());
     }
 
+    @When("I send get current user request")
+    public void getCurrentUserRequest() {
+        OperationResult<User> operationResult = service.me();
+        OperationsResults.setResult(operationResult);
+        context.put("user", operationResult.getResult());
+    }
+
+
 }

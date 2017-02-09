@@ -4,6 +4,7 @@ import conditions.Verify;
 import controllers.APILogin;
 import http.OperationResult;
 import http.OperationsResults;
+import model.RequestResult;
 import model.Token;
 import model.User;
 import org.apache.log4j.Logger;
@@ -18,7 +19,7 @@ import static conditions.Conditions.isTrue;
 
 public class APILoginSteps extends APISteps {
 
-    private static Logger LOGGER = Logger.getLogger(APILoginSteps.class);
+    private static Logger log = Logger.getLogger(APILoginSteps.class);
     private static APILogin login = new APILogin();
 
     @Given("I sign in as $role user")
@@ -45,24 +46,18 @@ public class APILoginSteps extends APISteps {
         user.setPassword("test");
         login.signInAsUser(user);
     }
-    /**
-    @Then("I got response code $real")
-    public void checkResponseCode(String real) {
-        LOGGER.info("Checking response code");
-        Integer actual;
-        actual = runContext.get("code", Integer.class);
-        Integer expected = Integer.valueOf(real);
-        Assert.assertEquals("Incorrect return codes!", expected, actual);
-
-    }
-     **/
 
     @Then("Error message is $message")
     public void checkErrorMessage(String message) throws IOException {
-        LOGGER.info("Verifying error message");
+        log.info("Verifying error message");
         OperationResult operationResult = OperationsResults.getResult();
         Verify.shouldBe(isTrue.element(operationResult.getMessage().toLowerCase().contains(message.toLowerCase())));
     }
 
+    @When("I send sing out request")
+    public void singOut() {
+        OperationResult<RequestResult> operationResult = login.singOut();
+        OperationsResults.setResult(operationResult);
+    }
 
 }

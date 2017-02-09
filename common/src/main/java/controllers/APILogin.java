@@ -4,6 +4,7 @@ import app_context.AppContext;
 import http.OperationResult;
 import http.OperationsResults;
 import model.LoggedUser;
+import model.RequestResult;
 import model.Token;
 import model.User;
 import org.apache.log4j.Logger;
@@ -37,5 +38,24 @@ public class APILogin {
         }
         return operationResult;
     }
+
+    /**
+     * Sing out as user
+     *
+     * @return {@link OperationResult<RequestResult>}
+     */
+    public OperationResult<RequestResult> singOut() {
+        log.info("Signing out");
+
+        OperationResult<RequestResult> operationResult = signService.singOut();
+        OperationsResults.setResult(operationResult);
+
+        if(operationResult.isSuccess()) {
+            context.setLoggedUser(null);
+        }
+
+        return operationResult;
+    }
+
 
 }
