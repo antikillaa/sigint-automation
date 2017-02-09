@@ -4,17 +4,12 @@ import abs.TeelaEntity;
 import http.JsonConverter;
 import model.Record;
 import model.UIRecord;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import utils.Parser;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
-import static java.lang.Boolean.TRUE;
 
 public class EqualCondition implements ExpectedCondition {
 
@@ -39,8 +34,9 @@ public class EqualCondition implements ExpectedCondition {
             equalCondition = new NotEqual();
         }
         if (Collection.class.isAssignableFrom(obj1.getClass())) {
-            elements((Collection) obj1, (Collection) obj2);
-            return;
+            equalCondition = new SetEqualCondition((Collection)obj1, (Collection)obj2);
+            //elements((Collection) obj1, (Collection) obj2);
+
         } else if (TeelaEntity.class.isAssignableFrom(obj1.getClass())) {
             equalCondition = new TeelaEntityEqualCondition<>((TeelaEntity) obj1, (TeelaEntity) obj2);
 
@@ -58,6 +54,8 @@ public class EqualCondition implements ExpectedCondition {
         }
         Object[] collection1ToArray = collection1.toArray();
         Object[] collection2ToArray = collection2.toArray();
+        Arrays.sort(collection1ToArray);
+        Arrays.sort(collection2ToArray);
         for (int i = 0; i < collection1.size() - 1; i++) {
             elements(collection1ToArray[i], collection2ToArray[i]);
         }
@@ -66,7 +64,7 @@ public class EqualCondition implements ExpectedCondition {
 
 
     public Boolean check() {
-        Boolean isConditionApplied = true;
+        Boolean isConditionApplied;
         for (ExpectedCondition condition : conditions) {
             isConditionApplied = condition.check();
             if (!isConditionApplied) {
@@ -105,7 +103,11 @@ public class EqualCondition implements ExpectedCondition {
             if ((set1 == null || set1.size() == 0) && (set2 == null || set2.size() == 0)) {
                 return true;
             }
-            return set1.equals(set2);
+            Object[] collection1ToArray = set1.toArray();
+            Object[] collection2ToArray = set2.toArray();
+            Arrays.sort(collection1ToArray);
+            Arrays.sort(collection2ToArray);
+            return Arrays.equals(collection1ToArray, collection2ToArray);
         }
     }
 
@@ -150,18 +152,19 @@ public class EqualCondition implements ExpectedCondition {
 
         public Boolean check() {
             log.debug("Comparing two teela entities with type:" + obj2.getClass().getName());
-            Boolean equals = TRUE;
+            Boolean equals;
             for (Field field : obj2.getClass().getDeclaredFields()) {
                 if (Modifier.isStatic(field.getModifiers())) {
                     continue;
                 }
-                String originalValue;
-                String requestValue;
+                Object originalValue;
+                Object requestValue;
+                field.setAccessible(true);
                 log.debug("Checking field with name:" + field.getName());
                 try {
-                    originalValue = BeanUtils.getProperty(obj1, field.getName());
+                    originalValue = field.get(obj1);
                     log.debug("Value of object 1 is:" + originalValue);
-                    requestValue = BeanUtils.getProperty(obj2, field.getName());
+                    requestValue = field.get(obj2);
                     log.debug("Value of object 2 is:" + requestValue);
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
@@ -172,16 +175,19 @@ public class EqualCondition implements ExpectedCondition {
                 if ((originalValue == null || originalValue.equals("")) && (requestValue == null || requestValue.equals(""))) {
                     continue;
                 }
-                // if one of them null return false, else equals them
-                equals = !(originalValue == null || requestValue == null) &&
-                        originalValue.trim().equalsIgnoreCase(requestValue.trim());
+                EqualCondition condition = new EqualCondition();
+                condition.elements(originalValue, requestValue);
+                equals = condition.check();
 
                 if (!equals) {
+                    log.debug(String.format("Not equaled values: %s and %s", originalValue, requestValue));
                     return false;
                 }
             }
             return true;
         }
+
+
     }
 
     private class RecordToUIRecordEqualCondition implements ExpectedCondition {

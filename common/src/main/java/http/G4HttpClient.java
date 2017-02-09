@@ -256,8 +256,15 @@ public class G4HttpClient {
                 DateHelper.waitTime(WAIT_TIME);
             }
 
-        } while ((response.getStatus() == 503) && (tryCount <= MAX_TRY_COUNT) && (!DateHelper.isTimeout(timeoutDate)));
-
+        } while ((response.getStatus() == 503) && (tryCount <= maxTryCount) && (!DateHelper.isTimeout(timeoutDate)));
+        if (response.getStatus() == 503 || response.getStatus() == 502) {
+            ErrorReporter.reportAndRaiseError(String.format("Got error code: %s. " +
+                    "Request: %s. " +
+                    "Payload: %s. " +
+                    "Message: %s", response.getStatus(),
+                    request.getURI(), request.getPayload().toString(),
+                    response.readEntity(String.class)));
+        }
         return new G4Response(response.readEntity(String.class), response.getStatus());
     }
 

@@ -1,5 +1,6 @@
 Meta:
 @component targetManagement
+@deprecated
 
 
 Scenario: API.Add new target group with target in body
