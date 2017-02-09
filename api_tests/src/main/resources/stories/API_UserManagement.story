@@ -1,6 +1,5 @@
 Meta:
 @component userManagement
-@wip
 
 Scenario: API.Create, Read, Update, Delete role
 Given I sign in as admin user
