@@ -1,6 +1,5 @@
 package http.requests;
 
-import app_context.AppContext;
 import http.HttpMethod;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -8,14 +7,13 @@ import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 
-import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
 
 /**
  * Http request model.
  */
-@JsonIgnoreProperties(value = {"URI", "context", "cookie", "httpMethod", "mediaType", "payload"})
+@JsonIgnoreProperties(value = {"URI", "context", "httpMethod", "mediaType", "payload"})
 public class HttpRequest {
 
     /**
@@ -29,7 +27,6 @@ public class HttpRequest {
     private String mediaType;
     private Object payload;
     private MultiPart multiPart;
-    private Cookie cookie;
 
     private Logger log = Logger.getLogger(HttpRequest.class);
 
@@ -45,24 +42,6 @@ public class HttpRequest {
         mediaType = MediaType.APPLICATION_JSON;
         multiPart = new MultiPart();
         multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
-    }
-
-    //todo:Move getCookie to higher level. Remove from model
-    public Cookie getCookie() {
-        if (cookie == null) {
-            try {
-                String tokenValue = AppContext.get().getLoggedUser().getToken().getValue();
-                this.cookie = new Cookie("t", tokenValue);
-            } catch (NullPointerException e) {
-                return null;
-            }
-        }
-        return cookie;
-    }
-
-    public HttpRequest setCookie(Cookie cookie) {
-        this.cookie = cookie;
-        return this;
     }
 
     public String getURI() {

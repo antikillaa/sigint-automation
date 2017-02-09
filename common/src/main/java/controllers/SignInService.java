@@ -19,6 +19,10 @@ class SignInService {
 
     OperationResult<RequestResult> singOut(){
         G4Response response = g4HttpClient.sendRequest(request.singOut());
-        return new OperationResult<>(response, RequestResult.class);
+        OperationResult<RequestResult> operationResult = new OperationResult<>(response, RequestResult.class);
+        if (operationResult.isSuccess()) {
+            g4HttpClient.removeCookie();
+        }
+        return operationResult;
     }
 }
