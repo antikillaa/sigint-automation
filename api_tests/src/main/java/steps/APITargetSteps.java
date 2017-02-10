@@ -25,6 +25,7 @@ import java.util.List;
 
 import static conditions.Conditions.isTrue;
 
+@SuppressWarnings("unchecked")
 public class APITargetSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APITargetGroupSteps.class);
@@ -78,7 +79,7 @@ public class APITargetSteps extends APISteps {
         Verify.isTrue(Conditions.equals(checkedTarget.getType(), etalonTarget.getType()));
     }
 
-    private boolean isEqualsUploadedTargets(Target checkedTarget, Target etalonTarget) {
+    private boolean isEqualstargets(Target checkedTarget, Target etalonTarget) {
         return Verify.isTrue(Conditions.equals(checkedTarget.getName(), etalonTarget.getName())) &&
                 Verify.isTrue(Conditions.equals(checkedTarget.getKeywords(), etalonTarget.getKeywords())) &&
                 Verify.isTrue(Conditions.equals(checkedTarget.getPhones(), etalonTarget.getPhones())) &&
@@ -123,9 +124,11 @@ public class APITargetSteps extends APISteps {
     @When("I send upload targets request with XLS file containing $count targets without specified id")
     public void targetGeneratedXls(String count){
         List<Target> targets = getRandomTargets(Integer.valueOf(count));
+        
         OperationResult<UploadResult> operationResult = service.upload(targets);
         OperationsResults.setResult(operationResult);
-        context.put("uploadedTargets", targets);
+        
+        context.put("targets", targets);
         context.put("uploadResult", operationResult.getResult());
     }
 
@@ -142,7 +145,7 @@ public class APITargetSteps extends APISteps {
 
         OperationResult<UploadResult> operationResult = service.upload(targets);
         OperationsResults.setResult(operationResult);
-        context.put("uploadedTargets", targets);
+        context.put("targets", targets);
         context.put("uploadResult", operationResult.getResult());
     }
 
@@ -220,7 +223,7 @@ public class APITargetSteps extends APISteps {
 
         Boolean contains = false;
         for (Target entity : list) {
-            contains = isEqualsUploadedTargets(target, entity);
+            contains = isEqualstargets(target, entity);
             if (contains) {
                 Entities.getTargets().updateEntity(target, entity);
                 break;
@@ -247,13 +250,13 @@ public class APITargetSteps extends APISteps {
 
     @When("I send upload updated target request")
     public void uploadUpdatedTarget() {
-        List<Target> targets = context.get("uploadedTargets", List.class);
+        List<Target> targets = context.get("targets", List.class);
         for (Target target : targets) {
             target.setName(RandomStringUtils.randomAlphabetic(10));
             target.setDescription(RandomStringUtils.randomAlphabetic(20));
         }
         service.upload(targets);
-        context.put("uploadedTargets", targets);
+        context.put("targets", targets);
     }
 
     @Given("generate XLS with $count target")
@@ -283,7 +286,7 @@ public class APITargetSteps extends APISteps {
 
         OperationResult<UploadResult> operationResult = service.upload(targets);
         OperationsResults.setResult(operationResult);
-        context.put("uploadedTargets", targets);
+        context.put("targets", targets);
         context.put("uploadResult", operationResult.getResult());
     }
 
@@ -294,7 +297,7 @@ public class APITargetSteps extends APISteps {
 
         int numEntries = Integer.valueOf(count);
         if ((result.getRowsAdded() + result.getRowsUpdated()) == numEntries || result.getRowsFailed() == 0) {
-            List<Target> targets = context.get("uploadedTargets", ArrayList.class);
+            List<Target> targets = context.get("targets", ArrayList.class);
             for (Target target : targets) {
                 Entities.getTargets().addOrUpdateEntity(target);
             }
@@ -324,5 +327,19 @@ public class APITargetSteps extends APISteps {
     static Target getRandomTarget() {
         return objectInitializer.randomEntity(Target.class);
     }
-    
+
+    @When("I send get list of targets request")
+    public void getTargetList() {
+        OperationResult<EntityList<Target>> operationResult = service.list();
+        OperationsResults.setResult(operationResult);
+
+        context.put("targetEntityList", operationResult.getResult());
+    }
+
+    @Then("Target list size more than $size")
+    public void targetListShouldBeMoreThan(String size) {
+        EntityList<Target> targets = context.get("targetEntityList", EntityList.class);
+
+        Assert.assertTrue(targets.size() > Integer.valueOf(size));
+    }
 }

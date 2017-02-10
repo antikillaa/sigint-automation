@@ -10,7 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 public class TargetRequest extends HttpRequest {
 
-    private final static String URI = "/api/profile/targets";
+    private final static String URI = "/api/profiler/targets";
 
     public TargetRequest() {
         super(URI);
@@ -25,7 +25,9 @@ public class TargetRequest extends HttpRequest {
     }
 
     public TargetRequest get(String id) {
-        this.setURI(URI + "/" + id + "/details");
+        this
+                .setURI(URI + "/" + id + "/details")
+                .setHttpMethod(HttpMethod.GET);
         return this;
     }
 
@@ -61,7 +63,16 @@ public class TargetRequest extends HttpRequest {
     }
 
     public TargetRequest findTargetGroups(String id) {
-        this.setURI(URI + "/" + id + "/groups");
+        this
+                .setURI(URI + "/" + id + "/groups")
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
+    public TargetRequest list() {
+        this
+                .setURI(URI)
+                .setHttpMethod(HttpMethod.GET);
         return this;
     }
 
