@@ -6,6 +6,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -13,11 +14,11 @@ import java.util.List;
 public class Group extends TeelaEntity {
     
     @DataIgnore
-    private List<String> roles;
+    private List<String> roles = new ArrayList<>();
     @DataIgnore
-    private List<Permission> permissions;
+    private List<Permission> permissions = new ArrayList<>();
     @DataIgnore
-    private List<String> users;
+    private List<String> users = new ArrayList<>();
     @JsonProperty("display_name")
     private String displayName;
 

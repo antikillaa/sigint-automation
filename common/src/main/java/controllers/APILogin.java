@@ -1,6 +1,7 @@
 package controllers;
 
 import app_context.AppContext;
+import http.G4HttpClient;
 import http.OperationResult;
 import http.OperationsResults;
 import model.LoggedUser;
@@ -12,7 +13,7 @@ import services.UserService;
 
 public class APILogin {
 
-    private SignInService signService = new SignInService();
+    private AuthService signService = new AuthService();
     private AppContext context = AppContext.get();
     private Logger log = Logger.getLogger(APILogin.class);
 
@@ -27,14 +28,16 @@ public class APILogin {
         OperationsResults.setResult(operationResult);
         if (operationResult.isSuccess()) {
             Token token = operationResult.getResult();
-            context.setLoggedUser(new LoggedUser(user, token));
+            context.setLoggedUser(new LoggedUser(user));
+            G4HttpClient.setCookie("t", token.getValue());
+
             //update user
             OperationResult<User> meResult = new UserService().me();
             User me = meResult.getResult();
             me.setPassword(user.getPassword());
             me.setRoles(user.getRoles());
 
-            context.setLoggedUser(new LoggedUser(me, token));
+            context.setLoggedUser(new LoggedUser(me));
         }
         return operationResult;
     }

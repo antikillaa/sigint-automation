@@ -3,14 +3,14 @@ package controllers;
 import http.G4HttpClient;
 import http.G4Response;
 import http.OperationResult;
-import http.requests.SignInRequest;
+import http.requests.AuthRequest;
 import model.RequestResult;
 import model.Token;
 
-class SignInService {
+class AuthService {
 
     private static G4HttpClient g4HttpClient = new G4HttpClient();
-    private static SignInRequest request = new SignInRequest();
+    private static AuthRequest request = new AuthRequest();
 
     OperationResult<Token> signIn(String name, String password){
         G4Response response = g4HttpClient.sendRequest(request.signIn(name, password));
@@ -21,7 +21,7 @@ class SignInService {
         G4Response response = g4HttpClient.sendRequest(request.singOut());
         OperationResult<RequestResult> operationResult = new OperationResult<>(response, RequestResult.class);
         if (operationResult.isSuccess()) {
-            g4HttpClient.removeCookie();
+            G4HttpClient.removeCookie();
         }
         return operationResult;
     }

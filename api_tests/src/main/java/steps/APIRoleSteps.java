@@ -2,15 +2,13 @@ package steps;
 
 import abs.EntityList;
 import app_context.entities.Entities;
-import conditions.Conditions;
-import conditions.Verify;
-import errors.NullReturnException;
 import http.OperationResult;
 import http.OperationsResults;
 import model.Role;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import org.junit.Assert;
 import services.RoleService;
 
 import java.util.Objects;
@@ -31,13 +29,15 @@ public class APIRoleSteps extends APISteps {
     }
 
     @Then("Role is correct")
-    public void createdRoleIsCorrect() throws NullReturnException {
+    public void createdRoleIsCorrect() {
         Role createdRole = Entities.getRoles().getLatest();
         Role requestRole = context.get("role", Role.class);
 
-        Verify.shouldBe(Conditions.equals(createdRole, requestRole));
+        Assert.assertEquals(createdRole.getName().toUpperCase(), requestRole.getName().toUpperCase());
+        Assert.assertEquals(createdRole.getDisplayName(), requestRole.getDisplayName());
+        Assert.assertEquals(createdRole.getPermissions(), requestRole.getPermissions());
     }
-    
+
     static Role getRandomRole() {
         return objectInitializer.randomEntity(Role.class);
     }
@@ -56,7 +56,7 @@ public class APIRoleSteps extends APISteps {
     }
 
     @Then("Role is deleted")
-    public void roleIsDeleted(){
+    public void roleIsDeleted() {
         EntityList<Role> roleEntityList = context.get("roles", EntityList.class);
         Role role = context.get("role", Role.class);
 

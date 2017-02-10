@@ -1,27 +1,26 @@
 package http.requests;
+
 import http.HttpMethod;
 import model.PegasusMediaType;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(value = { "URI", "cookie" })
-public class SignInRequest extends HttpRequest {
+public class AuthRequest extends HttpRequest {
 
     private final static String URI = "/api/auth/tokens";
 
-    public SignInRequest() {
+    public AuthRequest() {
         super(URI);
         this.setMediaType(PegasusMediaType.PEGASUS_JSON);
     }
 
-    public SignInRequest singOut() {
+    public AuthRequest singOut() {
         this
                 .setURI(URI + "/me")
                 .setHttpMethod(HttpMethod.DELETE);
         return this;
     }
 
-    public SignInRequest signIn(String username, String password) {
-        SignInRequest.User user = new SignInRequest.User();
+    public AuthRequest signIn(String username, String password) {
+        AuthRequest.User user = new AuthRequest.User();
         user.setName(username);
         user.setPassword(password);
 

@@ -1,8 +1,6 @@
 package abs;
 
-import data_for_entity.annotations.WithDataSize;
-import data_for_entity.annotations.WithFieldDataType;
-import data_for_entity.data_types.FieldDataType;
+import data_for_entity.annotations.DataIgnore;
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.lang.reflect.Field;
@@ -12,8 +10,7 @@ import static java.lang.Boolean.TRUE;
 
 public abstract class AbstractEntity {
 
-    @WithDataSize(8)
-    @WithFieldDataType(FieldDataType.NUMERIC)
+    @DataIgnore
     private String id;
 
     public String getId() {
