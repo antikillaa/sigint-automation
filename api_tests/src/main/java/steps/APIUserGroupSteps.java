@@ -27,14 +27,14 @@ public class APIUserGroupSteps extends APISteps {
 
     @When("I send create a new group without any roles")
     public void createGroupRequest() {
-        Group group = createRandomUserGroup();
+        Group group = getRandomUserGroup();
 
         OperationResult<Group> operationResult = service.add(group);
         OperationsResults.setResult(operationResult);
         context.put("group", operationResult.getResult());
     }
 
-    @Then("Created group is correct")
+    @Then("CreatedOrUpdated group is correct")
     public void createdGroupIsCorrect() {
         Group createdGroup = Entities.getGroups().getLatest();
         Group requestGroup = context.get("group", Group.class);
@@ -61,7 +61,7 @@ public class APIUserGroupSteps extends APISteps {
         Verify.shouldBe(Conditions.equals(updatedGroup, createdGroup));
     }
 
-    static Group createRandomUserGroup() {
+    static Group getRandomUserGroup() {
         return objectInitializer.randomEntity(Group.class);
     }
 
@@ -69,6 +69,7 @@ public class APIUserGroupSteps extends APISteps {
     public void deleteGroup() {
         Group group = context.get("group", Group.class);
         OperationResult<RequestResult> operationResult = service.remove(group);
+        OperationsResults.setResult(operationResult);
 
         context.put("requestResult", operationResult.getResult());
     }
@@ -132,5 +133,17 @@ public class APIUserGroupSteps extends APISteps {
                 Assert.assertTrue(operationResult.isSuccess());
             }
         }
+    }
+
+
+    @When("I send update user group request")
+    public void updateUserGroup() {
+        Group group = Entities.getGroups().getLatest();
+        Group updatedGroup = getRandomUserGroup();
+        updatedGroup.setId(group.getId());
+
+        OperationResult<Group> operationResult =  service.update(updatedGroup);
+
+        context.put("group", operationResult.getResult());
     }
 }
