@@ -41,17 +41,17 @@ public class Target extends TeelaEntity {
     private long lmt;
     @DataIgnore
     private boolean deleted;
-   
-    
+    private boolean active;
+    private int version;
+
     
     @Override
     public String toString(){
         return String.format("groups:%s, keywords:%s, languages:%s, name:%s," +
-                "phones:%s, type:%s, originalName:%s, threatScore:%s, lmt:%s",
+                "phones:%s, type:%s, originalName:%s, threatScore:%s, lmt:%s, deleted:%s, active:%s, version:%s",
                 Arrays.toString(groups.toArray()), Arrays.toString(keywords.toArray()),
                 Arrays.toString(languages.toArray()), name, Arrays.toString(phones.toArray()),
-                type, originalName, threatScore, lmt);
-        
+                type, originalName, threatScore, lmt, deleted, active, version);
     }
 
     public Target(String id) {
@@ -146,6 +146,22 @@ public class Target extends TeelaEntity {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
     
     public Target addGroup(TargetGroup targetGroup) {

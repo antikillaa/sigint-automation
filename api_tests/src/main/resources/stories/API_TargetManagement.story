@@ -42,6 +42,14 @@ When I send delete target request
 Then Request is successful
 And Target deleted correctly
 
+
+Scenario: (New profiler) API.Get all targets (G4 comp.)
+Given I sign in as admin user
+When I send get list of targets request
+Then Request is successful
+And Target list size more than 0
+
+
 Scenario: API.View target group details
 Given I sign in as admin user
 When I send create target group without targets request
@@ -107,6 +115,7 @@ When I send search targets by name and value random
 Then targets search result are correct
 And uploaded target in list
 And target has auto-generated ID
+
 
 Scenario: API.Upload updated target
 Given I sign in as admin user

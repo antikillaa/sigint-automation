@@ -21,6 +21,9 @@ public class User extends TeelaEntity {
     @WithDataSize(10)
     private String password;
     @DataIgnore
+    @JsonProperty("new_password")
+    private String newPassword;
+    @DataIgnore
     private String phone;
     @JsonProperty("staff_id")
     private String staffId;
@@ -130,5 +133,12 @@ public class User extends TeelaEntity {
     public void setExpandedRoles(List<String> expandedRoles) {
         this.expandedRoles = expandedRoles;
     }
-    
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
 }
