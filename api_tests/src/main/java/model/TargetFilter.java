@@ -13,7 +13,7 @@ import java.util.Set;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class TargetFilter extends SearchFilter<Target> {
 
-    private boolean deleted;
+    private boolean includeDeleted;
     private String name;
     private String description;
     private TargetType type;
@@ -123,12 +123,12 @@ public class TargetFilter extends SearchFilter<Target> {
         this.name = name;
     }
 
-    public boolean isDeleted() {
-        return deleted;
+    public boolean getIncludeDeleted() {
+        return includeDeleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void setIncludeDeleted(boolean includeDeleted) {
+        this.includeDeleted = includeDeleted;
     }
 
 
@@ -149,18 +149,6 @@ public class TargetFilter extends SearchFilter<Target> {
         }
     }
 
-    private class TypeFilter extends SearchFilter<Target> {
-
-        TypeFilter(String value) {
-            type = TargetType.valueOf(value);
-        }
-
-        @Override
-        public boolean isAppliedToEntity(Target entity) {
-            return entity.getType().equals(type);
-        }
-    }
-
     private class DescriptionFilter extends SearchFilter<Target> {
 
         DescriptionFilter(String value) {
@@ -176,12 +164,12 @@ public class TargetFilter extends SearchFilter<Target> {
     private class DeletedFilter extends SearchFilter<Target> {
 
         DeletedFilter(Boolean value) {
-            deleted = value;
+            includeDeleted = value;
         }
 
         @Override
         public boolean isAppliedToEntity(Target entity) {
-            return entity.isDeleted() == deleted;
+            return entity.isDeleted() == includeDeleted;
         }
     }
 
@@ -268,11 +256,9 @@ public class TargetFilter extends SearchFilter<Target> {
     public TargetFilter filterBy(String criteria, String value) {
         if (criteria.toLowerCase().equals("name")) {
             this.setActiveFilter(this.new NameFilter(value));
-        } else if (criteria.toLowerCase().equals("type")) {
-            this.setActiveFilter(this.new TypeFilter(value));
         } else if (criteria.toLowerCase().equals("description")) {
             this.setActiveFilter(this.new DescriptionFilter(value));
-        } else if (criteria.toLowerCase().equals("deleted")) {
+        } else if (criteria.toLowerCase().equals("includedeleted")) {
             this.setActiveFilter(this.new DeletedFilter(Boolean.valueOf(value)));
         } else if (criteria.toLowerCase().equals("keywords")) {
             this.setActiveFilter(this.new KeywordsFilter(Parser.stringToSet(value)));

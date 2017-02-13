@@ -4,9 +4,8 @@ import abs.TeelaEntity;
 import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.DataProvider;
 import data_for_entity.annotations.WithDataSize;
-import data_for_entity.data_providers.custom.LanguageCodesProvider;
 import data_for_entity.data_providers.PhonesProvider;
-import data_for_entity.data_providers.data_target.TargetTypeProvider;
+import data_for_entity.data_providers.custom.LanguageCodesProvider;
 import json.serialization.TargetDeserializer;
 import json.serialization.TargetJsonSerializer;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -31,8 +30,6 @@ public class Target extends TeelaEntity {
     private String name;
     @DataProvider(PhonesProvider.class)
     private HashSet<String> phones = new HashSet<>();
-    @DataProvider(TargetTypeProvider.class)
-    private TargetType type;
     @DataIgnore
     private String originalName;
     @DataIgnore
@@ -48,10 +45,9 @@ public class Target extends TeelaEntity {
     @Override
     public String toString(){
         return String.format("groups:%s, keywords:%s, languages:%s, name:%s," +
-                "phones:%s, type:%s, originalName:%s, threatScore:%s, lmt:%s, deleted:%s, active:%s, version:%s",
+                "phones:%s, originalName:%s, threatScore:%s, lmt:%s, deleted:%s, active:%s, version:%s",
                 Arrays.toString(groups.toArray()), Arrays.toString(keywords.toArray()),
-                Arrays.toString(languages.toArray()), name, Arrays.toString(phones.toArray()),
-                type, originalName, threatScore, lmt, deleted, active, version);
+                Arrays.toString(languages.toArray()), name, Arrays.toString(phones.toArray()), originalName, threatScore, lmt, deleted, active, version);
     }
 
     public Target(String id) {
@@ -106,14 +102,6 @@ public class Target extends TeelaEntity {
 
     public void setPhones(HashSet<String> phones) {
         this.phones = phones;
-    }
-
-    public TargetType getType() {
-        return type;
-    }
-
-    public void setType(TargetType type) {
-        this.type = type;
     }
 
     public String getOriginalName() {

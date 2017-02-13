@@ -1,9 +1,10 @@
 Meta:
 @component targetManagement
-@deprecated
 
 
 Scenario: API.Add new target group with target in body
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send create target without targets group request
 Then Request is successful
@@ -12,6 +13,8 @@ Then Request is successful
 And Created target group is correct
 
 Scenario: API.Add new target with target groups
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send create target group without targets request
 Then Request is successful
@@ -20,6 +23,8 @@ Then Request is successful
 And Created target is correct
 
 Scenario: API.View target details
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send create target without targets group request
 Then Request is successful
@@ -27,6 +32,8 @@ When I send get target details request
 Then Viewed target is correct
 
 Scenario: API.Update target entry
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send create target without targets group request
 Then Request is successful
@@ -35,6 +42,8 @@ Then Request is successful
 And Target updated correctly
 
 Scenario: API.Deleting Target - DELETE
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send create target without targets group request
 Then Request is successful
@@ -51,6 +60,8 @@ And Target list size more than 0
 
 
 Scenario: API.View target group details
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send create target group without targets request
 Then Request is successful
@@ -58,6 +69,8 @@ When I send get target group details request
 Then Viewed target group is correct
 
 Scenario: API.List of target groups - GET
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send create target group without targets request
 Then Request is successful
@@ -65,6 +78,8 @@ When I send get list of target group request
 Then Created target group in list
 
 Scenario: API.Update target group
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send create target group without targets request
 Then Request is successful
@@ -73,6 +88,8 @@ Then Request is successful
 And Target group updated correctly
 
 Scenario: API.Delete target group
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send create target group without targets request
 Then Request is successful
@@ -80,59 +97,52 @@ When I send delete target group request
 Then Request is successful
 And Target group deleted correctly
 
-Scenario: API.Search targets entries using search filters
+Scenario: (New profiler) API.Search targets entries using search filters (G4 comp.)
 Given I sign in as admin user
-When I send create target without targets group request
+When I send upload targets XLS file request with 1 random targets
 Then Request is successful
-And Created target is correct
-When I send search targets by <criteria> and value <value>
+When I get random target from targets list
+And I send search targets by <criteria> and value <value>
 Then targets search result are correct
-And searched target entry in list
+And searched target in search result list
 
 Examples:
-| criteria | value |
-| type | random |
-| name | random |
-| keywords | random |
-| description | random |
-| languages | random |
-| phones | random |
+| criteria | value  |
 | updatedAfter | random |
 
 
-Scenario: API.Upload multiple targets
+Scenario: (New profiler) API.Upload targets (G4 comp.)
 Given I sign in as admin user
-When I send upload targets request with XLS file containing 3 targets without specified id
+When I send upload targets XLS file request with <targetCount> random targets
 Then Request is successful
-And Upload result of 3 targets is successful
+And Upload result of <targetCount> targets is successful
 
-Scenario: API.Upload new target without group and ID
-Given I sign in as admin user
-When I send upload targets request with XLS file containing 1 targets without specified id
-Then Request is successful
-And Upload result of 1 targets is successful
-When I send search targets by name and value random
-Then targets search result are correct
-And uploaded target in list
-And target has auto-generated ID
+Examples:
+| targetCount |
+| 2           |
 
 
 Scenario: API.Upload updated target
+Meta:
+@deprecated
 Given I sign in as admin user
-When I send upload targets request with XLS file containing 1 targets without specified id
+When I send upload targets XLS file request with <targetCount> random targets
 Then Request is successful
 And Upload result of 1 targets is successful
 When I send search targets by name and value random
 Then targets search result are correct
-And uploaded target in list
+And searched target in search result list
 When I send upload updated target request
 Then Request is successful
 And Upload result of 1 targets is successful
 When I send search targets by name and value random
 Then targets search result are correct
-And uploaded target in list
+And searched target in search result list
+
 
 Scenario: API.Upload new target with existing group
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send get list of target group request
 Then Request is successful
@@ -141,20 +151,22 @@ Then Request is successful
 And Upload result of 1 targets is successful
 When I send search targets by name and value random
 Then targets search result are correct
-And uploaded target in list
+And searched target in search result list
 When I send get list of target group request
 Then existing group is listed in list only once
 When I send get groups list of new target request
 Then target group in list
 
 Scenario: API.Upload new target with new group
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send upload new 1 targets with new group request
 Then Request is successful
 And Upload result of 1 targets is successful
 When I send search targets by name and value random
 Then targets search result are correct
-And uploaded target in list
+And searched target in search result list
 When I send get list of target group request
 Then target group in list
 When I send get groups list of new target request

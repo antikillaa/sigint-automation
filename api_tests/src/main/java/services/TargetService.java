@@ -8,10 +8,7 @@ import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
 import http.requests.targets.TargetRequest;
-import model.G4File;
-import model.Target;
-import model.TargetGroup;
-import model.UploadResult;
+import model.*;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -57,8 +54,9 @@ public class TargetService implements EntityService<Target> {
         log.info("Writing Targets to file");
         G4File file = new FileGenerator(Target.class).write(targets);
 
-        log.info("Upload file with " + targets.size() + " targets");
-        G4Response response = g4HttpClient.sendRequest(request.upload(file));
+        log.info("Upload file " + file.getAbsolutePath() + " with " + targets.size() + " targets");
+        TargetRequest request = new TargetRequest().upload(file);
+        G4Response response = g4HttpClient.sendRequest(request);
 
         UploadResult uploadResult = JsonConverter.readEntityFromResponse(response, UploadResult.class, "result");
         return new OperationResult<>(response, uploadResult);
@@ -89,13 +87,14 @@ public class TargetService implements EntityService<Target> {
      * @param filter search filter for payload
      * @return EntityList of Targets
      */
+    @SuppressWarnings("unchecked")
     @Override
     public OperationResult<EntityList<Target>> list(SearchFilter filter) {
         log.info("Search targets by filter:" + JsonConverter.toJsonString(filter));
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
-        List<Target> targets = JsonConverter.readEntitiesFromResponse(response, Target[].class, "result");
-        return new OperationResult<>(response, new EntityList<>(targets));
+        TargetSearchResult targetSearchResult = JsonConverter.readEntityFromResponse(response, TargetSearchResult.class, "result");
+        return new OperationResult<>(response, new EntityList<>(targetSearchResult.getContent()));
     }
 
     /**
