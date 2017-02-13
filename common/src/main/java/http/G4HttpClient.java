@@ -28,11 +28,12 @@ import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeatu
 
 public class G4HttpClient {
 
-    private static Logger log = Logger.getLogger(G4HttpClient.class);
+    private static final Logger log = Logger.getLogger(G4HttpClient.class);
     private String host = G4Properties.getRunProperties().getApplicationURL();
-    private final int requestTimeout = 30;
-    private final int waitTime = 15;
-    private final int maxTryCount = 3;
+    private static final int REQUEST_TIMEOUT = 30;
+    private static final int WAIT_TIME = 15;
+    private static final int MAX_TRY_COUNT = 3;
+    private static Cookie cookie;
 
     private static final String TRUSTORE_CLIENT_FILE = "truststore_client";
     private static final String TRUSTSTORE_CLIENT_PWD = "123456";
@@ -107,6 +108,21 @@ public class G4HttpClient {
     }
 
     /**
+     * @return {@link Cookie}
+     */
+    private static Cookie getCookie() {
+        return cookie;
+    }
+
+    public static void setCookie(String name, String value) {
+        G4HttpClient.cookie = new Cookie(name, value);
+    }
+
+    public static void removeCookie() {
+        cookie = null;
+    }
+
+    /**
      * Build request with initialization: URL, MediaType, [Cookie]
      *
      * @param request HTTP request model
@@ -121,8 +137,8 @@ public class G4HttpClient {
                 .target(URL)
                 .request(request.getMediaType());
 
-        Cookie cookie = request.getCookie();
-        if (request.getCookie() != null) {
+        Cookie cookie = getCookie();
+        if (cookie != null) {
             builder.cookie(cookie);
             log.debug("Cookie: " + cookie.getName() + "=" + cookie.getValue());
         } else {
@@ -201,7 +217,7 @@ public class G4HttpClient {
     /**
      * Internal method to invoke passed request within the given time frame.
      * If 503 error occurred (usually due to server restart), request will be
-     * sent again after waitTime unless try counter reaches maxTryCount.
+     * sent again after WAIT_TIME unless try counter reaches MAX_TRY_COUNT.
      *
      * @param builder {@link Builder} instance with set options.
      * @param request {@link HttpRequest} instance.
@@ -212,21 +228,21 @@ public class G4HttpClient {
         Invocation invocation;
         int tryCount = 0;
         Response response;
-        Date timeoutDate = DateHelper.getDateWithShift(requestTimeout);
+        Date timeoutDate = DateHelper.getDateWithShift(REQUEST_TIMEOUT);
         do {
             invocation = buildInvocation(request.getHttpMethod(), payload, builder);
             tryCount++;
             response = invocation.invoke();
             if (response.getStatus() == 503) {
-                DateHelper.waitTime(waitTime);
+                DateHelper.waitTime(WAIT_TIME);
             }
 
-        } while ((response.getStatus() == 503) && (tryCount <= maxTryCount) && (!DateHelper.isTimeout(timeoutDate)));
+        } while ((response.getStatus() == 503) && (tryCount <= MAX_TRY_COUNT) && (!DateHelper.isTimeout(timeoutDate)));
         if (response.getStatus() == 503 || response.getStatus() == 502) {
             ErrorReporter.reportAndRaiseError(String.format("Got error code: %s. " +
-                    "Request: %s. " +
-                    "Payload: %s. " +
-                    "Message: %s", response.getStatus(),
+                            "Request: %s. " +
+                            "Payload: %s. " +
+                            "Message: %s", response.getStatus(),
                     request.getURI(), request.getPayload().toString(),
                     response.readEntity(String.class)));
         }

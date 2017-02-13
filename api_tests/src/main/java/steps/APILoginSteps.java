@@ -1,5 +1,6 @@
 package steps;
 
+import app_context.entities.Entities;
 import conditions.Verify;
 import controllers.APILogin;
 import http.OperationResult;
@@ -60,4 +61,11 @@ public class APILoginSteps extends APISteps {
         OperationsResults.setResult(operationResult);
     }
 
+    @When("I sign in as new created user")
+    public void singInAsNewCreatedUser() {
+        User user = Entities.getUsers().getLatest();
+
+        OperationResult<Token> operationResult = login.signInAsUser(user);
+        OperationsResults.setResult(operationResult);
+    }
 }

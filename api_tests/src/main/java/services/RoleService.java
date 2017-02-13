@@ -17,7 +17,8 @@ import java.util.List;
 
 public class RoleService implements EntityService<Role> {
 
-    private Logger log = Logger.getLogger(RoleService.class);
+    private static final Logger log = Logger.getLogger(RoleService.class);
+    private static final RoleRequest request = new RoleRequest();
 
     /**
      * Add new Role
@@ -31,8 +32,8 @@ public class RoleService implements EntityService<Role> {
         log.info("Creating new Role, name:" + entity.getName());
         log.debug(Parser.entityToString(entity));
 
-        RoleRequest request = new RoleRequest().add(entity);
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.add(entity));
+
         OperationResult<Role> roleOperationResult = new OperationResult<>(response, Role.class);
         if (roleOperationResult.isSuccess()) {
             Entities.getRoles().addOrUpdateEntity(roleOperationResult.getResult());
@@ -50,8 +51,7 @@ public class RoleService implements EntityService<Role> {
     public OperationResult<RequestResult> remove(Role entity) {
         log.info("Deleting Role, name:" + entity.getName());
 
-        RoleRequest request = new RoleRequest().delete(entity.getName());
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.delete(entity.getName()));
 
         OperationResult<RequestResult> operationResult = new OperationResult<>(response, RequestResult.class);
         if (operationResult.isSuccess()) {
@@ -66,8 +66,8 @@ public class RoleService implements EntityService<Role> {
     }
 
     public OperationResult<EntityList<Role>> list() {
-        RoleRequest request = new RoleRequest().list();
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.list());
+
         List<Role> roles = JsonConverter.readEntitiesFromResponse(response, Role[].class);
         return new OperationResult<>(response, new EntityList<>(roles));
     }
@@ -77,12 +77,11 @@ public class RoleService implements EntityService<Role> {
         log.info("Updating Role, name: " + entity.getName());
         log.debug(Parser.entityToString(entity));
 
-        RoleRequest request = new RoleRequest().update(entity);
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.update(entity));
 
         OperationResult<Role> operationResult = new OperationResult<>(response, Role.class);
         if (operationResult.isSuccess()) {
-            Entities.getRoles().addOrUpdateEntity(entity);
+            Entities.getRoles().addOrUpdateEntity(operationResult.getResult());
         } else {
             log.error("Error! Update role was failed");
         }

@@ -8,6 +8,7 @@ import http.OperationResult;
 import http.OperationsResults;
 import model.RequestResult;
 import model.User;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -29,9 +30,10 @@ public class APIUserSteps extends APISteps {
         userGroupIds.add(Entities.getGroups().getLatest().getId());
         User user = getRandomUser();
         user.setUserGroupIds(userGroupIds);
+        context.put("user", user);
+
         OperationResult<User> operationResult = service.add(user);
         OperationsResults.setResult(operationResult);
-        context.put("user", operationResult.getResult());
     }
 
     @Then("Created user is correct")
@@ -63,7 +65,6 @@ public class APIUserSteps extends APISteps {
         OperationResult<RequestResult> operationResult = service.remove(createdUser);
 
         OperationsResults.setResult(operationResult);
-        context.put("requestResult", operationResult.getResult());
     }
 
     @When("I send get list of users")
@@ -96,18 +97,34 @@ public class APIUserSteps extends APISteps {
         User user = Entities.getUsers().getLatest();
         User updatedUser = getRandomUser();
         updatedUser.setId(user.getId());
+        context.put("user", updatedUser);
 
         OperationResult<User> result = service.update(updatedUser);
-
-        context.put("user", result.getResult());
     }
 
     @When("I send get current user request")
     public void getCurrentUserRequest() {
         OperationResult<User> operationResult = service.me();
         OperationsResults.setResult(operationResult);
-        context.put("user", operationResult.getResult());
     }
 
+    @When("I send create a new user")
+    public void createNewUser() {
+        User user = getRandomUser();
+        context.put("user", user);
+
+        OperationResult<User> operationResult = service.add(user);
+        OperationsResults.setResult(operationResult);
+    }
+
+    @When("I send change user password request")
+    public void changeUserPassword(){
+        User user = Entities.getUsers().getLatest();
+        user.setNewPassword(RandomStringUtils.randomAlphanumeric(8));
+        context.put("user", user);
+
+        OperationResult<User> operationResult = service.update(user);
+        OperationsResults.setResult(operationResult);
+    }
 
 }

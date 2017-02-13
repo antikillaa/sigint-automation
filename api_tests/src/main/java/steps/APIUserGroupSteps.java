@@ -28,10 +28,10 @@ public class APIUserGroupSteps extends APISteps {
     @When("I send create a new group without any roles")
     public void createGroupRequest() {
         Group group = getRandomUserGroup();
+        context.put("group", group);
 
         OperationResult<Group> operationResult = service.add(group);
         OperationsResults.setResult(operationResult);
-        context.put("group", operationResult.getResult());
     }
 
     @Then("CreatedOrUpdated group is correct")
@@ -48,9 +48,10 @@ public class APIUserGroupSteps extends APISteps {
         roles.add(Entities.getRoles().getLatest().getName());
 
         Group group = Entities.getGroups().getLatest().setRoles(roles);
+        context.put("group", group);
+
         OperationResult<Group> operationResult = service.update(group);
         OperationsResults.setResult(operationResult);
-        context.put("group", operationResult.getResult());
     }
 
     @Then("Updated group is correct")
@@ -67,7 +68,8 @@ public class APIUserGroupSteps extends APISteps {
 
     @When("I send delete group request")
     public void deleteGroup() {
-        Group group = context.get("group", Group.class);
+        Group group = Entities.getGroups().getLatest();
+
         OperationResult<RequestResult> operationResult = service.remove(group);
         OperationsResults.setResult(operationResult);
 

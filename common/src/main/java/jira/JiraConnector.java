@@ -4,12 +4,11 @@ import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import http.G4HttpClient;
 import http.G4Response;
+import http.JsonConverter;
 import http.requests.HttpRequest;
 import jira.model.*;
-import http.JsonConverter;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.core.Cookie;
 import java.util.List;
 
 /**
@@ -17,32 +16,14 @@ import java.util.List;
  */
 public class JiraConnector {
 
-    public static Logger log = Logger.getLogger(JiraConnector.class);
-    private G4HttpClient client = new G4HttpClient().setHost(G4Properties.getJiraProperties().getJiraServer());
-    private Cookie cookie;
+    private static final Logger log = Logger.getLogger(JiraConnector.class);
+    private static final G4HttpClient client = new G4HttpClient().setHost(G4Properties.getJiraProperties().getJiraServer());
 
     /**
      * JiraConnector instance. Try to connect and initialize cookie.
      */
     public JiraConnector() {
-        getCookie();
-    }
-
-    /**
-     * Return cookie. If cookie is 'null', then try connect to Jira and initialize cookie.
-     *
-     * @return javax.ws.rs.core Cookie
-     */
-    private Cookie getCookie() {
-        if (cookie == null) {
-            Session session = initSession();
-            if (session == null) {
-                log.debug("jira session wasn't received. Cookie will not be generated");
-                return null;
-            }
-            this.cookie = new Cookie(session.getName(), session.getValue());
-        }
-        return cookie;
+        initSession();
     }
 
     /**
@@ -58,9 +39,15 @@ public class JiraConnector {
 
         SessionInfo sessionInfo = JsonConverter.readEntityFromResponse(response, SessionInfo.class);
         log.debug("Jira session created");
+
+        Session session = null;
         if (sessionInfo != null) {
-            return sessionInfo.getSession();
-        } else return null;
+            session = sessionInfo.getSession();
+            G4HttpClient.setCookie(session.getName(), session.getValue());
+        } else {
+            log.error("Jira session wasn't received. Cookie will not be generated");
+        }
+        return session;
     }
 
     /**
@@ -74,7 +61,7 @@ public class JiraConnector {
         log.debug("Getting project id based on name:" + name);
 
         String URL = "/rest/api/latest/project";
-        HttpRequest request = new HttpRequest(URL).setCookie(cookie);
+        HttpRequest request = new HttpRequest(URL);
         G4Response response = client.sendRequest(request);
 
         List<JiraProject> projects = JsonConverter.readEntitiesFromResponse(response, JiraProject[].class);
@@ -98,7 +85,7 @@ public class JiraConnector {
         log.debug("Getting version id based on project id:" + projectId + " and version name:" + versionName);
 
         String URL = "/rest/api/latest/project/" + projectId + "/versions";
-        HttpRequest request = new HttpRequest(URL).setCookie(cookie);
+        HttpRequest request = new HttpRequest(URL);
         G4Response response = client.sendRequest(request);
 
         List<ProjectVersion> versions = JsonConverter.readEntitiesFromResponse(response, ProjectVersion[].class);
@@ -120,7 +107,8 @@ public class JiraConnector {
     public Issue getIssue(String issueKey) {
         log.debug("Getting issue by it's key:" + issueKey);
         String url = "/rest/api/latest/issue/" + issueKey;
-        HttpRequest request = new HttpRequest(url).setCookie(cookie);
+
+        HttpRequest request = new HttpRequest(url);
         G4Response response = client.sendRequest(request);
         return JsonConverter.readEntityFromResponse(response, Issue.class);
     }

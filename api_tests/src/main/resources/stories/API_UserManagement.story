@@ -1,7 +1,6 @@
 Meta:
 @component userManagement
 
-
 Scenario: API.Create, Read, Update, Delete role
 Given I sign in as admin user
 
@@ -31,7 +30,6 @@ And CreatedOrUpdated group is correct
 
 When I send delete group request
 Then Request is successful
-Then Request message should be 'success'
 
 
 Scenario: API.Adding user roles to user groups
@@ -44,7 +42,7 @@ When I send add a created role to group request
 Then Request is successful
 And Updated group is correct
 When I send delete group request
-Then Request message should be 'success'
+Then Request is successful
 When I send delete Role request
 Then Request is successful
 When I send get list of Roles request
@@ -66,10 +64,9 @@ And Created user is correct
 
 When I send delete user request
 Then Request is successful
-And Request message should be 'success'
+
 When I send delete group request
 Then Request is successful
-Then Request message should be 'success'
 
 
 Scenario: Get list of user groups
@@ -100,6 +97,32 @@ Then Request is unsuccessful
 Examples:
 | role  |
 | admin |
+
+
+Scenario: API.Changing password to user
+Given I sign in as admin user
+
+When I send create a new user
+Then Request is successful
+When I send sing out request
+Then Request is successful
+
+When I sign in as new created user
+Then Request is successful
+When I send sing out request
+Then Request is successful
+
+Given I sign in as admin user
+
+When I send change user password request
+Then Request is successful
+When I send sing out request
+Then Request is successful
+
+When I sign in as new created user
+Then Request is successful
+When I send sing out request
+Then Request is successful
 
 
 Scenario: Cleanup groups
