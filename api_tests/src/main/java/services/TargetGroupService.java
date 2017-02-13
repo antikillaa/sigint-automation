@@ -6,16 +6,18 @@ import app_context.entities.Entities;
 import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
-import http.requests.targetGroups.TargetGroupRequest;
+import http.requests.TargetGroupRequest;
 import model.TargetGroup;
-import model.targetGroup.TargetGroupSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
+import java.util.List;
+
 public class TargetGroupService implements EntityService<TargetGroup> {
 
     private Logger log = Logger.getLogger(TargetGroupService.class);
+    private TargetGroupRequest request = new TargetGroupRequest();
     
     /**
      * PUT /target-groups createTargetGroup
@@ -101,7 +103,6 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         G4Response response = g4HttpClient.sendRequest(request);
 
         TargetGroup resultTargetGroup = JsonConverter.readEntityFromResponse(response, TargetGroup.class, "result");
-        log.debug(Parser.entityToString(resultTargetGroup));
         return new OperationResult<>(response, resultTargetGroup);
     }
 
@@ -110,10 +111,12 @@ public class TargetGroupService implements EntityService<TargetGroup> {
      *
      * @return list of TargetGroup
      */
-    public OperationResult<TargetGroupSearchResult> list() {
+    public OperationResult<EntityList<TargetGroup>> list() {
         log.info("Get list of target groups");
-        TargetGroupRequest request = new TargetGroupRequest();
-        G4Response response = g4HttpClient.sendRequest(request);
-        return new OperationResult<>(response, TargetGroupSearchResult.class);
+        G4Response response = g4HttpClient.sendRequest(request.list());
+
+        List<TargetGroup> targetGroupList =
+                JsonConverter.readEntitiesFromResponse(response, TargetGroup[].class, "result");
+        return new OperationResult<>(response, new EntityList<>(targetGroupList));
     }
 }

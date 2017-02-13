@@ -68,14 +68,13 @@ Then Request is successful
 When I send get target group details request
 Then Viewed target group is correct
 
-Scenario: API.List of target groups - GET
-Meta:
-@deprecated
+
+Scenario: (New profiler) API.Get all target groups (G4 comp.)
 Given I sign in as admin user
-When I send create target group without targets request
-Then Request is successful
 When I send get list of target group request
-Then Created target group in list
+Then Request is successful
+And Target group list size more than 0
+
 
 Scenario: API.Update target group
 Meta:
@@ -96,6 +95,7 @@ Then Request is successful
 When I send delete target group request
 Then Request is successful
 And Target group deleted correctly
+
 
 Scenario: (New profiler) API.Search targets entries using search filters (G4 comp.)
 Given I sign in as admin user

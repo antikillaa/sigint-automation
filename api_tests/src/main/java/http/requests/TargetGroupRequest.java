@@ -1,12 +1,11 @@
-package http.requests.targetGroups;
+package http.requests;
 
-import http.requests.HttpRequest;
 import http.HttpMethod;
 import model.TargetGroup;
 
 public class TargetGroupRequest extends HttpRequest {
 
-    private static final String URI = "/api/profile/target-groups";
+    private static final String URI = "/api/profiler/target-groups";
 
     public TargetGroupRequest() {
         super(URI);
@@ -27,7 +26,7 @@ public class TargetGroupRequest extends HttpRequest {
 
     public TargetGroupRequest delete(String id) {
         this
-                .setURI(URI + "/" + id )
+                .setURI(URI + "/" + id)
                 .setHttpMethod(HttpMethod.DELETE);
         return this;
     }
@@ -36,6 +35,13 @@ public class TargetGroupRequest extends HttpRequest {
         this
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(targetGroup);
+        return this;
+    }
+
+    public TargetGroupRequest list() {
+        this
+                .setURI(URI)
+                .setHttpMethod(HttpMethod.GET);
         return this;
     }
 }
