@@ -13,23 +13,41 @@ import java.util.List;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class TargetGroup extends TeelaEntity {
 
-    private String name;
+    // TODO old fields, check it and remove redundant
+    @DataIgnore
     private String description;
     //@JsonSerialize(using= TargetGroupJsonSerializer.class)
     //@JsonDeserialize(using= TargetGroupDeserializer.class)
     @DataIgnore
     private List<String> targets;
     @DataIgnore
-    private int lmt;
+    private Integer lmt;
     @DataIgnore
-    private int threatScore;
+    private Integer threatScore;
     @DataIgnore
-    private boolean deleted;
+    private Boolean deleted;
+
+    // checked fields
+    //@DataProvider(TargetGroupProvider.class)
+    @DataIgnore
+    private TargetGroupType type = TargetGroupType.TargetGroup;
+    private String name;
+    private TargetGroupProperties properties;
+    @DataIgnore
+    private int noGroups;
+    @DataIgnore
+    private int noProfiles;
+    @DataIgnore
+    private ArrayList<String> profiles = new ArrayList<>(); // TODO check format
+    @DataIgnore
+    private ArrayList<String> groups = new ArrayList<>(); // TODO
+    @DataIgnore
+    private String parent; // TODO
 
     @Override
     public String toString() {
         return String.format("name: %s, description: %s, targets: %s," +
-                "lmt: %s, deleted: %s", name, description, targets, lmt, threatScore, deleted);
+                "lmt: %s, deleted: %s", name, description, targets, lmt, deleted);
     }
 
     public String getName() {
@@ -56,29 +74,85 @@ public class TargetGroup extends TeelaEntity {
         this.targets = targets;
     }
 
-    public int getLmt() {
+    public Integer getLmt() {
         return lmt;
     }
 
-    public void setLmt(int lmt) {
+    public void setLmt(Integer lmt) {
         this.lmt = lmt;
     }
 
-    public int getThreatScore() {
+    public Integer getThreatScore() {
         return threatScore;
     }
 
-    public void setThreatScore(int threatScore) {
+    public void setThreatScore(Integer threatScore) {
         this.threatScore = threatScore;
     }
 
-    public boolean isDeleted() {
+    public Boolean isDeleted() {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
+    public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
-    
+
+
+    public TargetGroupType getType() {
+        return type;
+    }
+
+    public void setType(TargetGroupType type) {
+        this.type = type;
+    }
+
+    public TargetGroupProperties getProperties() {
+        return properties;
+    }
+
+    public void setProperties(TargetGroupProperties properties) {
+        this.properties = properties;
+    }
+
+    public int getNoGroups() {
+        return noGroups;
+    }
+
+    public void setNoGroups(int noGroups) {
+        this.noGroups = noGroups;
+    }
+
+    public int getNoProfiles() {
+        return noProfiles;
+    }
+
+    public void setNoProfiles(int noProfiles) {
+        this.noProfiles = noProfiles;
+    }
+
+    public ArrayList<String> getProfiles() {
+        return profiles;
+    }
+
+    public void setProfiles(ArrayList<String> profiles) {
+        this.profiles = profiles;
+    }
+
+    public ArrayList<String> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(ArrayList<String> groups) {
+        this.groups = groups;
+    }
+
+    public String getParent() {
+        return parent;
+    }
+
+    public void setParent(String parent) {
+        this.parent = parent;
+    }
 
 }

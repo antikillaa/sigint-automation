@@ -5,7 +5,7 @@ import model.TargetGroup;
 
 public class TargetGroupRequest extends HttpRequest {
 
-    private static final String URI = "/api/profiler/target-groups";
+    private static final String URI = "/api/profiler/targetGroups";
 
     public TargetGroupRequest() {
         super(URI);
@@ -14,7 +14,7 @@ public class TargetGroupRequest extends HttpRequest {
     public TargetGroupRequest add(TargetGroup targetGroup) {
         this
                 .setURI(URI)
-                .setHttpMethod(HttpMethod.PUT)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(targetGroup);
         return this;
     }
@@ -38,10 +38,11 @@ public class TargetGroupRequest extends HttpRequest {
         return this;
     }
 
-    public TargetGroupRequest list() {
+    public TargetGroupRequest listG4Compatibility() {
         this
-                .setURI(URI)
+                .setURI("/api/profiler/target-groups")
                 .setHttpMethod(HttpMethod.GET);
         return this;
     }
+    
 }

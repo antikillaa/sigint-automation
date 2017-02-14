@@ -29,28 +29,31 @@ public class APITargetGroupSteps extends APISteps {
     @When("I send create target group $with targets request")
     public void sendCreateRequest(String with) {
         TargetGroup group = getRandomTargetGroup();
+
         if (with.toLowerCase().equals("with")) {
             List<String> targets = new ArrayList<>();
             targets.add(Entities.getTargets().random().getId());
             group.setTargets(targets);
         }
+
+        context.put("targetGroup", group);
+
         OperationResult<TargetGroup> operationResult = service.add(group);
         OperationsResults.setResult(operationResult);
-        context.put("requestTargetGroup", operationResult.getResult());
     }
 
     @Then("Created target group is correct")
     public void targetGroupCorrect() {
-        TargetGroup contextTargetGroup = context.get("requestTargetGroup", TargetGroup.class);
+        TargetGroup contextTargetGroup = context.get("targetGroup", TargetGroup.class);
         TargetGroup createdTargetGroup = Entities.getTargetGroups().getLatest();
 
         Verify.shouldBe(isTrue.element(equalsTargetGroups(createdTargetGroup, contextTargetGroup)));
     }
 
     private boolean equalsTargetGroups(TargetGroup checkedTargetGroup, TargetGroup etalonTargetGroup) {
-        return Verify.isTrue(Conditions.equals(checkedTargetGroup.getDescription(), etalonTargetGroup.getDescription())) &&
+        return Verify.isTrue(Conditions.equals(checkedTargetGroup.getType(), etalonTargetGroup.getType())) &&
                 Verify.isTrue(Conditions.equals(checkedTargetGroup.getName(), etalonTargetGroup.getName())) &&
-                Verify.isTrue(Conditions.equals(checkedTargetGroup.getTargets(), etalonTargetGroup.getTargets()));
+                Verify.isTrue(Conditions.equals(checkedTargetGroup.getProperties().getDescription(), etalonTargetGroup.getProperties().getDescription()));
     }
 
     @When("I send get target group details request")
@@ -69,7 +72,7 @@ public class APITargetGroupSteps extends APISteps {
 
     @When("I send get list of target group request")
     public void getListOfTargetGroupsRequest() throws NullReturnException {
-        OperationResult<EntityList<TargetGroup>> operationResult = service.list();
+        OperationResult<EntityList<TargetGroup>> operationResult = service.listG4Compatibility();
         OperationsResults.setResult(operationResult);
 
         context.put("targetGroupEntityList", operationResult.getResult());
@@ -121,16 +124,10 @@ public class APITargetGroupSteps extends APISteps {
     @When("I send delete target group request")
     public void deleteTargetGroupRequest() {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
+        context.put("targetGroup", targetGroup);
+
         OperationResult operationResult = service.remove(targetGroup);
         OperationsResults.setResult(operationResult);
-        context.put("deletedTargetGroup", targetGroup);
-    }
-
-    @Then("Target group deleted correctly")
-    public void targetGroupDeletedCorrectly() {
-        TargetGroup deletedTargetGroup = context.get("deletedTargetGroup", TargetGroup.class);
-        OperationResult<TargetGroup> operationResult = service.view(deletedTargetGroup.getId());
-        Verify.shouldBe(isTrue.element(operationResult.getResult().getName().contains("DELETED at")));
     }
 
     @When("I send update target group request")

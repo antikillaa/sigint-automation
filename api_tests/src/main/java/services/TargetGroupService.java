@@ -19,43 +19,29 @@ public class TargetGroupService implements EntityService<TargetGroup> {
     private Logger log = Logger.getLogger(TargetGroupService.class);
     private TargetGroupRequest request = new TargetGroupRequest();
     
-    /**
-     * PUT /target-groups createTargetGroup
-     *
-     * @param entity entity
-     * @return HTTP status code
-     */
     @Override
     public OperationResult<TargetGroup> add(TargetGroup entity) {
         log.info("Creating new target group");
         log.debug(Parser.entityToString(entity));
 
-        TargetGroupRequest request = new TargetGroupRequest().add(entity);
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.add(entity));
         
-        TargetGroup group = JsonConverter.readEntityFromResponse(response, TargetGroup.class, "id");
+        TargetGroup group = JsonConverter.readEntityFromResponse(response, TargetGroup.class, "data");
         if (group != null) {
             Entities.getTargetGroups().addOrUpdateEntity(group);
         }
         return new OperationResult<>(response, group);
     }
 
-    /**
-     * DELETE /target-groups/{id} removeTargetGroup
-     *
-     * @param entity entity
-     * @return HTTP status code
-     */
     @Override
     public OperationResult remove(TargetGroup entity) {
         log.info("Deleting target group id:" + entity.getId());
         log.debug(Parser.entityToString(entity));
-        TargetGroupRequest request = new TargetGroupRequest().delete(entity.getId());
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.delete(entity.getId()));
+
         OperationResult<String> deleteResult = new OperationResult<>(response);
         if (deleteResult.isSuccess()) {
             Entities.getTargetGroups().removeEntity(entity);
-            
         }
         return deleteResult;
     }
@@ -66,12 +52,6 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         throw new NotImplementedException();
     }
 
-    /**
-     * POST /target-groups updateTargetGroup
-     *
-     * @param entity entity
-     * @return HTTP status code
-     */
     @Override
     public OperationResult<TargetGroup> update(TargetGroup entity) {
         log.info("Updating target group");
@@ -90,30 +70,24 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         return new OperationResult<>(response, targetGroup);
     }
 
-    /**
-     * GET /target-groups/{id}/details getTargetGroupDetails
-     *
-     * @param id id of entity
-     * @return TargetGroup entity
-     */
     @Override
     public OperationResult<TargetGroup> view(String id) {
         log.info("View target group id:" + id);
-        TargetGroupRequest request = new TargetGroupRequest().get(id);
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.get(id));
 
         TargetGroup resultTargetGroup = JsonConverter.readEntityFromResponse(response, TargetGroup.class, "result");
         return new OperationResult<>(response, resultTargetGroup);
     }
 
     /**
+     * Get target groups list. Target Group API for G4 backward compatibility
      * GET /target-groups getTargetGroups
      *
      * @return list of TargetGroup
      */
-    public OperationResult<EntityList<TargetGroup>> list() {
+    public OperationResult<EntityList<TargetGroup>> listG4Compatibility() {
         log.info("Get list of target groups");
-        G4Response response = g4HttpClient.sendRequest(request.list());
+        G4Response response = g4HttpClient.sendRequest(request.listG4Compatibility());
 
         List<TargetGroup> targetGroupList =
                 JsonConverter.readEntitiesFromResponse(response, TargetGroup[].class, "result");

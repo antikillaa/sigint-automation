@@ -13,6 +13,7 @@ public class OperationResult<T> {
     static {
         successfulCodes.add(200);
         successfulCodes.add(201);
+        successfulCodes.add(204);
     }
     private G4Response response;
     private T responseObject;

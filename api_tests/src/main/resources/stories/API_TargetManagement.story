@@ -94,7 +94,6 @@ When I send create target group without targets request
 Then Request is successful
 When I send delete target group request
 Then Request is successful
-And Target group deleted correctly
 
 
 Scenario: (New profiler) API.Search targets entries using search filters (G4 comp.)
@@ -172,3 +171,20 @@ Then target group in list
 When I send get groups list of new target request
 Then target group in list
 
+
+Scenario: API.(New profiler) Addition of new target group without targets
+Given I sign in as admin user
+When I send create target group without targets request
+Then Request is successful
+And Created target group is correct
+When I send delete target group request
+Then Request is successful
+
+
+Scenario: (New profiler) Deleting of target group
+Given I sign in as admin user
+When I send create target group without targets request
+Then Request is successful
+And Created target group is correct
+When I send delete target group request
+Then Request is successful
