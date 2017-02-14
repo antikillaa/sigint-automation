@@ -35,7 +35,7 @@ public class APITargetSteps extends APISteps {
     public void sendCreateRequest(String with) throws NullReturnException {
         Target target = getRandomTarget();
         if (with.toLowerCase().equals("with")) {
-            ArrayList<TargetGroup> groups = new ArrayList<TargetGroup>();
+            ArrayList<TargetGroup> groups = new ArrayList<>();
             groups.add(Entities.getTargetGroups().random());
             target.setGroups(groups);
         }
@@ -152,18 +152,8 @@ public class APITargetSteps extends APISteps {
         log.info("Start search targets by criteria: " + criteria + ", value: " + value);
         Target target = Entities.getTargets().getLatest();
 
-        if (criteria.toLowerCase().equals("name")) {
-            value = value.equals("random") ? target.getName() : value;
-        } else if (criteria.toLowerCase().equals("keywords")) {
-            value = value.equals("random") ? Parser.setToString(target.getKeywords()) : value;
-        } else if (criteria.toLowerCase().equals("description")) {
-            value = value.equals("random") ? target.getDescription() : value;
-        } else if (criteria.toLowerCase().equals("includedeleted")) {
+        if (criteria.toLowerCase().equals("includedeleted")) {
             value = value.equals("random") ? String.valueOf(target.isDeleted()) : value;
-        } else if (criteria.toLowerCase().equals("languages")) {
-            value = value.equals("random") ? Parser.setToString(target.getLanguages()) : value;
-        } else if (criteria.toLowerCase().equals("phones")) {
-            value = value.equals("random") ? Parser.setToString(target.getPhones()) : value;
         } else if (criteria.toLowerCase().equals("updatedafter")) {
             value = value.equals("random") ? String.valueOf(target.getCreatedAt().getTime() - 60000) : value;
         } else if (criteria.toLowerCase().equals("empty")) {

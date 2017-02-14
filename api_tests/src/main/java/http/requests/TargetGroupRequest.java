@@ -1,5 +1,6 @@
 package http.requests;
 
+import abs.SearchFilter;
 import http.HttpMethod;
 import model.TargetGroup;
 
@@ -44,5 +45,12 @@ public class TargetGroupRequest extends HttpRequest {
                 .setHttpMethod(HttpMethod.GET);
         return this;
     }
-    
+
+    public TargetGroupRequest searchG4Compatibility(SearchFilter filter) {
+        this
+                .setURI("/api/profiler/target-groups/search")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(filter);
+        return this;
+    }
 }

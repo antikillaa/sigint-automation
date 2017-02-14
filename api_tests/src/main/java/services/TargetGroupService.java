@@ -8,6 +8,7 @@ import http.JsonConverter;
 import http.OperationResult;
 import http.requests.TargetGroupRequest;
 import model.TargetGroup;
+import model.TargetGroupSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
@@ -18,14 +19,14 @@ public class TargetGroupService implements EntityService<TargetGroup> {
 
     private Logger log = Logger.getLogger(TargetGroupService.class);
     private TargetGroupRequest request = new TargetGroupRequest();
-    
+
     @Override
     public OperationResult<TargetGroup> add(TargetGroup entity) {
         log.info("Creating new target group");
         log.debug(Parser.entityToString(entity));
 
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
-        
+
         TargetGroup group = JsonConverter.readEntityFromResponse(response, TargetGroup.class, "data");
         if (group != null) {
             Entities.getTargetGroups().addOrUpdateEntity(group);
@@ -46,7 +47,6 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         return deleteResult;
     }
 
-    // TODO POST /target-groups/search search
     @Override
     public OperationResult<EntityList<TargetGroup>> list(SearchFilter filter) {
         throw new NotImplementedException();
@@ -92,5 +92,22 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         List<TargetGroup> targetGroupList =
                 JsonConverter.readEntitiesFromResponse(response, TargetGroup[].class, "result");
         return new OperationResult<>(response, new EntityList<>(targetGroupList));
+    }
+
+    /**
+     * Search target-groups by filter
+     * POST /target-groups/search search
+     *
+     * @param filter search filter for payload
+     * @return {@link OperationResult<EntityList<TargetGroup>> }
+     */
+    public OperationResult<EntityList<TargetGroup>> searchG4Compatibility(SearchFilter filter) {
+        log.info("Search targetGroups by filter:" + JsonConverter.toJsonString(filter));
+
+        G4Response response = g4HttpClient.sendRequest(request.searchG4Compatibility(filter));
+
+        TargetGroupSearchResult result =
+                JsonConverter.readEntityFromResponse(response, TargetGroupSearchResult.class, "result");
+        return new OperationResult<>(response, new EntityList<>(result.getContent()));
     }
 }

@@ -8,15 +8,19 @@ import errors.NullReturnException;
 import http.OperationResult;
 import http.OperationsResults;
 import model.TargetGroup;
+import model.TargetGroupFilter;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TargetGroupService;
+import utils.DateHelper;
+import utils.Parser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static conditions.Conditions.isTrue;
 
@@ -50,10 +54,20 @@ public class APITargetGroupSteps extends APISteps {
         Verify.shouldBe(isTrue.element(equalsTargetGroups(createdTargetGroup, contextTargetGroup)));
     }
 
-    private boolean equalsTargetGroups(TargetGroup checkedTargetGroup, TargetGroup etalonTargetGroup) {
-        return Verify.isTrue(Conditions.equals(checkedTargetGroup.getType(), etalonTargetGroup.getType())) &&
-                Verify.isTrue(Conditions.equals(checkedTargetGroup.getName(), etalonTargetGroup.getName())) &&
-                Verify.isTrue(Conditions.equals(checkedTargetGroup.getProperties().getDescription(), etalonTargetGroup.getProperties().getDescription()));
+    /**
+     * Compare two targetGroups
+     * new targetGroups keep description in TargetGroupProperties
+     *
+     * @param checked checked targetGroup
+     * @param etalon etalon targetGroup
+     * @return true if two targetGroups is equal, false if otherwise
+     */
+    private boolean equalsTargetGroups(TargetGroup checked, TargetGroup etalon) {
+        return Verify.isTrue(Conditions.equals(checked.getType(), etalon.getType())) &&
+                Verify.isTrue(Conditions.equals(checked.getName(), etalon.getName())) &&
+                checked.getDescription() == null ?
+                Objects.equals(checked.getProperties().getDescription(), etalon.getProperties().getDescription()) :
+                Objects.equals(checked.getDescription(), etalon.getProperties().getDescription());
     }
 
     @When("I send get target group details request")
@@ -177,6 +191,69 @@ public class APITargetGroupSteps extends APISteps {
         EntityList<TargetGroup> groups = context.get("targetGroupEntityList", EntityList.class);
 
         Assert.assertTrue(groups.size() > Integer.valueOf(size));
+    }
+
+    @When("I send search targetGroups by $criteria and value $value")
+    public void searchTargetGroupByCriteria(String criteria, String value) {
+        log.info("Start search targetGroups by criteria: " + criteria + ", value: " + value);
+        TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
+
+        if (criteria.toLowerCase().equals("includedeleted")) {
+            value = value.equals("random") ? String.valueOf(targetGroup.isDeleted()) : value;
+        } else if (criteria.toLowerCase().equals("updatedafter")) {
+            value = String.valueOf(DateHelper.yesterday().getTime());
+        } else if (criteria.toLowerCase().equals("empty")) {
+            log.debug("Search without filter..");
+        } else {
+            throw new AssertionError("Unknown filter type");
+        }
+
+        TargetGroupFilter searchFilter = new TargetGroupFilter().filterBy(criteria, value);
+        OperationResult<EntityList<TargetGroup>> operationResult = service.searchG4Compatibility(searchFilter);
+
+        context.put("searchFilter", searchFilter);
+        context.put("searchResult", operationResult.getResult());
+    }
+
+    @Then("targetGroups search result are correct")
+    public void targetGroupsSearchResultIsCorrert() {
+        log.info("Checking if search targetGroups result is correct");
+        TargetGroupFilter searchFilter = context.get("searchFilter", TargetGroupFilter.class);
+        EntityList<TargetGroup> searchResult = context.get("searchResult", EntityList.class);
+
+        if (searchResult.size() == 0) {
+            log.warn("Search result can be incorrect. There are not records in it");
+        } else {
+            log.info("Search result size: " + searchResult.size());
+        }
+        for (TargetGroup targetGroup : searchResult.getEntities()) {
+            Assert.assertTrue(String.format("Target:%s should not match to filter %s", targetGroup, Parser.entityToString(searchFilter)),
+                    searchFilter.isAppliedToEntity(targetGroup));
+        }
+    }
+
+    @Then("searched targetGroups $criteria search result list")
+    public void searchedTargetGroupsInResultList(String criteria) {
+        log.info("Checking if targetGroup entry " + criteria + " list");
+        TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
+        EntityList<TargetGroup> list = context.get("searchResult", EntityList.class);
+
+        Boolean contains = false;
+        for (TargetGroup entity : list) {
+            contains = equalsTargetGroups(entity, targetGroup);
+            if (contains) {
+                Entities.getTargetGroups().updateEntity(targetGroup, entity);
+                break;
+            }
+        }
+
+        if (criteria.toLowerCase().equals("in")) {
+            Verify.shouldBe(isTrue.element(contains));
+        } else if (criteria.toLowerCase().equals("not in")) {
+            Verify.shouldNotBe(isTrue.element(contains));
+        } else {
+            throw new AssertionError("Incorrect argument passed to step");
+        }
     }
 
 }

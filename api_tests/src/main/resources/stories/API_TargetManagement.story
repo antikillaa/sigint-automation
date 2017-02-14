@@ -177,6 +177,7 @@ Given I sign in as admin user
 When I send create target group without targets request
 Then Request is successful
 And Created target group is correct
+
 When I send delete target group request
 Then Request is successful
 
@@ -186,5 +187,24 @@ Given I sign in as admin user
 When I send create target group without targets request
 Then Request is successful
 And Created target group is correct
+
 When I send delete target group request
 Then Request is successful
+
+
+Scenario: (New profiler) API.Search target groups using search filters (G4 comp.)
+Given I sign in as admin user
+When I send create target group without targets request
+Then Request is successful
+And Created target group is correct
+
+When I send search targetGroups by <criteria> and value <value>
+Then targetGroups search result are correct
+And searched targetGroups in search result list
+
+When I send delete target group request
+Then Request is successful
+
+Examples:
+| criteria | value  |
+| updatedAfter | random |

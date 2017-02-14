@@ -13,7 +13,6 @@ import java.util.List;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class TargetGroup extends TeelaEntity {
 
-    // TODO old fields, check it and remove redundant
     @DataIgnore
     private String description;
     //@JsonSerialize(using= TargetGroupJsonSerializer.class)
@@ -27,7 +26,6 @@ public class TargetGroup extends TeelaEntity {
     @DataIgnore
     private Boolean deleted;
 
-    // checked fields
     //@DataProvider(TargetGroupProvider.class)
     @DataIgnore
     private TargetGroupType type = TargetGroupType.TargetGroup;
@@ -38,11 +36,11 @@ public class TargetGroup extends TeelaEntity {
     @DataIgnore
     private int noProfiles;
     @DataIgnore
-    private ArrayList<String> profiles = new ArrayList<>(); // TODO check format
+    private ArrayList<String> profiles = new ArrayList<>();
     @DataIgnore
-    private ArrayList<String> groups = new ArrayList<>(); // TODO
+    private ArrayList<String> groups = new ArrayList<>();
     @DataIgnore
-    private String parent; // TODO
+    private String parent;
 
     @Override
     public String toString() {
