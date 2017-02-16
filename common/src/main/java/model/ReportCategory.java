@@ -21,7 +21,7 @@ public class ReportCategory extends TeelaEntity implements Comparable {
     private Integer order;
     @WithFieldDataType(FieldDataType.BOOLEAN)
     private Boolean hidden;
-    @WithFieldDataType(FieldDataType.BOOLEAN)
+    @DataIgnore
     private Boolean deleted;
     @DataIgnore
     private String currentValue;
