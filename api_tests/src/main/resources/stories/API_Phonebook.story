@@ -61,6 +61,9 @@ And Upload result of 3 'Phonebook' entries is successful
 
 
 Scenario: API.Upload DuSubscriber Entry with all fields
+Meta:
+@deprecated
+
 Given I sign in as admin user
 When I send upload DuSubscriberEntry request with all fields
 Then Request is successful
@@ -88,6 +91,9 @@ Examples:
 
 
 Scenario: API.Get details of DuSubscriber entry
+Meta:
+@deprecated
+
 Given I sign in as admin user
 When I send upload DuSubscriberEntry request with all fields
 Then Request is successful
