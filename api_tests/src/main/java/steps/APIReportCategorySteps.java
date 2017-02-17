@@ -1,7 +1,10 @@
 package steps;
 
 import abs.EntityList;
+import app_context.entities.Entities;
+import http.JsonConverter;
 import http.OperationResult;
+import http.OperationsResults;
 import model.ReportCategory;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -9,23 +12,89 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.ReportCategoryService;
 
+import java.util.List;
+import java.util.Objects;
+
 @SuppressWarnings("unchecked")
 public class APIReportCategorySteps extends APISteps {
 
-    private ReportCategoryService service = new ReportCategoryService();
-    private static Logger LOGGER = Logger.getLogger(APIReportCategorySteps.class);
+    private static final Logger log = Logger.getLogger(APIReportCategorySteps.class);
+    private ReportCategoryService reportCategoryService = new ReportCategoryService();
+
+    @When("I send update report category request")
+    public void updateReportCategory() {
+        ReportCategory createdCategory = Entities.getReportCategories().getLatest();
+        ReportCategory updatedReportCategory = objectInitializer.randomEntity(ReportCategory.class);
+        updatedReportCategory.setId(createdCategory.getId());
+        updatedReportCategory.setOrder(createdCategory.getOrder());
+
+        OperationResult<ReportCategory> result = reportCategoryService.update(updatedReportCategory);
+
+        context.put("reportCategory", updatedReportCategory);
+    }
 
     @When("I send get list of report categories request")
     public void getReportCategoryList() {
-        OperationResult<EntityList<ReportCategory>> result = service.list();
+        OperationResult<EntityList<ReportCategory>> result = reportCategoryService.list();
         context.put("reportCategoryEntityList", result.getResult());
     }
 
     @Then("Report categories list size more than $count")
-    public void reportCategoryListShouldBeMoreThan(String count) {
-        EntityList<ReportCategory> reportCategories = context.get("reportCategoryEntityList", EntityList.class);
+    public void reportCategoryListShouldBeMoreThan(final String count) {
+        int minSize = Integer.valueOf(count);
+        EntityList<ReportCategory> reportCategories =
+                context.get("reportCategoryEntityList", EntityList.class);
 
-        Assert.assertTrue(reportCategories.getEntities().size() > 0);
+        Assert.assertTrue(reportCategories.getEntities().size() > minSize);
     }
 
+    @When("I create new report category")
+    public void createReportCategory() {
+        ReportCategory reportCategory = objectInitializer.randomEntity(ReportCategory.class);
+
+        OperationResult<ReportCategory> operationResult = reportCategoryService.add(reportCategory);
+        OperationsResults.setResult(operationResult);
+
+        context.put("reportCategory", reportCategory);
+    }
+
+    @Then("Report category is correct")
+    public void reportCategoryIsCorrect() {
+        ReportCategory createdCategory = Entities.getReportCategories().getLatest();
+        ReportCategory generatedCategory = context.get("reportCategory", ReportCategory.class);
+
+        log.debug("requested: " + JsonConverter.toJsonString(generatedCategory));
+        log.debug("created: " + JsonConverter.toJsonString(createdCategory));
+
+        Assert.assertEquals("hidden mismatch", generatedCategory.getHidden(), createdCategory.getHidden());
+        Assert.assertEquals("option values mismatch", generatedCategory.getValues(), createdCategory.getValues());
+        Assert.assertEquals("category name mismatch", generatedCategory.getName(), createdCategory.getName());
+    }
+
+    @Then("Report category is marked as deleted")
+    public void reportCategoryIsDeleted() {
+        ReportCategory deletedCategory = context.get("deletedReportCategory", ReportCategory.class);
+
+        OperationResult<EntityList<ReportCategory>> result = reportCategoryService.filter(deletedCategory.getCreatedAt().getTime());
+
+        List<ReportCategory> reportCategories = result.getResult().getEntities();
+        Boolean isDeleted = false;
+        for (ReportCategory reportCategory: reportCategories) {
+            if (Objects.equals(reportCategory.getId(), deletedCategory.getId())) {
+                isDeleted = reportCategory.getDeleted();
+                break;
+            }
+        }
+        Assert.assertEquals("should be deleted", true, isDeleted);
+    }
+
+    @When("I send delete report category request")
+    public void deleteReportCategory() {
+        ReportCategory categoryToDelete = Entities.getReportCategories().getLatest();
+
+        OperationResult operationResult = reportCategoryService.remove(categoryToDelete);
+        OperationsResults.setResult(operationResult);
+
+        context.put("deletedReportCategory", categoryToDelete);
+    }
 }

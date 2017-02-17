@@ -8,6 +8,7 @@ import http.JsonConverter;
 import http.OperationResult;
 import http.requests.ReportCategoriesRequest;
 import model.ReportCategory;
+import model.Result;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class ReportCategoryService implements EntityService<ReportCategory> {
 
-    private Logger log = Logger.getLogger(ReportCategoryService.class);
+    private static final Logger log = Logger.getLogger(ReportCategoryService.class);
 
     @Override
     public OperationResult<ReportCategory> add(ReportCategory entity) {
@@ -27,14 +28,24 @@ public class ReportCategoryService implements EntityService<ReportCategory> {
         ReportCategory reportCategory = JsonConverter.readEntityFromResponse(response, ReportCategory.class, "result");
         OperationResult<ReportCategory> operationResult = new OperationResult<>(response, reportCategory);
         if (operationResult.isSuccess()) {
-            Entities.getReportCategories().addOrUpdateEntity(entity);
+            log.info("New report category id: " + reportCategory.getId() + " and name: " + reportCategory.getName());
+            Entities.getReportCategories().addOrUpdateEntity(reportCategory);
         }
         return operationResult;
     }
 
     @Override
-    public OperationResult<ReportCategory> remove(ReportCategory entity) {
-        throw new NotImplementedException();
+    public OperationResult<Result> remove(ReportCategory entity) {
+        log.info("Deleting report category id:" + entity.getId() + " and name: " + entity.getName());
+
+        ReportCategoriesRequest request = new ReportCategoriesRequest().delete(entity.getId());
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        OperationResult<Result> operationResult = new OperationResult<>(response, Result.class);
+        if (operationResult.isSuccess()) {
+            Entities.getReportCategories().removeEntity(entity);
+        }
+        return operationResult;
     }
 
     @Override
@@ -58,9 +69,29 @@ public class ReportCategoryService implements EntityService<ReportCategory> {
         return new OperationResult<>(response, new EntityList<>(reportCategories));
     }
 
+    public OperationResult<EntityList<ReportCategory>> filter(Long updatedAfter) {
+        ReportCategoriesRequest request = new ReportCategoriesRequest().filter(updatedAfter);
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        List<ReportCategory> reportCategories =
+                JsonConverter.readEntitiesFromResponse(response, ReportCategory[].class, "result");
+
+        return new OperationResult<>(response, new EntityList<>(reportCategories));
+    }
+
     @Override
     public OperationResult<ReportCategory> update(ReportCategory entity) {
-        throw new NotImplementedException();
+        log.info("Update report category with id: " + entity.getId());
+
+        ReportCategoriesRequest request = new ReportCategoriesRequest().update(entity);
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        ReportCategory reportCategory = JsonConverter.readEntityFromResponse(response, ReportCategory.class, "result");
+        OperationResult<ReportCategory> operationResult = new OperationResult<>(response, reportCategory);
+        if (operationResult.isSuccess()) {
+            Entities.getReportCategories().addOrUpdateEntity(reportCategory);
+        }
+        return operationResult;
     }
 
     @Override
