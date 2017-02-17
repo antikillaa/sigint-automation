@@ -238,7 +238,7 @@ public class G4HttpClient {
             }
 
         } while ((response.getStatus() == 503) && (tryCount <= MAX_TRY_COUNT) && (!DateHelper.isTimeout(timeoutDate)));
-        if (response.getStatus() == 503 || response.getStatus() == 502) {
+        if (response.getStatus() == 503 || response.getStatus() == 502 || response.getStatus() == 500) {
             ErrorReporter.reportAndRaiseError(String.format("Got error code: %s. " +
                             "Request: %s. " +
                             "Payload: %s. " +
