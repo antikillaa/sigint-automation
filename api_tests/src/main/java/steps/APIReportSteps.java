@@ -7,11 +7,13 @@ import conditions.Verify;
 import errors.NullReturnException;
 import http.OperationResult;
 import http.OperationsResults;
-import model.*;
+import model.Record;
+import model.Report;
+import model.ReportCategory;
+import model.Source;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.junit.Assert;
 import services.RecordEntityService;
 import services.ReportCategoryService;
 import services.ReportCreateService;
@@ -22,15 +24,14 @@ import java.util.List;
 
 public class APIReportSteps extends APISteps {
 
-    private Logger log = Logger.getLogger(APIReportSteps.class);
-    private ReportService service = new ReportService();
+    private static final Logger log = Logger.getLogger(APIReportSteps.class);
+    private ReportService reportService = new ReportService();
     private ReportCategoryService reportCategoryService = new ReportCategoryService();
-    
     
     @When("I send create manual report")
     public void createManualReport() {
         Report report = context.get("report", Report.class);
-        OperationResult<Report> operationResult = service.add(report);
+        OperationResult<Report> operationResult = reportService.add(report);
         OperationsResults.setResult(operationResult);
         context.put("requestReport", operationResult.getResult());
     }
@@ -54,26 +55,6 @@ public class APIReportSteps extends APISteps {
         report.setCategories(categories.getEntities());
 
         context.put("report", report);
-    }
-
-    @When("I create new report category")
-    public void createReportCategory() {
-        ReportCategory reportCategory = objectInitializer.randomEntity(ReportCategory.class);
-
-        OperationResult<ReportCategory> operationResult = reportCategoryService.add(reportCategory);
-        OperationsResults.setResult(operationResult);
-
-        context.put("reportCategory", operationResult.getResult());
-    }
-
-    @Then("Report category is correct")
-    public void reportCategoryIsCorrect() {
-        ReportCategory savedCategory = Entities.getReportCategories().getLatest();
-        ReportCategory responcedCategory = context.get("reportCategory", ReportCategory.class);
-
-        Assert.assertEquals("hidden mismatch", savedCategory.getHidden(), responcedCategory.getHidden());
-        Assert.assertEquals("option values mismatch", savedCategory.getValues(), responcedCategory.getValues());
-        Assert.assertEquals("category name mismatch", savedCategory.getName(), responcedCategory.getName());
     }
 
     @When("Add new random record to report")
