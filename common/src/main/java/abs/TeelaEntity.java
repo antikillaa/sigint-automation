@@ -1,12 +1,14 @@
 package abs;
 
 import data_for_entity.annotations.DataIgnore;
+import data_for_entity.annotations.WithFieldDataType;
+import data_for_entity.data_types.FieldDataType;
 
 import java.util.Date;
 
 public abstract class TeelaEntity extends AbstractEntity {
 
-    @DataIgnore
+    @WithFieldDataType(FieldDataType.DATE)
     private Date createdAt;
     @DataIgnore
     private Date modifiedAt;
