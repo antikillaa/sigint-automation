@@ -2,6 +2,7 @@ package model;
 
 import data_for_entity.annotations.DataIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.Date;
@@ -12,15 +13,20 @@ public class TargetGroupProperties {
 
     private String description;
     @DataIgnore
-    private Date __creation_time;
+    @JsonProperty("__creation_time")
+    private Date creation_time;
     @DataIgnore
-    private String __creator;
+    @JsonProperty("__creator")
+    private String creator;
     @DataIgnore
-    private Date __last_modified_time;
+    @JsonProperty("__last_modified_time")
+    private Date last_modified_time;
     @DataIgnore
-    private String __modifier;
+    @JsonProperty("__modifier")
+    private String modifier;
     @DataIgnore
-    private Integer __target_group_version;
+    @JsonProperty("__target_group_version")
+    private Integer target_group_version;
 
     public String getDescription() {
         return description;
@@ -30,44 +36,44 @@ public class TargetGroupProperties {
         this.description = description;
     }
 
-    public Date get__creation_time() {
-        return __creation_time;
+    public Date getCreation_time() {
+        return creation_time;
     }
 
-    public void set__creation_time(Date __creation_time) {
-        this.__creation_time = __creation_time;
+    public void setCreation_time(Date creation_time) {
+        this.creation_time = creation_time;
     }
 
-    public String get__creator() {
-        return __creator;
+    public String getCreator() {
+        return creator;
     }
 
-    public void set__creator(String __creator) {
-        this.__creator = __creator;
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
-    public Date get__last_modified_time() {
-        return __last_modified_time;
+    public Date getLast_modified_time() {
+        return last_modified_time;
     }
 
-    public void set__last_modified_time(Date __last_modified_time) {
-        this.__last_modified_time = __last_modified_time;
+    public void setLast_modified_time(Date last_modified_time) {
+        this.last_modified_time = last_modified_time;
     }
 
-    public String get__modifier() {
-        return __modifier;
+    public String getModifier() {
+        return modifier;
     }
 
-    public void set__modifier(String __modifier) {
-        this.__modifier = __modifier;
+    public void setModifier(String modifier) {
+        this.modifier = modifier;
     }
 
-    public Integer get__target_group_version() {
-        return __target_group_version;
+    public Integer getTarget_group_version() {
+        return target_group_version;
     }
 
-    public void set__target_group_version(Integer __target_group_version) {
-        this.__target_group_version = __target_group_version;
+    public void setTarget_group_version(Integer target_group_version) {
+        this.target_group_version = target_group_version;
     }
 
 }
