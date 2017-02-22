@@ -14,19 +14,19 @@ public class TargetGroupProperties {
     private String description;
     @DataIgnore
     @JsonProperty("__creation_time")
-    private Date creation_time;
+    private Date creationTime;
     @DataIgnore
     @JsonProperty("__creator")
     private String creator;
     @DataIgnore
     @JsonProperty("__last_modified_time")
-    private Date last_modified_time;
+    private Date lastModifiedTime;
     @DataIgnore
     @JsonProperty("__modifier")
     private String modifier;
     @DataIgnore
     @JsonProperty("__target_group_version")
-    private Integer target_group_version;
+    private Integer targetGroupVersion;
 
     public String getDescription() {
         return description;
@@ -36,12 +36,12 @@ public class TargetGroupProperties {
         this.description = description;
     }
 
-    public Date getCreation_time() {
-        return creation_time;
+    public Date getCreationTime() {
+        return creationTime;
     }
 
-    public void setCreation_time(Date creation_time) {
-        this.creation_time = creation_time;
+    public void setCreationTime(Date creationTime) {
+        this.creationTime = creationTime;
     }
 
     public String getCreator() {
@@ -52,12 +52,12 @@ public class TargetGroupProperties {
         this.creator = creator;
     }
 
-    public Date getLast_modified_time() {
-        return last_modified_time;
+    public Date getLastModifiedTime() {
+        return lastModifiedTime;
     }
 
-    public void setLast_modified_time(Date last_modified_time) {
-        this.last_modified_time = last_modified_time;
+    public void setLastModifiedTime(Date lastModifiedTime) {
+        this.lastModifiedTime = lastModifiedTime;
     }
 
     public String getModifier() {
@@ -68,12 +68,12 @@ public class TargetGroupProperties {
         this.modifier = modifier;
     }
 
-    public Integer getTarget_group_version() {
-        return target_group_version;
+    public Integer getTargetGroupVersion() {
+        return targetGroupVersion;
     }
 
-    public void setTarget_group_version(Integer target_group_version) {
-        this.target_group_version = target_group_version;
+    public void setTargetGroupVersion(Integer targetGroupVersion) {
+        this.targetGroupVersion = targetGroupVersion;
     }
 
 }
