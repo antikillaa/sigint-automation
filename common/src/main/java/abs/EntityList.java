@@ -1,7 +1,6 @@
 package abs;
 
 import errors.NullReturnException;
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.math.RandomUtils;
 
 import java.util.*;
@@ -31,7 +30,6 @@ public class EntityList<T extends AbstractEntity> implements Iterable<T> {
     }
 
     public Iterator<T> iterator() {
-
         return entities.iterator();
     }
 
@@ -71,7 +69,12 @@ public class EntityList<T extends AbstractEntity> implements Iterable<T> {
     }
 
     public T getEntity(String param) throws NullReturnException {
-        throw new NotImplementedException();
+        for (T entity : entities) {
+            if (entity.getId().equals(param)) {
+                return entity;
+            }
+        }
+        throw new NullReturnException("Entity not found by id:" + param);
     }
 
     public T getLatest() {
