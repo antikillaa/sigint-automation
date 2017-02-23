@@ -26,7 +26,7 @@ public class APIProfileSteps extends APISteps {
         return objectInitializer.randomEntity(Profile.class);
     }
 
-    @Then("Created profile draft is correct")
+    @Then("Profile draft is correct")
     public void profileDraftIsCorrect() {
         Profile requestedProfile = context.get("profileDraft", Profile.class);
         Profile createdProfile = Entities.getProfiles().getLatest();
@@ -46,6 +46,15 @@ public class APIProfileSteps extends APISteps {
         Profile profile = Entities.getProfiles().getLatest();
 
         OperationResult operationResult = service.remove(profile);
+        OperationsResults.setResult(operationResult);
+    }
+
+    @When("I send get profile draft details request")
+    public void getProfileDraftDetails() {
+        Profile createdProfile = Entities.getProfiles().getLatest();
+        context.put("profileDraft", createdProfile);
+
+        OperationResult<Profile> operationResult = service.view(createdProfile.getId());
         OperationsResults.setResult(operationResult);
     }
 

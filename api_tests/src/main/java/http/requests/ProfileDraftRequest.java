@@ -29,4 +29,11 @@ public class ProfileDraftRequest extends HttpRequest {
                 .setHttpMethod(HttpMethod.DELETE);
         return this;
     }
+
+    public ProfileDraftRequest view(String id) {
+        this
+                .setURI(URI + "/" + id)
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
 }

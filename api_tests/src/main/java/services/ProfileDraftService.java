@@ -55,6 +55,15 @@ public class ProfileDraftService implements EntityService<Profile> {
 
     @Override
     public OperationResult<Profile> view(String id) {
-        throw new NotImplementedException();
+        log.info("Getting profile details, id:" + id);
+        G4Response response = g4HttpClient.sendRequest(request.view(id));
+
+        Profile profile = JsonConverter.readEntityFromResponse(response, Profile.class, "data");
+
+        OperationResult<Profile> operationResult = new OperationResult<>(response, profile);
+        if (operationResult.isSuccess()) {
+            Entities.getProfiles().addOrUpdateEntity(operationResult.getResult());
+        }
+        return operationResult;
     }
 }

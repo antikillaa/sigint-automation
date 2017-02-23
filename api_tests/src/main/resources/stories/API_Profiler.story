@@ -83,7 +83,7 @@ Scenario: API.(New profiler) Addition of new profile draft
 Given I sign in as admin user
 When I send create profile draft request
 Then Request is successful
-And Created profile draft is correct
+And Profile draft is correct
 When I send delete profile draft request
 Then Request is successful
 
@@ -92,6 +92,18 @@ Scenario: (New profiler) Deleting of profile draft
 Given I sign in as admin user
 When I send create profile draft request
 Then Request is successful
-And Created profile draft is correct
+And Profile draft is correct
+When I send delete profile draft request
+Then Request is successful
+
+
+Scenario: (New profiler) Displaying of profile draft details
+Given I sign in as admin user
+When I send create profile draft request
+Then Request is successful
+And Profile draft is correct
+When I send get profile draft details request
+Then Request is successful
+And Profile draft is correct
 When I send delete profile draft request
 Then Request is successful
