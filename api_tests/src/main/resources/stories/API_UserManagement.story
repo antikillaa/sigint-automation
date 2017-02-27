@@ -27,7 +27,6 @@ And CreatedOrUpdated group is correct
 When I send update user group request
 Then Request is successful
 And CreatedOrUpdated group is correct
-
 When I send delete group request
 Then Request is successful
 

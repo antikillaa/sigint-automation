@@ -5,7 +5,8 @@ public class G4Properties {
     private static JiraProperties jiraProperties;
     private static MailProperties mailProperties;
     private static JenkinsProperties jenkinsProperties;
-    
+    private static MongoProperties mongoProperties;
+
     
     public static RunProperties getRunProperties() {
         if(runProperties==null) {
@@ -33,5 +34,12 @@ public class G4Properties {
             jenkinsProperties = new JenkinsProperties();
         }
         return  jenkinsProperties;
+    }
+
+    static MongoProperties getMongoProperties() {
+        if (mongoProperties == null) {
+            mongoProperties = new MongoProperties();
+        }
+        return mongoProperties;
     }
 }
