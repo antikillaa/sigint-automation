@@ -80,7 +80,7 @@ public class APITargetSteps extends APISteps {
 
     private boolean isEqualstargets(Target checkedTarget, Target etalonTarget) {
         return Verify.isTrue(Conditions.equals(checkedTarget.getName(), etalonTarget.getName())) &&
-                Verify.isTrue(Conditions.equals(checkedTarget.getKeywords(), etalonTarget.getKeywords())) &&
+                Verify.isTrue(Conditions.equals(checkedTarget.getGroups(), etalonTarget.getGroups())) &&
                 Verify.isTrue(Conditions.equals(checkedTarget.getPhones(), etalonTarget.getPhones()));
     }
 
