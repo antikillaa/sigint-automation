@@ -96,6 +96,15 @@ public class ReportCategoryService implements EntityService<ReportCategory> {
 
     @Override
     public OperationResult<ReportCategory> view(String id) {
-        throw new NotImplementedException();
+        ReportCategoriesRequest request = new ReportCategoriesRequest().view(id);
+        G4Response response = g4HttpClient.sendRequest(request);
+
+        ReportCategory reportCategory = JsonConverter.readEntityFromResponse(response, ReportCategory.class, "result");
+        OperationResult<ReportCategory> operationResult = new OperationResult<>(response, reportCategory);
+        if (operationResult.isSuccess()) {
+            Entities.getReportCategories().addOrUpdateEntity(reportCategory);
+        }
+
+        return operationResult;
     }
 }
