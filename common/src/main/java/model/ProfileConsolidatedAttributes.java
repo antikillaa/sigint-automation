@@ -11,74 +11,73 @@ import java.util.ArrayList;
 public class ProfileConsolidatedAttributes {
 
     @DataIgnore
-    private ArrayList<String> image = new ArrayList<>();
+    private ArrayList<ProfileAttribute> image = new ArrayList<>();
     @DataIgnore
-    private ArrayList<String> gender = new ArrayList<>();
+    private ArrayList<ProfileAttribute> gender = new ArrayList<>();
     @DataIgnore
-    private ArrayList<String> nationality = new ArrayList<>();
+    private ArrayList<ProfileAttribute> nationality = new ArrayList<>();
     @DataIgnore
-    private ArrayList<String> document = new ArrayList<>();
+    private ArrayList<ProfileAttribute> document = new ArrayList<>();
     @DataIgnore
-    private ArrayList<String> name = new ArrayList<>();
+    private ArrayList<ProfileAttribute> name = new ArrayList<>();
     @DataIgnore
-    private ArrayList<String> dateOfBirth = new ArrayList<>();
+    private ArrayList<ProfileAttribute> dateOfBirth = new ArrayList<>();
     @DataIgnore
-    private ArrayList<String> image_large = new ArrayList<>();
+    private ArrayList<ProfileAttribute> image_large = new ArrayList<>();
 
-    public ArrayList<String> getImage() {
+    public ArrayList<ProfileAttribute> getImage() {
         return image;
     }
 
-    public void setImage(ArrayList<String> image) {
+    public void setImage(ArrayList<ProfileAttribute> image) {
         this.image = image;
     }
 
-    public ArrayList<String> getGender() {
+    public ArrayList<ProfileAttribute> getGender() {
         return gender;
     }
 
-    public void setGender(ArrayList<String> gender) {
+    public void setGender(ArrayList<ProfileAttribute> gender) {
         this.gender = gender;
     }
 
-    public ArrayList<String> getNationality() {
+    public ArrayList<ProfileAttribute> getNationality() {
         return nationality;
     }
 
-    public void setNationality(ArrayList<String> nationality) {
+    public void setNationality(ArrayList<ProfileAttribute> nationality) {
         this.nationality = nationality;
     }
 
-    public ArrayList<String> getDocument() {
+    public ArrayList<ProfileAttribute> getDocument() {
         return document;
     }
 
-    public void setDocument(ArrayList<String> document) {
+    public void setDocument(ArrayList<ProfileAttribute> document) {
         this.document = document;
     }
 
-    public ArrayList<String> getName() {
+    public ArrayList<ProfileAttribute> getName() {
         return name;
     }
 
-    public void setName(ArrayList<String> name) {
+    public void setName(ArrayList<ProfileAttribute> name) {
         this.name = name;
     }
 
-    public ArrayList<String> getDateOfBirth() {
+    public ArrayList<ProfileAttribute> getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(ArrayList<String> dateOfBirth) {
+    public void setDateOfBirth(ArrayList<ProfileAttribute> dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public ArrayList<String> getImage_large() {
+    public ArrayList<ProfileAttribute> getImage_large() {
         return image_large;
     }
 
-    public void setImage_large(ArrayList<String> image_large) {
+    public void setImage_large(ArrayList<ProfileAttribute> image_large) {
         this.image_large = image_large;
     }
-
 }

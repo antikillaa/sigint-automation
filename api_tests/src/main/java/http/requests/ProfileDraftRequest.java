@@ -36,4 +36,12 @@ public class ProfileDraftRequest extends HttpRequest {
                 .setHttpMethod(HttpMethod.GET);
         return this;
     }
+
+    public ProfileDraftRequest publish(Profile profile) {
+        this
+                .setURI(URI + "/" + profile.getId() + "/publish")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(profile);
+        return this;
+    }
 }

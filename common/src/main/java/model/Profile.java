@@ -16,11 +16,13 @@ public class Profile extends AbstractEntity {
     private String name;
     private ProfileProperties properties;
     @DataIgnore
-    private ArrayList<String> entities = new ArrayList<>();
+    private ArrayList<ProfileEntity> entities = new ArrayList<>();
     @DataIgnore
-    private ArrayList<String> groups = new ArrayList<>();
+    private ArrayList<TargetGroup> groups = new ArrayList<>();
     @DataIgnore
     private Boolean target;
+    @DataIgnore
+    private String category;
     @DataIgnore
     private ProfileConsolidatedAttributes consolidatedAttributes;
     @DataIgnore
@@ -32,7 +34,7 @@ public class Profile extends AbstractEntity {
     @DataIgnore
     private String parent;
     @DataIgnore
-    private String mergingProfilesIDs;
+    private ArrayList<String> mergingProfilesIDs = new ArrayList<>();
 
 
     public ProfileType getType() {
@@ -41,14 +43,6 @@ public class Profile extends AbstractEntity {
 
     public void setType(ProfileType type) {
         this.type = type;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
     }
 
     public String getName() {
@@ -67,19 +61,19 @@ public class Profile extends AbstractEntity {
         this.properties = properties;
     }
 
-    public ArrayList<String> getEntities() {
+    public ArrayList<ProfileEntity> getEntities() {
         return entities;
     }
 
-    public void setEntities(ArrayList<String> entities) {
+    public void setEntities(ArrayList<ProfileEntity> entities) {
         this.entities = entities;
     }
 
-    public ArrayList<String> getGroups() {
+    public ArrayList<TargetGroup> getGroups() {
         return groups;
     }
 
-    public void setGroups(ArrayList<String> groups) {
+    public void setGroups(ArrayList<TargetGroup> groups) {
         this.groups = groups;
     }
 
@@ -97,6 +91,14 @@ public class Profile extends AbstractEntity {
 
     public void setConsolidatedAttributes(ProfileConsolidatedAttributes consolidatedAttributes) {
         this.consolidatedAttributes = consolidatedAttributes;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Date getActiveUntil() {
@@ -123,11 +125,19 @@ public class Profile extends AbstractEntity {
         this.parent = parent;
     }
 
-    public String getMergingProfilesIDs() {
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public ArrayList<String> getMergingProfilesIDs() {
         return mergingProfilesIDs;
     }
 
-    public void setMergingProfilesIDs(String mergingProfilesIDs) {
+    public void setMergingProfilesIDs(ArrayList<String> mergingProfilesIDs) {
         this.mergingProfilesIDs = mergingProfilesIDs;
     }
 }

@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 public class ProfileDraftService implements EntityService<Profile> {
 
     private static final ProfileDraftRequest request = new ProfileDraftRequest();
-    private static final Logger log = Logger.getLogger(TargetService.class);
+    private static final Logger log = Logger.getLogger(ProfileDraftService.class);
 
     @Override
     public OperationResult<Profile> add(Profile entity) {
@@ -63,6 +63,20 @@ public class ProfileDraftService implements EntityService<Profile> {
         OperationResult<Profile> operationResult = new OperationResult<>(response, profile);
         if (operationResult.isSuccess()) {
             Entities.getProfiles().addOrUpdateEntity(operationResult.getResult());
+        }
+        return operationResult;
+    }
+
+    public OperationResult<Profile> publish(Profile profile) {
+        log.info("Publishing profile id:" + profile.getId());
+        log.info(JsonConverter.toJsonString(profile));
+        G4Response response = g4HttpClient.sendRequest(request.publish(profile));
+
+        Profile publishedProfile = JsonConverter.readEntityFromResponse(response, Profile.class, "data");
+
+        OperationResult<Profile> operationResult = new OperationResult<>(response, publishedProfile);
+        if (operationResult.isSuccess()) {
+            Entities.getProfiles().addOrUpdateEntity(publishedProfile);
         }
         return operationResult;
     }
