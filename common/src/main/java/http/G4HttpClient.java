@@ -243,7 +243,7 @@ public class G4HttpClient {
                             "Request: %s. " +
                             "Payload: %s. " +
                             "Message: %s", response.getStatus(),
-                    request.getURI(), request.getPayload().toString(),
+                    request.getURI(), JsonConverter.toJsonString(request.getPayload()),
                     response.readEntity(String.class)));
         }
         return new G4Response(response.readEntity(String.class), response.getStatus());

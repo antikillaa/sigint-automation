@@ -1,8 +1,7 @@
 .idea
 build/
-log4j/log.out
+log4j
 *.iml
-*/target
 target
 .DS_Store
 /htmlEmail

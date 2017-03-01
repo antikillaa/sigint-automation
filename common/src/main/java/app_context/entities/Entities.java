@@ -3,13 +3,11 @@ package app_context.entities;
 import abs.EntityList;
 import http.JsonConverter;
 import model.*;
-import org.apache.log4j.Logger;
 
 import java.io.InputStream;
 
 public class Entities {
 
-    private static Logger logger = Logger.getLogger(Entities.class);
     private static RFIList RFIs;
     private static UsersList users;
     private static TargetGroupsList targetGroups;
@@ -23,6 +21,7 @@ public class Entities {
     private static SourceList sources;
     private static RecordCategoriesList recordCategories;
     private static ReportCategoriesList reportCategories;
+    private static ProfileList profiles;
 
 
     public static EntityList<Target> getTargets() {
@@ -123,4 +122,10 @@ public class Entities {
         return reportCategories;
     }
 
+    public static EntityList<Profile> getProfiles() {
+        if (profiles == null) {
+            profiles = new ProfileList();
+        }
+        return profiles;
+    }
 }
