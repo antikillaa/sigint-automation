@@ -100,6 +100,8 @@ Examples:
 
 
 Scenario: API.Changing password to user
+Meta:
+@stage
 Given I sign in as admin user
 
 When I send create a new user
