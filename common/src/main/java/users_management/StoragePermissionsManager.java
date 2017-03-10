@@ -22,6 +22,7 @@ class StoragePermissionsManager {
             permissions.add(doc.getString("_id"));
         }
         return permissions;
+
     }
 
 
