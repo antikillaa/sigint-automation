@@ -43,14 +43,14 @@ public class APILogin {
     }
 
     /**
-     * Sing out as user
+     * Sign out as user
      *
      * @return {@link OperationResult<RequestResult>}
      */
-    public OperationResult<RequestResult> singOut() {
+    public OperationResult<RequestResult> signOut() {
         log.info("Signing out");
 
-        OperationResult<RequestResult> operationResult = signService.singOut();
+        OperationResult<RequestResult> operationResult = signService.signOut();
         OperationsResults.setResult(operationResult);
 
         if(operationResult.isSuccess()) {

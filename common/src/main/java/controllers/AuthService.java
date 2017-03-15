@@ -17,7 +17,7 @@ class AuthService {
         return new OperationResult<>(response, Token.class);
     }
 
-    OperationResult<RequestResult> singOut(){
+    OperationResult<RequestResult> signOut(){
         G4Response response = g4HttpClient.sendRequest(request.singOut());
         OperationResult<RequestResult> operationResult = new OperationResult<>(response, RequestResult.class);
         if (operationResult.isSuccess()) {
