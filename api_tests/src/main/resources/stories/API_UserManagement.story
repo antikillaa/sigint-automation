@@ -88,7 +88,7 @@ Given I sign in as <role> user
 When I send get current user request
 Then Request is successful
 
-When I send sing out request
+When I send sign out request
 Then Request is successful
 
 When I send get current user request
@@ -106,24 +106,24 @@ Given I sign in as admin user
 
 When I send create a new user
 Then Request is successful
-When I send sing out request
+When I send sign out request
 Then Request is successful
 
 When I sign in as new created user
 Then Request is successful
-When I send sing out request
+When I send sign out request
 Then Request is successful
 
 Given I sign in as admin user
 
 When I send change user password request
 Then Request is successful
-When I send sing out request
+When I send sign out request
 Then Request is successful
 
 When I sign in as new created user
 Then Request is successful
-When I send sing out request
+When I send sign out request
 Then Request is successful
 
 
