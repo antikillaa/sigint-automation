@@ -13,7 +13,7 @@ public class ProfileProperties {
 
     private String description = "";
     @DataIgnore
-    private ProfileType type = ProfileType.Person;
+    private ProfileType type = ProfileType.Individual;
     @DataIgnore
     @JsonProperty("__creation_time")
     private Date creationTime;

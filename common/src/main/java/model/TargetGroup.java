@@ -14,6 +14,8 @@ import java.util.List;
 public class TargetGroup extends TeelaEntity {
 
     @DataIgnore
+    private ProfileJsonType jsonType = ProfileJsonType.TargetGroup;
+    @DataIgnore
     private String description;
     //@JsonSerialize(using= TargetGroupJsonSerializer.class)
     //@JsonDeserialize(using= TargetGroupDeserializer.class)
@@ -153,4 +155,11 @@ public class TargetGroup extends TeelaEntity {
         this.parent = parent;
     }
 
+    public ProfileJsonType getJsonType() {
+        return jsonType;
+    }
+
+    public void setJsonType(ProfileJsonType jsonType) {
+        this.jsonType = jsonType;
+    }
 }

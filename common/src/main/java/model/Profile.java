@@ -12,7 +12,9 @@ import java.util.Date;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Profile extends AbstractEntity {
 
-    private ProfileType type = ProfileType.Profile;
+    @DataIgnore
+    private ProfileJsonType jsonType = ProfileJsonType.Draft;
+    private ProfileType type = ProfileType.Individual;
     private String name;
     private ProfileProperties properties;
     @DataIgnore
@@ -22,7 +24,7 @@ public class Profile extends AbstractEntity {
     @DataIgnore
     private Boolean target;
     @DataIgnore
-    private String category;
+    private ProfileCategory category;
     @DataIgnore
     private ProfileConsolidatedAttributes consolidatedAttributes;
     @DataIgnore
@@ -125,11 +127,11 @@ public class Profile extends AbstractEntity {
         this.parent = parent;
     }
 
-    public String getCategory() {
+    public ProfileCategory getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(ProfileCategory category) {
         this.category = category;
     }
 
@@ -139,5 +141,13 @@ public class Profile extends AbstractEntity {
 
     public void setMergingProfilesIDs(ArrayList<String> mergingProfilesIDs) {
         this.mergingProfilesIDs = mergingProfilesIDs;
+    }
+
+    public ProfileJsonType getJsonType() {
+        return jsonType;
+    }
+
+    public void setJsonType(ProfileJsonType jsonType) {
+        this.jsonType = jsonType;
     }
 }
