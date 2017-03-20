@@ -12,8 +12,10 @@ import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import utils.CollectionUtils;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static conditions.Conditions.isTrue;
 
@@ -29,9 +31,23 @@ public class APILoginSteps extends APISteps {
         OperationsResults.setResult(operationResult);
         checkResultSuccess();
     }
-    
+
+    @Given("I sign in as user with permissions $permissions")
+    public void signInWithPermissions(String permString) {
+        String[] permissions = CollectionUtils.trimSpaces(permString.split(","));
+        User user = GlobalSteps.getUserWithPermissions(permissions);
+        OperationResult operationResult = signInCreds(user);
+        OperationsResults.setResult(operationResult);
+        checkResultSuccess();
+
+    }
+
     private OperationResult<Token> signInCreds(String role) {
         User user = GlobalSteps.getUserByRole(role);
+        return login.signInAsUser(user);
+    }
+    
+    private OperationResult<Token> signInCreds(User user) {
         return login.signInAsUser(user);
     }
     

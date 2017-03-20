@@ -7,23 +7,26 @@ import model.Role;
 import model.User;
 import services.GroupService;
 import services.RoleService;
+import services.UserService;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 public class UserSteps {
 
-    private static RoleService roleService = new RoleService();
     private static GroupService groupService = new GroupService();
     private static RandomEntities randomEntities = new RandomEntities();
+    private static UserService userService = new UserService();
 
     public static User createUserWithPermissions(String...permissions) {
-        Role role  = randomEntities.randomEntity(Role.class);
-        HashSet<String> permissionsSet = new HashSet<>(Arrays.asList(permissions));
-        role.setPermissions(permissionsSet);
-        OperationResult<Role> result =  roleService.add(role);
+
         Group group = randomEntities.randomEntity(Group.class);
-        group.setPermissions()
+        group.setPermissions(Arrays.asList(permissions));
+        OperationResult<Group> groupOperationResult = groupService.add(group);
+        User newUser = randomEntities.randomEntity(User.class);
+        List<String> ids = new ArrayList<>();
+        ids.add(groupOperationResult.getResult().getId());
+        newUser.setUserGroupIds(ids);
+        OperationResult<User> userOperationResult = userService.add(newUser);
+        return userOperationResult.getResult();
     }
 }

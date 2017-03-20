@@ -2,24 +2,29 @@ package users_management;
 
 import error_reporter.ErrorReporter;
 import model.User;
+import org.apache.log4j.Logger;
 import steps.GlobalSteps;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StorageUsersManager {
 
+    private static StorageUsersManager instance;
+    private static Map<String, List<User>> userMap = new HashMap<>();
+    private Logger log = Logger.getLogger(StorageUsersManager.class);
 
-    public StorageUsersManager() {
-        initializePermissions();
+    private StorageUsersManager(){initializePermissions();}
+
+
+    public static StorageUsersManager getManager(){
+        if (instance == null) {
+            instance = new StorageUsersManager();
+        }
+        return instance;
     }
 
-    private static Map<String, List<User>> userMap = new HashMap<>();
-
     private static void initializePermissions() {
-        List<String> existingPermissions = new StoragePermissionsManager().getPermissions();
+        List<String> existingPermissions = Permissions.getPermissions();
         if (existingPermissions.size() == 0) {
             ErrorReporter.raiseError("List of permissions wasn't loaded from mongo DB!");
         }
@@ -35,13 +40,18 @@ public class StorageUsersManager {
             } else {
                 users.retainAll(userMap.get(permission));
                 if (users.size() == 0) {
-                    User user = GlobalSteps.createUserWithPermissions(permissions);
-                    users.add(user);
+                    System.out.println("User with permissions: " + permissions + "not found!");
                     return users;
                 }
-
             }
         }
+       log.trace("With permissions: " + permissions.toString() + " users found: " + users.size());
        return users;
+    }
+
+    public void addUser(User user, String... permissions) {
+        for (String permission: permissions) {
+            userMap.get(permission).add(user);
+        }
     }
 }
