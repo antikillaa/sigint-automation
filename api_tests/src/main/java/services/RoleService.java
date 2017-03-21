@@ -36,7 +36,7 @@ public class RoleService implements EntityService<Role> {
 
         OperationResult<Role> roleOperationResult = new OperationResult<>(response, Role.class);
         if (roleOperationResult.isSuccess()) {
-            Entities.getRoles().addOrUpdateEntity(roleOperationResult.getResult());
+            Entities.getRoles().addOrUpdateEntity(roleOperationResult.getEntity());
         }
         return roleOperationResult;
     }
@@ -68,7 +68,7 @@ public class RoleService implements EntityService<Role> {
     public OperationResult<EntityList<Role>> list() {
         G4Response response = g4HttpClient.sendRequest(request.list());
 
-        List<Role> roles = JsonConverter.readEntitiesFromResponse(response, Role[].class);
+        List<Role> roles = JsonConverter.jsonToObjectsList(response.getMessage(), Role[].class);
         return new OperationResult<>(response, new EntityList<>(roles));
     }
 
@@ -81,7 +81,7 @@ public class RoleService implements EntityService<Role> {
 
         OperationResult<Role> operationResult = new OperationResult<>(response, Role.class);
         if (operationResult.isSuccess()) {
-            Entities.getRoles().addOrUpdateEntity(operationResult.getResult());
+            Entities.getRoles().addOrUpdateEntity(operationResult.getEntity());
         } else {
             log.error("Error! Update role was failed");
         }

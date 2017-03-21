@@ -33,7 +33,7 @@ public class APIReportSteps extends APISteps {
         Report report = context.get("report", Report.class);
         OperationResult<Report> operationResult = reportService.add(report);
         OperationsResults.setResult(operationResult);
-        context.put("requestReport", operationResult.getResult());
+        context.put("requestReport", operationResult.getEntity());
     }
 
     @When("Generate new report with logged user as owner")
@@ -46,7 +46,7 @@ public class APIReportSteps extends APISteps {
     @When("Add categories to report")
     public void addCategoriesToReport() {
         OperationResult<EntityList<ReportCategory>> operationResult = reportCategoryService.list();
-        EntityList<ReportCategory> categories = operationResult.getResult();
+        EntityList<ReportCategory> categories = operationResult.getEntity();
         for (ReportCategory reportCategory : categories) {
             reportCategory.setCurrentValue("--");
         }

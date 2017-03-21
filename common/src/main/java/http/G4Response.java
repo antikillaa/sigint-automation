@@ -5,16 +5,16 @@ public class G4Response {
     private String jsonResponseString;
     private int code;
     
-    G4Response(String jsonResponseString, int code) {
+    public G4Response(String jsonResponseString, int code) {
         this.jsonResponseString = jsonResponseString;
         this.code = code;
     }
     
-    int getCode() {
+    public int getCode() {
         return code;
     }
-    
-    String getMessage() {
+
+    public String getMessage() {
         return jsonResponseString;
     }
 }

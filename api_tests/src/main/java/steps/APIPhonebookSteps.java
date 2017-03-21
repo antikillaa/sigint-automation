@@ -33,7 +33,7 @@ public class APIPhonebookSteps extends APISteps {
 
         OperationResult<Phonebook> operationResult = service.add(phonebook);
         OperationsResults.setResult(operationResult);
-        context.put("phonebook", operationResult.getResult());
+        context.put("phonebook", operationResult.getEntity());
     }
 
     @When("I send update request for created Phonebook Entry")
@@ -43,7 +43,7 @@ public class APIPhonebookSteps extends APISteps {
         newPhonebook.setId(phonebook.getId());
         OperationResult<Phonebook> operationResult = service.update(newPhonebook);
         OperationsResults.setResult(operationResult);
-        context.put("phonebook", operationResult.getResult());
+        context.put("phonebook", operationResult.getEntity());
     }
 
     @Then("Phonebook Entry is correct")
@@ -74,7 +74,7 @@ public class APIPhonebookSteps extends APISteps {
         String id = context.get("id", String.class);
         OperationResult<Phonebook> operationResult = service.view(id);
         try {
-            operationResult.getResult();
+            operationResult.getEntity();
         } catch (OperationResultError ex) {
             log.debug("Entry cannot be found in response. Delete was successfully");
             return;
@@ -86,7 +86,7 @@ public class APIPhonebookSteps extends APISteps {
     public void getPhonebookEntry() {
         Phonebook entity = Entities.getPhonebooks().getLatest();
         OperationResult<Phonebook> operationResult = service.view(entity.getId());
-        context.put("phonebook", operationResult.getResult());
+        context.put("phonebook", operationResult.getEntity());
     }
 
     @When("I search Phonebook Entry by $criteria and value $value")
@@ -117,7 +117,7 @@ public class APIPhonebookSteps extends APISteps {
         OperationResult<EntityList<Phonebook>> operationResult = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
-        context.put("searchResult", operationResult.getResult());
+        context.put("searchResult", operationResult.getEntity());
     }
 
     @Then("Search Phonebook results are correct")
@@ -165,8 +165,8 @@ public class APIPhonebookSteps extends APISteps {
         int numPonebooks = Integer.valueOf(count);
         List<Phonebook> phonebooks = getRandomPhoneBooks(numPonebooks);
         OperationResult<UploadResult> operationResult = service.upload(phonebooks);
-        if (operationResult.getResult() != null) {
-            context.put("uploadResult", operationResult.getResult());
+        if (operationResult.getEntity() != null) {
+            context.put("uploadResult", operationResult.getEntity());
         }
         OperationsResults.setResult(operationResult);
         context.put("uploadedPhonebooks", phonebooks);

@@ -2,11 +2,9 @@ package services;
 
 import abs.EntityList;
 import abs.SearchFilter;
-import abs.SearchResult;
 import app_context.entities.Entities;
 import file_generator.FileGenerator;
 import http.G4Response;
-import http.JsonConverter;
 import http.OperationResult;
 import http.requests.phonebook.DuSubscriberRequest;
 import model.DuSubscriberEntry;
@@ -21,7 +19,8 @@ import java.util.List;
 
 public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
 
-    private Logger log = Logger.getLogger(DuSubscriberService.class);
+    private static Logger log = Logger.getLogger(DuSubscriberService.class);
+    private static DuSubscriberRequest request = new DuSubscriberRequest();
 
     /**
      * ADD new Du Subscriber entry.
@@ -35,7 +34,8 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
         log.info("Add duSubscriber Entry..");
         List<DuSubscriberEntry> entries = new ArrayList<>();
         entries.add(entity);
-        OperationResult<UploadResult> operationResult =  upload(entries);
+
+        OperationResult<UploadResult> operationResult = upload(entries);
         if (operationResult.isSuccess()) {
             Entities.getDuSubscriberses().addOrUpdateEntity(entity);
         }
@@ -50,14 +50,13 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
      * @return HTTP status code
      */
     private OperationResult<UploadResult> upload(List<DuSubscriberEntry> entries) {
-        log.debug("Writing DuSubscriberEntry to csv file..");
+        log.info("Writing DuSubscriberEntry to csv file..");
         G4File file = new FileGenerator(DuSubscriberEntry.class).write(entries);
 
         log.info("Upload file: " + file.getName() + " with " + entries.size() + " duSubscriber entries..");
-        DuSubscriberRequest request = new DuSubscriberRequest().upload(file);
-        G4Response response = g4HttpClient.sendRequest(request);
-        UploadResult uploadResult = JsonConverter.readEntityFromResponse(response, UploadResult.class, "result");
-        return new OperationResult<>(response, uploadResult);
+        G4Response response = g4HttpClient.sendRequest(request.upload(file));
+
+        return new OperationResult<>(response, UploadResult.class, "result");
     }
 
     @Override
@@ -75,17 +74,17 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
     @Override
     public OperationResult<EntityList<DuSubscriberEntry>> list(SearchFilter filter) {
         log.info("Getting list of duSubscriber entries..");
-        DuSubscriberRequest request = new DuSubscriberRequest().search(filter);
-        G4Response response = g4HttpClient.sendRequest(request);
-        SearchResult<DuSubscriberEntry> searchResults =
-                JsonConverter.readEntityFromResponse(response, DuSubscriberSearchResult.class, "result");
-        EntityList<DuSubscriberEntry> duSubscriberEntries;
-        if (searchResults != null) {
-            duSubscriberEntries = new EntityList<>(searchResults.getContent());
+        G4Response response = g4HttpClient.sendRequest(request.search(filter));
+
+        OperationResult<DuSubscriberSearchResult> operationResult =
+                new OperationResult<>(response, DuSubscriberSearchResult.class, "result");
+
+        if (operationResult.isSuccess() && operationResult.getEntity() != null) {
+            EntityList<DuSubscriberEntry> duSubscriberEntries = new EntityList<>(operationResult.getEntity().getContent());
+            return new OperationResult<>(response, duSubscriberEntries);
         } else {
             throw new RuntimeException("Unable to read search results from duSubscriber search");
         }
-        return new OperationResult<>(response, duSubscriberEntries);
     }
 
     @Override
@@ -103,11 +102,9 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
     @Override
     public OperationResult<DuSubscriberEntry> view(String id) {
         log.info("Getting derails of duSubscriber Entry by id: " + id);
-        DuSubscriberRequest request = new DuSubscriberRequest().get(id);
-        G4Response response = g4HttpClient.sendRequest(request);
-        DuSubscriberEntry duEntry =  JsonConverter.readEntityFromResponse(
-                response, DuSubscriberEntry.class, "result");
-        return new OperationResult<>(response, duEntry);
+        G4Response response = g4HttpClient.sendRequest(request.get(id));
+
+        return new OperationResult<>(response, DuSubscriberEntry.class, "result");
     }
 
 }

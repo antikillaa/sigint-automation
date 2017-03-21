@@ -18,39 +18,6 @@ public class JsonConverter {
     private static Logger log = Logger.getRootLogger();
     public static ObjectMapper mapper = new ObjectMapper();
 
-    public static <T> T readEntityFromResponse(G4Response response, Class<T> entityClass, String id) {
-        String message = response.getMessage();
-        log.debug("Response: " + message);
-        T entity;
-        MapType mapType = JsonConverter.constructMapTypeToValue(entityClass);
-        try {
-            HashMap<String, T> map = mapper.readValue(message, mapType);
-            entity = map.get(id);
-            return entity;
-        } catch (IOException | NullPointerException e) {
-            String error = "Unable to parse entity from response: " + message + ", status: " + response.getCode();
-            log.error(error);
-            log.error(e.getMessage(), e);
-            throw new Error(error);
-        }
-    }
-    
-    public static <T> List<T> readEntitiesFromResponse(G4Response response, Class<T[]> userClass) {
-        String jsonString = response.getMessage();
-        return fromJsonToObjectsList(jsonString, userClass);
-    }
-
-    public static <T> List<T> readEntitiesFromResponse(G4Response response, Class<T[]> userClass, String wrapperField) {
-        String jsonString = response.getMessage();
-        return fromJsonToObjectsList(jsonString, userClass, wrapperField);
-    }
-
-    public static <T> T readEntityFromResponse(G4Response response, Class<T> entityClass) {
-        String message = response.getMessage();
-        log.debug("Response: " + message);
-        return fromJsonToObject(message, entityClass);
-    }
-
     public static Map<String, String> loadJsonToStringMap(String filename) {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
 
@@ -91,7 +58,7 @@ public class JsonConverter {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T fromJsonToObject(String jsonString, Class<T> userClass) {
+    public static <T> T jsonToObject(String jsonString, Class<T> userClass) {
         log.debug("Converting json string: " + jsonString + " to user class: " + userClass);
         try {
             return userClass == String.class ? (T) jsonString : mapper.readValue(jsonString, userClass);
@@ -103,7 +70,23 @@ public class JsonConverter {
         }
     }
 
-    private static <T> List<T> fromJsonToObjectsList(String jsonString, Class<T[]> userClass) {
+    public static <T> T jsonToObject(String jsonString, Class<T> entityClass, String id) {
+        log.debug("Converting json string: " + jsonString + " to user class: " + entityClass);
+        T entity;
+        MapType mapType = JsonConverter.constructMapTypeToValue(entityClass);
+        try {
+            HashMap<String, T> map = mapper.readValue(jsonString, mapType);
+            entity = map.get(id);
+            return entity;
+        } catch (IOException | NullPointerException e) {
+            String error = "Error when converting json string:" + jsonString + " to object:" + entityClass;
+            log.error(error);
+            log.error(e.getMessage(), e);
+            throw new Error(error);
+        }
+    }
+
+    public static <T> List<T> jsonToObjectsList(String jsonString, Class<T[]> userClass) {
         log.debug("Converting json: " + jsonString + " to object list: " + userClass);
         try {
             return Arrays.asList(mapper.readValue(jsonString, userClass));
@@ -115,7 +98,7 @@ public class JsonConverter {
         }
     }
 
-    public static <T extends EntityList> T fromJsonToObjectsList(InputStream stream, Class<T> userClass) {
+    public static <T extends EntityList> T jsonToObjectsList(InputStream stream, Class<T> userClass) {
         log.debug("Converting from Input stream to user:" + userClass);
         try {
             return mapper.readValue(stream, userClass);
@@ -127,7 +110,7 @@ public class JsonConverter {
         }
     }
 
-    private static <T> List<T> fromJsonToObjectsList(String jsonString, Class<T[]> userClass, String wrapperField) {
+    public static <T> List<T> jsonToObjectsList(String jsonString, Class<T[]> userClass, String wrapperField) {
         log.debug("Converting json: " + jsonString + " to object list: " + userClass);
         MapType mapType = JsonConverter.constructMapTypeToValue(userClass);
 

@@ -37,7 +37,7 @@ public class JiraConnector {
         JiraSessionRequest request = new JiraSessionRequest();
         G4Response response = client.sendRequest(request);
 
-        SessionInfo sessionInfo = JsonConverter.readEntityFromResponse(response, SessionInfo.class);
+        SessionInfo sessionInfo = JsonConverter.jsonToObject(response.getMessage(), SessionInfo.class);
         log.debug("Jira session created");
 
         Session session = null;
@@ -64,7 +64,7 @@ public class JiraConnector {
         HttpRequest request = new HttpRequest(URL);
         G4Response response = client.sendRequest(request);
 
-        List<JiraProject> projects = JsonConverter.readEntitiesFromResponse(response, JiraProject[].class);
+        List<JiraProject> projects = JsonConverter.jsonToObjectsList(response.getMessage(), JiraProject[].class);
         for (JiraProject project : projects) {
             if (project.getName().equals(name)) {
                 return project.getId();
@@ -88,7 +88,7 @@ public class JiraConnector {
         HttpRequest request = new HttpRequest(URL);
         G4Response response = client.sendRequest(request);
 
-        List<ProjectVersion> versions = JsonConverter.readEntitiesFromResponse(response, ProjectVersion[].class);
+        List<ProjectVersion> versions = JsonConverter.jsonToObjectsList(response.getMessage(), ProjectVersion[].class);
 
         for (ProjectVersion version : versions) {
             if (version.getName().equals(versionName)) {
@@ -110,7 +110,7 @@ public class JiraConnector {
 
         HttpRequest request = new HttpRequest(url);
         G4Response response = client.sendRequest(request);
-        return JsonConverter.readEntityFromResponse(response, Issue.class);
+        return JsonConverter.jsonToObject(response.getMessage(), Issue.class);
     }
 
 }

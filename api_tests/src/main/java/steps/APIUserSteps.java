@@ -70,7 +70,7 @@ public class APIUserSteps extends APISteps {
     @When("I send get list of users")
     public void getListOfUsers() {
         OperationResult<EntityList<User>> operationResult = service.list();
-        context.put("userEntityList", operationResult.getResult());
+        context.put("userEntityList", operationResult.getEntity());
     }
 
     @Then("Users list size more than $count")
@@ -87,7 +87,7 @@ public class APIUserSteps extends APISteps {
         for (User user : userEntityList.getEntities()) {
             if (user.getRoles().isEmpty() && user.getUserGroupIds().isEmpty()) {
                 OperationResult<RequestResult> operationResult = service.remove(user);
-                Assert.assertEquals("success", operationResult.getResult().getMessage());
+                Assert.assertEquals("success", operationResult.getEntity().getMessage());
             }
         }
     }

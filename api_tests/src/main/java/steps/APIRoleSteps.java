@@ -52,7 +52,7 @@ public class APIRoleSteps extends APISteps {
     @When("I send get list of Roles request")
     public void viewSource() {
         OperationResult<EntityList<Role>> operationResult = service.list();
-        context.put("roles", operationResult.getResult());
+        context.put("roles", operationResult.getEntity());
     }
 
     @Then("Role is deleted")

@@ -35,7 +35,7 @@ public class GroupService implements EntityService<Group> {
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
         OperationResult<Group> operationResult = new OperationResult<>(response, Group.class);
         if (operationResult.isSuccess()) {
-            Entities.getGroups().addOrUpdateEntity(operationResult.getResult());
+            Entities.getGroups().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
     }
@@ -61,7 +61,7 @@ public class GroupService implements EntityService<Group> {
     public OperationResult<EntityList<Group>> list() {
         G4Response response = g4HttpClient.sendRequest(request.list());
 
-        List<Group> groups = JsonConverter.readEntitiesFromResponse(response, Group[].class);
+        List<Group> groups = JsonConverter.jsonToObjectsList(response.getMessage(), Group[].class);
         return new OperationResult<>(response, new EntityList<>(groups));
     }
 

@@ -13,8 +13,10 @@ import java.util.List;
 public class UploadFilesService {
 
     private static G4HttpClient g4HttpClient = new G4HttpClient();
-    private Logger log = Logger.getLogger(UploadFilesService.class);
-    
+    private static Logger log = Logger.getLogger(UploadFilesService.class);
+    private static UploadFilesRequest uploadFilesRequest = new UploadFilesRequest();
+    private static UploadRequest uploadRequest = new UploadRequest();
+
     /**
      * Multipart UPLOAD file
      * API: POST /api/upload/files
@@ -24,25 +26,20 @@ public class UploadFilesService {
      */
     public OperationResult<FileMeta> upload(G4File file, Source source, String ownerId) {
         log.info("Upload file" + file.getAbsolutePath() + " with 'meta' string..");
-        UploadFilesRequest uploadRequest = new UploadFilesRequest().upload(file, source, ownerId);
-        G4Response uploadResponse = g4HttpClient.sendRequest(uploadRequest);
+        G4Response uploadResponse = g4HttpClient.sendRequest(uploadFilesRequest.upload(file, source, ownerId));
+
         OperationResult<FileMeta> uploadResult = new OperationResult<>(uploadResponse, FileMeta.class);
-        
         if (!uploadResult.isSuccess()) {
             OperationsResults.throwError(uploadResult);
         }
-        G4Response notifyResponse = sendNotify(uploadResult.getResult());
-        return new OperationResult<>(notifyResponse, uploadResult.getResult());
-        
+
+        G4Response notifyResponse = sendNotify(uploadResult.getEntity());
+        return new OperationResult<>(notifyResponse, uploadResult.getEntity());
     }
-    
-    
+
     private G4Response sendNotify(FileMeta fileMeta) {
-        UploadFilesRequest notifyRequest = new UploadFilesRequest().notify(fileMeta);
-        G4Response notifyResponse = g4HttpClient.sendRequest(notifyRequest);
-        return notifyResponse;
+        return g4HttpClient.sendRequest(uploadFilesRequest.notify(fileMeta));
     }
-    
 
     /**
      * GET meta of uploaded file
@@ -53,10 +50,9 @@ public class UploadFilesService {
      */
     public OperationResult<FileMeta> meta(String id) {
         log.info("Get Meta of uploaded file id:" + id);
-        UploadFilesRequest request = new UploadFilesRequest().meta(id);
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(uploadFilesRequest.meta(id));
+
         return new OperationResult<>(response, FileMeta.class);
-        
     }
 
     /**
@@ -68,10 +64,9 @@ public class UploadFilesService {
      */
     public OperationResult<UploadDetails> details(String id) {
         log.info("Get UploadDetails of uploaded file id:" + id);
-        UploadRequest request = new UploadRequest().details(id);
-        G4Response response = g4HttpClient.sendRequest(request);
-        UploadDetails details = JsonConverter.readEntityFromResponse(response, UploadDetails.class);
-        return new OperationResult<>(response, details);
+        G4Response response = g4HttpClient.sendRequest(uploadRequest.details(id));
+
+        return new OperationResult<>(response, UploadDetails.class);
     }
 
     /**
@@ -82,14 +77,13 @@ public class UploadFilesService {
      */
     public List<Process> search(SearchFilter filter) {
         log.info("Get Ingestion History list..");
-        UploadRequest request = new UploadRequest().search(filter);
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(uploadRequest.search(filter));
 
-        UploadSearchResult searchResults = JsonConverter.readEntityFromResponse(response, UploadSearchResult.class);
-        if (searchResults == null) {
-            throw new AssertionError("Unable to read search results from Upload search");
+        OperationResult<UploadSearchResult> operationResult = new OperationResult<>(response, UploadSearchResult.class);
+        if (operationResult.isSuccess() && operationResult.getEntity() != null) {
+            return operationResult.getEntity().getContent();
         } else {
-            return searchResults.getContent();
+            throw new AssertionError("Unable to read search results from Upload search");
         }
     }
 

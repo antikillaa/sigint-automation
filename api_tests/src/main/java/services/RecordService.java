@@ -15,7 +15,8 @@ import utils.Parser;
 
 public class RecordService implements EntityService<Record> {
 
-    private static Logger LOGGER = Logger.getLogger(RecordService.class);
+    private static Logger log = Logger.getLogger(RecordService.class);
+    private static RecordRequest request = new RecordRequest();
 
     /**
      * ADD new manual record
@@ -26,16 +27,15 @@ public class RecordService implements EntityService<Record> {
      */
     @Override
     public OperationResult<Record> add(Record entity) {
-        LOGGER.info("Creating new record");
-        LOGGER.debug(Parser.entityToString(entity));
+        log.info("Creating new record");
+        log.debug(Parser.entityToString(entity));
+        G4Response response = g4HttpClient.sendRequest(request.manual(entity));
 
-        RecordRequest request = new RecordRequest().manual(entity);
-        G4Response response = g4HttpClient.sendRequest(request);
-
-        Record record = JsonConverter.readEntityFromResponse(response, Record.class, "result");
-        Entities.getRecords().addOrUpdateEntity(record);
-
-        return new OperationResult<>(response, record);
+        OperationResult<Record> operationResult = new OperationResult<>(response, Record.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRecords().addOrUpdateEntity(operationResult.getEntity());
+        }
+        return operationResult;
     }
 
     @Override
@@ -52,16 +52,17 @@ public class RecordService implements EntityService<Record> {
      */
     @Override
     public OperationResult<EntityList<Record>> list(SearchFilter filter) {
-        LOGGER.info("Search records by filter:" + JsonConverter.toJsonString(filter));
+        log.info("Search records by filter:" + JsonConverter.toJsonString(filter));
+        G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
-        RecordRequest request = new RecordRequest().search(filter);
-        G4Response response = g4HttpClient.sendRequest(request);
-
-        RecordSearchResult searchResults = JsonConverter.readEntityFromResponse(response, RecordSearchResult.class);
-        EntityList<Record> records = searchResults.getResult();
-
-        LOGGER.info("Founded " + records.size() + " records");
-        return new OperationResult<>(response, records);
+        OperationResult<RecordSearchResult> operationResult = new OperationResult<>(response, RecordSearchResult.class);
+        if (operationResult.isSuccess()) {
+            EntityList<Record> records = operationResult.getEntity().getResult();
+            log.info("Founded " + records.size() + " records");
+            return new OperationResult<>(response, records);
+        } else {
+            throw new RuntimeException("Unable to read list of record from record search response");
+        }
     }
 
     @Override

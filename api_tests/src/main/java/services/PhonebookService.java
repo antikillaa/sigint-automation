@@ -5,7 +5,6 @@ import abs.SearchFilter;
 import app_context.entities.Entities;
 import file_generator.FileGenerator;
 import http.G4Response;
-import http.JsonConverter;
 import http.OperationResult;
 import http.requests.phonebook.PhonebookRequest;
 import http.requests.phonebook.UnifiedPhonebookSearchRequest;
@@ -20,7 +19,8 @@ import java.util.List;
 
 public class PhonebookService implements EntityService<Phonebook> {
 
-    private Logger log = Logger.getLogger(PhonebookService.class);
+    private static Logger log = Logger.getLogger(PhonebookService.class);
+    private static PhonebookRequest request = new PhonebookRequest();
 
     /*
         TODO
@@ -47,14 +47,13 @@ public class PhonebookService implements EntityService<Phonebook> {
     public OperationResult<Phonebook> add(Phonebook entity) {
         log.info("Creating new Phonebook entry");
         log.debug(Parser.entityToString(entity));
+        G4Response response = g4HttpClient.sendRequest(request.add(entity));
 
-        PhonebookRequest request = new PhonebookRequest().add(entity);
-        G4Response response = g4HttpClient.sendRequest(request);
-        Phonebook createdPhonebook = JsonConverter.readEntityFromResponse(response, Phonebook.class, "result");
-        if (createdPhonebook != null) {
-            Entities.getPhonebooks().addOrUpdateEntity(createdPhonebook);
+        OperationResult<Phonebook> operationResult = new OperationResult<>(response, Phonebook.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getPhonebooks().addOrUpdateEntity(operationResult.getEntity());
         }
-        return new OperationResult<>(response, createdPhonebook);
+        return operationResult;
     }
 
     /**
@@ -66,8 +65,8 @@ public class PhonebookService implements EntityService<Phonebook> {
     @Override
     public OperationResult remove(Phonebook entity) {
         log.info("Delete Phonebook entry id:" + entity.getId());
-        PhonebookRequest request = new PhonebookRequest().delete(entity.getId());
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.delete(entity.getId()));
+
         OperationResult operationResult = new OperationResult(response);
         if (operationResult.isSuccess()) {
             Entities.getPhonebooks().removeEntity(entity);
@@ -87,15 +86,15 @@ public class PhonebookService implements EntityService<Phonebook> {
         UnifiedPhonebookSearchRequest request = new UnifiedPhonebookSearchRequest(filter);
         G4Response response = g4HttpClient.sendRequest(request);
 
-        PhonebookSearchResults searchResults = JsonConverter.readEntityFromResponse(
-                response, PhonebookSearchResults.class, "result");
-        EntityList<Phonebook> phonebooks;
-        if (searchResults != null) {
-            phonebooks = new EntityList<>(searchResults.getContent());
+        OperationResult<PhonebookSearchResults> operationResult =
+                new OperationResult<>(response, PhonebookSearchResults.class, "result");
+
+        if (operationResult.isSuccess() && operationResult.getEntity() != null) {
+            EntityList<Phonebook> phonebooks = new EntityList<>(operationResult.getEntity().getContent());
+            return new OperationResult<>(response, phonebooks);
         } else {
             throw new RuntimeException("Unable to read search results from Phonebook search");
         }
-        return new OperationResult<>(response, phonebooks);
     }
 
     /**
@@ -107,14 +106,13 @@ public class PhonebookService implements EntityService<Phonebook> {
     @Override
     public OperationResult<Phonebook> update(Phonebook entity) {
         log.info("Updating Phonebook entry id:" + entity.getId());
-        PhonebookRequest request = new PhonebookRequest().update(entity);
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.update(entity));
 
-        Phonebook createdPhonebook = JsonConverter.readEntityFromResponse(response, Phonebook.class, "result");
-        if (createdPhonebook != null) {
-            Entities.getPhonebooks().addOrUpdateEntity(createdPhonebook);
+        OperationResult<Phonebook> operationResult = new OperationResult<>(response, Phonebook.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getPhonebooks().addOrUpdateEntity(operationResult.getEntity());
         }
-        return new OperationResult<>(response, createdPhonebook);
+        return operationResult;
     }
 
     /**
@@ -126,12 +124,9 @@ public class PhonebookService implements EntityService<Phonebook> {
     @Override
     public OperationResult<Phonebook> view(String id) {
         log.info("View Phonebook entry id:" + id);
+        G4Response response = g4HttpClient.sendRequest(request.get(id));
 
-        PhonebookRequest request = new PhonebookRequest().get(id);
-        G4Response response = g4HttpClient.sendRequest(request);
-
-        Phonebook phonebook= JsonConverter.readEntityFromResponse(response, Phonebook.class, "result");
-        return new OperationResult<>(response, phonebook);
+        return new OperationResult<>(response, Phonebook.class, "result");
     }
 
     /**
@@ -143,11 +138,11 @@ public class PhonebookService implements EntityService<Phonebook> {
     public OperationResult<UploadResult> upload(List<Phonebook> phonebooks) {
         log.info("Writing Phonebook entries to file..");
         G4File file = new FileGenerator(Phonebook.class).write(phonebooks);
+
         log.info("Upload file with " + phonebooks.size() + " Phonebook entries..");
-        PhonebookRequest request = new PhonebookRequest().upload(file);
-        G4Response response = g4HttpClient.sendRequest(request);
-        UploadResult uploadResult = JsonConverter.readEntityFromResponse(response, UploadResult.class, "result");
-        return new OperationResult<>(response,uploadResult);
+        G4Response response = g4HttpClient.sendRequest(request.upload(file));
+
+        return new OperationResult<>(response, UploadResult.class, "result");
     }
 
 }
