@@ -2,6 +2,6 @@ package model;
 
 public enum ProfileType {
 
-    Individual
+    Profile, Individual
 
 }
