@@ -40,7 +40,7 @@ public class StorageUsersManager {
             } else {
                 users.retainAll(userMap.get(permission));
                 if (users.size() == 0) {
-                    System.out.println("User with permissions: " + permissions + "not found!");
+                    log.debug("User with permissions: " + permissions + "not found!");
                     return users;
                 }
             }
