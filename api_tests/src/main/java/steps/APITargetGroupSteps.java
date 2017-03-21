@@ -74,7 +74,7 @@ public class APITargetGroupSteps extends APISteps {
     public void getTargetGroupRequest() {
         TargetGroup createdTargetGroup = Entities.getTargetGroups().getLatest();
         OperationResult<TargetGroup> operationResult = service.view(createdTargetGroup.getId());
-        context.put("viewedTargetGroup", operationResult.getResult());
+        context.put("viewedTargetGroup", operationResult.getEntity());
     }
 
     @Then("Viewed target group is correct")
@@ -89,7 +89,7 @@ public class APITargetGroupSteps extends APISteps {
         OperationResult<EntityList<TargetGroup>> operationResult = service.listG4Compatibility();
         OperationsResults.setResult(operationResult);
 
-        context.put("targetGroupEntityList", operationResult.getResult());
+        context.put("targetGroupEntityList", operationResult.getEntity());
     }
 
     @Then("Created target group $criteria list")
@@ -150,7 +150,7 @@ public class APITargetGroupSteps extends APISteps {
         TargetGroup updatedTargetGroup = updateTargetGroup(createdTargetGroup);
         OperationResult<TargetGroup> operationResult = service.update(updatedTargetGroup);
         OperationsResults.setResult(operationResult);
-        context.put("updatedTargetGroup", operationResult.getResult());
+        context.put("updatedTargetGroup", operationResult.getEntity());
     }
 
     @Then("Target group updated correctly")
@@ -212,7 +212,7 @@ public class APITargetGroupSteps extends APISteps {
         OperationResult<EntityList<TargetGroup>> operationResult = service.searchG4Compatibility(searchFilter);
 
         context.put("searchFilter", searchFilter);
-        context.put("searchResult", operationResult.getResult());
+        context.put("searchResult", operationResult.getEntity());
     }
 
     @Then("targetGroups search result are correct")

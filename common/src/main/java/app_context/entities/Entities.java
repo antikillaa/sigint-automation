@@ -14,6 +14,7 @@ public class Entities {
     private static TargetsList targets;
     private static PhonebookList phonebooks;
     private static DuSubscriberList duSubscriberses;
+    private static EtisalatSubscriberList etisalatSubscribers;
     private static RoleList roles;
     private static GroupList groups;
     private static RecordList records;
@@ -41,7 +42,7 @@ public class Entities {
     private static UsersList initDefaultUsers() {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         InputStream users_input = classloader.getResourceAsStream("default_users.json");
-        return JsonConverter.fromJsonToObjectsList(users_input, UsersList.class);
+        return JsonConverter.jsonToObjectsList(users_input, UsersList.class);
     }
 
     public static EntityList<User> getUsers() {
@@ -127,5 +128,12 @@ public class Entities {
             profiles = new ProfileList();
         }
         return profiles;
+    }
+
+    public static EtisalatSubscriberList getEtisalatSubscribers() {
+        if (etisalatSubscribers == null) {
+            etisalatSubscribers = new EtisalatSubscriberList();
+        }
+        return etisalatSubscribers;
     }
 }

@@ -21,11 +21,9 @@ public class ProfileDraftService implements EntityService<Profile> {
         log.info("Creating new ProfileDraft: " + JsonConverter.toJsonString(entity));
         G4Response response = g4HttpClient.sendRequest(request.create(entity));
 
-        Profile profile = JsonConverter.readEntityFromResponse(response, Profile.class, "data");
-
-        OperationResult<Profile> operationResult = new OperationResult<>(response, profile);
+        OperationResult<Profile> operationResult = new OperationResult<>(response, Profile.class, "data");
         if (operationResult.isSuccess()) {
-            Entities.getProfiles().addOrUpdateEntity(operationResult.getResult());
+            Entities.getProfiles().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
     }
@@ -33,7 +31,6 @@ public class ProfileDraftService implements EntityService<Profile> {
     @Override
     public OperationResult remove(Profile entity) {
         log.info("Deleting profile id:" + entity.getId() + " name:" + entity.getName());
-
         G4Response response = g4HttpClient.sendRequest(request.delete(entity.getId()));
 
         OperationResult operationResult = new OperationResult(response);
@@ -58,11 +55,9 @@ public class ProfileDraftService implements EntityService<Profile> {
         log.info("Getting profile details, id:" + id);
         G4Response response = g4HttpClient.sendRequest(request.view(id));
 
-        Profile profile = JsonConverter.readEntityFromResponse(response, Profile.class, "data");
-
-        OperationResult<Profile> operationResult = new OperationResult<>(response, profile);
+        OperationResult<Profile> operationResult = new OperationResult<>(response, Profile.class, "data");
         if (operationResult.isSuccess()) {
-            Entities.getProfiles().addOrUpdateEntity(operationResult.getResult());
+            Entities.getProfiles().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
     }
@@ -72,11 +67,9 @@ public class ProfileDraftService implements EntityService<Profile> {
         log.info(JsonConverter.toJsonString(profile));
         G4Response response = g4HttpClient.sendRequest(request.publish(profile));
 
-        Profile publishedProfile = JsonConverter.readEntityFromResponse(response, Profile.class, "data");
-
-        OperationResult<Profile> operationResult = new OperationResult<>(response, publishedProfile);
+        OperationResult<Profile> operationResult = new OperationResult<>(response, Profile.class, "data");
         if (operationResult.isSuccess()) {
-            Entities.getProfiles().addOrUpdateEntity(publishedProfile);
+            Entities.getProfiles().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
     }

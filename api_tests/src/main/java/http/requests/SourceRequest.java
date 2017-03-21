@@ -20,7 +20,9 @@ public class SourceRequest extends HttpRequest {
     }
 
     public SourceRequest get(String id) {
-        setURI(URI + "/" + id + "/details");
+        this
+                .setURI(URI + "/" + id + "/details")
+                .setHttpMethod(HttpMethod.GET);
         return this;
     }
 
@@ -33,6 +35,7 @@ public class SourceRequest extends HttpRequest {
 
     public SourceRequest update(Source source) {
         this
+                .setURI(URI)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(source);
         return this;

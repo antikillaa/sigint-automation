@@ -27,13 +27,13 @@ public class APILogin {
         OperationResult<Token> operationResult = signService.signIn(user.getName(), user.getPassword());
         OperationsResults.setResult(operationResult);
         if (operationResult.isSuccess()) {
-            Token token = operationResult.getResult();
+            Token token = operationResult.getEntity();
             context.setLoggedUser(new LoggedUser(user));
             G4HttpClient.setCookie("t", token.getValue());
 
             //update user
             OperationResult<User> meResult = new UserService().me();
-            User me = meResult.getResult();
+            User me = meResult.getEntity();
             me.setPassword(user.getPassword());
             me.setRoles(user.getRoles());
 

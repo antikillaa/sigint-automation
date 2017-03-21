@@ -76,12 +76,13 @@ public class APIProfileSteps extends APISteps {
 
         OperationResult<Profile> operationResult = draftService.publish(createdProfile);
         OperationsResults.setResult(operationResult);
+
+        context.put("profile", operationResult.getEntity());
     }
 
     @When("I send get profile details request")
     public void getProfileDetails() {
-        Profile profile = Entities.getProfiles().getLatest();
-        context.put("profile", profile);
+        Profile profile = context.get("profile", Profile.class);
 
         OperationResult<Profile> operationResult = service.view(profile.getId());
         OperationsResults.setResult(operationResult);
@@ -98,6 +99,7 @@ public class APIProfileSteps extends APISteps {
     @When("I send delete profile request")
     public void deleteProfile() {
         Profile profile = Entities.getProfiles().getLatest();
+        context.put("profile", profile);
 
         OperationResult operationResult = service.remove(profile);
         OperationsResults.setResult(operationResult);

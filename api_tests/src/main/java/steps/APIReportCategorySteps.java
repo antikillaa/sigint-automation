@@ -33,7 +33,7 @@ public class APIReportCategorySteps extends APISteps {
     @When("I send get list of report categories request")
     public void getReportCategoryList() {
         OperationResult<EntityList<ReportCategory>> result = reportCategoryService.list();
-        context.put("reportCategoryEntityList", result.getResult());
+        context.put("reportCategoryEntityList", result.getEntity());
     }
 
     @Then("Report categories list size more than $count")
@@ -75,7 +75,7 @@ public class APIReportCategorySteps extends APISteps {
         OperationResult<ReportCategory> result = reportCategoryService.view(deletedCategory.getId());
 
         Assert.assertEquals("report category should be deleted",
-            true, result.getResult().getDeleted());
+            true, result.getEntity().getDeleted());
     }
 
     @When("I send delete report category request")

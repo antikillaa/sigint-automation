@@ -13,6 +13,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TargetGroupService implements EntityService<TargetGroup> {
@@ -27,17 +28,18 @@ public class TargetGroupService implements EntityService<TargetGroup> {
 
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
 
-        TargetGroup group = JsonConverter.readEntityFromResponse(response, TargetGroup.class, "data");
-        if (group != null) {
-            Entities.getTargetGroups().addOrUpdateEntity(group);
+        OperationResult<TargetGroup> operationResult = new OperationResult<>(response, TargetGroup.class, "data");
+        if (operationResult.isSuccess()) {
+            Entities.getTargetGroups().addOrUpdateEntity(operationResult.getEntity());
         }
-        return new OperationResult<>(response, group);
+        return operationResult;
     }
 
     @Override
     public OperationResult remove(TargetGroup entity) {
         log.info("Deleting target group id:" + entity.getId());
         log.debug(Parser.entityToString(entity));
+
         G4Response response = g4HttpClient.sendRequest(request.delete(entity.getId()));
 
         OperationResult<String> deleteResult = new OperationResult<>(response);
@@ -57,17 +59,16 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         log.info("Updating target group");
         log.debug(Parser.entityToString(entity));
 
-        TargetGroupRequest request = new TargetGroupRequest().update(entity);
-        G4Response response = g4HttpClient.sendRequest(request);
-        TargetGroup targetGroup = JsonConverter.readEntityFromResponse(response, TargetGroup.class, "result");
-        log.debug(Parser.entityToString(targetGroup));
-        if (targetGroup != null) {
-            Entities.getTargetGroups().addOrUpdateEntity(entity);
+        G4Response response = g4HttpClient.sendRequest(request.update(entity));
+
+        OperationResult<TargetGroup> operationResult = new OperationResult<>(response, TargetGroup.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getTargetGroups().addOrUpdateEntity(operationResult.getEntity());
         } else {
             log.error("Error! Update targetGroup process was failed");
             throw new AssertionError("Error! Update targetGroup process was failed");
         }
-        return new OperationResult<>(response, targetGroup);
+        return operationResult;
     }
 
     @Override
@@ -75,8 +76,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         log.info("View target group id:" + id);
         G4Response response = g4HttpClient.sendRequest(request.get(id));
 
-        TargetGroup resultTargetGroup = JsonConverter.readEntityFromResponse(response, TargetGroup.class, "result");
-        return new OperationResult<>(response, resultTargetGroup);
+        return new OperationResult<>(response, TargetGroup.class, "result");
     }
 
     /**
@@ -90,7 +90,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         G4Response response = g4HttpClient.sendRequest(request.listG4Compatibility());
 
         List<TargetGroup> targetGroupList =
-                JsonConverter.readEntitiesFromResponse(response, TargetGroup[].class, "result");
+                JsonConverter.jsonToObjectsList(response.getMessage(), TargetGroup[].class, "result");
         return new OperationResult<>(response, new EntityList<>(targetGroupList));
     }
 
@@ -106,8 +106,14 @@ public class TargetGroupService implements EntityService<TargetGroup> {
 
         G4Response response = g4HttpClient.sendRequest(request.searchG4Compatibility(filter));
 
-        TargetGroupSearchResult result =
-                JsonConverter.readEntityFromResponse(response, TargetGroupSearchResult.class, "result");
-        return new OperationResult<>(response, new EntityList<>(result.getContent()));
+        OperationResult<TargetGroupSearchResult> operationResult =
+                new OperationResult<>(response, TargetGroupSearchResult.class, "result");
+
+        if (operationResult.isSuccess()) {
+            List<TargetGroup> targetGroups = new ArrayList<>(operationResult.getEntity().getContent());
+            return new OperationResult<>(response, new EntityList<>(targetGroups));
+        } else {
+            throw new RuntimeException("Unable to read list of target group from response");
+        }
     }
 }

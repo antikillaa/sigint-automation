@@ -63,7 +63,7 @@ public class ZAPIService {
         OperationResult<Cycle> cycleOperationResult= zapi.postCycle(cycle);
 
         if (cycleOperationResult.isSuccess()) {
-            cycle = cycleOperationResult.getResult();
+            cycle = cycleOperationResult.getEntity();
             log.info(cycle);
         } else {
             OperationsResults.logError(cycleOperationResult);
@@ -86,7 +86,7 @@ public class ZAPIService {
 
             G4Response response = zapi.getCycles(projectId, versionId);
 
-            CyclesList cycles = JsonConverter.readEntityFromResponse(response, CyclesList.class);
+            CyclesList cycles = JsonConverter.jsonToObject(response.getMessage(), CyclesList.class);
             Cycle foundcycle = cycles.getCycle(connectionProperties.getCycleName());
             if (foundcycle == null) {
                 log.debug("Cycle is not found. Creating new one");
@@ -127,9 +127,9 @@ public class ZAPIService {
 
         execution = null;
         if (executionResult.isSuccess()) {
-            String message = executionResult.getResult();
+            String message = executionResult.getEntity();
             String json = message.substring(message.lastIndexOf("{"), message.indexOf("}") + 1);
-            execution = JsonConverter.fromJsonToObject(json, Execution.class);
+            execution = JsonConverter.jsonToObject(json, Execution.class);
             log.debug(execution + " executionId = " + execution.getId());
         } else {
             OperationsResults.logError(executionResult);
@@ -173,7 +173,7 @@ public class ZAPIService {
             return null;
         }
         try {
-            IssueList issueList = operationResult.getResult();
+            IssueList issueList = operationResult.getEntity();
             log.debug("Found issues: " + issueList.getIssues());
             return issueList.getIssues().get(0).getKey();
         } catch (IndexOutOfBoundsException e) {
@@ -191,7 +191,7 @@ public class ZAPIService {
         OperationResult<IssueList> operationResult = zapi.JQL(0, 1000, "id,key,summary", "project=" + projectKey + " and issuetype = Test", IssueList.class);
 
         if (operationResult.isSuccess()) {
-            IssueList issueList = operationResult.getResult();
+            IssueList issueList = operationResult.getEntity();
             log.info("Tests downloaded: " + issueList.getIssues().size());
             for (Issue issue : issueList.getIssues()) {
                 issueIdMap.put(issue.getFields().getSummary(), issue.getId());

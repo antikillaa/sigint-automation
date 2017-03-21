@@ -25,7 +25,7 @@ public class ReportCreateService {
     private static void initOwner(Report report) {
         UserService userService = new UserService();
         OperationResult<User> operationResult = userService.me();
-        User user = operationResult.getResult();
+        User user = operationResult.getEntity();
         User reportUser = new User();
         reportUser.setId(user.getId());
         reportUser.setName(user.getName());

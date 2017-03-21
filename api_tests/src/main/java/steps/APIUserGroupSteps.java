@@ -73,13 +73,13 @@ public class APIUserGroupSteps extends APISteps {
         OperationResult<RequestResult> operationResult = service.remove(group);
         OperationsResults.setResult(operationResult);
 
-        context.put("requestResult", operationResult.getResult());
+        context.put("requestResult", operationResult.getEntity());
     }
 
     @When("I send get list of users group")
     public void getListOfGroups() {
         OperationResult<EntityList<Group>> operationResult = service.list();
-        context.put("groupEntityList", operationResult.getResult());
+        context.put("groupEntityList", operationResult.getEntity());
     }
 
     @Then("Users group list size more than 0")
@@ -95,7 +95,7 @@ public class APIUserGroupSteps extends APISteps {
         for (Group group : groupEntityList.getEntities()) {
             if (group.getRoles().isEmpty() && group.getUsers() == null) {
                 OperationResult<RequestResult> operationResult = service.remove(group);
-                Assert.assertEquals( "success", operationResult.getResult().getMessage());
+                Assert.assertEquals( "success", operationResult.getEntity().getMessage());
             }
         }
     }
@@ -146,6 +146,6 @@ public class APIUserGroupSteps extends APISteps {
 
         OperationResult<Group> operationResult =  service.update(updatedGroup);
 
-        context.put("group", operationResult.getResult());
+        context.put("group", operationResult.getEntity());
     }
 }

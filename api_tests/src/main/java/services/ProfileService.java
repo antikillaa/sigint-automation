@@ -4,7 +4,6 @@ import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import http.G4Response;
-import http.JsonConverter;
 import http.OperationResult;
 import http.requests.ProfileRequest;
 import model.Profile;
@@ -58,11 +57,9 @@ public class ProfileService implements EntityService<Profile> {
         log.info("Getting profile details");
         G4Response response = g4HttpClient.sendRequest(request.view(id));
 
-        Profile profile = JsonConverter.readEntityFromResponse(response, Profile.class, "data");
-
-        OperationResult<Profile> operationResult = new OperationResult<>(response, profile);
+        OperationResult<Profile> operationResult = new OperationResult<>(response, Profile.class, "data");
         if (operationResult.isSuccess()) {
-            Entities.getProfiles().addOrUpdateEntity(profile);
+            Entities.getProfiles().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
     }

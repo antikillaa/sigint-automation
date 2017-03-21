@@ -17,17 +17,17 @@ import java.util.List;
 public class ReportCategoryService implements EntityService<ReportCategory> {
 
     private static final Logger log = Logger.getLogger(ReportCategoryService.class);
+    private static final ReportCategoriesRequest request = new ReportCategoriesRequest();
 
     @Override
     public OperationResult<ReportCategory> add(ReportCategory entity) {
         log.info("Report category creating");
 
-        ReportCategoriesRequest request = new ReportCategoriesRequest().create(entity);
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.create(entity));
 
-        ReportCategory reportCategory = JsonConverter.readEntityFromResponse(response, ReportCategory.class, "result");
-        OperationResult<ReportCategory> operationResult = new OperationResult<>(response, reportCategory);
+        OperationResult<ReportCategory> operationResult = new OperationResult<>(response, ReportCategory.class, "result");
         if (operationResult.isSuccess()) {
+            ReportCategory reportCategory = operationResult.getEntity();
             log.info("New report category id: " + reportCategory.getId() + " and name: " + reportCategory.getName());
             Entities.getReportCategories().addOrUpdateEntity(reportCategory);
         }
@@ -38,8 +38,7 @@ public class ReportCategoryService implements EntityService<ReportCategory> {
     public OperationResult<Result> remove(ReportCategory entity) {
         log.info("Deleting report category id:" + entity.getId() + " and name: " + entity.getName());
 
-        ReportCategoriesRequest request = new ReportCategoriesRequest().delete(entity.getId());
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.delete(entity.getId()));
 
         OperationResult<Result> operationResult = new OperationResult<>(response, Result.class);
         if (operationResult.isSuccess()) {
@@ -55,26 +54,25 @@ public class ReportCategoryService implements EntityService<ReportCategory> {
 
     /**
      * GET list of Report Category
+     *
      * @return list of ReportCategory
      */
     public OperationResult<EntityList<ReportCategory>> list() {
         log.info("Get list of categories...");
 
-        ReportCategoriesRequest request = new ReportCategoriesRequest();
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.list());
 
         List<ReportCategory> reportCategories =
-                JsonConverter.readEntitiesFromResponse(response, ReportCategory[].class, "result");
+                JsonConverter.jsonToObjectsList(response.getMessage(), ReportCategory[].class, "result");
 
         return new OperationResult<>(response, new EntityList<>(reportCategories));
     }
 
     public OperationResult<EntityList<ReportCategory>> filter(Long updatedAfter) {
-        ReportCategoriesRequest request = new ReportCategoriesRequest().filter(updatedAfter);
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.filter(updatedAfter));
 
         List<ReportCategory> reportCategories =
-                JsonConverter.readEntitiesFromResponse(response, ReportCategory[].class, "result");
+                JsonConverter.jsonToObjectsList(response.getMessage(), ReportCategory[].class, "result");
 
         return new OperationResult<>(response, new EntityList<>(reportCategories));
     }
@@ -83,28 +81,25 @@ public class ReportCategoryService implements EntityService<ReportCategory> {
     public OperationResult<ReportCategory> update(ReportCategory entity) {
         log.info("Update report category with id: " + entity.getId());
 
-        ReportCategoriesRequest request = new ReportCategoriesRequest().update(entity);
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.update(entity));
 
-        ReportCategory reportCategory = JsonConverter.readEntityFromResponse(response, ReportCategory.class, "result");
-        OperationResult<ReportCategory> operationResult = new OperationResult<>(response, reportCategory);
+        OperationResult<ReportCategory> operationResult = new OperationResult<>(response, ReportCategory.class, "result");
         if (operationResult.isSuccess()) {
-            Entities.getReportCategories().addOrUpdateEntity(reportCategory);
+            Entities.getReportCategories().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
     }
 
     @Override
     public OperationResult<ReportCategory> view(String id) {
-        ReportCategoriesRequest request = new ReportCategoriesRequest().view(id);
-        G4Response response = g4HttpClient.sendRequest(request);
+        log.info("Getting ReportCategory details id:" + id);
 
-        ReportCategory reportCategory = JsonConverter.readEntityFromResponse(response, ReportCategory.class, "result");
-        OperationResult<ReportCategory> operationResult = new OperationResult<>(response, reportCategory);
+        G4Response response = g4HttpClient.sendRequest(request.view(id));
+
+        OperationResult<ReportCategory> operationResult = new OperationResult<>(response, ReportCategory.class, "result");
         if (operationResult.isSuccess()) {
-            Entities.getReportCategories().addOrUpdateEntity(reportCategory);
+            Entities.getReportCategories().addOrUpdateEntity(operationResult.getEntity());
         }
-
         return operationResult;
     }
 }

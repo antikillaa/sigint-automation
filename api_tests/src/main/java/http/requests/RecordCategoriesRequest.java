@@ -25,6 +25,7 @@ public class RecordCategoriesRequest extends HttpRequest {
      */
     public RecordCategoriesRequest add(RecordCategory recordCategory) {
         this
+                .setURI(URI)
                 .setHttpMethod(HttpMethod.PUT)
                 .setPayload(recordCategory);
         return this;
@@ -38,7 +39,9 @@ public class RecordCategoriesRequest extends HttpRequest {
      * @return RecordCategoriesRequest
      */
     public RecordCategoriesRequest list() {
-        this.setHttpMethod(HttpMethod.GET);
+        this
+                .setURI(URI)
+                .setHttpMethod(HttpMethod.GET);
         return this;
     }
 

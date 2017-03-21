@@ -12,7 +12,8 @@ import utils.Parser;
 
 public class ReportService implements EntityService<Report> {
 
-    private Logger log = Logger.getLogger(RecordService.class);
+    private static Logger log = Logger.getLogger(ReportService.class);
+    private static ReportRequest request = new ReportRequest();
 
     /**
      * API: PUT /api/reports/
@@ -24,12 +25,12 @@ public class ReportService implements EntityService<Report> {
     public OperationResult<Report> add(Report entity) {
         log.info("Sending create new report request...");
         log.debug(Parser.entityToString(entity));
-        ReportRequest request = new ReportRequest().add(entity);
-        G4Response response = g4HttpClient.sendRequest(request);
-        Report report = JsonConverter.readEntityFromResponse(response, Report.class, "result");
-        OperationResult<Report> operationResult = new OperationResult<>(response, report);
-        if (report != null) {
-            Entities.getReports().addOrUpdateEntity(report);
+
+        G4Response response = g4HttpClient.sendRequest(request.add(entity));
+
+        OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
         } else {
             OperationsResults.throwError(operationResult);
         }

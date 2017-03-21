@@ -30,7 +30,7 @@ public class APIDuSubscriberSteps extends APISteps {
         OperationResult operationResult = service.add(duSubscriberEntry);
         OperationsResults.setResult(operationResult);
         context.put("duSubscriberEntry", duSubscriberEntry);
-        context.put("uploadResult", operationResult.getResult());
+        context.put("uploadResult", operationResult.getEntity());
     }
 
     @When("I send search DuSubscribers by $criteria and value $value")
@@ -54,7 +54,7 @@ public class APIDuSubscriberSteps extends APISteps {
         OperationResult<EntityList<DuSubscriberEntry>> operationResult = service.list(searchFilter);
         OperationsResults.setResult(operationResult);
         context.put("searchFilter", searchFilter);
-        context.put("searchResult", operationResult.getResult());
+        context.put("searchResult", operationResult.getEntity());
     }
 
     @Then("DuSubscriber search result are correct")
@@ -126,7 +126,7 @@ public class APIDuSubscriberSteps extends APISteps {
 
         OperationResult<DuSubscriberEntry> operationResult = service.view(etalonEntry.getId());
 
-        context.put("duSubscriberEntry", operationResult.getResult());
+        context.put("duSubscriberEntry", operationResult.getEntity());
         context.put("etalonEntry", etalonEntry);
     }
 

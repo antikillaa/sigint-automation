@@ -4,7 +4,6 @@ import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import http.G4Response;
-import http.JsonConverter;
 import http.OperationResult;
 import http.requests.RecordCategoriesRequest;
 import model.RecordCategory;
@@ -19,7 +18,8 @@ import java.util.List;
 
 public class RecordCategoryService implements EntityService<RecordCategory> {
 
-    private Logger logger = Logger.getLogger(RecordCategoryService.class);
+    private static Logger logger = Logger.getLogger(RecordCategoryService.class);
+    private static RecordCategoriesRequest request = new RecordCategoriesRequest();
 
     /**
      * Add a new one record-category.
@@ -31,22 +31,19 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
     public OperationResult<RecordCategory> add(RecordCategory entity) {
         logger.info("Add new one record category..");
         logger.info(Parser.entityToString(entity));
+        G4Response response = g4HttpClient.sendRequest(request.add(entity));
 
-        RecordCategoriesRequest request = new RecordCategoriesRequest().add(entity);
-        G4Response response = g4HttpClient.sendRequest(request);
-        OperationResult<RecordCategory> operationResult = new OperationResult<>(response, entity);
-        
+        OperationResult<RecordCategory> operationResult = new OperationResult<>(response, RecordCategory.class);
         if (operationResult.isSuccess()) {
             Entities.getRecordCategories().addOrUpdateEntity(entity);
         }
         return operationResult;
     }
-    
+
     public List<OperationResult> addAll(List<RecordCategory> catList) {
         List<OperationResult> operationResults = new ArrayList<>();
-        for (RecordCategory category: catList) {
-            RecordCategoriesRequest request = new RecordCategoriesRequest().add(category);
-            G4Response response = g4HttpClient.sendRequest(request);
+        for (RecordCategory category : catList) {
+            G4Response response = g4HttpClient.sendRequest(request.add(category));
             OperationResult<Result> operationResult = new OperationResult<>(response, Result.class);
             operationResults.add(operationResult);
         }
@@ -59,7 +56,8 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
     }
 
     @Override
-    public OperationResult<EntityList<RecordCategory>> list(SearchFilter filter) { throw new NotImplementedException();
+    public OperationResult<EntityList<RecordCategory>> list(SearchFilter filter) {
+        throw new NotImplementedException();
     }
 
     /**
@@ -68,23 +66,25 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
      * @return list of record-categories
      */
     public OperationResult<EntityList<RecordCategory>> list() {
-        RecordCategoriesRequest request = new RecordCategoriesRequest().list();
+        G4Response response = g4HttpClient.sendRequest(request.list());
 
-        G4Response response = g4HttpClient.sendRequest(request);
-        
-        RecordCategoryListResult listResult =
-                JsonConverter.readEntityFromResponse(response, RecordCategoryListResult.class);
-        EntityList<RecordCategory> recordCategories = listResult.getResult();
-        return new OperationResult<>(response, recordCategories);
+        OperationResult<RecordCategoryListResult> operationResult =
+                new OperationResult<>(response, RecordCategoryListResult.class);
+
+        if (operationResult.isSuccess()) {
+            EntityList<RecordCategory> recordCategories = operationResult.getEntity().getResult();
+            return new OperationResult<>(response, recordCategories);
+        } else {
+            throw new RuntimeException("Unable to read list of record-categories");
+        }
     }
 
     @Override
-    public OperationResult update(RecordCategory entity) {
+    public OperationResult<RecordCategory> update(RecordCategory entity) {
         logger.info("Updating record-category id:" + entity.getId());
         logger.debug(Parser.entityToString(entity));
+        G4Response response = g4HttpClient.sendRequest(request.update(entity));
 
-        RecordCategoriesRequest request = new RecordCategoriesRequest().update(entity);
-        G4Response response = g4HttpClient.sendRequest(request);
         OperationResult<RecordCategory> operationResult = new OperationResult<>(response);
         if (operationResult.isSuccess()) {
             Entities.getRecordCategories().addOrUpdateEntity(entity);
@@ -100,16 +100,12 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
      */
     @Override
     public OperationResult<RecordCategory> view(String id) {
-        RecordCategoriesRequest request = new RecordCategoriesRequest().view(id);
+        G4Response response = g4HttpClient.sendRequest(request.view(id));
 
-        G4Response response = g4HttpClient.sendRequest(request);
-
-        RecordCategory recordCategory = JsonConverter.readEntityFromResponse(response, RecordCategory.class, "result");
-        OperationResult<RecordCategory> operationResult = new OperationResult<>(response, recordCategory);
+        OperationResult<RecordCategory> operationResult = new OperationResult<>(response, RecordCategory.class, "result");
         if (operationResult.isSuccess()) {
-            Entities.getRecordCategories().addOrUpdateEntity(recordCategory);
+            Entities.getRecordCategories().addOrUpdateEntity(operationResult.getEntity());
         }
-
         return operationResult;
     }
 }

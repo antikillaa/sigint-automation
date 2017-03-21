@@ -42,7 +42,7 @@ public class APITargetSteps extends APISteps {
 
         OperationResult<Target> operationResult = service.add(target);
         OperationsResults.setResult(operationResult);
-        context.put("requestTarget", operationResult.getResult());
+        context.put("requestTarget", operationResult.getEntity());
     }
 
     @Then("Created target is correct")
@@ -57,7 +57,7 @@ public class APITargetSteps extends APISteps {
     public void getTargetDetails() {
         Target createdTarget = Entities.getTargets().getLatest();
         OperationResult<Target> operationResult = service.view(createdTarget.getId());
-        context.put("viewedTarget", operationResult.getResult());
+        context.put("viewedTarget", operationResult.getEntity());
     }
 
     @Then("Viewed target is correct")
@@ -93,14 +93,14 @@ public class APITargetSteps extends APISteps {
         log.info("Updated target: " + JsonConverter.toJsonString(updatedTarget));
         OperationResult<Target> operationResult = service.update(updatedTarget);
         OperationsResults.setResult(operationResult);
-        context.put("updatedTarget", operationResult.getResult());
+        context.put("updatedTarget", operationResult.getEntity());
     }
 
     @Then("Target updated correctly")
     public void targetUpdatedCorrectly() throws NullReturnException {
         Target updatedTarget = context.get("updatedTarget", Target.class);
         OperationResult<Target> operationResult = service.view(updatedTarget.getId());
-        Verify.shouldBe(isTrue.element(isEqualsTargets(updatedTarget, operationResult.getResult())));
+        Verify.shouldBe(isTrue.element(isEqualsTargets(updatedTarget, operationResult.getEntity())));
     }
 
     @When("I send delete target request")
@@ -116,7 +116,7 @@ public class APITargetSteps extends APISteps {
     public void targetDeletedCorrectly() throws NullReturnException {
         Target deletedTarget = context.get("deletedTarget", Target.class);
         OperationResult<Target> operationResult = service.view(deletedTarget.getId());
-        Verify.shouldBe(isTrue.element(operationResult.getResult().getName().contains("DELETED at")));
+        Verify.shouldBe(isTrue.element(operationResult.getEntity().getName().contains("DELETED at")));
     }
 
     @When("I send upload targets XLS file request with $count random targets")
@@ -127,7 +127,7 @@ public class APITargetSteps extends APISteps {
         OperationsResults.setResult(operationResult);
 
         context.put("targets", targets);
-        context.put("uploadResult", operationResult.getResult());
+        context.put("uploadResult", operationResult.getEntity());
     }
 
     @When("I send upload targets request with XLS file containing $count targets with existing group request")
@@ -144,7 +144,7 @@ public class APITargetSteps extends APISteps {
         OperationResult<UploadResult> operationResult = service.upload(targets);
         OperationsResults.setResult(operationResult);
         context.put("targets", targets);
-        context.put("uploadResult", operationResult.getResult());
+        context.put("uploadResult", operationResult.getEntity());
     }
 
     @When("I send search targets by $criteria and value $value")
@@ -166,7 +166,7 @@ public class APITargetSteps extends APISteps {
         OperationResult<EntityList<Target>> operationResult = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
-        context.put("searchResult", operationResult.getResult());
+        context.put("searchResult", operationResult.getEntity());
     }
 
     @Then("targets search result are correct")
@@ -232,7 +232,7 @@ public class APITargetSteps extends APISteps {
     @When("I send get groups list of new target request")
     public void getTargetGroupsOfNewTarget() {
         Target target = Entities.getTargets().getLatest();
-        EntityList<TargetGroup> targetGroups = service.getTargetGroups(target.getId()).getResult();
+        EntityList<TargetGroup> targetGroups = service.getTargetGroups(target.getId()).getEntity();
         context.put("targetGroupList", targetGroups);
     }
 
@@ -249,7 +249,7 @@ public class APITargetSteps extends APISteps {
         OperationResult<UploadResult> operationResult = service.upload(targets);
         OperationsResults.setResult(operationResult);
         context.put("targets", targets);
-        context.put("uploadResult", operationResult.getResult());
+        context.put("uploadResult", operationResult.getEntity());
     }
 
     @Then("Upload result of $count targets is successful")
@@ -295,7 +295,7 @@ public class APITargetSteps extends APISteps {
         OperationResult<EntityList<Target>> operationResult = service.list();
         OperationsResults.setResult(operationResult);
 
-        context.put("targetEntityList", operationResult.getResult());
+        context.put("targetEntityList", operationResult.getEntity());
     }
 
     @Then("Target list size more than $size")
