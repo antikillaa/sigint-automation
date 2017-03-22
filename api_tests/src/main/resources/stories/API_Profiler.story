@@ -110,6 +110,8 @@ Then Request is successful
 
 
 Scenario: API.(New profiler) Publishing of new profile draft
+Meta:
+@dev
 Given I sign in as admin user
 When I send create profile draft request
 Then Request is successful
@@ -125,3 +127,20 @@ And Profile is correct
 
 When I send delete profile request
 Then Request is successful
+
+
+Scenario: (New profiler) Deleting of profile
+Given I sign in as admin user
+When I send create profile draft request
+Then Request is successful
+And Profile draft is correct
+
+When I send publish profile draft request
+Then Request is successful
+And Profile draft is correct
+
+When I send delete profile request
+Then Request is successful
+
+When I send get profile details request
+Then Request is unsuccessful
