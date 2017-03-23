@@ -16,7 +16,7 @@ public class Group extends TeelaEntity {
     @DataIgnore
     private List<String> roles = new ArrayList<>();
     @DataIgnore
-    private List<Permission> permissions = new ArrayList<>();
+    private List<String> permissions = new ArrayList<>();
     @DataIgnore
     private List<String> users = new ArrayList<>();
     @JsonProperty("display_name")
@@ -31,11 +31,11 @@ public class Group extends TeelaEntity {
         return this;
     }
 
-    public List<Permission> getPermissions() {
+    public List<String> getPermissions() {
         return permissions;
     }
 
-    public Group setPermissions(List<Permission> permissions) {
+    public Group setPermissions(List<String> permissions) {
         this.permissions = permissions;
         return this;
     }
