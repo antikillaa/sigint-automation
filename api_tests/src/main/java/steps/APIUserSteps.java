@@ -6,6 +6,8 @@ import errors.NullReturnException;
 import http.JsonConverter;
 import http.OperationResult;
 import http.OperationsResults;
+import java.util.ArrayList;
+import java.util.List;
 import model.RequestResult;
 import model.User;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -14,9 +16,6 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.UserService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class APIUserSteps extends APISteps {
@@ -117,10 +116,30 @@ public class APIUserSteps extends APISteps {
         OperationsResults.setResult(operationResult);
     }
 
-    @When("I send change user password request")
-    public void changeUserPassword(){
+    @When("I set wrong user password")
+    public void setWrongUserPassword() {
         User user = Entities.getUsers().getLatest();
-        user.setNewPassword(RandomStringUtils.randomAlphanumeric(8));
+
+        String passwordToReplace = RandomStringUtils.randomAlphanumeric(8);
+        log.info(String.format("Setting wrong password %s for user %s", passwordToReplace, user.getName()));
+        user.setPassword(passwordToReplace);
+        Entities.getUsers().addOrUpdateEntity(user);
+    }
+
+    @When("I change user password to $newPassword")
+    public void changeUserPassword(final String newPassword){
+        User user = Entities.getUsers().getLatest();
+
+        String passwordToReplace = newPassword;
+        if ("random".equals(newPassword.toLowerCase())) {
+            passwordToReplace = RandomStringUtils.randomAlphanumeric(8);
+        }
+        if ("username".equals(newPassword.toLowerCase())) {
+            passwordToReplace = user.getName();
+        }
+
+        log.info(String.format("Changing password from %s to %s", user.getPassword(), passwordToReplace));
+        user.setNewPassword(passwordToReplace);
         context.put("user", user);
 
         OperationResult<User> operationResult = service.update(user);

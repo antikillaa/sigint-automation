@@ -1,5 +1,7 @@
 package steps;
 
+import static utils.StringUtils.stripQuotes;
+
 import app_context.AppContext;
 import app_context.RunContext;
 import data_for_entity.RandomEntities;
@@ -18,15 +20,24 @@ public abstract class APISteps {
 
     @Then("I got response code $expected")
     public void checkResponseCode(String expected) {
-        log.info("Checking response code");
-        Integer actual = context.get("code", Integer.class);
-        Assert.assertEquals("Incorrect return codes!", Integer.valueOf(expected), actual);
+        OperationResult result = OperationsResults.getResult();
+
+        log.info("Checking response code " + result.getCode());
+        Assert.assertTrue("Incorrect return code!", Integer.valueOf(expected) == result.getCode());
+    }
+
+    @Then("Message contains $text")
+    public void checkMessageContainsText(String text) {
+        OperationResult result = OperationsResults.getResult();
+
+        log.info("Checking message " + result.getMessage());
+        Assert.assertTrue(text + " not found", result.getMessage().contains(stripQuotes(text)));
     }
     
     @Then("Request is successful")
     public void checkResultSuccess() {
-        log.info("Checking if request is successful");
         OperationResult result = OperationsResults.getResult();
+
         if (!result.isSuccess()) {
             OperationsResults.throwError(result);
         }
@@ -34,8 +45,8 @@ public abstract class APISteps {
     
     @Then("Request is unsuccessful")
     public void checkResultFail() {
-        log.info("Checking if request failed");
         OperationResult result = OperationsResults.getResult();
+
         if (result.isSuccess()) {
             OperationsResults.throwError(result);
         }

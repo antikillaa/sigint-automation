@@ -52,7 +52,7 @@ public class OperationResult<T> {
             return responseObject;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new OperationResultError("Cannot get result of type:" + castType, e);
+            throw new OperationResultError("Cannot get result of type: " + castType, e);
         }
     }
 
@@ -71,7 +71,7 @@ public class OperationResult<T> {
         return response.getMessage();
     }
 
-    int getCode() {
+    public int getCode() {
         return response.getCode();
     }
 }
