@@ -1,10 +1,13 @@
 package steps;
 
+import static conditions.Conditions.isTrue;
+
 import app_context.entities.Entities;
 import conditions.Verify;
 import controllers.APILogin;
 import http.OperationResult;
 import http.OperationsResults;
+import java.io.IOException;
 import model.RequestResult;
 import model.Token;
 import model.User;
@@ -13,11 +16,6 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import utils.CollectionUtils;
-
-import java.io.IOException;
-import java.util.Arrays;
-
-import static conditions.Conditions.isTrue;
 
 
 public class APILoginSteps extends APISteps {
@@ -71,14 +69,14 @@ public class APILoginSteps extends APISteps {
         Verify.shouldBe(isTrue.element(operationResult.getMessage().toLowerCase().contains(message.toLowerCase())));
     }
 
-    @When("I send sing out request")
-    public void singOut() {
-        OperationResult<RequestResult> operationResult = login.singOut();
+    @When("I send sign out request")
+    public void signOut() {
+        OperationResult<RequestResult> operationResult = login.signOut();
         OperationsResults.setResult(operationResult);
     }
 
     @When("I sign in as new created user")
-    public void singInAsNewCreatedUser() {
+    public void signInAsNewCreatedUser() {
         User user = Entities.getUsers().getLatest();
 
         OperationResult<Token> operationResult = login.signInAsUser(user);

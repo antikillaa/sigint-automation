@@ -16,7 +16,7 @@ public class DictionaryService {
         G4Response response = new G4HttpClient().sendRequest(request);
         Dictionary dictionary = null;
         try {
-            dictionary = JsonConverter.readEntityFromResponse(response, Dictionary.class, "result");
+            dictionary = JsonConverter.jsonToObject(response.getMessage(), Dictionary.class, "result");
         } catch (Exception ex) {
             logger.error("Error occurred getting dictionary. User must be logged in to get it");
         }

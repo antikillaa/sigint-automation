@@ -42,7 +42,7 @@ public class APIUploadFilesSteps extends APISteps {
         LoggedUser user = AppContext.get().getLoggedUser();
         OperationResult<FileMeta> uploadResult = service.upload(file, source, user.getId());
         OperationsResults.setResult(uploadResult);
-        context.put("meta", uploadResult.getResult());
+        context.put("meta", uploadResult.getEntity());
     }
 
     @When("uploaded file is processed")
@@ -70,7 +70,7 @@ public class APIUploadFilesSteps extends APISteps {
 
     private boolean isProcessed(String fileId) {
         OperationResult<FileMeta> fileMetaOperationResult = service.meta(fileId);
-        FileMeta fileMeta = fileMetaOperationResult.getResult();
+        FileMeta fileMeta = fileMetaOperationResult.getEntity();
 
         if (fileMeta != null && fileMeta.getMeta() != null) {
             if (fileMeta.getMeta().getProperties().getError() != null) {
@@ -163,7 +163,7 @@ public class APIUploadFilesSteps extends APISteps {
     @When("I send get upload details request")
     public void getUploadDetails() {
         Process process = context.get("process", Process.class);
-        UploadDetails uploadDetails = service.details(process.getId()).getResult();
+        UploadDetails uploadDetails = service.details(process.getId()).getEntity();
         context.put("uploadDetails", uploadDetails);
     }
 
@@ -223,7 +223,7 @@ public class APIUploadFilesSteps extends APISteps {
 
         RecordService recordService = new RecordService();
         OperationResult<EntityList<Record>> searchResult = recordService.list(filter);
-        List<Record> ingestedRecords = searchResult.getResult().getEntities();
+        List<Record> ingestedRecords = searchResult.getEntity().getEntities();
 
         // for each uploaded records
         for (G4Record g4Record : uploadedRecords) {

@@ -1,12 +1,12 @@
-package http.requests.targetGroups;
+package http.requests;
 
-import http.requests.HttpRequest;
+import abs.SearchFilter;
 import http.HttpMethod;
 import model.TargetGroup;
 
 public class TargetGroupRequest extends HttpRequest {
 
-    private static final String URI = "/api/profile/target-groups";
+    private static final String URI = "/api/profiler/targetGroups";
 
     public TargetGroupRequest() {
         super(URI);
@@ -15,7 +15,7 @@ public class TargetGroupRequest extends HttpRequest {
     public TargetGroupRequest add(TargetGroup targetGroup) {
         this
                 .setURI(URI)
-                .setHttpMethod(HttpMethod.PUT)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(targetGroup);
         return this;
     }
@@ -27,7 +27,7 @@ public class TargetGroupRequest extends HttpRequest {
 
     public TargetGroupRequest delete(String id) {
         this
-                .setURI(URI + "/" + id )
+                .setURI(URI + "/" + id)
                 .setHttpMethod(HttpMethod.DELETE);
         return this;
     }
@@ -36,6 +36,21 @@ public class TargetGroupRequest extends HttpRequest {
         this
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(targetGroup);
+        return this;
+    }
+
+    public TargetGroupRequest listG4Compatibility() {
+        this
+                .setURI("/api/profiler/target-groups")
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
+    public TargetGroupRequest searchG4Compatibility(SearchFilter filter) {
+        this
+                .setURI("/api/profiler/target-groups/search")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(filter);
         return this;
     }
 }

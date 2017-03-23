@@ -35,7 +35,7 @@ public class UserService implements EntityService<User> {
 
         OperationResult<User> operationResult = new OperationResult<>(response, User.class);
         if (operationResult.isSuccess()) {
-            User user = operationResult.getResult();
+            User user = operationResult.getEntity();
             if (entity.getPassword() != null) {
                 user.setPassword(entity.getPassword());
             }
@@ -65,7 +65,7 @@ public class UserService implements EntityService<User> {
 
         G4Response response = g4HttpClient.sendRequest(request.list());
 
-        List<User> users = JsonConverter.readEntitiesFromResponse(response, User[].class);
+        List<User> users = JsonConverter.jsonToObjectsList(response.getMessage(), User[].class);
         return new OperationResult<>(response, new EntityList<>(users));
     }
 
@@ -76,7 +76,7 @@ public class UserService implements EntityService<User> {
 
         OperationResult<User> operationResult = new OperationResult<>(response, User.class);
         if (operationResult.isSuccess()) {
-            User user = operationResult.getResult();
+            User user = operationResult.getEntity();
             if (entity.getNewPassword() != null) {
                 user.setPassword(entity.getNewPassword());
             }
@@ -102,7 +102,7 @@ public class UserService implements EntityService<User> {
 
         OperationResult<User> operationResult = new OperationResult<>(response, User.class);
         if (operationResult.isSuccess()) {
-            Entities.getUsers().addOrUpdateEntity(operationResult.getResult());
+            Entities.getUsers().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
     }

@@ -30,7 +30,7 @@ class TargetFileService implements FileService<Target> {
             //ID	Name	Type	Phones	Keywords    Target Groups
             targetFields.add(targets.get(i).getId());
             targetFields.add(targets.get(i).getName());
-            targetFields.add(targets.get(i).getType().name());
+            targetFields.add(""); // TargetType moved to targetGroups
             targetFields.add(targets.get(i).getPhones().toString().replace("[", "").replace("]", ""));
             targetFields.add(targets.get(i).getKeywords().toString().replace("[", "").replace("]", ""));
             // fill target groups

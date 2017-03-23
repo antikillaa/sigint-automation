@@ -35,14 +35,14 @@ public class APITargetSteps extends APISteps {
     public void sendCreateRequest(String with) throws NullReturnException {
         Target target = getRandomTarget();
         if (with.toLowerCase().equals("with")) {
-            ArrayList<TargetGroup> groups = new ArrayList<TargetGroup>();
+            ArrayList<TargetGroup> groups = new ArrayList<>();
             groups.add(Entities.getTargetGroups().random());
             target.setGroups(groups);
         }
 
         OperationResult<Target> operationResult = service.add(target);
         OperationsResults.setResult(operationResult);
-        context.put("requestTarget", operationResult.getResult());
+        context.put("requestTarget", operationResult.getEntity());
     }
 
     @Then("Created target is correct")
@@ -57,7 +57,7 @@ public class APITargetSteps extends APISteps {
     public void getTargetDetails() {
         Target createdTarget = Entities.getTargets().getLatest();
         OperationResult<Target> operationResult = service.view(createdTarget.getId());
-        context.put("viewedTarget", operationResult.getResult());
+        context.put("viewedTarget", operationResult.getEntity());
     }
 
     @Then("Viewed target is correct")
@@ -71,19 +71,17 @@ public class APITargetSteps extends APISteps {
 
     private boolean isEqualsTargets(Target checkedTarget, Target etalonTarget) {
         return Verify.isTrue(Conditions.equals(checkedTarget.getDescription(), etalonTarget.getDescription())) &&
-        Verify.isTrue(Conditions.equals(checkedTarget.getName(), etalonTarget.getName())) &&
-        Verify.isTrue(Conditions.equals(checkedTarget.getKeywords(), etalonTarget.getKeywords())) &&
-        Verify.isTrue(Conditions.equals(checkedTarget.getPhones(), etalonTarget.getPhones())) &&
-        Verify.isTrue(Conditions.equals(checkedTarget.getLanguages(), etalonTarget.getLanguages())) &&
-        Verify.isTrue(Conditions.equals(checkedTarget.getGroups(), etalonTarget.getGroups())) &&
-        Verify.isTrue(Conditions.equals(checkedTarget.getType(), etalonTarget.getType()));
+                Verify.isTrue(Conditions.equals(checkedTarget.getName(), etalonTarget.getName())) &&
+                Verify.isTrue(Conditions.equals(checkedTarget.getKeywords(), etalonTarget.getKeywords())) &&
+                Verify.isTrue(Conditions.equals(checkedTarget.getPhones(), etalonTarget.getPhones())) &&
+                Verify.isTrue(Conditions.equals(checkedTarget.getLanguages(), etalonTarget.getLanguages())) &&
+                Verify.isTrue(Conditions.equals(checkedTarget.getGroups(), etalonTarget.getGroups()));
     }
 
     private boolean isEqualstargets(Target checkedTarget, Target etalonTarget) {
         return Verify.isTrue(Conditions.equals(checkedTarget.getName(), etalonTarget.getName())) &&
-                Verify.isTrue(Conditions.equals(checkedTarget.getKeywords(), etalonTarget.getKeywords())) &&
-                Verify.isTrue(Conditions.equals(checkedTarget.getPhones(), etalonTarget.getPhones())) &&
-                Verify.isTrue(Conditions.equals(checkedTarget.getType(), etalonTarget.getType()));
+                Verify.isTrue(Conditions.equals(checkedTarget.getGroups(), etalonTarget.getGroups())) &&
+                Verify.isTrue(Conditions.equals(checkedTarget.getPhones(), etalonTarget.getPhones()));
     }
 
     @When("I send update target request")
@@ -95,14 +93,14 @@ public class APITargetSteps extends APISteps {
         log.info("Updated target: " + JsonConverter.toJsonString(updatedTarget));
         OperationResult<Target> operationResult = service.update(updatedTarget);
         OperationsResults.setResult(operationResult);
-        context.put("updatedTarget", operationResult.getResult());
+        context.put("updatedTarget", operationResult.getEntity());
     }
 
     @Then("Target updated correctly")
     public void targetUpdatedCorrectly() throws NullReturnException {
         Target updatedTarget = context.get("updatedTarget", Target.class);
         OperationResult<Target> operationResult = service.view(updatedTarget.getId());
-        Verify.shouldBe(isTrue.element(isEqualsTargets(updatedTarget, operationResult.getResult())));
+        Verify.shouldBe(isTrue.element(isEqualsTargets(updatedTarget, operationResult.getEntity())));
     }
 
     @When("I send delete target request")
@@ -118,26 +116,26 @@ public class APITargetSteps extends APISteps {
     public void targetDeletedCorrectly() throws NullReturnException {
         Target deletedTarget = context.get("deletedTarget", Target.class);
         OperationResult<Target> operationResult = service.view(deletedTarget.getId());
-        Verify.shouldBe(isTrue.element(operationResult.getResult().getName().contains("DELETED at")));
+        Verify.shouldBe(isTrue.element(operationResult.getEntity().getName().contains("DELETED at")));
     }
 
-    @When("I send upload targets request with XLS file containing $count targets without specified id")
-    public void targetGeneratedXls(String count){
+    @When("I send upload targets XLS file request with $count random targets")
+    public void targetGeneratedXls(String count) {
         List<Target> targets = getRandomTargets(Integer.valueOf(count));
-        
+
         OperationResult<UploadResult> operationResult = service.upload(targets);
         OperationsResults.setResult(operationResult);
-        
+
         context.put("targets", targets);
-        context.put("uploadResult", operationResult.getResult());
+        context.put("uploadResult", operationResult.getEntity());
     }
 
     @When("I send upload targets request with XLS file containing $count targets with existing group request")
-    public void uploadTargetsWithExistingGroup(String count){
+    public void uploadTargetsWithExistingGroup(String count) {
         EntityList<TargetGroup> targetGroups = context.get("targetGroupList", EntityList.class);
         List<Target> targets = getRandomTargets(Integer.valueOf(count));
 
-        for (Target target : targets ) {
+        for (Target target : targets) {
             TargetGroup group = RandomGenerator.getRandomItemFromList(targetGroups.getEntities());
             target.addGroup(group);
             Entities.getTargetGroups().addOrUpdateEntity(group);
@@ -146,7 +144,7 @@ public class APITargetSteps extends APISteps {
         OperationResult<UploadResult> operationResult = service.upload(targets);
         OperationsResults.setResult(operationResult);
         context.put("targets", targets);
-        context.put("uploadResult", operationResult.getResult());
+        context.put("uploadResult", operationResult.getEntity());
     }
 
     @When("I send search targets by $criteria and value $value")
@@ -154,22 +152,10 @@ public class APITargetSteps extends APISteps {
         log.info("Start search targets by criteria: " + criteria + ", value: " + value);
         Target target = Entities.getTargets().getLatest();
 
-        if (criteria.toLowerCase().equals("type")) {
-            value = value.equals("random") ? target.getType().toString() : value;
-        } else if (criteria.toLowerCase().equals("name")) {
-            value = value.equals("random") ? target.getName() : value;
-        } else if (criteria.toLowerCase().equals("keywords")) {
-            value = value.equals("random") ? Parser.setToString(target.getKeywords()) : value;
-        } else if (criteria.toLowerCase().equals("description")) {
-            value = value.equals("random") ? target.getDescription() : value;
-        } else if (criteria.toLowerCase().equals("deleted")) {
+        if (criteria.toLowerCase().equals("includedeleted")) {
             value = value.equals("random") ? String.valueOf(target.isDeleted()) : value;
-        } else if (criteria.toLowerCase().equals("languages")) {
-            value = value.equals("random") ? Parser.setToString(target.getLanguages()) : value;
-        } else if (criteria.toLowerCase().equals("phones")) {
-            value = value.equals("random") ? Parser.setToString(target.getPhones()) : value;
         } else if (criteria.toLowerCase().equals("updatedafter")) {
-            value = value.equals("random") ? String.valueOf(target.getCreatedAt().getTime()-1000) : value;
+            value = value.equals("random") ? String.valueOf(target.getCreatedAt().getTime() - 60000) : value;
         } else if (criteria.toLowerCase().equals("empty")) {
             log.debug("Search without filter..");
         } else {
@@ -177,13 +163,14 @@ public class APITargetSteps extends APISteps {
         }
 
         TargetFilter searchFilter = new TargetFilter().filterBy(criteria, value);
-        EntityList<Target> targets = service.list(searchFilter).getResult();
+        OperationResult<EntityList<Target>> operationResult = service.list(searchFilter);
+
         context.put("searchFilter", searchFilter);
-        context.put("searchResult", targets);
+        context.put("searchResult", operationResult.getEntity());
     }
 
     @Then("targets search result are correct")
-    public void targetSearchResultAreCorrect(){
+    public void targetSearchResultAreCorrect() {
         log.info("Checking if search targets result is correct");
         TargetFilter searchFilter = context.get("searchFilter", TargetFilter.class);
         EntityList<Target> searchResult = context.get("searchResult", EntityList.class);
@@ -193,29 +180,13 @@ public class APITargetSteps extends APISteps {
         } else {
             log.info("Search result size: " + searchResult.size());
         }
-        for (Target target : searchResult) {
+        for (Target target : searchResult.getEntities()) {
             Assert.assertTrue(String.format("Target:%s should not match to filter %s", target, Parser.entityToString(searchFilter)),
                     searchFilter.isAppliedToEntity(target));
         }
     }
 
-    @Then("searched target entry $criteria list")
-    public void searchedTargetInList(String criteria) {
-        log.info("Checking if Target entry " + criteria + " list");
-        Target target = Entities.getTargets().getLatest();
-        EntityList<Target> list = context.get("searchResult", EntityList.class);
-
-        Boolean contains = list.contains(target);
-        if (criteria.toLowerCase().equals("in")) {
-            Verify.shouldBe(isTrue.element(contains));
-        } else if (criteria.toLowerCase().equals("not in")) {
-            Verify.shouldNotBe(isTrue.element(contains));
-        } else {
-            throw new AssertionError("Incorrect argument passed to step");
-        }
-    }
-
-    @Then("uploaded target $criteria list")
+    @Then("searched target $criteria search result list")
     public void uploadedTargetInList(String criteria) {
         log.info("Checking if Target entry " + criteria + " list");
         Target target = Entities.getTargets().getLatest();
@@ -229,22 +200,13 @@ public class APITargetSteps extends APISteps {
                 break;
             }
         }
-        
+
         if (criteria.toLowerCase().equals("in")) {
             Verify.shouldBe(isTrue.element(contains));
         } else if (criteria.toLowerCase().equals("not in")) {
             Verify.shouldNotBe(isTrue.element(contains));
         } else {
             throw new AssertionError("Incorrect argument passed to step");
-        }
-    }
-
-    @Then("target has auto-generated ID")
-    public void targetHasID() {
-        log.info("Checking if Target has ID");
-        EntityList<Target> list = context.get("searchResult", EntityList.class);
-        for (Target target : list) {
-            Assert.assertNotNull(target.getId());
         }
     }
 
@@ -268,9 +230,9 @@ public class APITargetSteps extends APISteps {
     }
 
     @When("I send get groups list of new target request")
-    public void getTargetGroupsOfNewTarget(){
+    public void getTargetGroupsOfNewTarget() {
         Target target = Entities.getTargets().getLatest();
-        EntityList<TargetGroup> targetGroups = service.getTargetGroups(target.getId()).getResult();
+        EntityList<TargetGroup> targetGroups = service.getTargetGroups(target.getId()).getEntity();
         context.put("targetGroupList", targetGroups);
     }
 
@@ -287,7 +249,7 @@ public class APITargetSteps extends APISteps {
         OperationResult<UploadResult> operationResult = service.upload(targets);
         OperationsResults.setResult(operationResult);
         context.put("targets", targets);
-        context.put("uploadResult", operationResult.getResult());
+        context.put("uploadResult", operationResult.getEntity());
     }
 
     @Then("Upload result of $count targets is successful")
@@ -309,7 +271,7 @@ public class APITargetSteps extends APISteps {
     }
 
     @Given("$count targets with phones generated and added")
-    public void targetWithPhonesExist(String count){
+    public void targetWithPhonesExist(String count) {
         int targetsCount = Integer.valueOf(count);
         List<Target> targets = getRandomTargets(targetsCount);
         OperationResult operationResult = service.upload(targets);
@@ -319,11 +281,11 @@ public class APITargetSteps extends APISteps {
         context.put("generationMatrix", generationMatrix);
         context.put("targets", targets);
     }
-    
+
     private List<Target> getRandomTargets(int count) {
         return objectInitializer.randomEntities(Target.class, count);
     }
-    
+
     static Target getRandomTarget() {
         return objectInitializer.randomEntity(Target.class);
     }
@@ -333,7 +295,7 @@ public class APITargetSteps extends APISteps {
         OperationResult<EntityList<Target>> operationResult = service.list();
         OperationsResults.setResult(operationResult);
 
-        context.put("targetEntityList", operationResult.getResult());
+        context.put("targetEntityList", operationResult.getEntity());
     }
 
     @Then("Target list size more than $size")
@@ -341,5 +303,14 @@ public class APITargetSteps extends APISteps {
         EntityList<Target> targets = context.get("targetEntityList", EntityList.class);
 
         Assert.assertTrue(targets.size() > Integer.valueOf(size));
+    }
+
+    @When("I get random target from targets list")
+    public void getRandomTargetFromTargetList() {
+        List<Target> targets = context.get("targets", List.class);
+        Target target = RandomGenerator.getRandomItemFromList(targets);
+
+        Entities.getTargets().addOrUpdateEntity(target);
+        context.put("target", target);
     }
 }

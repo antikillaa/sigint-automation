@@ -30,7 +30,7 @@ public class APISourceSteps extends APISteps {
         Source source = getRandomSource();
         OperationResult<Source> operationResult = service.add(source);
         OperationsResults.setResult(operationResult);
-        context.put("source", operationResult.getResult());
+        context.put("source", operationResult.getEntity());
     }
 
     @Then("Source is correct")
@@ -43,8 +43,7 @@ public class APISourceSteps extends APISteps {
 
     @When("I send get list of sources request")
     public void getListOfSources() {
-       
-        EntityList<Source> sources = service.list().getResult();
+        EntityList<Source> sources = service.list().getEntity();
         context.put("sourceList", sources);
     }
 
@@ -79,7 +78,8 @@ public class APISourceSteps extends APISteps {
     public void viewRandomSourceFromList() {
         Source source = Entities.getSources().getLatest();
         OperationResult<Source> operationResult = service.view(source.getId());
-        context.put("source", operationResult.getResult());
+        OperationsResults.setResult(operationResult);
+        context.put("source", operationResult.getEntity());
     }
 
     @When("I send update source request")
@@ -94,7 +94,7 @@ public class APISourceSteps extends APISteps {
         generatedSource.setLatitude(newSource.getLatitude());
         generatedSource.setLongitude(newSource.getLongitude());
 
-        OperationResult<Source> operationResult = service.update(generatedSource);
+        OperationResult operationResult = service.update(generatedSource);
         OperationsResults.setResult(operationResult);
     }
 
@@ -132,7 +132,7 @@ public class APISourceSteps extends APISteps {
         RecordType recordType = RecordType.valueOf(rType);
 
         // if exist, return source
-        EntityList<Source> sources = service.list().getResult();
+        EntityList<Source> sources = service.list().getEntity();
         for (Source source : sources) {
             if (source.getType().equals(sourceType)) {
                 try {

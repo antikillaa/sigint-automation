@@ -35,7 +35,7 @@ class JenkinsClient {
             logger.error("Got error from jenkins when trying to get job status");
         }
 
-        JobInfo jobInfo = operationResult.getResult();
+        JobInfo jobInfo = operationResult.getEntity();
         logger.debug("Received job: " + jobInfo);
         return jobInfo;
     }

@@ -45,4 +45,18 @@ public class ReportCategoriesRequest extends HttpRequest {
                 .setHttpMethod(HttpMethod.GET);
         return this;
     }
+
+    public ReportCategoriesRequest view(String id) {
+        this
+            .setURI(URI + id)
+            .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
+    public ReportCategoriesRequest list() {
+        this
+                .setURI(URI_DEFAULT)
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
 }

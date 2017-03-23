@@ -8,6 +8,7 @@ import http.JsonConverter;
 import http.OperationResult;
 import http.OperationsResults;
 import model.EtisalatSubscriberEntry;
+import model.UploadResult;
 import model.phonebook.EtisalatSubscriberFilter;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -30,11 +31,11 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
     @When("I send upload EtisalatSubscriberData entry request with all fields")
     public void sendUploadEtisalatSubscriberDataEntryRequest() throws NullReturnException {
         EtisalatSubscriberEntry entry = getRandomEtisalatEntry();
-        log.info("Uploading etisalat subscriber");
-        log.debug("Entry:" + JsonConverter.toJsonString(entry));
-        OperationResult<EtisalatSubscriberEntry> operationResult = service.add(entry);
-        OperationsResults.setResult(operationResult);
         context.put("etisalatSubscriberEntry", entry);
+
+        OperationResult<UploadResult> operationResult = service.add(entry);
+        OperationsResults.setResult(operationResult);
+        context.put("uploadResult", operationResult.getEntity());
     }
 
     @When("I send search EtisalatSubscriberData by $criteria and value $value")
@@ -71,7 +72,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         OperationResult<EntityList<EtisalatSubscriberEntry>> operationResult = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
-        context.put("searchResult", operationResult.getResult());
+        context.put("searchResult", operationResult.getEntity());
     }
 
     @Then("EtisalatSubscriberData search result are correct")
@@ -182,7 +183,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
 
         OperationResult<EtisalatSubscriberEntry> operationResult = service.view(etalonEntry.getId());
 
-        context.put("etisalatSubscriberEntry", operationResult.getResult());
+        context.put("etisalatSubscriberEntry", operationResult.getEntity());
         context.put("etalonEntry", etalonEntry);
     }
 
@@ -202,9 +203,11 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
             EtisalatSubscriberEntry entry = getRandomEtisalatEntry();
             entries.add(entry);
         }
-        OperationResult<List<EtisalatSubscriberEntry>> operationResult = service.add(entries);
-        OperationsResults.setResult(operationResult);
         context.put("uploadedEtisalatSubscriberEntries", entries);
+
+        OperationResult<UploadResult> operationResult = service.add(entries);
+        OperationsResults.setResult(operationResult);
+        context.put("uploadResult", operationResult.getEntity());
     }
     
     

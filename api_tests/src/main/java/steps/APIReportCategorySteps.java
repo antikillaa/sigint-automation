@@ -12,9 +12,6 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.ReportCategoryService;
 
-import java.util.List;
-import java.util.Objects;
-
 @SuppressWarnings("unchecked")
 public class APIReportCategorySteps extends APISteps {
 
@@ -36,7 +33,7 @@ public class APIReportCategorySteps extends APISteps {
     @When("I send get list of report categories request")
     public void getReportCategoryList() {
         OperationResult<EntityList<ReportCategory>> result = reportCategoryService.list();
-        context.put("reportCategoryEntityList", result.getResult());
+        context.put("reportCategoryEntityList", result.getEntity());
     }
 
     @Then("Report categories list size more than $count")
@@ -75,17 +72,10 @@ public class APIReportCategorySteps extends APISteps {
     public void reportCategoryIsDeleted() {
         ReportCategory deletedCategory = context.get("deletedReportCategory", ReportCategory.class);
 
-        OperationResult<EntityList<ReportCategory>> result = reportCategoryService.filter(deletedCategory.getCreatedAt().getTime());
+        OperationResult<ReportCategory> result = reportCategoryService.view(deletedCategory.getId());
 
-        List<ReportCategory> reportCategories = result.getResult().getEntities();
-        Boolean isDeleted = false;
-        for (ReportCategory reportCategory: reportCategories) {
-            if (Objects.equals(reportCategory.getId(), deletedCategory.getId())) {
-                isDeleted = reportCategory.getDeleted();
-                break;
-            }
-        }
-        Assert.assertEquals("should be deleted", true, isDeleted);
+        Assert.assertEquals("report category should be deleted",
+            true, result.getEntity().getDeleted());
     }
 
     @When("I send delete report category request")

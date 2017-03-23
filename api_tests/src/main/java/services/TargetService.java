@@ -8,10 +8,7 @@ import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
 import http.requests.targets.TargetRequest;
-import model.G4File;
-import model.Target;
-import model.TargetGroup;
-import model.UploadResult;
+import model.*;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -37,12 +34,13 @@ public class TargetService implements EntityService<Target> {
         log.info("Creating new target");
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
 
-        Target target = JsonConverter.readEntityFromResponse(response, Target.class, "id");
-        OperationResult<Target> operationResult = new OperationResult<>(response, target);
+        OperationResult<Target> operationResult = new OperationResult<>(response, Target.class, "id");
         if (operationResult.isSuccess()) {
-            Entities.getTargets().addOrUpdateEntity(target);
+            Entities.getTargets().addOrUpdateEntity(operationResult.getEntity());
         } else {
-            log.error("Add new target process was failed");
+            String errorMessage = "Add new target process was failed";
+            log.error(errorMessage);
+            throw new AssertionError(errorMessage);
         }
         return operationResult;
     }
@@ -57,11 +55,10 @@ public class TargetService implements EntityService<Target> {
         log.info("Writing Targets to file");
         G4File file = new FileGenerator(Target.class).write(targets);
 
-        log.info("Upload file with " + targets.size() + " targets");
+        log.info("Upload file " + file.getAbsolutePath() + " with " + targets.size() + " targets");
         G4Response response = g4HttpClient.sendRequest(request.upload(file));
 
-        UploadResult uploadResult = JsonConverter.readEntityFromResponse(response, UploadResult.class, "result");
-        return new OperationResult<>(response, uploadResult);
+        return new OperationResult<>(response, UploadResult.class, "result");
     }
 
     /**
@@ -89,13 +86,19 @@ public class TargetService implements EntityService<Target> {
      * @param filter search filter for payload
      * @return EntityList of Targets
      */
+    @SuppressWarnings("unchecked")
     @Override
     public OperationResult<EntityList<Target>> list(SearchFilter filter) {
         log.info("Search targets by filter:" + JsonConverter.toJsonString(filter));
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
-        List<Target> targets = JsonConverter.readEntitiesFromResponse(response, Target[].class, "result");
-        return new OperationResult<>(response, new EntityList<>(targets));
+        OperationResult<TargetSearchResult> operationResult = new OperationResult<>(response, TargetSearchResult.class, "result");
+
+        if (operationResult.isSuccess()) {
+            return new OperationResult<>(response, new EntityList<>(operationResult.getEntity().getContent()));
+        } else {
+            throw new AssertionError("Unable to read list of target from response");
+        }
     }
 
     /**
@@ -107,7 +110,7 @@ public class TargetService implements EntityService<Target> {
         log.info("Get list of targets");
         G4Response response = g4HttpClient.sendRequest(request.list());
 
-        List<Target> targets = JsonConverter.readEntitiesFromResponse(response, Target[].class, "result");
+        List<Target> targets = JsonConverter.jsonToObjectsList(response.getMessage(), Target[].class, "result");
         log.info("received " + targets.size() + " targets");
         return new OperationResult<>(response, new EntityList<>(targets));
     }
@@ -143,8 +146,7 @@ public class TargetService implements EntityService<Target> {
         log.info("View target entry id:" + id);
         G4Response response = g4HttpClient.sendRequest(request.get(id));
 
-        Target target = JsonConverter.readEntityFromResponse(response, Target.class, "result");
-        return new OperationResult<>(response, target);
+        return new OperationResult<>(response, Target.class, "result");
     }
 
     /**
@@ -157,7 +159,7 @@ public class TargetService implements EntityService<Target> {
         log.info("Get targetGroups of target id:" + id);
         G4Response response = g4HttpClient.sendRequest(request.findTargetGroups(id));
 
-        List<TargetGroup> targetGroups = JsonConverter.readEntitiesFromResponse(response, TargetGroup[].class);
+        List<TargetGroup> targetGroups = JsonConverter.jsonToObjectsList(response.getMessage(), TargetGroup[].class);
         return new OperationResult<>(response, new EntityList<>(targetGroups));
     }
 
