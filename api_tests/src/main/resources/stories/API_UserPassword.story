@@ -28,7 +28,7 @@ Meta:
 @dev
 When I change user password to LONGPASSWORDHERE
 Then I got response code 400
-And Message contains "too weak"
+And Message contains "not valid"
 
 Scenario: API.Check dictionary password
 Meta:
@@ -60,6 +60,7 @@ And Message contains "not valid"
 Scenario: API.Check password with emoji symbols
 Meta:
 @dev
+@wip
 When I change user password to Em0j1🚀🚃🚑🚕
 Then I got response code 400
 
