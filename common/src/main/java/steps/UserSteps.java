@@ -24,9 +24,9 @@ public class UserSteps {
         OperationResult<Group> groupOperationResult = groupService.add(group);
         User newUser = randomEntities.randomEntity(User.class);
         List<String> ids = new ArrayList<>();
-        ids.add(groupOperationResult.getResult().getId());
+        ids.add(groupOperationResult.getEntity().getId());
         newUser.setUserGroupIds(ids);
         OperationResult<User> userOperationResult = userService.add(newUser);
-        return userOperationResult.getResult();
+        return userOperationResult.getEntity();
     }
 }
