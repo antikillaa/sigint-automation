@@ -1,5 +1,6 @@
 package steps;
 
+import abs.EntityList;
 import app_context.entities.Entities;
 import http.OperationResult;
 import http.OperationsResults;
@@ -103,5 +104,20 @@ public class APIProfileSteps extends APISteps {
 
         OperationResult operationResult = service.remove(profile);
         OperationsResults.setResult(operationResult);
+    }
+
+    @When("I send get list of profile drafts request")
+    public void getProfileDraftsList() {
+        OperationResult<EntityList<Profile>> operationResult = draftService.list();
+        OperationsResults.setResult(operationResult);
+
+        context.put("profileDraftsEntityList", operationResult.getEntity());
+    }
+
+    @Then("Profile drafts list size more than $size")
+    public void profileDraftsListMoreThan(String size) {
+        EntityList<Profile> profiles = context.get("profileDraftsEntityList", EntityList.class);
+
+        Assert.assertTrue(profiles.size() > Integer.valueOf(size));
     }
 }

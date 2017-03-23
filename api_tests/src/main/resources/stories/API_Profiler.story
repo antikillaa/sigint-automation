@@ -29,22 +29,23 @@ Then Request is successful
 And Upload result of <targetCount> targets is successful
 
 Examples:
-| targetCount |
-| 2           |
+| criteria     | value  | targetCount |
+| updatedAfter | random | 1           |
 
 
 Scenario: (New profiler) API.Search targets entries using search filters (G4 comp.)
 Given I sign in as admin user
-When I send upload targets XLS file request with 1 random targets
+When I send upload targets XLS file request with <targetCount> random targets
 Then Request is successful
+And Upload result of <targetCount> targets is successful
 When I get random target from targets list
 And I send search targets by <criteria> and value <value>
 Then targets search result are correct
 And searched target in search result list
 
 Examples:
-| criteria | value  |
-| updatedAfter | random |
+| criteria     | value  | targetCount |
+| updatedAfter | random | 1           |
 
 
 Scenario: (New profiler) API.Search target groups using search filters (G4 comp.)
@@ -144,3 +145,10 @@ Then Request is successful
 
 When I send get profile details request
 Then Request is unsuccessful
+
+
+Scenario: API.(New profiler) Get list of all profile drafts
+Given I sign in as admin user
+When I send get list of profile drafts request
+Then Request is successful
+And Profile drafts list size more than 0
