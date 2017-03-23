@@ -12,7 +12,7 @@ public class ProfileEntity extends AbstractEntity {
 
     private String name;
     private DummyFieldType properties;
-    private ArrayList<ProfileSources> sources = new ArrayList<>();
+    private ArrayList<SourceType> sources = new ArrayList<>();
     private ProfileEntityType type;
     private ValidationStatus validationStatus;
     private DummyFieldType entities;
@@ -33,11 +33,11 @@ public class ProfileEntity extends AbstractEntity {
         this.properties = properties;
     }
 
-    public ArrayList<ProfileSources> getSources() {
+    public ArrayList<SourceType> getSources() {
         return sources;
     }
 
-    public void setSources(ArrayList<ProfileSources> sources) {
+    public void setSources(ArrayList<SourceType> sources) {
         this.sources = sources;
     }
 

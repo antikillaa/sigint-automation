@@ -2,7 +2,9 @@ package model;
 
 import abs.AbstractEntity;
 import data_for_entity.annotations.DataIgnore;
+import json.serialization.ProfileCategoryDeserializer;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ public class Profile extends AbstractEntity {
     @DataIgnore
     private Boolean target;
     @DataIgnore
+    @JsonDeserialize(using = ProfileCategoryDeserializer.class)
     private ProfileCategory category;
     @DataIgnore
     private ProfileConsolidatedAttributes consolidatedAttributes;
@@ -34,7 +37,7 @@ public class Profile extends AbstractEntity {
     @DataIgnore
     private Integer entityCount;
     @DataIgnore
-    private String parent;
+    private Profile parent;
     @DataIgnore
     private ArrayList<String> mergingProfilesIDs = new ArrayList<>();
 
@@ -119,11 +122,11 @@ public class Profile extends AbstractEntity {
         this.entityCount = entityCount;
     }
 
-    public String getParent() {
+    public Profile getParent() {
         return parent;
     }
 
-    public void setParent(String parent) {
+    public void setParent(Profile parent) {
         this.parent = parent;
     }
 

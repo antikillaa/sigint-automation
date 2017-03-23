@@ -11,6 +11,8 @@ import model.Profile;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
+
 public class ProfileDraftService implements EntityService<Profile> {
 
     private static final ProfileDraftRequest request = new ProfileDraftRequest();
@@ -43,6 +45,18 @@ public class ProfileDraftService implements EntityService<Profile> {
     @Override
     public OperationResult<EntityList<Profile>> list(SearchFilter filter) {
         throw new NotImplementedException();
+    }
+
+    public OperationResult<EntityList<Profile>> list() {
+        G4Response response = g4HttpClient.sendRequest(request.list());
+
+        OperationResult<Profile[]> operationResult = new OperationResult<>(response, Profile[].class, "data");
+        if (operationResult.isSuccess()) {
+            Profile[] profiles = operationResult.getEntity();
+            return new OperationResult<>(response, new EntityList<>(Arrays.asList(profiles)));
+        } else {
+            throw new AssertionError("Unable to get list of profile drafts!");
+        }
     }
 
     @Override

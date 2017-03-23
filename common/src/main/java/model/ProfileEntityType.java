@@ -2,6 +2,6 @@ package model;
 
 public enum  ProfileEntityType {
 
-    IMSI, PhoneNumber
+    Unknown, IMSI, PhoneNumber, Email, TwitterAccount
 
 }

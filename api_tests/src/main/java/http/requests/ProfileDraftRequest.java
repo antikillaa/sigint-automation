@@ -44,4 +44,11 @@ public class ProfileDraftRequest extends HttpRequest {
                 .setPayload(profile);
         return this;
     }
+
+    public ProfileDraftRequest list() {
+        this
+                .setURI(URI)
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
 }
