@@ -25,7 +25,7 @@ public class APILoginSteps extends APISteps {
 
     @Given("I sign in as $role user")
     public void signInGlobal(String role) {
-        OperationResult operationResult = signInCreds(role);
+        signInCreds(role);
         checkResultSuccess();
     }
 
@@ -33,7 +33,7 @@ public class APILoginSteps extends APISteps {
     public void signInWithPermissions(String permString) {
         String[] permissions = CollectionUtils.trimSpaces(permString.split(","));
         User user = GlobalSteps.getUserWithPermissions(permissions);
-        OperationResult operationResult = signInCreds(user);
+        signInCreds(user);
         checkResultSuccess();
 
     }

@@ -25,6 +25,7 @@ public class OperationResult<T> {
     public OperationResult(G4Response response, Class<T> resultCastType) {
         this.response = response;
         this.objectTypeClass = resultCastType;
+        OperationsResults.setResult(this);
     }
 
     public OperationResult(G4Response response, Class<T> resultCastType, String wrappedField) {
