@@ -23,6 +23,8 @@ Then Request is successful
 
 
 Scenario: (New profiler) API.Upload targets (G4 comp.)
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send upload targets XLS file request with <targetCount> random targets
 Then Request is successful
@@ -34,6 +36,8 @@ Examples:
 
 
 Scenario: (New profiler) API.Search targets entries using search filters (G4 comp.)
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send upload targets XLS file request with 1 random targets
 Then Request is successful
@@ -48,6 +52,8 @@ Examples:
 
 
 Scenario: (New profiler) API.Search target groups using search filters (G4 comp.)
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send create target group without targets request
 Then Request is successful
@@ -66,6 +72,8 @@ Examples:
 
 
 Scenario: (New profiler) API.Get all targets (G4 comp.)
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send get list of targets request
 Then Request is successful
@@ -73,6 +81,8 @@ And Target list size more than 0
 
 
 Scenario: (New profiler) API.Get all target groups (G4 comp.)
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send get list of target group request
 Then Request is successful
