@@ -25,7 +25,6 @@ public class APILogin {
         log.info("Signing in as user: " + user);
 
         OperationResult<Token> operationResult = signService.signIn(user.getName(), user.getPassword());
-        OperationsResults.setResult(operationResult);
         if (operationResult.isSuccess()) {
             Token token = operationResult.getEntity();
             context.setLoggedUser(new LoggedUser(user));
@@ -51,8 +50,6 @@ public class APILogin {
         log.info("Signing out");
 
         OperationResult<RequestResult> operationResult = signService.signOut();
-        OperationsResults.setResult(operationResult);
-
         if(operationResult.isSuccess()) {
             context.setLoggedUser(null);
         }
