@@ -41,7 +41,6 @@ public class APITargetSteps extends APISteps {
         }
 
         OperationResult<Target> operationResult = service.add(target);
-        OperationsResults.setResult(operationResult);
         context.put("requestTarget", operationResult.getEntity());
     }
 
@@ -92,7 +91,6 @@ public class APITargetSteps extends APISteps {
         updatedTarget.setDescription(RandomStringUtils.randomAlphabetic(20));
         log.info("Updated target: " + JsonConverter.toJsonString(updatedTarget));
         OperationResult<Target> operationResult = service.update(updatedTarget);
-        OperationsResults.setResult(operationResult);
         context.put("updatedTarget", operationResult.getEntity());
     }
 
@@ -106,9 +104,7 @@ public class APITargetSteps extends APISteps {
     @When("I send delete target request")
     public void deleteTargetRequest() {
         Target createdTarget = Entities.getTargets().getLatest();
-
-        OperationResult operationResult = service.remove(createdTarget);
-        OperationsResults.setResult(operationResult);
+        service.remove(createdTarget);
         context.put("deletedTarget", createdTarget);
     }
 
@@ -122,10 +118,7 @@ public class APITargetSteps extends APISteps {
     @When("I send upload targets XLS file request with $count random targets")
     public void targetGeneratedXls(String count) {
         List<Target> targets = getRandomTargets(Integer.valueOf(count));
-
         OperationResult<UploadResult> operationResult = service.upload(targets);
-        OperationsResults.setResult(operationResult);
-
         context.put("targets", targets);
         context.put("uploadResult", operationResult.getEntity());
     }
@@ -142,7 +135,6 @@ public class APITargetSteps extends APISteps {
         }
 
         OperationResult<UploadResult> operationResult = service.upload(targets);
-        OperationsResults.setResult(operationResult);
         context.put("targets", targets);
         context.put("uploadResult", operationResult.getEntity());
     }
@@ -247,7 +239,6 @@ public class APITargetSteps extends APISteps {
         }
 
         OperationResult<UploadResult> operationResult = service.upload(targets);
-        OperationsResults.setResult(operationResult);
         context.put("targets", targets);
         context.put("uploadResult", operationResult.getEntity());
     }
@@ -293,8 +284,6 @@ public class APITargetSteps extends APISteps {
     @When("I send get list of targets request")
     public void getTargetList() {
         OperationResult<EntityList<Target>> operationResult = service.list();
-        OperationsResults.setResult(operationResult);
-
         context.put("targetEntityList", operationResult.getEntity());
     }
 

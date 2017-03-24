@@ -5,11 +5,10 @@ import org.apache.log4j.Logger;
 
 public class OperationsResults {
 
-
     private static OperationResult operationResult;
     private static Logger logger = Logger.getLogger(OperationsResults.class);
 
-    public static void setResult(OperationResult result) {
+    static void setResult(OperationResult result) {
         operationResult = result;
     }
 

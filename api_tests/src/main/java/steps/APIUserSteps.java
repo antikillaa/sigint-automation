@@ -30,9 +30,7 @@ public class APIUserSteps extends APISteps {
         User user = getRandomUser();
         user.setUserGroupIds(userGroupIds);
         context.put("user", user);
-
-        OperationResult<User> operationResult = service.add(user);
-        OperationsResults.setResult(operationResult);
+        service.add(user);
     }
 
     @Then("Created user is correct")
@@ -61,9 +59,7 @@ public class APIUserSteps extends APISteps {
     @When("I send delete user request")
     public void deleteUser() {
         User createdUser = Entities.getUsers().getLatest();
-        OperationResult<RequestResult> operationResult = service.remove(createdUser);
-
-        OperationsResults.setResult(operationResult);
+        service.remove(createdUser);
     }
 
     @When("I send get list of users")
@@ -97,23 +93,19 @@ public class APIUserSteps extends APISteps {
         User updatedUser = getRandomUser();
         updatedUser.setId(user.getId());
         context.put("user", updatedUser);
-
-        OperationResult<User> result = service.update(updatedUser);
+        service.update(updatedUser);
     }
 
     @When("I send get current user request")
     public void getCurrentUserRequest() {
-        OperationResult<User> operationResult = service.me();
-        OperationsResults.setResult(operationResult);
+        service.me();
     }
 
     @When("I send create a new user")
     public void createNewUser() {
         User user = getRandomUser();
         context.put("user", user);
-
-        OperationResult<User> operationResult = service.add(user);
-        OperationsResults.setResult(operationResult);
+        service.add(user);
     }
 
     @When("I set wrong user password")
@@ -141,9 +133,8 @@ public class APIUserSteps extends APISteps {
         log.info(String.format("Changing password from %s to %s", user.getPassword(), passwordToReplace));
         user.setNewPassword(passwordToReplace);
         context.put("user", user);
+        service.update(user);
 
-        OperationResult<User> operationResult = service.update(user);
-        OperationsResults.setResult(operationResult);
     }
 
 }

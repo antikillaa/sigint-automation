@@ -21,7 +21,6 @@ public class APIProfileSteps extends APISteps {
         context.put("profileDraft", profile);
 
         OperationResult<Profile> operationResult = draftService.add(profile);
-        OperationsResults.setResult(operationResult);
     }
 
     private static Profile getRandomProfile() {
@@ -55,37 +54,29 @@ public class APIProfileSteps extends APISteps {
     @When("I send delete profile draft request")
     public void deleteLatestProfile() {
         Profile profile = Entities.getProfiles().getLatest();
-
-        OperationResult operationResult = draftService.remove(profile);
-        OperationsResults.setResult(operationResult);
+        draftService.remove(profile);
     }
 
     @When("I send get profile draft details request")
     public void getProfileDraftDetails() {
         Profile createdProfile = Entities.getProfiles().getLatest();
         context.put("profileDraft", createdProfile);
+        draftService.view(createdProfile.getId());
 
-        OperationResult<Profile> operationResult = draftService.view(createdProfile.getId());
-        OperationsResults.setResult(operationResult);
     }
 
     @When("I send publish profile draft request")
     public void publishProfileDraft() {
         Profile createdProfile = Entities.getProfiles().getLatest();
         context.put("profileDraft", createdProfile);
-
         OperationResult<Profile> operationResult = draftService.publish(createdProfile);
-        OperationsResults.setResult(operationResult);
-
         context.put("profile", operationResult.getEntity());
     }
 
     @When("I send get profile details request")
     public void getProfileDetails() {
         Profile profile = context.get("profile", Profile.class);
-
-        OperationResult<Profile> operationResult = service.view(profile.getId());
-        OperationsResults.setResult(operationResult);
+        service.view(profile.getId());
     }
 
     @Then("Profile is correct")
@@ -100,8 +91,6 @@ public class APIProfileSteps extends APISteps {
     public void deleteProfile() {
         Profile profile = Entities.getProfiles().getLatest();
         context.put("profile", profile);
-
-        OperationResult operationResult = service.remove(profile);
-        OperationsResults.setResult(operationResult);
+        service.remove(profile);
     }
 }

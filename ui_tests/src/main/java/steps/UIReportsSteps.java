@@ -4,6 +4,7 @@ import app_context.AppContext;
 import conditions.Conditions;
 import conditions.Verify;
 import controllers.TableController;
+import data_for_entity.RandomEntities;
 import errors.NotFoundException;
 import model.Record;
 import model.Report;
@@ -16,6 +17,7 @@ import utils.RandomGenerator;
 public class UIReportsSteps extends UISteps {
 
     private static Logger log = Logger.getLogger(UIReportsSteps.class);
+    private RandomEntities randomEntities = new RandomEntities();
 
     @When("I create new manual draft report")
     public void createManualDraftReport() {
@@ -44,7 +46,7 @@ public class UIReportsSteps extends UISteps {
     @When("Fill out required fields on 'Create Report' page based from record")
     public void fillOutRequiredFieldsOnCreateReportScreen() {
         Record record  = getRecordFromContext();
-        Report report = new Report().generate();
+        Report report = randomEntities.randomEntity(Report.class);
         report.setRecordType(record.getType().name());
         report.setSourceType(record.getSourceName());
         getReportsFormFactory().getRecordBasedForm().fillForm(report);
@@ -53,7 +55,7 @@ public class UIReportsSteps extends UISteps {
 
     @When("I fill out required fields on 'Create Manual Report' page")
     public void fillOutRequiredFieldsOnCreateManualReportPage() {
-        Report report = new Report().generate();
+        Report report = randomEntities.randomEntity(Report.class);
         report.setRecordType(RandomGenerator.getRandomItemFromList(AppContext.get().getDictionary().getRecordTypes()).getType());
         report.setSourceType(RandomGenerator.getRandomItemFromList(AppContext.get().getDictionary().getSources()).getType().name());
 

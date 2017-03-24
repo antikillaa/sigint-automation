@@ -32,7 +32,6 @@ public class APIPhonebookSteps extends APISteps {
         Phonebook phonebook = getRandomPhonebook();
 
         OperationResult<Phonebook> operationResult = service.add(phonebook);
-        OperationsResults.setResult(operationResult);
         context.put("phonebook", operationResult.getEntity());
     }
 
@@ -42,7 +41,6 @@ public class APIPhonebookSteps extends APISteps {
         Phonebook newPhonebook = getRandomPhonebook();
         newPhonebook.setId(phonebook.getId());
         OperationResult<Phonebook> operationResult = service.update(newPhonebook);
-        OperationsResults.setResult(operationResult);
         context.put("phonebook", operationResult.getEntity());
     }
 
@@ -66,7 +64,6 @@ public class APIPhonebookSteps extends APISteps {
         Phonebook phonebook = Entities.getPhonebooks().getLatest();
         context.put("id", phonebook.getId());
         OperationResult operationResult = service.remove(phonebook);
-        OperationsResults.setResult(operationResult);
     }
 
     @Then("Phonebook Entry was deleted")
@@ -168,7 +165,6 @@ public class APIPhonebookSteps extends APISteps {
         if (operationResult.getEntity() != null) {
             context.put("uploadResult", operationResult.getEntity());
         }
-        OperationsResults.setResult(operationResult);
         context.put("uploadedPhonebooks", phonebooks);
         for (Phonebook phonebook : phonebooks){
             Entities.getPhonebooks().addOrUpdateEntity(phonebook);

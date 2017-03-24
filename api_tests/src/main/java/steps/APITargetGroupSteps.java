@@ -41,9 +41,8 @@ public class APITargetGroupSteps extends APISteps {
         }
 
         context.put("targetGroup", group);
+        service.add(group);
 
-        OperationResult<TargetGroup> operationResult = service.add(group);
-        OperationsResults.setResult(operationResult);
     }
 
     @Then("Created target group is correct")
@@ -87,8 +86,6 @@ public class APITargetGroupSteps extends APISteps {
     @When("I send get list of target group request")
     public void getListOfTargetGroupsRequest() throws NullReturnException {
         OperationResult<EntityList<TargetGroup>> operationResult = service.listG4Compatibility();
-        OperationsResults.setResult(operationResult);
-
         context.put("targetGroupEntityList", operationResult.getEntity());
     }
 
@@ -139,9 +136,8 @@ public class APITargetGroupSteps extends APISteps {
     public void deleteTargetGroupRequest() {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
         context.put("targetGroup", targetGroup);
+        service.remove(targetGroup);
 
-        OperationResult operationResult = service.remove(targetGroup);
-        OperationsResults.setResult(operationResult);
     }
 
     @When("I send update target group request")
@@ -149,7 +145,6 @@ public class APITargetGroupSteps extends APISteps {
         TargetGroup createdTargetGroup = Entities.getTargetGroups().getLatest();
         TargetGroup updatedTargetGroup = updateTargetGroup(createdTargetGroup);
         OperationResult<TargetGroup> operationResult = service.update(updatedTargetGroup);
-        OperationsResults.setResult(operationResult);
         context.put("updatedTargetGroup", operationResult.getEntity());
     }
 

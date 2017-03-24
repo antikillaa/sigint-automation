@@ -34,8 +34,7 @@ public class APIRecordSteps extends APISteps {
                 throw new AssertionError("Unknown record type passed:" + recordType);
         }
         record.setSourceId(RandomGenerator.getRandomItemFromList(appContext.getDictionary().getSources()).getId());
-        OperationResult<Record> operationResult = service.add(record);
-        OperationsResults.setResult(operationResult);
+        service.add(record);
         context.put("requestRecord", record);
     }
 

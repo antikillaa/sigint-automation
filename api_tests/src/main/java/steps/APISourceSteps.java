@@ -29,7 +29,6 @@ public class APISourceSteps extends APISteps {
     public void createSource() {
         Source source = getRandomSource();
         OperationResult<Source> operationResult = service.add(source);
-        OperationsResults.setResult(operationResult);
         context.put("source", operationResult.getEntity());
     }
 
@@ -78,7 +77,6 @@ public class APISourceSteps extends APISteps {
     public void viewRandomSourceFromList() {
         Source source = Entities.getSources().getLatest();
         OperationResult<Source> operationResult = service.view(source.getId());
-        OperationsResults.setResult(operationResult);
         context.put("source", operationResult.getEntity());
     }
 
@@ -93,9 +91,8 @@ public class APISourceSteps extends APISteps {
         generatedSource.setRecordType(newSource.getRecordType());
         generatedSource.setLatitude(newSource.getLatitude());
         generatedSource.setLongitude(newSource.getLongitude());
+        service.update(generatedSource);
 
-        OperationResult operationResult = service.update(generatedSource);
-        OperationsResults.setResult(operationResult);
     }
 
     @Given("Get random source from list")
@@ -114,8 +111,7 @@ public class APISourceSteps extends APISteps {
     @When("I send delete Source request")
     public void deleteSource() {
         Source source = Entities.getSources().getLatest();
-        OperationResult operationResult = service.remove(source);
-        OperationsResults.setResult(operationResult);
+        service.remove(source);
         context.put("source", source);
     }
 

@@ -28,7 +28,6 @@ public class APIDuSubscriberSteps extends APISteps {
         DuSubscriberEntry duSubscriberEntry = getRandomDuEntry();
         log.info("Entry:" + JsonConverter.toJsonString(duSubscriberEntry));
         OperationResult operationResult = service.add(duSubscriberEntry);
-        OperationsResults.setResult(operationResult);
         context.put("duSubscriberEntry", duSubscriberEntry);
         context.put("uploadResult", operationResult.getEntity());
     }
@@ -52,7 +51,6 @@ public class APIDuSubscriberSteps extends APISteps {
         DuSubscriberFilter searchFilter = new DuSubscriberFilter().filterBy(criteria, value);
         log.info("Search isAppliedToEntity: " + JsonConverter.toJsonString(searchFilter));
         OperationResult<EntityList<DuSubscriberEntry>> operationResult = service.list(searchFilter);
-        OperationsResults.setResult(operationResult);
         context.put("searchFilter", searchFilter);
         context.put("searchResult", operationResult.getEntity());
     }

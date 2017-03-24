@@ -5,6 +5,7 @@ import conditions.Conditions;
 import conditions.Verify;
 import controllers.records.RecordAddController;
 import controllers.records.RecordsDetailsController;
+import data_for_entity.RandomEntities;
 import errors.NotFoundException;
 import model.Record;
 import model.RecordType;
@@ -19,6 +20,7 @@ public class UIRecordsSteps extends UISteps {
     private static Logger log = Logger.getLogger(UIRecordsSteps.class);
     private RecordAddController addController;
     private RecordsDetailsController detailsController;
+    private RandomEntities randomEntities = new RandomEntities();
 
 
     private RecordAddController addController() {
@@ -58,11 +60,9 @@ public class UIRecordsSteps extends UISteps {
 
     @When("I fill the form for $recordType record")
     public void fillTheForm(String recordType) {
-        Record record = new Record();
+        Record record = randomEntities.randomEntity(Record.class);
         record.setType(RecordType.valueOf(recordType));
         record.setSourceName(RandomGenerator.getRandomItemFromList(AppContext.get().getDictionary().getSources()).getName());
-        record.generate();
-
         addController().fillForm(record);
         context.put("record", record);
     }

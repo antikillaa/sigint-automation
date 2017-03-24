@@ -48,10 +48,7 @@ public class APIReportCategorySteps extends APISteps {
     @When("I create new report category")
     public void createReportCategory() {
         ReportCategory reportCategory = objectInitializer.randomEntity(ReportCategory.class);
-
-        OperationResult<ReportCategory> operationResult = reportCategoryService.add(reportCategory);
-        OperationsResults.setResult(operationResult);
-
+        reportCategoryService.add(reportCategory);
         context.put("reportCategory", reportCategory);
     }
 
@@ -71,9 +68,7 @@ public class APIReportCategorySteps extends APISteps {
     @Then("Report category is marked as deleted")
     public void reportCategoryIsDeleted() {
         ReportCategory deletedCategory = context.get("deletedReportCategory", ReportCategory.class);
-
         OperationResult<ReportCategory> result = reportCategoryService.view(deletedCategory.getId());
-
         Assert.assertEquals("report category should be deleted",
             true, result.getEntity().getDeleted());
     }
@@ -81,10 +76,7 @@ public class APIReportCategorySteps extends APISteps {
     @When("I send delete report category request")
     public void deleteReportCategory() {
         ReportCategory categoryToDelete = Entities.getReportCategories().getLatest();
-
-        OperationResult operationResult = reportCategoryService.remove(categoryToDelete);
-        OperationsResults.setResult(operationResult);
-
+        reportCategoryService.remove(categoryToDelete);
         context.put("deletedReportCategory", categoryToDelete);
     }
 }

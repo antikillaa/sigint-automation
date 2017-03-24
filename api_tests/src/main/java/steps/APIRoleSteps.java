@@ -23,9 +23,7 @@ public class APIRoleSteps extends APISteps {
     public void createRoleRequest() {
         Role role = getRandomRole();
         context.put("role", role);
-
-        OperationResult<Role> operationResult = service.add(role);
-        OperationsResults.setResult(operationResult);
+        service.add(role);
     }
 
     @Then("Role is correct")
@@ -45,8 +43,7 @@ public class APIRoleSteps extends APISteps {
     @When("I send delete Role request")
     public void deleteLatestRole() {
         Role role = Entities.getRoles().getLatest();
-        OperationResult operationResult = service.remove(role);
-        OperationsResults.setResult(operationResult);
+        service.remove(role);
     }
 
     @When("I send get list of Roles request")
@@ -73,8 +70,6 @@ public class APIRoleSteps extends APISteps {
         Role updatedRole = getRandomRole();
         updatedRole.setName(role.getName());
         context.put("role", updatedRole);
-
-        OperationResult<Role> operationResult = service.update(updatedRole);
-        OperationsResults.setResult(operationResult);
+        service.update(updatedRole);
     }
 }

@@ -26,9 +26,8 @@ public class APIRecordCategorySteps extends APISteps {
         DataGenerator dataGenerator = new DataGenerator(RecordCategory.class);
         RecordCategory recordCategory = (RecordCategory) dataGenerator.produce();
         context.put("recordCategory", recordCategory);
+        service.add(recordCategory);
 
-        OperationResult<RecordCategory> operationResult = service.add(recordCategory);
-        OperationsResults.setResult(operationResult);
     }
 
     @When("I send get list of record categories request")

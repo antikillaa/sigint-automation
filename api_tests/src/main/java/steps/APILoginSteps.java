@@ -26,7 +26,6 @@ public class APILoginSteps extends APISteps {
     @Given("I sign in as $role user")
     public void signInGlobal(String role) {
         OperationResult operationResult = signInCreds(role);
-        OperationsResults.setResult(operationResult);
         checkResultSuccess();
     }
 
@@ -35,7 +34,6 @@ public class APILoginSteps extends APISteps {
         String[] permissions = CollectionUtils.trimSpaces(permString.split(","));
         User user = GlobalSteps.getUserWithPermissions(permissions);
         OperationResult operationResult = signInCreds(user);
-        OperationsResults.setResult(operationResult);
         checkResultSuccess();
 
     }
@@ -71,15 +69,12 @@ public class APILoginSteps extends APISteps {
 
     @When("I send sign out request")
     public void signOut() {
-        OperationResult<RequestResult> operationResult = login.signOut();
-        OperationsResults.setResult(operationResult);
+        login.signOut();
     }
 
     @When("I sign in as new created user")
     public void signInAsNewCreatedUser() {
         User user = Entities.getUsers().getLatest();
-
-        OperationResult<Token> operationResult = login.signInAsUser(user);
-        OperationsResults.setResult(operationResult);
+        login.signInAsUser(user);
     }
 }

@@ -34,7 +34,6 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         context.put("etisalatSubscriberEntry", entry);
 
         OperationResult<UploadResult> operationResult = service.add(entry);
-        OperationsResults.setResult(operationResult);
         context.put("uploadResult", operationResult.getEntity());
     }
 
@@ -206,7 +205,6 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         context.put("uploadedEtisalatSubscriberEntries", entries);
 
         OperationResult<UploadResult> operationResult = service.add(entries);
-        OperationsResults.setResult(operationResult);
         context.put("uploadResult", operationResult.getEntity());
     }
     

@@ -29,9 +29,7 @@ public class APIUserGroupSteps extends APISteps {
     public void createGroupRequest() {
         Group group = getRandomUserGroup();
         context.put("group", group);
-
-        OperationResult<Group> operationResult = service.add(group);
-        OperationsResults.setResult(operationResult);
+        service.add(group);
     }
 
     @Then("CreatedOrUpdated group is correct")
@@ -46,12 +44,10 @@ public class APIUserGroupSteps extends APISteps {
     public void addRoleToGroupRequest() {
         List<String> roles = new ArrayList<>();
         roles.add(Entities.getRoles().getLatest().getName());
-
         Group group = Entities.getGroups().getLatest().setRoles(roles);
         context.put("group", group);
+        service.update(group);
 
-        OperationResult<Group> operationResult = service.update(group);
-        OperationsResults.setResult(operationResult);
     }
 
     @Then("Updated group is correct")
@@ -69,10 +65,7 @@ public class APIUserGroupSteps extends APISteps {
     @When("I send delete group request")
     public void deleteGroup() {
         Group group = Entities.getGroups().getLatest();
-
         OperationResult<RequestResult> operationResult = service.remove(group);
-        OperationsResults.setResult(operationResult);
-
         context.put("requestResult", operationResult.getEntity());
     }
 

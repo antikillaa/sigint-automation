@@ -32,7 +32,6 @@ public class APIReportSteps extends APISteps {
     public void createManualReport() {
         Report report = context.get("report", Report.class);
         OperationResult<Report> operationResult = reportService.add(report);
-        OperationsResults.setResult(operationResult);
         context.put("requestReport", operationResult.getEntity());
     }
 

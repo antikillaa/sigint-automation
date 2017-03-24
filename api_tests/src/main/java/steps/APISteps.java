@@ -21,7 +21,6 @@ public abstract class APISteps {
     @Then("I got response code $expected")
     public void checkResponseCode(String expected) {
         OperationResult result = OperationsResults.getResult();
-
         log.info("Checking response code " + result.getCode());
         Assert.assertTrue("Incorrect return code!", Integer.valueOf(expected) == result.getCode());
     }
@@ -29,7 +28,6 @@ public abstract class APISteps {
     @Then("Message contains $text")
     public void checkMessageContainsText(String text) {
         OperationResult result = OperationsResults.getResult();
-
         log.info("Checking message " + result.getMessage());
         Assert.assertTrue(text + " not found", result.getMessage().contains(stripQuotes(text)));
     }
@@ -37,7 +35,6 @@ public abstract class APISteps {
     @Then("Request is successful")
     public void checkResultSuccess() {
         OperationResult result = OperationsResults.getResult();
-
         if (!result.isSuccess()) {
             OperationsResults.throwError(result);
         }
@@ -46,7 +43,6 @@ public abstract class APISteps {
     @Then("Request is unsuccessful")
     public void checkResultFail() {
         OperationResult result = OperationsResults.getResult();
-
         if (result.isSuccess()) {
             OperationsResults.throwError(result);
         }

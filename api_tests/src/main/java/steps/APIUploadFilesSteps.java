@@ -41,7 +41,6 @@ public class APIUploadFilesSteps extends APISteps {
         Source source = RunContext.get().get("source", Source.class);
         LoggedUser user = AppContext.get().getLoggedUser();
         OperationResult<FileMeta> uploadResult = service.upload(file, source, user.getId());
-        OperationsResults.setResult(uploadResult);
         context.put("meta", uploadResult.getEntity());
     }
 

@@ -31,15 +31,18 @@ public class OperationResult<T> {
         this.response = response;
         this.objectTypeClass = resultCastType;
         this.wrappedField = wrappedField;
+        OperationsResults.setResult(this);
     }
 
     public OperationResult(G4Response response) {
         this.response = response;
+        OperationsResults.setResult(this);
     }
 
     public OperationResult(G4Response response, T responseObject) {
         this.response = response;
         this.responseObject = responseObject;
+        OperationsResults.setResult(this);
     }
 
     private T getObject(Class<T> castType) {
