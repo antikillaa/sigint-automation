@@ -56,7 +56,7 @@ public class SourceService implements EntityService<Source> {
 
         OperationResult<Result> operationResult = new OperationResult<>(response, Result.class);
         if (operationResult.isSuccess()) {
-            Entities.getSources().addOrUpdateEntity(entity);
+            Entities.getSources().removeEntity(entity);
         }
         return operationResult;
     }
