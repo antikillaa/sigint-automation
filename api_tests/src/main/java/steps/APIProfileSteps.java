@@ -3,7 +3,6 @@ package steps;
 import abs.EntityList;
 import app_context.entities.Entities;
 import http.OperationResult;
-import http.OperationsResults;
 import model.Profile;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -98,7 +97,6 @@ public class APIProfileSteps extends APISteps {
     @When("I send get list of profile drafts request")
     public void getProfileDraftsList() {
         OperationResult<EntityList<Profile>> operationResult = draftService.list();
-        OperationsResults.setResult(operationResult);
 
         context.put("profileDraftsEntityList", operationResult.getEntity());
     }
