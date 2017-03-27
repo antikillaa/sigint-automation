@@ -6,7 +6,6 @@ import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import http.OperationResult;
-import http.OperationsResults;
 import model.*;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
@@ -48,7 +47,7 @@ public class APISourceSteps extends APISteps {
 
     @Then("Source $criteria list")
     public void sourceShouldBeInList(String criteria){
-        Source source = Entities.getSources().getLatest();
+        Source source = context.get("source", Source.class);
         EntityList<Source> sources = context.get("sourceList", EntityList.class);
         boolean contains = false;
         for (Source entity : sources) {
@@ -91,8 +90,9 @@ public class APISourceSteps extends APISteps {
         generatedSource.setRecordType(newSource.getRecordType());
         generatedSource.setLatitude(newSource.getLatitude());
         generatedSource.setLongitude(newSource.getLongitude());
-        service.update(generatedSource);
+        context.put("source", generatedSource);
 
+        service.update(generatedSource);
     }
 
     @Given("Get random source from list")

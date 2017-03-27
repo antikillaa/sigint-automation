@@ -21,8 +21,9 @@ Then Source is correct
 
 When I send delete Source request
 Then Request is successful
-When I send view source request
-Then Source is deleted
+When I send get list of sources request
+Then Request is successful
+Then Source not in list
 
 
 Scenario: API.Get list of sources
