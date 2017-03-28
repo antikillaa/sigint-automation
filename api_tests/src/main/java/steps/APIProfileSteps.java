@@ -20,7 +20,7 @@ public class APIProfileSteps extends APISteps {
         Profile profile = getRandomProfile();
         context.put("profileDraft", profile);
 
-        OperationResult<Profile> operationResult = draftService.add(profile);
+        draftService.add(profile);
     }
 
     private static Profile getRandomProfile() {

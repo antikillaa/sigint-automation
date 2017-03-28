@@ -1,5 +1,6 @@
 Meta:
 @component profiler
+@deprecated
 
 
 Scenario: API.(New profiler) Addition of new target group without targets
