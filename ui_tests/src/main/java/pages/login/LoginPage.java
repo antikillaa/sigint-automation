@@ -1,23 +1,23 @@
 package pages.login;
 
+import static com.codeborne.selenide.Condition.exist;
+import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+
 import app_context.properties.G4Properties;
 import blocks.context.Context;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import pages.SigintPage;
 
-import static com.codeborne.selenide.Condition.hidden;
-import static com.codeborne.selenide.Condition.present;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-
 public class LoginPage extends SigintPage {
 
     private final String url = String.format("%s/#/login", G4Properties.getRunProperties().getApplicationURL());
 
     public SelenideElement getUsernameField() {
-        return $(By.id("inputEmail")).shouldBe(present);
+        return $(By.id("inputEmail")).shouldBe(exist);
     }
 
     public SelenideElement getPasswordField() {
