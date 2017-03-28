@@ -1,5 +1,7 @@
 package steps;
 
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+
 import app_context.RunContext;
 import app_context.properties.G4Properties;
 import blocks.context.factories.RecordsControllerFactory;
@@ -8,6 +10,8 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import controllers.PageControllerFactory;
 import controllers.reports.form_page.ReportFormFactoryController;
+import java.io.IOException;
+import java.net.URL;
 import model.Record;
 import model.Report;
 import model.User;
@@ -20,17 +24,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import pages.Navigator;
-import pages.Pages;
-
-import java.io.IOException;
-import java.net.URL;
-
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class UISteps {
 
     static RunContext context = RunContext.get();
-    Pages pages = new Pages();
     static User user;
     static Navigator navigator = new Navigator();
 
