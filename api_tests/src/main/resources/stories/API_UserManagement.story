@@ -115,7 +115,7 @@ Then Request is successful
 
 Given I sign in as admin user
 
-When I send change user password request
+When I change user password to random
 Then Request is successful
 When I send sign out request
 Then Request is successful
