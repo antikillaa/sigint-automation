@@ -38,10 +38,35 @@ When I change user password to My-very-G00d-paswooord
 Then I got response code 400
 And Message contains "more than 2 repeated"
 
-Scenario: API.Check random 8-character alpha-numeric password
+Scenario: API.Check random 8-character password
 Meta:
 @dev
+!-- upper and lower case letters, and digits
 When I change user password to random
+Then I got response code 200
+
+!-- upper and lower case letters
+When I change user password to adoKSLAQ
+Then I got response code 200
+
+!-- lower case letters and digits
+When I change user password to 9h21b33w
+Then I got response code 200
+
+!-- upper case letters and digits
+When I change user password to K9JJ782D
+Then I got response code 200
+
+!-- lower case letters and special characters
+When I change user password to adoksl@q
+Then I got response code 200
+
+!-- upper case letters and special characters
+When I change user password to HDK@HD!D
+Then I got response code 200
+
+!-- digits and special characters
+When I change user password to 324@!421
 Then I got response code 200
 
 Scenario: API.Check password with username
