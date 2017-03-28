@@ -1,5 +1,9 @@
 package steps;
 
+import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Selenide.sleep;
+
 import blocks.context.Context;
 import com.codeborne.selenide.WebDriverRunner;
 import org.jbehave.core.annotations.Given;
@@ -10,28 +14,22 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import pages.Pages;
 import pages.SigintPage;
-
-import static com.codeborne.selenide.Condition.appear;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.sleep;
 
 public class UILoginSteps extends UISteps {
 
-    private GlobalSteps steps = new GlobalSteps();
-
-
     private void login(String username, String password) {
-        pages.loginPage().getUsernameField().val(username);
-        pages.loginPage().getPasswordField().val(password);
-        pages.loginPage().clickSignInButton();
+        Pages.loginPage().getUsernameField().val(username);
+        Pages.loginPage().getPasswordField().val(password);
+        Pages.loginPage().clickSignInButton();
     }
 
 
     @Given("I as <role> try sign in with incorrect credentials")
     public void userAsRoleSignInWithIncorrectCredentials(@Named("role") String role) {
-        user = steps.getUserByRole(role);
-        pages.loginPage().load();
+        user = GlobalSteps.getUserByRole(role);
+        Pages.loginPage().load();
 
         login(
                 user.getName(),
@@ -42,7 +40,7 @@ public class UILoginSteps extends UISteps {
 
     @Then("I should see $message error")
     public void userDoesNotSignIn(String message) {
-        pages.loginPage().getErrorMessage().shouldHave(text(message));
+        Pages.loginPage().getErrorMessage().shouldHave(text(message));
     }
 
 
@@ -74,7 +72,7 @@ public class UILoginSteps extends UISteps {
 
     @Then("I should see Login page")
     public void userSeeLoginPage() {
-        pages.loginPage().getFormSignin().shouldBe(appear);
+        Pages.loginPage().getFormSignin().shouldBe(appear);
     }
 
 
@@ -82,8 +80,8 @@ public class UILoginSteps extends UISteps {
     @Then("I logged in as $role")
     public void iLoggedInAsOperator(@Named("role") String role) {
         // Arrange
-        user = steps.getUserByRole(role);
-        pages.loginPage().load();
+        user = GlobalSteps.getUserByRole(role);
+        Pages.loginPage().load();
 
         // Act
         login(
