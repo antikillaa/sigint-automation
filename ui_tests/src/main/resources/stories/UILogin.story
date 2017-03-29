@@ -3,8 +3,6 @@ Meta:
 
 
 Scenario: User as <role> does not able to sign in with incorrect credentials
-Meta:
-@wip
 Given I as <role> try sign in with incorrect credentials
 Then I should see Login page
 And I should see invalid credentials error
