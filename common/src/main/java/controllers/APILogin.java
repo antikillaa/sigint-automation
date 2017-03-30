@@ -3,7 +3,6 @@ package controllers;
 import app_context.AppContext;
 import http.G4HttpClient;
 import http.OperationResult;
-import http.OperationsResults;
 import model.LoggedUser;
 import model.RequestResult;
 import model.Token;
@@ -28,7 +27,7 @@ public class APILogin {
         if (operationResult.isSuccess()) {
             Token token = operationResult.getEntity();
             context.setLoggedUser(new LoggedUser(user));
-            G4HttpClient.setCookie("t", token.getValue());
+            G4HttpClient.setCookie(Token.tokenCookieProperty, token.getValue());
 
             //update user
             OperationResult<User> meResult = new UserService().me();
