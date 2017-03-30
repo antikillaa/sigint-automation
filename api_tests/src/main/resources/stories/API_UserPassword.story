@@ -11,36 +11,26 @@ When I send create a new user
 Then Request is successful
 
 Scenario: API.Check short password
-Meta:
-@dev
 When I change user password to 123456
 Then I got response code 400
 And Message contains "at least 8"
 
 Scenario: API.Check long weak password
-Meta:
-@dev
 When I change user password to LONGPASSWORDHERE
 Then I got response code 400
 And Message contains "not valid"
 
 Scenario: API.Check dictionary password
-Meta:
-@dev
 When I change user password to P@ssWord1
 Then I got response code 400
 And Message contains "too weak"
 
 Scenario: API.Check password with more than two successive identical characters
-Meta:
-@dev
 When I change user password to My-very-G00d-paswooord
 Then I got response code 400
 And Message contains "more than 2 repeated"
 
 Scenario: API.Check random 8-character password
-Meta:
-@dev
 !-- upper and lower case letters, and digits
 When I change user password to random
 Then I got response code 200
@@ -70,22 +60,18 @@ When I change user password to 324@!421
 Then I got response code 200
 
 Scenario: API.Check password with username
-Meta:
-@dev
 When I change user password to username
 Then I got response code 400
 And Message contains "not valid"
 
 Scenario: API.Check password with emoji symbols
 Meta:
-@dev
-@wip
+@skip
+!-- feature is not implemented
 When I change user password to Em0j1🚀🚃🚑🚕
 Then I got response code 400
 
 Scenario: API.Check that password is different from the last 3 passwords used
-Meta:
-@dev
 When I change user password to This-happened-once-before
 Then Request is successful
 When I change user password to When-I-came-to-your-door
@@ -109,8 +95,6 @@ When I change user password to This-happened-once-before
 Then Request is successful
 
 Scenario: API.Check that user will be locked after 5 sequential failed login attempts
-Meta:
-@dev
 When I set wrong user password
 And I send sign out request
 Then Request is successful
