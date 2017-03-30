@@ -16,7 +16,6 @@ When I send update report category request
 Then Request is successful
 And Report category is correct
 
-Scenario: API.Delete report category
 When I send delete report category request
 Then Request is successful
 And Report category is marked as deleted
