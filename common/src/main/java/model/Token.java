@@ -4,9 +4,9 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Token {
 
-    String value;
+    private String value;
 
-    @JsonProperty("t")
+    @JsonProperty("accessToken")
     public void setValue(String value) {
         this.value = value;
     }

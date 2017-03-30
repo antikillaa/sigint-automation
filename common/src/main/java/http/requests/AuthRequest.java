@@ -1,7 +1,6 @@
 package http.requests;
 
 import http.HttpMethod;
-import model.PegasusMediaType;
 
 public class AuthRequest extends HttpRequest {
 
@@ -9,7 +8,6 @@ public class AuthRequest extends HttpRequest {
 
     public AuthRequest() {
         super(URI);
-        this.setMediaType(PegasusMediaType.PEGASUS_JSON);
     }
 
     public AuthRequest singOut() {
