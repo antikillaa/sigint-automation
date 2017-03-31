@@ -3,7 +3,7 @@ package steps;
 import abs.EntityList;
 import http.OperationResult;
 import model.ProfileEntity;
-import model.RecordsSearchFilter;
+import model.ProfileEntitySearchFilter;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
@@ -16,7 +16,7 @@ public class APIRecordsSearchSteps extends APISteps {
     @When("I send records search request, keywords: $keywords, pageSize $pageSize")
     public void recordSearch(String keywords, String pageSize) {
 
-        RecordsSearchFilter filter = new RecordsSearchFilter();
+        ProfileEntitySearchFilter filter = new ProfileEntitySearchFilter();
         filter.setPageSize(Integer.valueOf(pageSize));
         filter.setKeywords(keywords);
 

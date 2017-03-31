@@ -1,9 +1,8 @@
 package model;
 
-import abs.AbstractEntity;
 import abs.SearchFilter;
 
-public class RecordsSearchFilter extends SearchFilter {
+public class ProfileEntitySearchFilter extends SearchFilter<ProfileEntity> {
 
     private String keywords;
 
@@ -16,9 +15,7 @@ public class RecordsSearchFilter extends SearchFilter {
     }
 
     @Override
-    public boolean isAppliedToEntity(AbstractEntity entity) {
+    public boolean isAppliedToEntity(ProfileEntity entity) {
         return false;
     }
-
-
 }
