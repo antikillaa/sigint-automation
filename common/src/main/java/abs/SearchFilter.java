@@ -8,16 +8,16 @@ public abstract class SearchFilter <T extends AbstractEntity> {
     protected SearchFilter activeFilter;
 
     protected String sortField;
-    protected boolean sortDirection; //asc=true, desc=false
+    protected Boolean sortDirection; //asc=true, desc=false
 
-    protected int page = 0;
-    protected int pageSize = 1000; //TODO
+    protected Integer page = 0;
+    protected Integer pageSize = 1000; //TODO
 
-    public SearchFilter getActiveFilter() {
+    protected SearchFilter getActiveFilter() {
         return activeFilter;
     }
 
-    public void setActiveFilter(SearchFilter activeFilter) {
+    protected void setActiveFilter(SearchFilter activeFilter) {
         this.activeFilter = activeFilter;
     }
 
@@ -32,27 +32,27 @@ public abstract class SearchFilter <T extends AbstractEntity> {
         this.sortField = sortField;
     }
 
-    public boolean isSortDirection() {
+    public Boolean isSortDirection() {
         return sortDirection;
     }
 
-    public void setSortDirection(boolean sortDirection) {
+    public void setSortDirection(Boolean sortDirection) {
         this.sortDirection = sortDirection;
     }
 
-    public int getPage() {
+    public Integer getPage() {
         return page;
     }
 
-    public void setPage(int page) {
+    public void setPage(Integer page) {
         this.page = page;
     }
 
-    public int getPageSize() {
+    public Integer getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(int pageSize) {
+    public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
 

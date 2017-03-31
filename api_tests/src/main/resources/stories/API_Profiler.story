@@ -1,5 +1,5 @@
 Meta:
-@component profiler
+@story profiler
 @deprecated
 
 

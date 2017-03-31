@@ -1,5 +1,5 @@
 Meta:
-@component ingestion
+@story ingestion
 @deprecated
 
 

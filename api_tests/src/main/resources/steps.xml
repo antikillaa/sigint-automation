@@ -41,4 +41,6 @@
     </bean>
     <bean id="profileSteps" class="steps.APIProfileSteps" >
     </bean>
+    <bean id="recordsSearchSteps" class="steps.APIRecordsSearchSteps" >
+    </bean>
 </beans>

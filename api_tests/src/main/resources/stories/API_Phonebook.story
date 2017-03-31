@@ -1,5 +1,5 @@
 Meta:
-@component phonebook
+@story phonebook
 
 
 Scenario: API.Create PhoneBook with all fields

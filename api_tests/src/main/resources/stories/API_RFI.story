@@ -1,5 +1,5 @@
 Meta:
-@component RFI
+@story RFI
 @deprecated
 
 Scenario: API.Tasker can create new RFI with all fields

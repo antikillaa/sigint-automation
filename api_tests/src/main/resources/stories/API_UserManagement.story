@@ -1,5 +1,5 @@
 Meta:
-@component userManagement
+@story userManagement
 
 Scenario: API.Create, Read, Update, Delete role
 Given I sign in as admin user
