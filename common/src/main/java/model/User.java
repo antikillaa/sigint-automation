@@ -15,22 +15,28 @@ import java.util.List;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class User extends TeelaEntity {
 
-    private String name;
-    @JsonProperty("display_name")
-    private String displayName;
+    private String name; // "admin@pegasus.ae",
+    private String fullName; // Admin
     @WithDataSize(10)
     private String password;
     @DataIgnore
     @JsonProperty("new_password")
     private String newPassword;
-    @DataIgnore
-    private String phone;
     @JsonProperty("staff_id")
     private String staffId;
     @DataIgnore
-    private List<String> roles = new ArrayList<>();
-    @DataIgnore
     private List<String> languages = new ArrayList<>();
+    private Boolean isDeleted = false;
+    private String parentTeamId;
+    private OrganizationType organizationType; // "TEAM"
+    private String email;
+    private String imageURL;
+    private Permission defaultPermission;
+    private Permission effectivePermission;
+
+    //TODO remove this fields block
+    @DataIgnore
+    private List<String> roles = new ArrayList<>();
     @DataIgnore
     @JsonProperty("user_group_ids")
     private List<String> userGroupIds = new ArrayList<>();
@@ -40,8 +46,8 @@ public class User extends TeelaEntity {
     @DataIgnore
     @JsonProperty("expanded_roles")
     private List<String> expandedRoles = new ArrayList<>();
-    
-    
+    //TODO remove this fields block
+
     public String toString() {
         return String.format("name:%s, password:%s", name, password);
     }
@@ -54,12 +60,12 @@ public class User extends TeelaEntity {
     }
 
 
-    public String getDisplayName() {
-        return displayName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setDisplayName(String name) {
-        this.displayName = name;
+    public void setFullName(String name) {
+        this.fullName = name;
     }
 
     public String getPassword() {
@@ -84,14 +90,6 @@ public class User extends TeelaEntity {
 
     public void setRoles(List<String> roles) {
         this.roles = roles;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getStaffId() {
@@ -140,5 +138,61 @@ public class User extends TeelaEntity {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public String getParentTeamId() {
+        return parentTeamId;
+    }
+
+    public void setParentTeamId(String parentTeamId) {
+        this.parentTeamId = parentTeamId;
+    }
+
+    public OrganizationType getOrganizationType() {
+        return organizationType;
+    }
+
+    public void setOrganizationType(OrganizationType organizationType) {
+        this.organizationType = organizationType;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public Permission getDefaultPermission() {
+        return defaultPermission;
+    }
+
+    public void setDefaultPermission(Permission defaultPermission) {
+        this.defaultPermission = defaultPermission;
+    }
+
+    public Permission getEffectivePermission() {
+        return effectivePermission;
+    }
+
+    public void setEffectivePermission(Permission effectivePermission) {
+        this.effectivePermission = effectivePermission;
     }
 }
