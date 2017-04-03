@@ -1,8 +1,13 @@
 package model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Permission {
 
     private ArrayList<PermissionType> titles = new ArrayList<>();
@@ -33,7 +38,7 @@ public class Permission {
         this.record = record;
     }
 
-    class PermissionRecord {
+    public class PermissionRecord {
 
         private List<String> clearances;
         private List<String> dataSources;
