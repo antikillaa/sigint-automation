@@ -1,5 +1,5 @@
 Meta:
-@component reports
+@story reports
 
 
 Scenario: API.Create manual report

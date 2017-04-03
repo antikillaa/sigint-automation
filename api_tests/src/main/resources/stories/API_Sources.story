@@ -1,5 +1,5 @@
 Meta:
-@component source
+@story source
 
 
 Scenario: API.Create, Read, Update, Delete source

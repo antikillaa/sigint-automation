@@ -1,5 +1,5 @@
 Meta:
-@component targetManagement
+@story targetManagement
 
 
 Scenario: API.Add new target group with target in body

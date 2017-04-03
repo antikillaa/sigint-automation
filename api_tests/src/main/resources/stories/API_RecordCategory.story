@@ -1,5 +1,5 @@
 Meta:
-@component recordCategory
+@story recordCategory
 
 
 Scenario: API.Create record category

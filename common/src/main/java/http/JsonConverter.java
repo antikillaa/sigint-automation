@@ -112,11 +112,14 @@ public class JsonConverter {
 
     public static <T> List<T> jsonToObjectsList(String jsonString, Class<T[]> userClass, String wrapperField) {
         log.debug("Converting json: " + jsonString + " to object list: " + userClass);
-        MapType mapType = JsonConverter.constructMapTypeToValue(userClass);
+        MapType mapType = JsonConverter.constructMapTypeToValue(Object.class);
 
         try {
-            HashMap<String, T[]> map = mapper.readValue(jsonString, mapType);
-            return Arrays.asList(map.get(wrapperField));
+            HashMap<String, Object> map = mapper.readValue(jsonString, mapType);
+            Object obj = map.get(wrapperField);
+
+            T[] objects = mapper.convertValue(obj, userClass);
+            return Arrays.asList(objects);
         } catch (IOException | NullPointerException e) {
             String error = "Error occurred when converting json: " + jsonString + " to object list: " + userClass;
             log.error(error);
