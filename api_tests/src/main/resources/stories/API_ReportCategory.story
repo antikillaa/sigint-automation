@@ -1,5 +1,5 @@
 Meta:
-@component reportCategory
+@story reportCategory
 
 Narrative:
 As a user

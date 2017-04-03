@@ -4,18 +4,31 @@ import abs.AbstractEntity;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ProfileEntity extends AbstractEntity {
 
-    private String name;
-    private DummyFieldType properties;
-    private ArrayList<SourceType> sources = new ArrayList<>();
-    private ProfileEntityType type;
+    private String nodeId;
+    private String key; //"[TWEET]:Unknown:833467341514092546"
+    private String name; // 833467341514092546
+    private Object properties;
+    private List<String> sources; //["TWEET"]
+    private ProfileEntityType type; // unknown
     private ValidationStatus validationStatus;
-    private DummyFieldType entities;
+    private Object entities;
+    private String attributes;
+    private Boolean manualSource;
+
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public String getName() {
         return name;
@@ -23,22 +36,6 @@ public class ProfileEntity extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public DummyFieldType getProperties() {
-        return properties;
-    }
-
-    public void setProperties(DummyFieldType properties) {
-        this.properties = properties;
-    }
-
-    public ArrayList<SourceType> getSources() {
-        return sources;
-    }
-
-    public void setSources(ArrayList<SourceType> sources) {
-        this.sources = sources;
     }
 
     public ProfileEntityType getType() {
@@ -57,11 +54,19 @@ public class ProfileEntity extends AbstractEntity {
         this.validationStatus = validationStatus;
     }
 
-    public DummyFieldType getEntities() {
-        return entities;
+    public String getAttributes() {
+        return attributes;
     }
 
-    public void setEntities(DummyFieldType entities) {
-        this.entities = entities;
+    public void setAttributes(String attributes) {
+        this.attributes = attributes;
+    }
+
+    public Boolean getManualSource() {
+        return manualSource;
+    }
+
+    public void setManualSource(Boolean manualSource) {
+        this.manualSource = manualSource;
     }
 }

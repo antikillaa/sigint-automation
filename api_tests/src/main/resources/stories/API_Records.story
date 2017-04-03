@@ -1,5 +1,5 @@
 Meta:
-@component records
+@story records
 
 
 Scenario: API.User creates manual record - SMS
