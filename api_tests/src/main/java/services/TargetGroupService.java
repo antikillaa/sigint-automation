@@ -3,6 +3,7 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
+import errors.OperationResultError;
 import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
@@ -113,7 +114,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
             List<TargetGroup> targetGroups = new ArrayList<>(operationResult.getEntity().getContent());
             return new OperationResult<>(response, new EntityList<>(targetGroups));
         } else {
-            throw new RuntimeException("Unable to read list of target group from response");
+            throw new OperationResultError(operationResult);
         }
     }
 }

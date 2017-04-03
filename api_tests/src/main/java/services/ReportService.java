@@ -3,6 +3,7 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
+import errors.OperationResultError;
 import http.*;
 import http.requests.ReportRequest;
 import model.Report;
@@ -32,7 +33,7 @@ public class ReportService implements EntityService<Report> {
         if (operationResult.isSuccess()) {
             Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
         } else {
-            OperationsResults.throwError(operationResult);
+            throw new OperationResultError(operationResult);
         }
         return operationResult;
     }

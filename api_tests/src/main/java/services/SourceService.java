@@ -3,6 +3,7 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
+import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.SourceRequest;
@@ -84,7 +85,7 @@ public class SourceService implements EntityService<Source> {
 
             return new OperationResult<>(response, new EntityList<>(sources));
         } else {
-            throw new RuntimeException("Unable to read list of sources from response");
+            throw new OperationResultError(operationResult);
         }
     }
 

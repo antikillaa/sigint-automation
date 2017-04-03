@@ -5,6 +5,7 @@ import static utils.StringUtils.stripQuotes;
 import app_context.AppContext;
 import app_context.RunContext;
 import data_for_entity.RandomEntities;
+import errors.OperationResultError;
 import http.OperationResult;
 import http.OperationsResults;
 import org.apache.log4j.Logger;
@@ -36,7 +37,7 @@ public abstract class APISteps {
     public void checkResultSuccess() {
         OperationResult result = OperationsResults.getResult();
         if (!result.isSuccess()) {
-            OperationsResults.throwError(result);
+            throw new OperationResultError(result);
         }
     }
     
@@ -44,7 +45,7 @@ public abstract class APISteps {
     public void checkResultFail() {
         OperationResult result = OperationsResults.getResult();
         if (result.isSuccess()) {
-            OperationsResults.throwError(result);
+            throw new OperationResultError(result);
         }
     }
 

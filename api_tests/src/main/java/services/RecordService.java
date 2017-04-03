@@ -3,6 +3,7 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
+import errors.OperationResultError;
 import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
@@ -61,7 +62,7 @@ public class RecordService implements EntityService<Record> {
             log.info("Founded " + records.size() + " records");
             return new OperationResult<>(response, records);
         } else {
-            throw new RuntimeException("Unable to read list of record from record search response");
+            throw new OperationResultError(operationResult);
         }
     }
 
