@@ -3,17 +3,13 @@ package steps;
 import app_context.entities.Entities;
 import app_context.properties.G4Properties;
 import controllers.APILogin;
-import data_for_entity.RandomEntities;
 import errors.NullReturnException;
-import model.Group;
 import model.User;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStories;
-import services.UserService;
 import users_management.StorageUsersManager;
 import zapi.ZAPIService;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class GlobalSteps {
@@ -21,16 +17,15 @@ public class GlobalSteps {
     static Logger log = Logger.getLogger(GlobalSteps.class);
     private static final String ADMIN_ROLE = "admin";
 
-
     @AfterStories
-    public void reportResults(){
+    public void reportResults() {
         ZAPIService service = new ZAPIService();
         Boolean shouldReport = G4Properties.getRunProperties().shouldReport();
         try {
             if (shouldReport) {
                 service.reportToZephyr();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
     }
@@ -39,7 +34,7 @@ public class GlobalSteps {
         try {
             return Entities.getUsers().getEntity(role);
         } catch (NullReturnException e) {
-            log.error("Cannot find user by given role:"+role);
+            log.error("Cannot find user by given role:" + role);
             return null;
         }
     }

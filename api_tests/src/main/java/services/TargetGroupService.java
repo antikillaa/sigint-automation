@@ -9,7 +9,6 @@ import http.OperationResult;
 import http.requests.TargetGroupRequest;
 import model.TargetGroup;
 import model.TargetGroupSearchResult;
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
@@ -51,7 +50,13 @@ public class TargetGroupService implements EntityService<TargetGroup> {
 
     @Override
     public OperationResult<EntityList<TargetGroup>> list(SearchFilter filter) {
-        throw new NotImplementedException();
+        log.info("Get list of target groups");
+        G4Response response = g4HttpClient.sendRequest(request.list(filter));
+
+        List<TargetGroup> targetGroupList =
+                JsonConverter.jsonToObjectsList(response.getMessage(), TargetGroup[].class, "data");
+
+        return new OperationResult<>(response, new EntityList<>(targetGroupList));
     }
 
     @Override
@@ -85,6 +90,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
      *
      * @return list of TargetGroup
      */
+    @Deprecated
     public OperationResult<EntityList<TargetGroup>> listG4Compatibility() {
         log.info("Get list of target groups");
         G4Response response = g4HttpClient.sendRequest(request.listG4Compatibility());
@@ -101,6 +107,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
      * @param filter search filter for payload
      * @return {@link OperationResult<EntityList<TargetGroup>> }
      */
+    @Deprecated
     public OperationResult<EntityList<TargetGroup>> searchG4Compatibility(SearchFilter filter) {
         log.info("Search targetGroups by filter:" + JsonConverter.toJsonString(filter));
 

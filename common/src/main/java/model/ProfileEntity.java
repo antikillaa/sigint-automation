@@ -14,13 +14,44 @@ public class ProfileEntity extends AbstractEntity {
     private String key; //"[TWEET]:Unknown:833467341514092546"
     private String name; // 833467341514092546
     private Object properties;
-    private List<String> sources; //["TWEET"]
+    private List<ProfileSourceType> sources; //["TWEET"]
     private ProfileEntityType type; // unknown
     private ValidationStatus validationStatus;
     private Object entities;
     private String attributes;
     private Boolean manualSource;
 
+    public String getNodeId() {
+        return nodeId;
+    }
+
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
+    }
+
+    public Object getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Object properties) {
+        this.properties = properties;
+    }
+
+    public List<ProfileSourceType> getSources() {
+        return sources;
+    }
+
+    public void setSources(List<ProfileSourceType> sources) {
+        this.sources = sources;
+    }
+
+    public Object getEntities() {
+        return entities;
+    }
+
+    public void setEntities(Object entities) {
+        this.entities = entities;
+    }
 
     public String getKey() {
         return key;

@@ -8,7 +8,7 @@ public abstract class SearchFilter <T extends AbstractEntity> {
     protected SearchFilter activeFilter;
 
     protected String sortField;
-    protected Boolean sortDirection; //asc=true, desc=false
+    protected Boolean sortDirection = true; //asc=true, desc=false
 
     protected Integer page = 0;
     protected Integer pageSize = 1000; //TODO
