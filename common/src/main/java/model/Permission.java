@@ -10,15 +10,15 @@ import java.util.List;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Permission {
 
-    private ArrayList<PermissionType> titles = new ArrayList<>();
+    private ArrayList<String> titles = new ArrayList<>();
     private ArrayList<PermissionType> actions = new ArrayList<>();
     private PermissionRecord record;
 
-    public ArrayList<PermissionType> getTitles() {
+    public ArrayList<String> getTitles() {
         return titles;
     }
 
-    public void setTitles(ArrayList<PermissionType> titles) {
+    public void setTitles(ArrayList<String> titles) {
         this.titles = titles;
     }
 

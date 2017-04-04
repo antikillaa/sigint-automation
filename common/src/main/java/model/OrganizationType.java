@@ -2,5 +2,5 @@ package model;
 
 public enum OrganizationType {
 
-    TEAM
+    TEAM, USER
 }
