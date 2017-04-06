@@ -28,9 +28,6 @@ public class TargetGroup extends TeelaEntity {
     @DataIgnore
     private Boolean deleted;
 
-    //@DataProvider(TargetGroupProvider.class)
-    @DataIgnore
-    private TargetGroupType type = TargetGroupType.TargetGroup;
     private String name;
     private TargetGroupProperties properties;
     @DataIgnore
@@ -96,15 +93,6 @@ public class TargetGroup extends TeelaEntity {
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
-    }
-
-
-    public TargetGroupType getType() {
-        return type;
-    }
-
-    public void setType(TargetGroupType type) {
-        this.type = type;
     }
 
     public TargetGroupProperties getProperties() {

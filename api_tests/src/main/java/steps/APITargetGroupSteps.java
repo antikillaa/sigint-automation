@@ -4,11 +4,10 @@ import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
-import errors.NullReturnException;
 import http.OperationResult;
-import http.OperationsResults;
 import model.TargetGroup;
 import model.TargetGroupFilter;
+import model.TargetGroupSearchFilter;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -17,6 +16,7 @@ import org.junit.Assert;
 import services.TargetGroupService;
 import utils.DateHelper;
 import utils.Parser;
+import utils.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,6 @@ public class APITargetGroupSteps extends APISteps {
 
         context.put("targetGroup", group);
         service.add(group);
-
     }
 
     @Then("Created target group is correct")
@@ -58,11 +57,11 @@ public class APITargetGroupSteps extends APISteps {
      * new targetGroups keep description in TargetGroupProperties
      *
      * @param checked checked targetGroup
-     * @param etalon etalon targetGroup
+     * @param etalon  etalon targetGroup
      * @return true if two targetGroups is equal, false if otherwise
      */
     private boolean equalsTargetGroups(TargetGroup checked, TargetGroup etalon) {
-        return Verify.isTrue(Conditions.equals(checked.getType(), etalon.getType())) &&
+        return Verify.isTrue(Conditions.equals(checked.getJsonType(), etalon.getJsonType())) &&
                 Verify.isTrue(Conditions.equals(checked.getName(), etalon.getName())) &&
                 checked.getDescription() == null ?
                 Objects.equals(checked.getProperties().getDescription(), etalon.getProperties().getDescription()) :
@@ -84,13 +83,28 @@ public class APITargetGroupSteps extends APISteps {
     }
 
     @When("I send get list of target group request")
-    public void getListOfTargetGroupsRequest() throws NullReturnException {
+    public void getListOfG4TargetGroupsRequest() {
         OperationResult<EntityList<TargetGroup>> operationResult = service.listG4Compatibility();
         context.put("targetGroupEntityList", operationResult.getEntity());
     }
 
+    @When("I send get list of top target groups request")
+    public void getListOfTargetGroupsRequest() {
+        TargetGroupSearchFilter filter = new TargetGroupSearchFilter();
+        filter.setSortField("name");
+
+        OperationResult<EntityList<TargetGroup>> operationResult = service.list(filter);
+        context.put("targetGroupEntityList", operationResult.getEntity());
+    }
+
+    @When("I get random target group from targetGroup list")
+    public void getTargetGroupFrolList() {
+        EntityList<TargetGroup> targetGroups = context.get("targetGroupEntityList", EntityList.class);
+        context.put("targetGroup", RandomGenerator.getRandomItemFromList(targetGroups.getEntities()));
+    }
+
     @Then("Created target group $criteria list")
-    public void targetGroupsContainNewTargetGroup(String criteria) throws NullReturnException {
+    public void targetGroupsContainNewTargetGroup(String criteria) {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
         EntityList<TargetGroup> list = context.get("targetGroupEntityList", EntityList.class);
         Boolean contains = false;
@@ -110,7 +124,7 @@ public class APITargetGroupSteps extends APISteps {
     }
 
     @Then("target group $criteria list")
-    public void existingTargetGroupContainsInList(String criteria) throws NullReturnException {
+    public void existingTargetGroupContainsInList(String criteria) {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
         LOGGER.debug("Requested target group: " + targetGroup.getName());
         EntityList<TargetGroup> list = context.get("targetGroupEntityList", EntityList.class);
@@ -137,7 +151,6 @@ public class APITargetGroupSteps extends APISteps {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
         context.put("targetGroup", targetGroup);
         service.remove(targetGroup);
-
     }
 
     @When("I send update target group request")

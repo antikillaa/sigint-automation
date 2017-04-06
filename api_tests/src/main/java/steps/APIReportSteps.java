@@ -4,9 +4,7 @@ import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
-import errors.NullReturnException;
 import http.OperationResult;
-import http.OperationsResults;
 import model.Record;
 import model.Report;
 import model.ReportCategory;
@@ -27,7 +25,7 @@ public class APIReportSteps extends APISteps {
     private static final Logger log = Logger.getLogger(APIReportSteps.class);
     private ReportService reportService = new ReportService();
     private ReportCategoryService reportCategoryService = new ReportCategoryService();
-    
+
     @When("I send create manual report")
     public void createManualReport() {
         Report report = context.get("report", Report.class);
@@ -36,7 +34,7 @@ public class APIReportSteps extends APISteps {
     }
 
     @When("Generate new report with logged user as owner")
-    public void generateNewReport(){
+    public void generateNewReport() {
         log.info("Generate new report...");
         Report report = getRandomReport();
         context.put("report", report);
@@ -79,7 +77,7 @@ public class APIReportSteps extends APISteps {
     }
 
     @Then("Created report is correct")
-    public void createdReportIsCorrect() throws NullReturnException {
+    public void createdReportIsCorrect() {
         Report requestReport = context.get("requestReport", Report.class);
         Report createdReport = Entities.getReports().getLatest();
 
@@ -94,7 +92,7 @@ public class APIReportSteps extends APISteps {
         Verify.shouldBe(Conditions.equals(createdReport.getReportRecords(), requestReport.getReportRecords()));
         Verify.shouldBe(Conditions.equals(createdReport.getCategories(), requestReport.getCategories()));
     }
-    
+
     static Report getRandomReport() {
         return ReportCreateService.generateReport();
     }

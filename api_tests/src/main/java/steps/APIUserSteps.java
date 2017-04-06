@@ -2,7 +2,6 @@ package steps;
 
 import abs.EntityList;
 import app_context.entities.Entities;
-import errors.NullReturnException;
 import http.JsonConverter;
 import http.OperationResult;
 import model.RequestResult;
@@ -34,7 +33,7 @@ public class APIUserSteps extends APISteps {
     }
 
     @Then("Created user is correct")
-    public void createdUserIsCorrect() throws NullReturnException {
+    public void createdUserIsCorrect() {
         User createdUser = Entities.getUsers().getLatest();
         User requestUser = context.get("user", User.class);
 
@@ -50,7 +49,7 @@ public class APIUserSteps extends APISteps {
         Assert.assertEquals(createdUser.getExpandedPermissions(), requestUser.getExpandedPermissions());
         Assert.assertEquals(createdUser.getExpandedRoles(), requestUser.getExpandedRoles());
     }
-    
+
     static User getRandomUser() {
         return objectInitializer.randomEntity(User.class);
     }
@@ -75,7 +74,7 @@ public class APIUserSteps extends APISteps {
     }
 
     @Then("delete all users without roles and groups")
-    public void cleanupUsers(){
+    public void cleanupUsers() {
         EntityList<User> userEntityList = context.get("userEntityList", EntityList.class);
 
         for (User user : userEntityList.getEntities()) {
@@ -118,7 +117,7 @@ public class APIUserSteps extends APISteps {
     }
 
     @When("I change user password to $newPassword")
-    public void changeUserPassword(final String newPassword){
+    public void changeUserPassword(final String newPassword) {
         User user = Entities.getUsers().getLatest();
 
         String passwordToReplace = newPassword;

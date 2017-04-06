@@ -39,6 +39,18 @@ public class TargetGroupRequest extends HttpRequest {
         return this;
     }
 
+    public TargetGroupRequest list(SearchFilter filter) {
+        String params = "/root?page=" + filter.getPage() +
+                "&pageSize=" + filter.getPageSize() +
+                "&sortKey=" + filter.getSortField() +
+                "&sortOrder=" + (filter.isSortDirection() ? "ASC" : "DESC");
+        this
+                .setURI(URI + params)
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
+    @Deprecated
     public TargetGroupRequest listG4Compatibility() {
         this
                 .setURI("/api/profiler/target-groups")
@@ -46,6 +58,7 @@ public class TargetGroupRequest extends HttpRequest {
         return this;
     }
 
+    @Deprecated
     public TargetGroupRequest searchG4Compatibility(SearchFilter filter) {
         this
                 .setURI("/api/profiler/target-groups/search")

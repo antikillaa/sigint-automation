@@ -1,6 +1,5 @@
 Meta:
 @story profiler
-@deprecated
 
 
 Scenario: API.(New profiler) Addition of new target group without targets
@@ -122,6 +121,8 @@ Then Request is successful
 
 
 Scenario: API.(New profiler) Publishing of new profile draft
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send create profile draft request
 Then Request is successful
@@ -140,6 +141,8 @@ Then Request is successful
 
 
 Scenario: (New profiler) Deleting of profile
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send create profile draft request
 Then Request is successful
@@ -161,3 +164,12 @@ Given I sign in as admin user
 When I send get list of profile drafts request
 Then Request is successful
 And Profile drafts list size more than 0
+
+
+Scenario: API.(New profiler) Displaying of top level target groups list
+Given I sign in as admin user
+When I send create target group without targets request
+Then Request is successful
+When I send get list of top target groups request
+Then Request is successful
+Then Created target group in list

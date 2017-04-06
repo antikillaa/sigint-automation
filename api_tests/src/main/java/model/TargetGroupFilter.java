@@ -5,6 +5,10 @@ import utils.DateHelper;
 
 import java.util.Date;
 
+/**
+ * old G4 API
+ * for Profiler API see {@link TargetGroupSearchFilter}
+ */
 public class TargetGroupFilter extends SearchFilter<TargetGroup> {
 
     private boolean includeDeleted;
