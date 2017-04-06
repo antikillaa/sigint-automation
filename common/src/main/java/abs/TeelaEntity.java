@@ -11,9 +11,15 @@ public abstract class TeelaEntity extends AbstractEntity {
     @WithFieldDataType(FieldDataType.DATE)
     private Date createdAt;
     @DataIgnore
+    private String createdBy;
+    @DataIgnore
     private Date modifiedAt;
     @DataIgnore
     private String modifiedBy;
+    @DataIgnore
+    private Date deletedAt;
+    @DataIgnore
+    private String deletedBy;
 
     public String getModifiedBy() {
         return modifiedBy;
@@ -37,6 +43,30 @@ public abstract class TeelaEntity extends AbstractEntity {
 
     public void setModifiedAt(Date modifiedAt) {
         this.modifiedAt = modifiedAt;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(Date deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
+    public String getDeletedBy() {
+        return deletedBy;
+    }
+
+    public void setDeletedBy(String deletedBy) {
+        this.deletedBy = deletedBy;
     }
 
 }

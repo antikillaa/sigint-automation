@@ -5,9 +5,6 @@ import app_context.entities.Entities;
 import errors.NullReturnException;
 import http.JsonConverter;
 import http.OperationResult;
-import http.OperationsResults;
-import java.util.ArrayList;
-import java.util.List;
 import model.RequestResult;
 import model.User;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -16,6 +13,9 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class APIUserSteps extends APISteps {
@@ -42,10 +42,9 @@ public class APIUserSteps extends APISteps {
         log.debug("created: " + JsonConverter.toJsonString(createdUser));
 
         Assert.assertEquals(createdUser.getName().toLowerCase(), requestUser.getName().toLowerCase());
-        Assert.assertEquals(createdUser.getDisplayName(), requestUser.getDisplayName());
+        Assert.assertEquals(createdUser.getFullName(), requestUser.getFullName());
         Assert.assertEquals(createdUser.getRoles(), requestUser.getRoles());
         Assert.assertEquals(createdUser.getLanguages(), requestUser.getLanguages());
-        Assert.assertEquals(createdUser.getPhone(), requestUser.getPhone());
         Assert.assertEquals(createdUser.getStaffId(), requestUser.getStaffId());
         Assert.assertEquals(createdUser.getUserGroupIds(), requestUser.getUserGroupIds());
         Assert.assertEquals(createdUser.getExpandedPermissions(), requestUser.getExpandedPermissions());
