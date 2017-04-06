@@ -1,5 +1,7 @@
 package model;
 
+import static model.OrganizationType.USER;
+
 import abs.TeelaEntity;
 import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.WithDataSize;
@@ -20,18 +22,18 @@ public class User extends TeelaEntity {
     @WithDataSize(10)
     private String password;
     @DataIgnore
-    @JsonProperty("new_password")
     private String newPassword;
-    @JsonProperty("staff_id")
     private String staffId;
     @DataIgnore
     private List<String> languages = new ArrayList<>();
     private Boolean isDeleted = false;
     private String parentTeamId;
-    private OrganizationType organizationType; // "TEAM"
+    private OrganizationType organizationType = USER;
     private String email;
     private String imageURL;
+    @DataIgnore
     private Permission defaultPermission;
+    @DataIgnore
     private Permission effectivePermission;
 
     //TODO remove this fields block
