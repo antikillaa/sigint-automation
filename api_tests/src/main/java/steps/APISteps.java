@@ -22,14 +22,14 @@ public abstract class APISteps {
     @Then("I got response code $expected")
     public void checkResponseCode(String expected) {
         OperationResult result = OperationsResults.getResult();
-        log.info("Checking response code " + result.getCode());
-        Assert.assertTrue("Incorrect return code!", Integer.valueOf(expected) == result.getCode());
+        log.info("Response code: " + result.getCode());
+        Assert.assertTrue("Incorrect return code!\n" + result.getMessage(), Integer.valueOf(expected) == result.getCode());
     }
 
     @Then("Message contains $text")
     public void checkMessageContainsText(String text) {
         OperationResult result = OperationsResults.getResult();
-        log.info("Checking message " + result.getMessage());
+        log.info("Response message: " + result.getMessage());
         Assert.assertTrue(text + " not found", result.getMessage().contains(stripQuotes(text)));
     }
     
