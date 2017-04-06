@@ -112,4 +112,4 @@ Then I got response code 400
 
 When I sign in as new created user
 Then I got response code 403
-And Message contains "Access Denied"
+And Message contains "AUTH_FORBIDDEN"

@@ -7,7 +7,6 @@ I want to perform an action
 So that I can achieve a business goal
 
 Scenario: API.Create, Update, Delete report category
-Meta: @wip
 Given I sign in as admin user
 When I create new report category
 Then Request is successful
