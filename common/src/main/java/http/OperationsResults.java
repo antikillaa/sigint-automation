@@ -20,12 +20,7 @@ public class OperationsResults {
     }
 
     public static void logError(OperationResult result) {
-        logger.error("Code:" + result.getCode());
-        logger.error("Message:" + result.getMessage());
-
-    }
-
-    public static void throwError(OperationResult result) {
-        throw new OperationResultError(result.getCode(), result.getMessage());
+        logger.error("Code: " + result.getCode());
+        logger.error("Message: " + result.getMessage());
     }
 }

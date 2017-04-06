@@ -3,10 +3,13 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
+import errors.OperationResultError;
 import file_generator.FileGenerator;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.phonebook.EtisalatSubscriberRequest;
+import java.util.ArrayList;
+import java.util.List;
 import model.EtisalatSubscriberEntry;
 import model.G4File;
 import model.UploadResult;
@@ -14,9 +17,6 @@ import model.phonebook.EtisalatSubscriberSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EtisalatSubscriberService implements EntityService<EtisalatSubscriberEntry> {
 
@@ -99,7 +99,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
             EntityList<EtisalatSubscriberEntry> etisalatSubscriberEntries = new EntityList<>(entries);
             return new OperationResult<>(response, etisalatSubscriberEntries);
         } else {
-            throw new RuntimeException("Unable to read search results from Etisalat Subscriber search");
+            throw new OperationResultError(operationResult);
         }
     }
 

@@ -1,6 +1,7 @@
 package services;
 
 import abs.SearchFilter;
+import errors.OperationResultError;
 import http.*;
 import http.requests.UploadFilesRequest;
 import http.requests.UploadRequest;
@@ -30,7 +31,7 @@ public class UploadFilesService {
 
         OperationResult<FileMeta> uploadResult = new OperationResult<>(uploadResponse, FileMeta.class);
         if (!uploadResult.isSuccess()) {
-            OperationsResults.throwError(uploadResult);
+            throw new OperationResultError(uploadResult);
         }
 
         G4Response notifyResponse = sendNotify(uploadResult.getEntity());

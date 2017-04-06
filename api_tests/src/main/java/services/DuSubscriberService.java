@@ -3,6 +3,7 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
+import errors.OperationResultError;
 import file_generator.FileGenerator;
 import http.G4Response;
 import http.OperationResult;
@@ -83,7 +84,7 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
             EntityList<DuSubscriberEntry> duSubscriberEntries = new EntityList<>(operationResult.getEntity().getContent());
             return new OperationResult<>(response, duSubscriberEntries);
         } else {
-            throw new RuntimeException("Unable to read search results from duSubscriber search");
+            throw new OperationResultError(operationResult);
         }
     }
 

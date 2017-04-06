@@ -3,19 +3,19 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
+import errors.OperationResultError;
 import file_generator.FileGenerator;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.phonebook.PhonebookRequest;
 import http.requests.phonebook.UnifiedPhonebookSearchRequest;
+import java.util.List;
 import model.G4File;
 import model.Phonebook;
 import model.UploadResult;
 import model.phonebook.PhonebookSearchResults;
 import org.apache.log4j.Logger;
 import utils.Parser;
-
-import java.util.List;
 
 public class PhonebookService implements EntityService<Phonebook> {
 
@@ -93,7 +93,7 @@ public class PhonebookService implements EntityService<Phonebook> {
             EntityList<Phonebook> phonebooks = new EntityList<>(operationResult.getEntity().getContent());
             return new OperationResult<>(response, phonebooks);
         } else {
-            throw new RuntimeException("Unable to read search results from Phonebook search");
+            throw new OperationResultError(operationResult);
         }
     }
 

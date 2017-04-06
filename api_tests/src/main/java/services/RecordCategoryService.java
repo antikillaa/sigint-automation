@@ -3,6 +3,7 @@ package services;
 import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
+import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.RecordCategoriesRequest;
@@ -75,7 +76,7 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
             EntityList<RecordCategory> recordCategories = operationResult.getEntity().getResult();
             return new OperationResult<>(response, recordCategories);
         } else {
-            throw new RuntimeException("Unable to read list of record-categories");
+            throw new OperationResultError(operationResult);
         }
     }
 
