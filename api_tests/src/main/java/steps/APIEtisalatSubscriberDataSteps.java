@@ -3,10 +3,8 @@ package steps;
 import abs.EntityList;
 import conditions.Conditions;
 import conditions.Verify;
-import errors.NullReturnException;
 import http.JsonConverter;
 import http.OperationResult;
-import http.OperationsResults;
 import model.EtisalatSubscriberEntry;
 import model.UploadResult;
 import model.phonebook.EtisalatSubscriberFilter;
@@ -26,10 +24,9 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APIEtisalatSubscriberDataSteps.class);
     private EtisalatSubscriberService service = new EtisalatSubscriberService();
-    
 
     @When("I send upload EtisalatSubscriberData entry request with all fields")
-    public void sendUploadEtisalatSubscriberDataEntryRequest() throws NullReturnException {
+    public void sendUploadEtisalatSubscriberDataEntryRequest() {
         EtisalatSubscriberEntry entry = getRandomEtisalatEntry();
         context.put("etisalatSubscriberEntry", entry);
 
@@ -38,7 +35,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
     }
 
     @When("I send search EtisalatSubscriberData by $criteria and value $value")
-    public void sendSearchEtisalatListByCriteriaAndValue(String criteria, String value) throws NullReturnException {
+    public void sendSearchEtisalatListByCriteriaAndValue(String criteria, String value) {
         log.info("Searching EtisalatSubscriberData by criteria:" + criteria + " and value:" + value);
         EtisalatSubscriberEntry entry = context.get("etisalatSubscriberEntry", EtisalatSubscriberEntry.class);
 
@@ -75,7 +72,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
     }
 
     @Then("EtisalatSubscriberData search result are correct")
-    public void searchEtisalatResultsCorrect() throws NullReturnException {
+    public void searchEtisalatResultsCorrect() {
         log.info("Checking if etisalatSubscriberData search result is correct");
         EtisalatSubscriberFilter searchFilter = context.get("searchFilter", EtisalatSubscriberFilter.class);
         EntityList<EtisalatSubscriberEntry> searchResults = context.get("searchResult", EntityList.class);
@@ -93,7 +90,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
     }
 
     @Then("Searched EtisalatSubscriberData Entry $critera list")
-    public void checkEtisalatSubscriberEntryInResults(String criteria) throws NullReturnException {
+    public void checkEtisalatSubscriberEntryInResults(String criteria) {
         EtisalatSubscriberEntry entry = context.get("etisalatSubscriberEntry", EtisalatSubscriberEntry.class);
         EntityList<EtisalatSubscriberEntry> entityList = context.get("searchResult", EntityList.class);
 
@@ -207,8 +204,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
         OperationResult<UploadResult> operationResult = service.add(entries);
         context.put("uploadResult", operationResult.getEntity());
     }
-    
-    
+
     static EtisalatSubscriberEntry getRandomEtisalatEntry() {
         return objectInitializer.randomEntity(EtisalatSubscriberEntry.class);
     }

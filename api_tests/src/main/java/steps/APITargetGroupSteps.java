@@ -4,7 +4,6 @@ import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
-import errors.NullReturnException;
 import http.OperationResult;
 import model.TargetGroup;
 import model.TargetGroupFilter;
@@ -58,7 +57,7 @@ public class APITargetGroupSteps extends APISteps {
      * new targetGroups keep description in TargetGroupProperties
      *
      * @param checked checked targetGroup
-     * @param etalon etalon targetGroup
+     * @param etalon  etalon targetGroup
      * @return true if two targetGroups is equal, false if otherwise
      */
     private boolean equalsTargetGroups(TargetGroup checked, TargetGroup etalon) {
@@ -84,13 +83,13 @@ public class APITargetGroupSteps extends APISteps {
     }
 
     @When("I send get list of target group request")
-    public void getListOfG4TargetGroupsRequest() throws NullReturnException {
+    public void getListOfG4TargetGroupsRequest() {
         OperationResult<EntityList<TargetGroup>> operationResult = service.listG4Compatibility();
         context.put("targetGroupEntityList", operationResult.getEntity());
     }
 
     @When("I send get list of top target groups request")
-    public void getListOfTargetGroupsRequest() throws NullReturnException {
+    public void getListOfTargetGroupsRequest() {
         TargetGroupSearchFilter filter = new TargetGroupSearchFilter();
         filter.setSortField("name");
 
@@ -105,7 +104,7 @@ public class APITargetGroupSteps extends APISteps {
     }
 
     @Then("Created target group $criteria list")
-    public void targetGroupsContainNewTargetGroup(String criteria) throws NullReturnException {
+    public void targetGroupsContainNewTargetGroup(String criteria) {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
         EntityList<TargetGroup> list = context.get("targetGroupEntityList", EntityList.class);
         Boolean contains = false;
@@ -125,7 +124,7 @@ public class APITargetGroupSteps extends APISteps {
     }
 
     @Then("target group $criteria list")
-    public void existingTargetGroupContainsInList(String criteria) throws NullReturnException {
+    public void existingTargetGroupContainsInList(String criteria) {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
         LOGGER.debug("Requested target group: " + targetGroup.getName());
         EntityList<TargetGroup> list = context.get("targetGroupEntityList", EntityList.class);

@@ -4,11 +4,9 @@ import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
-import errors.NullReturnException;
 import file_generator.FileGenerator;
 import http.JsonConverter;
 import http.OperationResult;
-import http.OperationsResults;
 import model.*;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
@@ -32,7 +30,7 @@ public class APITargetSteps extends APISteps {
     private TargetService service = new TargetService();
 
     @When("I send create target $with targets group request")
-    public void sendCreateRequest(String with) throws NullReturnException {
+    public void sendCreateRequest(String with) {
         Target target = getRandomTarget();
         if (with.toLowerCase().equals("with")) {
             ArrayList<TargetGroup> groups = new ArrayList<>();
@@ -84,7 +82,7 @@ public class APITargetSteps extends APISteps {
     }
 
     @When("I send update target request")
-    public void updateTargetRequest() throws NullReturnException {
+    public void updateTargetRequest() {
         Target createdTarget = Entities.getTargets().getLatest();
         Target updatedTarget = createdTarget;
         updatedTarget.setName(RandomStringUtils.randomAlphabetic(10));
@@ -95,7 +93,7 @@ public class APITargetSteps extends APISteps {
     }
 
     @Then("Target updated correctly")
-    public void targetUpdatedCorrectly() throws NullReturnException {
+    public void targetUpdatedCorrectly() {
         Target updatedTarget = context.get("updatedTarget", Target.class);
         OperationResult<Target> operationResult = service.view(updatedTarget.getId());
         Verify.shouldBe(isTrue.element(isEqualsTargets(updatedTarget, operationResult.getEntity())));
@@ -109,7 +107,7 @@ public class APITargetSteps extends APISteps {
     }
 
     @Then("Target deleted correctly")
-    public void targetDeletedCorrectly() throws NullReturnException {
+    public void targetDeletedCorrectly() {
         Target deletedTarget = context.get("deletedTarget", Target.class);
         OperationResult<Target> operationResult = service.view(deletedTarget.getId());
         Verify.shouldBe(isTrue.element(operationResult.getEntity().getName().contains("DELETED at")));

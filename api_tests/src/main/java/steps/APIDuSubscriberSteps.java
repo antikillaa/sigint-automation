@@ -3,10 +3,8 @@ package steps;
 import abs.EntityList;
 import conditions.Conditions;
 import conditions.Verify;
-import errors.NullReturnException;
 import http.JsonConverter;
 import http.OperationResult;
-import http.OperationsResults;
 import model.DuSubscriberEntry;
 import model.phonebook.DuSubscriberFilter;
 import org.apache.log4j.Logger;
@@ -24,7 +22,7 @@ public class APIDuSubscriberSteps extends APISteps {
 
 
     @When("I send upload DuSubscriberEntry request with all fields")
-    public void sendUploadDuSubscriberEntryRequest() throws NullReturnException {
+    public void sendUploadDuSubscriberEntryRequest() {
         DuSubscriberEntry duSubscriberEntry = getRandomDuEntry();
         log.info("Entry:" + JsonConverter.toJsonString(duSubscriberEntry));
         OperationResult operationResult = service.add(duSubscriberEntry);
@@ -33,7 +31,7 @@ public class APIDuSubscriberSteps extends APISteps {
     }
 
     @When("I send search DuSubscribers by $criteria and value $value")
-    public void sendSearchDuSubscriberListByCriteriaAndValue(String criteria, String value) throws NullReturnException {
+    public void sendSearchDuSubscriberListByCriteriaAndValue(String criteria, String value) {
         log.info("Searching DuSubscribers by criteria:" + criteria + " and value:" + value);
         DuSubscriberEntry duSubscriberEntry = context.get("duSubscriberEntry", DuSubscriberEntry.class);
         if (criteria.toLowerCase().equals("address")) {
@@ -56,7 +54,7 @@ public class APIDuSubscriberSteps extends APISteps {
     }
 
     @Then("DuSubscriber search result are correct")
-    public void searchDuSubscriberResultsCorrect() throws NullReturnException {
+    public void searchDuSubscriberResultsCorrect() {
         log.info("Checking if duSubscriber search result is correct");
         DuSubscriberFilter searchFilter = context.get("searchFilter", DuSubscriberFilter.class);
         EntityList<DuSubscriberEntry> searchResults = context.get("searchResult", EntityList.class);
@@ -73,7 +71,7 @@ public class APIDuSubscriberSteps extends APISteps {
     }
 
     @Then("Searched DuSubscriber Entry $criteria list")
-    public void checkDuSubscriberInResults(String criteria) throws NullReturnException {
+    public void checkDuSubscriberInResults(String criteria) {
         DuSubscriberEntry entry = context.get("duSubscriberEntry", DuSubscriberEntry.class);
         EntityList<DuSubscriberEntry> entityList = context.get("searchResult", EntityList.class);
 
@@ -135,7 +133,7 @@ public class APIDuSubscriberSteps extends APISteps {
 
         Verify.shouldBe(Conditions.equals(entry, etalonEntry));
     }
-    
+
     static DuSubscriberEntry getRandomDuEntry() {
         return objectInitializer.randomEntity(DuSubscriberEntry.class);
     }

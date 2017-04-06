@@ -3,11 +3,9 @@ package steps;
 import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Verify;
-import errors.NullReturnException;
 import errors.OperationResultError;
 import http.JsonConverter;
 import http.OperationResult;
-import http.OperationsResults;
 import model.Phonebook;
 import model.UploadResult;
 import model.phonebook.PhonebookSearchFilter;
@@ -87,7 +85,7 @@ public class APIPhonebookSteps extends APISteps {
     }
 
     @When("I search Phonebook Entry by $criteria and value $value")
-    public void searchPhonebookbyCriteria(String criteria, String value) throws NullReturnException {
+    public void searchPhonebookbyCriteria(String criteria, String value) {
         log.info("Start search phonebook by criteria: " + criteria + ", value: " + value);
         Phonebook phonebook = Entities.getPhonebooks().getLatest();
 
@@ -96,7 +94,7 @@ public class APIPhonebookSteps extends APISteps {
         } else if (criteria.toLowerCase().equals("name")) {
             value = value.equals("random") ? phonebook.getName() : value;
         } else if (criteria.toLowerCase().equals("country")) {
-            String countryName =  value.equals("random") ? phonebook.getCountry() : value;
+            String countryName = value.equals("random") ? phonebook.getCountry() : value;
             value = RandomGenerator.getCountryCode(countryName);
         } else if (criteria.toLowerCase().equals("countrycode")) {
             value = value.equals("random") ? phonebook.getCountryCode() : value;
@@ -141,7 +139,7 @@ public class APIPhonebookSteps extends APISteps {
         log.info("Checking if phonebook entry " + criteria + " list");
 
         Boolean contains = false;
-        for(Phonebook entry : list) {
+        for (Phonebook entry : list) {
             if (entry.getPhoneNumber().equals(phonebook.getPhoneNumber())) {
                 contains = true;
                 break;
@@ -166,7 +164,7 @@ public class APIPhonebookSteps extends APISteps {
             context.put("uploadResult", operationResult.getEntity());
         }
         context.put("uploadedPhonebooks", phonebooks);
-        for (Phonebook phonebook : phonebooks){
+        for (Phonebook phonebook : phonebooks) {
             Entities.getPhonebooks().addOrUpdateEntity(phonebook);
         }
     }
@@ -185,11 +183,11 @@ public class APIPhonebookSteps extends APISteps {
             throw new AssertionError(errorMessage);
         }
     }
-    
+
     static Phonebook getRandomPhonebook() {
         return objectInitializer.randomEntity(Phonebook.class);
     }
-    
+
     static List<Phonebook> getRandomPhoneBooks(int count) {
         return objectInitializer.randomEntities(Phonebook.class, count);
     }
