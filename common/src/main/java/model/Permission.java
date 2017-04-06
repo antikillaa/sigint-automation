@@ -11,7 +11,7 @@ import java.util.List;
 public class Permission {
 
     private ArrayList<String> titles = new ArrayList<>();
-    private ArrayList<PermissionType> actions = new ArrayList<>();
+    private ArrayList<String> actions = new ArrayList<>();
     private PermissionRecord record;
 
     public ArrayList<String> getTitles() {
@@ -22,11 +22,11 @@ public class Permission {
         this.titles = titles;
     }
 
-    public ArrayList<PermissionType> getActions() {
+    public ArrayList<String> getActions() {
         return actions;
     }
 
-    public void setActions(ArrayList<PermissionType> actions) {
+    public void setActions(ArrayList<String> actions) {
         this.actions = actions;
     }
 
