@@ -2,9 +2,7 @@ package model;
 
 import abs.AbstractEntity;
 import data_for_entity.annotations.DataIgnore;
-import json.serialization.ProfileCategoryDeserializer;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
@@ -26,8 +24,8 @@ public class Profile extends AbstractEntity {
     @DataIgnore
     private Boolean target;
     @DataIgnore
-    @JsonDeserialize(using = ProfileCategoryDeserializer.class)
-    private ProfileCategory category;
+    //@JsonDeserialize(using = ProfileCategoryDeserializer.class)
+    private String category;
     @DataIgnore
     private ProfileConsolidatedAttributes consolidatedAttributes;
     @DataIgnore
@@ -130,11 +128,11 @@ public class Profile extends AbstractEntity {
         this.parent = parent;
     }
 
-    public ProfileCategory getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(ProfileCategory category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 

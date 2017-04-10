@@ -18,6 +18,8 @@ public class ProfileDraftService implements EntityService<Profile> {
     private static final ProfileDraftRequest request = new ProfileDraftRequest();
     private static final Logger log = Logger.getLogger(ProfileDraftService.class);
 
+    // TODO POST /profiles/{profileId}/draft getOrCreateDraft
+
     @Override
     public OperationResult<Profile> add(Profile entity) {
         log.info("Creating new ProfileDraft: " + JsonConverter.toJsonString(entity));
@@ -61,7 +63,16 @@ public class ProfileDraftService implements EntityService<Profile> {
 
     @Override
     public OperationResult<Profile> update(Profile entity) {
-        throw new NotImplementedException();
+        log.info("Updating profile");
+        log.info(JsonConverter.toJsonString(entity));
+
+        G4Response response = g4HttpClient.sendRequest(request.update(entity));
+
+        OperationResult<Profile> operationResult = new OperationResult<>(response, Profile.class, "data");
+        if (operationResult.isSuccess()) {
+            Entities.getProfiles().addOrUpdateEntity(operationResult.getEntity());
+        }
+        return operationResult;
     }
 
     @Override
