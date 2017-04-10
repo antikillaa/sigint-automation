@@ -9,10 +9,8 @@ import java.util.List;
 
 public class JiraService {
     
-    static List<String> activeStatuses = initActiveList();
-    
+    private static List<String> activeStatuses = initActiveList();
     private JiraConnector connector = new JiraConnector();
-    
     
     private static List<String>  initActiveList() {
         List<String> activeStatuses = new ArrayList<>();

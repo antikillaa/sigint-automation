@@ -8,6 +8,8 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Session {
+    private String name;
+    private String value;
 
     public String getName() {
         return name;
@@ -25,11 +27,8 @@ public class Session {
         this.value = value;
     }
 
-    private String name;
-    private String value;
-
     @Override
     public String toString() {
-        return name+"="+value;
+        return name + "=" + value;
     }
 }
