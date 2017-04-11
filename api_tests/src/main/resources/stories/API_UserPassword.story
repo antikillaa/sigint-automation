@@ -30,33 +30,33 @@ When I change user password to My-very-G00d-paswooord
 Then I got response code 400
 And Message contains "more than 2 repeated"
 
-Scenario: API.Check random 8-character password
+Scenario: API.Check random password
 !-- upper and lower case letters, and digits
 When I change user password to random
 Then I got response code 200
 
 !-- upper and lower case letters
-When I change user password to adoKSLAQ
+When I change user password to adoKSLAQxo
 Then I got response code 200
 
 !-- lower case letters and digits
-When I change user password to 9h21b33w
+When I change user password to 9h21b33wx0
 Then I got response code 200
 
 !-- upper case letters and digits
-When I change user password to K9JJ782D
+When I change user password to K9JJ782DXO
 Then I got response code 200
 
 !-- lower case letters and special characters
-When I change user password to adoksl@q
+When I change user password to adoksl@q!@
 Then I got response code 200
 
 !-- upper case letters and special characters
-When I change user password to HDK@HD!D
+When I change user password to HDK@HD!D&O
 Then I got response code 200
 
 !-- digits and special characters
-When I change user password to 324@!421
+When I change user password to 324@!421#$
 Then I got response code 200
 
 Scenario: API.Check password with username
@@ -65,11 +65,8 @@ Then I got response code 400
 And Message contains "not valid"
 
 Scenario: API.Check password with emoji symbols
-Meta:
-@skip
-!-- feature is not implemented
 When I change user password to Em0j1🚀🚃🚑🚕
-Then I got response code 400
+Then I got response code 200
 
 Scenario: API.Check that password is different from the last 3 passwords used
 When I change user password to This-happened-once-before

@@ -22,6 +22,12 @@ public class APIUserSteps extends APISteps {
     private Logger log = Logger.getLogger(APIUserGroupSteps.class);
     private UserService service = new UserService();
 
+    private static final int PASSWORD_LENGTH = 10;
+
+    private String generatePassword() {
+        return RandomStringUtils.randomAlphanumeric(PASSWORD_LENGTH);
+    }
+
     @When("I send create a new user with group request")
     public void createNewUserRequest() {
         List<String> userGroupIds = new ArrayList<>();
@@ -110,7 +116,7 @@ public class APIUserSteps extends APISteps {
     public void setWrongUserPassword() {
         User user = Entities.getUsers().getLatest();
 
-        String passwordToReplace = RandomStringUtils.randomAlphanumeric(8);
+        String passwordToReplace = generatePassword();
         log.info(String.format("Setting wrong password %s for user %s", passwordToReplace, user.getName()));
         user.setPassword(passwordToReplace);
         Entities.getUsers().addOrUpdateEntity(user);
@@ -122,7 +128,7 @@ public class APIUserSteps extends APISteps {
 
         String passwordToReplace = newPassword;
         if ("random".equals(newPassword.toLowerCase())) {
-            passwordToReplace = RandomStringUtils.randomAlphanumeric(8);
+            passwordToReplace = generatePassword();
         }
         if ("username".equals(newPassword.toLowerCase())) {
             passwordToReplace = user.getName();
