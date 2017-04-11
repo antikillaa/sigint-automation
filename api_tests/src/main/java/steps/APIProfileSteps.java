@@ -2,8 +2,12 @@ package steps;
 
 import abs.EntityList;
 import app_context.entities.Entities;
+import http.JsonConverter;
 import http.OperationResult;
 import model.Profile;
+import model.ProfileCategory;
+import model.TargetGroup;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
@@ -33,6 +37,8 @@ public class APIProfileSteps extends APISteps {
         Profile createdProfile = Entities.getProfiles().getLatest();
 
         profilesShouldBeEquals(requestedProfile, createdProfile);
+
+        context.put("profileDraft", createdProfile);
     }
 
     private void profilesShouldBeEquals(Profile expected, Profile actual) {
@@ -40,7 +46,9 @@ public class APIProfileSteps extends APISteps {
         Assert.assertEquals(expected.getType(), actual.getType());
         Assert.assertEquals(expected.getActive(), actual.getActive());
         Assert.assertEquals(expected.getProperties().getDescription(), actual.getProperties().getDescription());
-        Assert.assertEquals(expected.getGroups(), actual.getGroups());
+        Assert.assertEquals(
+                JsonConverter.toJsonString(expected.getGroups()),
+                JsonConverter.toJsonString(actual.getGroups()));
         Assert.assertEquals(expected.getEntities(), actual.getEntities());
         Assert.assertEquals(expected.getEntityCount(), actual.getEntityCount());
 
@@ -67,9 +75,8 @@ public class APIProfileSteps extends APISteps {
 
     @When("I send publish profile draft request")
     public void publishProfileDraft() {
-        Profile createdProfile = Entities.getProfiles().getLatest();
-        context.put("profileDraft", createdProfile);
-        OperationResult<Profile> operationResult = draftService.publish(createdProfile);
+        Profile profile = context.get("profileDraft", Profile.class);
+        OperationResult<Profile> operationResult = draftService.publish(profile);
         context.put("profile", operationResult.getEntity());
     }
 
@@ -106,5 +113,29 @@ public class APIProfileSteps extends APISteps {
         EntityList<Profile> profiles = context.get("profileDraftsEntityList", EntityList.class);
 
         Assert.assertTrue(profiles.size() > Integer.valueOf(size));
+    }
+
+    @When("I add profile draft to target group")
+    public void addProfileDraftToTargetGroup() {
+        Profile profile = Entities.getProfiles().getLatest();
+        TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
+
+        profile.getGroups().add(targetGroup);
+
+        context.put("profileDraft", profile);
+    }
+
+    @When("I send update profile request")
+    public void updateProfile() {
+        Profile profile = context.get("profileDraft", Profile.class);
+
+        profile.setName(RandomStringUtils.randomAlphanumeric(10));
+        profile.getProperties().setDescription(RandomStringUtils.randomAlphanumeric(20));
+        profile.getProperties().setProfileVersion(profile.getProperties().getProfileVersion() + 1);
+        profile.setCategory(ProfileCategory.random().getDisplayName());
+
+        context.put("profileDraft", profile);
+
+        draftService.update(profile);
     }
 }

@@ -121,16 +121,19 @@ Then Request is successful
 
 
 Scenario: API.(New profiler) Publishing of new profile draft
-Meta:
-@deprecated
 Given I sign in as admin user
 When I send create profile draft request
 Then Request is successful
 And Profile draft is correct
 
+When I send create target group without targets request
+Then Request is successful
+And Created target group is correct
+
+When I add profile draft to target group
+
 When I send publish profile draft request
 Then Request is successful
-And Profile draft is correct
 
 When I send get profile details request
 Then Request is successful
@@ -138,25 +141,60 @@ And Profile is correct
 
 When I send delete profile request
 Then Request is successful
+When I send delete target group request
+Then Request is successful
 
 
 Scenario: (New profiler) Deleting of profile
-Meta:
-@deprecated
 Given I sign in as admin user
 When I send create profile draft request
 Then Request is successful
 And Profile draft is correct
 
-When I send publish profile draft request
+When I send create target group without targets request
 Then Request is successful
-And Profile draft is correct
+And Created target group is correct
 
-When I send delete profile request
+When I add profile draft to target group
+
+When I send publish profile draft request
 Then Request is successful
 
 When I send get profile details request
-Then Request is unsuccessful
+Then Request is successful
+And Profile is correct
+
+When I send delete profile request
+Then Request is successful
+When I send delete target group request
+Then Request is successful
+
+
+Scenario: (New profiler) Updating of profile draft
+Given I sign in as admin user
+When I send create profile draft request
+Then Request is successful
+And Profile draft is correct
+
+When I send create target group without targets request
+Then Request is successful
+
+When I add profile draft to target group
+
+When I send update profile request
+Then Request is successful
+And Profile draft is correct
+
+When I send publish profile draft request
+Then Request is successful
+
+When I send get profile details request
+Then Request is successful
+
+When I send delete profile request
+Then Request is successful
+When I send delete target group request
+Then Request is successful
 
 
 Scenario: API.(New profiler) Get list of all profile drafts
