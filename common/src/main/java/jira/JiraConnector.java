@@ -5,11 +5,15 @@ import errors.NullReturnException;
 import http.G4HttpClient;
 import http.G4Response;
 import http.JsonConverter;
+import http.OperationResult;
 import http.requests.HttpRequest;
-import jira.model.*;
-import org.apache.log4j.Logger;
-
 import java.util.List;
+import jira.model.Issue;
+import jira.model.JiraProject;
+import jira.model.ProjectVersion;
+import jira.model.Session;
+import jira.model.SessionInfo;
+import org.apache.log4j.Logger;
 
 /**
  * JiraConnector
@@ -37,12 +41,18 @@ public class JiraConnector {
         JiraSessionRequest request = new JiraSessionRequest();
         G4Response response = client.sendRequest(request);
 
-        SessionInfo sessionInfo = JsonConverter.jsonToObject(response.getMessage(), SessionInfo.class);
-        log.debug("Jira session created");
+        OperationResult<SessionInfo> result = new OperationResult<>(response, SessionInfo.class);
+        if (!result.isSuccess()) {
+            log.error(String.format("Jira session init failed with %d code. Response message:\n%s",
+                result.getCode(), result.getMessage()));
+            return null;
+        } else {
+            log.debug("Jira session created");
+        }
 
         Session session = null;
-        if (sessionInfo != null) {
-            session = sessionInfo.getSession();
+        if (result.getEntity() != null) {
+            session = result.getEntity().getSession();
             G4HttpClient.setCookie(session.getName(), session.getValue());
         } else {
             log.error("Jira session wasn't received. Cookie will not be generated");
