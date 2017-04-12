@@ -1,6 +1,5 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import errors.OperationResultError;
@@ -63,7 +62,7 @@ public class SourceService implements EntityService<Source> {
     }
 
     @Override
-    public OperationResult<EntityList<Source>> list(SearchFilter filter) {
+    public OperationResult<List<Source>> list(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
@@ -73,7 +72,7 @@ public class SourceService implements EntityService<Source> {
      *
      * @return HTTP status code
      */
-    public OperationResult<EntityList<Source>> list() {
+    public OperationResult<List<Source>> list() {
         log.info("GET list of Sources. Filter {\"deleted\":false}");
         G4Response response = g4HttpClient.sendRequest(sourcesRequest.list());
 
@@ -83,7 +82,7 @@ public class SourceService implements EntityService<Source> {
             List<Source> sources = new ArrayList<>(operationResult.getEntity().getResult().getEntities());
             sources.removeIf(Source::isDeleted);
 
-            return new OperationResult<>(response, new EntityList<>(sources));
+            return new OperationResult<>(response, sources);
         } else {
             throw new OperationResultError(operationResult);
         }

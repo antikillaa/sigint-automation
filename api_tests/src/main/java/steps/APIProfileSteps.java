@@ -1,6 +1,5 @@
 package steps;
 
-import abs.EntityList;
 import app_context.entities.Entities;
 import http.JsonConverter;
 import http.OperationResult;
@@ -13,6 +12,8 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.ProfileDraftService;
 import services.ProfileService;
+
+import java.util.List;
 
 public class APIProfileSteps extends APISteps {
 
@@ -103,14 +104,14 @@ public class APIProfileSteps extends APISteps {
 
     @When("I send get list of profile drafts request")
     public void getProfileDraftsList() {
-        OperationResult<EntityList<Profile>> operationResult = draftService.list();
+        OperationResult<List<Profile>> operationResult = draftService.list();
 
-        context.put("profileDraftsEntityList", operationResult.getEntity());
+        context.put("profileDraftsList", operationResult.getEntity());
     }
 
     @Then("Profile drafts list size more than $size")
     public void profileDraftsListMoreThan(String size) {
-        EntityList<Profile> profiles = context.get("profileDraftsEntityList", EntityList.class);
+        List<Profile> profiles = context.get("profileDraftsList", List.class);
 
         Assert.assertTrue(profiles.size() > Integer.valueOf(size));
     }

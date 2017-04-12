@@ -1,15 +1,17 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import errors.OperationResultError;
-import http.*;
+import http.G4Response;
+import http.OperationResult;
 import http.requests.ReportRequest;
 import model.Report;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
+
+import java.util.List;
 
 public class ReportService implements EntityService<Report> {
 
@@ -44,7 +46,7 @@ public class ReportService implements EntityService<Report> {
     }
 
     @Override
-    public OperationResult<EntityList<Report>> list(SearchFilter filter) {
+    public OperationResult<List<Report>> list(SearchFilter filter) {
         throw new NotImplementedException();
     }
 

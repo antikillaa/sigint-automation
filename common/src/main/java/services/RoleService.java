@@ -1,6 +1,5 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import http.G4Response;
@@ -22,8 +21,9 @@ public class RoleService implements EntityService<Role> {
 
     /**
      * Add new Role
-     *
+     * <p>
      * API: POST /api/auth/roles
+     *
      * @param entity Role entity for payload
      * @return HTTP status code
      */
@@ -61,15 +61,15 @@ public class RoleService implements EntityService<Role> {
     }
 
     @Override
-    public OperationResult<EntityList<Role>> list(SearchFilter filter) {
+    public OperationResult<List<Role>> list(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
-    public OperationResult<EntityList<Role>> list() {
+    public OperationResult<List<Role>> list() {
         G4Response response = g4HttpClient.sendRequest(request.list());
 
         List<Role> roles = JsonConverter.jsonToObjectsList(response.getMessage(), Role[].class);
-        return new OperationResult<>(response, new EntityList<>(roles));
+        return new OperationResult<>(response, roles);
     }
 
     @Override

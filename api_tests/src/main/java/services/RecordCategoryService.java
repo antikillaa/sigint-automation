@@ -1,6 +1,5 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import errors.OperationResultError;
@@ -9,12 +8,10 @@ import http.OperationResult;
 import http.requests.RecordCategoriesRequest;
 import model.RecordCategory;
 import model.RecordCategoryListResult;
-import model.Result;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecordCategoryService implements EntityService<RecordCategory> {
@@ -41,23 +38,13 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
         return operationResult;
     }
 
-    public List<OperationResult> addAll(List<RecordCategory> catList) {
-        List<OperationResult> operationResults = new ArrayList<>();
-        for (RecordCategory category : catList) {
-            G4Response response = g4HttpClient.sendRequest(request.add(category));
-            OperationResult<Result> operationResult = new OperationResult<>(response, Result.class);
-            operationResults.add(operationResult);
-        }
-        return operationResults;
-    }
-
     @Override
     public OperationResult remove(RecordCategory entity) {
         throw new NotImplementedException();
     }
 
     @Override
-    public OperationResult<EntityList<RecordCategory>> list(SearchFilter filter) {
+    public OperationResult<List<RecordCategory>> list(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
@@ -66,14 +53,14 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
      *
      * @return list of record-categories
      */
-    public OperationResult<EntityList<RecordCategory>> list() {
+    public OperationResult<List<RecordCategory>> list() {
         G4Response response = g4HttpClient.sendRequest(request.list());
 
         OperationResult<RecordCategoryListResult> operationResult =
                 new OperationResult<>(response, RecordCategoryListResult.class);
 
         if (operationResult.isSuccess()) {
-            EntityList<RecordCategory> recordCategories = operationResult.getEntity().getResult();
+            List<RecordCategory> recordCategories = operationResult.getEntity().getResult().getEntities();
             return new OperationResult<>(response, recordCategories);
         } else {
             throw new OperationResultError(operationResult);

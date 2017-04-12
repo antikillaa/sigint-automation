@@ -1,6 +1,5 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import errors.OperationResultError;
@@ -13,6 +12,8 @@ import model.RecordSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
+
+import java.util.List;
 
 public class RecordService implements EntityService<Record> {
 
@@ -49,16 +50,16 @@ public class RecordService implements EntityService<Record> {
      * API: POST "/api/sigint/records/search?withTargets=true"
      *
      * @param filter search filter for payload
-     * @return EntityList of record
+     * @return List of record
      */
     @Override
-    public OperationResult<EntityList<Record>> list(SearchFilter filter) {
+    public OperationResult<List<Record>> list(SearchFilter filter) {
         log.info("Search records by filter:" + JsonConverter.toJsonString(filter));
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
         OperationResult<RecordSearchResult> operationResult = new OperationResult<>(response, RecordSearchResult.class);
         if (operationResult.isSuccess()) {
-            EntityList<Record> records = operationResult.getEntity().getResult();
+            List<Record> records = operationResult.getEntity().getResult().getEntities();
             log.info("Founded " + records.size() + " records");
             return new OperationResult<>(response, records);
         } else {

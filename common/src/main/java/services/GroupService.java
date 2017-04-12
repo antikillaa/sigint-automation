@@ -1,6 +1,5 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import http.G4Response;
@@ -54,15 +53,15 @@ public class GroupService implements EntityService<Group> {
     }
 
     @Override
-    public OperationResult<EntityList<Group>> list(SearchFilter filter) {
+    public OperationResult<List<Group>> list(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
-    public OperationResult<EntityList<Group>> list() {
+    public OperationResult<List<Group>> list() {
         G4Response response = g4HttpClient.sendRequest(request.list());
 
         List<Group> groups = JsonConverter.jsonToObjectsList(response.getMessage(), Group[].class);
-        return new OperationResult<>(response, new EntityList<>(groups));
+        return new OperationResult<>(response, groups);
     }
 
     /**

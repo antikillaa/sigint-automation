@@ -1,6 +1,5 @@
 package steps;
 
-import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
@@ -123,11 +122,11 @@ public class APITargetSteps extends APISteps {
 
     @When("I send upload targets request with XLS file containing $count targets with existing group request")
     public void uploadTargetsWithExistingGroup(String count) {
-        EntityList<TargetGroup> targetGroups = context.get("targetGroupList", EntityList.class);
+        List<TargetGroup> targetGroups = context.get("targetGroupList", List.class);
         List<Target> targets = getRandomTargets(Integer.valueOf(count));
 
         for (Target target : targets) {
-            TargetGroup group = RandomGenerator.getRandomItemFromList(targetGroups.getEntities());
+            TargetGroup group = RandomGenerator.getRandomItemFromList(targetGroups);
             target.addGroup(group);
             Entities.getTargetGroups().addOrUpdateEntity(group);
         }
@@ -153,7 +152,7 @@ public class APITargetSteps extends APISteps {
         }
 
         TargetFilter searchFilter = new TargetFilter().filterBy(criteria, value);
-        OperationResult<EntityList<Target>> operationResult = service.list(searchFilter);
+        OperationResult<List<Target>> operationResult = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
         context.put("searchResult", operationResult.getEntity());
@@ -163,14 +162,14 @@ public class APITargetSteps extends APISteps {
     public void targetSearchResultAreCorrect() {
         log.info("Checking if search targets result is correct");
         TargetFilter searchFilter = context.get("searchFilter", TargetFilter.class);
-        EntityList<Target> searchResult = context.get("searchResult", EntityList.class);
+        List<Target> searchResult = context.get("searchResult", List.class);
 
         if (searchResult.size() == 0) {
             log.warn("Search result can be incorrect. There are not records in it");
         } else {
             log.info("Search result size: " + searchResult.size());
         }
-        for (Target target : searchResult.getEntities()) {
+        for (Target target : searchResult) {
             Assert.assertTrue(String.format("Target:%s should not match to filter %s", target, Parser.entityToString(searchFilter)),
                     searchFilter.isAppliedToEntity(target));
         }
@@ -180,7 +179,7 @@ public class APITargetSteps extends APISteps {
     public void uploadedTargetInList(String criteria) {
         log.info("Checking if Target entry " + criteria + " list");
         Target target = Entities.getTargets().getLatest();
-        EntityList<Target> list = context.get("searchResult", EntityList.class);
+        List<Target> list = context.get("searchResult", List.class);
 
         Boolean contains = false;
         for (Target entity : list) {
@@ -222,7 +221,7 @@ public class APITargetSteps extends APISteps {
     @When("I send get groups list of new target request")
     public void getTargetGroupsOfNewTarget() {
         Target target = Entities.getTargets().getLatest();
-        EntityList<TargetGroup> targetGroups = service.getTargetGroups(target.getId()).getEntity();
+        List<TargetGroup> targetGroups = service.getTargetGroups(target.getId()).getEntity();
         context.put("targetGroupList", targetGroups);
     }
 
@@ -281,13 +280,13 @@ public class APITargetSteps extends APISteps {
 
     @When("I send get list of targets request")
     public void getTargetList() {
-        OperationResult<EntityList<Target>> operationResult = service.list();
-        context.put("targetEntityList", operationResult.getEntity());
+        OperationResult<List<Target>> operationResult = service.list();
+        context.put("targetList", operationResult.getEntity());
     }
 
     @Then("Target list size more than $size")
     public void targetListShouldBeMoreThan(String size) {
-        EntityList<Target> targets = context.get("targetEntityList", EntityList.class);
+        List<Target> targets = context.get("targetList", List.class);
 
         Assert.assertTrue(targets.size() > Integer.valueOf(size));
     }

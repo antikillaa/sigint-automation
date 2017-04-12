@@ -1,12 +1,10 @@
 package steps;
 
-import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import data_generator.DataGenerator;
 import http.OperationResult;
-import http.OperationsResults;
 import model.RecordCategory;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -14,6 +12,8 @@ import org.jbehave.core.annotations.When;
 import services.RecordCategoryService;
 import utils.Parser;
 import utils.RandomGenerator;
+
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class APIRecordCategorySteps extends APISteps {
@@ -32,7 +32,7 @@ public class APIRecordCategorySteps extends APISteps {
 
     @When("I send get list of record categories request")
     public void getListOfRecordCategory() {
-        OperationResult<EntityList<RecordCategory>> operationResult = service.list();
+        OperationResult<List<RecordCategory>> operationResult = service.list();
         context.put("recordCategories", operationResult.getEntity());
     }
 
@@ -40,7 +40,7 @@ public class APIRecordCategorySteps extends APISteps {
     @SuppressWarnings("unchecked")
     public void recordCategoriesListSizeShouldbeMoroThan(String size) {
         int lessSize = Integer.valueOf(size);
-        EntityList<RecordCategory> categories = context.get("recordCategories", EntityList.class);
+        List<RecordCategory> categories = context.get("recordCategories", List.class);
         Verify.shouldBe(Conditions.isTrue.element(categories.size() > lessSize));
     }
 
@@ -48,7 +48,7 @@ public class APIRecordCategorySteps extends APISteps {
     @SuppressWarnings("unchecked")
     public void recordcateroryShouldBeInList(String criteria) {
         RecordCategory category = context.get("recordCategory", RecordCategory.class);
-        EntityList<RecordCategory> categories = context.get("recordCategories", EntityList.class);
+        List<RecordCategory> categories = context.get("recordCategories", List.class);
 
         boolean contained = false;
         for (RecordCategory recordCategory : categories) {
@@ -68,8 +68,8 @@ public class APIRecordCategorySteps extends APISteps {
     @When("I get random record category from list")
     @SuppressWarnings("unchecked")
     public void getRandomRecordCategoryfromList() {
-        EntityList<RecordCategory> categories = context.get("recordCategories", EntityList.class);
-        RecordCategory recordCategory = RandomGenerator.getRandomItemFromList((categories.getEntities()));
+        List<RecordCategory> categories = context.get("recordCategories", List.class);
+        RecordCategory recordCategory = RandomGenerator.getRandomItemFromList((categories));
         Verify.shouldBe(Conditions.isTrue.element(recordCategory != null));
         context.put("recordCategory", recordCategory);
     }

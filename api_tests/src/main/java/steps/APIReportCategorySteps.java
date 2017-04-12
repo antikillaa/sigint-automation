@@ -1,16 +1,16 @@
 package steps;
 
-import abs.EntityList;
 import app_context.entities.Entities;
 import http.JsonConverter;
 import http.OperationResult;
-import http.OperationsResults;
 import model.ReportCategory;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.ReportCategoryService;
+
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class APIReportCategorySteps extends APISteps {
@@ -32,17 +32,17 @@ public class APIReportCategorySteps extends APISteps {
 
     @When("I send get list of report categories request")
     public void getReportCategoryList() {
-        OperationResult<EntityList<ReportCategory>> result = reportCategoryService.list();
-        context.put("reportCategoryEntityList", result.getEntity());
+        OperationResult<List<ReportCategory>> result = reportCategoryService.list();
+        context.put("reportCategoryList", result.getEntity());
     }
 
     @Then("Report categories list size more than $count")
     public void reportCategoryListShouldBeMoreThan(final String count) {
         int minSize = Integer.valueOf(count);
-        EntityList<ReportCategory> reportCategories =
-                context.get("reportCategoryEntityList", EntityList.class);
+        List<ReportCategory> reportCategories =
+                context.get("reportCategoryList", List.class);
 
-        Assert.assertTrue(reportCategories.getEntities().size() > minSize);
+        Assert.assertTrue(reportCategories.size() > minSize);
     }
 
     @When("I create new report category")

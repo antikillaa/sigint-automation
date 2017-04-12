@@ -1,6 +1,5 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import http.G4Response;
@@ -48,7 +47,7 @@ public class ReportCategoryService implements EntityService<ReportCategory> {
     }
 
     @Override
-    public OperationResult<EntityList<ReportCategory>> list(SearchFilter filter) {
+    public OperationResult<List<ReportCategory>> list(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
@@ -57,7 +56,7 @@ public class ReportCategoryService implements EntityService<ReportCategory> {
      *
      * @return list of ReportCategory
      */
-    public OperationResult<EntityList<ReportCategory>> list() {
+    public OperationResult<List<ReportCategory>> list() {
         log.info("Get list of categories...");
 
         G4Response response = g4HttpClient.sendRequest(request.list());
@@ -65,16 +64,16 @@ public class ReportCategoryService implements EntityService<ReportCategory> {
         List<ReportCategory> reportCategories =
                 JsonConverter.jsonToObjectsList(response.getMessage(), ReportCategory[].class, "result");
 
-        return new OperationResult<>(response, new EntityList<>(reportCategories));
+        return new OperationResult<>(response, reportCategories);
     }
 
-    public OperationResult<EntityList<ReportCategory>> filter(Long updatedAfter) {
+    public OperationResult<List<ReportCategory>> filter(Long updatedAfter) {
         G4Response response = g4HttpClient.sendRequest(request.filter(updatedAfter));
 
         List<ReportCategory> reportCategories =
                 JsonConverter.jsonToObjectsList(response.getMessage(), ReportCategory[].class, "result");
 
-        return new OperationResult<>(response, new EntityList<>(reportCategories));
+        return new OperationResult<>(response, reportCategories);
     }
 
     @Override

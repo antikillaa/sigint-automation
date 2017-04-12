@@ -1,6 +1,5 @@
 package steps;
 
-import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
@@ -42,14 +41,14 @@ public class APIReportSteps extends APISteps {
 
     @When("Add categories to report")
     public void addCategoriesToReport() {
-        OperationResult<EntityList<ReportCategory>> operationResult = reportCategoryService.list();
-        EntityList<ReportCategory> categories = operationResult.getEntity();
+        OperationResult<List<ReportCategory>> operationResult = reportCategoryService.list();
+        List<ReportCategory> categories = operationResult.getEntity();
         for (ReportCategory reportCategory : categories) {
             reportCategory.setCurrentValue("--");
         }
         Report report = context.get("report", Report.class);
         log.info("Set categories to report...");
-        report.setCategories(categories.getEntities());
+        report.setCategories(categories);
 
         context.put("report", report);
     }

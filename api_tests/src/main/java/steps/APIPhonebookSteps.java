@@ -1,6 +1,5 @@
 package steps;
 
-import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Verify;
 import errors.OperationResultError;
@@ -109,7 +108,7 @@ public class APIPhonebookSteps extends APISteps {
         }
         PhonebookSearchFilter searchFilter = new PhonebookSearchFilter().filterBy(criteria, value);
         log.info("Search isAppliedToEntity: " + JsonConverter.toJsonString(searchFilter));
-        OperationResult<EntityList<Phonebook>> operationResult = service.list(searchFilter);
+        OperationResult<List<Phonebook>> operationResult = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
         context.put("searchResult", operationResult.getEntity());
@@ -119,7 +118,7 @@ public class APIPhonebookSteps extends APISteps {
     public void searchPhonebookResultsCorrect() {
         log.info("Checking if search phonebook result is correct");
         PhonebookSearchFilter searchFilter = context.get("searchFilter", PhonebookSearchFilter.class);
-        EntityList<Phonebook> searchResult = context.get("searchResult", EntityList.class);
+        List<Phonebook> searchResult = context.get("searchResult", List.class);
 
         if (searchResult.size() == 0) {
             log.warn("Search result can be incorrect. There are not records in it");
@@ -135,7 +134,7 @@ public class APIPhonebookSteps extends APISteps {
     @Then("Searched Phonebook Entry $critera list")
     public void checkPhonebookInResults(String criteria) {
         Phonebook phonebook = Entities.getPhonebooks().getLatest();
-        EntityList<Phonebook> list = context.get("searchResult", EntityList.class);
+        List<Phonebook> list = context.get("searchResult", List.class);
         log.info("Checking if phonebook entry " + criteria + " list");
 
         Boolean contains = false;
