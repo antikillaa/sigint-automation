@@ -23,6 +23,7 @@ public class Entities {
     private static RecordCategoriesList recordCategories;
     private static ReportCategoriesList reportCategories;
     private static ProfileList profiles;
+    private static WhitelistsList whitelists;
 
 
     public static EntityList<Target> getTargets() {
@@ -135,5 +136,14 @@ public class Entities {
             etisalatSubscribers = new EtisalatSubscriberList();
         }
         return etisalatSubscribers;
+    }
+
+
+    public static WhitelistsList getWhitelists(){
+
+        if (whitelists == null){
+            whitelists  = new WhitelistsList();
+        }
+        return whitelists;
     }
 }

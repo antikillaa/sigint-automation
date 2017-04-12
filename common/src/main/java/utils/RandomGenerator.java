@@ -192,5 +192,14 @@ public class RandomGenerator {
                 suffix.trim();
     }
 
+    public static String generateEmail(){
+        int size = generateRandomInteger(3,15);
+        String username = RandomStringUtils.randomAlphanumeric(size);
+        return username+"@gmail.com";
+
+    }
+
+
+
 }
 
