@@ -43,4 +43,6 @@
     </bean>
     <bean id="recordsSearchSteps" class="steps.APIRecordsSearchSteps" >
     </bean>
+    <bean id="whitelistsSteps" class="steps.APIWhitelistSteps">
+    </bean>
 </beans>
