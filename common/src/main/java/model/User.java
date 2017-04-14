@@ -1,40 +1,37 @@
 package model;
 
-import static model.OrganizationType.USER;
-
-import abs.TeelaEntity;
 import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.WithDataSize;
+import java.util.ArrayList;
+import java.util.List;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class User extends TeelaEntity {
+public class User extends Organization {
 
-    private String name; // "admin@pegasus.ae",
-    private String fullName; // Admin
+    private String name; // "admin@pegasus.ae"
+    private String email;
+    @DataIgnore
+    private List<String> languages = new ArrayList<>();
+    private String imageURL;
+    private String staffId;
+
     @WithDataSize(10)
     private String password;
     @DataIgnore
     private String newPassword;
-    private String staffId;
-    @DataIgnore
-    private List<String> languages = new ArrayList<>();
+
     private Boolean isDeleted = false;
-    private String parentTeamId;
-    private OrganizationType organizationType = USER;
-    private String email;
-    private String imageURL;
-    @DataIgnore
-    private Permission defaultPermission;
     @DataIgnore
     private Permission effectivePermission;
+
+    public User() {
+        setOrganizationType(OrganizationType.USER);
+    }
 
     //TODO remove this fields block
     @DataIgnore
@@ -59,15 +56,6 @@ public class User extends TeelaEntity {
             return false;
         }
         return roles.contains(role);
-    }
-
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String name) {
-        this.fullName = name;
     }
 
     public String getPassword() {
@@ -150,22 +138,6 @@ public class User extends TeelaEntity {
         isDeleted = deleted;
     }
 
-    public String getParentTeamId() {
-        return parentTeamId;
-    }
-
-    public void setParentTeamId(String parentTeamId) {
-        this.parentTeamId = parentTeamId;
-    }
-
-    public OrganizationType getOrganizationType() {
-        return organizationType;
-    }
-
-    public void setOrganizationType(OrganizationType organizationType) {
-        this.organizationType = organizationType;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -180,14 +152,6 @@ public class User extends TeelaEntity {
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
-    }
-
-    public Permission getDefaultPermission() {
-        return defaultPermission;
-    }
-
-    public void setDefaultPermission(Permission defaultPermission) {
-        this.defaultPermission = defaultPermission;
     }
 
     public Permission getEffectivePermission() {
