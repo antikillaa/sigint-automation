@@ -5,21 +5,31 @@ import app_context.entities.Entities;
 import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
+import http.requests.PasswordsRequest;
 import http.requests.UserRequest;
+import java.util.List;
 import model.RequestResult;
 import model.User;
+import model.UserPassword;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
-
 import java.util.ArrayList;
-import java.util.List;
-
 
 public class UserService implements EntityService<User> {
 
     private static final Logger log = Logger.getLogger(UserService.class);
     private static final UserRequest request = new UserRequest();
+    private static final PasswordsRequest passwordRequest = new PasswordsRequest();
+    private static String defaultTeamId;
+
+    public static String getDefaultTeamId() {
+        return defaultTeamId;
+    }
+
+    public static void setDefaultTeamId(String defaultTeamId) {
+        UserService.defaultTeamId = defaultTeamId;
+    }
 
     /**
      * Add new G4 User.
@@ -105,6 +115,23 @@ public class UserService implements EntityService<User> {
             Entities.getUsers().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
+    }
+
+    /**
+     * TODO: return OperationResult
+     */
+    public void changePasswordForNewUser(User user, String newPassword) {
+        log.info("New password for " + user.getName() + " user: " + newPassword);
+
+        UserPassword userPassword = new UserPassword(user, newPassword);
+
+        G4Response response = g4HttpClient.sendRequest(passwordRequest.create(userPassword));
+        log.debug(response.getMessage());
+
+        if (response.getCode() == 200) {
+            user.setPassword(newPassword);
+            Entities.getUsers().addOrUpdateEntity(user);
+        }
     }
 
     /**

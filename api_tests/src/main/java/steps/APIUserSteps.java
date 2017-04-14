@@ -3,23 +3,25 @@ package steps;
 import app_context.entities.Entities;
 import http.JsonConverter;
 import http.OperationResult;
+import java.util.ArrayList;
+import java.util.List;
 import model.RequestResult;
+import model.Team;
 import model.User;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
+import services.TeamService;
 import services.UserService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class APIUserSteps extends APISteps {
 
-    private static final Logger log = Logger.getLogger(APIUserGroupSteps.class);
-    private static final UserService service = new UserService();
+    private Logger log = Logger.getLogger(APIUserSteps.class);
+    private UserService service = new UserService();
+    private TeamService teamService = new TeamService();
 
     private static final int PASSWORD_LENGTH = 10;
 
@@ -108,8 +110,24 @@ public class APIUserSteps extends APISteps {
     @When("I send create a new user")
     public void createNewUser() {
         User user = getRandomUser();
+
+        if (UserService.getDefaultTeamId() == null) {
+            Team team = objectInitializer.randomEntity(Team.class);
+            String teamId = teamService.add(team).getEntity().getId();
+            UserService.setDefaultTeamId(teamId);
+        }
+        user.setParentTeamId(UserService.getDefaultTeamId());
+
         context.put("user", user);
         service.add(user);
+    }
+
+    @When("I change password for created user")
+    public void changePasswordFirstTime() {
+        User user = Entities.getUsers().getLatest();
+        String newPassword = generatePassword();
+
+        service.changePasswordForNewUser(user, newPassword);
     }
 
     @When("I set wrong user password")

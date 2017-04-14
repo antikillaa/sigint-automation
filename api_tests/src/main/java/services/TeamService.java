@@ -1,15 +1,15 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.TeamRequest;
+import java.util.List;
 import model.Result;
 import model.Team;
-import org.apache.log4j.Logger;
 import org.apache.commons.lang.NotImplementedException;
+import org.apache.log4j.Logger;
 
 public class TeamService implements EntityService<Team> {
 
@@ -71,11 +71,11 @@ public class TeamService implements EntityService<Team> {
   }
 
   @Override
-  public OperationResult<EntityList<Team>> list(SearchFilter filter) {
+  public OperationResult<List<Team>> list(SearchFilter filter) {
     throw new NotImplementedException();
   }
   
-  public OperationResult<EntityList<Team>> list() {
+  public OperationResult<List<Team>> list() {
     throw new NotImplementedException();
   }
 
