@@ -1,13 +1,11 @@
 package steps;
 
-import abs.EntityList;
 import app_context.AppContext;
 import app_context.RunContext;
 import conditions.Conditions;
 import conditions.Verify;
 import error_reporter.ErrorReporter;
 import http.OperationResult;
-import http.OperationsResults;
 import model.*;
 import model.Process;
 import org.apache.log4j.Logger;
@@ -221,8 +219,8 @@ public class APIUploadFilesSteps extends APISteps {
         filter.setProcessIds(ids);
 
         RecordService recordService = new RecordService();
-        OperationResult<EntityList<Record>> searchResult = recordService.list(filter);
-        List<Record> ingestedRecords = searchResult.getEntity().getEntities();
+        OperationResult<List<Record>> searchResult = recordService.list(filter);
+        List<Record> ingestedRecords = searchResult.getEntity();
 
         // for each uploaded records
         for (G4Record g4Record : uploadedRecords) {

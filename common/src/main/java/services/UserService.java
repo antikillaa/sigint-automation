@@ -1,6 +1,5 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import http.G4Response;
@@ -56,17 +55,17 @@ public class UserService implements EntityService<User> {
         return operationResult;
     }
 
-    public OperationResult<EntityList<User>> list(SearchFilter filter) {
+    public OperationResult<List<User>> list(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
-    public OperationResult<EntityList<User>> list() {
+    public OperationResult<List<User>> list() {
         log.info("Getting users list");
 
         G4Response response = g4HttpClient.sendRequest(request.list());
 
         List<User> users = JsonConverter.jsonToObjectsList(response.getMessage(), User[].class);
-        return new OperationResult<>(response, new EntityList<>(users));
+        return new OperationResult<>(response, users);
     }
 
     public OperationResult<User> update(User entity) {

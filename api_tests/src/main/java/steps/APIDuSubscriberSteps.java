@@ -1,6 +1,5 @@
 package steps;
 
-import abs.EntityList;
 import conditions.Conditions;
 import conditions.Verify;
 import http.JsonConverter;
@@ -12,6 +11,8 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.DuSubscriberService;
+
+import java.util.List;
 
 import static conditions.Conditions.isTrue;
 
@@ -48,7 +49,7 @@ public class APIDuSubscriberSteps extends APISteps {
 
         DuSubscriberFilter searchFilter = new DuSubscriberFilter().filterBy(criteria, value);
         log.info("Search isAppliedToEntity: " + JsonConverter.toJsonString(searchFilter));
-        OperationResult<EntityList<DuSubscriberEntry>> operationResult = service.list(searchFilter);
+        OperationResult<List<DuSubscriberEntry>> operationResult = service.list(searchFilter);
         context.put("searchFilter", searchFilter);
         context.put("searchResult", operationResult.getEntity());
     }
@@ -57,7 +58,7 @@ public class APIDuSubscriberSteps extends APISteps {
     public void searchDuSubscriberResultsCorrect() {
         log.info("Checking if duSubscriber search result is correct");
         DuSubscriberFilter searchFilter = context.get("searchFilter", DuSubscriberFilter.class);
-        EntityList<DuSubscriberEntry> searchResults = context.get("searchResult", EntityList.class);
+        List<DuSubscriberEntry> searchResults = context.get("searchResult", List.class);
 
         if (searchResults.size() == 0) {
             log.warn("Search result can be incorrect. There are not records in it");
@@ -73,11 +74,11 @@ public class APIDuSubscriberSteps extends APISteps {
     @Then("Searched DuSubscriber Entry $criteria list")
     public void checkDuSubscriberInResults(String criteria) {
         DuSubscriberEntry entry = context.get("duSubscriberEntry", DuSubscriberEntry.class);
-        EntityList<DuSubscriberEntry> entityList = context.get("searchResult", EntityList.class);
+        List<DuSubscriberEntry> List = context.get("searchResult", List.class);
 
         log.info("Checking if duSubscriber entry " + criteria + " list");
         Boolean contains = false;
-        for (DuSubscriberEntry entity : entityList) {
+        for (DuSubscriberEntry entity : List) {
             if (equalsEntries(entry, entity)) {
                 contains = true;
                 break;
@@ -117,8 +118,8 @@ public class APIDuSubscriberSteps extends APISteps {
 
     @When("I send get DuSubscriber Entry request")
     public void sendGetDuSubscriberEntryRequest() {
-        EntityList<DuSubscriberEntry> searchResults = context.get("searchResult", EntityList.class);
-        DuSubscriberEntry etalonEntry = searchResults.getLatest();
+        List<DuSubscriberEntry> searchResults = context.get("searchResult", List.class);
+        DuSubscriberEntry etalonEntry = searchResults.get(0);
 
         OperationResult<DuSubscriberEntry> operationResult = service.view(etalonEntry.getId());
 

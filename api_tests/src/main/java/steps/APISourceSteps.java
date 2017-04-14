@@ -1,6 +1,5 @@
 package steps;
 
-import abs.EntityList;
 import app_context.AppContext;
 import app_context.entities.Entities;
 import conditions.Conditions;
@@ -41,14 +40,14 @@ public class APISourceSteps extends APISteps {
 
     @When("I send get list of sources request")
     public void getListOfSources() {
-        EntityList<Source> sources = service.list().getEntity();
+        List<Source> sources = service.list().getEntity();
         context.put("sourceList", sources);
     }
 
     @Then("Source $criteria list")
     public void sourceShouldBeInList(String criteria){
         Source source = context.get("source", Source.class);
-        EntityList<Source> sources = context.get("sourceList", EntityList.class);
+        List<Source> sources = context.get("sourceList", List.class);
         boolean contains = false;
         for (Source entity : sources) {
             if (entity.getName().equals(source.getName())) {
@@ -68,7 +67,7 @@ public class APISourceSteps extends APISteps {
     @Then("Source list size more than $size")
     public void sourseListSizeMoreThan(String size) {
         int minSize = Integer.valueOf(size);
-        EntityList<Source> sources = context.get("sourceList", EntityList.class);
+        List<Source> sources = context.get("sourceList", List.class);
         Verify.shouldBe(Conditions.isTrue.element(sources.size() > minSize));
     }
 
@@ -97,7 +96,7 @@ public class APISourceSteps extends APISteps {
 
     @Given("Get random source from list")
     public void getRandomSourceFrolList() {
-        EntityList<Source> sourceList = context.get("sourceList", EntityList.class);
+        List<Source> sourceList = context.get("sourceList", List.class);
         List<Source> sources = new ArrayList<>();
         for (Source source : sourceList) {
             if (!source.isDeleted()) {
@@ -128,7 +127,7 @@ public class APISourceSteps extends APISteps {
         RecordType recordType = RecordType.valueOf(rType);
 
         // if exist, return source
-        EntityList<Source> sources = service.list().getEntity();
+        List<Source> sources = service.list().getEntity();
         for (Source source : sources) {
             if (source.getType().equals(sourceType)) {
                 try {
@@ -162,7 +161,7 @@ public class APISourceSteps extends APISteps {
      */
     @Then("delete all old sources")
     public void deleteOldSources(){
-        EntityList<Source> sourceList = context.get("sourceList", EntityList.class);
+        List<Source> sourceList = context.get("sourceList", List.class);
         List<DictionarySourceType> sourceTypes = AppContext.get().getDictionary().getSourceTypes();
         List<DictionaryRecordType> recordTypes = AppContext.get().getDictionary().getRecordTypes();
 

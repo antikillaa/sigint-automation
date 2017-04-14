@@ -1,9 +1,12 @@
 Meta:
 @story profiler
 
+Lifecycle:
+Before:
+Given I sign in as admin user
+
 
 Scenario: API.(New profiler) Addition of new target group without targets
-Given I sign in as admin user
 When I send create target group without targets request
 Then Request is successful
 And Created target group is correct
@@ -13,7 +16,6 @@ Then Request is successful
 
 
 Scenario: (New profiler) Deleting of target group
-Given I sign in as admin user
 When I send create target group without targets request
 Then Request is successful
 And Created target group is correct
@@ -25,7 +27,6 @@ Then Request is successful
 Scenario: (New profiler) API.Upload targets (G4 comp.)
 Meta:
 @deprecated
-Given I sign in as admin user
 When I send upload targets XLS file request with <targetCount> random targets
 Then Request is successful
 And Upload result of <targetCount> targets is successful
@@ -38,7 +39,6 @@ Examples:
 Scenario: (New profiler) API.Search targets entries using search filters (G4 comp.)
 Meta:
 @deprecated
-Given I sign in as admin user
 When I send upload targets XLS file request with <targetCount> random targets
 Then Request is successful
 And Upload result of <targetCount> targets is successful
@@ -55,7 +55,6 @@ Examples:
 Scenario: (New profiler) API.Search target groups using search filters (G4 comp.)
 Meta:
 @deprecated
-Given I sign in as admin user
 When I send create target group without targets request
 Then Request is successful
 And Created target group is correct
@@ -75,7 +74,6 @@ Examples:
 Scenario: (New profiler) API.Get all targets (G4 comp.)
 Meta:
 @deprecated
-Given I sign in as admin user
 When I send get list of targets request
 Then Request is successful
 And Target list size more than 0
@@ -84,14 +82,12 @@ And Target list size more than 0
 Scenario: (New profiler) API.Get all target groups (G4 comp.)
 Meta:
 @deprecated
-Given I sign in as admin user
 When I send get list of target group request
 Then Request is successful
 And Target group list size more than 0
 
 
 Scenario: API.(New profiler) Addition of new profile draft
-Given I sign in as admin user
 When I send create profile draft request
 Then Request is successful
 And Profile draft is correct
@@ -100,7 +96,6 @@ Then Request is successful
 
 
 Scenario: (New profiler) Deleting of profile draft
-Given I sign in as admin user
 When I send create profile draft request
 Then Request is successful
 And Profile draft is correct
@@ -109,7 +104,6 @@ Then Request is successful
 
 
 Scenario: (New profiler) Displaying of profile draft details
-Given I sign in as admin user
 When I send create profile draft request
 Then Request is successful
 And Profile draft is correct
@@ -121,7 +115,6 @@ Then Request is successful
 
 
 Scenario: API.(New profiler) Publishing of new profile draft
-Given I sign in as admin user
 When I send create profile draft request
 Then Request is successful
 And Profile draft is correct
@@ -146,7 +139,6 @@ Then Request is successful
 
 
 Scenario: (New profiler) Deleting of profile
-Given I sign in as admin user
 When I send create profile draft request
 Then Request is successful
 And Profile draft is correct
@@ -171,7 +163,6 @@ Then Request is successful
 
 
 Scenario: (New profiler) Updating of profile draft
-Given I sign in as admin user
 When I send create profile draft request
 Then Request is successful
 And Profile draft is correct
@@ -198,14 +189,12 @@ Then Request is successful
 
 
 Scenario: API.(New profiler) Get list of all profile drafts
-Given I sign in as admin user
 When I send get list of profile drafts request
 Then Request is successful
 And Profile drafts list size more than 0
 
 
 Scenario: API.(New profiler) Displaying of top level target groups list
-Given I sign in as admin user
 When I send create target group without targets request
 Then Request is successful
 When I send get list of top target groups request

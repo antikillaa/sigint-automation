@@ -1,6 +1,5 @@
 package steps;
 
-import abs.EntityList;
 import conditions.Conditions;
 import conditions.Verify;
 import http.JsonConverter;
@@ -22,8 +21,8 @@ import static utils.DateHelper.dateToFormat;
 
 public class APIEtisalatSubscriberDataSteps extends APISteps {
 
-    private Logger log = Logger.getLogger(APIEtisalatSubscriberDataSteps.class);
-    private EtisalatSubscriberService service = new EtisalatSubscriberService();
+    private static final Logger log = Logger.getLogger(APIEtisalatSubscriberDataSteps.class);
+    private static final EtisalatSubscriberService service = new EtisalatSubscriberService();
 
     @When("I send upload EtisalatSubscriberData entry request with all fields")
     public void sendUploadEtisalatSubscriberDataEntryRequest() {
@@ -65,7 +64,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
 
         EtisalatSubscriberFilter searchFilter = new EtisalatSubscriberFilter().filterBy(criteria, value);
         log.info("Search isAppliedToEntity: " + JsonConverter.toJsonString(searchFilter));
-        OperationResult<EntityList<EtisalatSubscriberEntry>> operationResult = service.list(searchFilter);
+        OperationResult<List<EtisalatSubscriberEntry>> operationResult = service.list(searchFilter);
 
         context.put("searchFilter", searchFilter);
         context.put("searchResult", operationResult.getEntity());
@@ -75,7 +74,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
     public void searchEtisalatResultsCorrect() {
         log.info("Checking if etisalatSubscriberData search result is correct");
         EtisalatSubscriberFilter searchFilter = context.get("searchFilter", EtisalatSubscriberFilter.class);
-        EntityList<EtisalatSubscriberEntry> searchResults = context.get("searchResult", EntityList.class);
+        List<EtisalatSubscriberEntry> searchResults = context.get("searchResult", List.class);
 
         if (searchResults.size() == 0) {
             log.warn("Search result can be incorrect. There are not records in it");
@@ -92,11 +91,11 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
     @Then("Searched EtisalatSubscriberData Entry $critera list")
     public void checkEtisalatSubscriberEntryInResults(String criteria) {
         EtisalatSubscriberEntry entry = context.get("etisalatSubscriberEntry", EtisalatSubscriberEntry.class);
-        EntityList<EtisalatSubscriberEntry> entityList = context.get("searchResult", EntityList.class);
+        List<EtisalatSubscriberEntry> List = context.get("searchResult", List.class);
 
         log.info("Checking if etisalatSubscriberData entry " + criteria + " list");
         Boolean contains = false;
-        for (EtisalatSubscriberEntry entity : entityList) {
+        for (EtisalatSubscriberEntry entity : List) {
             if (equalsEntries(entry, entity)) {
                 contains = true;
                 break;
@@ -174,8 +173,8 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
 
     @When("I send get EtisalatSubscriberData Entry request")
     public void getEtisalatSubscriberRequest() {
-        EntityList<EtisalatSubscriberEntry> searchResults = context.get("searchResult", EntityList.class);
-        EtisalatSubscriberEntry etalonEntry = searchResults.getLatest();
+        List<EtisalatSubscriberEntry> searchResults = context.get("searchResult", List.class);
+        EtisalatSubscriberEntry etalonEntry = searchResults.get(0);
 
         OperationResult<EtisalatSubscriberEntry> operationResult = service.view(etalonEntry.getId());
 

@@ -1,6 +1,5 @@
 package steps;
 
-import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
@@ -84,8 +83,8 @@ public class APITargetGroupSteps extends APISteps {
 
     @When("I send get list of target group request")
     public void getListOfG4TargetGroupsRequest() {
-        OperationResult<EntityList<TargetGroup>> operationResult = service.listG4Compatibility();
-        context.put("targetGroupEntityList", operationResult.getEntity());
+        OperationResult<List<TargetGroup>> operationResult = service.listG4Compatibility();
+        context.put("targetGroupList", operationResult.getEntity());
     }
 
     @When("I send get list of top target groups request")
@@ -93,20 +92,20 @@ public class APITargetGroupSteps extends APISteps {
         TargetGroupSearchFilter filter = new TargetGroupSearchFilter();
         filter.setSortField("name");
 
-        OperationResult<EntityList<TargetGroup>> operationResult = service.list(filter);
-        context.put("targetGroupEntityList", operationResult.getEntity());
+        OperationResult<List<TargetGroup>> operationResult = service.list(filter);
+        context.put("targetGroupList", operationResult.getEntity());
     }
 
     @When("I get random target group from targetGroup list")
     public void getTargetGroupFrolList() {
-        EntityList<TargetGroup> targetGroups = context.get("targetGroupEntityList", EntityList.class);
-        context.put("targetGroup", RandomGenerator.getRandomItemFromList(targetGroups.getEntities()));
+        List<TargetGroup> targetGroups = context.get("targetGroupList", List.class);
+        context.put("targetGroup", RandomGenerator.getRandomItemFromList(targetGroups));
     }
 
     @Then("Created target group $criteria list")
     public void targetGroupsContainNewTargetGroup(String criteria) {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
-        EntityList<TargetGroup> list = context.get("targetGroupEntityList", EntityList.class);
+        List<TargetGroup> list = context.get("targetGroupList", List.class);
         Boolean contains = false;
         for (TargetGroup entity : list) {
             if (Verify.isTrue(isTrue.element(equalsTargetGroups(targetGroup, entity)))) {
@@ -127,7 +126,7 @@ public class APITargetGroupSteps extends APISteps {
     public void existingTargetGroupContainsInList(String criteria) {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
         LOGGER.debug("Requested target group: " + targetGroup.getName());
-        EntityList<TargetGroup> list = context.get("targetGroupEntityList", EntityList.class);
+        List<TargetGroup> list = context.get("targetGroupList", List.class);
         Boolean contains = false;
         for (TargetGroup entity : list) {
             LOGGER.debug("Comparing with target group: " + entity.getName());
@@ -171,7 +170,7 @@ public class APITargetGroupSteps extends APISteps {
     @Then("existing group is listed in list only once")
     public void groupNotDuplicated() {
         List<TargetGroup> targetGroups = Entities.getTargets().getLatest().getGroups();
-        EntityList<TargetGroup> groups = context.get("targetGroupEntityList", EntityList.class);
+        List<TargetGroup> groups = context.get("targetGroupList", List.class);
         for (TargetGroup uploadedGroup : targetGroups) {
             int count = 0;
             for (TargetGroup group : groups) {
@@ -196,7 +195,7 @@ public class APITargetGroupSteps extends APISteps {
 
     @Then("Target group list size more than $size")
     public void targetGroupListMoreThan(String size) {
-        EntityList<TargetGroup> groups = context.get("targetGroupEntityList", EntityList.class);
+        List<TargetGroup> groups = context.get("targetGroupList", List.class);
 
         Assert.assertTrue(groups.size() > Integer.valueOf(size));
     }
@@ -217,7 +216,7 @@ public class APITargetGroupSteps extends APISteps {
         }
 
         TargetGroupFilter searchFilter = new TargetGroupFilter().filterBy(criteria, value);
-        OperationResult<EntityList<TargetGroup>> operationResult = service.searchG4Compatibility(searchFilter);
+        OperationResult<List<TargetGroup>> operationResult = service.searchG4Compatibility(searchFilter);
 
         context.put("searchFilter", searchFilter);
         context.put("searchResult", operationResult.getEntity());
@@ -227,14 +226,14 @@ public class APITargetGroupSteps extends APISteps {
     public void targetGroupsSearchResultIsCorrert() {
         log.info("Checking if search targetGroups result is correct");
         TargetGroupFilter searchFilter = context.get("searchFilter", TargetGroupFilter.class);
-        EntityList<TargetGroup> searchResult = context.get("searchResult", EntityList.class);
+        List<TargetGroup> searchResult = context.get("searchResult", List.class);
 
         if (searchResult.size() == 0) {
             log.warn("Search result can be incorrect. There are not records in it");
         } else {
             log.info("Search result size: " + searchResult.size());
         }
-        for (TargetGroup targetGroup : searchResult.getEntities()) {
+        for (TargetGroup targetGroup : searchResult) {
             Assert.assertTrue(String.format("Target:%s should not match to filter %s", targetGroup, Parser.entityToString(searchFilter)),
                     searchFilter.isAppliedToEntity(targetGroup));
         }
@@ -244,7 +243,7 @@ public class APITargetGroupSteps extends APISteps {
     public void searchedTargetGroupsInResultList(String criteria) {
         log.info("Checking if targetGroup entry " + criteria + " list");
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
-        EntityList<TargetGroup> list = context.get("searchResult", EntityList.class);
+        List<TargetGroup> list = context.get("searchResult", List.class);
 
         Boolean contains = false;
         for (TargetGroup entity : list) {

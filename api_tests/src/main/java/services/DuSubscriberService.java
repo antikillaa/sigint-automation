@@ -1,6 +1,5 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import errors.OperationResultError;
@@ -73,7 +72,7 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
      * @return EntityList of Du Subscriber entries
      */
     @Override
-    public OperationResult<EntityList<DuSubscriberEntry>> list(SearchFilter filter) {
+    public OperationResult<List<DuSubscriberEntry>> list(SearchFilter filter) {
         log.info("Getting list of duSubscriber entries..");
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
@@ -81,8 +80,7 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
                 new OperationResult<>(response, DuSubscriberSearchResult.class, "result");
 
         if (operationResult.isSuccess() && operationResult.getEntity() != null) {
-            EntityList<DuSubscriberEntry> duSubscriberEntries = new EntityList<>(operationResult.getEntity().getContent());
-            return new OperationResult<>(response, duSubscriberEntries);
+            return new OperationResult<>(response, operationResult.getEntity().getContent());
         } else {
             throw new OperationResultError(operationResult);
         }

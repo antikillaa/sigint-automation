@@ -1,6 +1,5 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import errors.OperationResultError;
@@ -13,13 +12,12 @@ import model.TargetGroupSearchResult;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TargetGroupService implements EntityService<TargetGroup> {
 
-    private Logger log = Logger.getLogger(TargetGroupService.class);
-    private TargetGroupRequest request = new TargetGroupRequest();
+    private static final Logger log = Logger.getLogger(TargetGroupService.class);
+    private static final TargetGroupRequest request = new TargetGroupRequest();
 
     @Override
     public OperationResult<TargetGroup> add(TargetGroup entity) {
@@ -37,8 +35,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
 
     @Override
     public OperationResult remove(TargetGroup entity) {
-        log.info("Deleting target group id:" + entity.getId());
-        log.debug(Parser.entityToString(entity));
+        log.info("Deleting target group id:" + entity.getId() + ", name:" + entity.getName());
 
         G4Response response = g4HttpClient.sendRequest(request.delete(entity.getId()));
 
@@ -50,14 +47,14 @@ public class TargetGroupService implements EntityService<TargetGroup> {
     }
 
     @Override
-    public OperationResult<EntityList<TargetGroup>> list(SearchFilter filter) {
+    public OperationResult<List<TargetGroup>> list(SearchFilter filter) {
         log.info("Get list of target groups");
         G4Response response = g4HttpClient.sendRequest(request.list(filter));
 
         List<TargetGroup> targetGroupList =
                 JsonConverter.jsonToObjectsList(response.getMessage(), TargetGroup[].class, "data");
 
-        return new OperationResult<>(response, new EntityList<>(targetGroupList));
+        return new OperationResult<>(response, targetGroupList);
     }
 
     @Override
@@ -92,13 +89,13 @@ public class TargetGroupService implements EntityService<TargetGroup> {
      * @return list of TargetGroup
      */
     @Deprecated
-    public OperationResult<EntityList<TargetGroup>> listG4Compatibility() {
+    public OperationResult<List<TargetGroup>> listG4Compatibility() {
         log.info("Get list of target groups");
         G4Response response = g4HttpClient.sendRequest(request.listG4Compatibility());
 
         List<TargetGroup> targetGroupList =
                 JsonConverter.jsonToObjectsList(response.getMessage(), TargetGroup[].class, "result");
-        return new OperationResult<>(response, new EntityList<>(targetGroupList));
+        return new OperationResult<>(response, targetGroupList);
     }
 
     /**
@@ -106,10 +103,10 @@ public class TargetGroupService implements EntityService<TargetGroup> {
      * POST /target-groups/search search
      *
      * @param filter search filter for payload
-     * @return {@link OperationResult<EntityList<TargetGroup>> }
+     * @return {@link OperationResult<List<TargetGroup>> }
      */
     @Deprecated
-    public OperationResult<EntityList<TargetGroup>> searchG4Compatibility(SearchFilter filter) {
+    public OperationResult<List<TargetGroup>> searchG4Compatibility(SearchFilter filter) {
         log.info("Search targetGroups by filter:" + JsonConverter.toJsonString(filter));
 
         G4Response response = g4HttpClient.sendRequest(request.searchG4Compatibility(filter));
@@ -118,8 +115,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
                 new OperationResult<>(response, TargetGroupSearchResult.class, "result");
 
         if (operationResult.isSuccess()) {
-            List<TargetGroup> targetGroups = new ArrayList<>(operationResult.getEntity().getContent());
-            return new OperationResult<>(response, new EntityList<>(targetGroups));
+            return new OperationResult<>(response, operationResult.getEntity().getContent());
         } else {
             throw new OperationResultError(operationResult);
         }

@@ -1,6 +1,5 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import http.G4Response;
 import http.JsonConverter;
@@ -28,14 +27,14 @@ public class RecordsSearchService implements EntityService<ProfileEntity> {
     }
 
     @Override
-    public OperationResult<EntityList<ProfileEntity>> list(SearchFilter filter) {
+    public OperationResult<List<ProfileEntity>> list(SearchFilter filter) {
         log.info("Records search with filter: " + JsonConverter.toJsonString(filter));
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
         List<ProfileEntity> profileEntities =
                 JsonConverter.jsonToObjectsList(response.getMessage(), ProfileEntity[].class, "data");
 
-        return new OperationResult<>(response, new EntityList<>(profileEntities));
+        return new OperationResult<>(response, profileEntities);
     }
 
     @Override

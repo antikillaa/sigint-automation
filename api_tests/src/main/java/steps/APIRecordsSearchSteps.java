@@ -1,6 +1,5 @@
 package steps;
 
-import abs.EntityList;
 import http.OperationResult;
 import model.ProfileEntity;
 import model.ProfileEntitySearchFilter;
@@ -8,6 +7,8 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.RecordsSearchService;
+
+import java.util.List;
 
 public class APIRecordsSearchSteps extends APISteps {
 
@@ -20,15 +21,15 @@ public class APIRecordsSearchSteps extends APISteps {
         filter.setPageSize(Integer.valueOf(pageSize));
         filter.setKeywords(keywords);
 
-        OperationResult<EntityList<ProfileEntity>> operationResult = service.list(filter);
-        EntityList<ProfileEntity> profileEntities = operationResult.getEntity();
+        OperationResult<List<ProfileEntity>> operationResult = service.list(filter);
+        List<ProfileEntity> profileEntities = operationResult.getEntity();
 
-        context.put("ProfileEntityList", profileEntities);
+        context.put("ProfileList", profileEntities);
     }
 
     @Then("Profile enlity list size $criteria than $size")
-    public void profileEntityListShouldBeLess(String criteria, String size) {
-        EntityList<ProfileEntity> entities = context.get("ProfileEntityList", EntityList.class);
+    public void profileListShouldBeLess(String criteria, String size) {
+        List<ProfileEntity> entities = context.get("ProfileList", List.class);
 
         if (criteria.equals("more")) {
             Assert.assertTrue(entities.size() > Integer.valueOf(size));

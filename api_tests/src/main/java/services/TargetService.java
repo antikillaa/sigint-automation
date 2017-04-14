@@ -1,6 +1,5 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import file_generator.FileGenerator;
@@ -84,18 +83,18 @@ public class TargetService implements EntityService<Target> {
      * POST /targets/search search
      *
      * @param filter search filter for payload
-     * @return EntityList of Targets
+     * @return List of Targets
      */
     @SuppressWarnings("unchecked")
     @Override
-    public OperationResult<EntityList<Target>> list(SearchFilter filter) {
+    public OperationResult<List<Target>> list(SearchFilter filter) {
         log.info("Search targets by filter:" + JsonConverter.toJsonString(filter));
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
         OperationResult<TargetSearchResult> operationResult = new OperationResult<>(response, TargetSearchResult.class, "result");
 
         if (operationResult.isSuccess()) {
-            return new OperationResult<>(response, new EntityList<>(operationResult.getEntity().getContent()));
+            return new OperationResult<>(response, operationResult.getEntity().getContent());
         } else {
             throw new AssertionError("Unable to read list of target from response");
         }
@@ -104,15 +103,15 @@ public class TargetService implements EntityService<Target> {
     /**
      * Get list of targets
      *
-     * @return {@link OperationResult<EntityList<Target>>}
+     * @return {@link OperationResult<List<Target>>}
      */
-    public OperationResult<EntityList<Target>> list() {
+    public OperationResult<List<Target>> list() {
         log.info("Get list of targets");
         G4Response response = g4HttpClient.sendRequest(request.list());
 
         List<Target> targets = JsonConverter.jsonToObjectsList(response.getMessage(), Target[].class, "result");
         log.info("received " + targets.size() + " targets");
-        return new OperationResult<>(response, new EntityList<>(targets));
+        return new OperationResult<>(response, targets);
     }
 
     /**
@@ -155,12 +154,12 @@ public class TargetService implements EntityService<Target> {
      * @param id Target id
      * @return List of Target groups
      */
-    public OperationResult<EntityList<TargetGroup>> getTargetGroups(String id) {
+    public OperationResult<List<TargetGroup>> getTargetGroups(String id) {
         log.info("Get targetGroups of target id:" + id);
         G4Response response = g4HttpClient.sendRequest(request.findTargetGroups(id));
 
         List<TargetGroup> targetGroups = JsonConverter.jsonToObjectsList(response.getMessage(), TargetGroup[].class);
-        return new OperationResult<>(response, new EntityList<>(targetGroups));
+        return new OperationResult<>(response, targetGroups);
     }
 
 }

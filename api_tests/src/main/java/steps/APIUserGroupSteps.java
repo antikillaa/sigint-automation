@@ -1,11 +1,9 @@
 package steps;
 
-import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import http.OperationResult;
-import http.OperationsResults;
 import model.Group;
 import model.RequestResult;
 import model.Role;
@@ -22,8 +20,8 @@ import java.util.Objects;
 
 public class APIUserGroupSteps extends APISteps {
 
-    private Logger log = Logger.getLogger(APIUserGroupSteps.class);
-    private GroupService service = new GroupService();
+    private static final Logger log = Logger.getLogger(APIUserGroupSteps.class);
+    private static final GroupService service = new GroupService();
 
     @When("I send create a new group without any roles")
     public void createGroupRequest() {
@@ -71,35 +69,36 @@ public class APIUserGroupSteps extends APISteps {
 
     @When("I send get list of users group")
     public void getListOfGroups() {
-        OperationResult<EntityList<Group>> operationResult = service.list();
-        context.put("groupEntityList", operationResult.getEntity());
+        OperationResult<List<Group>> operationResult = service.list();
+        Group[] groups = (Group[]) operationResult.getEntity().toArray();
+        context.put("groupList", operationResult.getEntity());
     }
 
-    @Then("Users group list size more than 0")
-    public void groupListIsNotEmpty() {
-        EntityList<Group> groupEntityList = context.get("groupEntityList", EntityList.class);
+    @Then("Users group list size more than $size")
+    public void groupListIsNotEmpty(String size) {
+        List<Group> groupList = context.get("groupList", List.class);
 
-        Assert.assertFalse(groupEntityList.getEntities().isEmpty());
+        Assert.assertFalse(groupList.size() > Integer.valueOf(size));
     }
 
     @Then("delete all groups without roles and users")
     public void deleteAllOldGroups() {
-        EntityList<Group> groupEntityList = context.get("groupEntityList", EntityList.class);
-        for (Group group : groupEntityList.getEntities()) {
+        List<Group> groupList = context.get("groupList", List.class);
+        for (Group group : groupList) {
             if (group.getRoles().isEmpty() && group.getUsers() == null) {
                 OperationResult<RequestResult> operationResult = service.remove(group);
-                Assert.assertEquals( "success", operationResult.getEntity().getMessage());
+                Assert.assertEquals("success", operationResult.getEntity().getMessage());
             }
         }
     }
 
     @Then("delete from groups phantom roles")
-    public void deleteFromGroupsPhantomRoles(){
+    public void deleteFromGroupsPhantomRoles() {
 
-        EntityList<Group> groupEntityList = context.get("groupEntityList", EntityList.class);
-        EntityList<Role> roleEntityList = context.get("roles", EntityList.class);
+        List<Group> groupList = context.get("groupList", List.class);
+        List<Role> roleList = context.get("roles", List.class);
 
-        for (Group group : groupEntityList.getEntities()) {
+        for (Group group : groupList) {
 
             List<String> groupRoles = group.getRoles();
             boolean updated = false;
@@ -109,7 +108,7 @@ public class APIUserGroupSteps extends APISteps {
                 boolean exist = false;
                 String groupRoleName = iterator.next();
 
-                for (Role role : roleEntityList.getEntities()) {
+                for (Role role : roleList) {
                     // if role exist
                     if (Objects.equals(groupRoleName, role.getName())) {
                         exist = true;
@@ -137,7 +136,7 @@ public class APIUserGroupSteps extends APISteps {
         Group updatedGroup = getRandomUserGroup();
         updatedGroup.setId(group.getId());
 
-        OperationResult<Group> operationResult =  service.update(updatedGroup);
+        OperationResult<Group> operationResult = service.update(updatedGroup);
 
         context.put("group", operationResult.getEntity());
     }

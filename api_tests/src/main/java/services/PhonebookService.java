@@ -1,6 +1,5 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import errors.OperationResultError;
@@ -9,13 +8,14 @@ import http.G4Response;
 import http.OperationResult;
 import http.requests.phonebook.PhonebookRequest;
 import http.requests.phonebook.UnifiedPhonebookSearchRequest;
-import java.util.List;
 import model.G4File;
 import model.Phonebook;
 import model.UploadResult;
 import model.phonebook.PhonebookSearchResults;
 import org.apache.log4j.Logger;
 import utils.Parser;
+
+import java.util.List;
 
 public class PhonebookService implements EntityService<Phonebook> {
 
@@ -79,10 +79,10 @@ public class PhonebookService implements EntityService<Phonebook> {
      * API: POST /unified-phonebook/search search
      *
      * @param filter search filter for payload
-     * @return EntityList of Unified Phonebook subscriber entries
+     * @return List of Unified Phonebook subscriber entries
      */
     @Override
-    public OperationResult<EntityList<Phonebook>> list(SearchFilter filter) {
+    public OperationResult<List<Phonebook>> list(SearchFilter filter) {
         UnifiedPhonebookSearchRequest request = new UnifiedPhonebookSearchRequest(filter);
         G4Response response = g4HttpClient.sendRequest(request);
 
@@ -90,8 +90,7 @@ public class PhonebookService implements EntityService<Phonebook> {
                 new OperationResult<>(response, PhonebookSearchResults.class, "result");
 
         if (operationResult.isSuccess() && operationResult.getEntity() != null) {
-            EntityList<Phonebook> phonebooks = new EntityList<>(operationResult.getEntity().getContent());
-            return new OperationResult<>(response, phonebooks);
+            return new OperationResult<>(response, operationResult.getEntity().getContent());
         } else {
             throw new OperationResultError(operationResult);
         }

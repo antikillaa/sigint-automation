@@ -1,6 +1,5 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import http.G4Response;
@@ -10,6 +9,8 @@ import model.Profile;
 import model.RequestResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class ProfileService implements EntityService<Profile> {
 
@@ -43,7 +44,7 @@ public class ProfileService implements EntityService<Profile> {
     }
 
     @Override
-    public OperationResult<EntityList<Profile>> list(SearchFilter filter) {
+    public OperationResult<List<Profile>> list(SearchFilter filter) {
         throw new NotImplementedException();
     }
 

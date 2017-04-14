@@ -1,9 +1,7 @@
 package steps;
 
-import abs.EntityList;
 import app_context.entities.Entities;
 import http.OperationResult;
-import http.OperationsResults;
 import model.Role;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -11,6 +9,7 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.RoleService;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -48,16 +47,16 @@ public class APIRoleSteps extends APISteps {
 
     @When("I send get list of Roles request")
     public void viewSource() {
-        OperationResult<EntityList<Role>> operationResult = service.list();
+        OperationResult<List<Role>> operationResult = service.list();
         context.put("roles", operationResult.getEntity());
     }
 
     @Then("Role is deleted")
     public void roleIsDeleted() {
-        EntityList<Role> roleEntityList = context.get("roles", EntityList.class);
+        List<Role> roleList = context.get("roles", List.class);
         Role role = context.get("role", Role.class);
 
-        for (Role entity : roleEntityList.getEntities()) {
+        for (Role entity : roleList) {
             if (Objects.equals(role.getName(), entity.getName())) {
                 throw new AssertionError("Role wasn't removed, name: " + role.getName());
             }

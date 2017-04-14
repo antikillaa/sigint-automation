@@ -1,6 +1,5 @@
 package steps;
 
-import abs.EntityList;
 import app_context.entities.Entities;
 import http.JsonConverter;
 import http.OperationResult;
@@ -19,8 +18,8 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class APIUserSteps extends APISteps {
 
-    private Logger log = Logger.getLogger(APIUserGroupSteps.class);
-    private UserService service = new UserService();
+    private static final Logger log = Logger.getLogger(APIUserGroupSteps.class);
+    private static final UserService service = new UserService();
 
     private static final int PASSWORD_LENGTH = 10;
 
@@ -68,22 +67,23 @@ public class APIUserSteps extends APISteps {
 
     @When("I send get list of users")
     public void getListOfUsers() {
-        OperationResult<EntityList<User>> operationResult = service.list();
-        context.put("userEntityList", operationResult.getEntity());
+        OperationResult<List<User>> operationResult = service.list();
+        context.put("userList", operationResult.getEntity());
     }
 
-    @Then("Users list size more than $count")
-    public void userListMoreThan(String count) {
-        EntityList<User> userEntityList = context.get("userEntityList", EntityList.class);
+    @Then("Users list size more than $size")
+    public void userListMoreThan(String size) {
+        List<User> userList = context.get("userList", List.class);
 
-        Assert.assertFalse("Users list is empty", userEntityList.getEntities().isEmpty());
+        Assert.assertFalse("Users list is empty", userList.isEmpty());
+        Assert.assertTrue(userList.size() > Integer.valueOf(size));
     }
 
     @Then("delete all users without roles and groups")
     public void cleanupUsers() {
-        EntityList<User> userEntityList = context.get("userEntityList", EntityList.class);
+        List<User> userList = context.get("userList", List.class);
 
-        for (User user : userEntityList.getEntities()) {
+        for (User user : userList) {
             if (user.getRoles().isEmpty() && user.getUserGroupIds().isEmpty()) {
                 OperationResult<RequestResult> operationResult = service.remove(user);
                 Assert.assertEquals("success", operationResult.getEntity().getMessage());
@@ -138,7 +138,6 @@ public class APIUserSteps extends APISteps {
         user.setNewPassword(passwordToReplace);
         context.put("user", user);
         service.update(user);
-
     }
 
 }

@@ -1,6 +1,5 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import errors.OperationResultError;
@@ -8,8 +7,6 @@ import file_generator.FileGenerator;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.phonebook.EtisalatSubscriberRequest;
-import java.util.ArrayList;
-import java.util.List;
 import model.EtisalatSubscriberEntry;
 import model.G4File;
 import model.UploadResult;
@@ -18,10 +15,13 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EtisalatSubscriberService implements EntityService<EtisalatSubscriberEntry> {
 
-    private static Logger log = Logger.getLogger(EtisalatSubscriberService.class);
-    private static EtisalatSubscriberRequest request = new EtisalatSubscriberRequest();
+    private static final Logger log = Logger.getLogger(EtisalatSubscriberService.class);
+    private static final EtisalatSubscriberRequest request = new EtisalatSubscriberRequest();
 
     /**
      * ADD Etisalat Subscriber entry
@@ -37,7 +37,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
         List<EtisalatSubscriberEntry> entries = new ArrayList<>();
         entries.add(entity);
 
-        OperationResult<UploadResult> operationResult =  upload(entries);
+        OperationResult<UploadResult> operationResult = upload(entries);
         if (operationResult.isSuccess()) {
             Entities.getEtisalatSubscribers().addOrUpdateEntity(entity);
         }
@@ -87,7 +87,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
      * @return EntityList of Etisalat subscriber
      */
     @Override
-    public OperationResult<EntityList<EtisalatSubscriberEntry>> list(SearchFilter filter) {
+    public OperationResult<List<EtisalatSubscriberEntry>> list(SearchFilter filter) {
         log.info("Getting list of Etisalat Subscriber enries..");
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
@@ -95,9 +95,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
                 new OperationResult<>(response, EtisalatSubscriberSearchResult.class, "result");
 
         if (operationResult.isSuccess() && operationResult.getEntity() != null) {
-            List<EtisalatSubscriberEntry> entries = operationResult.getEntity().getContent();
-            EntityList<EtisalatSubscriberEntry> etisalatSubscriberEntries = new EntityList<>(entries);
-            return new OperationResult<>(response, etisalatSubscriberEntries);
+            return new OperationResult<>(response, operationResult.getEntity().getContent());
         } else {
             throw new OperationResultError(operationResult);
         }

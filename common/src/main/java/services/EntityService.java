@@ -1,10 +1,11 @@
 package services;
 
 import abs.AbstractEntity;
-import abs.EntityList;
 import abs.SearchFilter;
 import http.G4HttpClient;
 import http.OperationResult;
+
+import java.util.List;
 
 
 public interface EntityService<T extends AbstractEntity> {
@@ -31,7 +32,7 @@ public interface EntityService<T extends AbstractEntity> {
      * @param filter search filter for payload
      * @return {@link OperationResult}
      */
-    OperationResult<EntityList<T>> list(SearchFilter filter);
+    OperationResult<List<T>> list(SearchFilter filter);
 
     /**
      * UPDATE entity
