@@ -12,6 +12,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -113,13 +114,13 @@ public class UserService implements EntityService<User> {
      * @return 'Report role' for G4 user
      * <br>note: ADMIN user has 'approver' role
      */
-    public String getReportRole(User user) {
-        List<String> roles = user.getExpandedRoles();
-        if (roles.contains("APPROVER") || roles.contains("ADMIN")) {
+    String getReportRole(User user) {
+        ArrayList<String> roles = user.getEffectivePermission().getActions();
+        if (roles.contains("REPORT_UPDATE_APPROVER")) {
             return "approver";
-        } else if (roles.contains("ANALYST")) {
+        } else if (roles.contains("REPORT_UPDATE_ANALYST")) {
             return "analyst";
-        } else if (roles.contains("OPERATOR")) {
+        } else if (roles.contains("REPORT_UPDATE")) {
             return "operator";
         } else {
             log.error("Can not get reportRole for current user");

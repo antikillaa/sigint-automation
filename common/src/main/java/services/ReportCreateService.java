@@ -28,15 +28,12 @@ public class ReportCreateService {
         User user = operationResult.getEntity();
         User reportUser = new User();
         reportUser.setId(user.getId());
-        reportUser.setName(user.getName());
-        reportUser.setStaffId(user.getStaffId());
-        
+
         ReportOwner owner = new ReportOwner();
         owner
                 .setRole(userService.getReportRole(user))
                 .setUser(reportUser);
         report.setAuthorId(user.getId());
-        report.setAuthorName(user.getName());
         report.setOwner(owner);
         
     }
