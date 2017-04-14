@@ -1,7 +1,6 @@
 package steps;
 
 
-import abs.EntityList;
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
@@ -15,23 +14,25 @@ import org.junit.Assert;
 import services.WhitelistService;
 import utils.RandomGenerator;
 
+import java.util.List;
+
 public class APIWhitelistSteps extends APISteps {
 
-    private Logger logger = Logger.getLogger(APIReportSteps.class);
-    private WhitelistService service = new WhitelistService();
+    private static Logger logger = Logger.getLogger(APIWhitelistSteps.class);
+    private static WhitelistService service = new WhitelistService();
 
 
     @When("I send get list of whitlist entries request")
     public void getListOfWhitelistEntries() {
-        OperationResult<EntityList<Whitelist>> operationResult = service.list();
+        OperationResult<List<Whitelist>> operationResult = service.list();
         context.put("WhitelistEntitiesList", operationResult.getEntity());
     }
 
     @Then("Whitelists  list size more then $count")
     public void whitelistsListShouldBeMoreThen(final String count) {
         int minSize = Integer.valueOf(count);
-        EntityList<Whitelist> whitelists = context.get("WhitelistEntitiesList", EntityList.class);
-        Assert.assertTrue(whitelists.getEntities().size() > minSize);
+        List<Whitelist> whitelists = context.get("WhitelistEntitiesList", List.class);
+        Assert.assertTrue(whitelists.size() > minSize);
     }
 
     @When("I send create new whitelist entry request")
@@ -44,7 +45,7 @@ public class APIWhitelistSteps extends APISteps {
     @Then("Whitelist entry is $criteria common list")
     public void whitelistEntryInCommonList(String criteria) {
         Whitelist whitelist = context.get("whitelist", Whitelist.class);
-        EntityList<Whitelist> whitelists = context.get("WhitelistEntitiesList", EntityList.class);
+        List<Whitelist> whitelists = context.get("WhitelistEntitiesList", List.class);
         boolean founded = false;
         for (Whitelist elem : whitelists) {
             if (elem.getId().equals(whitelist.getId())) {
@@ -67,13 +68,12 @@ public class APIWhitelistSteps extends APISteps {
         Assert.assertEquals("type mismatch", fromContext.getType(), latest.getType());
         Assert.assertEquals("identifier mismatch", fromContext.getIdentifier(), latest.getIdentifier());
         Assert.assertEquals("description mismatch", fromContext.getDescription(), latest.getDescription());
-
     }
 
     @When("I get random whitelist entry from list")
     public void selectRandomWhitelistEntry() {
-        EntityList<Whitelist> whitelists = context.get("WhitelistEntitiesList", EntityList.class);
-        Whitelist whitelist = RandomGenerator.getRandomItemFromList((whitelists.getEntities())); //whitelists.getLatest();
+        List<Whitelist> whitelists = context.get("WhitelistEntitiesList", List.class);
+        Whitelist whitelist = RandomGenerator.getRandomItemFromList((whitelists)); //whitelists.getLatest();
         Verify.shouldBe(Conditions.isTrue.element(whitelist != null));
         context.put("whitelist", whitelist);
     }
@@ -85,7 +85,6 @@ public class APIWhitelistSteps extends APISteps {
         OperationResult<Whitelist> operationResult = service.view(whitelist.getId());
         Verify.shouldBe(Conditions.isTrue.element(operationResult.getEntity() != null));
         context.put("whitelist", operationResult.getEntity());
-
     }
 
     @When("I send update whitelist entry request")
@@ -103,9 +102,6 @@ public class APIWhitelistSteps extends APISteps {
     public void deleteWhitelistEntryRequest() {
         Whitelist whitelist = context.get("whitelist", Whitelist.class);
         OperationResult operationResult = service.remove(whitelist);
-        Whitelist whitelist2 = context.get("whitelist", Whitelist.class);
-
-
     }
 
 }

@@ -1,6 +1,5 @@
 package services;
 
-import abs.EntityList;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import http.G4Response;
@@ -11,7 +10,8 @@ import model.Whitelist;
 import model.WhitelistListResult;
 import org.apache.log4j.Logger;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import utils.Parser;
+
+import java.util.List;
 
 
 public class WhitelistService implements EntityService<Whitelist> {
@@ -45,19 +45,18 @@ public class WhitelistService implements EntityService<Whitelist> {
     }
 
     @Override
-    public OperationResult<EntityList<Whitelist>> list(SearchFilter filter) {
-
+    public OperationResult<List<Whitelist>> list(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
 
-    public OperationResult<EntityList<Whitelist>> list() {
+    public OperationResult<List<Whitelist>> list() {
         G4Response response = g4HttpClient.sendRequest(request.list());
         OperationResult<WhitelistListResult> operationResult =
                 new OperationResult<>(response, WhitelistListResult.class);
 
         if (operationResult.isSuccess()) {
-            EntityList<Whitelist> whiteLists = operationResult.getEntity().getResult();
+            List<Whitelist> whiteLists = operationResult.getEntity().getResult().getEntities();
             return new OperationResult<>(response, whiteLists);
 
         } else {
