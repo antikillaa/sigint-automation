@@ -99,8 +99,9 @@ public class APIRecordCategorySteps extends APISteps {
         DataGenerator dataGenerator = new DataGenerator(RecordCategory.class);
         RecordCategory recordCategory = (RecordCategory) dataGenerator.produce();
         recordCategory.setId(category.getId());
+
         OperationResult operationResult = service.update(recordCategory);
-        Verify.shouldBe(Conditions.isTrue.element(operationResult.isSuccess()));
+
         context.put("recordCategory", recordCategory);
     }
 }
