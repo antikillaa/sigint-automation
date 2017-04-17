@@ -9,8 +9,7 @@ import model.Result;
 import model.Whitelist;
 import model.WhitelistListResult;
 import org.apache.log4j.Logger;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
+import org.apache.commons.lang.NotImplementedException;
 import java.util.List;
 
 

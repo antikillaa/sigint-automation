@@ -24,7 +24,14 @@ public class Entities {
     private static ReportCategoriesList reportCategories;
     private static ProfileList profiles;
     private static WhitelistsList whitelists;
+    private static TeamList teams;
 
+    public static TeamList getTeams() {
+        if (teams == null) {
+            teams = new TeamList();
+        }
+        return teams;
+    }
 
     public static EntityList<Target> getTargets() {
         if (targets == null) {
