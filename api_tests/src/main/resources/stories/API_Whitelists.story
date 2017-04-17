@@ -4,6 +4,8 @@ Meta:
 
 Scenario: API. Get all whitelist entries
 Given I sign in as admin user
+When I send create new whitelist entry request
+Then Request is successful
 When I send get list of whitlist entries request
 Then Request is successful
 And Whitelists  list size more then 0
