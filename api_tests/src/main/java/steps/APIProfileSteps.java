@@ -1,11 +1,10 @@
 package steps;
 
+import abs.EntityList;
 import app_context.entities.Entities;
 import http.JsonConverter;
 import http.OperationResult;
-import model.Profile;
-import model.ProfileCategory;
-import model.TargetGroup;
+import model.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -13,6 +12,7 @@ import org.junit.Assert;
 import services.ProfileDraftService;
 import services.ProfileService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class APIProfileSteps extends APISteps {
@@ -138,5 +138,90 @@ public class APIProfileSteps extends APISteps {
         context.put("profileDraft", profile);
 
         draftService.update(profile);
+    }
+
+    @When("I send merge two profile into one request")
+    public void mergeTwoProfileIntoOne() {
+        EntityList<Profile> profileEntityList = Entities.getProfiles();
+        Assert.assertTrue("Profile EntityList size shouldHave at least 2 profiles", profileEntityList.size() > 1);
+        Profile firstProfile = profileEntityList.getLatest();
+        Profile secondProfile = profileEntityList.getEntities().get(profileEntityList.size() - 2);
+        Assert.assertNotNull(firstProfile.getId());
+        Assert.assertNotNull(secondProfile.getId());
+
+        context.put("firstProfileToMerge", firstProfile);
+        context.put("secondProfileToMerge", secondProfile);
+
+        OperationResult<Profile> operationResult = service.merge(firstProfile, secondProfile);
+        context.put("profileDraft", operationResult.getEntity());
+    }
+
+    @Then("Merged profile draft is correct")
+    public void mergedProfileShouldBeCorrect() {
+        Profile firstProfileToMerge = context.get("firstProfileToMerge", Profile.class);
+        Profile secondProfileToMerge = context.get("secondProfileToMerge", Profile.class);
+        Profile mergedProfile = context.get("profileDraft", Profile.class);
+
+        // name
+        Assert.assertTrue("Merged target name should contain all names of original targets",
+                mergedProfile.getName().contains(firstProfileToMerge.getName()));
+        Assert.assertTrue("Merged target name should contain all names of original targets",
+                mergedProfile.getName().contains(secondProfileToMerge.getName()));
+
+        // target category
+        if (firstProfileToMerge.getCategory().equals("Dangerous") || secondProfileToMerge.getCategory().equals("Dangerous")) {
+            Assert.assertTrue(mergedProfile.getCategory().equals(ProfileCategory.Dangerous.getDisplayName()));
+        } else {
+            Assert.assertTrue(mergedProfile.getCategory().equals(ProfileCategory.POI.getDisplayName()));
+        }
+
+        // jsonType
+        Assert.assertTrue(mergedProfile.getJsonType().equals(ProfileJsonType.Draft));
+
+        // mergedIDs
+        Assert.assertTrue(mergedProfile.getMergingProfilesIDs().contains(firstProfileToMerge.getId()));
+        Assert.assertTrue(mergedProfile.getMergingProfilesIDs().contains(secondProfileToMerge.getId()));
+
+        // active
+        if (firstProfileToMerge.getActive() || secondProfileToMerge.getActive()) {
+            Assert.assertTrue(mergedProfile.getActive());
+        }
+
+        // type, now it's only 'Individual'
+        Assert.assertEquals(mergedProfile.getType(), ProfileType.Individual);
+
+        // groups
+        ArrayList<TargetGroup> groups = firstProfileToMerge.getGroups();
+        groups.addAll(secondProfileToMerge.getGroups());
+
+        String jsonMergedGroups = JsonConverter.toJsonString(mergedProfile.getGroups());
+        for (TargetGroup group : groups) {
+            String jsonGroup = JsonConverter.toJsonString(group);
+            Assert.assertTrue(jsonMergedGroups.contains(jsonGroup));
+        }
+
+        // activeUntil
+        if (firstProfileToMerge.getActiveUntil() != null ) {
+            Assert.assertFalse(mergedProfile.getActiveUntil().after(firstProfileToMerge.getActiveUntil()));
+        } else if (secondProfileToMerge.getActiveUntil() != null ) {
+            Assert.assertFalse(mergedProfile.getActiveUntil().after(secondProfileToMerge.getActiveUntil()));
+        }
+
+        // entityCount
+        if (mergedProfile.getEntityCount() == null || mergedProfile.getEntityCount().equals(0)) {
+            Assert.assertTrue(mergedProfile.getEntities().isEmpty());
+        } else {
+            Assert.assertTrue(mergedProfile.getEntityCount() == mergedProfile.getEntities().size());
+        }
+
+        // entities
+        ArrayList<ProfileEntity> entities = firstProfileToMerge.getEntities();
+        entities.addAll(secondProfileToMerge.getEntities());
+        for (ProfileEntity entity : entities) {
+            Assert.assertTrue(mergedProfile.getEntities().contains(entity));
+        }
+
+        //TODO update validation for consolidatedAttributes
+        Assert.assertNotNull(mergedProfile.getConsolidatedAttributes());
     }
 }

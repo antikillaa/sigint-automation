@@ -2,6 +2,8 @@ package http.requests;
 
 import http.HttpMethod;
 
+import java.util.ArrayList;
+
 public class ProfileRequest extends HttpRequest {
 
     private static final String URI = "/api/profiler/profiles";
@@ -37,6 +39,27 @@ public class ProfileRequest extends HttpRequest {
         this
                 .setURI(URI + "/" + id)
                 .setHttpMethod(HttpMethod.DELETE);
+        return this;
+    }
+
+
+    /**
+     * POST /profiles/merge merge
+     *
+     * @param firstProfileId  first Profile ID
+     * @param secondProfileId second Profile ID
+     * @return {@link ProfileRequest}
+     */
+    public ProfileRequest merge(String firstProfileId, String secondProfileId) {
+
+        ArrayList<String> mergeIDs = new ArrayList<>();
+        mergeIDs.add(firstProfileId);
+        mergeIDs.add(secondProfileId);
+
+        this
+                .setURI(URI + "/merge")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(mergeIDs);
         return this;
     }
 }
