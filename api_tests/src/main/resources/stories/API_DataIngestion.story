@@ -15,7 +15,8 @@ Given I sign in as admin user
 And data source with <sourceType> and <recordType> exists
 And <targetCount> targets with phones generated and added
 And <sourceType> - <recordType> data file with records for test targets was generated
-When I send upload <sourceType> - <recordType> data file request
+When I wait for 61 seconds
+And I send upload <sourceType> - <recordType> data file request
 Then Request is successful
 When uploaded file is processed
 And ingest matching complete
@@ -35,7 +36,8 @@ Given I sign in as admin user
 And data source with <sourceType> and <recordType> exists
 And <targetCount> targets with phones generated and added
 And <sourceType> - <recordType> data file with records for test targets was generated
-When I send upload <sourceType> - <recordType> data file request
+When I wait for 61 seconds
+And I send upload <sourceType> - <recordType> data file request
 Then Request is successful
 When uploaded file is processed
 And ingest matching complete
