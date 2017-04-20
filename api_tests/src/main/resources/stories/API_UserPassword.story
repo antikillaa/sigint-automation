@@ -91,6 +91,18 @@ And Message contains "must be different"
 When I change user password to This-happened-once-before
 Then Request is successful
 
+Scenario: API.Check last logon datetime
+When I change password for the first time
+Then Request is successful
+When I send sign out request
+And I sign in as new created user
+Then User last logon datetime is correct
+
+When I send sign out request
+And I wait for 10 seconds
+And I sign in as new created user
+Then User last logon datetime is correct
+
 Scenario: API.Check password change after the first login attempt
 When I send sign out request
 And I sign in as new created user

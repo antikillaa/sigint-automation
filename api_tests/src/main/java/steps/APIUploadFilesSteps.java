@@ -27,17 +27,23 @@ public class APIUploadFilesSteps extends APISteps {
     private Logger log = Logger.getLogger(APIUploadFilesSteps.class);
     private UploadFilesService service = new UploadFilesService();
 
+
+    @When("I wait for $count seconds")
+    public void waitSeveralseconds(String count) {
+        int delay = Integer.valueOf(count);
+
+        log.info("Waiting for " + delay + " seconds...");
+        DateHelper.waitTime(delay);
+    }
+
     @When("I send upload $sType - $rType data file request")
     public void uploadFile(String sType, String rType) {
+        // wait for targets index update in ingest service before this step
+
         G4File file = context.get("g4file", G4File.class);
-
-        //wait for targets index update in ingest service
-        int targetUpdateDelayInSec = 61;
-        log.info("Wait " + targetUpdateDelayInSec + " sec, while targets index updated in ingest service");
-        DateHelper.waitTime(targetUpdateDelayInSec);
-
         Source source = RunContext.get().get("source", Source.class);
         LoggedUser user = AppContext.get().getLoggedUser();
+
         OperationResult<FileMeta> uploadResult = service.upload(file, source, user.getId());
         context.put("meta", uploadResult.getEntity());
     }

@@ -1,9 +1,11 @@
 package steps;
 
 import app_context.entities.Entities;
+import error_reporter.ErrorReporter;
 import http.JsonConverter;
 import http.OperationResult;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import model.RequestResult;
 import model.Team;
@@ -24,6 +26,7 @@ public class APIUserSteps extends APISteps {
     private TeamService teamService = new TeamService();
 
     private static final int PASSWORD_LENGTH = 10;
+    private static final int LOGIN_DELAY = 5000;
 
     private String generatePassword() {
         return RandomStringUtils.randomAlphanumeric(PASSWORD_LENGTH);
@@ -158,4 +161,18 @@ public class APIUserSteps extends APISteps {
         service.update(user);
     }
 
+    @Then("User last logon datetime is correct")
+    public void checkLogonDatetime() {
+        User user = Entities.getUsers().getLatest();
+        Date userLogonDatetime = user.getLastLoginDate();
+
+        if (userLogonDatetime == null) {
+            ErrorReporter.reportAndRaiseError("Logon datetime is not initialized: " + userLogonDatetime);
+        }
+
+        long deltaInMillis = System.currentTimeMillis() - userLogonDatetime.getTime();
+        if (deltaInMillis > LOGIN_DELAY) {
+            ErrorReporter.reportAndRaiseError("Incorrect logon datetime: " + userLogonDatetime);
+        }
+    }
 }
