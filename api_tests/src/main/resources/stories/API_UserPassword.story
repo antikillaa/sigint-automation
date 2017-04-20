@@ -95,13 +95,19 @@ Scenario: API.Check password change after the first login attempt
 When I send sign out request
 And I sign in as new created user
 Then I got response code 401
-When I change password for created user
-And I sign in as new created user
+And Message contains "AUTH_CHANGE_PASSWORD_REQUIRED"
+When I change password for the first time
 Then Request is successful
+When I sign in as new created user
+Then Request is successful
+When I change password for the first time
+Then I got response code 403
+And Message contains "AUTH_FORBIDDEN"
 
 Scenario: API.Check that user will be locked after 5 sequential failed login attempts
-When I change password for created user
-And I set wrong user password
+When I change password for the first time
+Then Request is successful
+When I set wrong user password
 And I send sign out request
 Then Request is successful
 
@@ -118,4 +124,24 @@ Then I got response code 400
 
 When I sign in as new created user
 Then I got response code 403
-And Message contains "AUTH_FORBIDDEN"
+And Message contains "AUTH_ACCOUNT_IS_LOCKED"
+
+Scenario: API.Check that user will be locked after 5 failed password changes
+When I set wrong user password
+And I send sign out request
+Then Request is successful
+
+When I change password for the first time
+Then I got response code 400
+When I change password for the first time
+Then I got response code 400
+When I change password for the first time
+Then I got response code 400
+When I change password for the first time
+Then I got response code 400
+When I change password for the first time
+Then I got response code 400
+
+When I change password for the first time
+Then I got response code 403
+And Message contains "AUTH_ACCOUNT_IS_LOCKED"

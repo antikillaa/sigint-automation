@@ -122,12 +122,12 @@ public class APIUserSteps extends APISteps {
         service.add(user);
     }
 
-    @When("I change password for created user")
+    @When("I change password for the first time")
     public void changePasswordFirstTime() {
         User user = Entities.getUsers().getLatest();
         String newPassword = generatePassword();
 
-        service.changePasswordForNewUser(user, newPassword);
+        service.firstPasswordChange(user, newPassword);
     }
 
     @When("I set wrong user password")

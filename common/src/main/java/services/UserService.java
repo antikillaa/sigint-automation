@@ -7,14 +7,15 @@ import http.JsonConverter;
 import http.OperationResult;
 import http.requests.PasswordsRequest;
 import http.requests.UserRequest;
+import java.util.ArrayList;
 import java.util.List;
+import model.AuthResponseResult;
 import model.RequestResult;
 import model.User;
 import model.UserPassword;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
-import java.util.ArrayList;
 
 public class UserService implements EntityService<User> {
 
@@ -117,21 +118,20 @@ public class UserService implements EntityService<User> {
         return operationResult;
     }
 
-    /**
-     * TODO: return OperationResult
-     */
-    public void changePasswordForNewUser(User user, String newPassword) {
+    public OperationResult<AuthResponseResult> firstPasswordChange(User user, String newPassword) {
         log.info("New password for " + user.getName() + " user: " + newPassword);
 
         UserPassword userPassword = new UserPassword(user, newPassword);
 
         G4Response response = g4HttpClient.sendRequest(passwordRequest.create(userPassword));
-        log.debug(response.getMessage());
+        OperationResult<AuthResponseResult> operationResult =
+            new OperationResult<>(response, AuthResponseResult.class);
 
-        if (response.getCode() == 200) {
+        if (operationResult.isSuccess())  {
             user.setPassword(newPassword);
             Entities.getUsers().addOrUpdateEntity(user);
         }
+        return operationResult;
     }
 
     /**
