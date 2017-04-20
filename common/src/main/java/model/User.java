@@ -3,6 +3,7 @@ package model;
 import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.WithDataSize;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -19,6 +20,10 @@ public class User extends Organization {
     private List<String> languages = new ArrayList<>();
     private String imageURL;
     private String staffId;
+    @DataIgnore
+    private Date lastLoginDate;
+    @DataIgnore
+    private Boolean inactive;
 
     @WithDataSize(10)
     private String password;
@@ -56,6 +61,22 @@ public class User extends Organization {
             return false;
         }
         return roles.contains(role);
+    }
+
+    public Boolean getInactive() {
+        return inactive;
+    }
+
+    public void setInactive(Boolean inactive) {
+        this.inactive = inactive;
+    }
+
+    public Date getLastLoginDate() {
+        return lastLoginDate;
+    }
+
+    public void setLastLoginDate(Date lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
     }
 
     public String getPassword() {
