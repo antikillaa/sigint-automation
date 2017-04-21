@@ -7,6 +7,7 @@ import http.G4Response;
 import http.JsonConverter;
 import http.OperationResult;
 import http.requests.TargetGroupRequest;
+import model.ProfileAndTargetGroup;
 import model.TargetGroup;
 import model.TargetGroupSearchResult;
 import org.apache.log4j.Logger;
@@ -79,7 +80,11 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         log.info("View target group id:" + id);
         G4Response response = g4HttpClient.sendRequest(request.get(id));
 
-        return new OperationResult<>(response, TargetGroup.class, "result");
+        OperationResult<TargetGroup> operationResult = new OperationResult<>(response, TargetGroup.class, "data");
+        if (operationResult.isSuccess()) {
+            Entities.getTargetGroups().addOrUpdateEntity(operationResult.getEntity());
+        }
+        return operationResult;
     }
 
     /**
@@ -119,5 +124,39 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         } else {
             throw new OperationResultError(operationResult);
         }
+    }
+
+    /**
+     * POST /targetGroups/{groupId}/targetGroups createChildGroup
+     *
+     * @param parentGroupId parent target group id
+     * @param childGroup    new child target group
+     * @return {@link OperationResult<TargetGroup>}
+     */
+    public OperationResult<TargetGroup> createChildGroup(String parentGroupId, TargetGroup childGroup) {
+        log.info("Create child group, parentID: " + parentGroupId + ", name: " + childGroup.getName());
+        G4Response response = g4HttpClient.sendRequest(request.createChildGroup(parentGroupId, childGroup));
+
+        OperationResult<TargetGroup> operationResult =
+                new OperationResult<>(response, TargetGroup.class, "data");
+
+        if (operationResult.isSuccess()) {
+            Entities.getTargetGroups().addOrUpdateEntity(operationResult.getEntity());
+        }
+        return operationResult;
+    }
+
+    /**
+     * GET /targetGroups/{groupId}/contents
+     *
+     * @param groupID groupID
+     * @return {@link OperationResult< ProfileAndTargetGroup []>}
+     */
+    public OperationResult<ProfileAndTargetGroup[]> getContent(String groupID) {
+        log.info("Get content of target group id: " + groupID);
+
+        G4Response response = g4HttpClient.sendRequest(request.getContent(groupID));
+
+        return new OperationResult<>(response, ProfileAndTargetGroup[].class, "data");
     }
 }

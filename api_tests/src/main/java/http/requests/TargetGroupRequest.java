@@ -20,8 +20,16 @@ public class TargetGroupRequest extends HttpRequest {
         return this;
     }
 
+    /**
+     * GET /targetGroups/{groupId} getGroup
+     *
+     * @param id groupId
+     * @return {@link TargetGroupRequest}
+     */
     public TargetGroupRequest get(String id) {
-        this.setURI(URI + "/" + id + "/details");
+        this
+                .setURI(URI + "/" + id)
+                .setHttpMethod(HttpMethod.GET);
         return this;
     }
 
@@ -64,6 +72,34 @@ public class TargetGroupRequest extends HttpRequest {
                 .setURI("/api/profiler/target-groups/search")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(filter);
+        return this;
+    }
+
+    /**
+     * POST /targetGroups/{groupId}/targetGroups createChildGroup
+     *
+     * @param parentId   parent group id
+     * @param childGroup new child group
+     * @return {@link TargetGroupRequest}
+     */
+    public TargetGroupRequest createChildGroup(String parentId, TargetGroup childGroup) {
+        this
+                .setURI(URI + "/" + parentId + "/targetGroups")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(childGroup);
+        return this;
+    }
+
+    /**
+     * GET /targetGroups/{groupId}/contents
+     *
+     * @param groupID groupID
+     * @return {@link TargetGroupRequest}
+     */
+    public TargetGroupRequest getContent(String groupID) {
+        this
+                .setURI(URI + "/" + groupID + "/contents")
+                .setHttpMethod(HttpMethod.GET);
         return this;
     }
 }

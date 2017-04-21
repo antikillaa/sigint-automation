@@ -48,18 +48,6 @@ public class TargetGroupFilter extends SearchFilter<TargetGroup> {
         }
     }
 
-    private class UpdateAfterFilter extends SearchFilter<TargetGroup> {
-
-        UpdateAfterFilter(Date value) {
-            updatedAfter = value;
-        }
-
-        @Override
-        public boolean isAppliedToEntity(TargetGroup entity) {
-            return entity.getModifiedAt().after(updatedAfter);
-        }
-    }
-
     private class EmptyFilter extends SearchFilter<TargetGroup> {
 
         EmptyFilter() {
@@ -83,8 +71,6 @@ public class TargetGroupFilter extends SearchFilter<TargetGroup> {
     public TargetGroupFilter filterBy(String criteria, String value) {
         if (criteria.toLowerCase().equals("includedeleted")) {
             this.setActiveFilter(this.new DeletedFilter(Boolean.valueOf(value)));
-        } else if (criteria.toLowerCase().equals("updatedafter")) {
-            this.setActiveFilter(this.new UpdateAfterFilter(new Date(Long.valueOf(value))));
         } else if (criteria.toLowerCase().equals("empty")) {
             this.setActiveFilter(this.new EmptyFilter());
         } else {
