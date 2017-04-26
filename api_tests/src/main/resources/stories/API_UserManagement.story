@@ -110,7 +110,7 @@ Examples:
 
 Scenario: API.Changing password to user
 Meta:
-@stage
+@deprecated
 Given I sign in as admin user
 
 When I send create a new user
