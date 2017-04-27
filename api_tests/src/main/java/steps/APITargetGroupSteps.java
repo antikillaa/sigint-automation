@@ -4,6 +4,7 @@ import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import http.OperationResult;
+import model.ProfileAndTargetGroup;
 import model.TargetGroup;
 import model.TargetGroupFilter;
 import model.TargetGroupSearchFilter;
@@ -13,11 +14,10 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TargetGroupService;
-import utils.DateHelper;
 import utils.Parser;
 import utils.RandomGenerator;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,18 +26,12 @@ import static conditions.Conditions.isTrue;
 @SuppressWarnings("unchecked")
 public class APITargetGroupSteps extends APISteps {
 
-    private TargetGroupService service = new TargetGroupService();
-    private static Logger LOGGER = Logger.getLogger(APITargetGroupSteps.class);
+    private static TargetGroupService service = new TargetGroupService();
+    private static Logger log = Logger.getLogger(APITargetGroupSteps.class);
 
-    @When("I send create target group $with targets request")
-    public void sendCreateRequest(String with) {
+    @When("I send create target group request")
+    public void sendCreateRequest() {
         TargetGroup group = getRandomTargetGroup();
-
-        if (with.toLowerCase().equals("with")) {
-            List<String> targets = new ArrayList<>();
-            targets.add(Entities.getTargets().random().getId());
-            group.setTargets(targets);
-        }
 
         context.put("targetGroup", group);
         service.add(group);
@@ -71,13 +65,13 @@ public class APITargetGroupSteps extends APISteps {
     public void getTargetGroupRequest() {
         TargetGroup createdTargetGroup = Entities.getTargetGroups().getLatest();
         OperationResult<TargetGroup> operationResult = service.view(createdTargetGroup.getId());
-        context.put("viewedTargetGroup", operationResult.getEntity());
+        context.put("targetGroup", operationResult.getEntity());
     }
 
     @Then("Viewed target group is correct")
     public void viewedTargetGroupIsCorrect() {
         TargetGroup createdTarget = Entities.getTargetGroups().getLatest();
-        TargetGroup viewedTargetGroup = context.get("viewedTargetGroup", TargetGroup.class);
+        TargetGroup viewedTargetGroup = context.get("targetGroup", TargetGroup.class);
         equalsTargetGroups(viewedTargetGroup, createdTarget);
     }
 
@@ -125,11 +119,11 @@ public class APITargetGroupSteps extends APISteps {
     @Then("target group $criteria list")
     public void existingTargetGroupContainsInList(String criteria) {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
-        LOGGER.debug("Requested target group: " + targetGroup.getName());
+        log.debug("Requested target group: " + targetGroup.getName());
         List<TargetGroup> list = context.get("targetGroupList", List.class);
         Boolean contains = false;
         for (TargetGroup entity : list) {
-            LOGGER.debug("Comparing with target group: " + entity.getName());
+            log.debug("Comparing with target group: " + entity.getName());
             if (targetGroup.getName().equals(entity.getName())) {
                 contains = true;
                 break;
@@ -207,8 +201,6 @@ public class APITargetGroupSteps extends APISteps {
 
         if (criteria.toLowerCase().equals("includedeleted")) {
             value = value.equals("random") ? String.valueOf(targetGroup.isDeleted()) : value;
-        } else if (criteria.toLowerCase().equals("updatedafter")) {
-            value = String.valueOf(DateHelper.yesterday().getTime());
         } else if (criteria.toLowerCase().equals("empty")) {
             log.debug("Search without filter..");
         } else {
@@ -261,6 +253,48 @@ public class APITargetGroupSteps extends APISteps {
         } else {
             throw new AssertionError("Incorrect argument passed to step");
         }
+    }
+
+    @When("I send create new child target group request")
+    public void creatNewChildTargetGroup() {
+        TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
+        TargetGroup childGroup = getRandomTargetGroup();
+
+        context.put("parentTargetGroup", targetGroup);
+        context.put("childTargetGroup", childGroup);
+
+        service.createChildGroup(targetGroup.getId(), childGroup);
+    }
+
+    @Then("created nested target group is correct")
+    public void createdNestedTargetGroupShouldBeCorrect() {
+        TargetGroup createdChildGroup = Entities.getTargetGroups().getLatest();
+        TargetGroup childTargetGroup = context.get("childTargetGroup", TargetGroup.class);
+        TargetGroup parentTargetGroup = context.get("parentTargetGroup", TargetGroup.class);
+
+        Verify.shouldBe(isTrue.element(equalsTargetGroups(createdChildGroup, childTargetGroup)));
+        Verify.shouldBe(isTrue.element(equalsTargetGroups(createdChildGroup.getParent(), parentTargetGroup)));
+
+        Verify.shouldBe(isTrue.element(createdChildGroup.getParentChain()
+                .stream().anyMatch(parentChain -> parentChain.getId().equals(parentTargetGroup.getId()))));
+    }
+
+    @When("I send get content of parent target group")
+    public void getNestedTargetGroupDetails() {
+        TargetGroup nestedGroup = Entities.getTargetGroups().getLatest();
+
+        OperationResult<ProfileAndTargetGroup[]> operationResult = service.getContent(nestedGroup.getParent().getId());
+
+        context.put("targetGroupContent", operationResult.getEntity());
+    }
+
+    @Then("Target group content contains created nested group")
+    public void targetGroupContentShouldHaveNestedGroup() {
+        ProfileAndTargetGroup[] profileAndGroups = context.get("targetGroupContent", ProfileAndTargetGroup[].class);
+        TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
+
+        boolean matched = Arrays.stream(profileAndGroups).anyMatch(p -> p.getId().equals(targetGroup.getId()));
+        Verify.shouldBe(isTrue.element(matched));
     }
 
 }

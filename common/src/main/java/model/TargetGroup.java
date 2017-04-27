@@ -1,34 +1,24 @@
 package model;
 
 
-import abs.TeelaEntity;
+import abs.AbstractEntity;
 import data_for_entity.annotations.DataIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class TargetGroup extends TeelaEntity {
+public class TargetGroup extends ProfileAndTargetGroup {
 
     @DataIgnore
-    private ProfileJsonType jsonType = ProfileJsonType.TargetGroup;
-    @DataIgnore
     private String description;
-    //@JsonSerialize(using= TargetGroupJsonSerializer.class)
-    //@JsonDeserialize(using= TargetGroupDeserializer.class)
-    @DataIgnore
-    private List<String> targets;
-    @DataIgnore
-    private Integer lmt;
     @DataIgnore
     private Integer threatScore;
     @DataIgnore
     private Boolean deleted;
 
-    private String name;
     private TargetGroupProperties properties;
     @DataIgnore
     private int noGroups;
@@ -39,20 +29,17 @@ public class TargetGroup extends TeelaEntity {
     @DataIgnore
     private ArrayList<String> groups = new ArrayList<>();
     @DataIgnore
-    private String parent;
+    private TargetGroup parent;
+    @DataIgnore
+    private ArrayList<ParentChain> parentChain;
+
+    public TargetGroup () {
+        setJsonType(ProfileJsonType.TargetGroup);
+    }
 
     @Override
     public String toString() {
-        return String.format("name: %s, description: %s, targets: %s," +
-                "lmt: %s, deleted: %s", name, description, targets, lmt, deleted);
-    }
-
-    public String getName() {
-        return name.trim();
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        return String.format("name: %s, description: %s, deleted: %s", this.getName(), description, deleted);
     }
 
     public String getDescription() {
@@ -61,22 +48,6 @@ public class TargetGroup extends TeelaEntity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<String> getTargets() {
-        return targets;
-    }
-
-    public void setTargets(List<String> targets) {
-        this.targets = targets;
-    }
-
-    public Integer getLmt() {
-        return lmt;
-    }
-
-    public void setLmt(Integer lmt) {
-        this.lmt = lmt;
     }
 
     public Integer getThreatScore() {
@@ -135,19 +106,33 @@ public class TargetGroup extends TeelaEntity {
         this.groups = groups;
     }
 
-    public String getParent() {
+    public TargetGroup getParent() {
         return parent;
     }
 
-    public void setParent(String parent) {
+    public void setParent(TargetGroup parent) {
         this.parent = parent;
     }
 
-    public ProfileJsonType getJsonType() {
-        return jsonType;
+    public ArrayList<ParentChain> getParentChain() {
+        return parentChain;
     }
 
-    public void setJsonType(ProfileJsonType jsonType) {
-        this.jsonType = jsonType;
+    public void setParentChain(ArrayList<ParentChain> parentChain) {
+        this.parentChain = parentChain;
+    }
+
+
+    public static class ParentChain extends AbstractEntity {
+
+        private String name;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 }
