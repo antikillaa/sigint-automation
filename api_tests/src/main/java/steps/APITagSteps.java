@@ -1,5 +1,6 @@
 package steps;
 
+import http.JsonConverter;
 import http.OperationResult;
 import model.Tag;
 import model.TagFilter;
@@ -41,12 +42,25 @@ public class APITagSteps extends APISteps {
         Assert.assertTrue(tags.size() > Integer.valueOf(size));
     }
 
-    @When("I send search tags request")
-    public void searchTags() {
-        TagFilter filter = new TagFilter();
+    @When("I send search tags by $criteria with $value request")
+    public void searchTags(String criteria, String value) {
+        Tag tag = context.get("tag", Tag.class);
+
+        if (criteria.toLowerCase().equals("name")) {
+            value = value.equals("random") ? tag.getName() : value;
+        } else if (criteria.toLowerCase().equals("updatedafter")) {
+            value = value.equals("random") ? String.valueOf(tag.getCreatedAt().getTime() - 60000) : value;
+        } else if (criteria.toLowerCase().equals("empty")) {
+            log.debug("Search without filter..");
+        } else {
+            throw new AssertionError("Unknown filter type");
+        }
+
+        TagFilter filter = new TagFilter().filterBy(criteria, value);
         OperationResult<List<Tag>> operationResult = service.list(filter);
 
         context.put("tagList", operationResult.getEntity());
+        context.put("tagFilter", filter);
     }
 
     @When("I send delete tag request")
@@ -67,5 +81,25 @@ public class APITagSteps extends APISteps {
             }
         }
         throw new AssertionError("Tag this name: " + tag.getName() + " not founded in tag list");
+    }
+
+    @Then("tags search result are correct")
+    public void tagsSearchResultShouldBeCorrect() {
+        log.info("Checking if search targets result is correct");
+        TagFilter searchFilter = context.get("tagFilter", TagFilter.class);
+        List<Tag> searchResult = context.get("tagList", List.class);
+
+        if (searchResult.size() == 0) {
+            log.warn("Search result can be incorrect. There are not records in it");
+        } else {
+            log.info("Search result size: " + searchResult.size());
+        }
+
+        for (Tag tag : searchResult) {
+            Assert.assertTrue(
+                    String.format("Tag: %s should not match to filter %s", tag, JsonConverter.toJsonString(searchFilter)),
+                    searchFilter.isAppliedToEntity(tag)
+            );
+        }
     }
 }
