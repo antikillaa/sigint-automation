@@ -25,8 +25,9 @@ public class Entities {
     private static ProfileList profiles;
     private static WhitelistsList whitelists;
     private static TeamList teams;
+    private static TagList tags;
 
-    public static TeamList getTeams() {
+    public static EntityList<Team> getTeams() {
         if (teams == null) {
             teams = new TeamList();
         }
@@ -138,7 +139,7 @@ public class Entities {
         return profiles;
     }
 
-    public static EtisalatSubscriberList getEtisalatSubscribers() {
+    public static EntityList<EtisalatSubscriberEntry> getEtisalatSubscribers() {
         if (etisalatSubscribers == null) {
             etisalatSubscribers = new EtisalatSubscriberList();
         }
@@ -146,11 +147,17 @@ public class Entities {
     }
 
 
-    public static WhitelistsList getWhitelists(){
-
-        if (whitelists == null){
-            whitelists  = new WhitelistsList();
+    public static EntityList<Whitelist> getWhitelists() {
+        if (whitelists == null) {
+            whitelists = new WhitelistsList();
         }
         return whitelists;
+    }
+
+    public static EntityList<Tag> getTags() {
+        if (tags == null) {
+            tags = new TagList();
+        }
+        return tags;
     }
 }

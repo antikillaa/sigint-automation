@@ -5,7 +5,7 @@ import abs.EntityList;
 import errors.NullReturnException;
 import model.Whitelist;
 
-public class WhitelistsList extends EntityList<Whitelist>{
+class WhitelistsList extends EntityList<Whitelist>{
 
     @Override
     public Whitelist getEntity(String param) throws NullReturnException{

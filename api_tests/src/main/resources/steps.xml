@@ -45,4 +45,6 @@
     </bean>
     <bean id="whitelistsSteps" class="steps.APIWhitelistSteps">
     </bean>
+    <bean id="tagSteps" class="steps.APITagSteps" >
+    </bean>
 </beans>

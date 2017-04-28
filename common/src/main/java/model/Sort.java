@@ -7,6 +7,7 @@ public class Sort {
     private boolean ignoreCase;
     private String nullHandling;
     private boolean ascending;
+    private boolean descending;
 
     public Direction getDirection() {
         return direction;
@@ -48,4 +49,11 @@ public class Sort {
         this.ascending = ascending;
     }
 
+    public boolean isDescending() {
+        return descending;
+    }
+
+    public void setDescending(boolean descending) {
+        this.descending = descending;
+    }
 }
