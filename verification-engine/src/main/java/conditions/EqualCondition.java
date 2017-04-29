@@ -1,7 +1,7 @@
 package conditions;
 
 import abs.TeelaEntity;
-import http.JsonConverter;
+import json.JsonConverter;
 import model.Record;
 import model.UIRecord;
 import org.apache.log4j.Logger;
@@ -208,7 +208,7 @@ public class EqualCondition implements ExpectedCondition {
 
         @Override
         public Boolean check() {
-            String.format("Checking records...");
+            log.debug("Checking records...");
             return record.getTmsi().equals(uiRecord.getTmsi()) &&
                     record.getLanguage().equals(uiRecord.getLanguage()) &&
                     record.getImsi().equals(uiRecord.getImsi()) &&

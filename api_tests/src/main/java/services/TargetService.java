@@ -4,7 +4,7 @@ import abs.SearchFilter;
 import app_context.entities.Entities;
 import file_generator.FileGenerator;
 import http.G4Response;
-import http.JsonConverter;
+import json.JsonConverter;
 import http.OperationResult;
 import http.requests.targets.TargetRequest;
 import model.*;

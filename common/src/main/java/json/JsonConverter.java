@@ -1,4 +1,4 @@
-package http;
+package json;
 
 import abs.EntityList;
 import org.apache.log4j.Logger;

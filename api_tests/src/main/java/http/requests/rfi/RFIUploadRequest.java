@@ -3,7 +3,7 @@ package http.requests.rfi;
 
 import http.requests.HttpRequest;
 import http.HttpMethod;
-import http.JsonConverter;
+import json.JsonConverter;
 import model.FileAttachment;
 import model.InformationRequest;
 import org.apache.log4j.Logger;
@@ -14,9 +14,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by dm on 4/15/16.
- */
 public class RFIUploadRequest extends HttpRequest {
 
     private static final String URI = "/api/rfi/upload";

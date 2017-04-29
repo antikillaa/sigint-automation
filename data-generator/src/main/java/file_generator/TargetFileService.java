@@ -1,6 +1,6 @@
 package file_generator;
 
-import http.JsonConverter;
+import json.JsonConverter;
 import model.G4File;
 import model.Target;
 import model.TargetGroup;

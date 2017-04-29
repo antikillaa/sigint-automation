@@ -2,11 +2,8 @@ package steps;
 
 import app_context.entities.Entities;
 import error_reporter.ErrorReporter;
-import http.JsonConverter;
 import http.OperationResult;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import json.JsonConverter;
 import model.RequestResult;
 import model.Team;
 import model.User;
@@ -17,6 +14,10 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TeamService;
 import services.UserService;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class APIUserSteps extends APISteps {
@@ -167,7 +168,7 @@ public class APIUserSteps extends APISteps {
         Date userLogonDatetime = user.getLastLoginDate();
 
         if (userLogonDatetime == null) {
-            ErrorReporter.reportAndRaiseError("Logon datetime is not initialized: " + userLogonDatetime);
+            ErrorReporter.reportAndRaiseError("Logon datetime is not initialized");
         }
 
         long deltaInMillis = System.currentTimeMillis() - userLogonDatetime.getTime();

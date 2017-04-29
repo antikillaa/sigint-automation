@@ -4,7 +4,7 @@ import abs.SearchFilter;
 import app_context.entities.Entities;
 import errors.OperationResultError;
 import http.G4Response;
-import http.JsonConverter;
+import json.JsonConverter;
 import http.OperationResult;
 import http.requests.TargetGroupRequest;
 import model.ProfileAndTargetGroup;

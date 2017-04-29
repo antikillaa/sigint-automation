@@ -1,7 +1,7 @@
 package steps;
 
 import app_context.entities.Entities;
-import http.JsonConverter;
+import json.JsonConverter;
 import http.OperationResult;
 import model.ReportCategory;
 import org.apache.log4j.Logger;

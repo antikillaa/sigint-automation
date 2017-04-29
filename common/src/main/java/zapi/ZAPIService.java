@@ -7,7 +7,7 @@ import http.G4Response;
 import http.OperationResult;
 import http.OperationsResults;
 import jira.JiraConnector;
-import http.JsonConverter;
+import json.JsonConverter;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import reporter.ReportParser;

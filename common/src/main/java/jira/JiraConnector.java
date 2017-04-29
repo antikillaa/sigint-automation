@@ -4,7 +4,7 @@ import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import http.G4HttpClient;
 import http.G4Response;
-import http.JsonConverter;
+import json.JsonConverter;
 import http.OperationResult;
 import http.requests.HttpRequest;
 import java.util.List;
