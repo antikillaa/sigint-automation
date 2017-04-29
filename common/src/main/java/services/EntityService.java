@@ -22,20 +22,30 @@ public interface EntityService<T extends AbstractEntity> {
 
     /**
      * DELETE entity
+     *
      * @param entity entity
      * @return {@link OperationResult}
      */
     OperationResult remove(T entity);
 
     /**
-     * GET list of entities
+     * Filter Entities Search
+     *
      * @param filter search filter for payload
      * @return {@link OperationResult}
      */
-    OperationResult<List<T>> list(SearchFilter filter);
+    OperationResult<List<T>> search(SearchFilter filter);
+
+    /**
+     * Get list of entities
+     *
+     * @return {@link OperationResult}
+     */
+    OperationResult<List<T>> list();
 
     /**
      * UPDATE entity
+     *
      * @param entity entity
      * @return {@link OperationResult}
      */
@@ -43,6 +53,7 @@ public interface EntityService<T extends AbstractEntity> {
 
     /**
      * GET entity
+     *
      * @param id id of entity
      * @return {@link OperationResult}
      */

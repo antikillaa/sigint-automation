@@ -46,7 +46,12 @@ public class ReportService implements EntityService<Report> {
     }
 
     @Override
-    public OperationResult<List<Report>> list(SearchFilter filter) {
+    public OperationResult<List<Report>> search(SearchFilter filter) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public OperationResult<List<Report>> list() {
         throw new NotImplementedException();
     }
 

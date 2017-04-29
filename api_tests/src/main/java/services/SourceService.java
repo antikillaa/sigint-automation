@@ -62,7 +62,7 @@ public class SourceService implements EntityService<Source> {
     }
 
     @Override
-    public OperationResult<List<Source>> list(SearchFilter filter) {
+    public OperationResult<List<Source>> search(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
@@ -72,6 +72,7 @@ public class SourceService implements EntityService<Source> {
      *
      * @return HTTP status code
      */
+    @Override
     public OperationResult<List<Source>> list() {
         log.info("GET list of Sources. Filter {\"deleted\":false}");
         G4Response response = g4HttpClient.sendRequest(sourcesRequest.list());

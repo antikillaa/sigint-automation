@@ -87,7 +87,7 @@ public class TargetService implements EntityService<Target> {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public OperationResult<List<Target>> list(SearchFilter filter) {
+    public OperationResult<List<Target>> search(SearchFilter filter) {
         log.info("Search targets by filter:" + JsonConverter.toJsonString(filter));
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
@@ -105,6 +105,7 @@ public class TargetService implements EntityService<Target> {
      *
      * @return {@link OperationResult<List<Target>>}
      */
+    @Override
     public OperationResult<List<Target>> list() {
         log.info("Get list of targets");
         G4Response response = g4HttpClient.sendRequest(request.list());

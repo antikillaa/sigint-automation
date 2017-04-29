@@ -44,7 +44,7 @@ public class TagService implements EntityService<Tag> {
     }
 
     @Override
-    public OperationResult<List<Tag>> list(SearchFilter filter) {
+    public OperationResult<List<Tag>> search(SearchFilter filter) {
         log.info("Search list of tags, filter: " + JsonConverter.toJsonString(filter));
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
@@ -52,6 +52,7 @@ public class TagService implements EntityService<Tag> {
         return new OperationResult<>(response, searchResult.getResult().getEntities());
     }
 
+    @Override
     public OperationResult<List<Tag>> list() {
         log.info("Get list of tags");
         G4Response response = g4HttpClient.sendRequest(request.list());

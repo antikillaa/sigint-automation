@@ -225,7 +225,7 @@ public class APIUploadFilesSteps extends APISteps {
         filter.setProcessIds(ids);
 
         RecordService recordService = new RecordService();
-        OperationResult<List<Record>> searchResult = recordService.list(filter);
+        OperationResult<List<Record>> searchResult = recordService.search(filter);
         List<Record> ingestedRecords = searchResult.getEntity();
 
         // for each uploaded records

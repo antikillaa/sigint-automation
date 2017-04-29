@@ -21,7 +21,7 @@ public class APIRecordsSearchSteps extends APISteps {
         filter.setPageSize(Integer.valueOf(pageSize));
         filter.setKeywords(keywords);
 
-        OperationResult<List<ProfileEntity>> operationResult = service.list(filter);
+        OperationResult<List<ProfileEntity>> operationResult = service.search(filter);
         List<ProfileEntity> profileEntities = operationResult.getEntity();
 
         context.put("ProfileList", profileEntities);
