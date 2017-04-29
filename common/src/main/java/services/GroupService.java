@@ -53,10 +53,11 @@ public class GroupService implements EntityService<Group> {
     }
 
     @Override
-    public OperationResult<List<Group>> list(SearchFilter filter) {
+    public OperationResult<List<Group>> search(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
+    @Override
     public OperationResult<List<Group>> list() {
         G4Response response = g4HttpClient.sendRequest(request.list());
 

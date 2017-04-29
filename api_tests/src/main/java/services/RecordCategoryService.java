@@ -44,7 +44,7 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
     }
 
     @Override
-    public OperationResult<List<RecordCategory>> list(SearchFilter filter) {
+    public OperationResult<List<RecordCategory>> search(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
@@ -53,6 +53,7 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
      *
      * @return list of record-categories
      */
+    @Override
     public OperationResult<List<RecordCategory>> list() {
         G4Response response = g4HttpClient.sendRequest(request.list());
 

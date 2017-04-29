@@ -12,6 +12,7 @@ import model.G4File;
 import model.Phonebook;
 import model.UploadResult;
 import model.phonebook.PhonebookSearchResults;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
 
@@ -82,7 +83,7 @@ public class PhonebookService implements EntityService<Phonebook> {
      * @return List of Unified Phonebook subscriber entries
      */
     @Override
-    public OperationResult<List<Phonebook>> list(SearchFilter filter) {
+    public OperationResult<List<Phonebook>> search(SearchFilter filter) {
         UnifiedPhonebookSearchRequest request = new UnifiedPhonebookSearchRequest(filter);
         G4Response response = g4HttpClient.sendRequest(request);
 
@@ -94,6 +95,11 @@ public class PhonebookService implements EntityService<Phonebook> {
         } else {
             throw new OperationResultError(operationResult);
         }
+    }
+
+    @Override
+    public OperationResult<List<Phonebook>> list() {
+        throw new NotImplementedException();
     }
 
     /**

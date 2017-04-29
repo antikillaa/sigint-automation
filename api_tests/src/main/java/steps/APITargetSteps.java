@@ -152,7 +152,7 @@ public class APITargetSteps extends APISteps {
         }
 
         TargetFilter searchFilter = new TargetFilter().filterBy(criteria, value);
-        OperationResult<List<Target>> operationResult = service.list(searchFilter);
+        OperationResult<List<Target>> operationResult = service.search(searchFilter);
 
         context.put("searchFilter", searchFilter);
         context.put("searchResult", operationResult.getEntity());

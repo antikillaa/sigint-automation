@@ -72,7 +72,7 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
      * @return EntityList of Du Subscriber entries
      */
     @Override
-    public OperationResult<List<DuSubscriberEntry>> list(SearchFilter filter) {
+    public OperationResult<List<DuSubscriberEntry>> search(SearchFilter filter) {
         log.info("Getting list of duSubscriber entries..");
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
@@ -84,6 +84,11 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
         } else {
             throw new OperationResultError(operationResult);
         }
+    }
+
+    @Override
+    public OperationResult<List<DuSubscriberEntry>> list() {
+        throw new NotImplementedException();
     }
 
     @Override

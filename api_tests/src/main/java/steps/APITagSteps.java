@@ -44,7 +44,7 @@ public class APITagSteps extends APISteps {
     @When("I send search tags request")
     public void searchTags() {
         TagFilter filter = new TagFilter();
-        OperationResult<List<Tag>> operationResult = service.list(filter);
+        OperationResult<List<Tag>> operationResult = service.search(filter);
 
         context.put("tagList", operationResult.getEntity());
     }

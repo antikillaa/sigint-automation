@@ -49,7 +49,7 @@ public class APIDuSubscriberSteps extends APISteps {
 
         DuSubscriberFilter searchFilter = new DuSubscriberFilter().filterBy(criteria, value);
         log.info("Search isAppliedToEntity: " + JsonConverter.toJsonString(searchFilter));
-        OperationResult<List<DuSubscriberEntry>> operationResult = service.list(searchFilter);
+        OperationResult<List<DuSubscriberEntry>> operationResult = service.search(searchFilter);
         context.put("searchFilter", searchFilter);
         context.put("searchResult", operationResult.getEntity());
     }

@@ -61,10 +61,11 @@ public class RoleService implements EntityService<Role> {
     }
 
     @Override
-    public OperationResult<List<Role>> list(SearchFilter filter) {
+    public OperationResult<List<Role>> search(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
+    @Override
     public OperationResult<List<Role>> list() {
         G4Response response = g4HttpClient.sendRequest(request.list());
 

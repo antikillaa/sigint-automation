@@ -86,7 +86,7 @@ public class APITargetGroupSteps extends APISteps {
         TargetGroupSearchFilter filter = new TargetGroupSearchFilter();
         filter.setSortField("name");
 
-        OperationResult<List<TargetGroup>> operationResult = service.list(filter);
+        OperationResult<List<TargetGroup>> operationResult = service.search(filter);
         context.put("targetGroupList", operationResult.getEntity());
     }
 
