@@ -1,6 +1,6 @@
 package steps;
 
-import http.JsonConverter;
+import json.JsonConverter;
 import http.OperationResult;
 import model.Tag;
 import model.TagFilter;
@@ -57,7 +57,7 @@ public class APITagSteps extends APISteps {
         }
 
         TagFilter filter = new TagFilter().filterBy(criteria, value);
-        OperationResult<List<Tag>> operationResult = service.list(filter);
+        OperationResult<List<Tag>> operationResult = service.search(filter);
 
         context.put("tagList", operationResult.getEntity());
         context.put("tagFilter", filter);
