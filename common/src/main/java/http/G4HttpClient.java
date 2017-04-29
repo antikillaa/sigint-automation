@@ -3,6 +3,7 @@ package http;
 import app_context.properties.G4Properties;
 import error_reporter.ErrorReporter;
 import http.requests.HttpRequest;
+import json.JsonConverter;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.client.ClientConfig;

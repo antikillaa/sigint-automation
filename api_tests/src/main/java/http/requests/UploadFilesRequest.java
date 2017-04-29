@@ -1,7 +1,7 @@
 package http.requests;
 
 import http.HttpMethod;
-import http.JsonConverter;
+import json.JsonConverter;
 import model.*;
 import org.apache.log4j.Logger;
 

@@ -2,7 +2,7 @@ package steps;
 
 import conditions.Conditions;
 import conditions.Verify;
-import http.JsonConverter;
+import json.JsonConverter;
 import http.OperationResult;
 import model.DuSubscriberEntry;
 import model.phonebook.DuSubscriberFilter;

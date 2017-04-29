@@ -1,7 +1,7 @@
 package app_context.entities;
 
 import abs.EntityList;
-import http.JsonConverter;
+import json.JsonConverter;
 import model.*;
 
 import java.io.InputStream;

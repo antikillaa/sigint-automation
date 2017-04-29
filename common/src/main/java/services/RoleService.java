@@ -3,7 +3,7 @@ package services;
 import abs.SearchFilter;
 import app_context.entities.Entities;
 import http.G4Response;
-import http.JsonConverter;
+import json.JsonConverter;
 import http.OperationResult;
 import http.requests.RoleRequest;
 import model.RequestResult;

@@ -1,6 +1,7 @@
 package http;
 
 import errors.OperationResultError;
+import json.JsonConverter;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;

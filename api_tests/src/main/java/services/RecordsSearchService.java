@@ -2,7 +2,7 @@ package services;
 
 import abs.SearchFilter;
 import http.G4Response;
-import http.JsonConverter;
+import json.JsonConverter;
 import http.OperationResult;
 import http.requests.RecordsSearchRequest;
 import model.ProfileEntity;

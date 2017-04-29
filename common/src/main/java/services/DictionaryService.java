@@ -3,7 +3,7 @@ package services;
 import http.G4HttpClient;
 import http.G4Response;
 import http.requests.GetDictionariesRequest;
-import http.JsonConverter;
+import json.JsonConverter;
 import model.Dictionary;
 import org.apache.log4j.Logger;
 
