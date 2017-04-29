@@ -19,7 +19,6 @@ public class ProfileService implements EntityService<Profile> {
 
     /* TODO
         GET /profiles getProfiles
-        POST /profiles/merge merge
         GET /profiles/{profileId}/activity getActivity
         GET /profiles/{profileId}/audit getProfileAudit
 
@@ -55,13 +54,27 @@ public class ProfileService implements EntityService<Profile> {
 
     @Override
     public OperationResult<Profile> view(String id) {
-        log.info("Getting profile details");
+        log.info("Getting profile details id: " + id);
         G4Response response = g4HttpClient.sendRequest(request.view(id));
 
         OperationResult<Profile> operationResult = new OperationResult<>(response, Profile.class, "data");
         if (operationResult.isSuccess()) {
             Entities.getProfiles().addOrUpdateEntity(operationResult.getEntity());
         }
+        return operationResult;
+    }
+
+    public OperationResult<Profile> merge(Profile firstProfile, Profile secondProfile) {
+        log.info("Merge two profile into one");
+        log.info("Create merged profile draft");
+
+        G4Response response = g4HttpClient.sendRequest(request.merge(firstProfile.getId(), secondProfile.getId()));
+
+        OperationResult<Profile> operationResult = new OperationResult<>(response, Profile.class, "data");
+        if (operationResult.isSuccess()) {
+            Entities.getProfiles().addOrUpdateEntity(operationResult.getEntity());
+        }
+
         return operationResult;
     }
 

@@ -1,6 +1,6 @@
 package steps;
 
-import http.JsonConverter;
+import json.JsonConverter;
 import http.OperationResult;
 import model.Tag;
 import model.TagFilter;
