@@ -53,7 +53,7 @@ public class RecordService implements EntityService<Record> {
      * @return List of record
      */
     @Override
-    public OperationResult<List<Record>> list(SearchFilter filter) {
+    public OperationResult<List<Record>> search(SearchFilter filter) {
         log.info("Search records by filter:" + JsonConverter.toJsonString(filter));
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
@@ -65,6 +65,11 @@ public class RecordService implements EntityService<Record> {
         } else {
             throw new OperationResultError(operationResult);
         }
+    }
+
+    @Override
+    public OperationResult<List<Record>> list() {
+        throw new NotImplementedException();
     }
 
     @Override

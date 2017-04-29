@@ -7,8 +7,6 @@ import json.JsonConverter;
 import http.OperationResult;
 import http.requests.PasswordsRequest;
 import http.requests.UserRequest;
-import java.util.ArrayList;
-import java.util.List;
 import model.AuthResponseResult;
 import model.RequestResult;
 import model.User;
@@ -16,6 +14,9 @@ import model.UserPassword;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserService implements EntityService<User> {
 
@@ -38,6 +39,7 @@ public class UserService implements EntityService<User> {
      * @param entity New user
      * @return Response status code
      */
+    @Override
     public OperationResult<User> add(User entity) {
         log.info("Creating new user");
         log.debug(Parser.entityToString(entity));
@@ -55,6 +57,7 @@ public class UserService implements EntityService<User> {
         return operationResult;
     }
 
+    @Override
     public OperationResult<RequestResult> remove(User entity) {
         log.info("Deleting user, id:" + entity.getId() + " name:" + entity.getName());
 
@@ -67,10 +70,12 @@ public class UserService implements EntityService<User> {
         return operationResult;
     }
 
-    public OperationResult<List<User>> list(SearchFilter filter) {
+    @Override
+    public OperationResult<List<User>> search(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
+    @Override
     public OperationResult<List<User>> list() {
         log.info("Getting users list");
 
@@ -80,6 +85,7 @@ public class UserService implements EntityService<User> {
         return new OperationResult<>(response, users);
     }
 
+    @Override
     public OperationResult<User> update(User entity) {
         log.info("Update user id:" + entity.getId() + " name:" + entity.getName());
 
@@ -96,6 +102,7 @@ public class UserService implements EntityService<User> {
         return operationResult;
     }
 
+    @Override
     public OperationResult<User> view(String id) {
         throw new NotImplementedException();
     }

@@ -87,7 +87,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
      * @return EntityList of Etisalat subscriber
      */
     @Override
-    public OperationResult<List<EtisalatSubscriberEntry>> list(SearchFilter filter) {
+    public OperationResult<List<EtisalatSubscriberEntry>> search(SearchFilter filter) {
         log.info("Getting list of Etisalat Subscriber enries..");
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
@@ -99,6 +99,11 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
         } else {
             throw new OperationResultError(operationResult);
         }
+    }
+
+    @Override
+    public OperationResult<List<EtisalatSubscriberEntry>> list() {
+        throw new NotImplementedException();
     }
 
     @Override

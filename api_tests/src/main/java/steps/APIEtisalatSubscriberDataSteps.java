@@ -64,7 +64,7 @@ public class APIEtisalatSubscriberDataSteps extends APISteps {
 
         EtisalatSubscriberFilter searchFilter = new EtisalatSubscriberFilter().filterBy(criteria, value);
         log.info("Search isAppliedToEntity: " + JsonConverter.toJsonString(searchFilter));
-        OperationResult<List<EtisalatSubscriberEntry>> operationResult = service.list(searchFilter);
+        OperationResult<List<EtisalatSubscriberEntry>> operationResult = service.search(searchFilter);
 
         context.put("searchFilter", searchFilter);
         context.put("searchResult", operationResult.getEntity());

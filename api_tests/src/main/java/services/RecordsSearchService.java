@@ -27,7 +27,7 @@ public class RecordsSearchService implements EntityService<ProfileEntity> {
     }
 
     @Override
-    public OperationResult<List<ProfileEntity>> list(SearchFilter filter) {
+    public OperationResult<List<ProfileEntity>> search(SearchFilter filter) {
         log.info("Records search with filter: " + JsonConverter.toJsonString(filter));
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
@@ -35,6 +35,11 @@ public class RecordsSearchService implements EntityService<ProfileEntity> {
                 JsonConverter.jsonToObjectsList(response.getMessage(), ProfileEntity[].class, "data");
 
         return new OperationResult<>(response, profileEntities);
+    }
+
+    @Override
+    public OperationResult<List<ProfileEntity>> list() {
+        throw new NotImplementedException();
     }
 
     @Override

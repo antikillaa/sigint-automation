@@ -44,11 +44,12 @@ public class WhitelistService implements EntityService<Whitelist> {
     }
 
     @Override
-    public OperationResult<List<Whitelist>> list(SearchFilter filter) {
+    public OperationResult<List<Whitelist>> search(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
 
+    @Override
     public OperationResult<List<Whitelist>> list() {
         G4Response response = g4HttpClient.sendRequest(request.list());
         OperationResult<WhitelistListResult> operationResult =

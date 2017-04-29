@@ -45,10 +45,11 @@ public class ProfileDraftService implements EntityService<Profile> {
     }
 
     @Override
-    public OperationResult<List<Profile>> list(SearchFilter filter) {
+    public OperationResult<List<Profile>> search(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
+    @Override
     public OperationResult<List<Profile>> list() {
         G4Response response = g4HttpClient.sendRequest(request.list());
 

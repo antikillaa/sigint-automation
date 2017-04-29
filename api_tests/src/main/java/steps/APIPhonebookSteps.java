@@ -108,7 +108,7 @@ public class APIPhonebookSteps extends APISteps {
         }
         PhonebookSearchFilter searchFilter = new PhonebookSearchFilter().filterBy(criteria, value);
         log.info("Search isAppliedToEntity: " + JsonConverter.toJsonString(searchFilter));
-        OperationResult<List<Phonebook>> operationResult = service.list(searchFilter);
+        OperationResult<List<Phonebook>> operationResult = service.search(searchFilter);
 
         context.put("searchFilter", searchFilter);
         context.put("searchResult", operationResult.getEntity());

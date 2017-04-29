@@ -47,7 +47,7 @@ public class ReportCategoryService implements EntityService<ReportCategory> {
     }
 
     @Override
-    public OperationResult<List<ReportCategory>> list(SearchFilter filter) {
+    public OperationResult<List<ReportCategory>> search(SearchFilter filter) {
         throw new NotImplementedException();
     }
 
@@ -56,6 +56,7 @@ public class ReportCategoryService implements EntityService<ReportCategory> {
      *
      * @return list of ReportCategory
      */
+    @Override
     public OperationResult<List<ReportCategory>> list() {
         log.info("Get list of categories...");
 
