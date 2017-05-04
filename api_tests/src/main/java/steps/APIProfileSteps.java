@@ -1,8 +1,10 @@
 package steps;
 
+import abs.EntityList;
 import app_context.entities.Entities;
-import json.JsonConverter;
+import errors.NullReturnException;
 import http.OperationResult;
+import json.JsonConverter;
 import model.Profile;
 import model.ProfileCategory;
 import model.TargetGroup;
@@ -12,6 +14,7 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.ProfileDraftService;
 import services.ProfileService;
+import verification.profiler.ProfileMergeVerification;
 
 import java.util.List;
 
@@ -88,9 +91,9 @@ public class APIProfileSteps extends APISteps {
     }
 
     @Then("Profile is correct")
-    public void profileIsCorrect() {
-        Profile created = Entities.getProfiles().getLatest();
+    public void profileIsCorrect() throws NullReturnException {
         Profile requested = context.get("profile", Profile.class);
+        Profile created = Entities.getProfiles().getEntity(requested.getName());
 
         profilesShouldBeEquals(requested, created);
     }
@@ -138,5 +141,31 @@ public class APIProfileSteps extends APISteps {
         context.put("profileDraft", profile);
 
         draftService.update(profile);
+    }
+
+    @When("I send merge two profile into one request")
+    public void mergeTwoProfileIntoOne() {
+        EntityList<Profile> profileEntityList = Entities.getProfiles();
+        Assert.assertTrue("Profile EntityList size shouldHave at least 2 profiles", profileEntityList.size() > 1);
+        Profile firstProfile = profileEntityList.getLatest();
+        Profile secondProfile = profileEntityList.getEntities().get(profileEntityList.size() - 2);
+        Assert.assertNotNull(firstProfile.getId());
+        Assert.assertNotNull(secondProfile.getId());
+
+        context.put("firstProfileToMerge", firstProfile);
+        context.put("secondProfileToMerge", secondProfile);
+
+        OperationResult<Profile> operationResult = service.merge(firstProfile, secondProfile);
+        context.put("profileDraft", operationResult.getEntity());
+    }
+
+    @Then("Merged profile draft is correct")
+    public void mergedProfileShouldBeCorrect() {
+        Profile firstProfileToMerge = context.get("firstProfileToMerge", Profile.class);
+        Profile secondProfileToMerge = context.get("secondProfileToMerge", Profile.class);
+        Profile mergedProfile = context.get("profileDraft", Profile.class);
+
+        ProfileMergeVerification verification = new ProfileMergeVerification();
+        verification.verify(firstProfileToMerge, secondProfileToMerge, mergedProfile);
     }
 }

@@ -62,7 +62,16 @@ public class EntityList<T extends AbstractEntity> implements Iterable<T> {
     public void removeEntity(T entity) {
         for (T exEntity : entities) {
             if (Objects.equals(exEntity.getId(), entity.getId())) {
-                entities.remove(entity);
+                entities.remove(exEntity);
+                return;
+            }
+        }
+    }
+
+    public void removeEntity(String id) {
+        for (T exEntity : entities) {
+            if (Objects.equals(exEntity.getId(), id)) {
+                entities.remove(exEntity);
                 return;
             }
         }

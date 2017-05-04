@@ -51,6 +51,7 @@ public class ProfileDraftService implements EntityService<Profile> {
 
     @Override
     public OperationResult<List<Profile>> list() {
+        log.info("Get all profiles");
         G4Response response = g4HttpClient.sendRequest(request.list());
 
         OperationResult<Profile[]> operationResult = new OperationResult<>(response, Profile[].class, "data");
@@ -65,8 +66,6 @@ public class ProfileDraftService implements EntityService<Profile> {
     @Override
     public OperationResult<Profile> update(Profile entity) {
         log.info("Updating profile");
-        log.info(JsonConverter.toJsonString(entity));
-
         G4Response response = g4HttpClient.sendRequest(request.update(entity));
 
         OperationResult<Profile> operationResult = new OperationResult<>(response, Profile.class, "data");
@@ -89,13 +88,20 @@ public class ProfileDraftService implements EntityService<Profile> {
     }
 
     public OperationResult<Profile> publish(Profile profile) {
-        log.info("Publishing profile id:" + profile.getId());
-        log.info(JsonConverter.toJsonString(profile));
+        log.info("Publishing profile id: " + profile.getId() + ", name: " + profile.getName());
         G4Response response = g4HttpClient.sendRequest(request.publish(profile));
 
         OperationResult<Profile> operationResult = new OperationResult<>(response, Profile.class, "data");
+
         if (operationResult.isSuccess()) {
+            // if it's merging then remove two source profiles
+            if (profile.getMergingProfilesIDs() != null && !profile.getMergingProfilesIDs().isEmpty()) {
+                Entities.getProfiles().removeEntity(profile.getMergingProfilesIDs().get(0));
+                Entities.getProfiles().removeEntity(profile.getMergingProfilesIDs().get(1));
+            }
+
             Entities.getProfiles().addOrUpdateEntity(operationResult.getEntity());
+            Entities.getProfiles().removeEntity(profile);
         }
         return operationResult;
     }
