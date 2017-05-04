@@ -4,10 +4,7 @@ import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import http.OperationResult;
-import model.ProfileAndTargetGroup;
-import model.TargetGroup;
-import model.TargetGroupFilter;
-import model.TargetGroupSearchFilter;
+import model.*;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -297,4 +294,12 @@ public class APITargetGroupSteps extends APISteps {
         Verify.shouldBe(isTrue.element(matched));
     }
 
+    @Then("Target group content contains created profile")
+    public void targetGroupContentShouldHaveProfile() {
+        ProfileAndTargetGroup[] profileAndGroups = context.get("targetGroupContent", ProfileAndTargetGroup[].class);
+        Profile profile = Entities.getProfiles().getLatest();
+
+        boolean matched = Arrays.stream(profileAndGroups).anyMatch(p -> p.getId().equals(profile.getId()));
+        Verify.shouldBe(isTrue.element(matched));
+    }
 }
