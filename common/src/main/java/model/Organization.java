@@ -15,7 +15,7 @@ public class Organization extends TeelaEntity {
   private OrganizationType organizationType;
   private String fullName;
   @DataIgnore
-  private Permission defaultPermission;
+  private UserPermission defaultPermission;
 
   public String getParentTeamId() {
     return parentTeamId;
@@ -39,5 +39,13 @@ public class Organization extends TeelaEntity {
 
   public void setFullName(String fullName) {
     this.fullName = fullName;
+  }
+
+  public UserPermission getDefaultPermission() {
+    return defaultPermission;
+  }
+
+  public void setDefaultPermission(UserPermission defaultPermission) {
+    this.defaultPermission = defaultPermission;
   }
 }

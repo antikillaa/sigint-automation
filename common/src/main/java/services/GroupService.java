@@ -14,6 +14,7 @@ import utils.Parser;
 
 import java.util.List;
 
+@Deprecated
 public class GroupService implements EntityService<Group> {
 
     private static final Logger log = Logger.getLogger(GroupService.class);

@@ -4,7 +4,6 @@ import app_context.entities.Entities;
 import error_reporter.ErrorReporter;
 import http.OperationResult;
 import json.JsonConverter;
-import model.RequestResult;
 import model.Team;
 import model.User;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -15,7 +14,6 @@ import org.junit.Assert;
 import services.TeamService;
 import services.UserService;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,16 +31,6 @@ public class APIUserSteps extends APISteps {
         return RandomStringUtils.randomAlphanumeric(PASSWORD_LENGTH);
     }
 
-    @When("I send create a new user with group request")
-    public void createNewUserRequest() {
-        List<String> userGroupIds = new ArrayList<>();
-        userGroupIds.add(Entities.getGroups().getLatest().getId());
-        User user = getRandomUser();
-        user.setUserGroupIds(userGroupIds);
-        context.put("user", user);
-        service.add(user);
-    }
-
     @Then("Created user is correct")
     public void createdUserIsCorrect() {
         User createdUser = Entities.getUsers().getLatest();
@@ -53,12 +41,8 @@ public class APIUserSteps extends APISteps {
 
         Assert.assertEquals(createdUser.getName().toLowerCase(), requestUser.getName().toLowerCase());
         Assert.assertEquals(createdUser.getFullName(), requestUser.getFullName());
-        Assert.assertEquals(createdUser.getRoles(), requestUser.getRoles());
         Assert.assertEquals(createdUser.getLanguages(), requestUser.getLanguages());
         Assert.assertEquals(createdUser.getStaffId(), requestUser.getStaffId());
-        Assert.assertEquals(createdUser.getUserGroupIds(), requestUser.getUserGroupIds());
-        Assert.assertEquals(createdUser.getExpandedPermissions(), requestUser.getExpandedPermissions());
-        Assert.assertEquals(createdUser.getExpandedRoles(), requestUser.getExpandedRoles());
     }
 
     static User getRandomUser() {
@@ -83,18 +67,6 @@ public class APIUserSteps extends APISteps {
 
         Assert.assertFalse("Users list is empty", userList.isEmpty());
         Assert.assertTrue(userList.size() > Integer.valueOf(size));
-    }
-
-    @Then("delete all users without roles and groups")
-    public void cleanupUsers() {
-        List<User> userList = context.get("userList", List.class);
-
-        for (User user : userList) {
-            if (user.getRoles().isEmpty() && user.getUserGroupIds().isEmpty()) {
-                OperationResult<RequestResult> operationResult = service.remove(user);
-                Assert.assertEquals("success", operationResult.getEntity().getMessage());
-            }
-        }
     }
 
     @When("I send update user request")

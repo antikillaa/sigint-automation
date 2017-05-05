@@ -33,7 +33,6 @@ public class APILogin {
             OperationResult<User> meResult = new UserService().me();
             User me = meResult.getEntity();
             me.setPassword(user.getPassword());
-            me.setRoles(user.getRoles());
 
             context.setLoggedUser(new LoggedUser(me));
         }

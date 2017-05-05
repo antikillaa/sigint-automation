@@ -1,71 +1,47 @@
 package model;
 
+import abs.AbstractEntity;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class Permission {
+public class Permission extends AbstractEntity {
 
-    private ArrayList<String> titles = new ArrayList<>();
-    private ArrayList<String> actions = new ArrayList<>();
-    private PermissionRecord record;
+    private String category;
+    private String description;
+    private String displayName;
+    private String name;
 
-    public ArrayList<String> getTitles() {
-        return titles;
+    public String getCategory() {
+        return category;
     }
 
-    public void setTitles(ArrayList<String> titles) {
-        this.titles = titles;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public ArrayList<String> getActions() {
-        return actions;
+    public String getDescription() {
+        return description;
     }
 
-    public void setActions(ArrayList<String> actions) {
-        this.actions = actions;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public PermissionRecord getRecord() {
-        return record;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setRecord(PermissionRecord record) {
-        this.record = record;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
-    public class PermissionRecord {
+    public String getName() {
+        return name;
+    }
 
-        private List<String> clearances;
-        private List<String> dataSources;
-        private List<String> organizations;
-
-        public List<String> getClearances() {
-            return clearances;
-        }
-
-        public void setClearances(List<String> clearances) {
-            this.clearances = clearances;
-        }
-
-        public List<String> getDataSources() {
-            return dataSources;
-        }
-
-        public void setDataSources(List<String> dataSources) {
-            this.dataSources = dataSources;
-        }
-
-        public List<String> getOrganizations() {
-            return organizations;
-        }
-
-        public void setOrganizations(List<String> organizations) {
-            this.organizations = organizations;
-        }
+    public void setName(String name) {
+        this.name = name;
     }
 }
