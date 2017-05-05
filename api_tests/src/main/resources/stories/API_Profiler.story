@@ -236,6 +236,11 @@ When I send get profile details request
 Then Request is successful
 And Profile is correct
 
+When I send get first merged profile details request
+Then Request is unsuccessful
+When I send get second merged profile details request
+Then Request is unsuccessful
+
 
 Scenario: (New profiler) Addition of new child target group
 When I send create target group request
