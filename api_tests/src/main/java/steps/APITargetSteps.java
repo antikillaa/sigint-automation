@@ -1,12 +1,21 @@
 package steps;
 
+import static conditions.Conditions.isTrue;
+
 import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import file_generator.FileGenerator;
 import json.JsonConverter;
 import http.OperationResult;
-import model.*;
+import java.util.ArrayList;
+import java.util.List;
+import model.G4File;
+import model.GenerationMatrix;
+import model.Target;
+import model.TargetFilter;
+import model.TargetGroup;
+import model.UploadResult;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
@@ -16,11 +25,6 @@ import org.junit.Assert;
 import services.TargetService;
 import utils.Parser;
 import utils.RandomGenerator;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static conditions.Conditions.isTrue;
 
 @SuppressWarnings("unchecked")
 public class APITargetSteps extends APISteps {

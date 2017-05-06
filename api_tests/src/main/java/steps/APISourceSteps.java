@@ -121,7 +121,7 @@ public class APISourceSteps extends APISteps {
         Verify.shouldBe(Conditions.isTrue.element(source.getName().contains("DELETED at")));
     }
 
-    @Given("data source with $sourceType and $recordType exists")
+    @Given("Data source with $sourceType and $recordType exists")
     public void getDataSourceWithSourceTypeAndRecordType(String sType, String rType) {
         SourceType sourceType = SourceType.valueOf(sType);
         RecordType recordType = RecordType.valueOf(rType);
@@ -133,6 +133,7 @@ public class APISourceSteps extends APISteps {
                 try {
                     RecordType entityRecordType = source.getRecordType();
                     if (entityRecordType.equals(recordType)) {
+                        log.info(source.getName() + " source will be used");
                         context.put("source", source);
                         return;
                     }
