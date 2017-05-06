@@ -13,8 +13,8 @@ import java.util.List;
 
 public class UploadFilesService {
 
+    private static final Logger log = Logger.getLogger(UploadFilesService.class);
     private static G4HttpClient g4HttpClient = new G4HttpClient();
-    private static Logger log = Logger.getLogger(UploadFilesService.class);
     private static UploadFilesRequest uploadFilesRequest = new UploadFilesRequest();
     private static UploadRequest uploadRequest = new UploadRequest();
 
@@ -26,7 +26,8 @@ public class UploadFilesService {
      * @return {@link OperationResult}
      */
     public OperationResult<FileMeta> upload(G4File file, Source source, String ownerId) {
-        log.info("Upload file" + file.getAbsolutePath() + " with 'meta' string..");
+        log.info("Uploading file " + file.getAbsolutePath() + " with 'meta' string...");
+
         G4Response uploadResponse = g4HttpClient.sendRequest(uploadFilesRequest.upload(file, source, ownerId));
 
         OperationResult<FileMeta> uploadResult = new OperationResult<>(uploadResponse, FileMeta.class);

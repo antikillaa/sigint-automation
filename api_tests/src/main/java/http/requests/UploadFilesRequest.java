@@ -1,18 +1,19 @@
 package http.requests;
 
 import http.HttpMethod;
-import json.JsonConverter;
-import model.*;
-import org.apache.log4j.Logger;
-
-import javax.ws.rs.core.MediaType;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.ws.rs.core.MediaType;
+import json.JsonConverter;
+import model.FileMeta;
+import model.G4File;
+import model.Meta;
+import model.MetaProperties;
+import model.Source;
 
 public class UploadFilesRequest extends HttpRequest {
 
-    private final static String URI = "/api/upload/files";
-    private Logger log = Logger.getLogger(UploadFilesRequest.class);
+    private final static String URI = "/api/upload/files/";
 
     public UploadFilesRequest() {
         super(URI);
@@ -26,7 +27,9 @@ public class UploadFilesRequest extends HttpRequest {
      * @return GET meta of uploaded file request
      */
     public UploadFilesRequest meta(String id) {
-        setURI(URI + "/" + id + "/meta");
+        setURI(URI + id + "/meta")
+                .setHttpMethod(HttpMethod.GET) ;
+
         return this;
     }
     
@@ -57,9 +60,10 @@ public class UploadFilesRequest extends HttpRequest {
         String meta = JsonConverter.toJsonString(fileMeta);
         addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         addBodyString("meta", meta);
-        file.deleteOnExit();
 
-        this.setHttpMethod(HttpMethod.POST);
+        file.deleteOnExit();
+        this.setURI(URI).setHttpMethod(HttpMethod.POST);
+
         return this;
     }
 
