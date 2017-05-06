@@ -3,7 +3,6 @@ package utils;
 import app_context.AppContext;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
-import org.apache.log4j.Logger;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -11,13 +10,11 @@ import java.util.*;
 
 public class RandomGenerator {
 
-    private static Logger log = Logger.getLogger(RandomGenerator.class);
     private static AppContext context = AppContext.get();
-    
     
     public static int generateRandomInteger(int minNumber, int maxNumber) {
         Random random = new Random();
-        return random.nextInt((maxNumber-minNumber)+1) + minNumber;
+        return random.nextInt((maxNumber - minNumber) + 1) + minNumber;
     }
 
     public static String generatePhone() {
@@ -54,14 +51,12 @@ public class RandomGenerator {
 
     public static String getRandomCountry() {
         List<String> countries = new LinkedList<>(context.getCountries().values());
-        String country = countries.get(RandomUtils.nextInt(countries.size() - 1));
-        return country;
+        return countries.get(RandomUtils.nextInt(countries.size() - 1));
     }
 
     public static String getRandomLanguage() {
         List<String> languages = new LinkedList<>(context.getLanguages().values());
-        String language = languages.get(RandomUtils.nextInt(languages.size() - 1));
-        return language;
+        return languages.get(RandomUtils.nextInt(languages.size() - 1));
     }
 
     public static LinkedHashSet<String> generateRandomStrings(int maxNumber) {
@@ -79,7 +74,14 @@ public class RandomGenerator {
         int index = RandomUtils.nextInt(list.size());
         return list.get(index);
     }
-    
+
+    public static <T> List<T> getRandomItemsFromList(List<T> list, Integer maxCount) {
+        Set<T> set = new HashSet<>();
+        for (int i = 0; i < maxCount; i++) {
+            set.add(getRandomItemFromList(list));
+        }
+        return Arrays.asList((T[]) set.toArray());
+    }
 
     public static String todayDateInterval() {
 
@@ -192,14 +194,11 @@ public class RandomGenerator {
                 suffix.trim();
     }
 
-    public static String generateEmail(){
-        int size = generateRandomInteger(3,15);
+    public static String generateEmail() {
+        int size = generateRandomInteger(3, 15);
         String username = RandomStringUtils.randomAlphanumeric(size);
-        return username+"@gmail.com";
-
+        return username + "@gmail.com";
     }
-
-
 
 }
 

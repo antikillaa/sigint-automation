@@ -8,6 +8,7 @@ public class AuthResponseResult {
   private String code;
   private String message;
   private AuthError[] errors;
+  private String info;
 
   public String getCode() {
     return code;
@@ -31,6 +32,14 @@ public class AuthResponseResult {
 
   public void setErrors(AuthError[] errors) {
     this.errors = errors;
+  }
+
+  public String getInfo() {
+    return info;
+  }
+
+  public void setInfo(String info) {
+    this.info = info;
   }
 
   private class AuthError {

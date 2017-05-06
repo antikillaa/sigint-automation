@@ -1,6 +1,7 @@
 package http.requests;
 
 import http.HttpMethod;
+import model.Responsibility;
 
 public class ResponsibilityRequest extends HttpRequest {
 
@@ -17,6 +18,36 @@ public class ResponsibilityRequest extends HttpRequest {
     public ResponsibilityRequest list() {
         this
                 .setURI(URI)
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
+    public ResponsibilityRequest create(Responsibility responsibility) {
+        this
+                .setURI(URI)
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(responsibility);
+        return this;
+    }
+
+    public ResponsibilityRequest delete(String id) {
+        this
+                .setURI(URI + "/" + id)
+                .setHttpMethod(HttpMethod.DELETE);
+        return this;
+    }
+
+    public ResponsibilityRequest update(Responsibility responsibility) {
+        this
+                .setURI(URI + "/" + responsibility.getId())
+                .setHttpMethod(HttpMethod.PUT)
+                .setPayload(responsibility);
+        return this;
+    }
+
+    public ResponsibilityRequest view(Responsibility responsibility) {
+        this
+                .setURI(URI + "/" + responsibility.getId())
                 .setHttpMethod(HttpMethod.GET);
         return this;
     }

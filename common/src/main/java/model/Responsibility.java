@@ -1,6 +1,7 @@
 package model;
 
 import abs.TeelaEntity;
+import data_for_entity.annotations.DataIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -12,7 +13,9 @@ public class Responsibility extends TeelaEntity {
 
     private String description;
     private String displayName;
+    @DataIgnore
     private Boolean isDeleted;
+    @DataIgnore
     private List<String> permissions;
 
     public String getDisplayName() {
@@ -31,11 +34,11 @@ public class Responsibility extends TeelaEntity {
         this.description = description;
     }
 
-    public Boolean getDeleted() {
+    public Boolean getIsDeleted() {
         return isDeleted;
     }
 
-    public void setDeleted(Boolean deleted) {
+    public void setIsDeleted(Boolean deleted) {
         isDeleted = deleted;
     }
 
