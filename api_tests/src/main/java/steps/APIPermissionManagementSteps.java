@@ -63,38 +63,43 @@ public class APIPermissionManagementSteps extends APISteps {
 
     @When("I send create a new responsibility request")
     public void createNewResponsibility() {
-        List<Permission> permissions = context.get("permissionList", List.class);
-
-        // get random collection of permission
-        int minNumber = 1;
-        int maxNumber = 10;
-        List<Permission> randomPermissionList = RandomGenerator
-                .getRandomItemsFromList(permissions, RandomGenerator.generateRandomInteger(minNumber, maxNumber));
-        List<String> permissionNames = getListOfPermissionNames(randomPermissionList);
-        context.put("permissionNameList", permissionNames);
-
-        // create responsibility with random collection of permissions
         Responsibility responsibility = createRandomResponsibility();
-        responsibility.setPermissions(permissionNames);
         context.put("responsibility", responsibility);
 
         responsibilityService.add(responsibility);
     }
 
     private static Responsibility createRandomResponsibility() {
-        return objectInitializer.randomEntity(Responsibility.class);
+        Responsibility responsibility = objectInitializer.randomEntity(Responsibility.class);
+
+        int maxPermissionsNumber = 10;
+        List<String> permissionNames = getRandomListOfPermissionNames(maxPermissionsNumber);
+        responsibility.setPermissions(permissionNames);
+
+        return responsibility;
     }
 
-    private static List<String> getListOfPermissionNames(List<Permission> permissions) {
-        List<String> permissionNameList = new ArrayList<>();
-        List<Permission> permissions1 = permissions.stream()
-                .peek((permission) -> permissionNameList.add(permission.getName())).collect(Collectors.toList());
-        return permissionNameList;
+    private static List<String> getRandomListOfPermissionNames(Integer maxNumber) {
+        List<Permission> permissions = context.get("permissionList", List.class);
+        if (permissions == null || permissions.isEmpty()) {
+            permissions = permissionService.list().getEntity();
+        }
+
+        // get random collection of permission
+        int minNumber = 1;
+        List<Permission> randomPermissionList = RandomGenerator
+                .getRandomItemsFromList(permissions, RandomGenerator.generateRandomInteger(minNumber, maxNumber));
+
+        List<String> permissionNames = new ArrayList<>();
+        randomPermissionList = randomPermissionList.stream()
+                .peek((permission) -> permissionNames.add(permission.getName()))
+                .collect(Collectors.toList());
+
+        return permissionNames;
     }
 
     @Then("Responsibility is correct")
     public void createdResponsibilityShoudBeCorrect(){
-        List<String> permissions = context.get("permissionNameList", List.class);
         Responsibility responsibility = context.get("responsibility", Responsibility.class);
         Responsibility createdResponsibility = Entities.getResponsibilities().getLatest();
 
@@ -125,5 +130,16 @@ public class APIPermissionManagementSteps extends APISteps {
         } else {
             Assert.assertFalse(matched);
         }
+    }
+
+    @When("I send update responsibility request")
+    public void updateResponsibility() {
+        Responsibility responsibility = Entities.getResponsibilities().getLatest();
+
+        Responsibility updatedResponsibility = createRandomResponsibility();
+        updatedResponsibility.setId(responsibility.getId());
+        context.put("responsibility", updatedResponsibility);
+
+        responsibilityService.update(updatedResponsibility);
     }
 }

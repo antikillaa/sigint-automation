@@ -53,3 +53,20 @@ Then Request is successful
 When I send get list of responsibilities request
 Then Request is successful
 And Responsibility is not in the list
+
+
+Scenario: API.Updating of new responsibility
+When I send get list of permission request
+Then Request is successful
+And Permission list size more than 0
+
+When I send create a new responsibility request
+Then Request is successful
+And Responsibility is correct
+
+When I send update responsibility request
+Then Request is successful
+And Responsibility is correct
+
+When I send delete responsibility request
+Then Request is successful
