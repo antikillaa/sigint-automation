@@ -2,16 +2,14 @@ package steps;
 
 import static org.junit.Assert.assertNotNull;
 
-import docker.DockerService;
-import docker.adapters.FSMSDockerAdapter;
-import docker.adapters.IDockerAdapter;
-import docker.adapters.SSMSDockerAdapter;
-import docker.adapters.TSMSDockerAdapter;
-import java.io.File;
-import java.io.IOException;
+import ingestion.DockerDataGenerator;
+import ingestion.docker.adapters.FSMSDockerAdapter;
+import ingestion.docker.adapters.IDockerAdapter;
+import ingestion.docker.adapters.SSMSDockerAdapter;
+import ingestion.docker.adapters.TSMSDockerAdapter;
+import ingestion.IngestionService;
 import model.G4File;
 import model.SourceType;
-import org.apache.commons.io.FileUtils;
 import org.jbehave.core.annotations.Given;
 
 public class APIDataGeneratorSteps extends APISteps {
@@ -21,36 +19,34 @@ public class APIDataGeneratorSteps extends APISteps {
 
         SourceType sourceType = SourceType.valueOf(sType);
 
-        DockerService dockerService = null;
+        IDockerAdapter dockerAdapter = null;
         switch (sourceType) {
             case Strategic:
-                dockerService = new DockerService(new SSMSDockerAdapter());
+                dockerAdapter = new SSMSDockerAdapter();
                 break;
             case Tactical:
-                dockerService = new DockerService(new TSMSDockerAdapter());
+                dockerAdapter = new TSMSDockerAdapter();
                 break;
             case F:
-                dockerService = new DockerService(new FSMSDockerAdapter());
+                dockerAdapter = new FSMSDockerAdapter();
                 break;
             default:
                 log.error("Unknown source type: " + sType);
                 break;
         }
-        assertNotNull("Can't create docker service", dockerService);
-        dockerService.generateDataInContainer(rCount);
+        assertNotNull("Can't assign proper ingestion.docker adapter", dockerAdapter);
 
-        G4File file = dockerService.getGeneratedFile();
+        IngestionService ingestionService = new IngestionService(new DockerDataGenerator(dockerAdapter));
+        IngestionService.cleanIngestionDir();
+        G4File file = ingestionService.getGenerator().generateIngestionFile(rCount);
         context.put("g4file", file);
     }
 
-    @Given("Ingestion directory is clean")
-    public void cleanIngestionDir() {
-        String ingestionDir = IDockerAdapter.VOLUME_MOUNT_POINT.toString();
-        FileUtils.deleteQuietly(new File(ingestionDir));
-        try {
-            FileUtils.forceMkdir(new File(ingestionDir));
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
+    @Given("$sType - $rType data file is renamed to make filename unique")
+    public void renameIngestionFile(String sType, String rType) {
+        G4File sourceFile = context.get("g4file", G4File.class);
+        G4File renamed = IngestionService.renameFile(sourceFile, String.format("%s_%s", sType, rType));
+
+        context.put("g4file", renamed);
     }
 }

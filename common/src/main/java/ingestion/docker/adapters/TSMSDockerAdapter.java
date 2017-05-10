@@ -1,13 +1,12 @@
-package docker.adapters;
+package ingestion.docker.adapters;
 
-import static docker.DockerConfig.getTDataConfig;
+import static ingestion.docker.DockerConfig.getTDataConfig;
 
 import com.spotify.docker.client.messages.ContainerConfig;
 
 public class TSMSDockerAdapter implements IDockerAdapter  {
 
   private static final String[] filemasks = {"tactical*"};
-  private static final String fileSuffix = "_TSMS.xls";
 
   @Override
   public ContainerConfig getContainerConfig(String recordsCount) {
@@ -17,11 +16,6 @@ public class TSMSDockerAdapter implements IDockerAdapter  {
   @Override
   public String[] getFilemasks() {
     return filemasks;
-  }
-
-  @Override
-  public String getFileSuffix() {
-    return fileSuffix;
   }
 
 }

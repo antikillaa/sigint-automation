@@ -1,20 +1,16 @@
-package docker;
+package ingestion;
 
-import static docker.DockerConfig.getDockerClient;
+import static ingestion.docker.DockerConfig.getDockerClient;
+import static ingestion.IngestionService.INGESTION_DIR;
 import static org.junit.Assert.assertNotNull;
 import static utils.FileHelper.getFilesByWildcards;
 
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.ContainerCreation;
-import docker.adapters.IDockerAdapter;
+import ingestion.docker.adapters.IDockerAdapter;
 import error_reporter.ErrorReporter;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 import javax.ws.rs.core.MediaType;
@@ -22,18 +18,18 @@ import model.G4File;
 import model.PegasusMediaType;
 import org.apache.log4j.Logger;
 
-public class DockerService {
+public class DockerDataGenerator implements IIngestionDataGenerator {
 
-  private static final Logger log = Logger.getLogger(DockerService.class);
+  private static final Logger log = Logger.getLogger(DockerDataGenerator.class);
   private DockerClient docker;
   private final IDockerAdapter dockerAdapter;
 
-  public DockerService(IDockerAdapter dockerAdapter) {
+  public DockerDataGenerator(IDockerAdapter dockerAdapter) {
     this.dockerAdapter = dockerAdapter;
     this.docker = getDockerClient();
   }
 
-  public void generateDataInContainer(String recordsCount) {
+  private void generateDataInContainer(String recordsCount) {
     assertNotNull("Can't init container config", dockerAdapter.getContainerConfig(recordsCount));
     try {
       final ContainerCreation creation = docker.createContainer(dockerAdapter.getContainerConfig(recordsCount));
@@ -49,8 +45,12 @@ public class DockerService {
     }
   }
 
-  public G4File getGeneratedFile() {
-    String path = IDockerAdapter.VOLUME_MOUNT_POINT.normalize().toString();
+  @Override
+  public G4File generateIngestionFile(String recordsCount) {
+
+    generateDataInContainer(recordsCount);
+
+    String path = INGESTION_DIR.normalize().toString();
     List<File> files = getFilesByWildcards(path, dockerAdapter.getFilemasks());
     if (files.isEmpty()) {
       ErrorReporter.raiseError(String.format("Can't find files by mask %s in %s",
@@ -59,7 +59,7 @@ public class DockerService {
     log.info("List of found files: " + files);
 
     MediaType mediaType;
-    String newFilename = renameFile(files.get(0));
+    String newFilename = files.get(0).getPath();
     if (newFilename.endsWith(".csv")) {
       mediaType = PegasusMediaType.TEXT_CSV_TYPE;
     } else {
@@ -69,20 +69,5 @@ public class DockerService {
     G4File g4File = new G4File(newFilename);
     g4File.setMediaType(mediaType);
     return g4File;
-  }
-
-  private String renameFile(File sourceFile) {
-    String epochTime = String.valueOf(System.currentTimeMillis());
-    Path source  = sourceFile.toPath();
-    Path target = Paths.get(source.getParent().toString(), epochTime + dockerAdapter.getFileSuffix());
-
-    log.info(String.format("Renaming %s to %s", source.getFileName(), target.getFileName()));
-    try {
-      Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
-    } catch (IOException e) {
-      log.error(e.getMessage());
-    }
-
-    return target.toString();
   }
 }

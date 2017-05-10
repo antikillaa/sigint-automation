@@ -1,6 +1,6 @@
-package docker;
+package ingestion.docker;
 
-import static docker.adapters.IDockerAdapter.VOLUME_MOUNT_POINT;
+import static ingestion.IngestionService.INGESTION_DIR;
 
 import app_context.properties.DockerProperties;
 import com.spotify.docker.client.DefaultDockerClient;
@@ -10,12 +10,13 @@ import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.messages.ContainerConfig;
 import com.spotify.docker.client.messages.HostConfig;
+import ingestion.DockerDataGenerator;
 import java.nio.file.Paths;
 import org.apache.log4j.Logger;
 
 public class DockerConfig {
 
-  private static final Logger log = Logger.getLogger(DockerService.class);
+  private static final Logger log = Logger.getLogger(DockerDataGenerator.class);
   private static DockerProperties props =  new DockerProperties();
 
   public static DockerClient getDockerClient() {
@@ -35,7 +36,7 @@ public class DockerConfig {
   public static ContainerConfig getTDataConfig(String... cmd) {
 
     final HostConfig hostConfig = HostConfig.builder()
-        .appendBinds(VOLUME_MOUNT_POINT + ":/src/test_data")
+        .appendBinds(INGESTION_DIR + ":/src/test_data")
         .build();
 
     ContainerConfig.Builder containerBuilder = ContainerConfig.builder();

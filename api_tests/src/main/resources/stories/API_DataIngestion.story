@@ -6,8 +6,8 @@ Scenario: API.T-SMS ingestion
 Meta: @nightly
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And Ingestion directory is clean
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> data file is renamed to make filename unique
 When I send upload data file request
 Then Request is successful
 When Uploaded file is processed
@@ -26,8 +26,8 @@ Scenario: API.F-SMS ingestion
 Meta: @nightly
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And Ingestion directory is clean
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> data file is renamed to make filename unique
 When I send upload data file request
 Then Request is successful
 When Uploaded file is processed
@@ -46,8 +46,8 @@ Scenario: API.S-SMS ingestion
 Meta: @nightly
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And Ingestion directory is clean
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> data file is renamed to make filename unique
 When I send upload data file request
 Then Request is successful
 When Uploaded file is processed
