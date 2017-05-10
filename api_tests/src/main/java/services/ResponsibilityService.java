@@ -74,6 +74,13 @@ public class ResponsibilityService implements EntityService<Responsibility> {
 
     @Override
     public OperationResult<Responsibility> view(String id) {
-        throw new NotImplementedException();
+        log.info("Getting responsibility by id:" + id);
+        G4Response response = g4HttpClient.sendRequest(request.view(id));
+
+        OperationResult<Responsibility> operationResult = new OperationResult<>(response, Responsibility.class);
+        if (operationResult.isSuccess()) {
+            Entities.getResponsibilities().addOrUpdateEntity(operationResult.getEntity());
+        }
+        return operationResult;
     }
 }

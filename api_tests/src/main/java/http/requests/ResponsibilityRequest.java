@@ -45,9 +45,9 @@ public class ResponsibilityRequest extends HttpRequest {
         return this;
     }
 
-    public ResponsibilityRequest view(Responsibility responsibility) {
+    public ResponsibilityRequest view(String id) {
         this
-                .setURI(URI + "/" + responsibility.getId())
+                .setURI(URI + "/" + id)
                 .setHttpMethod(HttpMethod.GET);
         return this;
     }

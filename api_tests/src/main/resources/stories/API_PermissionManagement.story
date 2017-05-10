@@ -70,3 +70,19 @@ And Responsibility is correct
 
 When I send delete responsibility request
 Then Request is successful
+
+
+Scenario: API.Getting a responsibility by id
+When I send get list of permission request
+Then Request is successful
+And Permission list size more than 0
+
+When I send create a new responsibility request
+Then Request is successful
+
+When I send get responsibility details request
+Then Request is successful
+And Responsibility is correct
+
+When I send delete responsibility request
+Then Request is successful

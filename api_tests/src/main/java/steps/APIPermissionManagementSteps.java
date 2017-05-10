@@ -142,4 +142,12 @@ public class APIPermissionManagementSteps extends APISteps {
 
         responsibilityService.update(updatedResponsibility);
     }
+
+    @When("I send get responsibility details request")
+    public void getResponsobilityDetails() {
+        Responsibility responsibility = Entities.getResponsibilities().getLatest();
+        context.put("responsibility", responsibility);
+
+        responsibilityService.view(responsibility.getId());
+    }
 }
