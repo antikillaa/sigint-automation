@@ -1,15 +1,19 @@
 package services;
 
 import abs.SearchFilter;
-import errors.OperationResultError;
-import http.*;
+import http.G4HttpClient;
+import http.G4Response;
+import http.OperationResult;
 import http.requests.UploadFilesRequest;
 import http.requests.UploadRequest;
-import model.*;
-import model.Process;
-import org.apache.log4j.Logger;
-
 import java.util.List;
+import model.FileMeta;
+import model.G4File;
+import model.Process;
+import model.Source;
+import model.UploadDetails;
+import model.UploadSearchResult;
+import org.apache.log4j.Logger;
 
 public class UploadFilesService {
 
@@ -32,7 +36,8 @@ public class UploadFilesService {
 
         OperationResult<FileMeta> uploadResult = new OperationResult<>(uploadResponse, FileMeta.class);
         if (!uploadResult.isSuccess()) {
-            throw new OperationResultError(uploadResult);
+            // do not notify sigint, return failed response
+            return uploadResult;
         }
 
         G4Response notifyResponse = sendNotify(uploadResult.getEntity());
