@@ -16,19 +16,12 @@ import java.io.File;
 @JsonIgnoreProperties(value = {"URI", "context", "httpMethod", "mediaType", "payload"})
 public class HttpRequest {
 
-    /**
-     * URL path
-     */
-    private String URI;
-    /**
-     * HTTP request httpMethod, such as: GET/PUT/POST/DELETE
-     */
-    private HttpMethod httpMethod;
+    private static final Logger log = Logger.getLogger(HttpRequest.class);
+    private String URI; // URL path
+    private HttpMethod httpMethod; // HTTP request httpMethod, such as: GET/PUT/POST/DELETE
     private String mediaType;
     private Object payload;
     private MultiPart multiPart;
-
-    private Logger log = Logger.getLogger(HttpRequest.class);
 
     /**
      * Build HTTP request.
@@ -40,8 +33,6 @@ public class HttpRequest {
         this.URI = URI;
         httpMethod = HttpMethod.GET;
         mediaType = MediaType.APPLICATION_JSON;
-        multiPart = new MultiPart();
-        multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
     }
 
     public String getURI() {
@@ -89,16 +80,14 @@ public class HttpRequest {
      * @return HttpRequest
      */
     protected HttpRequest addBodyFile(String name, File file, MediaType type) {
-        log.debug("Adding file to multipart body...");
+        log.debug("Adding file " + file.getName() + " to multipart body...");
+
+        cleanMultiPart();
         FileDataBodyPart filePart = new FileDataBodyPart(name, file, type);
-
-        multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
         multiPart.bodyPart(filePart);
-
         setPayload(multiPart);
 
         file.deleteOnExit();
-
         return this;
     }
 
@@ -110,12 +99,21 @@ public class HttpRequest {
      * @return HttpRequest
      */
     protected HttpRequest addBodyString(String fieldName, String value) {
+        if (multiPart == null) {
+            cleanMultiPart();
+        }
         FormDataBodyPart part = new FormDataBodyPart(fieldName, value);
         multiPart.bodyPart(part);
-
         setPayload(multiPart);
 
         return this;
     }
 
+    /**
+     * Clean Miltipart payload to avoid problems with instance reuse for upload
+     */
+    private void cleanMultiPart() {
+        multiPart = new MultiPart();
+        multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
+    }
 }

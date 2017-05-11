@@ -1,16 +1,18 @@
 package utils;
 
-import org.apache.log4j.Logger;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import org.apache.log4j.Logger;
 
 public class DateHelper {
 
     private static Logger log = Logger.getLogger(DateHelper.class);
+    private static Instant start;
 
     public static Date yesterday() {
         Calendar calendar = Calendar.getInstance();
@@ -70,6 +72,17 @@ public class DateHelper {
         Calendar date = Calendar.getInstance();
         date.add(Calendar.SECOND, shiftInSecs);
         return date.getTime();
+    }
+
+    public static void setStartTime() {
+        start = Instant.now();
+    }
+
+    public static long getDuration() {
+        Instant stop = Instant.now();
+        Duration dur = Duration.between(start, stop);
+
+        return dur.getSeconds();
     }
 
 }

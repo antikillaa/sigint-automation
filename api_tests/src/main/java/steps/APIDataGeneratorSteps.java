@@ -1,56 +1,52 @@
 package steps;
 
-import data_generator.DataGenerator;
-import file_generator.FileGenerator;
-import model.*;
-import model.bulders.SSMSGenerator;
-import org.jbehave.core.annotations.Given;
-import org.junit.Assert;
+import static org.junit.Assert.assertNotNull;
 
-import java.util.List;
+import ingestion.DockerDataGenerator;
+import ingestion.docker.adapters.FSMSDockerAdapter;
+import ingestion.docker.adapters.IDockerAdapter;
+import ingestion.docker.adapters.SSMSDockerAdapter;
+import ingestion.docker.adapters.TSMSDockerAdapter;
+import ingestion.IngestionService;
+import model.G4File;
+import model.SourceType;
+import org.jbehave.core.annotations.Given;
 
 public class APIDataGeneratorSteps extends APISteps {
 
-    @Given("$sType - $rType data file with records for test targets was generated")
-    public void generateEntityList(String sType, String rType) {
+    @Given("$sType - $rType data file with $rCount records was generated")
+    public void generateEntityList(String sType, String rType, String rCount) {
 
         SourceType sourceType = SourceType.valueOf(sType);
-        RecordType recordType = RecordType.valueOf(rType);
 
-        GenerationMatrix matrix = context.get("generationMatrix", GenerationMatrix.class);
-
-        G4File file = null;
-        List<G4Record> list = null;
-
+        IDockerAdapter dockerAdapter = null;
         switch (sourceType) {
             case Strategic:
-                switch (recordType) {
-                    case SMS:
-                        list = new SSMSGenerator().produceSSMSListByMatrix(matrix);
-                        file = new FileGenerator(SSMS.class).write(list);
-                        break;
-                    default:
-                        break;
-                }
+                dockerAdapter = new SSMSDockerAdapter();
+                break;
+            case Tactical:
+                dockerAdapter = new TSMSDockerAdapter();
                 break;
             case F:
-                switch (recordType) {
-                    case SMS:
-                        list = new DataGenerator(FSMS.class).produceListByMatrix(matrix);
-                        file = new FileGenerator(FSMS.class).write(list);
-                        break;
-                    default:
-                        break;
-                }
+                dockerAdapter = new FSMSDockerAdapter();
                 break;
             default:
+                log.error("Unknown source type: " + sType);
                 break;
         }
+        assertNotNull("Can't assign proper ingestion.docker adapter", dockerAdapter);
 
+        IngestionService ingestionService = new IngestionService(new DockerDataGenerator(dockerAdapter));
+        IngestionService.cleanIngestionDir();
+        G4File file = ingestionService.getGenerator().generateIngestionFile(rCount);
         context.put("g4file", file);
-        context.put("entitiesList", list);
-
-        Assert.assertNotNull("Data file does not create!", file);
     }
 
+    @Given("$sType - $rType data file is renamed to make filename unique")
+    public void renameIngestionFile(String sType, String rType) {
+        G4File sourceFile = context.get("g4file", G4File.class);
+        G4File renamed = IngestionService.renameFile(sourceFile, String.format("%s_%s", sType, rType));
+
+        context.put("g4file", renamed);
+    }
 }

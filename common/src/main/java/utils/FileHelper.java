@@ -1,9 +1,18 @@
 package utils;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Writer;
+import java.util.List;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.log4j.Logger;
-
-import java.io.*;
 
 public class FileHelper {
 
@@ -64,6 +73,12 @@ public class FileHelper {
             log.error(e.getMessage());
             return null;
         }
+    }
+
+    public static List<File> getFilesByWildcards(String directoryName, String[] extensions) {
+        File directory = new File(directoryName);
+        return (List<File>)
+            FileUtils.listFiles(directory, new WildcardFileFilter(extensions), TrueFileFilter.INSTANCE);
     }
 
 }
