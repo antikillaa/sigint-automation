@@ -122,8 +122,8 @@ public class APIPermissionManagementSteps extends APISteps {
         List<Responsibility> responsibilities = context.get("responsibilityList", List.class);
         Responsibility responsibility = context.get("responsibility", Responsibility.class);
 
-        boolean matched = responsibilities.stream().anyMatch(
-                (r -> r.getDisplayName().equals(responsibility.getDisplayName())));
+        boolean matched = responsibilities.stream()
+                .anyMatch((r -> r.getDisplayName().equals(responsibility.getDisplayName())));
 
         if (criteria.equals("in")) {
             Assert.assertTrue(matched);
@@ -150,4 +150,92 @@ public class APIPermissionManagementSteps extends APISteps {
 
         responsibilityService.view(responsibility.getId());
     }
+
+    @When("I send create a new title request")
+    public void createTitle() {
+        Title title = createRandomTitle();
+        context.put("title", title);
+
+        titleService.add(title);
+    }
+
+    private static Title createRandomTitle() {
+        int maxResponsibilitiesNumber = 5;
+
+        Title title = objectInitializer.randomEntity(Title.class);
+        title.setResponsibilities(getRandomListOfResponsibilitiesIDs(maxResponsibilitiesNumber));
+
+        return title;
+    }
+
+    private static List<String> getRandomListOfResponsibilitiesIDs(Integer maxNumber) {
+        List<Responsibility> responsibilities = context.get("responsibilityList", List.class);
+        if (responsibilities == null || responsibilities.isEmpty()) {
+            responsibilities = responsibilityService.list().getEntity();
+        }
+
+        // get random collection of responsibilities
+        List<Responsibility> randomItemsFromList = RandomGenerator.getRandomItemsFromList(responsibilities, maxNumber);
+
+        List<String> responsibilitiesIDs = new ArrayList<>();
+        randomItemsFromList = randomItemsFromList.stream()
+                .peek((responsibility) -> responsibilitiesIDs.add(responsibility.getId()))
+                .collect(Collectors.toList());
+
+        return responsibilitiesIDs;
+    }
+
+    @Then("Title is correct")
+    public void titleShouldBeCorrect() {
+        Title title = context.get("title", Title.class);
+        Title createdTitle = Entities.getTitles().getLatest();
+
+        Assert.assertEquals(title.getDescription(), createdTitle.getDescription());
+        Assert.assertEquals(title.getDisplayName(), createdTitle.getDisplayName());
+        Assert.assertFalse(createdTitle.getIsDeleted());
+        Verify.shouldBe(Conditions.equals(title.getResponsibilities(), createdTitle.getResponsibilities()));
+    }
+
+    @When("I send delete title request")
+    public void deleteTitle() {
+        Title title = Entities.getTitles().getLatest();
+        context.put("title", title);
+
+        titleService.remove(title);
+    }
+
+    @When("I send get title details request")
+    public void getTitleDetails() {
+        Title title = Entities.getTitles().getLatest();
+        context.put("title", title);
+
+        titleService.view(title.getId());
+    }
+
+    @Then("Title is $criteria the list")
+    public void checkTitleInList(String criteria) {
+        List<Title> titles = context.get("titleList", List.class);
+        Title title = context.get("title", Title.class);
+
+        boolean matched = titles.stream()
+                .anyMatch((r -> r.getId().equals(title.getId())));
+
+        if (criteria.equals("in")) {
+            Assert.assertTrue(matched);
+        } else {
+            Assert.assertFalse(matched);
+        }
+    }
+
+    @When("I send update title request")
+    public void updateTitle() {
+        Title title = Entities.getTitles().getLatest();
+
+        Title updatedTitle = createRandomTitle();
+        updatedTitle.setId(title.getId());
+        context.put("title", updatedTitle);
+
+        titleService.update(updatedTitle);
+    }
+
 }
