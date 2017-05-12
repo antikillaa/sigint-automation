@@ -3,19 +3,19 @@ package steps;
 import app_context.entities.Entities;
 import error_reporter.ErrorReporter;
 import http.OperationResult;
+import java.util.Date;
+import java.util.List;
 import json.JsonConverter;
 import model.Team;
 import model.User;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
+import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TeamService;
 import services.UserService;
-
-import java.util.Date;
-import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class APIUserSteps extends APISteps {
@@ -29,6 +29,16 @@ public class APIUserSteps extends APISteps {
 
     private String generatePassword() {
         return RandomStringUtils.randomAlphanumeric(PASSWORD_LENGTH);
+    }
+
+    @AfterStory
+    public void deleteDefaultTeam() {
+        if (UserService.getDefaultTeamId() != null) {
+            log.info("Trying to remove default team...");
+            Team team = teamService.view(UserService.getDefaultTeamId()).getEntity();
+            teamService.remove(team);
+            UserService.setDefaultTeamId(null);
+        }
     }
 
     @Then("Created user is correct")
@@ -52,7 +62,11 @@ public class APIUserSteps extends APISteps {
     @When("I send delete user request")
     public void deleteUser() {
         User createdUser = Entities.getUsers().getLatest();
-        service.remove(createdUser);
+        if (createdUser.getCreatedBy() == null) {
+            log.error("You are trying to delete system user " + createdUser.getName());
+        } else {
+            service.remove(createdUser);
+        }
     }
 
     @When("I send get list of users")
@@ -88,6 +102,7 @@ public class APIUserSteps extends APISteps {
         User user = getRandomUser();
 
         if (UserService.getDefaultTeamId() == null) {
+            log.info("Create default team");
             Team team = objectInitializer.randomEntity(Team.class);
             String teamId = teamService.add(team).getEntity().getId();
             UserService.setDefaultTeamId(teamId);

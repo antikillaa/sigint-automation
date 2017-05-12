@@ -92,7 +92,7 @@ Then Request is successful
 And Users list size more than 0
 
 
-Scenario: API.User as <role> is able to sign out
+Scenario: API.User is able to sign out
 Given I sign in as <role> user
 When I send get current user request
 Then Request is successful

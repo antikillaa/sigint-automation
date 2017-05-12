@@ -2,13 +2,13 @@ Meta:
 @story records
 
 
-Scenario: API.User creates manual record - SMS
+Scenario: User is able to create a manual record (SMS TEXT)
 Given I sign in as admin user
 When I send create manual record - SMS
 Then Request is successful
 And Created record is correct
 
-Scenario: API.User creates manual record - Voice
+Scenario: User is able to create a manual record (CALL)
 Given I sign in as admin user
 When I send create manual record - Voice
 Then Request is successful
