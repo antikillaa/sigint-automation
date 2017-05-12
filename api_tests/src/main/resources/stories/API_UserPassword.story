@@ -9,6 +9,10 @@ Before:
 Given I sign in as admin user
 When I send create a new user
 Then Request is successful
+After:
+Given I sign in as admin user
+When I send delete user request
+Then Request is successful
 
 Scenario: API.Check short password
 When I change user password to 123456
