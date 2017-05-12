@@ -2,12 +2,12 @@ package model;
 
 import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.WithDataSize;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -32,35 +32,18 @@ public class User extends Organization {
 
     private Boolean isDeleted = false;
     @DataIgnore
-    private Permission effectivePermission;
+    private UserPermission effectivePermission;
 
     public User() {
         setOrganizationType(OrganizationType.USER);
     }
 
-    //TODO remove this fields block
     @DataIgnore
+    @Deprecated
     private List<String> roles = new ArrayList<>();
-    @DataIgnore
-    @JsonProperty("user_group_ids")
-    private List<String> userGroupIds = new ArrayList<>();
-    @DataIgnore
-    @JsonProperty("expanded_permissions")
-    private List<String> expandedPermissions = new ArrayList<>();
-    @DataIgnore
-    @JsonProperty("expanded_roles")
-    private List<String> expandedRoles = new ArrayList<>();
-    //TODO remove this fields block
 
     public String toString() {
         return String.format("name:%s, password:%s", name, password);
-    }
-
-    public boolean hasRole(String role) {
-        if (roles == null || role == null) {
-            return false;
-        }
-        return roles.contains(role);
     }
 
     public Boolean getInactive() {
@@ -119,30 +102,6 @@ public class User extends Organization {
         this.languages = languages;
     }
 
-    public List<String> getUserGroupIds() {
-        return userGroupIds;
-    }
-
-    public void setUserGroupIds(List<String> userGroupIds) {
-        this.userGroupIds = userGroupIds;
-    }
-
-    public List<String> getExpandedPermissions() {
-        return expandedPermissions;
-    }
-
-    public void setExpandedPermissions(List<String> expandedPermissions) {
-        this.expandedPermissions = expandedPermissions;
-    }
-
-    public List<String> getExpandedRoles() {
-        return expandedRoles;
-    }
-
-    public void setExpandedRoles(List<String> expandedRoles) {
-        this.expandedRoles = expandedRoles;
-    }
-
     public String getNewPassword() {
         return newPassword;
     }
@@ -175,11 +134,11 @@ public class User extends Organization {
         this.imageURL = imageURL;
     }
 
-    public Permission getEffectivePermission() {
+    public UserPermission getEffectivePermission() {
         return effectivePermission;
     }
 
-    public void setEffectivePermission(Permission effectivePermission) {
+    public void setEffectivePermission(UserPermission effectivePermission) {
         this.effectivePermission = effectivePermission;
     }
 }

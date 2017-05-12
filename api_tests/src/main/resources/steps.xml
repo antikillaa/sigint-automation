@@ -47,4 +47,6 @@
     </bean>
     <bean id="tagSteps" class="steps.APITagSteps" >
     </bean>
+    <bean id="permissionSteps" class="steps.APIPermissionManagementSteps" >
+    </bean>
 </beans>

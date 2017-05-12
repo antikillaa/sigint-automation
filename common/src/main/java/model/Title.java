@@ -1,25 +1,22 @@
 package model;
 
-import abs.AbstractEntity;
+import abs.TeelaEntity;
+import data_for_entity.annotations.DataIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.util.List;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class Permission extends AbstractEntity {
+public class Title extends TeelaEntity {
 
-    private String category;
     private String description;
     private String displayName;
-    private String name;
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
+    @DataIgnore
+    private Boolean isDeleted;
+    @DataIgnore
+    private List<String> responsibilities;
 
     public String getDescription() {
         return description;
@@ -37,11 +34,19 @@ public class Permission extends AbstractEntity {
         this.displayName = displayName;
     }
 
-    public String getName() {
-        return name;
+    public Boolean getIsDeleted() {
+        return isDeleted;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setIsDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public List<String> getResponsibilities() {
+        return responsibilities;
+    }
+
+    public void setResponsibilities(List<String> responsibilities) {
+        this.responsibilities = responsibilities;
     }
 }

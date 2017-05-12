@@ -39,6 +39,7 @@ public class GlobalSteps {
         }
     }
 
+    @Deprecated
     public static User getUserWithPermissions(String... permissions) {
         StorageUsersManager manager = StorageUsersManager.getManager();
         log.debug("Finding users with permissions: " + permissions.toString());

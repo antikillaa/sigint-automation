@@ -1,14 +1,10 @@
 package steps;
 
-import static conditions.Conditions.isTrue;
-
 import app_context.entities.Entities;
 import conditions.Verify;
 import controllers.APILogin;
 import http.OperationResult;
 import http.OperationsResults;
-import java.io.IOException;
-import model.RequestResult;
 import model.Token;
 import model.User;
 import org.apache.log4j.Logger;
@@ -16,6 +12,10 @@ import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import utils.CollectionUtils;
+
+import java.io.IOException;
+
+import static conditions.Conditions.isTrue;
 
 
 public class APILoginSteps extends APISteps {
@@ -35,7 +35,6 @@ public class APILoginSteps extends APISteps {
         User user = GlobalSteps.getUserWithPermissions(permissions);
         signInCreds(user);
         checkResultSuccess();
-
     }
 
     private OperationResult<Token> signInCreds(String role) {

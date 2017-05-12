@@ -26,6 +26,8 @@ public class Entities {
     private static WhitelistsList whitelists;
     private static TeamList teams;
     private static TagList tags;
+    private static ResponsibilityList responsibilities;
+    private static TitleList titles;
 
     public static EntityList<Team> getTeams() {
         if (teams == null) {
@@ -159,5 +161,19 @@ public class Entities {
             tags = new TagList();
         }
         return tags;
+    }
+
+    public static EntityList<Responsibility> getResponsibilities() {
+        if (responsibilities == null) {
+            responsibilities = new ResponsibilityList();
+        }
+        return responsibilities;
+    }
+
+    public static EntityList<Title> getTitles() {
+        if (titles == null) {
+            titles = new TitleList();
+        }
+        return titles;
     }
 }
