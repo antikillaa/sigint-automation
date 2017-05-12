@@ -1,6 +1,5 @@
 package model;
 
-import abs.TeelaEntity;
 import data_for_entity.annotations.*;
 import data_for_entity.data_providers.country_info.CountryProvider;
 import data_for_entity.data_providers.custom.LanguageProvider;
@@ -10,7 +9,7 @@ import data_for_entity.data_providers.record.RecordTypeProvider;
 import data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import utils.TeelaDate;
+import utils.G4Date;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,7 +18,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class Record extends TeelaEntity {
+public class Record extends G4Entity {
     
     @DataIgnore
     private String sourceId;
@@ -57,7 +56,7 @@ public class Record extends TeelaEntity {
     private String imsi;
     private String originalId;
     @DataIgnore
-    private TeelaDate dateAndTime;
+    private G4Date dateAndTime;
     @WithFieldDataType(FieldDataType.DATE)
     private Date time;
     
@@ -147,11 +146,11 @@ public class Record extends TeelaEntity {
         this.originalId = originalId;
     }
 
-    public TeelaDate getDateAndTime() {
+    public G4Date getDateAndTime() {
         return dateAndTime;
     }
 
-    public void setDateAndTime(TeelaDate dateAndTime) {
+    public void setDateAndTime(G4Date dateAndTime) {
         this.dateAndTime = dateAndTime;
     }
 

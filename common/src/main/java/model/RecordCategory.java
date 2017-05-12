@@ -1,6 +1,5 @@
 package model;
 
-import abs.TeelaEntity;
 import data_for_entity.annotations.DataProvider;
 import data_for_entity.data_providers.PhonesProvider;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -10,7 +9,7 @@ import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class RecordCategory extends TeelaEntity {
+public class RecordCategory extends G4Entity {
 
     private String name;
     @DataProvider(PhonesProvider.class)

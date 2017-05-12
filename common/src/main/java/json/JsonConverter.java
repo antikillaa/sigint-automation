@@ -1,6 +1,6 @@
 package json;
 
-import abs.EntityList;
+import model.entities.EntityList;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.MapType;

@@ -1,6 +1,5 @@
 package model;
 
-import abs.TeelaEntity;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -9,7 +8,7 @@ import java.util.List;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Process extends TeelaEntity {
+public class Process extends G4Entity {
 
     private Integer version;
     private String ownerId;

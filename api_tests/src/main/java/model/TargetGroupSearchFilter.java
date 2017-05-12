@@ -1,7 +1,5 @@
 package model;
 
-import abs.SearchFilter;
-
 /**
  * used in Profiler API:
  * GET /targetGroups/root

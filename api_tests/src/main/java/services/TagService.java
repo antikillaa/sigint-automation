@@ -1,7 +1,7 @@
 package services;
 
-import abs.SearchFilter;
-import app_context.entities.Entities;
+import model.SearchFilter;
+import model.entities.Entities;
 import http.G4Response;
 import json.JsonConverter;
 import http.OperationResult;
@@ -49,7 +49,7 @@ public class TagService implements EntityService<Tag> {
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
         TagSearchResult searchResult = JsonConverter.jsonToObject(response.getMessage(), TagSearchResult.class, "result");
-        return new OperationResult<>(response, searchResult.getResult().getEntities());
+        return new OperationResult<>(response, searchResult.getResult());
     }
 
     @Override

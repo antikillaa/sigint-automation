@@ -1,7 +1,7 @@
 package services;
 
-import abs.SearchFilter;
-import app_context.entities.Entities;
+import model.SearchFilter;
+import model.entities.Entities;
 import errors.OperationResultError;
 import http.G4Response;
 import json.JsonConverter;
@@ -59,7 +59,7 @@ public class RecordService implements EntityService<Record> {
 
         OperationResult<RecordSearchResult> operationResult = new OperationResult<>(response, RecordSearchResult.class);
         if (operationResult.isSuccess()) {
-            List<Record> records = operationResult.getEntity().getResult().getEntities();
+            List<Record> records = operationResult.getEntity().getResult();
             log.info("Founded " + records.size() + " records");
             return new OperationResult<>(response, records);
         } else {

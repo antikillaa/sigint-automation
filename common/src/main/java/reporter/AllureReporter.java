@@ -1,7 +1,7 @@
 package reporter;
 
 import failure_strategy.Statistic;
-import model.SelenideContext;
+import model.ScenarioContext;
 import org.apache.log4j.Logger;
 import org.jbehave.core.model.*;
 import org.jbehave.core.reporters.StoryReporter;
@@ -22,9 +22,8 @@ public class AllureReporter implements StoryReporter {
     Allure allure = Allure.LIFECYCLE;
     private final Map<String, String> suites = new HashMap<>();
     private String uid;
-    static Logger log = Logger.getRootLogger();
-    private SelenideContext context = SelenideContext.get();
-    
+    static Logger log = Logger.getLogger(AllureReporter.class);
+    private ScenarioContext context = ScenarioContext.get();
 
     @Override
     public void beforeStory(Story story, boolean givenStory) {
@@ -80,12 +79,10 @@ public class AllureReporter implements StoryReporter {
             allure.fire(new TestCaseFailureEvent().withThrowable(cause.getCause()));
             allure.fire(new StepFinishedEvent());
             allure.fire(new TestCaseFinishedEvent());
-            
         } else {
-            allure.fire(new StepFinishedEvent());
-            //allure.fire(new TestCaseFinishedEvent());
+            allure.fire(new StepCanceledEvent());
+            //allure.fire(new TestCaseCanceledEvent());
         }
-        
     }
 
 
@@ -217,22 +214,20 @@ public class AllureReporter implements StoryReporter {
     protected void takeScreenshot() {
     }
 
-    protected void attachLogs(){
-
+    protected void attachLogs() {
         ByteArrayOutputStream zipArchive;
         ServicesLogs logs = new ServicesLogs();
         try {
             zipArchive = new Zipper().zip(logs.getOutputLog());
             byte[] zip = zipArchive.toByteArray();
-            allure.fire(new MakeAttachmentEvent(zip,"logs", "application/zip"));
+            allure.fire(new MakeAttachmentEvent(zip, "logs", "application/zip"));
         } catch (IOException e) {
             log.error("Error occurred when getting logs of G4 services");
             log.error(e.getMessage());
         }
-
     }
 
-    public  void makeStepFailedAttachment() {
+    public void makeStepFailedAttachment() {
         takeScreenshot();
         attachLogs();
     }

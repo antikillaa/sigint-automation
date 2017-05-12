@@ -1,6 +1,5 @@
 package model;
 
-import abs.TeelaEntity;
 import data_for_entity.annotations.DataIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -12,7 +11,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 @Deprecated
-public class Group extends TeelaEntity {
+public class Group extends G4Entity {
     
     @DataIgnore
     private List<String> roles = new ArrayList<>();

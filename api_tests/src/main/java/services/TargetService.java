@@ -1,7 +1,7 @@
 package services;
 
-import abs.SearchFilter;
-import app_context.entities.Entities;
+import model.SearchFilter;
+import model.entities.Entities;
 import file_generator.FileGenerator;
 import http.G4Response;
 import json.JsonConverter;
@@ -94,7 +94,7 @@ public class TargetService implements EntityService<Target> {
         OperationResult<TargetSearchResult> operationResult = new OperationResult<>(response, TargetSearchResult.class, "result");
 
         if (operationResult.isSuccess()) {
-            return new OperationResult<>(response, operationResult.getEntity().getContent());
+            return new OperationResult<>(response, operationResult.getEntity().getResult());
         } else {
             throw new AssertionError("Unable to read list of target from response");
         }

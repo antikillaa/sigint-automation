@@ -1,4 +1,4 @@
-import abs.TeelaEntity;
+import model.G4Entity;
 import data_generator.DataGenerator;
 import file_generator.FileGenerator;
 import model.*;
@@ -13,7 +13,7 @@ public class G4FileGenerator {
 
     private static Logger logger = Logger.getLogger(G4FileGenerator.class);
     private static Map<String, String> keys = new HashMap<>();
-    private static Class<? extends TeelaEntity> entityClass;
+    private static Class<? extends G4Entity> entityClass;
     private static String help = "readme.txt";
 
     public static void main(String[] args) {

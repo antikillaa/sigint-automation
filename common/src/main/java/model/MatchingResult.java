@@ -1,6 +1,5 @@
 package model;
 
-import abs.TeelaEntity;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -8,7 +7,7 @@ import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class MatchingResult extends TeelaEntity {
+public class MatchingResult extends G4Entity {
 
     private SearchResultType searchResultType;
     private TargetResultType targetResultType;

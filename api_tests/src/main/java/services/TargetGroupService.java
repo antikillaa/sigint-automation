@@ -1,7 +1,7 @@
 package services;
 
-import abs.SearchFilter;
-import app_context.entities.Entities;
+import model.SearchFilter;
+import model.entities.Entities;
 import errors.OperationResultError;
 import http.G4Response;
 import json.JsonConverter;
@@ -126,7 +126,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
                 new OperationResult<>(response, TargetGroupSearchResult.class, "result");
 
         if (operationResult.isSuccess()) {
-            return new OperationResult<>(response, operationResult.getEntity().getContent());
+            return new OperationResult<>(response, operationResult.getEntity().getResult());
         } else {
             throw new OperationResultError(operationResult);
         }

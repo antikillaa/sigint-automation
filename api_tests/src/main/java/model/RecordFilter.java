@@ -1,7 +1,5 @@
 package model;
 
-import abs.SearchFilter;
-
 import java.util.List;
 
 public class RecordFilter extends SearchFilter<Record> {

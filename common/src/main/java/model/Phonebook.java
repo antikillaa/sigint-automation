@@ -1,6 +1,5 @@
 package model;
 
-import abs.TeelaEntity;
 import data_for_entity.annotations.DataProvider;
 import data_for_entity.annotations.WithDataDependencies;
 import data_for_entity.data_providers.country_info.CountryCode;
@@ -11,7 +10,7 @@ import utils.RandomGenerator;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class Phonebook extends TeelaEntity {
+public class Phonebook extends G4Entity {
     
     private String phoneNumber;
     private String name;

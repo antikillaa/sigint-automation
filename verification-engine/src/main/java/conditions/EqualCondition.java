@@ -1,6 +1,6 @@
 package conditions;
 
-import abs.TeelaEntity;
+import model.G4Entity;
 import json.JsonConverter;
 import model.Record;
 import model.UIRecord;
@@ -37,8 +37,8 @@ public class EqualCondition implements ExpectedCondition {
             equalCondition = new SetEqualCondition((Collection)obj1, (Collection)obj2);
             //elements((Collection) obj1, (Collection) obj2);
 
-        } else if (TeelaEntity.class.isAssignableFrom(obj1.getClass())) {
-            equalCondition = new TeelaEntityEqualCondition<>((TeelaEntity) obj1, (TeelaEntity) obj2);
+        } else if (G4Entity.class.isAssignableFrom(obj1.getClass())) {
+            equalCondition = new G4EntityEqualCondition<>((G4Entity) obj1, (G4Entity) obj2);
 
         } else {
             equalCondition = new ObjectEqualCondition(obj1, obj2);
@@ -136,22 +136,22 @@ public class EqualCondition implements ExpectedCondition {
         }
     }
 
-    private class TeelaEntityEqualCondition<T extends TeelaEntity> implements ExpectedCondition {
+    private class G4EntityEqualCondition<T extends G4Entity> implements ExpectedCondition {
         private T obj1;
         private T obj2;
 
-        private TeelaEntityEqualCondition(T obj1, T obj2) {
+        private G4EntityEqualCondition(T obj1, T obj2) {
             this.obj1 = obj1;
             this.obj2 = obj2;
 
         }
 
         public String toString() {
-            return String.format("Compare two Teela entities: %s and %s", obj1.toString(), obj2.toString());
+            return String.format("Compare two G4 entities: %s and %s", obj1.toString(), obj2.toString());
         }
 
         public Boolean check() {
-            log.debug("Comparing two teela entities with type:" + obj2.getClass().getName());
+            log.debug("Comparing two G4 entities with type:" + obj2.getClass().getName());
             Boolean equals;
             for (Field field : obj2.getClass().getDeclaredFields()) {
                 if (Modifier.isStatic(field.getModifiers())) {

@@ -1,7 +1,5 @@
 package model;
 
-import abs.SearchFilter;
-
 public class ProfileEntitySearchFilter extends SearchFilter<ProfileEntity> {
 
     private String keywords;

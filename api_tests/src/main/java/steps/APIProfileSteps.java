@@ -1,7 +1,7 @@
 package steps;
 
-import abs.EntityList;
-import app_context.entities.Entities;
+import model.entities.EntityList;
+import model.entities.Entities;
 import errors.NullReturnException;
 import http.OperationResult;
 import json.JsonConverter;

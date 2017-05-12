@@ -1,10 +1,8 @@
 package steps;
 
-import app_context.entities.Entities;
+import model.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
-import http.OperationResult;
-import http.OperationsResults;
 import model.Record;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;

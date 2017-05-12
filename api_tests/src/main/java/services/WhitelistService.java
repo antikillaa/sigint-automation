@@ -1,7 +1,7 @@
 package services;
 
-import abs.SearchFilter;
-import app_context.entities.Entities;
+import model.SearchFilter;
+import model.entities.Entities;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.WhiteListRequest;
@@ -56,7 +56,7 @@ public class WhitelistService implements EntityService<Whitelist> {
                 new OperationResult<>(response, WhitelistListResult.class);
 
         if (operationResult.isSuccess()) {
-            List<Whitelist> whiteLists = operationResult.getEntity().getResult().getEntities();
+            List<Whitelist> whiteLists = operationResult.getEntity().getResult();
             return new OperationResult<>(response, whiteLists);
 
         } else {

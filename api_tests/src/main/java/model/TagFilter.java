@@ -1,6 +1,5 @@
 package model;
 
-import abs.SearchFilter;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 

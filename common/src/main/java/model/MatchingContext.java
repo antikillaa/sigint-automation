@@ -1,12 +1,11 @@
 package model;
 
-import abs.TeelaEntity;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class MatchingContext extends TeelaEntity {
+public class MatchingContext extends G4Entity {
     
     private Long version;
     private String uploadId;

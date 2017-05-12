@@ -1,6 +1,5 @@
 package model;
 
-import abs.AbstractEntity;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 

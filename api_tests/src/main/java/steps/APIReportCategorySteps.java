@@ -1,6 +1,6 @@
 package steps;
 
-import app_context.entities.Entities;
+import model.entities.Entities;
 import json.JsonConverter;
 import http.OperationResult;
 import model.ReportCategory;

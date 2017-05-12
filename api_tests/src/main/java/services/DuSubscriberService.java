@@ -1,7 +1,7 @@
 package services;
 
-import abs.SearchFilter;
-import app_context.entities.Entities;
+import model.SearchFilter;
+import model.entities.Entities;
 import errors.OperationResultError;
 import file_generator.FileGenerator;
 import http.G4Response;
@@ -80,7 +80,7 @@ public class DuSubscriberService implements EntityService<DuSubscriberEntry> {
                 new OperationResult<>(response, DuSubscriberSearchResult.class, "result");
 
         if (operationResult.isSuccess() && operationResult.getEntity() != null) {
-            return new OperationResult<>(response, operationResult.getEntity().getContent());
+            return new OperationResult<>(response, operationResult.getEntity().getResult());
         } else {
             throw new OperationResultError(operationResult);
         }

@@ -1,8 +1,6 @@
 package model;
 
-import abs.TeelaEntity;
-
-public class Tag extends TeelaEntity {
+public class Tag extends G4Entity {
 
     private Integer version;
     private String name;

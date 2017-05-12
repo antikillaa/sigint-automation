@@ -1,6 +1,6 @@
 package file_generator;
 
-import abs.TeelaEntity;
+import model.G4Entity;
 import model.*;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class FileGenerator implements FileService {
      */
     private FileService fileService;
 
-    public FileGenerator(Class<? extends TeelaEntity> entityClass) {
+    public FileGenerator(Class<? extends G4Entity> entityClass) {
         if (entityClass.equals(Target.class)) {
             fileService = new TargetFileService();
         } else if (entityClass.equals(DuSubscriberEntry.class)) {
@@ -30,7 +30,7 @@ public class FileGenerator implements FileService {
         } else if (entityClass.equals(FSMS.class)) {
             fileService = new FSMSFileService();
         } else {
-            throw new Error("Unknown TeelaEntity. Unable to initialize FileGenerator instance!");
+            throw new Error("Unknown G4Entity. Unable to initialize FileGenerator instance!");
         }
     }
 

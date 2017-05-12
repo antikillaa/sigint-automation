@@ -1,7 +1,7 @@
 package services;
 
-import abs.SearchFilter;
-import app_context.entities.Entities;
+import model.SearchFilter;
+import model.entities.Entities;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.TeamRequest;

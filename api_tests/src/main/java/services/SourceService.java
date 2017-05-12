@@ -1,7 +1,7 @@
 package services;
 
-import abs.SearchFilter;
-import app_context.entities.Entities;
+import model.SearchFilter;
+import model.entities.Entities;
 import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
@@ -80,7 +80,7 @@ public class SourceService implements EntityService<Source> {
         OperationResult<SourceListResult> operationResult = new OperationResult<>(response, SourceListResult.class);
         if (operationResult.isSuccess()) {
             // filter {"deleted":false}
-            List<Source> sources = new ArrayList<>(operationResult.getEntity().getResult().getEntities());
+            List<Source> sources = new ArrayList<>(operationResult.getEntity().getResult());
             sources.removeIf(Source::isDeleted);
 
             return new OperationResult<>(response, sources);

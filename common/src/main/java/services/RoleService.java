@@ -1,13 +1,13 @@
 package services;
 
-import abs.SearchFilter;
-import app_context.entities.Entities;
 import http.G4Response;
-import json.JsonConverter;
 import http.OperationResult;
 import http.requests.RoleRequest;
+import json.JsonConverter;
 import model.RequestResult;
 import model.Role;
+import model.SearchFilter;
+import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.Parser;

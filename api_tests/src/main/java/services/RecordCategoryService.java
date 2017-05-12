@@ -1,7 +1,7 @@
 package services;
 
-import abs.SearchFilter;
-import app_context.entities.Entities;
+import model.SearchFilter;
+import model.entities.Entities;
 import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
@@ -61,7 +61,7 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
                 new OperationResult<>(response, RecordCategoryListResult.class);
 
         if (operationResult.isSuccess()) {
-            List<RecordCategory> recordCategories = operationResult.getEntity().getResult().getEntities();
+            List<RecordCategory> recordCategories = operationResult.getEntity().getResult();
             return new OperationResult<>(response, recordCategories);
         } else {
             throw new OperationResultError(operationResult);

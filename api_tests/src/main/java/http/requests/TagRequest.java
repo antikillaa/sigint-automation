@@ -1,6 +1,6 @@
 package http.requests;
 
-import abs.SearchFilter;
+import model.SearchFilter;
 import http.HttpMethod;
 import model.Tag;
 

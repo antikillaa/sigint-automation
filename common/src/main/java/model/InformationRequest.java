@@ -1,6 +1,5 @@
 package model;
 
-import abs.TeelaEntity;
 import data_for_entity.annotations.*;
 import data_for_entity.data_providers.rfi.*;
 import data_for_entity.data_types.FieldDataType;
@@ -14,7 +13,7 @@ import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class InformationRequest extends TeelaEntity {
+public class InformationRequest extends G4Entity {
     
     @DataIgnore
     private String internalRequestNumber;

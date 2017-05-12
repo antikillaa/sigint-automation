@@ -1,6 +1,6 @@
 package steps;
 
-import app_context.entities.Entities;
+import model.entities.Entities;
 import error_reporter.ErrorReporter;
 import http.OperationResult;
 import java.util.Date;

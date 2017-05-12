@@ -1,6 +1,6 @@
 package steps;
 
-import app_context.entities.Entities;
+import model.entities.Entities;
 import conditions.Verify;
 import errors.OperationResultError;
 import json.JsonConverter;

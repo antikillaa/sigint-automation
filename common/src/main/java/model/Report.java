@@ -1,6 +1,5 @@
 package model;
 
-import abs.TeelaEntity;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -10,7 +9,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class Report extends TeelaEntity {
+public class Report extends G4Entity {
 
     private String name;
     private Boolean deleted;

@@ -1,10 +1,8 @@
 package model;
 
-import abs.TeelaEntity;
 import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.DataProvider;
 import data_for_entity.annotations.WithDataDependencies;
-import data_for_entity.data_providers.source.SourceNameProvider;
 import data_for_entity.data_providers.whitelist.WhiteListTypeProvider;
 import data_for_entity.data_providers.whitelist.WhiteListIdentifierProvider;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -12,7 +10,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class Whitelist extends TeelaEntity {
+public class Whitelist extends G4Entity {
     @DataIgnore
     private Long version;
 

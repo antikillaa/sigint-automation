@@ -1,7 +1,7 @@
 package model.rfi;
 
-import abs.AbstractEntity;
-import abs.SearchFilter;
+import model.AbstractEntity;
+import model.SearchFilter;
 import model.InformationRequest;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;

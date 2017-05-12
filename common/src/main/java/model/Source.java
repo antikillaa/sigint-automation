@@ -1,7 +1,6 @@
 package model;
 
 
-import abs.TeelaEntity;
 import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.DataProvider;
 import data_for_entity.annotations.WithDataDependencies;
@@ -15,7 +14,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class Source extends TeelaEntity {
+public class Source extends G4Entity {
     
     @DataProvider(SourceTypeProvider.class)
     private SourceType type;
