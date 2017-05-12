@@ -168,4 +168,16 @@ public class APIProfileSteps extends APISteps {
         ProfileMergeVerification verification = new ProfileMergeVerification();
         verification.verify(firstProfileToMerge, secondProfileToMerge, mergedProfile);
     }
+
+    @When("I send get $name merged profile details request")
+    public void getOneOfMergedProfile(String name) {
+        Profile firstProfileToMerge = context.get("firstProfileToMerge", Profile.class);
+        Profile secondProfileToMerge = context.get("secondProfileToMerge", Profile.class);
+
+        if (name.equals("first")) {
+            service.view(firstProfileToMerge.getId());
+        } else {
+            service.view(secondProfileToMerge.getId());
+        }
+    }
 }
