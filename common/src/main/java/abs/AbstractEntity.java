@@ -8,7 +8,7 @@ import java.lang.reflect.Modifier;
 
 import static java.lang.Boolean.TRUE;
 
-public abstract class AbstractEntity {
+public abstract class AbstractEntity implements Comparable {
 
     @DataIgnore
     private String id;
@@ -21,7 +21,7 @@ public abstract class AbstractEntity {
         this.id = id;
     }
 
-    public <T extends TeelaEntity> Boolean equals(T object) {
+    public <T extends AbstractEntity> Boolean equals(T object) {
         Boolean equals = TRUE;
         for (Field field : object.getClass().getDeclaredFields()) {
             if (Modifier.isStatic(field.getModifiers())) {
@@ -46,4 +46,9 @@ public abstract class AbstractEntity {
         return equals;
     }
 
+    @Override
+    public int compareTo(Object obj) {
+        AbstractEntity compareWith = (AbstractEntity) obj;
+        return this.getId().compareTo(compareWith.getId());
+    }
 }

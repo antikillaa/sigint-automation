@@ -16,6 +16,7 @@ import services.ProfileDraftService;
 import services.ProfileService;
 import verification.profiler.ProfileMergeVerification;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class APIProfileSteps extends APISteps {
@@ -50,9 +51,13 @@ public class APIProfileSteps extends APISteps {
         Assert.assertEquals(expected.getType(), actual.getType());
         Assert.assertEquals(expected.getActive(), actual.getActive());
         Assert.assertEquals(expected.getProperties().getDescription(), actual.getProperties().getDescription());
+
+        Arrays.sort(expected.getGroups().toArray());
+        Arrays.sort(actual.getGroups().toArray());
         Assert.assertEquals(
                 JsonConverter.toJsonString(expected.getGroups()),
                 JsonConverter.toJsonString(actual.getGroups()));
+
         Assert.assertEquals(expected.getEntities(), actual.getEntities());
         Assert.assertEquals(expected.getEntityCount(), actual.getEntityCount());
 
