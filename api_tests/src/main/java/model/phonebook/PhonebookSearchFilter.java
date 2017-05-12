@@ -1,6 +1,6 @@
 package model.phonebook;
 
-import abs.SearchFilter;
+import model.SearchFilter;
 import model.Phonebook;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;

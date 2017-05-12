@@ -1,6 +1,6 @@
 package json.serialization;
 
-import app_context.entities.Entities;
+import model.entities.Entities;
 import errors.NullReturnException;
 import model.Target;
 import org.codehaus.jackson.JsonNode;

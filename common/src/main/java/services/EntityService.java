@@ -1,9 +1,9 @@
 package services;
 
-import abs.AbstractEntity;
-import abs.SearchFilter;
 import http.G4HttpClient;
 import http.OperationResult;
+import model.AbstractEntity;
+import model.SearchFilter;
 
 import java.util.List;
 

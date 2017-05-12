@@ -1,6 +1,6 @@
 package steps;
 
-import app_context.entities.Entities;
+import model.entities.Entities;
 import app_context.properties.G4Properties;
 import controllers.APILogin;
 import errors.NullReturnException;

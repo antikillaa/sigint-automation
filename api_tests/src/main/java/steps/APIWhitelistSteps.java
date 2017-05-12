@@ -1,7 +1,7 @@
 package steps;
 
 
-import app_context.entities.Entities;
+import model.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import data_generator.DataGenerator;

@@ -1,6 +1,6 @@
 package steps;
 
-import app_context.entities.Entities;
+import model.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import http.OperationResult;
@@ -70,12 +70,6 @@ public class APITargetGroupSteps extends APISteps {
         TargetGroup createdTarget = Entities.getTargetGroups().getLatest();
         TargetGroup viewedTargetGroup = context.get("targetGroup", TargetGroup.class);
         equalsTargetGroups(viewedTargetGroup, createdTarget);
-    }
-
-    @When("I send get list of target group request")
-    public void getListOfG4TargetGroupsRequest() {
-        OperationResult<List<TargetGroup>> operationResult = service.listG4Compatibility();
-        context.put("targetGroupList", operationResult.getEntity());
     }
 
     @When("I send get list of top target groups request")
@@ -189,26 +183,6 @@ public class APITargetGroupSteps extends APISteps {
         List<TargetGroup> groups = context.get("targetGroupList", List.class);
 
         Assert.assertTrue(groups.size() > Integer.valueOf(size));
-    }
-
-    @When("I send search targetGroups by $criteria and value $value")
-    public void searchTargetGroupByCriteria(String criteria, String value) {
-        log.info("Start search targetGroups by criteria: " + criteria + ", value: " + value);
-        TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
-
-        if (criteria.toLowerCase().equals("includedeleted")) {
-            value = value.equals("random") ? String.valueOf(targetGroup.isDeleted()) : value;
-        } else if (criteria.toLowerCase().equals("empty")) {
-            log.debug("Search without filter..");
-        } else {
-            throw new AssertionError("Unknown filter type");
-        }
-
-        TargetGroupFilter searchFilter = new TargetGroupFilter().filterBy(criteria, value);
-        OperationResult<List<TargetGroup>> operationResult = service.searchG4Compatibility(searchFilter);
-
-        context.put("searchFilter", searchFilter);
-        context.put("searchResult", operationResult.getEntity());
     }
 
     @Then("targetGroups search result are correct")

@@ -1,6 +1,5 @@
 package model;
 
-import abs.SearchFilter;
 import utils.DateHelper;
 
 import java.util.Date;

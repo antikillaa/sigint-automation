@@ -1,6 +1,5 @@
 package model;
 
-import abs.TeelaEntity;
 import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.DataProvider;
 import data_for_entity.annotations.WithDataSize;
@@ -16,7 +15,7 @@ import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class Target extends TeelaEntity {
+public class Target extends G4Entity {
 
     private String description;
     @JsonSerialize(using = TargetJsonSerializer.class)

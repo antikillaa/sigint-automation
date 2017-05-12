@@ -1,19 +1,15 @@
 package services;
 
-import abs.SearchFilter;
 import http.G4HttpClient;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.UploadFilesRequest;
 import http.requests.UploadRequest;
-import java.util.List;
-import model.FileMeta;
-import model.G4File;
+import model.*;
 import model.Process;
-import model.Source;
-import model.UploadDetails;
-import model.UploadSearchResult;
 import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class UploadFilesService {
 
@@ -88,7 +84,7 @@ public class UploadFilesService {
 
         OperationResult<UploadSearchResult> operationResult = new OperationResult<>(response, UploadSearchResult.class);
         if (operationResult.isSuccess() && operationResult.getEntity() != null) {
-            return operationResult.getEntity().getContent();
+            return operationResult.getEntity().getResult();
         } else {
             throw new AssertionError("Unable to read search results from Upload search");
         }

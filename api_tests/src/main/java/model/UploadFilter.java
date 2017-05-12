@@ -1,7 +1,5 @@
 package model;
 
-import abs.SearchFilter;
-
 import java.util.Date;
 
 public class UploadFilter extends SearchFilter<Process> {

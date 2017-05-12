@@ -1,12 +1,12 @@
 package steps;
 
-import app_context.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import http.OperationResult;
 import model.Permission;
 import model.Responsibility;
 import model.Title;
+import model.entities.Entities;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;

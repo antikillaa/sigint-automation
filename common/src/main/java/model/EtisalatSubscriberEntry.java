@@ -1,6 +1,5 @@
 package model;
 
-import abs.TeelaEntity;
 import data_for_entity.annotations.*;
 import data_for_entity.data_providers.*;
 import data_for_entity.data_providers.country_info.CountryCode;
@@ -15,7 +14,7 @@ import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class EtisalatSubscriberEntry extends TeelaEntity {
+public class EtisalatSubscriberEntry extends G4Entity {
     
     
     private String sourceId="etisalat";

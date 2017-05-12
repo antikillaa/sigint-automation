@@ -1,6 +1,5 @@
 package model;
 
-import abs.TeelaEntity;
 import data_for_entity.annotations.DataProvider;
 import data_for_entity.annotations.WithCollectionSize;
 import data_for_entity.data_providers.user_permissions.UserPermissionProvider;
@@ -13,7 +12,7 @@ import java.util.Set;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Role extends TeelaEntity {
+public class Role extends G4Entity {
 
     private String name;
     @JsonProperty("display_name")

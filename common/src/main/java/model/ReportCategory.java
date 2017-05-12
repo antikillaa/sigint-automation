@@ -1,6 +1,5 @@
 package model;
 
-import abs.TeelaEntity;
 import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.WithFieldDataType;
 import data_for_entity.data_types.FieldDataType;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class ReportCategory extends TeelaEntity implements Comparable {
+public class ReportCategory extends G4Entity implements Comparable {
 
     @DataIgnore
     private Integer version;

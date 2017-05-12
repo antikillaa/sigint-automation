@@ -10,7 +10,7 @@ import model.UIRecord;
 import org.apache.log4j.Logger;
 import pages.SigintPage;
 import utils.Parser;
-import utils.TeelaDate;
+import utils.G4Date;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -56,11 +56,11 @@ public abstract class RecordsTableController extends TableController {
         RecordRow row = (RecordRow) recordRow;
         Record newRecord = new UIRecord();
         try {
-            TeelaDate date = new TeelaDate(new SimpleDateFormat("d MMM, HH:mm yyyy").parse(row.getDate().replace("GMT", "") + "2016"));
+            G4Date date = new G4Date(new SimpleDateFormat("d MMM, HH:mm yyyy").parse(row.getDate().replace("GMT", "") + "2016"));
             newRecord.setDateAndTime(date);
         } catch (ParseException e) {
             log.error(e.getMessage(), e);
-            throw new AssertionError("Was unable to set teela date from ui Row date");
+            throw new AssertionError("Was unable to set G4 date from ui Row date");
         }
         newRecord.setTmsi(row.getTMSI());
         newRecord.setImsi(row.getIMSI());

@@ -1,6 +1,6 @@
 import reporter.AllureReporter;
 
-public class APILauncher extends TeelaEmbeddable {
+public class APILauncher extends G4Embeddable {
 
     private static AllureReporter reporter = new AllureReporter();
 

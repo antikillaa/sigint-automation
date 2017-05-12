@@ -1,6 +1,6 @@
 package steps;
 
-import app_context.entities.Entities;
+import model.entities.Entities;
 import http.OperationResult;
 import model.Role;
 import org.apache.log4j.Logger;

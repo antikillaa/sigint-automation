@@ -1,10 +1,24 @@
 package model.rfi;
 
-import abs.SearchResult;
+import model.EntityListResult;
 import model.InformationRequest;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
+
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RFISearchResults extends SearchResult<InformationRequest> {
+public class RFISearchResults extends EntityListResult<InformationRequest> {
 
+    @Override
+    @JsonProperty("content")
+    public List<InformationRequest> getResult() {
+        return super.getResult();
+    }
+
+    @Override
+    @JsonProperty("content")
+    public void setResult(List<InformationRequest> result) {
+        super.setResult(result);
+    }
 }

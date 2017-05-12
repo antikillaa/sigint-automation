@@ -1,6 +1,6 @@
 package services;
 
-import abs.SearchFilter;
+import model.SearchFilter;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.PermissionRequest;

@@ -1,13 +1,12 @@
 package model;
 
-import abs.TeelaEntity;
 import data_for_entity.annotations.DataProvider;
 import data_for_entity.data_providers.PhonesProvider;
 
 /**
  *
  */
-public class G4Record extends TeelaEntity {
+public class G4Record extends G4Entity {
 
     @DataProvider(PhonesProvider.class)
     private String fromNumber;

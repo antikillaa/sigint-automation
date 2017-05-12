@@ -1,6 +1,6 @@
 package http.requests.targets;
 
-import abs.SearchFilter;
+import model.SearchFilter;
 import http.requests.HttpRequest;
 import http.HttpMethod;
 import model.G4File;

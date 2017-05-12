@@ -1,6 +1,6 @@
 package controllers;
 
-import abs.TeelaEntity;
+import model.G4Entity;
 import blocks.context.tables.EntityTable;
 import blocks.context.tables.Row;
 import org.apache.log4j.Logger;
@@ -20,7 +20,7 @@ public abstract class TableController extends PageController {
         this.table = this.getPage().context().getTable();
     }
 
-    protected abstract <T extends TeelaEntity>T initFromRow(Row recordRow);
+    protected abstract <T extends G4Entity>T initFromRow(Row recordRow);
 
     protected Row selectRecordInTable(Row recordRow) {
         if (!recordRow.getCheckBox().isSelected()) {

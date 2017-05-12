@@ -24,7 +24,7 @@ public class DataGenerator implements DataGeneratorService {
         if (aClass.equals(FSMS.class)) {
             dataGeneratorService = new FSMSGenerator();
         } else {
-            throw new Error("Unknown TeelaEntity. Unable to initialize DataGenerator instance!");
+            throw new Error("Unknown G4Entity. Unable to initialize DataGenerator instance!");
         }
 
         return dataGeneratorService.produceListByMatrix(matrix);
