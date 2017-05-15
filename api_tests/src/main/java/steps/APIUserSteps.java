@@ -63,7 +63,7 @@ public class APIUserSteps extends APISteps {
     public void deleteUser() {
         User createdUser = Entities.getUsers().getLatest();
         if (createdUser.getCreatedBy() == null) {
-            log.error("You are trying to delete system user " + createdUser.getName());
+            ErrorReporter.raiseError("You are trying to delete system user " + createdUser.getName());
         } else {
             service.remove(createdUser);
         }
