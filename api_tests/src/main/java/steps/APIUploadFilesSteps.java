@@ -61,8 +61,11 @@ public class APIUploadFilesSteps extends APISteps {
         context.put("meta", uploadResult.getEntity());
     }
 
-    @When("Uploaded file is processed")
+    @Then("Uploaded file is processed")
     public void fileIsProcessed() {
+        String fileProcesingError = String.format(
+            "Uploaded file is not processed during %d seconds", WAITING_TIME);
+
         // if file isn't processed
         // wait, update meta and check again
         Date deadline = DateHelper.getDateWithShift(WAITING_TIME);
@@ -75,8 +78,7 @@ public class APIUploadFilesSteps extends APISteps {
             fileProcessed = isProcessed(fileId);
         }
         if (!fileProcessed) {
-            String errorMessage = "Uploaded file is not processed. Failed by timeout";
-            ErrorReporter.reportAndRaiseError(errorMessage);
+            ErrorReporter.reportAndRaiseError(fileProcesingError);
         }
     }
 
@@ -103,26 +105,28 @@ public class APIUploadFilesSteps extends APISteps {
         }
     }
 
-    @When("Ingest matching is complete")
-    public void waitForIngestMatchingComplete() {
+    @Then("$rCount records are ingested")
+    public void waitForIngestMatchingComplete(String rCount) {
+        int recordsCount = Integer.valueOf(rCount);
+        String ingestionMatchingError = String.format(
+            "Ingest matching was not completed during %d seconds", WAITING_TIME);
         DateHelper.setStartTime();
         // if target matching isn't complete
         // wait, update meta and check again
         Date deadline = DateHelper.getDateWithShift(WAITING_TIME);
-        boolean ingestCompleted = isIngestMatchingComplete();
+        boolean ingestCompleted = isIngestMatchingComplete(recordsCount);
         while (!ingestCompleted && !isTimeout(deadline)) {
             log.info("Ingest isn't processed yet");
             DateHelper.waitTime(POLLING_INTERVAL);
-            ingestCompleted = isIngestMatchingComplete();
+            ingestCompleted = isIngestMatchingComplete(recordsCount);
         }
         if (!ingestCompleted) {
-            String errorMessage = "Ingest matching was not completed";
-            ErrorReporter.reportAndRaiseError(errorMessage);
+            ErrorReporter.reportAndRaiseError(ingestionMatchingError);
         }
         log.info(String.format("Ingestion time: %d seconds", DateHelper.getDuration()));
     }
 
-    private boolean isIngestMatchingComplete() {
+    private boolean isIngestMatchingComplete(int recordsCount) {
         // data range for Upload history filter
         Date minDate = DateHelper.getDateWithShift(-WAITING_TIME);
 
@@ -138,9 +142,11 @@ public class APIUploadFilesSteps extends APISteps {
             }
             log.debug(Parser.entityToString(process));
             if (process.isIngestMatchingComplete() && (process.getRecordsCount() > 0)) {
-                log.info("File processing completed with Records count: " + process.getRecordsCount());
-                context.put("process", process);
-                return true;
+                log.info(String.format("%s records are ingested", process.getRecordsCount()));
+                if (process.getRecordsCount() == recordsCount) {
+                    context.put("process", process);
+                    return true;
+                }
             }
             return false;
         }
@@ -154,7 +160,7 @@ public class APIUploadFilesSteps extends APISteps {
         Source source = context.get("source", Source.class);
 
         assertEquals("recordsCount calculation fails",
-            process.getRecordsCount(), Integer.valueOf(rCount));
+            Integer.valueOf(rCount), process.getRecordsCount());
         assertEquals("wrong source id detected",
             source.getId(), process.getSourceId());
     }
@@ -166,7 +172,7 @@ public class APIUploadFilesSteps extends APISteps {
         context.put("uploadDetails", uploadDetails);
     }
 
-    @Then("Matching results contain $rCount records")
+    @Then("Upload details contain $rCount records")
     public void matchingResultShouldContainCorrectSummary(String rCount) {
         UploadDetails uploadDetails = context.get("uploadDetails", UploadDetails.class);
         context.put("process", uploadDetails.getProcess());

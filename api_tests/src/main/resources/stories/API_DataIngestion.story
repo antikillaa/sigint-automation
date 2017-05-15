@@ -46,12 +46,11 @@ And <sourceType> - <recordType> data file with <recordsCount> records was genera
 And <sourceType> - <recordType> data file is renamed to make filename unique
 When I send upload data file request
 Then Request is successful
-When Uploaded file is processed
-And Ingest matching is complete
-Then Search results contain <recordsCount> records
+And Uploaded file is processed
+And <recordsCount> records are ingested
 When I send get upload details request
 Then Request is successful
-And Matching results contain <recordsCount> records
+And Upload details contain <recordsCount> records
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -66,12 +65,11 @@ And <sourceType> - <recordType> data file with <recordsCount> records was genera
 And <sourceType> - <recordType> data file is renamed to make filename unique
 When I send upload data file request
 Then Request is successful
-When Uploaded file is processed
-And Ingest matching is complete
-Then Search results contain <recordsCount> records
+And Uploaded file is processed
+And <recordsCount> records are ingested
 When I send get upload details request
 Then Request is successful
-And Matching results contain <recordsCount> records
+And Upload details contain <recordsCount> records
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -86,12 +84,11 @@ And <sourceType> - <recordType> data file with <recordsCount> records was genera
 And <sourceType> - <recordType> data file is renamed to make filename unique
 When I send upload data file request
 Then Request is successful
-When Uploaded file is processed
-And Ingest matching is complete
-Then Search results contain <recordsCount> records
+And Uploaded file is processed
+And <recordsCount> records are ingested
 When I send get upload details request
 Then Request is successful
-And Matching results contain <recordsCount> records
+And Upload details contain <recordsCount> records
 
 Examples:
 | sourceType | recordType | recordsCount |
