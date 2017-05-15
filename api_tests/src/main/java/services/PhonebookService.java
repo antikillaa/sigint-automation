@@ -1,20 +1,20 @@
 package services;
 
-import model.SearchFilter;
-import model.entities.Entities;
 import errors.OperationResultError;
 import file_generator.FileGenerator;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.phonebook.PhonebookRequest;
 import http.requests.phonebook.UnifiedPhonebookSearchRequest;
+import json.JsonConverter;
 import model.G4File;
 import model.Phonebook;
+import model.SearchFilter;
 import model.UploadResult;
+import model.entities.Entities;
 import model.phonebook.PhonebookSearchResults;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import utils.Parser;
 
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class PhonebookService implements EntityService<Phonebook> {
     @Override
     public OperationResult<Phonebook> add(Phonebook entity) {
         log.info("Creating new Phonebook entry");
-        log.debug(Parser.entityToString(entity));
+        log.debug(JsonConverter.toJsonString(entity));
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
 
         OperationResult<Phonebook> operationResult = new OperationResult<>(response, Phonebook.class, "result");

@@ -1,16 +1,15 @@
 package services;
 
-import model.SearchFilter;
-import model.entities.Entities;
 import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.RecordCategoriesRequest;
 import model.RecordCategory;
 import model.RecordCategoryListResult;
+import model.SearchFilter;
+import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import utils.Parser;
 
 import java.util.List;
 
@@ -28,7 +27,6 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
     @Override
     public OperationResult<RecordCategory> add(RecordCategory entity) {
         logger.info("Add new one record category..");
-        logger.info(Parser.entityToString(entity));
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
 
         OperationResult<RecordCategory> operationResult = new OperationResult<>(response, RecordCategory.class);
@@ -71,7 +69,6 @@ public class RecordCategoryService implements EntityService<RecordCategory> {
     @Override
     public OperationResult<RecordCategory> update(RecordCategory entity) {
         logger.info("Updating record-category id:" + entity.getId());
-        logger.debug(Parser.entityToString(entity));
         G4Response response = g4HttpClient.sendRequest(request.update(entity));
 
         OperationResult<RecordCategory> operationResult = new OperationResult<>(response);

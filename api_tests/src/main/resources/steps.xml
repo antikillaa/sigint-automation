@@ -49,4 +49,8 @@
     </bean>
     <bean id="permissionSteps" class="steps.APIPermissionManagementSteps" >
     </bean>
+    <bean id="teamSteps" class="steps.APITeamManagementSteps" >
+    </bean>
+     <bean id="organizationSteps" class="steps.APIOrganizationSteps" >
+     </bean>
 </beans>

@@ -1,19 +1,14 @@
 package services;
 
-import model.SearchFilter;
-import model.entities.Entities;
 import http.G4Response;
-import json.JsonConverter;
 import http.OperationResult;
 import http.requests.PasswordsRequest;
 import http.requests.UserRequest;
-import model.AuthResponseResult;
-import model.RequestResult;
-import model.User;
-import model.UserPassword;
+import json.JsonConverter;
+import model.*;
+import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import utils.Parser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +37,6 @@ public class UserService implements EntityService<User> {
     @Override
     public OperationResult<User> add(User entity) {
         log.info("Creating new user");
-        log.debug(Parser.entityToString(entity));
 
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
 
@@ -53,6 +47,7 @@ public class UserService implements EntityService<User> {
                 user.setPassword(entity.getPassword());
             }
             Entities.getUsers().addOrUpdateEntity(user);
+            Entities.getOrganizations().addOrUpdateEntity(user);
         }
         return operationResult;
     }
@@ -66,6 +61,7 @@ public class UserService implements EntityService<User> {
         OperationResult<RequestResult> operationResult = new OperationResult<>(response, RequestResult.class);
         if (operationResult.isSuccess()) {
             Entities.getUsers().removeEntity(entity);
+            Entities.getOrganizations().removeEntity(entity);
         }
         return operationResult;
     }
@@ -98,6 +94,7 @@ public class UserService implements EntityService<User> {
                 user.setPassword(entity.getNewPassword());
             }
             Entities.getUsers().addOrUpdateEntity(user);
+            Entities.getOrganizations().addOrUpdateEntity(user);
         }
         return operationResult;
     }
@@ -121,6 +118,7 @@ public class UserService implements EntityService<User> {
         OperationResult<User> operationResult = new OperationResult<>(response, User.class);
         if (operationResult.isSuccess()) {
             Entities.getUsers().addOrUpdateEntity(operationResult.getEntity());
+            Entities.getOrganizations().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
     }
@@ -137,6 +135,7 @@ public class UserService implements EntityService<User> {
         if (operationResult.isSuccess())  {
             user.setPassword(newPassword);
             Entities.getUsers().addOrUpdateEntity(user);
+            Entities.getOrganizations().addOrUpdateEntity(user);
         }
         return operationResult;
     }

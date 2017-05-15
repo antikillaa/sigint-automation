@@ -12,7 +12,7 @@ public class UserPermission {
 
     private ArrayList<String> titles = new ArrayList<>();
     private ArrayList<String> actions = new ArrayList<>();
-    private PermissionRecord record;
+    private PermissionRecord record = new PermissionRecord();
 
     public ArrayList<String> getTitles() {
         return titles;
@@ -40,9 +40,9 @@ public class UserPermission {
 
     public class PermissionRecord {
 
-        private List<String> clearances;
-        private List<String> dataSources;
-        private List<String> organizations;
+        private List<String> clearances = new ArrayList<>();
+        private List<String> dataSources = new ArrayList<>();
+        private List<String> organizations = new ArrayList<>();
 
         public List<String> getClearances() {
             return clearances;

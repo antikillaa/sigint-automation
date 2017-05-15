@@ -1,18 +1,17 @@
 package services;
 
-import model.SearchFilter;
-import model.entities.Entities;
 import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.SourceRequest;
 import http.requests.SourcesRequest;
 import model.Result;
+import model.SearchFilter;
 import model.Source;
 import model.SourceListResult;
+import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import utils.Parser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,6 @@ public class SourceService implements EntityService<Source> {
     @Override
     public OperationResult<Source> add(Source entity) {
         log.info("Creating new Source..");
-        log.debug(Parser.entityToString(entity));
 
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
 
@@ -99,7 +97,6 @@ public class SourceService implements EntityService<Source> {
     public OperationResult<Source> update(Source entity) {
         log.info("Updating Source id: " + entity.getId());
         entity.setVersion(entity.getVersion() == null ? 1 : entity.getVersion() + 1);
-        log.debug(Parser.entityToString(entity));
 
         G4Response response = g4HttpClient.sendRequest(request.update(entity));
 

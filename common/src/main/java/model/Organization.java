@@ -14,7 +14,7 @@ public class Organization extends G4Entity {
   private OrganizationType organizationType;
   private String fullName;
   @DataIgnore
-  private UserPermission defaultPermission;
+  private UserPermission defaultPermission = new UserPermission();
 
   public String getParentTeamId() {
     return parentTeamId;

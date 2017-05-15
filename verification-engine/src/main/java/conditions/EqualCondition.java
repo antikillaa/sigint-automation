@@ -1,14 +1,17 @@
 package conditions;
 
-import model.G4Entity;
 import json.JsonConverter;
+import model.G4Entity;
 import model.Record;
 import model.UIRecord;
 import org.apache.log4j.Logger;
-import utils.Parser;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 
 public class EqualCondition implements ExpectedCondition {
@@ -122,7 +125,8 @@ public class EqualCondition implements ExpectedCondition {
 
         @Override
         public String toString() {
-            return "Object condition with object1: " + Parser.entityToString(obj1) + " and object2: " + Parser.entityToString(obj2);
+            return "Object condition with object1: " + JsonConverter.toJsonString(obj1) +
+                    " and object2: " + JsonConverter.toJsonString(obj2);
         }
 
         public Boolean check() {

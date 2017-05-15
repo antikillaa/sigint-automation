@@ -1,13 +1,11 @@
 package steps;
 
-import model.entities.Entities;
 import error_reporter.ErrorReporter;
 import http.OperationResult;
-import java.util.Date;
-import java.util.List;
 import json.JsonConverter;
 import model.Team;
 import model.User;
+import model.entities.Entities;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStory;
@@ -16,6 +14,9 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TeamService;
 import services.UserService;
+
+import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class APIUserSteps extends APISteps {

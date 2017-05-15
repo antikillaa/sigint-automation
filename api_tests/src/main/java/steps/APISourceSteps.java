@@ -1,23 +1,23 @@
 package steps;
 
 import app_context.AppContext;
-import model.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import http.OperationResult;
+import json.JsonConverter;
 import model.*;
+import model.entities.Entities;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import services.SourceService;
-import utils.Parser;
 import utils.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+@SuppressWarnings("unchecked")
 public class APISourceSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APISourceSteps.class);
@@ -138,7 +138,7 @@ public class APISourceSteps extends APISteps {
                         return;
                     }
                 } catch (NullPointerException e) {
-                    log.warn("Source without recordType: " + Parser.entityToString(source));
+                    log.warn("Source without recordType: " + JsonConverter.toJsonString(source));
                 }
             }
         }

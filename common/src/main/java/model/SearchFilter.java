@@ -2,10 +2,12 @@ package model;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-public abstract class SearchFilter <T extends AbstractEntity> {
+import java.util.List;
+
+public abstract class SearchFilter<T extends AbstractEntity> {
 
     @JsonIgnore
-    protected SearchFilter activeFilter;
+    protected SearchFilter<T> activeFilter;
 
     protected String sortField;
     protected Boolean sortDirection = true; //asc=true, desc=false
@@ -13,11 +15,7 @@ public abstract class SearchFilter <T extends AbstractEntity> {
     protected Integer page = 0;
     protected Integer pageSize = 1000; //TODO
 
-    protected SearchFilter getActiveFilter() {
-        return activeFilter;
-    }
-
-    protected void setActiveFilter(SearchFilter activeFilter) {
+    protected void setActiveFilter(SearchFilter<T> activeFilter) {
         this.activeFilter = activeFilter;
     }
 
@@ -56,4 +54,14 @@ public abstract class SearchFilter <T extends AbstractEntity> {
         this.pageSize = pageSize;
     }
 
+    boolean isAppliedToFilterList(List<String> entityFieldCollection, List<String> filterCollection) {
+        if (filterCollection == null || filterCollection.isEmpty()) {
+            return true;
+        } else if (entityFieldCollection == null || entityFieldCollection.isEmpty()) {
+            return false;
+        } else {
+            entityFieldCollection.retainAll(filterCollection);
+            return !entityFieldCollection.isEmpty();
+        }
+    }
 }

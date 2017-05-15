@@ -1,19 +1,19 @@
 package services;
 
-import model.SearchFilter;
-import model.entities.Entities;
 import errors.OperationResultError;
 import file_generator.FileGenerator;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.phonebook.EtisalatSubscriberRequest;
+import json.JsonConverter;
 import model.EtisalatSubscriberEntry;
 import model.G4File;
+import model.SearchFilter;
 import model.UploadResult;
+import model.entities.Entities;
 import model.phonebook.EtisalatSubscriberSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import utils.Parser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
     @Override
     public OperationResult<UploadResult> add(EtisalatSubscriberEntry entity) {
         log.info("Add Etisalat Subscriber entry..");
-        log.debug(Parser.entityToString(entity));
+        log.debug(JsonConverter.toJsonString(entity));
         List<EtisalatSubscriberEntry> entries = new ArrayList<>();
         entries.add(entity);
 
@@ -46,7 +46,7 @@ public class EtisalatSubscriberService implements EntityService<EtisalatSubscrib
 
     public OperationResult<UploadResult> add(List<EtisalatSubscriberEntry> entities) {
         log.info("Adding Etisalat Subscriber entries..");
-        log.debug(Parser.entityToString(entities));
+        log.debug(JsonConverter.toJsonString(entities));
 
         OperationResult<UploadResult> operationResult = upload(entities);
         if (operationResult.isSuccess()) {
