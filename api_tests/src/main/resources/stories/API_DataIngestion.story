@@ -1,6 +1,23 @@
 Meta:
 @story ingestion
 
+Scenario: API.Ingestion with the wrong source type
+Meta: @nightly @wip
+Given I sign in as admin user
+And Data source with F and <recordType> exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> data file is renamed to make filename unique
+When I send upload data file request
+Then Request is successful
+And Uploaded file is processed
+And Message contains "file with id"
+
+Examples:
+| sourceType | recordType | recordsCount |
+| Strategic  | SMS        | 10           |
+| Tactical   | SMS        | 10           |
+
+
 Scenario: Upload several files with the same name into one source
 Meta: @nightly
 Given I sign in as admin user

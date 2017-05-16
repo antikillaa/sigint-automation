@@ -96,7 +96,8 @@ public class APIUploadFilesSteps extends APISteps {
 
         if (fileMeta != null && fileMeta.getMeta() != null) {
             if (fileMeta.getMeta().getProperties().getError() != null) {
-                ErrorReporter.reportAndRaiseError(fileMeta.getMeta().getProperties().getError());
+                log.error(fileMeta.getMeta().getProperties().getError());
+                return true;
             }
             log.info("meta: {'etag': '" + fileMeta.getEtag() + "', isProcessed: " + fileMeta.getMeta().getIsProcessed() + '}');
             return (fileMeta.getEtag().length() > 0 & fileMeta.getMeta().getIsProcessed()); // FileMeta.etag == Process.md5
