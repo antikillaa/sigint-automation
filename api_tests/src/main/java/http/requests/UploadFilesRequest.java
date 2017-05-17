@@ -14,6 +14,7 @@ import model.Source;
 public class UploadFilesRequest extends HttpRequest {
 
     private final static String URI = "/api/upload/files/";
+    private static String parentRemotePath;
 
     public UploadFilesRequest() {
         super(URI);
@@ -75,12 +76,25 @@ public class UploadFilesRequest extends HttpRequest {
      */
     private FileMeta initFileMeta(G4File file, Source source, String ownerId) {
 
-        String path = "/" + source.getType().toLetterCode() + "/" + source.getName()
-                + new SimpleDateFormat("/yyyy/MM/dd/").format(new Date()) +
-                file.getName().substring(0, file.getName().lastIndexOf(".")) + "/" + file.getName();
+        String name;
+        String basename = file.getName().substring(0, file.getName().lastIndexOf("."));
+        String path = "/" + source.getType().toLetterCode()
+            + "/" + source.getName()
+            + new SimpleDateFormat("/yyyy/MM/dd/").format(new Date())
+            + basename + "/";
+
+
+        /*  Meta file contains relative paths of audio files.
+            Place audio files into parentRemotePath subfolder to bind them together */
+        if (file.getName().contains(".xls") || file.getName().contains(".csv")) {
+            parentRemotePath = path;
+            name = parentRemotePath + file.getName();
+        } else {
+            name = parentRemotePath + file.getParentFile().getName() + "/" + file.getName();
+        }
 
         FileMeta fileMeta = new FileMeta();
-        fileMeta.setName(path);
+        fileMeta.setName(name);
         fileMeta.setOwner(ownerId);
         fileMeta.setSourceId(source.getId());
         Meta meta = new Meta();

@@ -1,4 +1,4 @@
-package ingestion.docker.adapters;
+package ingestion.docker;
 
 import com.spotify.docker.client.messages.ContainerConfig;
 
@@ -8,4 +8,5 @@ public interface IDockerAdapter {
 
   String[] getFilemasks();
 
+  String getImageName();
 }

@@ -1,11 +1,14 @@
 package ingestion;
 
+import static utils.FileHelper.getFilesByWildcards;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import model.G4File;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -55,5 +58,10 @@ public class IngestionService {
     G4File renamedFile = new G4File(target.toString());
     renamedFile.setMediaType(sourceFile.getMediaType());
     return renamedFile;
+  }
+
+  public static List<File> getWavs() {
+    String path = INGESTION_DIR.normalize().toString();
+    return getFilesByWildcards(path, new String[]{"*.wav"});
   }
 }

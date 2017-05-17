@@ -1,26 +1,32 @@
-package ingestion;
+package ingestion.docker;
 
-import static ingestion.docker.DockerConfig.getDockerClient;
 import static ingestion.IngestionService.INGESTION_DIR;
 import static org.junit.Assert.assertNotNull;
 import static utils.FileHelper.getFilesByWildcards;
 
+import app_context.properties.DockerProperties;
+import com.spotify.docker.client.DefaultDockerClient;
+import com.spotify.docker.client.DefaultDockerClient.Builder;
+import com.spotify.docker.client.DockerCertificates;
 import com.spotify.docker.client.DockerClient;
+import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.ContainerCreation;
-import ingestion.docker.adapters.IDockerAdapter;
+import com.spotify.docker.client.messages.RegistryAuth;
 import error_reporter.ErrorReporter;
+import ingestion.IIngestionDataGenerator;
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import javax.ws.rs.core.MediaType;
 import model.G4File;
-import model.PegasusMediaType;
 import org.apache.log4j.Logger;
 
 public class DockerDataGenerator implements IIngestionDataGenerator {
 
   private static final Logger log = Logger.getLogger(DockerDataGenerator.class);
+  private static DockerProperties props =  new DockerProperties();
+
   private DockerClient docker;
   private final IDockerAdapter dockerAdapter;
 
@@ -29,9 +35,33 @@ public class DockerDataGenerator implements IIngestionDataGenerator {
     this.docker = getDockerClient();
   }
 
+  private static DockerClient getDockerClient() {
+    Builder dockerBuilder = DefaultDockerClient.builder();
+    final RegistryAuth registryAuth = RegistryAuth.builder()
+        .username(props.getRegistryLogin())
+        .password(props.getRegistryPassword())
+        .serverAddress(props.getRegistryAddress())
+        .build();
+    dockerBuilder.registryAuth(registryAuth);
+
+    dockerBuilder.uri(props.getClientURI());
+
+    if (props.getClientURI().startsWith("https")) {
+      try {
+        dockerBuilder.dockerCertificates(new DockerCertificates(Paths.get(props.getCertPath())));
+      } catch (DockerCertificateException e) {
+        log.error(e.getMessage());
+      }
+    }
+    return dockerBuilder.build();
+  }
+
   private void generateDataInContainer(String recordsCount) {
     assertNotNull("Can't init container config", dockerAdapter.getContainerConfig(recordsCount));
     try {
+      log.info("Pulling image");
+      docker.pull(dockerAdapter.getImageName());
+      log.info("Create container");
       final ContainerCreation creation = docker.createContainer(dockerAdapter.getContainerConfig(recordsCount));
       final String id = creation.id();
       // Start container, wait for execution and delete after that
@@ -55,19 +85,11 @@ public class DockerDataGenerator implements IIngestionDataGenerator {
     if (files.isEmpty()) {
       ErrorReporter.raiseError(String.format("Can't find files by mask %s in %s",
           Arrays.toString(dockerAdapter.getFilemasks()), path));
+    } else if (files.size() > 1) {
+      log.info("List of found files: " + files);
     }
-    log.info("List of found files: " + files);
+    log.info(String.format("Working with %s file", files.get(0).getPath()));
 
-    MediaType mediaType;
-    String newFilename = files.get(0).getPath();
-    if (newFilename.endsWith(".csv")) {
-      mediaType = PegasusMediaType.TEXT_CSV_TYPE;
-    } else {
-      mediaType = PegasusMediaType.MS_EXCEL_TYPE;
-    }
-
-    G4File g4File = new G4File(newFilename);
-    g4File.setMediaType(mediaType);
-    return g4File;
+    return new G4File(files.get(0).getPath());
   }
 }
