@@ -1,5 +1,7 @@
 package steps;
 
+import conditions.Conditions;
+import conditions.Verify;
 import http.OperationResult;
 import model.Team;
 import model.entities.Entities;
@@ -33,7 +35,7 @@ public class APITeamManagementSteps extends APISteps {
         Team created = Entities.getTeams().getLatest();
 
         Assert.assertEquals(created.getDescription(), team.getDescription());
-        Assert.assertEquals(created.getDefaultPermission(), team.getDefaultPermission());
+        Verify.shouldBe(Conditions.equals(created.getDefaultPermission(), team.getDefaultPermission()));
         Assert.assertEquals(created.getFullName(), team.getFullName());
         Assert.assertEquals(created.getOrganizationType(), team.getOrganizationType());
         Assert.assertEquals(created.getParentTeamId(), team.getParentTeamId());
