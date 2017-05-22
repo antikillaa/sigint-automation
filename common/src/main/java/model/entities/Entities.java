@@ -27,6 +27,7 @@ public class Entities {
     private static TagList tags;
     private static ResponsibilityList responsibilities;
     private static TitleList titles;
+    private static OrganizationList organizations;
 
     public static EntityList<Team> getTeams() {
         if (teams == null) {
@@ -174,5 +175,12 @@ public class Entities {
             titles = new TitleList();
         }
         return titles;
+    }
+
+    public static EntityList<Organization> getOrganizations() {
+        if (organizations == null) {
+            organizations = new OrganizationList();
+        }
+        return organizations;
     }
 }

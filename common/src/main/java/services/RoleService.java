@@ -10,7 +10,6 @@ import model.SearchFilter;
 import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import utils.Parser;
 
 import java.util.List;
 
@@ -30,7 +29,6 @@ public class RoleService implements EntityService<Role> {
     @Override
     public OperationResult<Role> add(Role entity) {
         log.info("Creating new Role, name:" + entity.getName());
-        log.debug(Parser.entityToString(entity));
 
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
 
@@ -76,7 +74,6 @@ public class RoleService implements EntityService<Role> {
     @Override
     public OperationResult<Role> update(Role entity) {
         log.info("Updating Role, name: " + entity.getName());
-        log.debug(Parser.entityToString(entity));
 
         G4Response response = g4HttpClient.sendRequest(request.update(entity));
 

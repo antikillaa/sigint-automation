@@ -1,31 +1,13 @@
 package steps;
 
-import static org.junit.Assert.assertEquals;
-
 import app_context.AppContext;
 import conditions.Conditions;
 import conditions.Verify;
 import error_reporter.ErrorReporter;
 import http.OperationResult;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import model.FileMeta;
-import model.G4File;
-import model.G4Record;
-import model.GenerationMatrix;
-import model.GenerationMatrixRow;
-import model.LoggedUser;
-import model.MatchingResult;
+import json.JsonConverter;
+import model.*;
 import model.Process;
-import model.Record;
-import model.RecordFilter;
-import model.SearchResultType;
-import model.Source;
-import model.TargetResultType;
-import model.UploadDetails;
-import model.UploadFilter;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -33,8 +15,15 @@ import org.junit.Assert;
 import services.RecordService;
 import services.UploadFilesService;
 import utils.DateHelper;
-import utils.Parser;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+import static org.junit.Assert.assertEquals;
+
+@SuppressWarnings("unchecked")
 public class APIUploadFilesSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APIUploadFilesSteps.class);
@@ -141,7 +130,7 @@ public class APIUploadFilesSteps extends APISteps {
             if (!process.getMd5().equals(fileMeta.getEtag())) {
                 continue;
             }
-            log.debug(Parser.entityToString(process));
+            log.debug(JsonConverter.toJsonString(process));
             if (process.isIngestMatchingComplete() && (process.getRecordsCount() > 0)) {
                 log.info(String.format("%s records are ingested", process.getRecordsCount()));
                 if (process.getRecordsCount() == recordsCount) {

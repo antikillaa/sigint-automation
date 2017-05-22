@@ -1,15 +1,14 @@
 package services;
 
-import model.SearchFilter;
-import model.entities.Entities;
 import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.ReportRequest;
 import model.Report;
+import model.SearchFilter;
+import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import utils.Parser;
 
 import java.util.List;
 
@@ -27,7 +26,6 @@ public class ReportService implements EntityService<Report> {
     @Override
     public OperationResult<Report> add(Report entity) {
         log.info("Sending create new report request...");
-        log.debug(Parser.entityToString(entity));
 
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
 

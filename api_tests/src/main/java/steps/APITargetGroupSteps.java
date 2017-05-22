@@ -1,17 +1,17 @@
 package steps;
 
-import model.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import http.OperationResult;
+import json.JsonConverter;
 import model.*;
+import model.entities.Entities;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TargetGroupService;
-import utils.Parser;
 import utils.RandomGenerator;
 
 import java.util.Arrays;
@@ -197,7 +197,7 @@ public class APITargetGroupSteps extends APISteps {
             log.info("Search result size: " + searchResult.size());
         }
         for (TargetGroup targetGroup : searchResult) {
-            Assert.assertTrue(String.format("Target:%s should not match to filter %s", targetGroup, Parser.entityToString(searchFilter)),
+            Assert.assertTrue(String.format("Target:%s should not match to filter %s", targetGroup, JsonConverter.toJsonString(searchFilter)),
                     searchFilter.isAppliedToEntity(targetGroup));
         }
     }

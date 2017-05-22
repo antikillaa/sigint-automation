@@ -1,17 +1,16 @@
 package services;
 
-import model.SearchFilter;
-import model.entities.Entities;
 import errors.OperationResultError;
 import http.G4Response;
-import json.JsonConverter;
 import http.OperationResult;
 import http.requests.RecordRequest;
+import json.JsonConverter;
 import model.Record;
 import model.RecordSearchResult;
+import model.SearchFilter;
+import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import utils.Parser;
 
 import java.util.List;
 
@@ -30,7 +29,6 @@ public class RecordService implements EntityService<Record> {
     @Override
     public OperationResult<Record> add(Record entity) {
         log.info("Creating new record");
-        log.debug(Parser.entityToString(entity));
         G4Response response = g4HttpClient.sendRequest(request.manual(entity));
 
         OperationResult<Record> operationResult = new OperationResult<>(response, Record.class, "result");

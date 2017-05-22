@@ -9,8 +9,8 @@ import model.RecordType;
 import model.UIRecord;
 import org.apache.log4j.Logger;
 import pages.SigintPage;
-import utils.Parser;
 import utils.G4Date;
+import utils.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -69,7 +69,7 @@ public abstract class RecordsTableController extends TableController {
         newRecord.setOriginalId(row.getRecordID());
         newRecord.setType(RecordType.valueOf(row.getType()));
         if (row.getType().equalsIgnoreCase("voice")) {
-            newRecord.setDuration(Parser.getDurationFromString(row.getDetails()));
+            newRecord.setDuration(StringUtils.getDurationFromString(row.getDetails()));
         } else {
             newRecord.setText(row.getDetails());
         }

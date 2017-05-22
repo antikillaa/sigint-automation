@@ -1,16 +1,15 @@
 package steps;
 
-import model.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import data_generator.DataGenerator;
 import http.OperationResult;
 import model.RecordCategory;
+import model.entities.Entities;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import services.RecordCategoryService;
-import utils.Parser;
 import utils.RandomGenerator;
 
 import java.util.List;
@@ -95,7 +94,7 @@ public class APIRecordCategorySteps extends APISteps {
     @When("I send update record category request")
     public void updateRecordCategory() {
         RecordCategory category = context.get("recordCategory", RecordCategory.class);
-        logger.debug("Update record-category: " + Parser.entityToString(category));
+
         DataGenerator dataGenerator = new DataGenerator(RecordCategory.class);
         RecordCategory recordCategory = (RecordCategory) dataGenerator.produce();
         recordCategory.setId(category.getId());

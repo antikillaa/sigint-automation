@@ -1,16 +1,15 @@
 package services;
 
-import model.SearchFilter;
-import model.entities.Entities;
 import http.G4Response;
-import json.JsonConverter;
 import http.OperationResult;
 import http.requests.GroupsRequest;
+import json.JsonConverter;
 import model.Group;
 import model.RequestResult;
+import model.SearchFilter;
+import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-import utils.Parser;
 
 import java.util.List;
 
@@ -30,7 +29,6 @@ public class GroupService implements EntityService<Group> {
     @Override
     public OperationResult<Group> add(Group entity) {
         log.info("Creating new Group");
-        log.debug(Parser.entityToString(entity));
 
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
         OperationResult<Group> operationResult = new OperationResult<>(response, Group.class);
@@ -76,7 +74,6 @@ public class GroupService implements EntityService<Group> {
     @Override
     public OperationResult<Group> update(Group entity) {
         log.info("Updating Group id:" + entity.getId() + " display_name:" + entity.getDisplayName());
-        log.debug(Parser.entityToString(entity));
 
         G4Response response = g4HttpClient.sendRequest(request.update(entity));
         OperationResult<Group> operationResult = new OperationResult<>(response, Group.class);

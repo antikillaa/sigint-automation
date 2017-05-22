@@ -1,6 +1,7 @@
 package http.requests;
 
 import http.HttpMethod;
+import model.SearchFilter;
 import model.Team;
 
 public class TeamRequest extends HttpRequest {
@@ -41,4 +42,18 @@ public class TeamRequest extends HttpRequest {
     return this;
   }
 
+  public TeamRequest list() {
+    this
+            .setURI(URI)
+            .setHttpMethod(HttpMethod.GET);
+    return this;
+  }
+
+  public TeamRequest search(SearchFilter filter) {
+    this
+            .setURI(URI + "search")
+            .setHttpMethod(HttpMethod.POST)
+            .setPayload(filter);
+    return this;
+  }
 }

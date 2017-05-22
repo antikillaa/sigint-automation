@@ -14,7 +14,6 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TargetService;
-import utils.Parser;
 import utils.RandomGenerator;
 
 import java.util.ArrayList;
@@ -170,7 +169,7 @@ public class APITargetSteps extends APISteps {
             log.info("Search result size: " + searchResult.size());
         }
         for (Target target : searchResult) {
-            Assert.assertTrue(String.format("Target:%s should not match to filter %s", target, Parser.entityToString(searchFilter)),
+            Assert.assertTrue(String.format("Target:%s should not match to filter %s", target, JsonConverter.toJsonString(searchFilter)),
                     searchFilter.isAppliedToEntity(target));
         }
     }
