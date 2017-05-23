@@ -34,14 +34,13 @@ public class User extends Organization {
 
     private Boolean isDeleted = false;
     @DataIgnore
-    private UserPermission effectivePermission;
+    private UserPermission effectivePermission = new UserPermission();
 
     public User() {
         setOrganizationType(OrganizationType.USER);
     }
 
     @DataIgnore
-    @Deprecated
     private List<String> roles = new ArrayList<>();
 
     public String toString() {

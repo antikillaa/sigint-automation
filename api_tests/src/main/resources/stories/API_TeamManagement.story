@@ -3,7 +3,7 @@ Meta:
 
 Lifecycle:
 Before:
-Given I sign in as admin user
+Given I sign in as user with permissions UM_ADMIN, TEAM_MANAGER
 
 
 Scenario: Getting a list of all teams

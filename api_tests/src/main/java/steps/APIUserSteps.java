@@ -62,11 +62,7 @@ public class APIUserSteps extends APISteps {
     @When("I send delete user request")
     public void deleteUser() {
         User createdUser = Entities.getUsers().getLatest();
-        if (createdUser.getCreatedBy() == null) {
-            ErrorReporter.raiseError("You are trying to delete system user " + createdUser.getName());
-        } else {
-            service.remove(createdUser);
-        }
+        service.remove(createdUser);
     }
 
     @When("I send get list of users")

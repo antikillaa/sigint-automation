@@ -5,6 +5,8 @@
            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
     <bean id="loginSteps" class="steps.APILoginSteps">
     </bean>
+    <bean id="apiLoginController" class="controllers.APILogin" >
+    </bean>
     <bean id="testSteps" class="steps.GlobalSteps">
     </bean>
     <bean id="targetGroupSteps" class="steps.APITargetGroupSteps">
