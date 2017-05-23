@@ -1,5 +1,7 @@
 package steps;
 
+import static utils.StringUtils.hasRepeatedCharacters;
+
 import error_reporter.ErrorReporter;
 import http.OperationResult;
 import json.JsonConverter;
@@ -57,7 +59,12 @@ public class APIUserSteps extends APISteps {
     }
 
     static User getRandomUser() {
-        return objectInitializer.randomEntity(User.class);
+        User randomUser;
+        do {
+            randomUser = objectInitializer.randomEntity(User.class);
+        } while (hasRepeatedCharacters(randomUser.getPassword(), 3));
+
+        return randomUser;
     }
 
     @When("I send delete user request")
