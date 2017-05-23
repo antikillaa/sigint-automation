@@ -1,18 +1,12 @@
 package http;
 
+import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD;
+import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME;
+
 import app_context.properties.G4Properties;
 import error_reporter.ErrorReporter;
 import http.requests.HttpRequest;
-import json.JsonConverter;
-import org.apache.log4j.Logger;
-import org.glassfish.jersey.SslConfigurator;
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.HttpUrlConnectorProvider;
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
-import org.glassfish.jersey.media.multipart.MultiPart;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import utils.DateHelper;
-
+import java.util.Date;
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -22,10 +16,15 @@ import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Date;
-
-import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_PASSWORD;
-import static org.glassfish.jersey.client.authentication.HttpAuthenticationFeature.HTTP_AUTHENTICATION_BASIC_USERNAME;
+import json.JsonConverter;
+import org.apache.log4j.Logger;
+import org.glassfish.jersey.SslConfigurator;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.HttpUrlConnectorProvider;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.glassfish.jersey.media.multipart.MultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import utils.DateHelper;
 
 public class G4HttpClient {
 
@@ -173,9 +172,10 @@ public class G4HttpClient {
      * Convert object to Entity for payload.
      *
      * @param object object for payload
+     * @param mediaType String representation of Content-Type
      * @return Entity instance for payload
      */
-    private Entity convertToEntity(Object object) {
+    private Entity convertToEntity(Object object, String mediaType) {
 
         Entity payload;
         if (object == null) {
@@ -185,7 +185,8 @@ public class G4HttpClient {
         if (object.getClass().equals(MultiPart.class)) {
             payload = Entity.entity(object, MediaType.MULTIPART_FORM_DATA_TYPE);
         } else {
-            payload = Entity.json(JsonConverter.toJsonString(object));
+            // set payload object with Content-Type header
+            payload = Entity.entity(JsonConverter.toJsonString(object), mediaType);
         }
 
         return payload;
@@ -225,7 +226,7 @@ public class G4HttpClient {
      * @return {@link G4Response} formed from request
      */
     private G4Response sendRequest(Builder builder, HttpRequest request) {
-        Entity payload = convertToEntity(request.getPayload());
+        Entity payload = convertToEntity(request.getPayload(), request.getMediaType());
         Invocation invocation;
         int tryCount = 0;
         Response response;
@@ -247,6 +248,8 @@ public class G4HttpClient {
                     request.getURI(), JsonConverter.toJsonString(request.getPayload()),
                     response.readEntity(String.class)));
         }
+        // clean MultiPart to avoid problems with static request instance reuse
+        request.cleanMultiPart();
         return new G4Response(response.readEntity(String.class), response.getStatus());
     }
 
