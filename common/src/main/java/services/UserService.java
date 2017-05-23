@@ -48,6 +48,8 @@ public class UserService implements EntityService<User> {
             }
             Entities.getUsers().addOrUpdateEntity(user);
             Entities.getOrganizations().addOrUpdateEntity(user);
+        } else {
+            log.error("Can't create User " + entity.toString());
         }
         return operationResult;
     }
