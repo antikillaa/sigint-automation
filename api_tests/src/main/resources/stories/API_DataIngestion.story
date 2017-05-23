@@ -64,6 +64,7 @@ And <sourceType> - <recordType> data file is renamed to make filename unique
 When I send upload data file request
 Then Request is successful
 And Uploaded file is processed
+And Original data file is searchable within the system
 And <recordsCount> records are ingested
 When I send get upload details request
 Then Request is successful
@@ -84,6 +85,7 @@ And <sourceType> - <recordType> data file is renamed to make filename unique
 When I send upload data file request
 Then Request is successful
 And Uploaded file is processed
+And Original data file is searchable within the system
 And <recordsCount> records are ingested
 When I send get upload details request
 Then Request is successful
@@ -104,6 +106,7 @@ And <sourceType> - <recordType> data file is renamed to make filename unique
 When I send upload data file request
 Then Request is successful
 And Uploaded file is processed
+And Original data file is searchable within the system
 And <recordsCount> records are ingested
 When I send get upload details request
 Then Request is successful
@@ -124,6 +127,7 @@ And <sourceType> - <recordType> data file is renamed to make filename unique
 When I send upload data file request
 Then Request is successful
 And Uploaded file is processed
+And Original data file is searchable within the system
 And <recordsCount> records are ingested
 When I send get upload details request
 Then Request is successful
@@ -145,6 +149,7 @@ When I send upload data file request
 Then Request is successful
 When I upload audio files
 Then Uploaded file is processed
+And Original data file is searchable within the system
 And <recordsCount> records are ingested
 When I send get upload details request
 Then Request is successful

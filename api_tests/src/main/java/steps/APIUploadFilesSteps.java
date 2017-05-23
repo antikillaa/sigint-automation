@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Objects;
 import json.JsonConverter;
 import model.FileMeta;
+import model.FileMetaFilter;
+import model.FileMetaFilter.Query;
 import model.G4File;
 import model.G4Record;
 import model.GenerationMatrix;
@@ -45,6 +47,23 @@ public class APIUploadFilesSteps extends APISteps {
     private UploadFilesService service = new UploadFilesService();
     private static final int WAITING_TIME = 6 * 60; // in seconds
     private static final int POLLING_INTERVAL = 20; // in seconds
+
+    @Then("Original data file is searchable within the system")
+    public void originalFilesAreSearchable() {
+        FileMeta uploadedFileMeta = context.get("meta", FileMeta.class);
+
+        Query query = new Query("EQ", "path", uploadedFileMeta.getPath());
+        FileMetaFilter filter = new FileMetaFilter().setQuery(query);
+        List<FileMeta> fileMetaList = service.searchDataFiles(filter);
+
+        for (FileMeta fileMeta : fileMetaList) {
+            if (uploadedFileMeta.getId().equals(fileMeta.getId())) {
+                Verify.shouldBe(Conditions.equals(uploadedFileMeta, fileMeta));
+                return;
+            }
+        }
+        ErrorReporter.reportAndRaiseError("Can't find uploaded " + uploadedFileMeta.getPath());
+    }
 
     @When("I send upload data file request")
     public void uploadFile() {
@@ -121,11 +140,14 @@ public class APIUploadFilesSteps extends APISteps {
                 log.error(fileMeta.getMeta().getProperties().getError());
                 return true;
             }
+            // FileMeta.etag == Process.md5
             log.info("meta: {'etag': '" + fileMeta.getEtag() + "', isProcessed: " + fileMeta.getMeta().getIsProcessed() + '}');
-            return (fileMeta.getEtag().length() > 0 & fileMeta.getMeta().getIsProcessed()); // FileMeta.etag == Process.md5
-        } else {
-            return false;
+            if (fileMeta.getEtag().length() > 0 & fileMeta.getMeta().getIsProcessed()) {
+                context.put("meta", fileMeta);
+                return true;
+            }
         }
+        return false;
     }
 
     @Then("$rCount records are ingested")

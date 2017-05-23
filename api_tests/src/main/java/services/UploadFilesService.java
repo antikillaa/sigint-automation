@@ -6,6 +6,7 @@ import http.G4Response;
 import http.OperationResult;
 import http.requests.UploadFilesRequest;
 import http.requests.UploadRequest;
+import java.util.Arrays;
 import model.*;
 import model.Process;
 import org.apache.log4j.Logger;
@@ -92,4 +93,15 @@ public class UploadFilesService {
         }
     }
 
+    public List<FileMeta> searchDataFiles(FileMetaFilter filter) {
+        log.info("Search Data Files..");
+        G4Response response = g4HttpClient.sendRequest(uploadFilesRequest.search(filter));
+
+        OperationResult<FileMeta[]> operationResult = new OperationResult<>(response, FileMeta[].class);
+        if (operationResult.isSuccess() && operationResult.getEntity() != null) {
+            return Arrays.asList(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+    }
 }

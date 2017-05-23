@@ -6,9 +6,11 @@ import java.util.Date;
 import javax.ws.rs.core.MediaType;
 import json.JsonConverter;
 import model.FileMeta;
+import model.FileMetaFilter;
 import model.G4File;
 import model.Meta;
 import model.MetaProperties;
+import model.PegasusMediaType;
 import model.Source;
 
 public class UploadFilesRequest extends HttpRequest {
@@ -18,6 +20,8 @@ public class UploadFilesRequest extends HttpRequest {
 
     public UploadFilesRequest() {
         super(URI);
+        // API works only with specified Content-Type
+        this.setMediaType(PegasusMediaType.PEGASUS_JSON_V1);
     }
 
     /**
@@ -106,5 +110,14 @@ public class UploadFilesRequest extends HttpRequest {
         fileMeta.setType(file.getMediaType().toString());
 
         return fileMeta;
+    }
+
+    public UploadFilesRequest search(FileMetaFilter filter) {
+        this
+            .setURI(URI + "/_search")
+            .setHttpMethod(HttpMethod.POST)
+            .setPayload(filter);
+
+        return this;
     }
 }
