@@ -1,14 +1,14 @@
 package steps;
 
-import static utils.StringUtils.hasRepeatedCharacters;
-
+import data_for_entity.data_providers.user_password.UserPasswordProvider;
 import error_reporter.ErrorReporter;
 import http.OperationResult;
+import java.util.Date;
+import java.util.List;
 import json.JsonConverter;
 import model.Team;
 import model.User;
 import model.entities.Entities;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.Then;
@@ -16,9 +16,6 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TeamService;
 import services.UserService;
-
-import java.util.Date;
-import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class APIUserSteps extends APISteps {
@@ -31,7 +28,7 @@ public class APIUserSteps extends APISteps {
     private static final int LOGIN_DELAY = 5000;
 
     private String generatePassword() {
-        return RandomStringUtils.randomAlphanumeric(PASSWORD_LENGTH);
+        return (String) new UserPasswordProvider().generate(PASSWORD_LENGTH);
     }
 
     @AfterStory
@@ -59,12 +56,7 @@ public class APIUserSteps extends APISteps {
     }
 
     static User getRandomUser() {
-        User randomUser;
-        do {
-            randomUser = objectInitializer.randomEntity(User.class);
-        } while (hasRepeatedCharacters(randomUser.getPassword(), 3));
-
-        return randomUser;
+        return objectInitializer.randomEntity(User.class);
     }
 
     @When("I send delete user request")
