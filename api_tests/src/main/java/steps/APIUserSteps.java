@@ -3,8 +3,6 @@ package steps;
 import data_for_entity.data_providers.user_password.UserPasswordProvider;
 import error_reporter.ErrorReporter;
 import http.OperationResult;
-import java.util.Date;
-import java.util.List;
 import json.JsonConverter;
 import model.Team;
 import model.User;
@@ -16,6 +14,9 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TeamService;
 import services.UserService;
+
+import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class APIUserSteps extends APISteps {
@@ -62,11 +63,7 @@ public class APIUserSteps extends APISteps {
     @When("I send delete user request")
     public void deleteUser() {
         User createdUser = Entities.getUsers().getLatest();
-        if (createdUser.getCreatedBy() == null) {
-            ErrorReporter.raiseError("You are trying to delete system user " + createdUser.getName());
-        } else {
-            service.remove(createdUser);
-        }
+        service.remove(createdUser);
     }
 
     @When("I send get list of users")

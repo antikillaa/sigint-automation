@@ -10,23 +10,23 @@ import java.util.List;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class UserPermission {
 
-    private ArrayList<String> titles = new ArrayList<>();
-    private ArrayList<String> actions = new ArrayList<>();
+    private List<String> titles = new ArrayList<>();
+    private List<String> actions = new ArrayList<>();
     private PermissionRecord record = new PermissionRecord();
 
-    public ArrayList<String> getTitles() {
+    public List<String> getTitles() {
         return titles;
     }
 
-    public void setTitles(ArrayList<String> titles) {
+    public void setTitles(List<String> titles) {
         this.titles = titles;
     }
 
-    public ArrayList<String> getActions() {
+    public List<String> getActions() {
         return actions;
     }
 
-    public void setActions(ArrayList<String> actions) {
+    public void setActions(List<String> actions) {
         this.actions = actions;
     }
 
