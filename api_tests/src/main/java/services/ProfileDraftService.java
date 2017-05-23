@@ -1,5 +1,6 @@
 package services;
 
+import errors.OperationResultError;
 import model.SearchFilter;
 import model.entities.Entities;
 import http.G4Response;
@@ -59,7 +60,8 @@ public class ProfileDraftService implements EntityService<Profile> {
             Profile[] profiles = operationResult.getEntity();
             return new OperationResult<>(response, Arrays.asList(profiles));
         } else {
-            throw new AssertionError("Unable to get list of profile drafts!");
+            log.error("Unable to get list of profile drafts!");
+            throw new OperationResultError(operationResult);
         }
     }
 
