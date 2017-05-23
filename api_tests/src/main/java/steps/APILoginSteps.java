@@ -1,21 +1,20 @@
 package steps;
 
-import model.entities.Entities;
+import static conditions.Conditions.isTrue;
+import static utils.StringUtils.trimSpaces;
+
 import conditions.Verify;
 import controllers.APILogin;
 import http.OperationResult;
 import http.OperationsResults;
+import java.io.IOException;
 import model.Token;
 import model.User;
+import model.entities.Entities;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import utils.CollectionUtils;
-
-import java.io.IOException;
-
-import static conditions.Conditions.isTrue;
 
 
 public class APILoginSteps extends APISteps {
@@ -31,7 +30,7 @@ public class APILoginSteps extends APISteps {
 
     @Given("I sign in as user with permissions $permissions")
     public void signInWithPermissions(String permString) {
-        String[] permissions = CollectionUtils.trimSpaces(permString.split(","));
+        String[] permissions = trimSpaces(permString.split(","));
         User user = GlobalSteps.getUserWithPermissions(permissions);
         signInCreds(user);
         checkResultSuccess();

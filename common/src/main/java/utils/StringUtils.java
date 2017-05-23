@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class StringUtils {
 
-    private static Logger log = Logger.getLogger(StringUtils.class);
+    private static final Logger log = Logger.getLogger(StringUtils.class);
     private static Map<String, Integer> multiplier;
 
     static {
@@ -47,5 +47,19 @@ public class StringUtils {
         return Arrays.stream(strings)
                 .filter(s -> !s.equals("[]"))
                 .collect(Collectors.toList());
+    }
+
+    public static String[] trimSpaces(String[] arr) {
+        for (int i=0;i< arr.length; i++) {
+            arr[i] = arr[i].trim();
+        }
+        return arr;
+    }
+
+    public static boolean hasRepeatedCharacters(String text, int sequenceLength) {
+        String regex = String.format("([a-z])\\1{%d}", sequenceLength - 1);
+        Pattern pattern = Pattern.compile(regex);
+
+        return pattern.matcher(text).find();
     }
 }
