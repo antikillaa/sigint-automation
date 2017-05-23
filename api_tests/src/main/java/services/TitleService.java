@@ -1,5 +1,6 @@
 package services;
 
+import errors.OperationResultError;
 import model.SearchFilter;
 import model.entities.Entities;
 import http.G4Response;
@@ -56,7 +57,8 @@ public class TitleService implements EntityService<Title> {
         if (operationResult.isSuccess()) {
             return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
         } else {
-            throw new AssertionError("Unable to get list of titles");
+            log.error("Unable to get list of titles");
+            throw new OperationResultError(operationResult);
         }
     }
 

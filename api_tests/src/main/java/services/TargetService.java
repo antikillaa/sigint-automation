@@ -1,5 +1,6 @@
 package services;
 
+import errors.OperationResultError;
 import model.SearchFilter;
 import model.entities.Entities;
 import file_generator.FileGenerator;
@@ -37,9 +38,8 @@ public class TargetService implements EntityService<Target> {
         if (operationResult.isSuccess()) {
             Entities.getTargets().addOrUpdateEntity(operationResult.getEntity());
         } else {
-            String errorMessage = "Add new target process was failed";
-            log.error(errorMessage);
-            throw new AssertionError(errorMessage);
+            log.error("Add new target process was failed");
+            throw new OperationResultError(operationResult);
         }
         return operationResult;
     }
@@ -96,7 +96,8 @@ public class TargetService implements EntityService<Target> {
         if (operationResult.isSuccess()) {
             return new OperationResult<>(response, operationResult.getEntity().getResult());
         } else {
-            throw new AssertionError("Unable to read list of target from response");
+            log.error("Unable to read list of target from response");
+            throw new OperationResultError(operationResult);
         }
     }
 

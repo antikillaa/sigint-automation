@@ -1,5 +1,6 @@
 package services;
 
+import errors.OperationResultError;
 import http.G4HttpClient;
 import http.G4Response;
 import http.OperationResult;
@@ -86,7 +87,8 @@ public class UploadFilesService {
         if (operationResult.isSuccess() && operationResult.getEntity() != null) {
             return operationResult.getEntity().getResult();
         } else {
-            throw new AssertionError("Unable to read search results from Upload search");
+            log.error("Unable to read search results from Upload search");
+            throw new OperationResultError(operationResult);
         }
     }
 

@@ -72,8 +72,8 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         if (operationResult.isSuccess()) {
             Entities.getTargetGroups().addOrUpdateEntity(operationResult.getEntity());
         } else {
-            log.error("Error! Update targetGroup process was failed");
-            throw new AssertionError("Error! Update targetGroup process was failed");
+            log.error("Update targetGroup process was failed");
+            throw new OperationResultError(operationResult);
         }
         return operationResult;
     }
