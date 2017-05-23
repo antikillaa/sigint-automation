@@ -19,6 +19,7 @@ public class Process extends G4Entity {
     private Date lmt;
     private MatchingContext matchingContext;
     private Integer recordsCount;
+    private Integer voiceCount;
     private Integer smsCount;
     private Long workload;
     private Date earlistRecordTime;
@@ -27,6 +28,13 @@ public class Process extends G4Entity {
     private Integer targetMentionCount;
     private Boolean ingestMatchingComplete;
 
+    public Integer getVoiceCount() {
+        return voiceCount;
+    }
+
+    public void setVoiceCount(Integer voiceCount) {
+        this.voiceCount = voiceCount;
+    }
 
     public Integer getVersion() {
         return version;

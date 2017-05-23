@@ -1,13 +1,35 @@
 package steps;
 
+import static org.junit.Assert.assertEquals;
+
 import app_context.AppContext;
 import conditions.Conditions;
 import conditions.Verify;
 import error_reporter.ErrorReporter;
 import http.OperationResult;
+import ingestion.IngestionService;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import json.JsonConverter;
-import model.*;
+import model.FileMeta;
+import model.G4File;
+import model.G4Record;
+import model.GenerationMatrix;
+import model.GenerationMatrixRow;
+import model.LoggedUser;
+import model.MatchingResult;
+import model.PegasusMediaType;
 import model.Process;
+import model.Record;
+import model.RecordFilter;
+import model.SearchResultType;
+import model.Source;
+import model.TargetResultType;
+import model.UploadDetails;
+import model.UploadFilter;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -15,13 +37,6 @@ import org.junit.Assert;
 import services.RecordService;
 import services.UploadFilesService;
 import utils.DateHelper;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
-import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("unchecked")
 public class APIUploadFilesSteps extends APISteps {
@@ -31,14 +46,6 @@ public class APIUploadFilesSteps extends APISteps {
     private static final int WAITING_TIME = 6 * 60; // in seconds
     private static final int POLLING_INTERVAL = 20; // in seconds
 
-    @When("I wait for $count seconds")
-    public void waitSeveralseconds(String count) {
-        int delay = Integer.valueOf(count);
-
-        log.info("Waiting for " + delay + " seconds...");
-        DateHelper.waitTime(delay);
-    }
-
     @When("I send upload data file request")
     public void uploadFile() {
 
@@ -46,8 +53,34 @@ public class APIUploadFilesSteps extends APISteps {
         Source source = context.get("source", Source.class);
         LoggedUser user = AppContext.get().getLoggedUser();
 
+        if (file.getName().endsWith(".csv")) {
+            file.setMediaType(PegasusMediaType.TEXT_CSV_TYPE);
+        } else {
+            file.setMediaType(PegasusMediaType.MS_EXCEL_TYPE);
+        }
         OperationResult<FileMeta> uploadResult = service.upload(file, source, user.getId());
         context.put("meta", uploadResult.getEntity());
+    }
+
+    @When("I upload audio files")
+    public void uploadWavs() {
+
+        List<File> files = IngestionService.getWavs();
+        if (files.isEmpty()) {
+            ErrorReporter.reportAndRaiseError("Can't find audio files");
+        }
+        Source source = context.get("source", Source.class);
+        LoggedUser user = AppContext.get().getLoggedUser();
+
+        for (File file: files) {
+            G4File g4file = new G4File(file.getPath());
+            g4file.setMediaType(PegasusMediaType.AUDIO);
+            OperationResult<FileMeta> uploadResult = service.upload(g4file, source, user.getId());
+            if (!uploadResult.isSuccess()) {
+                log.error("Can't upload " + file.getName());
+            }
+            // TODO: add isProcessed check
+        }
     }
 
     @Then("Uploaded file is processed")
@@ -144,29 +177,11 @@ public class APIUploadFilesSteps extends APISteps {
         return false;
     }
 
-    @Then("Search results contain $rCount records")
-    public void processResultShouldContainCorrectResult(String rCount) {
-        Process process = context.get("process", Process.class);
-        Source source = context.get("source", Source.class);
-
-        assertEquals("recordsCount calculation fails",
-            Integer.valueOf(rCount), process.getRecordsCount());
-        assertEquals("wrong source id detected",
-            source.getId(), process.getSourceId());
-    }
-
     @When("I send get upload details request")
     public void getUploadDetails() {
         Process process = context.get("process", Process.class);
         UploadDetails uploadDetails = service.details(process.getId()).getEntity();
         context.put("uploadDetails", uploadDetails);
-    }
-
-    @Then("Upload details contain $rCount records")
-    public void matchingResultShouldContainCorrectSummary(String rCount) {
-        UploadDetails uploadDetails = context.get("uploadDetails", UploadDetails.class);
-        context.put("process", uploadDetails.getProcess());
-        processResultShouldContainCorrectResult(rCount);
     }
 
     @Then("matching results contain correct Matching results: total hit&Mention records, list of hit/mention targets with hit/mention records counts for each")

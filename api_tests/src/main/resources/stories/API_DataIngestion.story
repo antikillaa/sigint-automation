@@ -2,7 +2,7 @@ Meta:
 @story ingestion
 
 Scenario: API.Ingestion with the wrong source type
-Meta: @nightly @wip
+Meta: @nightly
 Given I sign in as admin user
 And Data source with F and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -67,7 +67,8 @@ And Uploaded file is processed
 And <recordsCount> records are ingested
 When I send get upload details request
 Then Request is successful
-And Upload details contain <recordsCount> records
+And Upload details contain <recordsCount> - Total records
+And Upload details contain <recordsCount> - <recordType> records
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -86,7 +87,8 @@ And Uploaded file is processed
 And <recordsCount> records are ingested
 When I send get upload details request
 Then Request is successful
-And Upload details contain <recordsCount> records
+And Upload details contain <recordsCount> - Total records
+And Upload details contain <recordsCount> - <recordType> records
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -105,8 +107,50 @@ And Uploaded file is processed
 And <recordsCount> records are ingested
 When I send get upload details request
 Then Request is successful
-And Upload details contain <recordsCount> records
+And Upload details contain <recordsCount> - Total records
+And Upload details contain <recordsCount> - <recordType> records
 
 Examples:
 | sourceType | recordType | recordsCount |
 | Strategic  | SMS        | 1000         |
+
+
+Scenario: API.S-CDR ingestion
+Meta: @nightly
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> data file is renamed to make filename unique
+When I send upload data file request
+Then Request is successful
+And Uploaded file is processed
+And <recordsCount> records are ingested
+When I send get upload details request
+Then Request is successful
+And Upload details contain <recordsCount> - Total records
+And Upload details contain <recordsCount> - <recordType> records
+
+Examples:
+| sourceType | recordType | recordsCount |
+| Strategic  | Voice      | 100          |
+
+
+Scenario: API.T-Voice ingestion
+Meta: @nightly
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> data file is renamed to make filename unique
+When I send upload data file request
+Then Request is successful
+When I upload audio files
+Then Uploaded file is processed
+And <recordsCount> records are ingested
+When I send get upload details request
+Then Request is successful
+And Upload details contain <recordsCount> - Total records
+And Upload details contain <recordsCount> - <recordType> records
+
+Examples:
+| sourceType | recordType | recordsCount |
+| Tactical   | Voice      | 10           |

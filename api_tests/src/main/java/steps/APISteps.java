@@ -10,7 +10,9 @@ import http.OperationResult;
 import http.OperationsResults;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
 import org.junit.Assert;
+import utils.DateHelper;
 
 public abstract class APISteps {
 
@@ -49,4 +51,11 @@ public abstract class APISteps {
         }
     }
 
+    @When("I wait for $count seconds")
+    public void waitSeveralseconds(String count) {
+        int delay = Integer.valueOf(count);
+
+        log.info("Waiting for " + delay + " seconds...");
+        DateHelper.waitTime(delay);
+    }
 }

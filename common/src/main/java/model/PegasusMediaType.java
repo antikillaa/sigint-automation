@@ -8,5 +8,6 @@ public class PegasusMediaType {
     public static final MediaType TEXT_CSV_TYPE = new MediaType("text", "csv");
     public static final String MS_EXCEL = "application/vnd.ms-excel";
     public static final MediaType MS_EXCEL_TYPE = new MediaType("application", "vnd.ms-excel");
+    public static final MediaType AUDIO = new MediaType("audio", "wav");
 }
 

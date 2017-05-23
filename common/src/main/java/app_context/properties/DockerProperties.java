@@ -20,4 +20,16 @@ public class DockerProperties extends ApplicationProperty {
   public String getUser() {
     return getProperty().getProperty("runAsUser");
   }
+
+  public String getRegistryLogin() {
+    return getProperty().getProperty("registryUser");
+  }
+
+  public String getRegistryPassword() {
+    return getProperty().getProperty("registryPassword");
+  }
+
+  public String getRegistryAddress() {
+    return getProperty().getProperty("registryURI");
+  }
 }
