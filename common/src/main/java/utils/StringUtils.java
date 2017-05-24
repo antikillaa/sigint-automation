@@ -62,4 +62,11 @@ public class StringUtils {
 
         return pattern.matcher(text).find();
     }
+
+    public static boolean hasUpperAndLowerCharacters(String text) {
+        boolean hasUppercase = !text.equals(text.toLowerCase());
+        boolean hasLowercase = !text.equals(text.toUpperCase());
+
+        return (hasLowercase && hasUppercase);
+    }
 }
