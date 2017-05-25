@@ -33,6 +33,15 @@ public class HttpRequest {
         this.URI = URI;
         httpMethod = HttpMethod.GET;
         mediaType = MediaType.APPLICATION_JSON;
+        cleanMultiPart();
+    }
+
+    /**
+     * Clean Miltipart payload to avoid problems with static instance reuse for upload
+     */
+    public void cleanMultiPart() {
+        multiPart = new MultiPart();
+        multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
     }
 
     public String getURI() {
@@ -82,7 +91,6 @@ public class HttpRequest {
     protected HttpRequest addBodyFile(String name, File file, MediaType type) {
         log.debug("Adding file " + file.getName() + " to multipart body...");
 
-        cleanMultiPart();
         FileDataBodyPart filePart = new FileDataBodyPart(name, file, type);
         multiPart.bodyPart(filePart);
         setPayload(multiPart);
@@ -99,21 +107,10 @@ public class HttpRequest {
      * @return HttpRequest
      */
     protected HttpRequest addBodyString(String fieldName, String value) {
-        if (multiPart == null) {
-            cleanMultiPart();
-        }
         FormDataBodyPart part = new FormDataBodyPart(fieldName, value);
         multiPart.bodyPart(part);
         setPayload(multiPart);
 
         return this;
-    }
-
-    /**
-     * Clean Miltipart payload to avoid problems with instance reuse for upload
-     */
-    private void cleanMultiPart() {
-        multiPart = new MultiPart();
-        multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
     }
 }
