@@ -2,6 +2,7 @@ package steps;
 
 import conditions.Conditions;
 import conditions.Verify;
+import data_for_entity.RandomEntities;
 import http.OperationResult;
 import model.Team;
 import model.entities.Entities;
@@ -92,5 +93,33 @@ public class APITeamManagementSteps extends APISteps {
         context.put("team", team);
 
         teamService.view(team.getId());
+    }
+
+    @When("I send create a new nested team")
+    public void createNestedTeam() {
+        Team parentTeam = Entities.getTeams().getLatest();
+        Team nestedTeam = new RandomEntities().randomEntity(Team.class);
+        nestedTeam.setParentTeamId(parentTeam.getId());
+
+        context.put("team", nestedTeam);
+
+        teamService.add(nestedTeam);
+    }
+
+    @When("I send move team to other parent team")
+    public void moveTeamToOtherTeam() {
+        Team team = Entities.getTeams().getLatest();
+        List<Team> teams = Entities.getTeams().getEntities();
+
+        Team newParentTeam = teams.stream()
+                .filter(t -> !t.getParentTeamId().equals(team.getParentTeamId()) || !t.getId().equals(team.getId()))
+                .findAny()
+                .orElse(null);
+        Assert.assertNotNull("New parent team for moving nested team not created", newParentTeam);
+
+        team.setParentTeamId(newParentTeam.getId());
+        context.put("team", team);
+
+        teamService.update(team);
     }
 }
