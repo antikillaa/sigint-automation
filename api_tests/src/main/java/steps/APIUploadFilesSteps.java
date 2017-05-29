@@ -136,8 +136,9 @@ public class APIUploadFilesSteps extends APISteps {
         FileMeta fileMeta = fileMetaOperationResult.getEntity();
 
         if (fileMeta != null && fileMeta.getMeta() != null) {
-            if (fileMeta.getMeta().getProperties().getError() != null) {
-                log.error(fileMeta.getMeta().getProperties().getError());
+            String error = fileMeta.getMeta().getProperties().getError();
+            if (error != null) {
+                log.error("Got 'error' in response:\n" + error);
                 return true;
             }
             // FileMeta.etag == Process.md5
