@@ -4,26 +4,22 @@ import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.SourceRequest;
-import http.requests.SourcesRequest;
+import java.util.Arrays;
+import java.util.List;
 import model.Result;
 import model.SearchFilter;
 import model.Source;
-import model.SourceListResult;
 import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SourceService implements EntityService<Source> {
 
     private static Logger log = Logger.getLogger(SourceService.class);
     private static SourceRequest request = new SourceRequest();
-    private static SourcesRequest sourcesRequest = new SourcesRequest();
 
     /**
-     * API: PUT /api/sigint/admin/source/add
+     * API: PUT /api/workflow/sources
      *
      * @param entity Source entity
      * @return HTTP status code
@@ -34,7 +30,7 @@ public class SourceService implements EntityService<Source> {
 
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
 
-        OperationResult<Source> operationResult = new OperationResult<>(response, Source.class, "id");
+        OperationResult<Source> operationResult = new OperationResult<>(response, Source.class);
         if (operationResult.isSuccess()) {
             Entities.getSources().addOrUpdateEntity(operationResult.getEntity());
         }
@@ -42,7 +38,7 @@ public class SourceService implements EntityService<Source> {
     }
 
     /**
-     * API: DELETE /api/sigint/admin/source/{id}
+     * API: DELETE /api/workflow/sources/{id}
      *
      * @param entity Source entity
      * @return HTTP status code
@@ -66,19 +62,19 @@ public class SourceService implements EntityService<Source> {
 
     /**
      * GET list of Sources. Filter {"deleted":false}
-     * API: GET /api/sigint/sources getSources
+     * API: GET /api/workflow/sources getSources
      *
      * @return HTTP status code
      */
     @Override
     public OperationResult<List<Source>> list() {
         log.info("GET list of Sources. Filter {\"deleted\":false}");
-        G4Response response = g4HttpClient.sendRequest(sourcesRequest.list());
+        G4Response response = g4HttpClient.sendRequest(request.list());
 
-        OperationResult<SourceListResult> operationResult = new OperationResult<>(response, SourceListResult.class);
-        if (operationResult.isSuccess()) {
+        OperationResult<Source[]> operationResult = new OperationResult<>(response, Source[].class);
+        if (operationResult.isSuccess() && operationResult.getEntity() != null) {
             // filter {"deleted":false}
-            List<Source> sources = new ArrayList<>(operationResult.getEntity().getResult());
+            List<Source> sources = Arrays.asList(operationResult.getEntity());
             sources.removeIf(Source::isDeleted);
 
             return new OperationResult<>(response, sources);
@@ -88,7 +84,7 @@ public class SourceService implements EntityService<Source> {
     }
 
     /**
-     * API: POST /api/sigint/admin/source
+     * API: POST /api/workflow/sources
      *
      * @param entity Source entity
      * @return HTTP status code
@@ -100,19 +96,18 @@ public class SourceService implements EntityService<Source> {
 
         G4Response response = g4HttpClient.sendRequest(request.update(entity));
 
-        OperationResult<Result> operationResult = new OperationResult<>(response, Result.class);
-
-        if (operationResult.isSuccess() && operationResult.getEntity().getResult().equals("ok")) {
+        OperationResult operationResult = new OperationResult<>(response);
+        if (operationResult.isSuccess()) {
             Entities.getSources().addOrUpdateEntity(entity);
             return new OperationResult<>(response, entity);
         } else {
             log.error("Error! Update source was failed");
-            return new OperationResult<>(response);
+            return operationResult;
         }
     }
 
     /**
-     * API: GET /api/sigint/admin/source/{id}/details
+     * API: GET /api/workflow/sources/{id}
      *
      * @param id id of entity
      * @return Source entity
@@ -122,6 +117,6 @@ public class SourceService implements EntityService<Source> {
         log.info("View Source details, id:" + id);
         G4Response response = g4HttpClient.sendRequest(request.get(id));
 
-        return new OperationResult<>(response, Source.class, "result");
+        return new OperationResult<>(response, Source.class);
     }
 }
