@@ -67,4 +67,12 @@ public class APIOrganizationSteps extends APISteps {
 
         Assert.assertTrue(organizations.size() > Integer.valueOf(size));
     }
+
+    @Then("Users and Teams list contains created user or team")
+    public void usersAndTeamsListContainCreatedTeam() {
+        List<Organization> organizations = context.get("organizationList", List.class);
+        Organization organization = Entities.getOrganizations().getLatest();
+
+        Assert.assertTrue(organizations.stream().anyMatch(org -> org.getId().equals(organization.getId())));
+    }
 }

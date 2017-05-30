@@ -90,3 +90,44 @@ Examples:
 | clearances    | random |
 | orgids        | random |
 | parentorgid   | random |
+
+
+Scenario: User is able to create nested team
+When I send create a new team
+Then Request is successful
+
+When I send create a new nested team
+Then Request is successful
+And Team is correct
+
+When I send search users and teams by parentOrgId with random request
+Then Request is successful
+And Users and Teams search result are correct
+And Users and Teams list contains created user or team
+
+When I send delete team request
+Then Request is successful
+When I send delete team request
+Then Request is successful
+
+
+Scenario: User is able to move a team
+When I send create a new team
+Then Request is successful
+
+When I send create a new team
+Then Request is successful
+
+When I send create a new nested team
+Then Request is successful
+
+When I send move team to other parent team
+Then Request is successful
+And Team is correct
+
+When I send delete team request
+Then Request is successful
+When I send delete team request
+Then Request is successful
+When I send delete team request
+Then Request is successful
