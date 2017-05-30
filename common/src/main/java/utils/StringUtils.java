@@ -57,7 +57,7 @@ public class StringUtils {
     }
 
     public static boolean hasRepeatedCharacters(String text, int sequenceLength) {
-        String regex = String.format("([a-z])\\1{%d}", sequenceLength - 1);
+        String regex = String.format("(.*)\\1{%d}", sequenceLength - 1);
         Pattern pattern = Pattern.compile(regex);
 
         return pattern.matcher(text).find();
