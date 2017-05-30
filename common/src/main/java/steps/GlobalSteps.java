@@ -1,23 +1,21 @@
 package steps;
 
-import model.entities.Entities;
 import app_context.properties.G4Properties;
 import controllers.APILogin;
 import errors.NullReturnException;
+import java.util.List;
 import model.User;
+import model.entities.Entities;
 import org.apache.log4j.Logger;
-import org.jbehave.core.annotations.AfterStories;
 import users_management.StorageUsersManager;
 import zapi.ZAPIService;
-
-import java.util.List;
 
 public class GlobalSteps {
 
     static Logger log = Logger.getLogger(GlobalSteps.class);
     private static final String ADMIN_ROLE = "admin";
 
-    @AfterStories
+//    @AfterStories
     public void reportResults() {
         ZAPIService service = new ZAPIService();
         Boolean shouldReport = G4Properties.getRunProperties().shouldReport();
