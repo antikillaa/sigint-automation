@@ -1,20 +1,37 @@
 package reporter;
 
-import failure_strategy.Statistic;
-import model.ScenarioContext;
-import org.apache.log4j.Logger;
-import org.jbehave.core.model.*;
-import org.jbehave.core.reporters.StoryReporter;
-import ru.yandex.qatools.allure.Allure;
-import ru.yandex.qatools.allure.config.AllureModelUtils;
-import ru.yandex.qatools.allure.events.*;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import model.ScenarioContext;
+import org.apache.log4j.Logger;
+import org.jbehave.core.model.ExamplesTable;
+import org.jbehave.core.model.GivenStories;
+import org.jbehave.core.model.Lifecycle;
+import org.jbehave.core.model.Meta;
+import org.jbehave.core.model.Narrative;
+import org.jbehave.core.model.OutcomesTable;
+import org.jbehave.core.model.Scenario;
+import org.jbehave.core.model.Story;
+import org.jbehave.core.model.StoryDuration;
+import org.jbehave.core.reporters.StoryReporter;
+import ru.yandex.qatools.allure.Allure;
+import ru.yandex.qatools.allure.config.AllureModelUtils;
+import ru.yandex.qatools.allure.events.ClearStepStorageEvent;
+import ru.yandex.qatools.allure.events.MakeAttachmentEvent;
+import ru.yandex.qatools.allure.events.StepCanceledEvent;
+import ru.yandex.qatools.allure.events.StepFailureEvent;
+import ru.yandex.qatools.allure.events.StepFinishedEvent;
+import ru.yandex.qatools.allure.events.StepStartedEvent;
+import ru.yandex.qatools.allure.events.TestCaseFailureEvent;
+import ru.yandex.qatools.allure.events.TestCaseFinishedEvent;
+import ru.yandex.qatools.allure.events.TestCasePendingEvent;
+import ru.yandex.qatools.allure.events.TestCaseStartedEvent;
+import ru.yandex.qatools.allure.events.TestSuiteFinishedEvent;
+import ru.yandex.qatools.allure.events.TestSuiteStartedEvent;
 
 
 public class AllureReporter implements StoryReporter {
@@ -73,7 +90,8 @@ public class AllureReporter implements StoryReporter {
 
     @Override
     public void failed(String step, Throwable cause) {
-        if (!new Statistic().hasOpenedBug(context.getScenarioTitle())) {
+        if (true) {
+//        if (!new Statistic().hasOpenedBug(context.getScenarioTitle())) {
             allure.fire(new StepFailureEvent().withThrowable(cause.getCause()));
             makeStepFailedAttachment();
             allure.fire(new TestCaseFailureEvent().withThrowable(cause.getCause()));
