@@ -1,6 +1,9 @@
 package model;
 
 import data_for_entity.annotations.DataIgnore;
+import data_for_entity.annotations.DataProvider;
+import data_for_entity.data_providers.profiler.CriminalRecordProvider;
+import data_for_entity.data_providers.profiler.ProfileCategoryProvider;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -19,13 +22,13 @@ public class Profile extends ProfileAndTargetGroup {
     private ArrayList<TargetGroup> groups = new ArrayList<>();
     @DataIgnore
     private Boolean target;
-    @DataIgnore
+    @DataProvider(ProfileCategoryProvider.class)
     //@JsonDeserialize(using = ProfileCategoryDeserializer.class)
     private String category;
     @DataIgnore
     private ProfileConsolidatedAttributes consolidatedAttributes;
     @DataIgnore
-    private Boolean active = true;
+    private TargetStatus active = TargetStatus.ACTIVE;
     @DataIgnore
     private Date activeUntil;
     @DataIgnore
@@ -34,6 +37,10 @@ public class Profile extends ProfileAndTargetGroup {
     private Profile parent;
     @DataIgnore
     private ArrayList<String> mergingProfilesIDs = new ArrayList<>();
+    @DataProvider(CriminalRecordProvider.class)
+    private CriminalRecord criminalRecord;
+    //TODO @DataProvider(ClassificationProvider.class)
+    private Classification classification = Classification.C;
 
     public Profile() {
         setJsonType(ProfileJsonType.Draft);
@@ -87,11 +94,11 @@ public class Profile extends ProfileAndTargetGroup {
         this.consolidatedAttributes = consolidatedAttributes;
     }
 
-    public Boolean getActive() {
+    public TargetStatus getActive() {
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(TargetStatus active) {
         this.active = active;
     }
 
@@ -135,4 +142,19 @@ public class Profile extends ProfileAndTargetGroup {
         this.mergingProfilesIDs = mergingProfilesIDs;
     }
 
+    public CriminalRecord getCriminalRecord() {
+        return criminalRecord;
+    }
+
+    public void setCriminalRecord(CriminalRecord criminalRecord) {
+        this.criminalRecord = criminalRecord;
+    }
+
+    public Classification getClassification() {
+        return classification;
+    }
+
+    public void setClassification(Classification classification) {
+        this.classification = classification;
+    }
 }

@@ -12,6 +12,7 @@ import model.TagSearchResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class TagService implements EntityService<Tag> {
@@ -48,8 +49,12 @@ public class TagService implements EntityService<Tag> {
         log.info("Search list of tags, filter: " + JsonConverter.toJsonString(filter));
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
-        TagSearchResult searchResult = JsonConverter.jsonToObject(response.getMessage(), TagSearchResult.class, "result");
-        return new OperationResult<>(response, searchResult.getResult());
+        OperationResult<TagSearchResult> operationResult = new OperationResult<>(response, TagSearchResult.class);
+        if (operationResult.isSuccess()) {
+            return new OperationResult<>(response, operationResult.getEntity().getResult());
+        } else {
+            return new OperationResult<>(response);
+        }
     }
 
     @Override
@@ -57,8 +62,12 @@ public class TagService implements EntityService<Tag> {
         log.info("Get list of tags");
         G4Response response = g4HttpClient.sendRequest(request.list());
 
-        List<Tag> tags = JsonConverter.jsonToObjectsList(response.getMessage(), Tag[].class, "result");
-        return new OperationResult<>(response, tags);
+        OperationResult<Tag[]> operationResult = new OperationResult<>(response, Tag[].class);
+        if (operationResult.isSuccess()) {
+            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
+        } else {
+            return new OperationResult<>(response);
+        }
     }
 
     @Override

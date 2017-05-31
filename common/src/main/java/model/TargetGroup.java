@@ -24,6 +24,8 @@ public class TargetGroup extends ProfileAndTargetGroup {
     @DataIgnore
     private int noProfiles;
     @DataIgnore
+    private int noSavedSearches;
+    @DataIgnore
     private ArrayList<String> profiles = new ArrayList<>();
     @DataIgnore
     private ArrayList<String> groups = new ArrayList<>();
@@ -87,6 +89,14 @@ public class TargetGroup extends ProfileAndTargetGroup {
 
     public void setNoProfiles(int noProfiles) {
         this.noProfiles = noProfiles;
+    }
+
+    public int getNoSavedSearches() {
+        return noSavedSearches;
+    }
+
+    public void setNoSavedSearches(int noSavedSearches) {
+        this.noSavedSearches = noSavedSearches;
     }
 
     public ArrayList<String> getProfiles() {

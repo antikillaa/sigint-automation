@@ -4,11 +4,12 @@ import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.DataProvider;
 import data_for_entity.annotations.WithDataSize;
 import data_for_entity.data_providers.user_password.UserPasswordProvider;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)

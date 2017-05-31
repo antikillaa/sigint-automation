@@ -55,8 +55,15 @@ abstract class ProfileMergeAttributeVerification {
         protected void verifyAttribute(Profile profile1, Profile profile2, Profile mergedProfile) {
             log.info("Verification: isActive of merged profile");
 
-            if (profile1.getActive() || profile2.getActive()) {
-                Assert.assertTrue(mergedProfile.getActive());
+            if (profile1.getActive().equals(TargetStatus.ACTIVE) || profile2.getActive().equals(TargetStatus.ACTIVE)) {
+                Assert.assertTrue("At least one old merged target was ACTIVE, new target shouldBe ACTIVE too",
+                        mergedProfile.getActive().equals(TargetStatus.ACTIVE));
+            } else if (profile1.getActive().equals(TargetStatus.INACTIVE) || profile2.getActive().equals(TargetStatus.INACTIVE)) {
+                Assert.assertTrue("At least one old merged target was INACTIVE, new target shouldBe INACTIVE too",
+                        mergedProfile.getActive().equals(TargetStatus.INACTIVE));
+            } else {
+                Assert.assertTrue("At least one old merged target was ARCHIVED, new target shouldBe ARCHIVED too",
+                        mergedProfile.getActive().equals(TargetStatus.ARCHIVED));
             }
         }
     }
