@@ -9,12 +9,13 @@ import utils.RandomGenerator;
 
 
 public class WhiteListIdentifierProvider extends DependencyDataProvider {
+
     @Override
     public String generate(int length) {
         DependencyData dependencyData = getDependencyData();
-        WhiteListType type = WhiteListType.valueOf((String)dependencyData.getData("type"));
+        WhiteListType type = WhiteListType.valueOf((String) dependencyData.getData("type"));
         String identifier;
-        switch(type){
+        switch (type) {
             case PHONE_NUMBER:
                 identifier = RandomGenerator.generatePhone();
                 break;
@@ -22,7 +23,7 @@ public class WhiteListIdentifierProvider extends DependencyDataProvider {
                 identifier = RandomGenerator.generateEmail();
                 break;
             case TWITTER_ID:
-                identifier = "@"+RandomStringUtils.randomAlphanumeric(10);
+                identifier = "@" + RandomStringUtils.randomAlphanumeric(10);
                 break;
             default:
                 identifier = "default_value";

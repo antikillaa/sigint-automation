@@ -1,46 +1,47 @@
 package services;
 
-import model.SearchFilter;
-import model.entities.Entities;
+import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.WhiteListRequest;
-import model.Result;
-import model.Whitelist;
-import model.WhitelistListResult;
-import org.apache.log4j.Logger;
-import org.apache.commons.lang.NotImplementedException;
+import java.util.Arrays;
 import java.util.List;
+import model.Result;
+import model.SearchFilter;
+import model.Whitelist;
+import model.entities.Entities;
+import org.apache.commons.lang.NotImplementedException;
+import org.apache.log4j.Logger;
 
 
 public class WhitelistService implements EntityService<Whitelist> {
 
-    WhiteListRequest request = new WhiteListRequest();
-
-    private Logger logger = Logger.getLogger(WhitelistService.class);
+    private static final Logger log = Logger.getLogger(WhitelistService.class);
+    private static WhiteListRequest request = new WhiteListRequest();
 
     @Override
     public OperationResult<Whitelist> add(Whitelist entity) {
+        log.info("Creating new Whitelist..");
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
-        OperationResult<Whitelist> operationResult = new OperationResult<>(response,entity);
+
+        OperationResult<Whitelist> operationResult = new OperationResult<>(response, entity);
         if (operationResult.isSuccess()) {
             Entities.getWhitelists().addOrUpdateEntity(entity);
         }
 
         return operationResult;
-
     }
 
     @Override
     public OperationResult<Result> remove(Whitelist entity) {
+        log.info("Deleting Whitelist with id: " + entity.getId());
         G4Response response = g4HttpClient.sendRequest(request.delete(entity.getId()));
+
         OperationResult<Result> operationResult = new OperationResult<>(response, Result.class);
         if (operationResult.isSuccess()) {
-
             Entities.getWhitelists().removeEntity(entity);
         }
         return operationResult;
-
     }
 
     @Override
@@ -48,44 +49,41 @@ public class WhitelistService implements EntityService<Whitelist> {
         throw new NotImplementedException();
     }
 
-
     @Override
     public OperationResult<List<Whitelist>> list() {
+        log.info("Getting list of Whitelists");
         G4Response response = g4HttpClient.sendRequest(request.list());
-        OperationResult<WhitelistListResult> operationResult =
-                new OperationResult<>(response, WhitelistListResult.class);
 
-        if (operationResult.isSuccess()) {
-            List<Whitelist> whiteLists = operationResult.getEntity().getResult();
-            return new OperationResult<>(response, whiteLists);
-
+        OperationResult<Whitelist[]> operationResult = new OperationResult<>(response, Whitelist[].class);
+        if (operationResult.isSuccess() && operationResult.getEntity() != null) {
+            List<Whitelist> whitelists = Arrays.asList(operationResult.getEntity());
+            return new OperationResult<>(response, whitelists);
         } else {
-            throw new RuntimeException("Unable to read list of whitelist entries: "+operationResult.getCode()+" , "+operationResult.getMessage());
+            throw new OperationResultError(operationResult);
         }
-
     }
 
     @Override
     public OperationResult<Whitelist> update(Whitelist entity) {
-        G4Response response = g4HttpClient.sendRequest(request.update(entity));
-        OperationResult<Whitelist> operationResult = new OperationResult<>(response,entity);
-        if(operationResult.isSuccess()){
+        log.info("Updating Whitelist with id: " + entity.getId());
 
+        G4Response response = g4HttpClient.sendRequest(request.update(entity));
+
+        OperationResult<Whitelist> operationResult = new OperationResult<>(response, entity);
+        if (operationResult.isSuccess()) {
             Entities.getWhitelists().addOrUpdateEntity(entity);
         }
         return operationResult;
     }
 
-
     @Override
     public OperationResult<Whitelist> view(String id) {
-
+        log.info("Getting Whitelist with id: " + id);
         G4Response response = g4HttpClient.sendRequest(request.get(id));
-        OperationResult<Whitelist> operationResult =
-                new OperationResult<>(response, Whitelist.class, "result");
+
+        OperationResult<Whitelist> operationResult = new OperationResult<>(response, Whitelist.class);
 
         if (operationResult.isSuccess()) {
-
             Entities.getWhitelists().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;

@@ -11,11 +11,10 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Whitelist extends G4Entity {
+
     @DataIgnore
     private Long version;
-
     private String description;
-
     @DataProvider(WhiteListTypeProvider.class)
     private WhiteListType type;
     @WithDataDependencies(provider = WhiteListIdentifierProvider.class, fields = {"type"})
@@ -52,13 +51,5 @@ public class Whitelist extends G4Entity {
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
-
-
-
-
-
-
-
-
 
 }
