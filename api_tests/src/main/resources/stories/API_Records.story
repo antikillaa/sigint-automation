@@ -1,5 +1,6 @@
 Meta:
 @story records
+@deprecated
 
 
 Scenario: User is able to create a manual record (SMS TEXT)

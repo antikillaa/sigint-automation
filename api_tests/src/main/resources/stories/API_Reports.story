@@ -1,6 +1,6 @@
 Meta:
 @story reports
-
+@deprecated
 
 Scenario: API.Create manual report
 Given I sign in as admin user

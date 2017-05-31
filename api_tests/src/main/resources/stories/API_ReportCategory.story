@@ -1,5 +1,6 @@
 Meta:
 @story reportCategory
+@deprecated
 
 Narrative:
 As a user

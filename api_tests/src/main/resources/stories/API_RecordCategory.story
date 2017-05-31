@@ -1,6 +1,6 @@
 Meta:
 @story recordCategory
-
+@deprecated
 
 Scenario: API.Create record category
 Given I sign in as admin user
