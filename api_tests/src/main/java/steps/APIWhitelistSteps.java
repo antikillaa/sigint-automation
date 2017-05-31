@@ -1,34 +1,30 @@
 package steps;
 
 
-import model.entities.Entities;
 import conditions.Conditions;
 import conditions.Verify;
 import data_generator.DataGenerator;
 import http.OperationResult;
+import java.util.List;
 import model.Whitelist;
-import org.apache.log4j.Logger;
+import model.entities.Entities;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.WhitelistService;
 import utils.RandomGenerator;
 
-import java.util.List;
-
 public class APIWhitelistSteps extends APISteps {
 
-    private static Logger logger = Logger.getLogger(APIWhitelistSteps.class);
     private static WhitelistService service = new WhitelistService();
 
-
-    @When("I send get list of whitlist entries request")
+    @When("I send get list of whitelist entries request")
     public void getListOfWhitelistEntries() {
         OperationResult<List<Whitelist>> operationResult = service.list();
         context.put("WhitelistEntitiesList", operationResult.getEntity());
     }
 
-    @Then("Whitelists  list size more then $count")
+    @Then("Whitelists list size more then $count")
     public void whitelistsListShouldBeMoreThen(final String count) {
         int minSize = Integer.valueOf(count);
         List<Whitelist> whitelists = context.get("WhitelistEntitiesList", List.class);
@@ -38,8 +34,9 @@ public class APIWhitelistSteps extends APISteps {
     @When("I send create new whitelist entry request")
     public void createWhitelistEntry() {
         Whitelist whitelist = objectInitializer.randomEntity(Whitelist.class);
-        OperationResult<Whitelist> operationResult = service.add(whitelist);
-        context.put("whitelist", Entities.getWhitelists().getLatest());
+        service.add(whitelist);
+
+        context.put("whitelist", whitelist);
     }
 
     @Then("Whitelist entry is $criteria common list")
@@ -73,7 +70,7 @@ public class APIWhitelistSteps extends APISteps {
     @When("I get random whitelist entry from list")
     public void selectRandomWhitelistEntry() {
         List<Whitelist> whitelists = context.get("WhitelistEntitiesList", List.class);
-        Whitelist whitelist = RandomGenerator.getRandomItemFromList((whitelists)); //whitelists.getLatest();
+        Whitelist whitelist = RandomGenerator.getRandomItemFromList((whitelists)); // whitelists.getLatest();
         Verify.shouldBe(Conditions.isTrue.element(whitelist != null));
         context.put("whitelist", whitelist);
     }
@@ -81,9 +78,10 @@ public class APIWhitelistSteps extends APISteps {
     @When("I send view whitelist entry request")
     public void viewWhitelistEntry() {
         Whitelist whitelist = context.get("whitelist", Whitelist.class);
-        logger.info("ID of entity : " + whitelist.getId());
+
         OperationResult<Whitelist> operationResult = service.view(whitelist.getId());
         Verify.shouldBe(Conditions.isTrue.element(operationResult.getEntity() != null));
+
         context.put("whitelist", operationResult.getEntity());
     }
 
@@ -100,8 +98,10 @@ public class APIWhitelistSteps extends APISteps {
 
     @When("I send delete whitelist entry request")
     public void deleteWhitelistEntryRequest() {
-        Whitelist whitelist = context.get("whitelist", Whitelist.class);
-        OperationResult operationResult = service.remove(whitelist);
+        Whitelist whitelist = Entities.getWhitelists().getLatest();
+        service.remove(whitelist);
+
+        context.put("whitelist", whitelist);
     }
 
 }
