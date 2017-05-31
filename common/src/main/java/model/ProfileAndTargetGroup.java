@@ -1,30 +1,27 @@
 package model;
 
 import data_for_entity.annotations.DataIgnore;
+import data_for_entity.annotations.DataProvider;
+import data_for_entity.data_providers.profiler.AssignmentPriorityProvider;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import java.util.Arrays;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ProfileAndTargetGroup extends AbstractEntity {
 
     @DataIgnore
-    private Object assignedTeams;
+    private List<String> assignedTeams = Arrays.asList("00"); // default team
     @DataIgnore
     private Object assignedUsers;
-    @DataIgnore
-    private Object assignmentPriority;
+    @DataProvider(AssignmentPriorityProvider.class)
+    private AssignmentPriority assignmentPriority;
     @DataIgnore
     private ProfileJsonType jsonType;
     private String name;
-
-    public Object getAssignedTeams() {
-        return assignedTeams;
-    }
-
-    public void setAssignedTeams(Object assignedTeams) {
-        this.assignedTeams = assignedTeams;
-    }
 
     public Object getAssignedUsers() {
         return assignedUsers;
@@ -32,14 +29,6 @@ public class ProfileAndTargetGroup extends AbstractEntity {
 
     public void setAssignedUsers(Object assignedUsers) {
         this.assignedUsers = assignedUsers;
-    }
-
-    public Object getAssignmentPriority() {
-        return assignmentPriority;
-    }
-
-    public void setAssignmentPriority(Object assignmentPriority) {
-        this.assignmentPriority = assignmentPriority;
     }
 
     public ProfileJsonType getJsonType() {
@@ -56,5 +45,21 @@ public class ProfileAndTargetGroup extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<String> getAssignedTeams() {
+        return assignedTeams;
+    }
+
+    public void setAssignedTeams(List<String> assignedTeams) {
+        this.assignedTeams = assignedTeams;
+    }
+
+    public AssignmentPriority getAssignmentPriority() {
+        return assignmentPriority;
+    }
+
+    public void setAssignmentPriority(AssignmentPriority assignmentPriority) {
+        this.assignmentPriority = assignmentPriority;
     }
 }

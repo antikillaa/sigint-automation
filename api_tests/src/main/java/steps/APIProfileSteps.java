@@ -19,6 +19,7 @@ import verification.profiler.ProfileMergeVerification;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class APIProfileSteps extends APISteps {
 
     private static final ProfileDraftService draftService = new ProfileDraftService();

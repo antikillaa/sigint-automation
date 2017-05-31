@@ -166,7 +166,7 @@ public class OrganizationFilter extends SearchFilter<Organization> {
 
         @Override
         public boolean isAppliedToEntity(Organization entity) {
-            return entity.getParentTeamId().equals(parentOrgId);
+            return parentOrgId.equals(entity.getParentTeamId());
         }
     }
 
