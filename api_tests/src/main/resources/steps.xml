@@ -41,6 +41,8 @@
     </bean>
     <bean id="recordCategorySteps" class="steps.APIRecordCategorySteps">
     </bean>
+    <bean id="designationSteps" class="steps.APIDesignationsSteps">
+    </bean>
     <bean id="reportCategorySteps" class="steps.APIReportCategorySteps" >
     </bean>
     <bean id="profileSteps" class="steps.APIProfileSteps" >

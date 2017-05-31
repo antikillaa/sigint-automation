@@ -28,6 +28,14 @@ public class Entities {
     private static ResponsibilityList responsibilities;
     private static TitleList titles;
     private static OrganizationList organizations;
+    private static DesignationList designations;
+
+    public static EntityList<Designation> getDesignations() {
+        if (designations == null) {
+            designations = new DesignationList();
+        }
+        return designations;
+    }
 
     public static EntityList<Team> getTeams() {
         if (teams == null) {
