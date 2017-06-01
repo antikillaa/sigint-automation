@@ -39,23 +39,86 @@ public class APITargetGroupSteps extends APISteps {
         TargetGroup contextTargetGroup = context.get("targetGroup", TargetGroup.class);
         TargetGroup createdTargetGroup = Entities.getTargetGroups().getLatest();
 
-        Verify.shouldBe(isTrue.element(equalsTargetGroups(createdTargetGroup, contextTargetGroup)));
+        Verify.shouldBe(isTrue.element(equalsTargetGroups(contextTargetGroup, createdTargetGroup)));
     }
 
     /**
-     * Compare two targetGroups
-     * new targetGroups keep description in TargetGroupProperties
+     * Verify two targetGroups
      *
-     * @param checked checked targetGroup
-     * @param etalon  etalon targetGroup
-     * @return true if two targetGroups is equal, false if otherwise
+     * @param expected checked targetGroup
+     * @param actual   etalon targetGroup
      */
-    private boolean equalsTargetGroups(TargetGroup checked, TargetGroup etalon) {
-        return Verify.isTrue(Conditions.equals(checked.getJsonType(), etalon.getJsonType())) &&
-                Verify.isTrue(Conditions.equals(checked.getName(), etalon.getName())) &&
-                checked.getDescription() == null ?
-                Objects.equals(checked.getProperties().getDescription(), etalon.getProperties().getDescription()) :
-                Objects.equals(checked.getDescription(), etalon.getProperties().getDescription());
+    static boolean equalsTargetGroups(TargetGroup expected, TargetGroup actual) {
+        if (expected == null && actual == null) {
+            return true;
+        } else if (expected == null || actual == null) {
+            log.error("At least of one of compared targetGroup is null" +
+                    ", actual: " + JsonConverter.toJsonString(actual) +
+                    ", expected: " + JsonConverter.toJsonString(expected));
+            return false;
+        }
+
+        try {
+            Verify.shouldBe(Conditions.equals(expected.getJsonType(), actual.getJsonType()));
+            Verify.shouldBe(Conditions.equals(expected.getName(), actual.getName()));
+            Verify.shouldBe(Conditions.equals(expected.getGroups(), actual.getGroups()));
+            Verify.shouldBe(Conditions.equals(expected.getNoGroups(), actual.getNoGroups()));
+            Verify.shouldBe(Conditions.equals(expected.getNoProfiles(), actual.getNoProfiles()));
+            Verify.shouldBe(Conditions.equals(expected.getNoSavedSearches(), actual.getNoSavedSearches()));
+            Verify.shouldBe(Conditions.equals(expected.getProfiles(), actual.getProfiles()));
+            Verify.shouldBe(Conditions.equals(expected.getThreatScore(), actual.getThreatScore()));
+            Verify.shouldBe(Conditions.equals(expected.isDeleted(), actual.isDeleted()));
+            Verify.shouldBe(Conditions.equals(expected.getAssignedTeams(), expected.getAssignedTeams()));
+            Verify.shouldBe(Conditions.equals(expected.getAssignedUsers(), expected.getAssignedUsers()));
+            Verify.shouldBe(Conditions.equals(expected.getAssignmentPriority(), expected.getAssignmentPriority()));
+            // Note: new targetGroups keep description in TargetGroupProperties
+            Assert.assertTrue(expected.getDescription() == null ?
+                    Objects.equals(expected.getProperties().getDescription(), actual.getProperties().getDescription()) :
+                    Objects.equals(expected.getDescription(), actual.getProperties().getDescription()));
+            Verify.shouldBe(Conditions.equals(
+                    JsonConverter.toJsonString(expected.getParentChain()),
+                    JsonConverter.toJsonString(actual.getParentChain())));
+            Assert.assertTrue(equalsTargetGroups(expected.getParent(), actual.getParent()));
+        } catch (Exception e) {
+            log.error(e);
+            return false;
+        }
+
+        return true;
+    }
+
+    static boolean equalsTargetGroups(List<TargetGroup> expected, List<TargetGroup> actual) {
+        if (actual.isEmpty() && expected.isEmpty()) {
+            return true;
+        } else if (actual.isEmpty() || expected.isEmpty()) {
+            log.error("At least of one of compared targetGroup lists is empty" +
+                    ", actual: " + JsonConverter.toJsonString(actual) +
+                    ", expected: " + JsonConverter.toJsonString(expected));
+            return false;
+        } else if (expected.size() != actual.size()) {
+            log.error("TargetGroup collections have different size! " +
+                    " ExpectedGroups size: " + expected.size() +
+                    " actualGroups size: " + expected.size());
+            return false;
+        }
+
+        TargetGroup[] expectedGroups = new TargetGroup[0];
+        TargetGroup[] actualGroups = new TargetGroup[0];
+        expectedGroups = expected.toArray(expectedGroups);
+        actualGroups = actual.toArray(actualGroups);
+
+        Arrays.sort(expectedGroups);
+        Arrays.sort(actualGroups);
+
+        for (int i = 0; i < expectedGroups.length; i++) {
+            if (!equalsTargetGroups(expectedGroups[i], actualGroups[i])) {
+                log.error("Target groups not equals" +
+                        ", " + JsonConverter.toJsonString(expectedGroups[i]) +
+                        ", " + JsonConverter.toJsonString(actualGroups[i]));
+                return false;
+            }
+        }
+        return true;
     }
 
     @When("I send get target group details request")
@@ -93,34 +156,11 @@ public class APITargetGroupSteps extends APISteps {
         List<TargetGroup> list = context.get("targetGroupList", List.class);
         Boolean contains = false;
         for (TargetGroup entity : list) {
-            if (Verify.isTrue(isTrue.element(equalsTargetGroups(targetGroup, entity)))) {
+            if (entity.getId().equals(targetGroup.getId())) {
                 contains = true;
                 break;
             }
         }
-        if (criteria.toLowerCase().equals("in")) {
-            Verify.shouldBe(isTrue.element(contains));
-        } else if (criteria.toLowerCase().equals("not in")) {
-            Verify.shouldNotBe(isTrue.element(contains));
-        } else {
-            throw new AssertionError("Incorrect argument passed to step");
-        }
-    }
-
-    @Then("target group $criteria list")
-    public void existingTargetGroupContainsInList(String criteria) {
-        TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
-        log.debug("Requested target group: " + targetGroup.getName());
-        List<TargetGroup> list = context.get("targetGroupList", List.class);
-        Boolean contains = false;
-        for (TargetGroup entity : list) {
-            log.debug("Comparing with target group: " + entity.getName());
-            if (targetGroup.getName().equals(entity.getName())) {
-                contains = true;
-                break;
-            }
-        }
-
         if (criteria.toLowerCase().equals("in")) {
             Verify.shouldBe(isTrue.element(contains));
         } else if (criteria.toLowerCase().equals("not in")) {
@@ -185,51 +225,13 @@ public class APITargetGroupSteps extends APISteps {
         Assert.assertTrue(groups.size() > Integer.valueOf(size));
     }
 
-    @Then("targetGroups search result are correct")
-    public void targetGroupsSearchResultIsCorrert() {
-        log.info("Checking if search targetGroups result is correct");
-        TargetGroupFilter searchFilter = context.get("searchFilter", TargetGroupFilter.class);
-        List<TargetGroup> searchResult = context.get("searchResult", List.class);
-
-        if (searchResult.size() == 0) {
-            log.warn("Search result can be incorrect. There are not records in it");
-        } else {
-            log.info("Search result size: " + searchResult.size());
-        }
-        for (TargetGroup targetGroup : searchResult) {
-            Assert.assertTrue(String.format("Target:%s should not match to filter %s", targetGroup, JsonConverter.toJsonString(searchFilter)),
-                    searchFilter.isAppliedToEntity(targetGroup));
-        }
-    }
-
-    @Then("searched targetGroups $criteria search result list")
-    public void searchedTargetGroupsInResultList(String criteria) {
-        log.info("Checking if targetGroup entry " + criteria + " list");
-        TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
-        List<TargetGroup> list = context.get("searchResult", List.class);
-
-        Boolean contains = false;
-        for (TargetGroup entity : list) {
-            contains = equalsTargetGroups(entity, targetGroup);
-            if (contains) {
-                Entities.getTargetGroups().updateEntity(targetGroup, entity);
-                break;
-            }
-        }
-
-        if (criteria.toLowerCase().equals("in")) {
-            Verify.shouldBe(isTrue.element(contains));
-        } else if (criteria.toLowerCase().equals("not in")) {
-            Verify.shouldNotBe(isTrue.element(contains));
-        } else {
-            throw new AssertionError("Incorrect argument passed to step");
-        }
-    }
-
     @When("I send create new child target group request")
     public void creatNewChildTargetGroup() {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
         TargetGroup childGroup = getRandomTargetGroup();
+        childGroup.setParent(targetGroup);
+        TargetGroup.ParentChain parentChain = new TargetGroup.ParentChain(targetGroup.getId(), targetGroup.getName());
+        childGroup.getParentChain().add(parentChain);
 
         context.put("parentTargetGroup", targetGroup);
         context.put("childTargetGroup", childGroup);

@@ -32,7 +32,7 @@ public class TargetGroup extends ProfileAndTargetGroup {
     @DataIgnore
     private TargetGroup parent;
     @DataIgnore
-    private ArrayList<ParentChain> parentChain;
+    private ArrayList<ParentChain> parentChain = new ArrayList<>();
 
     public TargetGroup () {
         setJsonType(ProfileJsonType.TargetGroup);
@@ -135,6 +135,14 @@ public class TargetGroup extends ProfileAndTargetGroup {
     public static class ParentChain extends AbstractEntity {
 
         private String name;
+
+        public ParentChain(){
+        }
+
+        public ParentChain(String id, String name) {
+            this.setId(id);
+            this.name = name;
+        }
 
         public String getName() {
             return name;
