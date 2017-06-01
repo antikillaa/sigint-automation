@@ -176,13 +176,11 @@ When I send update profile request
 Then Request is successful
 And Profile draft is correct
 
-When I send publish profile draft request
+When I send get profile draft details request
 Then Request is successful
+And Profile draft is correct
 
-When I send get profile details request
-Then Request is successful
-
-When I send delete profile request
+When I send delete profile draft request
 Then Request is successful
 When I send delete target group request
 Then Request is successful

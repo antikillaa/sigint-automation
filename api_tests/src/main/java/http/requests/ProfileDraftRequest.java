@@ -53,6 +53,8 @@ public class ProfileDraftRequest extends HttpRequest {
     }
 
     public ProfileDraftRequest update(Profile profile) {
+        profile.getProperties().setProfileVersion(
+                profile.getProperties().getProfileVersion() == null ? 1 : profile.getProperties().getProfileVersion() + 1);
         this
                 .setURI(URI + "/" + profile.getId())
                 .setHttpMethod(HttpMethod.PUT)

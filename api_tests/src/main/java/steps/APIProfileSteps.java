@@ -1,14 +1,11 @@
 package steps;
 
-import model.entities.EntityList;
-import model.entities.Entities;
 import errors.NullReturnException;
 import http.OperationResult;
-import json.JsonConverter;
 import model.Profile;
-import model.ProfileCategory;
 import model.TargetGroup;
-import org.apache.commons.lang3.RandomStringUtils;
+import model.entities.Entities;
+import model.entities.EntityList;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
@@ -16,7 +13,6 @@ import services.ProfileDraftService;
 import services.ProfileService;
 import verification.profiler.ProfileMergeVerification;
 
-import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
@@ -53,11 +49,7 @@ public class APIProfileSteps extends APISteps {
         Assert.assertEquals(expected.getActive(), actual.getActive());
         Assert.assertEquals(expected.getProperties().getDescription(), actual.getProperties().getDescription());
 
-        Arrays.sort(expected.getGroups().toArray());
-        Arrays.sort(actual.getGroups().toArray());
-        Assert.assertEquals(
-                JsonConverter.toJsonString(expected.getGroups()),
-                JsonConverter.toJsonString(actual.getGroups()));
+        Assert.assertTrue(APITargetGroupSteps.equalsTargetGroups(actual.getGroups(), expected.getGroups()));
 
         Assert.assertEquals(expected.getEntities(), actual.getEntities());
         Assert.assertEquals(expected.getEntityCount(), actual.getEntityCount());
@@ -80,7 +72,6 @@ public class APIProfileSteps extends APISteps {
         Profile createdProfile = Entities.getProfiles().getLatest();
         context.put("profileDraft", createdProfile);
         draftService.view(createdProfile.getId());
-
     }
 
     @When("I send publish profile draft request")
@@ -139,14 +130,12 @@ public class APIProfileSteps extends APISteps {
     public void updateProfile() {
         Profile profile = context.get("profileDraft", Profile.class);
 
-        profile.setName(RandomStringUtils.randomAlphanumeric(10));
-        profile.getProperties().setDescription(RandomStringUtils.randomAlphanumeric(20));
-        profile.getProperties().setProfileVersion(profile.getProperties().getProfileVersion() + 1);
-        profile.setCategory(ProfileCategory.random().getDisplayName());
+        Profile updatedProfile = getRandomProfile();
+        updatedProfile.setId(profile.getId());
+        updatedProfile.setGroups(profile.getGroups());
+        context.put("profileDraft", updatedProfile);
 
-        context.put("profileDraft", profile);
-
-        draftService.update(profile);
+        draftService.update(updatedProfile);
     }
 
     @When("I send merge two profile into one request")

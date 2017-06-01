@@ -67,7 +67,7 @@ public class ProfileDraftService implements EntityService<Profile> {
 
     @Override
     public OperationResult<Profile> update(Profile entity) {
-        log.info("Updating profile");
+        log.info("Updating profile id:" + entity.getId() + " profile:" + JsonConverter.toJsonString(entity));
         G4Response response = g4HttpClient.sendRequest(request.update(entity));
 
         OperationResult<Profile> operationResult = new OperationResult<>(response, Profile.class, "data");
