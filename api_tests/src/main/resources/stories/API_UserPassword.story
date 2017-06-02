@@ -96,10 +96,11 @@ When I change user password to This-happened-once-before
 Then Request is successful
 
 Scenario: API.Check last logon datetime
-When I change password for the first time
-Then Request is successful
 When I send sign out request
-And I sign in as new created user
+Then Request is successful
+When I change temporary password
+Then Request is successful
+When I sign in as new created user
 Then User last logon datetime is correct
 
 When I send sign out request
@@ -112,16 +113,17 @@ When I send sign out request
 And I sign in as new created user
 Then I got response code 401
 And Message contains "AUTH_CHANGE_PASSWORD_REQUIRED"
-When I change password for the first time
+When I change temporary password
 Then Request is successful
 When I sign in as new created user
 Then Request is successful
-When I change password for the first time
+When I change temporary password
 Then I got response code 403
 And Message contains "AUTH_FORBIDDEN"
 
 Scenario: API.Check that user will be locked after 5 sequential failed login attempts
-When I change password for the first time
+When I send sign out request
+And I change temporary password
 Then Request is successful
 When I set wrong user password
 And I send sign out request
@@ -147,17 +149,33 @@ When I set wrong user password
 And I send sign out request
 Then Request is successful
 
-When I change password for the first time
+When I change temporary password
 Then I got response code 400
-When I change password for the first time
+When I change temporary password
 Then I got response code 400
-When I change password for the first time
+When I change temporary password
 Then I got response code 400
-When I change password for the first time
+When I change temporary password
 Then I got response code 400
-When I change password for the first time
+When I change temporary password
 Then I got response code 400
 
-When I change password for the first time
+When I change temporary password
 Then I got response code 403
 And Message contains "AUTH_ACCOUNT_IS_LOCKED"
+
+Scenario: Change password for currently logged in user
+When I send sign out request
+Then Request is successful
+When I change temporary password
+Then Request is successful
+
+When I sign in as new created user
+Then Request is successful
+When I change user password to random
+Then I got response code 200
+
+When I send sign out request
+Then Request is successful
+When I sign in as new created user
+Then Request is successful

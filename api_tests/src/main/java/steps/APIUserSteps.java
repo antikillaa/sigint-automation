@@ -88,6 +88,7 @@ public class APIUserSteps extends APISteps {
         User user = Entities.getUsers().getLatest();
         User updatedUser = getRandomUser();
         updatedUser.setId(user.getId());
+        updatedUser.setNewPassword(updatedUser.getPassword());
         context.put("user", updatedUser);
         service.update(updatedUser);
     }
@@ -113,12 +114,12 @@ public class APIUserSteps extends APISteps {
         service.add(user);
     }
 
-    @When("I change password for the first time")
+    @When("I change temporary password")
     public void changePasswordFirstTime() {
         User user = Entities.getUsers().getLatest();
-        String newPassword = generatePassword();
+        user.setNewPassword(generatePassword());
 
-        service.firstPasswordChange(user, newPassword);
+        service.changeTempPassword(user);
     }
 
     @When("I set wrong user password")
@@ -143,10 +144,9 @@ public class APIUserSteps extends APISteps {
             passwordToReplace = user.getName();
         }
 
-        log.info(String.format("Changing password from %s to %s", user.getPassword(), passwordToReplace));
         user.setNewPassword(passwordToReplace);
         context.put("user", user);
-        service.update(user);
+        service.changePassword(user);
     }
 
     @Then("User last logon datetime is correct")
