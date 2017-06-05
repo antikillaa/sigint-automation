@@ -3,9 +3,6 @@ package model;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-/**
- * Created by ayak on 4/14/17.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class UserPassword {
@@ -13,11 +10,23 @@ public class UserPassword {
   private String name;
   private String oldPassword;
   private String newPassword;
+  private String id;
 
-  public UserPassword(User user, String newPassword) {
+  public UserPassword(User user) {
     this.name = user.getName();
     this.oldPassword = user.getPassword();
-    this.newPassword = newPassword;
+    this.newPassword = user.getNewPassword();
+
+    // save User's id for password update via /api/auth/users/{id} call
+    this.id = user.getId();
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 
   public String getName() {
