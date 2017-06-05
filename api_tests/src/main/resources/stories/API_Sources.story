@@ -1,6 +1,6 @@
 Meta:
 @story source
-
+@skip
 
 Scenario: API.Create, Read, Update, Delete source
 
