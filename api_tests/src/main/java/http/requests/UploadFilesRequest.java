@@ -120,4 +120,13 @@ public class UploadFilesRequest extends HttpRequest {
 
         return this;
     }
+
+    public UploadFilesRequest count(FileMetaFilter filter) {
+        this
+            .setURI(URI + "/_count")
+            .setHttpMethod(HttpMethod.POST)
+            .setPayload(filter);
+
+        return this;
+    }
 }

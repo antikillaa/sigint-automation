@@ -104,4 +104,11 @@ public class UploadFilesService {
             throw new OperationResultError(operationResult);
         }
     }
+
+    public OperationResult<Integer> countFiles(FileMetaFilter filter) {
+        log.info("Count Data Files..");
+        G4Response response = g4HttpClient.sendRequest(uploadFilesRequest.count(filter));
+
+        return new OperationResult<>(response, Integer.class);
+    }
 }

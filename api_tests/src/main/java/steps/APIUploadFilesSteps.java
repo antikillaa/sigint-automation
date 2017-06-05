@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Objects;
 import json.JsonConverter;
 import model.FileMeta;
-import model.FileMetaFilter;
-import model.FileMetaFilter.Query;
 import model.G4File;
 import model.G4Record;
 import model.GenerationMatrix;
@@ -43,27 +41,10 @@ import utils.DateHelper;
 @SuppressWarnings("unchecked")
 public class APIUploadFilesSteps extends APISteps {
 
-    private Logger log = Logger.getLogger(APIUploadFilesSteps.class);
+    private final static Logger log = Logger.getLogger(APIUploadFilesSteps.class);
     private UploadFilesService service = new UploadFilesService();
     private static final int WAITING_TIME = 6 * 60; // in seconds
     private static final int POLLING_INTERVAL = 20; // in seconds
-
-    @Then("Original data file is searchable within the system")
-    public void originalFilesAreSearchable() {
-        FileMeta uploadedFileMeta = context.get("meta", FileMeta.class);
-
-        Query query = new Query("EQ", "path", uploadedFileMeta.getPath());
-        FileMetaFilter filter = new FileMetaFilter().setQuery(query);
-        List<FileMeta> fileMetaList = service.searchDataFiles(filter);
-
-        for (FileMeta fileMeta : fileMetaList) {
-            if (uploadedFileMeta.getId().equals(fileMeta.getId())) {
-                Verify.shouldBe(Conditions.equals(uploadedFileMeta, fileMeta));
-                return;
-            }
-        }
-        ErrorReporter.reportAndRaiseError("Can't find uploaded " + uploadedFileMeta.getPath());
-    }
 
     @When("I send upload data file request")
     public void uploadFile() {

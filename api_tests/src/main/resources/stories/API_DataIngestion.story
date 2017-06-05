@@ -159,3 +159,56 @@ And Upload details contain <recordsCount> - <recordType> records
 Examples:
 | sourceType | recordType | recordsCount |
 | Tactical   | Voice      | 10           |
+
+
+Scenario: API.Search and count data folders by path
+Meta: @nightly @wip
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+When I search data folders by source with date pattern "yyyy/MM"
+Then Found folders list size is more than 0
+When I send count found folders request
+Then Folders count result is equal to appropriate list size
+
+Examples:
+| sourceType | recordType |
+| Tactical   | Voice      |
+| F          | SMS        |
+| Strategic  | SMS        |
+
+
+Scenario: API.Search and count data folders by wildcard
+Meta: @nightly @wip
+Given I sign in as admin user
+When I search data folders with date pattern "*/yyyy"
+Then Found folders list size is more than 0
+When I send count found folders request
+Then Folders count result is equal to appropriate list size
+
+
+Scenario: API.Search and count data files by path
+Meta: @nightly @wip
+
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+When I search data folders by source with date pattern "yyyy/MM/dd"
+Then Found folders list size is more than 0
+When I search data files by path
+Then Found files list size is more than 0
+When I send count found files request
+Then Files count result is equal to appropriate list size
+
+Examples:
+| sourceType | recordType |
+| Tactical   | Voice      |
+| F          | SMS        |
+| Strategic  | SMS        |
+
+
+Scenario: API.Search and count data files by wildcard
+Meta: @nightly @wip
+Given I sign in as admin user
+When I search data files with date pattern "*/yyyy/MM/dd/*"
+Then Found files list size is more than 0
+When I send count found files request
+Then Files count result is equal to appropriate list size

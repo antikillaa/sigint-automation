@@ -35,6 +35,8 @@
     </bean>
     <bean id="uploadFilesSteps" class="steps.APIUploadFilesSteps">
     </bean>
+    <bean id="searchFilesAndFolders" class="steps.APISearchFilesAndFoldersSteps">
+    </bean>
     <bean id="recordCategorySteps" class="steps.APIRecordCategorySteps">
     </bean>
     <bean id="reportCategorySteps" class="steps.APIReportCategorySteps" >
