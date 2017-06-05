@@ -1,5 +1,6 @@
 package utils;
 
+import java.io.IOException;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
@@ -9,11 +10,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import org.codehaus.jackson.map.ObjectMapper;
 
 public class StringUtils {
 
     private static final Logger log = Logger.getLogger(StringUtils.class);
     private static Map<String, Integer> multiplier;
+    private static ObjectMapper mapper = new ObjectMapper();
 
     static {
         multiplier = new HashMap<>();
@@ -68,5 +71,14 @@ public class StringUtils {
         boolean hasLowercase = !text.equals(text.toUpperCase());
 
         return (hasLowercase && hasUppercase);
+    }
+
+    public static String prettyPrint(String jsonString) {
+        try {
+            Object json = mapper.readValue(jsonString, Object.class);
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+        } catch (IOException e) {
+            return jsonString;
+        }
     }
 }

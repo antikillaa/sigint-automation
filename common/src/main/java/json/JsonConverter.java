@@ -1,5 +1,7 @@
 package json;
 
+import static utils.StringUtils.prettyPrint;
+
 import model.entities.EntityList;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -17,6 +19,12 @@ public class JsonConverter {
 
     private static Logger log = Logger.getRootLogger();
     public static ObjectMapper mapper = new ObjectMapper();
+
+    private static final String CONVERT_OBJ_MSG = "Converting json: \n'%s'\n to object: %s";
+    private static final String CONVERT_OBJ_ERR = "Error when converting json: \n'%s'\n to object: %s";
+
+    private static final String CONVERT_LIST_MSG = "Converting json: \n'%s'\n to object list: %s";
+    private static final String CONVERT_LIST_ERR = "Error when converting json: \n'%s'\n to object list: %s";
 
     public static Map<String, String> loadJsonToStringMap(String filename) {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
@@ -59,11 +67,11 @@ public class JsonConverter {
 
     @SuppressWarnings("unchecked")
     public static <T> T jsonToObject(String jsonString, Class<T> userClass) {
-        log.debug("Converting json string: " + jsonString + " to user class: " + userClass);
+        log.debug(String.format(CONVERT_OBJ_MSG, prettyPrint(jsonString), userClass));
         try {
             return userClass == String.class ? (T) jsonString : mapper.readValue(jsonString, userClass);
         } catch (IOException | NullPointerException e) {
-            String error = "Error when converting json string:" + jsonString + " to object:" + userClass;
+            String error = String.format(CONVERT_OBJ_ERR, prettyPrint(jsonString), userClass);
             log.error(error);
             log.error(e.getMessage(), e);
             throw new RuntimeException(error);
@@ -71,7 +79,7 @@ public class JsonConverter {
     }
 
     public static <T> T jsonToObject(String jsonString, Class<T> entityClass, String id) {
-        log.debug("Converting json string: " + jsonString + " to user class: " + entityClass);
+        log.debug(String.format(CONVERT_OBJ_MSG, prettyPrint(jsonString), entityClass));
         T entity;
         MapType mapType = JsonConverter.constructMapTypeToValue(entityClass);
         try {
@@ -79,7 +87,7 @@ public class JsonConverter {
             entity = map.get(id);
             return entity;
         } catch (IOException | NullPointerException e) {
-            String error = "Error when converting json string:" + jsonString + " to object:" + entityClass;
+            String error = String.format(CONVERT_OBJ_ERR, prettyPrint(jsonString), entityClass);
             log.error(error);
             log.error(e.getMessage(), e);
             throw new Error(error);
@@ -87,11 +95,11 @@ public class JsonConverter {
     }
 
     public static <T> List<T> jsonToObjectsList(String jsonString, Class<T[]> userClass) {
-        log.debug("Converting json: " + jsonString + " to object list: " + userClass);
+        log.debug(String.format(CONVERT_LIST_MSG, prettyPrint(jsonString), userClass));
         try {
             return Arrays.asList(mapper.readValue(jsonString, userClass));
         } catch (IOException | NullPointerException e) {
-            String error = "Error occurred when converting json: " + jsonString + " to object list: " + userClass;
+            String error = String.format(CONVERT_LIST_ERR, prettyPrint(jsonString), userClass);
             log.error(error);
             log.error(e.getMessage(), e);
             throw new RuntimeException(error);
@@ -111,7 +119,7 @@ public class JsonConverter {
     }
 
     public static <T> List<T> jsonToObjectsList(String jsonString, Class<T[]> userClass, String wrapperField) {
-        log.debug("Converting json: " + jsonString + " to object list: " + userClass);
+        log.debug(String.format(CONVERT_LIST_MSG, prettyPrint(jsonString), userClass));
         MapType mapType = JsonConverter.constructMapTypeToValue(Object.class);
 
         try {
@@ -121,7 +129,7 @@ public class JsonConverter {
             T[] objects = mapper.convertValue(obj, userClass);
             return Arrays.asList(objects);
         } catch (IOException | NullPointerException e) {
-            String error = "Error occurred when converting json: " + jsonString + " to object list: " + userClass;
+            String error = String.format(CONVERT_LIST_ERR, prettyPrint(jsonString), userClass);
             log.error(error);
             log.error(e.getMessage(), e);
             throw new RuntimeException(error);
