@@ -1,5 +1,7 @@
 package model;
 
+import static utils.StringUtils.capitalizeFirstLetter;
+
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -13,7 +15,7 @@ public class UserPassword {
   private String id;
 
   public UserPassword(User user) {
-    this.name = user.getName();
+    this.name = capitalizeFirstLetter(user.getName());
     this.oldPassword = user.getPassword();
     this.newPassword = user.getNewPassword();
 

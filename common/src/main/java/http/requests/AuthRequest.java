@@ -1,5 +1,7 @@
 package http.requests;
 
+import static utils.StringUtils.capitalizeFirstLetter;
+
 import http.HttpMethod;
 
 public class AuthRequest extends HttpRequest {
@@ -18,9 +20,7 @@ public class AuthRequest extends HttpRequest {
     }
 
     public AuthRequest signIn(String username, String password) {
-        AuthRequest.User user = new AuthRequest.User();
-        user.setName(username);
-        user.setPassword(password);
+        AuthRequest.User user = new AuthRequest.User(username, password);
 
         this
                 .setURI(URI)
@@ -32,6 +32,11 @@ public class AuthRequest extends HttpRequest {
     class User {
         private String name;
         private String password;
+
+        public User(String name, String password) {
+            this.name = capitalizeFirstLetter(name);
+            this.password = password;
+        }
 
         public String getName() {
             return name;
