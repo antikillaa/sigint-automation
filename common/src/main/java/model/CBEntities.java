@@ -1,0 +1,27 @@
+package model;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CBEntities {
+
+    private List<CBEntity> from = new ArrayList<>();
+    private List<CBEntity> to = new ArrayList<>();
+
+    public List<CBEntity> getFrom() {
+        return from;
+    }
+
+    public void setFrom(List<CBEntity> from) {
+        this.from = from;
+    }
+
+    public List<CBEntity> getTo() {
+        return to;
+    }
+
+    public void setTo(List<CBEntity> to) {
+        this.to = to;
+    }
+}

@@ -1,7 +1,5 @@
 package json;
 
-import static utils.StringUtils.prettyPrint;
-
 import model.entities.EntityList;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -14,6 +12,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static utils.StringUtils.prettyPrint;
 
 public class JsonConverter {
 
@@ -78,14 +78,13 @@ public class JsonConverter {
         }
     }
 
-    public static <T> T jsonToObject(String jsonString, Class<T> entityClass, String id) {
+    public static <T> T jsonToObject(String jsonString, Class<T> entityClass, String wrapperField) {
         log.debug(String.format(CONVERT_OBJ_MSG, prettyPrint(jsonString), entityClass));
-        T entity;
-        MapType mapType = JsonConverter.constructMapTypeToValue(entityClass);
+        MapType mapType = JsonConverter.constructMapTypeToValue(Object.class);
         try {
-            HashMap<String, T> map = mapper.readValue(jsonString, mapType);
-            entity = map.get(id);
-            return entity;
+            HashMap<String, Object> map = mapper.readValue(jsonString, mapType);
+            Object obj = map.get(wrapperField);
+            return mapper.convertValue(obj, entityClass);
         } catch (IOException | NullPointerException e) {
             String error = String.format(CONVERT_OBJ_ERR, prettyPrint(jsonString), entityClass);
             log.error(error);
