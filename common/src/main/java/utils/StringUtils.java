@@ -59,6 +59,13 @@ public class StringUtils {
         return arr;
     }
 
+    public static String capitalizeFirstLetter(String original) {
+        if (original == null || original.length() == 0) {
+            return original;
+        }
+        return original.substring(0, 1).toUpperCase() + original.substring(1);
+    }
+
     public static boolean hasRepeatedCharacters(String text, int sequenceLength) {
         String regex = String.format("([a-zA-Z0-9])\\1{%d}", sequenceLength - 1);
         Pattern pattern = Pattern.compile(regex);
