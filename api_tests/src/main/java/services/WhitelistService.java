@@ -1,5 +1,7 @@
 package services;
 
+import static json.JsonConverter.toJsonString;
+
 import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
@@ -9,8 +11,8 @@ import java.util.List;
 import model.Result;
 import model.SearchFilter;
 import model.Whitelist;
+import model.WhitelistSearchResult;
 import model.entities.Entities;
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
 
@@ -24,9 +26,9 @@ public class WhitelistService implements EntityService<Whitelist> {
         log.info("Creating new Whitelist..");
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
 
-        OperationResult<Whitelist> operationResult = new OperationResult<>(response, entity);
+        OperationResult<Whitelist> operationResult = new OperationResult<>(response, Whitelist.class);
         if (operationResult.isSuccess()) {
-            Entities.getWhitelists().addOrUpdateEntity(entity);
+            Entities.getWhitelists().addOrUpdateEntity(operationResult.getEntity());
         }
 
         return operationResult;
@@ -46,7 +48,15 @@ public class WhitelistService implements EntityService<Whitelist> {
 
     @Override
     public OperationResult<List<Whitelist>> search(SearchFilter filter) {
-        throw new NotImplementedException();
+        log.info("Search whitelists, filter:\n" + toJsonString(filter));
+        G4Response response = g4HttpClient.sendRequest(request.search(filter));
+
+        OperationResult<WhitelistSearchResult> operationResult = new OperationResult<>(response, WhitelistSearchResult.class);
+        if (operationResult.isSuccess()) {
+            return new OperationResult<>(response, operationResult.getEntity().getResult());
+        } else {
+            return new OperationResult<>(response);
+        }
     }
 
     @Override

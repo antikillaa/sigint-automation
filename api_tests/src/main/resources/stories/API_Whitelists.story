@@ -1,51 +1,53 @@
 Meta:
 @story whitelist
 
-
-Scenario: API. Get all whitelist entries
+Lifecycle:
+Before:
 Given I sign in as admin user
 When I send create new whitelist entry request
-Then Request is successful
-When I send get list of whitelist entries request
-Then Request is successful
-And Whitelists list size more then 0
-
-Scenario: API. Create new whitelist entry
-Given I sign in as admin user
-When I send create new whitelist entry request
-Then Request is successful
-When I send get list of whitelist entries request
 Then Request is successful
 And Whitelist entry is correct
-
-Scenario: API.Get whitelist entry details by id
+After:
 Given I sign in as admin user
+When I send delete whitelist entry request
+Then Request is successful
+
+
+Scenario: API. Create new whitelist entry
 When I send get list of whitelist entries request
 Then Request is successful
-And Whitelists list size more then 0
-When I get random whitelist entry from list
+Then Whitelists list size is more than 0
+Then Whitelist entry is in list
+
+Scenario: API.Get whitelist entry details by id
 When I send view whitelist entry request
 Then Request is successful
 And Whitelist entry is correct
 
 Scenario: API. Update whitelist entry
-Given I sign in as admin user
-When I send create new whitelist entry request
-Then Request is successful
 When I send update whitelist entry request
 Then Request is successful
-When I send view whitelist entry request
-Then Whitelist entry is correct
+And Whitelist entry is correct
 
 Scenario: API. Delete whitelist entry
-Given I sign in as admin user
-When I send create new whitelist entry request
+When I send view whitelist entry request
 Then Request is successful
-When I send delete whitelist entry request
-Then Request is successful
+
+Scenario: API. Get all whitelist entries
 When I send get list of whitelist entries request
-Then Whitelist entry is out common list
+Then Request is successful
+And Whitelists list size is more than 0
 
+Scenario: API.Search whitelists by filters
+When I send search whitelists by <criteria> with <value> request
+Then Request is successful
+And Whitelists list size is more than 0
+And Whitelists search result is correct
 
-
-
+Examples:
+| criteria      | value  |
+| identifier    | random |
+| description   | random |
+| type          | random |
+| updatedAfter  | random |
+| empty         |        |
