@@ -55,7 +55,7 @@ public class JsonConverter {
     public static String toJsonString(Object object) {
         log.debug("Converting to json string Object " + object);
         try {
-            return mapper.writeValueAsString(object);
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
         } catch (IOException | NullPointerException e) {
             String error = "Error occurred when trying to convert object with class:"
                     + object.getClass() + " to JSON string";
