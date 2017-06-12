@@ -1,0 +1,120 @@
+package model;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import java.util.*;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+public class CBEntity extends AbstractEntity {
+
+    private List<String> sources;
+    private String sourceType;
+    private String recordType;
+    private Date modifiedOn;
+    private Date eventTime;
+    private Map<String, Object> identifiers = new LinkedHashMap<>();
+    private Map<String, Object> attributes = new LinkedHashMap<>();
+    private List<Object> events = new ArrayList<>();
+    private CBEntities entities;
+    private CBEntityAssignments assignments;
+    private List<Geo> geo;
+    private ObjectType objectType;
+
+    public List<String> getSources() {
+        return sources;
+    }
+
+    public void setSources(List<String> sources) {
+        this.sources = sources;
+    }
+
+    public String getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(String sourceType) {
+        this.sourceType = sourceType;
+    }
+
+    public String getRecordType() {
+        return recordType;
+    }
+
+    public void setRecordType(String recordType) {
+        this.recordType = recordType;
+    }
+
+    public Date getModifiedOn() {
+        return modifiedOn;
+    }
+
+    public void setModifiedOn(Date modifiedOn) {
+        this.modifiedOn = modifiedOn;
+    }
+
+    public Date getEventTime() {
+        return eventTime;
+    }
+
+    public void setEventTime(Date eventTime) {
+        this.eventTime = eventTime;
+    }
+
+    public List<Object> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Object> events) {
+        this.events = events;
+    }
+
+    public CBEntities getEntities() {
+        return entities;
+    }
+
+    public void setEntities(CBEntities entities) {
+        this.entities = entities;
+    }
+
+    public CBEntityAssignments getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(CBEntityAssignments assignments) {
+        this.assignments = assignments;
+    }
+
+    public List<Geo> getGeo() {
+        return geo;
+    }
+
+    public void setGeo(List<Geo> geo) {
+        this.geo = geo;
+    }
+
+    public ObjectType getObjectType() {
+        return objectType;
+    }
+
+    public void setObjectType(ObjectType objectType) {
+        this.objectType = objectType;
+    }
+
+    public Map<String, Object> getIdentifiers() {
+        return identifiers;
+    }
+
+    public void setIdentifiers(Map<String, Object> identifiers) {
+        this.identifiers = identifiers;
+    }
+
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, Object> attributes) {
+        this.attributes = attributes;
+    }
+}

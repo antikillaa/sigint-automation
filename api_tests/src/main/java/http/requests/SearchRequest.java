@@ -1,26 +1,26 @@
 package http.requests;
 
-import model.SearchFilter;
 import http.HttpMethod;
+import model.CBSearchFilter;
 
-public class RecordsSearchRequest extends HttpRequest {
+public class SearchRequest extends HttpRequest {
 
-    private final static String URI = "/api/profiler/search/records";
+    private final static String URI = "/api/search/search/";
 
     /**
      * Build HTTP request.
      * By Default: HttpMethod = GET, MediaType = APPLICATION_JSON.
      */
-    public RecordsSearchRequest() {
+    public SearchRequest() {
         super(URI);
     }
 
     /**
      * CB Search
-     * API: POST /api/profiler/search/records
+     * API: POST /api/search/search
      * payload: {"keywords":"67576","pageSize":20,"page":0}
      */
-    public RecordsSearchRequest search(SearchFilter filter) {
+    public SearchRequest search(CBSearchFilter filter) {
         this
                 .setURI(URI)
                 .setHttpMethod(HttpMethod.POST)

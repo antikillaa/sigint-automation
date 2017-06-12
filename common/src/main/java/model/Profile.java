@@ -17,7 +17,7 @@ public class Profile extends ProfileAndTargetGroup {
     private ProfileType type = ProfileType.Individual;
     private ProfileProperties properties;
     @DataIgnore
-    private ArrayList<ProfileEntity> entities = new ArrayList<>();
+    private ArrayList<CBEntity> entities = new ArrayList<>();
     @DataIgnore
     private ArrayList<TargetGroup> groups = new ArrayList<>();
     @DataIgnore
@@ -62,11 +62,11 @@ public class Profile extends ProfileAndTargetGroup {
         this.properties = properties;
     }
 
-    public ArrayList<ProfileEntity> getEntities() {
+    public ArrayList<CBEntity> getEntities() {
         return entities;
     }
 
-    public void setEntities(ArrayList<ProfileEntity> entities) {
+    public void setEntities(ArrayList<CBEntity> entities) {
         this.entities = entities;
     }
 
