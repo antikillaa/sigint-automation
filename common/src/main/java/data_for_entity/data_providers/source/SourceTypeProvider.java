@@ -6,7 +6,13 @@ import model.SourceType;
 public class SourceTypeProvider implements EntityDataProvider {
     
     @Override
-    public Object generate(int length) {
-        return SourceType.random();
+    public SourceType generate(int length) {
+        SourceType sourceType;
+        int i = 0;
+        do {
+            sourceType = SourceType.random();
+            i++;
+        } while (sourceType.equals(SourceType.X) || i < SourceType.values().length);
+        return sourceType;
     }
 }
