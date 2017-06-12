@@ -1,9 +1,8 @@
 package steps;
 
-import static utils.StringUtils.stripQuotes;
-
 import app_context.AppContext;
 import app_context.RunContext;
+import conditions.Verify;
 import data_for_entity.RandomEntities;
 import errors.OperationResultError;
 import http.OperationResult;
@@ -13,6 +12,11 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import utils.DateHelper;
+
+import java.io.IOException;
+
+import static conditions.Conditions.isTrue;
+import static utils.StringUtils.stripQuotes;
 
 public abstract class APISteps {
 
@@ -33,6 +37,13 @@ public abstract class APISteps {
         OperationResult result = OperationsResults.getResult();
         log.info("Response message: " + result.getMessage());
         Assert.assertTrue(text + " not found", result.getMessage().contains(stripQuotes(text)));
+    }
+
+    @Then("Error message is $message")
+    public void checkErrorMessage(String message) throws IOException {
+        log.info("Verifying error message");
+        OperationResult operationResult = OperationsResults.getResult();
+        Verify.shouldBe(isTrue.element(operationResult.getMessage().toLowerCase().contains(message.toLowerCase())));
     }
     
     @Then("Request is successful")

@@ -1,19 +1,10 @@
 package steps;
 
-import static conditions.Conditions.isTrue;
-import static utils.StringUtils.trimSpaces;
-
-import conditions.Verify;
 import controllers.APILogin;
-import http.OperationResult;
-import http.OperationsResults;
-import java.io.IOException;
-import model.Token;
 import model.User;
 import model.entities.Entities;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
 
@@ -24,30 +15,13 @@ public class APILoginSteps extends APISteps {
 
     @Given("I sign in as $role user")
     public void signInGlobal(String role) {
-        signInCreds(role);
+        login.signInAsUser(role);
         checkResultSuccess();
-    }
-
-    @Given("I sign in as user with permissions $permissions")
-    public void signInWithPermissions(String permString) {
-        String[] permissions = trimSpaces(permString.split(","));
-        User user = GlobalSteps.getUserWithPermissions(permissions);
-        signInCreds(user);
-        checkResultSuccess();
-    }
-
-    private OperationResult<Token> signInCreds(String role) {
-        User user = GlobalSteps.getUserByRole(role);
-        return login.signInAsUser(user);
-    }
-    
-    private OperationResult<Token> signInCreds(User user) {
-        return login.signInAsUser(user);
     }
     
     @When("I sent sign in request as $role user with correct credentials")
     public void signInasCorrectUser(String role) {
-        signInCreds(role);
+        login.signInAsUser(role);
     }
     
     @When("I sent sign in request as $role user with incorrect credentials")
@@ -56,13 +30,6 @@ public class APILoginSteps extends APISteps {
         user.setName("test");
         user.setPassword("test");
         login.signInAsUser(user);
-    }
-
-    @Then("Error message is $message")
-    public void checkErrorMessage(String message) throws IOException {
-        log.info("Verifying error message");
-        OperationResult operationResult = OperationsResults.getResult();
-        Verify.shouldBe(isTrue.element(operationResult.getMessage().toLowerCase().contains(message.toLowerCase())));
     }
 
     @When("I send sign out request")
