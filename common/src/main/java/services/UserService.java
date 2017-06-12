@@ -1,20 +1,21 @@
 package services;
 
+import data_for_entity.RandomEntities;
+import data_for_entity.data_providers.user_password.UserPasswordProvider;
+import error_reporter.ErrorReporter;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.ChangePasswordRequest;
 import http.requests.UserRequest;
-import java.util.ArrayList;
-import java.util.List;
 import json.JsonConverter;
-import model.AuthResponseResult;
-import model.RequestResult;
-import model.SearchFilter;
-import model.User;
-import model.UserPassword;
+import model.*;
 import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class UserService implements EntityService<User> {
 
@@ -22,6 +23,12 @@ public class UserService implements EntityService<User> {
     private static final UserRequest request = new UserRequest();
     private static final ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
     private static String defaultTeamId;
+    private static RandomEntities randomEntities = new RandomEntities();
+    private static UserService userService = new UserService();
+    private static ResponsibilityService responsibilityService = new ResponsibilityService();
+    private static TitleService titleService = new TitleService();
+
+    private static final int PASSWORD_LENGTH = 10;
 
     public static String getDefaultTeamId() {
         return defaultTeamId;
@@ -60,6 +67,9 @@ public class UserService implements EntityService<User> {
     @Override
     public OperationResult<RequestResult> remove(User entity) {
         log.info("Deleting user, id:" + entity.getId() + " name:" + entity.getName());
+        if (entity.getCreatedBy() == null) {
+            ErrorReporter.raiseError("You are trying to delete system user " + entity.getName());
+        }
 
         G4Response response = g4HttpClient.sendRequest(request.delete(entity.getId()));
 
@@ -169,7 +179,7 @@ public class UserService implements EntityService<User> {
      * <br>note: ADMIN user has 'approver' role
      */
     String getReportRole(User user) {
-        ArrayList<String> roles = user.getEffectivePermission().getActions();
+        List<String> roles = user.getEffectivePermission().getActions();
         if (roles.contains("REPORT_UPDATE_APPROVER")) {
             return "approver";
         } else if (roles.contains("REPORT_UPDATE_ANALYST")) {
@@ -182,4 +192,36 @@ public class UserService implements EntityService<User> {
         }
     }
 
+    public static User createUserWithPermissions(String... permissions) {
+        Responsibility responsibility = randomEntities.randomEntity(Responsibility.class);
+        responsibility.setPermissions(Arrays.asList(permissions));
+        OperationResult<Responsibility> responsibilityOperationResult = responsibilityService.add(responsibility);
+        if (responsibilityOperationResult.isSuccess()) {
+            Title title = randomEntities.randomEntity(Title.class);
+            title.setResponsibilities(Collections.singletonList(responsibilityOperationResult.getEntity().getId()));
+            OperationResult<Title> titleOperationResult = titleService.add(title);
+            if (titleOperationResult.isSuccess()) {
+                User newUser = randomEntities.randomEntity(User.class);
+                newUser.setParentTeamId("00"); // default Team
+                newUser.getDefaultPermission().setTitles(Collections.singletonList(titleOperationResult.getEntity().getId()));
+                OperationResult<User> userOperationResult = userService.add(newUser);
+                if (userOperationResult.isSuccess()) {
+                    User user = userOperationResult.getEntity();
+                    user.setNewPassword((String) new UserPasswordProvider().generate(PASSWORD_LENGTH));
+                    OperationResult<AuthResponseResult> firstPasswordChangeResult = userService.changeTempPassword(user);
+                    if (firstPasswordChangeResult.isSuccess()) {
+                        return user;
+                    } else {
+                        throw new AssertionError("Unable change password for new User: " + JsonConverter.toJsonString(newUser));
+                    }
+                } else {
+                    throw new AssertionError("Unable create User: " + JsonConverter.toJsonString(newUser));
+                }
+            } else {
+                throw new AssertionError("Unable create Title: " + JsonConverter.toJsonString(title));
+            }
+        } else {
+            throw new AssertionError("Unable create Responsibility: " + JsonConverter.toJsonString(responsibility));
+        }
+    }
 }

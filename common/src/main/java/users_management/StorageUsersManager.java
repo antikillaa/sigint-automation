@@ -3,7 +3,6 @@ package users_management;
 import error_reporter.ErrorReporter;
 import model.User;
 import org.apache.log4j.Logger;
-import steps.GlobalSteps;
 
 import java.util.*;
 
@@ -40,12 +39,12 @@ public class StorageUsersManager {
             } else {
                 users.retainAll(userMap.get(permission));
                 if (users.size() == 0) {
-                    log.debug("User with permissions: " + permissions + "not found!");
+                    log.debug("User with permissions: " + Arrays.toString(permissions) + "not found!");
                     return users;
                 }
             }
         }
-       log.trace("With permissions: " + permissions.toString() + " users found: " + users.size());
+       log.trace("With permissions: " + Arrays.toString(permissions) + " users found: " + users.size());
        return users;
     }
 

@@ -1,11 +1,8 @@
 package steps;
 
-import static com.codeborne.selenide.Condition.appear;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.sleep;
-
 import blocks.context.Context;
 import com.codeborne.selenide.WebDriverRunner;
+import controllers.APILogin;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;
@@ -16,6 +13,10 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.Pages;
 import pages.SigintPage;
+
+import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Selenide.sleep;
 
 public class UILoginSteps extends UISteps {
 
@@ -28,7 +29,7 @@ public class UILoginSteps extends UISteps {
 
     @Given("I as <role> try sign in with incorrect credentials")
     public void userAsRoleSignInWithIncorrectCredentials(@Named("role") String role) {
-        user = GlobalSteps.getUserByRole(role);
+        user = APILogin.getUserByRole(role);
         Pages.loginPage().load();
 
         login(
@@ -80,7 +81,7 @@ public class UILoginSteps extends UISteps {
     @Then("I logged in as $role")
     public void iLoggedInAsOperator(@Named("role") String role) {
         // Arrange
-        user = GlobalSteps.getUserByRole(role);
+        user = APILogin.getUserByRole(role);
         Pages.loginPage().load();
 
         // Act
