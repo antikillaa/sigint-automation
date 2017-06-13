@@ -12,7 +12,7 @@ Given I sign in as admin user
 When I send delete designation request
 Then Request is successful
 
-Scenario: Scenario: API.Create designation
+Scenario: API.Create designation
 When I send get list of designations request
 Then Request is successful
 Then Designations list size is more than 0
