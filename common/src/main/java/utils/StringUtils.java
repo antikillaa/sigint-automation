@@ -88,4 +88,8 @@ public class StringUtils {
             return jsonString;
         }
     }
+
+    public static boolean stringEquals(String expected, String actual) {
+        return expected.equalsIgnoreCase(actual);
+    }
 }
