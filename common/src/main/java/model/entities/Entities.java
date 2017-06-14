@@ -29,6 +29,14 @@ public class Entities {
     private static TitleList titles;
     private static OrganizationList organizations;
     private static DesignationList designations;
+    private static DesignationMappingList designationMappings;
+
+    public static EntityList<DesignationMapping> getDesignationMappings() {
+        if (designationMappings == null) {
+            designationMappings = new DesignationMappingList();
+        }
+        return designationMappings;
+    }
 
     public static EntityList<Designation> getDesignations() {
         if (designations == null) {

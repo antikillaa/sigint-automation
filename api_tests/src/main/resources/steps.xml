@@ -43,6 +43,8 @@
     </bean>
     <bean id="designationSteps" class="steps.APIDesignationsSteps">
     </bean>
+    <bean id="designationMappingSteps" class="steps.APIDesignationMappingsSteps">
+    </bean>
     <bean id="reportCategorySteps" class="steps.APIReportCategorySteps" >
     </bean>
     <bean id="profileSteps" class="steps.APIProfileSteps" >
