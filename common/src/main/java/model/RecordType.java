@@ -15,7 +15,9 @@ public enum RecordType {
     InternetChat("C", "Internet Chat", "الدردشة عبر الإنترنت"),
     PhoneBook("PhoneBook", "PhoneBook", "دليل التلفونات" ),
     Subscriber("Subscriber", "Subscriber", "مكتتب"),
-    VLR("VLR", "VLR", "VLR");
+    VLR("VLR", "VLR", "VLR"),
+    CDR("CDR", "CDR", "CDR"),
+    T("T", "T", "T");
 
     private final String letterCode;
     private final String englishName;
