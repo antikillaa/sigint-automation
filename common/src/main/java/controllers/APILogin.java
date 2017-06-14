@@ -25,6 +25,7 @@ public class APILogin {
     private static AppContext context = AppContext.get();
     private static Logger log = Logger.getLogger(APILogin.class);
     private static final String ADMIN_ROLE = "admin";
+    private static boolean сleanupIsNeeded;
 
     public static User getUserByRole(String role) {
         try {
@@ -94,6 +95,7 @@ public class APILogin {
             log.debug("Users are not found. Creating new user with required permissions");
             signInAsUser(getUserByRole(ADMIN_ROLE));
             User user = UserService.createUserWithPermissions(permissions);
+            сleanupIsNeeded = true;
             manager.addUser(user, permissions);
             log.debug("User is created");
             return user;
@@ -111,15 +113,29 @@ public class APILogin {
 
     @AfterStory
     public void afterStoryTearDown() {
-        Assert.assertTrue("Unable login as admin user!", signInAsUser(ADMIN_ROLE).isSuccess());
+        if (сleanupIsNeeded) {
+            log.info("Cleanup for temp users, titles & responsibilities");
 
-        UserService userService = new UserService();
-        userService.remove(Entities.getUsers().getLatest());
+            Assert.assertTrue("Unable login as admin user!", signInAsUser(ADMIN_ROLE).isSuccess());
 
-        TitleService titleService = new TitleService();
-        titleService.remove(Entities.getTitles().getLatest());
+            UserService userService = new UserService();
+            for (User user : Entities.getUsers()) {
+                if (user.getCreatedBy() != null) {
+                    userService.remove(user);
+                }
+            }
 
-        ResponsibilityService responsibilityService = new ResponsibilityService();
-        responsibilityService.remove(Entities.getResponsibilities().getLatest());
+            TitleService titleService = new TitleService();
+            for (Title title : Entities.getTitles()) {
+                titleService.remove(title);
+            }
+
+            ResponsibilityService responsibilityService = new ResponsibilityService();
+            for (Responsibility responsibility : Entities.getResponsibilities()) {
+                responsibilityService.remove(responsibility);
+            }
+
+            сleanupIsNeeded = false;
+        }
     }
 }
