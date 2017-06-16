@@ -13,9 +13,7 @@ import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class UserService implements EntityService<User> {
 
@@ -223,5 +221,16 @@ public class UserService implements EntityService<User> {
         } else {
             throw new AssertionError("Unable create Responsibility: " + JsonConverter.toJsonString(responsibility));
         }
+    }
+
+    public List<OperationResult> removeAll() {
+        List<OperationResult> operationResults = new ArrayList<>();
+
+        Long count = new ArrayList<>(Entities.getUsers().getEntities()).stream()
+                .filter(user -> user.getCreatedBy() != null)
+                .peek(user -> operationResults.add(remove(user)))
+                .count();
+
+        return operationResults;
     }
 }

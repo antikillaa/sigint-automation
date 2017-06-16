@@ -3,6 +3,7 @@ package steps;
 import conditions.Conditions;
 import conditions.Verify;
 import data_for_entity.RandomEntities;
+import errors.NullReturnException;
 import http.OperationResult;
 import model.Team;
 import model.entities.Entities;
@@ -121,5 +122,13 @@ public class APITeamManagementSteps extends APISteps {
         context.put("team", team);
 
         teamService.update(team);
+    }
+
+    @When("I send delete parent team request")
+    public void deleteParentTeam() throws NullReturnException {
+        String parentTeamId = Entities.getTeams().getLatest().getParentTeamId();
+        Team parentTeam = Entities.getTeams().getEntity(parentTeamId);
+
+        teamService.remove(parentTeam);
     }
 }

@@ -1,16 +1,17 @@
 package services;
 
 import errors.OperationResultError;
-import model.SearchFilter;
-import model.entities.Entities;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.TitleRequest;
 import model.AuthResponseResult;
+import model.SearchFilter;
 import model.Title;
+import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class TitleService implements EntityService<Title> {
     }
 
     @Override
-    public OperationResult remove(Title entity) {
+    public OperationResult<AuthResponseResult> remove(Title entity) {
         log.info("Delete title id:" + entity.getId() + " name:" + entity.getDisplayName());
         G4Response response = g4HttpClient.sendRequest(request.delete(entity.getId()));
 
@@ -84,5 +85,15 @@ public class TitleService implements EntityService<Title> {
             Entities.getTitles().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
+    }
+
+    public List<OperationResult> removeAll() {
+        List<OperationResult> operationResults = new ArrayList<>();
+
+        Long count = new ArrayList<>(Entities.getTitles().getEntities()).stream()
+                .peek(entity -> operationResults.add(remove(entity)))
+                .count();
+
+        return operationResults;
     }
 }

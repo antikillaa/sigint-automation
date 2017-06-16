@@ -1,16 +1,17 @@
 package services;
 
 import errors.OperationResultError;
-import model.SearchFilter;
-import model.entities.Entities;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.ResponsibilityRequest;
 import model.AuthResponseResult;
 import model.Responsibility;
+import model.SearchFilter;
+import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -84,5 +85,15 @@ public class ResponsibilityService implements EntityService<Responsibility> {
             Entities.getResponsibilities().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
+    }
+
+    public List<OperationResult> removeAll() {
+        List<OperationResult> operationResults = new ArrayList<>();
+
+        Long count = new ArrayList<>(Entities.getResponsibilities().getEntities()).stream()
+                .peek(entity -> operationResults.add(remove(entity)))
+                .count();
+
+        return operationResults;
     }
 }
