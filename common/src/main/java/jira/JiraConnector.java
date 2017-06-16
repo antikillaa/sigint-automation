@@ -56,6 +56,7 @@ public class JiraConnector {
             G4HttpClient.setCookie(session.getName(), session.getValue());
         } else {
             log.error("Jira session wasn't received. Cookie will not be generated");
+            log.error(result.getEntity().getLoginInfo().toString());
         }
         return session;
     }
