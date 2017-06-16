@@ -6,7 +6,9 @@ import http.G4Response;
 import http.OperationResult;
 import http.requests.UploadFilesRequest;
 import http.requests.UploadRequest;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import model.*;
 import model.Process;
 import org.apache.log4j.Logger;
@@ -27,23 +29,23 @@ public class UploadFilesService {
      * @param file G4file (File with MediaType field)
      * @return {@link OperationResult}
      */
-    public OperationResult<FileMeta> upload(G4File file, Source source, String ownerId) {
-        log.info("Uploading file " + file.getAbsolutePath() + " with 'meta' string...");
+    public OperationResult<FileMeta> upload(G4File file, Source source, String ownerId, String remotePath) {
+        log.info("Uploading file " + file.getName() + " with 'meta' string");
 
-        G4Response uploadResponse = g4HttpClient.sendRequest(uploadFilesRequest.upload(file, source, ownerId));
+        G4Response uploadResponse = g4HttpClient.sendRequest(uploadFilesRequest.upload(file, source, ownerId, remotePath));
 
-        OperationResult<FileMeta> uploadResult = new OperationResult<>(uploadResponse, FileMeta.class);
-        if (!uploadResult.isSuccess()) {
-            // do not notify sigint, return failed response
-            return uploadResult;
-        }
-
-        G4Response notifyResponse = sendNotify(uploadResult.getEntity());
-        return new OperationResult<>(notifyResponse, uploadResult.getEntity());
+        return new OperationResult<>(uploadResponse, FileMeta.class);
     }
 
-    private G4Response sendNotify(FileMeta fileMeta) {
-        return g4HttpClient.sendRequest(uploadFilesRequest.notify(fileMeta));
+    public String getRemotePath(G4File metafile, Source source) {
+        String basename = metafile.getName().substring(0, metafile.getName().lastIndexOf("."));
+        String path = "/" + source.getType().toLetterCode()
+            + "/" + source.getName()
+            + new SimpleDateFormat("/yyyy/MM/dd/").format(new Date())
+            + basename + "/";
+        log.info("Remote path: " + path);
+
+        return path;
     }
 
     /**

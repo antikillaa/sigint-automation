@@ -14,8 +14,7 @@ And Message contains "file with id"
 
 Examples:
 | sourceType | recordType | recordsCount |
-| Strategic  | SMS        | 10           |
-| Tactical   | SMS        | 10           |
+| S          | SMS        | 10           |
 
 
 Scenario: Upload several files with the same name into one source
@@ -33,7 +32,7 @@ And Message contains "FileAlreadyExistsException"
 
 Examples:
 | sourceType | recordType | recordsCount |
-| Tactical   | SMS        | 10           |
+| F          | SMS        | 10           |
 
 
 Scenario: Upload duplicate data
@@ -52,28 +51,28 @@ And Message contains "file is duplicate with etag"
 
 Examples:
 | sourceType | recordType | recordsCount |
-| Strategic  | SMS        | 10           |
+| S          | SMS        | 10           |
 
 
 Scenario: API.T-SMS ingestion
 Meta: @nightly
 Given I sign in as admin user
-And Data source with <sourceType> and <recordType> exists
+And Data source with <sourceType> and T exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And <sourceType> - <recordType> data file is renamed to make filename unique
 When I send upload data file request
 Then Request is successful
 And Uploaded file is processed
 And Original data file is searchable within the system
-And <recordsCount> records are ingested
-When I send get upload details request
-Then Request is successful
-And Upload details contain <recordsCount> - Total records
-And Upload details contain <recordsCount> - <recordType> records
+!-- And <recordsCount> records are ingested
+!-- When I send get upload details request
+!-- Then Request is successful
+!-- And Upload details contain <recordsCount> - Total records
+!-- And Upload details contain <recordsCount> - <recordType> records
 
 Examples:
 | sourceType | recordType | recordsCount |
-| Tactical   | SMS        | 1000         |
+| T          | SMS        | 1000         |
 
 
 Scenario: API.F-SMS ingestion
@@ -86,11 +85,11 @@ When I send upload data file request
 Then Request is successful
 And Uploaded file is processed
 And Original data file is searchable within the system
-And <recordsCount> records are ingested
-When I send get upload details request
-Then Request is successful
-And Upload details contain <recordsCount> - Total records
-And Upload details contain <recordsCount> - <recordType> records
+!-- And <recordsCount> records are ingested
+!-- When I send get upload details request
+!-- Then Request is successful
+!-- And Upload details contain <recordsCount> - Total records
+!-- And Upload details contain <recordsCount> - <recordType> records
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -107,15 +106,15 @@ When I send upload data file request
 Then Request is successful
 And Uploaded file is processed
 And Original data file is searchable within the system
-And <recordsCount> records are ingested
-When I send get upload details request
-Then Request is successful
-And Upload details contain <recordsCount> - Total records
-And Upload details contain <recordsCount> - <recordType> records
+!-- And <recordsCount> records are ingested
+!-- When I send get upload details request
+!-- Then Request is successful
+!-- And Upload details contain <recordsCount> - Total records
+!-- And Upload details contain <recordsCount> - <recordType> records
 
 Examples:
 | sourceType | recordType | recordsCount |
-| Strategic  | SMS        | 1000         |
+| S          | SMS        | 1000         |
 
 
 Scenario: API.S-CDR ingestion
@@ -128,37 +127,38 @@ When I send upload data file request
 Then Request is successful
 And Uploaded file is processed
 And Original data file is searchable within the system
-And <recordsCount> records are ingested
-When I send get upload details request
-Then Request is successful
-And Upload details contain <recordsCount> - Total records
-And Upload details contain <recordsCount> - <recordType> records
+!-- And <recordsCount> records are ingested
+!-- When I send get upload details request
+!-- Then Request is successful
+!-- And Upload details contain <recordsCount> - Total records
+!-- And Upload details contain <recordsCount> - <recordType> records
 
 Examples:
 | sourceType | recordType | recordsCount |
-| Strategic  | Voice      | 100          |
+| S          | CDR        | 100          |
 
 
 Scenario: API.T-Voice ingestion
 Meta: @nightly
 Given I sign in as admin user
-And Data source with <sourceType> and <recordType> exists
+And Data source with <sourceType> and T exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And <sourceType> - <recordType> data file is renamed to make filename unique
+When I upload audio files
 When I send upload data file request
 Then Request is successful
-When I upload audio files
 Then Uploaded file is processed
+Then Uploaded audio files are processed
 And Original data file is searchable within the system
-And <recordsCount> records are ingested
-When I send get upload details request
-Then Request is successful
-And Upload details contain <recordsCount> - Total records
-And Upload details contain <recordsCount> - <recordType> records
+!-- And <recordsCount> records are ingested
+!-- When I send get upload details request
+!-- Then Request is successful
+!-- And Upload details contain <recordsCount> - Total records
+!-- And Upload details contain <recordsCount> - <recordType> records
 
 Examples:
 | sourceType | recordType | recordsCount |
-| Tactical   | Voice      | 10           |
+| T          | Voice      | 10           |
 
 
 Scenario: API.Search and count data folders by path
@@ -172,9 +172,9 @@ Then Folders count result is equal to appropriate list size
 
 Examples:
 | sourceType | recordType |
-| Tactical   | Voice      |
+| T          | T          |
 | F          | SMS        |
-| Strategic  | SMS        |
+| S          | SMS        |
 
 
 Scenario: API.Search and count data folders by wildcard
@@ -200,9 +200,9 @@ Then Files count result is equal to appropriate list size
 
 Examples:
 | sourceType | recordType |
-| Tactical   | Voice      |
+| T          | T          |
 | F          | SMS        |
-| Strategic  | SMS        |
+| S          | SMS        |
 
 
 Scenario: API.Search and count data files by wildcard
