@@ -1,8 +1,6 @@
 package http.requests;
 
 import http.HttpMethod;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.ws.rs.core.MediaType;
 import json.JsonConverter;
 import model.FileMeta;
@@ -60,8 +58,8 @@ public class UploadFilesRequest extends HttpRequest {
      * @param ownerId of file;
      * @return UploadFilesRequest
      */
-    public UploadFilesRequest upload(G4File file, Source source, String ownerId) {
-        FileMeta fileMeta = initFileMeta(file, source, ownerId);
+    public UploadFilesRequest upload(G4File file, Source source, String ownerId, String remotePath) {
+        FileMeta fileMeta = initFileMeta(file, source, ownerId, remotePath);
         String meta = JsonConverter.toJsonString(fileMeta);
         addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         addBodyString("meta", meta);
@@ -78,23 +76,14 @@ public class UploadFilesRequest extends HttpRequest {
      * @param file file for upload
      * @return FileMeta model for uploaded file
      */
-    private FileMeta initFileMeta(G4File file, Source source, String ownerId) {
-
+    private FileMeta initFileMeta(G4File file, Source source, String ownerId, String remotePath) {
         String name;
-        String basename = file.getName().substring(0, file.getName().lastIndexOf("."));
-        String path = "/" + source.getType().toLetterCode()
-            + "/" + source.getName()
-            + new SimpleDateFormat("/yyyy/MM/dd/").format(new Date())
-            + basename + "/";
-
-
         /*  Meta file contains relative paths of audio files.
             Place audio files into parentRemotePath subfolder to bind them together */
         if (file.getName().contains(".xls") || file.getName().contains(".csv")) {
-            parentRemotePath = path;
-            name = parentRemotePath + file.getName();
+            name = remotePath + file.getName();
         } else {
-            name = parentRemotePath + file.getParentFile().getName() + "/" + file.getName();
+            name = remotePath + file.getParentFile().getName() + "/" + file.getName();
         }
 
         FileMeta fileMeta = new FileMeta();

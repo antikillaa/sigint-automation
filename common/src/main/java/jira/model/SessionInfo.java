@@ -10,6 +10,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 public class SessionInfo {
 
     private Session session;
+    private LoginInfo loginInfo;
 
     public Session getSession() {
         return session;
@@ -19,5 +20,11 @@ public class SessionInfo {
         this.session = session;
     }
 
+    public LoginInfo getLoginInfo() {
+        return loginInfo;
+    }
 
+    public void setLoginInfo(LoginInfo loginInfo) {
+        this.loginInfo = loginInfo;
+    }
 }

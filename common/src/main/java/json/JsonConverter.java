@@ -1,10 +1,6 @@
 package json;
 
-import model.entities.EntityList;
-import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.type.MapType;
-import org.codehaus.jackson.map.type.TypeFactory;
+import static utils.StringUtils.prettyPrint;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,8 +8,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static utils.StringUtils.prettyPrint;
+import model.entities.EntityList;
+import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.type.MapType;
+import org.codehaus.jackson.map.type.TypeFactory;
+import org.glassfish.jersey.media.multipart.MultiPart;
 
 public class JsonConverter {
 
@@ -53,6 +53,9 @@ public class JsonConverter {
     }
 
     public static String toJsonString(Object object) {
+        if (object instanceof MultiPart) {
+            return "Multipart object";
+        }
         log.debug("Converting to json string Object " + object);
         try {
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);

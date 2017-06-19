@@ -5,6 +5,7 @@ public class MetaProperties {
     private RecordType recordType;
     private SourceType sourceType;
     private String error;
+    private String processId;
     
     public RecordType getRecordType() {
         return recordType;
@@ -28,5 +29,13 @@ public class MetaProperties {
 
     public void setError(String error) {
         this.error = error;
+    }
+
+    public String getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(String processId) {
+        this.processId = processId;
     }
 }

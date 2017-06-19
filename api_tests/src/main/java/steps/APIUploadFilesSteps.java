@@ -30,7 +30,6 @@ import model.Source;
 import model.TargetResultType;
 import model.UploadDetails;
 import model.UploadFilter;
-import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
@@ -41,7 +40,6 @@ import utils.DateHelper;
 @SuppressWarnings("unchecked")
 public class APIUploadFilesSteps extends APISteps {
 
-    private final static Logger log = Logger.getLogger(APIUploadFilesSteps.class);
     private UploadFilesService service = new UploadFilesService();
     private static final int WAITING_TIME = 6 * 60; // in seconds
     private static final int POLLING_INTERVAL = 20; // in seconds
@@ -58,7 +56,9 @@ public class APIUploadFilesSteps extends APISteps {
         } else {
             file.setMediaType(PegasusMediaType.MS_EXCEL_TYPE);
         }
-        OperationResult<FileMeta> uploadResult = service.upload(file, source, user.getId());
+        String remotePath = service.getRemotePath(file, source);
+
+        OperationResult<FileMeta> uploadResult = service.upload(file, source, user.getId(), remotePath);
         context.put("meta", uploadResult.getEntity());
     }
 
@@ -69,18 +69,34 @@ public class APIUploadFilesSteps extends APISteps {
         if (files.isEmpty()) {
             ErrorReporter.reportAndRaiseError("Can't find audio files");
         }
+        G4File metafile = context.get("g4file", G4File.class);
         Source source = context.get("source", Source.class);
         LoggedUser user = AppContext.get().getLoggedUser();
+        String remotePath = service.getRemotePath(metafile, source);
 
+        List<FileMeta> audioMetas = new ArrayList<>();
         for (File file: files) {
             G4File g4file = new G4File(file.getPath());
             g4file.setMediaType(PegasusMediaType.AUDIO);
-            OperationResult<FileMeta> uploadResult = service.upload(g4file, source, user.getId());
+            OperationResult<FileMeta> uploadResult = service.upload(g4file, source, user.getId(), remotePath);
             if (!uploadResult.isSuccess()) {
                 log.error("Can't upload " + file.getName());
             }
-            // TODO: add isProcessed check
+            audioMetas.add(uploadResult.getEntity());
         }
+        context.put("audioMetas", audioMetas);
+        DateHelper.setStartTime();
+    }
+
+    @Then("Uploaded audio files are processed")
+    public void audioFilesAreProcessed() {
+        List<FileMeta> audioMetas = context.get("audioMetas", List.class);
+
+        for (FileMeta audioMeta: audioMetas) {
+            context.put("meta", audioMeta);
+            fileIsProcessed();
+        }
+        log.info(String.format("Audio processing time: %d seconds", DateHelper.getDuration()));
     }
 
     @Then("Uploaded file is processed")
@@ -95,7 +111,6 @@ public class APIUploadFilesSteps extends APISteps {
         String fileId = fileMeta.getId();
         Boolean fileProcessed = isProcessed(fileId);
         while (!fileProcessed && !isTimeout(deadline)) {
-            log.info("Uploaded file isn't processed yet");
             DateHelper.waitTime(POLLING_INTERVAL);
             fileProcessed = isProcessed(fileId);
         }
@@ -123,7 +138,11 @@ public class APIUploadFilesSteps extends APISteps {
                 return true;
             }
             // FileMeta.etag == Process.md5
-            log.info("meta: {'etag': '" + fileMeta.getEtag() + "', isProcessed: " + fileMeta.getMeta().getIsProcessed() + '}');
+            log.info(String.format("%s%s meta: {'etag': '%s' , isProcessed: %s}",
+                fileMeta.getFile(),
+                fileMeta.getExtension(),
+                fileMeta.getEtag(),
+                fileMeta.getMeta().getIsProcessed()));
             if (fileMeta.getEtag().length() > 0 & fileMeta.getMeta().getIsProcessed()) {
                 context.put("meta", fileMeta);
                 return true;

@@ -30,17 +30,17 @@ public class APIIngestionSteps extends APISteps {
 
         IDockerAdapter dockerAdapter = null;
         switch (sourceType) {
-            case Strategic:
+            case S:
                 switch (recordType) {
                     case SMS:
                         dockerAdapter = new SSMSDockerAdapter();
                         break;
-                    case Voice:
+                    case CDR:
                         dockerAdapter = new SCDRDockerAdapter();
                         break;
                 }
                 break;
-            case Tactical:
+            case T:
                 switch (recordType) {
                     case SMS:
                         dockerAdapter = new TSMSDockerAdapter();
@@ -89,6 +89,9 @@ public class APIIngestionSteps extends APISteps {
                 actualCount = process.getSmsCount();
                 break;
             case "voice":
+                actualCount = process.getVoiceCount();
+                break;
+            case "cdr":
                 actualCount = process.getVoiceCount();
                 break;
             default:

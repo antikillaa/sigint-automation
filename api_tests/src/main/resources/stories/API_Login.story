@@ -9,4 +9,4 @@ Then Request is successful
 Scenario: User got error on sign in request with incorrect credentials
 When I sent sign in request as admin user with incorrect credentials
 Then Request is unsuccessful
-And Error message is invalid username or password
+And Message contains Invalid username or password
