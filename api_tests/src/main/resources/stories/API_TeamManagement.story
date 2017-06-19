@@ -3,7 +3,7 @@ Meta:
 
 Lifecycle:
 Before:
-Given I sign in as user with permissions UM_ADMIN, TEAM_MANAGER
+Given I sign in as user with permissions UM_ADMIN
 
 
 Scenario: Getting a list of all teams
@@ -32,6 +32,22 @@ Then Request is successful
 When I send get list of teams
 Then Request is successful
 And Team is not in the list
+
+When I send create a new team
+Then Request is successful
+And Team is correct
+
+When I send create a new nested team
+Then Request is successful
+
+When I send delete parent team request
+Then I got response code 400
+And Message contains "Can't remove non-empty team."
+
+When I send delete team request
+Then Request is successful
+When I send delete team request
+Then Request is successful
 
 
 Scenario: User is able to update a team

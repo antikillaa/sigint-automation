@@ -1,8 +1,9 @@
 package utils;
 
-import java.io.IOException;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +11,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import org.codehaus.jackson.map.ObjectMapper;
 
 public class StringUtils {
 
@@ -42,7 +42,7 @@ public class StringUtils {
     }
 
     public static String stripQuotes(String s) {
-        return s.replaceAll("'", "").replaceAll("\"", "").trim();
+        return s.replaceAll("^\"|\"$", "");
     }
 
     public static List<String> toList(String value) {

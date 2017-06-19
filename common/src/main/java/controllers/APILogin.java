@@ -4,7 +4,10 @@ import app_context.AppContext;
 import errors.NullReturnException;
 import http.G4HttpClient;
 import http.OperationResult;
-import model.*;
+import model.LoggedUser;
+import model.RequestResult;
+import model.Token;
+import model.User;
 import model.entities.Entities;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStory;
@@ -114,25 +117,31 @@ public class APILogin {
     @AfterStory
     public void afterStoryTearDown() {
         if (сleanupIsNeeded) {
-            log.info("Cleanup for temp users, titles & responsibilities");
+            log.info("TearDown for temp users, titles & responsibilities");
 
             Assert.assertTrue("Unable login as admin user!", signInAsUser(ADMIN_ROLE).isSuccess());
 
-            UserService userService = new UserService();
-            for (User user : Entities.getUsers()) {
-                if (user.getCreatedBy() != null) {
-                    userService.remove(user);
+            List<OperationResult> operationResults;
+
+            operationResults = new UserService().removeAll();
+            for (OperationResult result : operationResults) {
+                if (!result.isSuccess()) {
+                    log.error("Unable to delete User. Code:" + result.getCode() + ", Response:" + result.getMessage());
                 }
             }
 
-            TitleService titleService = new TitleService();
-            for (Title title : Entities.getTitles()) {
-                titleService.remove(title);
+            operationResults = new TitleService().removeAll();
+            for (OperationResult result : operationResults) {
+                if (!result.isSuccess()) {
+                    log.error("Unable to delete Title. Code:" + result.getCode() + ", Response:" + result.getMessage());
+                }
             }
 
-            ResponsibilityService responsibilityService = new ResponsibilityService();
-            for (Responsibility responsibility : Entities.getResponsibilities()) {
-                responsibilityService.remove(responsibility);
+            operationResults = new ResponsibilityService().removeAll();
+            for (OperationResult result : operationResults) {
+                if (!result.isSuccess()) {
+                    log.error("Unable to delete Responsibility. Code:" + result.getCode() + ", Response:" + result.getMessage());
+                }
             }
 
             сleanupIsNeeded = false;
