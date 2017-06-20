@@ -1,8 +1,12 @@
 package http.requests;
 
 
-import model.SearchFilter;
+import static org.junit.Assert.assertNotNull;
+
 import http.HttpMethod;
+import model.G4File;
+import model.PegasusMediaType;
+import model.SearchFilter;
 import model.Whitelist;
 
 public class WhiteListRequest extends HttpRequest {
@@ -59,6 +63,15 @@ public class WhiteListRequest extends HttpRequest {
             .setURI(URI + "search")
             .setHttpMethod(HttpMethod.POST)
             .setPayload(searchFilter);
+        return this;
+    }
+
+    public WhiteListRequest upload(G4File file) {
+        assertNotNull("null object for whitelist upload", file);
+        addBodyFile("file", file, PegasusMediaType.TEXT_CSV_TYPE);
+        this
+            .setURI(URI + "import")
+            .setHttpMethod(HttpMethod.POST);
         return this;
     }
 
