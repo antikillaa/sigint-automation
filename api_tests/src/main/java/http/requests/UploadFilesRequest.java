@@ -64,7 +64,6 @@ public class UploadFilesRequest extends HttpRequest {
         addBodyFile("file", file, MediaType.APPLICATION_JSON_TYPE);
         addBodyString("meta", meta);
 
-        file.deleteOnExit();
         this.setURI(URI).setHttpMethod(HttpMethod.POST);
 
         return this;
