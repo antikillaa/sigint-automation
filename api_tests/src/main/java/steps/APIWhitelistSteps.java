@@ -1,13 +1,19 @@
 package steps;
 
 
+import static ingestion.IngestionService.cleanImportDir;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import error_reporter.ErrorReporter;
 import http.OperationResult;
+import java.util.ArrayList;
 import java.util.List;
 import json.JsonConverter;
+import model.G4File;
+import model.ImportResult;
 import model.Whitelist;
 import model.WhitelistFilter;
 import model.entities.Entities;
@@ -22,6 +28,10 @@ public class APIWhitelistSteps extends APISteps {
 
     private static Whitelist getRandomWhitelist() {
         return objectInitializer.randomEntity(Whitelist.class);
+    }
+
+    static List<Whitelist> getRandomWhitelists(int count) {
+        return objectInitializer.randomEntities(Whitelist.class, count);
     }
 
     @When("I send get list of whitelist entries request")
@@ -85,7 +95,7 @@ public class APIWhitelistSteps extends APISteps {
         List<Whitelist> whitelists = context.get("whitelistEntitiesList", List.class);
         Whitelist whitelist = RandomGenerator.getRandomItemFromList((whitelists));
 
-        assertTrue(whitelist != null);
+        assertNotNull(whitelist);
         context.put("whitelist", whitelist);
     }
 
@@ -165,4 +175,59 @@ public class APIWhitelistSteps extends APISteps {
         }
     }
 
+    @When("I generate $count random whitelists inside CSV $criteria header")
+    public void generateCSVWithWhitelists(final String count, final String criteria) {
+        int size = Integer.valueOf(count);
+        boolean withHeader = true;
+        if (criteria.equalsIgnoreCase("without")) {
+            withHeader = false;
+        }
+
+        cleanImportDir();
+        List<Whitelist> whitelists = getRandomWhitelists(size);
+        G4File g4File = service.createCSVFile(whitelists, withHeader);
+
+        context.put("g4file", g4File);
+        context.put("importedWhitelists", whitelists);
+    }
+
+    @When("I send import whitelists request")
+    public void generateCSVWithWhitelists() {
+        G4File csvFile = context.get("g4file", G4File.class);
+        OperationResult<ImportResult> result = service.upload(csvFile);
+
+        context.put("importResult", result.getEntity());
+    }
+
+    @Then("$count whitelists are imported")
+    public void numberOfImportedwhitelistsIsCorrect(final String count) {
+        Integer size = Integer.valueOf(count);
+        ImportResult importResult = context.get("importResult", ImportResult.class);
+
+        assertEquals("Incorrect number of imported whitelists", size, importResult.getImported());
+    }
+
+    @Then("I delete imported whitelists")
+    @SuppressWarnings("unchecked")
+    public void deleteImportedWhitelists() {
+        List<Whitelist> whitelists = context.get("importedWhitelists", List.class);
+        List<String> errors = new ArrayList<>();
+        String error = "Found %d whitelists for identifier %s";
+
+        for (Whitelist importedWhitelist : whitelists) {
+            String identifier = importedWhitelist.getIdentifier();
+            WhitelistFilter filter = new WhitelistFilter().filterBy("identifier", identifier);
+
+            List<Whitelist> foundWhitelists = service.search(filter).getEntity();
+            if (foundWhitelists.size() != 1) {
+                errors.add(String.format(error, foundWhitelists.size(), identifier));
+            }
+            for (Whitelist foundWhitelist : foundWhitelists) {
+                service.remove(foundWhitelist);
+            }
+        }
+        if (errors.size() > 0) {
+            ErrorReporter.reportAndRaiseError(String.join(".\n", errors));
+        }
+    }
 }

@@ -95,7 +95,6 @@ public class HttpRequest {
         multiPart.bodyPart(filePart);
         setPayload(multiPart);
 
-        file.deleteOnExit();
         return this;
     }
 

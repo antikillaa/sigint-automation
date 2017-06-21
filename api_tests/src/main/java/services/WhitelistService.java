@@ -2,12 +2,15 @@ package services;
 
 import static json.JsonConverter.toJsonString;
 
+import csv.CSVFileWriter;
 import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.WhiteListRequest;
 import java.util.Arrays;
 import java.util.List;
+import model.G4File;
+import model.ImportResult;
 import model.Result;
 import model.SearchFilter;
 import model.Whitelist;
@@ -97,5 +100,26 @@ public class WhitelistService implements EntityService<Whitelist> {
             Entities.getWhitelists().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
+    }
+
+    public G4File createCSVFile(List<Whitelist> whitelists, boolean withHeader) {
+        log.info("Writing " + whitelists.size() + " Whitelist entries to file..");
+
+        CSVFileWriter writer = new CSVFileWriter("whitelists.csv", withHeader);
+        G4File file = null;
+        try {
+            file = writer.writeEntitiesToCsv(whitelists);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return file;
+    }
+
+    public OperationResult<ImportResult> upload(G4File file) {
+
+        log.info("Import Whitelists from file..");
+        G4Response response = g4HttpClient.sendRequest(request.upload(file));
+
+        return new OperationResult<>(response, ImportResult.class);
     }
 }

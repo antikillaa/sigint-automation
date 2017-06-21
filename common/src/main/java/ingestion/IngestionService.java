@@ -19,6 +19,7 @@ public class IngestionService {
   private static final Logger log = Logger.getLogger(IngestionService.class);
 
   public static final Path INGESTION_DIR = Paths.get(System.getProperty("user.dir"), "ingestionData");
+  public static final Path IMPORT_DIR = Paths.get(System.getProperty("user.dir"), "importData");
   private final IIngestionDataGenerator ingestionDataGenerator;
 
   public IngestionService(IIngestionDataGenerator ingestionDataGenerator) {
@@ -30,10 +31,17 @@ public class IngestionService {
   }
 
   public static void cleanIngestionDir() {
-    String ingestionDir = INGESTION_DIR.toString();
-    FileUtils.deleteQuietly(new File(ingestionDir));
+    cleanDirectory(INGESTION_DIR.toString());
+  }
+
+  public static void cleanImportDir() {
+    cleanDirectory(IMPORT_DIR.toString());
+  }
+
+  private static void cleanDirectory(String directory) {
+    FileUtils.deleteQuietly(new File(directory));
     try {
-      FileUtils.forceMkdir(new File(ingestionDir));
+      FileUtils.forceMkdir(new File(directory));
     } catch (IOException e) {
       log.error(e.getMessage());
     }

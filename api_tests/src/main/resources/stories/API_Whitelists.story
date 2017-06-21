@@ -51,3 +51,34 @@ Examples:
 | type          | random |
 | updatedAfter  | random |
 | empty         |        |
+
+Scenario: API. Import whitelists
+When I generate 5 random whitelists inside CSV without header
+And I send import whitelists request
+Then Request is successful
+And 5 whitelists are imported
+And I delete imported whitelists
+
+Scenario: API. Import whitelists with errors in file
+When I generate 1 random whitelists inside CSV with header
+And I send import whitelists request
+Then Request is successful
+And Message contains "Type is not set"
+And 1 whitelists are imported
+And I delete imported whitelists
+
+Scenario: API. Import whitelists with duplicate values
+When I generate 1 random whitelists inside CSV without header
+And I send import whitelists request
+Then Request is successful
+And 1 whitelists are imported
+When I send import whitelists request
+Then Request is successful
+And 0 whitelists are imported
+And Message contains "already exists"
+
+Scenario: Import non .csv file for whitelist records
+Given T - SMS data file with 10 records was generated
+When I send import whitelists request
+Then I got response code 400
+And Message contains "Unable to import non csv files"
