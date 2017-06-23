@@ -53,23 +53,26 @@ Examples:
 | empty         |        |
 
 Scenario: API. Import whitelists
-When I generate 5 random whitelists inside CSV without header
-And I send import whitelists request
+Given I generate 5 random whitelists
+And I write whitelists to CSV without header
+When I send import whitelists request
 Then Request is successful
 And 5 whitelists are imported
-And I delete imported whitelists
+And I delete whitelists
 
 Scenario: API. Import whitelists with errors in file
-When I generate 1 random whitelists inside CSV with header
-And I send import whitelists request
+Given I generate 1 random whitelists
+And I write whitelists to CSV with header
+When I send import whitelists request
 Then Request is successful
 And Message contains "Type is not set"
 And 1 whitelists are imported
-And I delete imported whitelists
+And I delete whitelists
 
 Scenario: API. Import whitelists with duplicate values
-When I generate 1 random whitelists inside CSV without header
-And I send import whitelists request
+Given I generate 1 random whitelists
+And I write whitelists to CSV without header
+When I send import whitelists request
 Then Request is successful
 And 1 whitelists are imported
 When I send import whitelists request
