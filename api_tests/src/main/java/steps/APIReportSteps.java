@@ -62,7 +62,7 @@ public class APIReportSteps extends APISteps {
         record.setSourceId(source.getId());
         record.setSourceName(source.getName());
         record.setSourceType(source.getType());
-        record.setSourceLetterCode(source.getType().toLetterCode());
+        record.setSourceLetterCode(source.getType());
         record.setSourceLocation(source.getLocation());
 
         Report report = context.get("report", Report.class);

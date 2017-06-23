@@ -1,12 +1,13 @@
 package http.requests;
 
 import http.HttpMethod;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import model.FileMetaFilter;
 import model.FileMetaFilter.Query;
 import model.PegasusMediaType;
 import model.Source;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class UploadFoldersRequest extends HttpRequest {
 
@@ -42,7 +43,7 @@ public class UploadFoldersRequest extends HttpRequest {
   }
 
   static public FileMetaFilter buildSearchFilter(Source source, String datePattern) {
-    String path = "/" + source.getType().toLetterCode()
+    String path = "/" + source.getType()
         + "/" + source.getName()
         + "/" + new SimpleDateFormat(datePattern).format(new Date());
 

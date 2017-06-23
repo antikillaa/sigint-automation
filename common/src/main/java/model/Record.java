@@ -25,7 +25,7 @@ public class Record extends G4Entity {
     @DataIgnore
     private String sourceName;
     @DataIgnore
-    private SourceType sourceType;
+    private String sourceType;
     @DataIgnore
     private String sourceLetterCode;
     @DataIgnore
@@ -61,11 +61,11 @@ public class Record extends G4Entity {
     private Date time;
     
     @DataProvider(RecordTypeProvider.class)
-    private RecordType type;
+    private String type;
     @WithDataDependencies(provider = RecordBodySMSProvider.class, fields = {"type"})
     private String text;
     @WithDataDependencies(provider = RecordBodyVoiceProvider.class, fields = {"type"})
-    private int duration;
+    private Integer duration;
     private boolean manualEntry = true;
     private int priority=0;
     private String state = "READY";
@@ -186,11 +186,11 @@ public class Record extends G4Entity {
         this.duration = duration;
     }
 
-    public RecordType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(RecordType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -234,11 +234,11 @@ public class Record extends G4Entity {
         this.state = state;
     }
 
-    public SourceType getSourceType() {
+    public String getSourceType() {
         return sourceType;
     }
 
-    public void setSourceType(SourceType sourceType) {
+    public void setSourceType(String sourceType) {
         this.sourceType = sourceType;
     }
 

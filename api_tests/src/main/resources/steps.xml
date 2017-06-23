@@ -5,7 +5,7 @@
            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
     <bean id="loginSteps" class="steps.APILoginSteps">
     </bean>
-    <bean id="apiLoginController" class="controllers.APILogin" >
+    <bean id="apiLoginController" class="controllers.APILogin">
     </bean>
     <bean id="testSteps" class="steps.GlobalSteps">
     </bean>
@@ -45,20 +45,22 @@
     </bean>
     <bean id="designationMappingSteps" class="steps.APIDesignationMappingsSteps">
     </bean>
-    <bean id="reportCategorySteps" class="steps.APIReportCategorySteps" >
+    <bean id="reportCategorySteps" class="steps.APIReportCategorySteps">
     </bean>
-    <bean id="profileSteps" class="steps.APIProfileSteps" >
+    <bean id="profileSteps" class="steps.APIProfileSteps">
     </bean>
-    <bean id="recordsSearchSteps" class="steps.APIRecordsSearchSteps" >
+    <bean id="recordsSearchSteps" class="steps.APIRecordsSearchSteps">
     </bean>
     <bean id="whitelistsSteps" class="steps.APIWhitelistSteps">
     </bean>
-    <bean id="tagSteps" class="steps.APITagSteps" >
+    <bean id="tagSteps" class="steps.APITagSteps">
     </bean>
-    <bean id="permissionSteps" class="steps.APIPermissionManagementSteps" >
+    <bean id="permissionSteps" class="steps.APIPermissionManagementSteps">
     </bean>
-    <bean id="teamSteps" class="steps.APITeamManagementSteps" >
+    <bean id="teamSteps" class="steps.APITeamManagementSteps">
     </bean>
-     <bean id="organizationSteps" class="steps.APIOrganizationSteps" >
-     </bean>
+    <bean id="organizationSteps" class="steps.APIOrganizationSteps">
+    </bean>
+    <bean id="dictionariesSteps" class="steps.APIDictionariesSteps">
+    </bean>
 </beans>

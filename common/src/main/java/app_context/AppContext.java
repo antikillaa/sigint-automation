@@ -9,22 +9,23 @@ import java.util.Map;
 
 
 public class AppContext {
-    
+
     private static AppContext instance;
     private Map<String, String> countries;
     private LoggedUser loggedUser;
     private Dictionary dictionary;
     private Map<String, String> languages;
-    
-    
-    private AppContext(){}
-    
+
+    private AppContext() {
+    }
+
     public static AppContext get() {
         if (instance == null) {
-            instance = new AppContext();}
+            instance = new AppContext();
+        }
         return instance;
     }
-    
+
     public LoggedUser getLoggedUser() {
         return loggedUser;
     }
@@ -32,8 +33,7 @@ public class AppContext {
     public void setLoggedUser(LoggedUser loggedUser) {
         this.loggedUser = loggedUser;
     }
-    
-    
+
     public Map<String, String> getLanguages() {
         if (languages == null) {
             languages = JsonConverter.loadJsonToStringMap("languages.json");
@@ -47,13 +47,12 @@ public class AppContext {
         }
         return countries;
     }
-    
+
     public Dictionary getDictionary() {
         if (dictionary == null) {
             dictionary = DictionaryService.loadDictionary();
         }
         return dictionary;
     }
-    
 }
 

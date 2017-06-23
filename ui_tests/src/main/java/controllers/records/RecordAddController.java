@@ -2,7 +2,6 @@ package controllers.records;
 
 import controllers.PageController;
 import model.Record;
-import model.RecordType;
 import pages.Pages;
 import pages.records.RecordsCreatePage;
 
@@ -42,13 +41,17 @@ public class RecordAddController extends PageController<RecordsCreatePage> {
                 .typeRecordId(record.getOriginalId())
                 .typeToNumber(record.getToNumber());
 
-        RecordType recordType = record.getType();
-        if (recordType.equals(RecordType.SMS)) {
-            fillSMS(record);
-        } else if (recordType.equals(RecordType.Voice)) {
-            fillCall(record);
+        String recordType = record.getType();
+        switch (recordType) {
+            case "SMS":
+                fillSMS(record);
+                break;
+            case "Voice":
+                fillCall(record);
+                break;
+            default:
+                throw new AssertionError(String.format("Incorrect record type %s", recordType));
         }
-        else {throw new AssertionError(String.format("Incorrect record type %s", recordType));}
         getPage().clickCreateRecordButton();
         return record;
     }

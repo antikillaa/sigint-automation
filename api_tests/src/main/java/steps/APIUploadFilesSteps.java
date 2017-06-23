@@ -1,41 +1,28 @@
 package steps;
 
-import static org.junit.Assert.assertEquals;
-
 import app_context.AppContext;
 import conditions.Conditions;
 import conditions.Verify;
 import error_reporter.ErrorReporter;
 import http.OperationResult;
 import ingestion.IngestionService;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 import json.JsonConverter;
-import model.FileMeta;
-import model.G4File;
-import model.G4Record;
-import model.GenerationMatrix;
-import model.GenerationMatrixRow;
-import model.LoggedUser;
-import model.MatchingResult;
-import model.PegasusMediaType;
+import model.*;
 import model.Process;
-import model.Record;
-import model.RecordFilter;
-import model.SearchResultType;
-import model.Source;
-import model.TargetResultType;
-import model.UploadDetails;
-import model.UploadFilter;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.RecordService;
 import services.UploadFilesService;
 import utils.DateHelper;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("unchecked")
 public class APIUploadFilesSteps extends APISteps {
@@ -225,7 +212,7 @@ public class APIUploadFilesSteps extends APISteps {
             // verify target Mention
             Source source = context.get("source", Source.class);
             switch (source.getRecordType()) {
-                case SMS:
+                case "SMS":
                     if (row.getTotalRecordsMention() > 0) {
                         result = uploadDetails.findMatchingResultByTargetNameAndTargetResultType(targetName, TargetResultType.MENTION);
                         Verify.shouldBe(Conditions.equals(result.getNumRecords(), row.getTotalRecordsMention()));

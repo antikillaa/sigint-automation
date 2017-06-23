@@ -15,11 +15,11 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Source extends G4Entity {
-    
+
     @DataProvider(SourceTypeProvider.class)
-    private SourceType type;
-    @DataProvider(RecordTypeProvider.class)
-    private RecordType recordType;
+    private String type;
+    @WithDataDependencies(provider = RecordTypeProvider.class, fields = {"type"})
+    private String recordType;
     @WithDataDependencies(provider = SourceNameProvider.class, fields = {"type", "recordType"})
     private String name;
     @DataProvider(CountryProvider.class)
@@ -33,20 +33,19 @@ public class Source extends G4Entity {
     @DataIgnore
     private Long version;
 
-    public SourceType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(SourceType type) {
+    public void setType(String type) {
         this.type = type;
-        
     }
 
-    public RecordType getRecordType() {
+    public String getRecordType() {
         return recordType;
     }
 
-    public void setRecordType(RecordType recordType) {
+    public void setRecordType(String recordType) {
         this.recordType = recordType;
     }
 

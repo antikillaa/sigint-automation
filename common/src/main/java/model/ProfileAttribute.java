@@ -9,18 +9,18 @@ import java.util.ArrayList;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ProfileAttribute {
 
-    private ArrayList<SourceType> sources = new ArrayList<>();
+    private ArrayList<String> sources = new ArrayList<>();
     private ProfileAttributeType type;
     private Object value;
     private String comments;
     private Boolean hidden;
     private ValidationStatus validationStatus;
 
-    public ArrayList<SourceType> getSources() {
+    public ArrayList<String> getSources() {
         return sources;
     }
 
-    public void setSources(ArrayList<SourceType> sources) {
+    public void setSources(ArrayList<String> sources) {
         this.sources = sources;
     }
 

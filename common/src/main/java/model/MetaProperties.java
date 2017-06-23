@@ -2,24 +2,24 @@ package model;
 
 public class MetaProperties {
     
-    private RecordType recordType;
-    private SourceType sourceType;
+    private String recordType;
+    private String sourceType;
     private String error;
     private String processId;
     
-    public RecordType getRecordType() {
+    public String getRecordType() {
         return recordType;
     }
     
-    public void setRecordType(RecordType recordType) {
+    public void setRecordType(String recordType) {
         this.recordType = recordType;
     }
     
-    public SourceType getSourceType() {
+    public String getSourceType() {
         return sourceType;
     }
     
-    public void setSourceType(SourceType sourceType) {
+    public void setSourceType(String sourceType) {
         this.sourceType = sourceType;
     }
 
