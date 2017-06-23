@@ -1,8 +1,6 @@
 package http.requests;
 
 
-import static org.junit.Assert.assertNotNull;
-
 import http.HttpMethod;
 import model.G4File;
 import model.PegasusMediaType;
@@ -67,7 +65,6 @@ public class WhiteListRequest extends HttpRequest {
     }
 
     public WhiteListRequest upload(G4File file) {
-        assertNotNull("null object for whitelist upload", file);
         addBodyFile("file", file, PegasusMediaType.TEXT_CSV_TYPE);
         this
             .setURI(URI + "import")

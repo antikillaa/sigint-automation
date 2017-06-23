@@ -19,7 +19,8 @@ public class CSVDesignationMappingWriter extends CSVFileWriter<DesignationMappin
     super(filename, withHeader);
   }
 
-  private static CellProcessor[] getDesignationMappingProcessors() {
+  @Override
+  public CellProcessor[] getCellProcessors() {
     return new CellProcessor[] {
         new DesignationProcessor(), // designation
         new NotNull(), // identifier
@@ -39,7 +40,7 @@ public class CSVDesignationMappingWriter extends CSVFileWriter<DesignationMappin
 
       // the header elements are used to map the bean values to each column (names must match)
       final String[] header = new String[] { "designations", "identifier", "type", "spam" };
-      final CellProcessor[] processors = getDesignationMappingProcessors();
+      final CellProcessor[] processors = getCellProcessors();
 
       // write the header
       if (isWithHeader()) {

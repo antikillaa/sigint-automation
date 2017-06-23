@@ -6,7 +6,7 @@ import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.exception.SuperCsvCellProcessorException;
 import org.supercsv.util.CsvContext;
 
-public class DesignationProcessor extends CellProcessorAdaptor {
+class DesignationProcessor extends CellProcessorAdaptor {
 
   public DesignationProcessor() {
     super();

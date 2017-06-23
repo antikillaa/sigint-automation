@@ -18,7 +18,8 @@ public class CSVWhitelistWriter extends CSVFileWriter<Whitelist> {
     super(filename, withHeader);
   }
 
-  private static CellProcessor[] getWhitelistProcessors() {
+  @Override
+  public CellProcessor[] getCellProcessors() {
     return new CellProcessor[] {
         new NotNull(), // identifier
         new NotNull(), // type
@@ -37,7 +38,7 @@ public class CSVWhitelistWriter extends CSVFileWriter<Whitelist> {
 
       // the header elements are used to map the bean values to each column (names must match)
       final String[] header = new String[] { "identifier", "type", "description" };
-      final CellProcessor[] processors = getWhitelistProcessors();
+      final CellProcessor[] processors = getCellProcessors();
 
       // write the header
       if (isWithHeader()) {

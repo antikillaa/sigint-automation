@@ -1,6 +1,7 @@
 package services;
 
 import static json.JsonConverter.toJsonString;
+import static org.junit.Assert.assertNotNull;
 
 import csv.CSVWhitelistWriter;
 import errors.OperationResultError;
@@ -116,6 +117,7 @@ public class WhitelistService implements EntityService<Whitelist> {
     }
 
     public OperationResult<ImportResult> upload(G4File file) {
+        assertNotNull("null object for whitelist upload", file);
 
         log.info("Import Whitelists from file..");
         G4Response response = g4HttpClient.sendRequest(request.upload(file));

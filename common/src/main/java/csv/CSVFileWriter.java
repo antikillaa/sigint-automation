@@ -6,8 +6,9 @@ import java.nio.file.Paths;
 import java.util.List;
 import model.AbstractEntity;
 import model.G4File;
+import org.supercsv.cellprocessor.ift.CellProcessor;
 
-public abstract class CSVFileWriter<T extends AbstractEntity> {
+abstract class CSVFileWriter<T extends AbstractEntity> {
 
   private String filename;
   private boolean withHeader;
@@ -38,4 +39,6 @@ public abstract class CSVFileWriter<T extends AbstractEntity> {
   }
 
   public abstract G4File writeEntitiesToCsv(List<T> entities) throws IOException;
+
+  public abstract CellProcessor[] getCellProcessors();
 }
