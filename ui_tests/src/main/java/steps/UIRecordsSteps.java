@@ -8,7 +8,6 @@ import controllers.records.RecordsDetailsController;
 import data_for_entity.RandomEntities;
 import errors.NotFoundException;
 import model.Record;
-import model.RecordType;
 import model.Report;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -61,7 +60,7 @@ public class UIRecordsSteps extends UISteps {
     @When("I fill the form for $recordType record")
     public void fillTheForm(String recordType) {
         Record record = randomEntities.randomEntity(Record.class);
-        record.setType(RecordType.valueOf(recordType));
+        record.setType(recordType);
         record.setSourceName(RandomGenerator.getRandomItemFromList(AppContext.get().getDictionary().getSources()).getName());
         addController().fillForm(record);
         context.put("record", record);

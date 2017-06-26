@@ -6,13 +6,13 @@ import http.G4Response;
 import http.OperationResult;
 import http.requests.UploadFilesRequest;
 import http.requests.UploadRequest;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
 import model.*;
 import model.Process;
 import org.apache.log4j.Logger;
 
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class UploadFilesService {
@@ -39,7 +39,7 @@ public class UploadFilesService {
 
     public String getRemotePath(G4File metafile, Source source) {
         String basename = metafile.getName().substring(0, metafile.getName().lastIndexOf("."));
-        String path = "/" + source.getType().toLetterCode()
+        String path = "/" + source.getType()
             + "/" + source.getName()
             + new SimpleDateFormat("/yyyy/MM/dd/").format(new Date())
             + basename + "/";

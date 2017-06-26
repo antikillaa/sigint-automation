@@ -5,7 +5,9 @@ import conditions.Conditions;
 import conditions.Verify;
 import http.OperationResult;
 import json.JsonConverter;
-import model.*;
+import model.RecordType;
+import model.Source;
+import model.SourceType;
 import model.entities.Entities;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
@@ -16,13 +18,14 @@ import utils.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @SuppressWarnings("unchecked")
 public class APISourceSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APISourceSteps.class);
     private SourceService service = new SourceService();
-    
+
     @When("I send create new random Source request")
     public void createSource() {
         Source source = getRandomSource();
@@ -45,7 +48,7 @@ public class APISourceSteps extends APISteps {
     }
 
     @Then("Source $criteria list")
-    public void sourceShouldBeInList(String criteria){
+    public void sourceShouldBeInList(String criteria) {
         Source source = context.get("source", Source.class);
         List<Source> sources = context.get("sourceList", List.class);
         boolean contains = false;
@@ -123,16 +126,15 @@ public class APISourceSteps extends APISteps {
 
     @Given("Data source with $sourceType and $recordType exists")
     public void getDataSourceWithSourceTypeAndRecordType(String sType, String rType) {
-        SourceType sourceType = SourceType.valueOf(sType);
-        RecordType recordType = RecordType.valueOf(rType);
+        SourceType sourceType = appContext.getDictionary().getSourceType(sType);
+        RecordType recordType = appContext.getDictionary().getRecordType(rType);
 
         // if exist, return source
         List<Source> sources = service.list().getEntity();
         for (Source source : sources) {
-            if (source.getType().equals(sourceType)) {
+            if (Objects.equals(source.getType(), sourceType.getType())) {
                 try {
-                    RecordType entityRecordType = source.getRecordType();
-                    if (entityRecordType.equals(recordType)) {
+                    if (Objects.equals(source.getRecordType(), recordType.getType())) {
                         log.info(source.getName() + " source will be used");
                         context.put("source", source);
                         return;
@@ -145,9 +147,9 @@ public class APISourceSteps extends APISteps {
 
         // not exist, create source
         Source source = getRandomSource();
-        source.setType(sourceType);
-        source.setRecordType(recordType);
-        source.setName(sourceType.toLetterCode() + "-" + recordType.toEnglishName());
+        source.setType(sourceType.getType());
+        source.setRecordType(recordType.getType());
+        source.setName(sourceType.getType() + "-" + recordType.getType());
         service.add(source);
         context.put("source", source);
     }
@@ -161,22 +163,23 @@ public class APISourceSteps extends APISteps {
      * TODO remove after moved to CB
      */
     @Then("delete all old sources")
-    public void deleteOldSources(){
+    public void deleteOldSources() {
         List<Source> sourceList = context.get("sourceList", List.class);
-        List<DictionarySourceType> sourceTypes = AppContext.get().getDictionary().getSourceTypes();
-        List<DictionaryRecordType> recordTypes = AppContext.get().getDictionary().getRecordTypes();
+        List<SourceType> sourceTypes = AppContext.get().getDictionary().getSourceTypes();
+        List<RecordType> recordTypes = AppContext.get().getDictionary().getRecordTypes();
 
         for (Source source : sourceList) {
             if (!source.isDeleted()) {
                 String[] strings = source.getName().split("-");
                 if (strings.length == 3) {
-                    for (DictionarySourceType sourceType : sourceTypes) {
+                    for (SourceType sourceType : sourceTypes) {
                         if (sourceType.getLetterCode().equals(strings[0])) {
-                            for (DictionaryRecordType recordType : recordTypes) {
+                            for (RecordType recordType : recordTypes) {
                                 if (recordType.getEnglishName().equals(strings[1])) {
                                     if (strings[2].length() == 10) {
                                         OperationResult operationResult = service.remove(source);
-                                        if (!operationResult.isSuccess()) throw new Error("Unable to remove source: " + source.getName());
+                                        if (!operationResult.isSuccess())
+                                            throw new Error("Unable to remove source: " + source.getName());
                                         break;
                                     }
                                 }

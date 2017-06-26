@@ -12,7 +12,7 @@ import java.util.List;
 public class CBSearchFilter {
 
     private List<DataSourceCategory> sourceType = new ArrayList<>();
-    private ObjectType objectType = ObjectType.Entity;
+    private ObjectType objectType = ObjectType.entity;
     private String query = "";
     private Page page = new Page();
 

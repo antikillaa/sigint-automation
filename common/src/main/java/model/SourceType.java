@@ -1,56 +1,71 @@
 package model;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+public class SourceType extends AbstractEntity {
 
-public enum SourceType{
+    private String type;
+    private String letterCode;
+    private String englishName;
+    private String arabicName;
+    private String eventFeed;
+    private String dataSource;
+    private String subSource;
 
-    Tactical("T", "Terra", "Terra"),
-    Strategic("S", "Speed", "Speed"),
-    F("F", "Falcon", "Falcon"),
-    C("C", "CIO", "CIO"),
-    O("O", "Octopus", "Octopus"),
-    J("J", "Jernas", "Jernas"),
-    HumanInput("H", "HumInt", "HumInt"),
-    Etisalat("E", "External", "External"),
-    X("X", "Target Team", "Target Team"),
-
-    MANUAL("MANUAL", "MANUAL", "MANUAL"),
-    T("T", "T", "T"),
-    S("S", "S", "S"),
-    TWEET("TWEET", "TWEET", "TWEET"),
-    SY("SY", "SY", "SY");
-
-    private final String letterCode;
-    private final String englishName;
-    private final String arabicName;
-
-    SourceType(String letterCode, String englishName, String arabicName) {
-        this.letterCode = letterCode;
-        this.englishName = englishName;
-        this.arabicName = arabicName;
+    public SourceType() {
     }
 
-    public String toLetterCode() {
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getLetterCode() {
         return letterCode;
     }
 
-    public String toEnglishName() {
+    public void setLetterCode(String letterCode) {
+        this.letterCode = letterCode;
+    }
+
+    public String getEnglishName() {
         return englishName;
     }
 
-    public String toArabicName() {
+    public void setEnglishName(String englishName) {
+        this.englishName = englishName;
+    }
+
+    public String getArabicName() {
         return arabicName;
     }
 
-    private static final List<SourceType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
-    private static final int SIZE = VALUES.size();
-    private static Random RANDOM = new Random();
-    
-    public static SourceType random() {
-        return VALUES.get(RANDOM.nextInt(SIZE));
+    public void setArabicName(String arabicName) {
+        this.arabicName = arabicName;
     }
 
+    public String getSubSource() {
+        return subSource;
+    }
+
+    public void setSubSource(String subSource) {
+        this.subSource = subSource;
+    }
+
+    public String getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(String dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public String getEventFeed() {
+        return eventFeed;
+    }
+
+    public void setEventFeed(String eventFeed) {
+        this.eventFeed = eventFeed;
+    }
 }

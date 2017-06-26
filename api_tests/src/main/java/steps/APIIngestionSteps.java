@@ -1,56 +1,48 @@
 package steps;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import ingestion.IngestionService;
 import ingestion.docker.DockerDataGenerator;
 import ingestion.docker.IDockerAdapter;
-import ingestion.docker.adapters.tdata.FSMSDockerAdapter;
-import ingestion.docker.adapters.tdata.SCDRDockerAdapter;
-import ingestion.docker.adapters.tdata.SSMSDockerAdapter;
-import ingestion.docker.adapters.tdata.TSMSDockerAdapter;
-import ingestion.docker.adapters.tdata.TVoiceDockerAdapter;
-import model.G4File;
+import ingestion.docker.adapters.tdata.*;
+import model.*;
 import model.Process;
-import model.RecordType;
-import model.Source;
-import model.SourceType;
-import model.UploadDetails;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class APIIngestionSteps extends APISteps {
 
     @Given("$sType - $rType data file with $rCount records was generated")
     public void generateIngestionFiles(String sType, String rType, String rCount) {
 
-        SourceType sourceType = SourceType.valueOf(sType);
-        RecordType recordType = RecordType.valueOf(rType);
+        SourceType sourceType = appContext.getDictionary().getSourceType(sType);
+        RecordType recordType = appContext.getDictionary().getRecordType(rType);
 
         IDockerAdapter dockerAdapter = null;
-        switch (sourceType) {
-            case S:
-                switch (recordType) {
-                    case SMS:
+        switch (sourceType.getType()) {
+            case "S":
+                switch (recordType.getType()) {
+                    case "SMS":
                         dockerAdapter = new SSMSDockerAdapter();
                         break;
-                    case CDR:
+                    case "CDR":
                         dockerAdapter = new SCDRDockerAdapter();
                         break;
                 }
                 break;
-            case T:
-                switch (recordType) {
-                    case SMS:
+            case "T":
+                switch (recordType.getType()) {
+                    case "SMS":
                         dockerAdapter = new TSMSDockerAdapter();
                         break;
-                    case Voice:
+                    case "Voice":
                         dockerAdapter = new TVoiceDockerAdapter();
                         break;
                 }
                 break;
-            case F:
+            case "F":
                 dockerAdapter = new FSMSDockerAdapter();
                 break;
             default:

@@ -1,53 +1,71 @@
 package model;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+public class RecordType extends AbstractEntity {
 
-public enum RecordType {
+    private String type;
+    private String letterCode;
+    private String englishName;
+    private String arabicName;
+    private String eventFeed;
+    private String dataSource;
+    private String subSource;
 
-    Voice("V", "Voice", "مكالمة هاتفية"),
-    SMS("S", "SMS", "رسالة نصية"),
-    Email("E", "Email", "بريد الالكتروني"),
-    Metadata("M", "Metadata", "البيانات الوصفية"),
-    Fax("F", "Fax", "فاكس"),
-    InternetChat("C", "Internet Chat", "الدردشة عبر الإنترنت"),
-    PhoneBook("PhoneBook", "PhoneBook", "دليل التلفونات" ),
-    Subscriber("Subscriber", "Subscriber", "مكتتب"),
-    VLR("VLR", "VLR", "VLR"),
-    CDR("CDR", "CDR", "CDR"),
-    T("T", "T", "T"),
-    IMEI2IMSI("IMEI2IMSI", "IMEI2IMSI", "IMEI2IMSI");
-
-    private final String letterCode;
-    private final String englishName;
-    private final String arabicName;
-
-    RecordType(String letterCode, String englishName, String arabicName) {
-        this.letterCode = letterCode;
-        this.englishName = englishName;
-        this.arabicName = arabicName;
+    public RecordType() {
     }
 
-    public String toLetterCode() {
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getLetterCode() {
         return letterCode;
     }
 
-    public String toEnglishName() {
+    public void setLetterCode(String letterCode) {
+        this.letterCode = letterCode;
+    }
+
+    public String getEnglishName() {
         return englishName;
     }
 
-    public String toArabicName() {
+    public void setEnglishName(String englishName) {
+        this.englishName = englishName;
+    }
+
+    public String getArabicName() {
         return arabicName;
     }
 
-    private static final List<RecordType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
-    private static final int SIZE = VALUES.size();
-    private static Random RANDOM = new Random();
-    
+    public void setArabicName(String arabicName) {
+        this.arabicName = arabicName;
+    }
 
-    public static RecordType random() {
-        return VALUES.get(RANDOM.nextInt(SIZE));
+    public String getEventFeed() {
+        return eventFeed;
+    }
+
+    public void setEventFeed(String eventFeed) {
+        this.eventFeed = eventFeed;
+    }
+
+    public String getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(String dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public String getSubSource() {
+        return subSource;
+    }
+
+    public void setSubSource(String subSource) {
+        this.subSource = subSource;
     }
 }
