@@ -1,5 +1,8 @@
 package services;
 
+import static org.junit.Assert.assertNotNull;
+
+import csv.CSVDesignationMappingWriter;
 import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
@@ -9,6 +12,8 @@ import java.util.List;
 import json.JsonConverter;
 import model.DesignationMapping;
 import model.DesignationMappingSearchResult;
+import model.G4File;
+import model.ImportResult;
 import model.Result;
 import model.SearchFilter;
 import model.entities.Entities;
@@ -128,5 +133,27 @@ public class DesignationMappingService implements EntityService<DesignationMappi
     G4Response response = g4HttpClient.sendRequest(request.view(id));
 
     return new OperationResult<>(response, DesignationMapping.class);
+  }
+
+  public G4File createCSVFile(List<DesignationMapping> designationMappings, boolean withHeader) {
+    log.info("Writing " + designationMappings.size() + " DesignationMapping entries to file..");
+
+    CSVDesignationMappingWriter writer = new CSVDesignationMappingWriter("designationMapping.csv", withHeader);
+    G4File file = null;
+    try {
+      file = writer.writeEntitiesToCsv(designationMappings);
+    } catch (Exception e) {
+      log.error(e.getMessage());
+    }
+    return file;
+  }
+
+  public OperationResult<ImportResult> upload(G4File file) {
+    assertNotNull("null object for designation-mapping upload", file);
+
+    log.info("Import Designation-mappings from file..");
+    G4Response response = g4HttpClient.sendRequest(request.upload(file));
+
+    return new OperationResult<>(response, ImportResult.class);
   }
 }

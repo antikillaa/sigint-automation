@@ -1,11 +1,16 @@
 package steps;
 
+import static ingestion.IngestionService.cleanImportDir;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static utils.StringUtils.stringEquals;
+import static utils.StringUtils.stripQuotes;
 
+import error_reporter.ErrorReporter;
 import http.OperationResult;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -13,7 +18,10 @@ import json.JsonConverter;
 import model.Designation;
 import model.DesignationMapping;
 import model.DesignationMappingFilter;
+import model.G4File;
+import model.ImportResult;
 import model.entities.Entities;
+import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import services.DesignationMappingService;
@@ -28,6 +36,10 @@ public class APIDesignationMappingsSteps extends APISteps {
 
   private static DesignationMapping getRandomDesignationMapping() {
     return objectInitializer.randomEntity(DesignationMapping.class);
+  }
+
+  static List<DesignationMapping> getRandomDesignationMappings(int count) {
+    return objectInitializer.randomEntities(DesignationMapping.class, count);
   }
 
   @When("I send delete designation-mapping request")
@@ -180,6 +192,97 @@ public class APIDesignationMappingsSteps extends APISteps {
       assertTrue(
           String.format(msg, designationMapping, JsonConverter.toJsonString(searchFilter)),
           searchFilter.isAppliedToEntity(designationMapping));
+    }
+  }
+
+  @Given("I generate $count random designation-mappings")
+  public void generateDesignationMappingsList(final String count) {
+    int size = Integer.valueOf(count);
+    List<DesignationMapping> designationMappings = getRandomDesignationMappings(size);
+
+    for (DesignationMapping designationMapping : designationMappings) {
+      designationMapping.setDesignations(new ArrayList<>(Collections.singletonList("Import Designation")));
+    }
+
+    context.put("designationMappingList", designationMappings);
+  }
+
+  @Given("I add the same designation-mapping with $designation designation to the list")
+  @SuppressWarnings("unchecked")
+  public void addDesignationMappingWithDesignations(final String designation) {
+    List<DesignationMapping> designationMappings = context.get("designationMappingList", List.class);
+
+    DesignationMapping newDesignation = designationMappings.get(0).copy();
+    newDesignation.setDesignations(new ArrayList<>(Collections.singletonList(stripQuotes(designation))));
+    designationMappings.add(newDesignation);
+
+    context.put("designationMappingList", designationMappings);
+  }
+
+  @Given("I add broken designation-mapping to the list")
+  @SuppressWarnings("unchecked")
+  public void addBrokenDesignationMapping() {
+    List<DesignationMapping> designationMappings = context.get("designationMappingList", List.class);
+
+    DesignationMapping newDesignation = getRandomDesignationMapping();
+    newDesignation.setDesignations(new ArrayList<>(Collections.singletonList("")));
+    designationMappings.add(newDesignation);
+
+    context.put("designationMappingList", designationMappings);
+  }
+
+  @Given("I write designation-mappings to CSV $criteria header")
+  @SuppressWarnings("unchecked")
+  public void writeDesignationMappingsToCSV(final String criteria) {
+    boolean withHeader = true;
+    if (criteria.equalsIgnoreCase("without")) {
+      withHeader = false;
+    }
+
+    cleanImportDir();
+    List<DesignationMapping> designationMappings = context.get("designationMappingList", List.class);
+    G4File g4File = service.createCSVFile(designationMappings, withHeader);
+
+    context.put("g4file", g4File);
+  }
+
+  @When("I send import designation-mappings request")
+  public void importDesignationMappings() {
+    G4File csvFile = context.get("g4file", G4File.class);
+    OperationResult<ImportResult> result = service.upload(csvFile);
+
+    context.put("importResult", result.getEntity());
+  }
+
+  @Then("$count designation-mappings are imported")
+  public void numberOfImportedDMIsCorrect(final String count) {
+    Integer size = Integer.valueOf(count);
+    ImportResult importResult = context.get("importResult", ImportResult.class);
+
+    assertEquals("Incorrect number of imported designation-mappings", size, importResult.getImported());
+  }
+
+  @Then("I delete designation-mappings")
+  @SuppressWarnings("unchecked")
+  public void deleteImportedWhitelists() {
+    List<DesignationMapping> designationMappings = context.get("designationMappingList", List.class);
+    List<String> errors = new ArrayList<>();
+    String error = "Found %d designation-mappings for identifier %s";
+
+    for (DesignationMapping importedDesignationMapping : designationMappings) {
+      String identifier = importedDesignationMapping.getIdentifier();
+      DesignationMappingFilter filter = new DesignationMappingFilter().filterBy("identifier", identifier);
+
+      List<DesignationMapping> foundDesignationMappings = service.search(filter).getEntity();
+      if (foundDesignationMappings.size() > 1) {
+        errors.add(String.format(error, foundDesignationMappings.size(), identifier));
+      }
+      for (DesignationMapping foundDesignationMapping : foundDesignationMappings) {
+        service.remove(foundDesignationMapping);
+      }
+    }
+    if (errors.size() > 0) {
+      ErrorReporter.reportAndRaiseError(String.join(".\n", errors));
     }
   }
 }

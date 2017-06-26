@@ -24,6 +24,17 @@ public class DesignationMapping extends G4Entity {
   @DataIgnore
   private List<String> designations;
 
+  public DesignationMapping copy() {
+    DesignationMapping dmCopy = new DesignationMapping();
+    dmCopy.setVersion(this.version);
+    dmCopy.setType(this.type);
+    dmCopy.setIdentifier(this.identifier);
+    dmCopy.setSpam(this.spam);
+    dmCopy.setDesignations(this.designations);
+
+    return dmCopy;
+  }
+
   public Long getVersion() {
     return version;
   }

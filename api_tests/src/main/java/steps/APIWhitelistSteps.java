@@ -17,6 +17,7 @@ import model.ImportResult;
 import model.Whitelist;
 import model.WhitelistFilter;
 import model.entities.Entities;
+import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import services.WhitelistService;
@@ -175,24 +176,31 @@ public class APIWhitelistSteps extends APISteps {
         }
     }
 
-    @When("I generate $count random whitelists inside CSV $criteria header")
-    public void generateCSVWithWhitelists(final String count, final String criteria) {
+    @Given("I generate $count random whitelists")
+    public void generateWhitelistsList(final String count) {
         int size = Integer.valueOf(count);
+        List<Whitelist> whitelists = getRandomWhitelists(size);
+
+        context.put("whitelistEntitiesList", whitelists);
+    }
+
+    @Given("I write whitelists to CSV $criteria header")
+    @SuppressWarnings("unchecked")
+    public void writeWhitelistsToCSV(final String criteria) {
         boolean withHeader = true;
         if (criteria.equalsIgnoreCase("without")) {
             withHeader = false;
         }
 
         cleanImportDir();
-        List<Whitelist> whitelists = getRandomWhitelists(size);
+        List<Whitelist> whitelists = context.get("whitelistEntitiesList", List.class);
         G4File g4File = service.createCSVFile(whitelists, withHeader);
 
         context.put("g4file", g4File);
-        context.put("importedWhitelists", whitelists);
     }
 
     @When("I send import whitelists request")
-    public void generateCSVWithWhitelists() {
+    public void importWhitelists() {
         G4File csvFile = context.get("g4file", G4File.class);
         OperationResult<ImportResult> result = service.upload(csvFile);
 
@@ -200,17 +208,17 @@ public class APIWhitelistSteps extends APISteps {
     }
 
     @Then("$count whitelists are imported")
-    public void numberOfImportedwhitelistsIsCorrect(final String count) {
+    public void numberOfImportedWhitelistsIsCorrect(final String count) {
         Integer size = Integer.valueOf(count);
         ImportResult importResult = context.get("importResult", ImportResult.class);
 
         assertEquals("Incorrect number of imported whitelists", size, importResult.getImported());
     }
 
-    @Then("I delete imported whitelists")
+    @Then("I delete whitelists")
     @SuppressWarnings("unchecked")
-    public void deleteImportedWhitelists() {
-        List<Whitelist> whitelists = context.get("importedWhitelists", List.class);
+    public void deleteImportedDesignationMappings() {
+        List<Whitelist> whitelists = context.get("whitelistEntitiesList", List.class);
         List<String> errors = new ArrayList<>();
         String error = "Found %d whitelists for identifier %s";
 
