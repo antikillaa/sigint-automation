@@ -1,11 +1,6 @@
 package steps;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import http.OperationResult;
-import java.util.List;
 import json.JsonConverter;
 import model.Designation;
 import model.DesignationFilter;
@@ -15,11 +10,15 @@ import org.jbehave.core.annotations.When;
 import services.DesignationService;
 import utils.RandomGenerator;
 
+import java.util.List;
+
+import static org.junit.Assert.*;
+
 public class APIDesignationsSteps extends APISteps {
 
   private static DesignationService service = new DesignationService();
 
-  private static Designation getRandomDesignation() {
+  static Designation getRandomDesignation() {
     return objectInitializer.randomEntity(Designation.class);
   }
 
@@ -136,7 +135,7 @@ public class APIDesignationsSteps extends APISteps {
 
   @Then("Designations search result is correct")
   public void designationsSearchResultShouldBeCorrect() {
-    log.info("Checking if search targets result is correct");
+    log.info("Checking if designations search result is correct");
     DesignationFilter searchFilter = context.get("designationFilter", DesignationFilter.class);
     List<Designation> searchResult = context.get("designationList", List.class);
 

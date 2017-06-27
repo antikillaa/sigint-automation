@@ -95,3 +95,17 @@ Then Request is successful
 And Message contains "Designations are not set"
 And Imported 1 designation-mappings, modified 1
 And I delete designation-mappings
+
+Scenario: API. Create not existing designation during designation-mappings import
+Given I generate 1 random designation-mappings
+And I add random designation-mapping to the list
+And I write designation-mappings to CSV with header
+When I send import designation-mappings request
+Then Request is successful
+And Imported 2 designation-mappings, modified 2
+And I delete designation-mappings
+
+When I send search designations by name with random request
+Then Request is successful
+And Designations list size is more than 0
+And Designations search result is correct
