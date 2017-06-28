@@ -11,14 +11,6 @@
     </bean>
     <bean id="targetGroupSteps" class="steps.APITargetGroupSteps">
     </bean>
-    <bean id="targetSteps" class="steps.APITargetSteps">
-    </bean>
-    <bean id="etisalatSubscriberDataSteps" class="steps.APIEtisalatSubscriberDataSteps">
-    </bean>
-    <bean id="phonebookSteps" class="steps.APIPhonebookSteps">
-    </bean>
-    <bean id="duSubscriberSteps" class="steps.APIDuSubscriberSteps">
-    </bean>
     <bean id="userRoleSteps" class="steps.APIRoleSteps">
     </bean>
     <bean id="userGroupSteps" class="steps.APIUserGroupSteps">
@@ -38,8 +30,6 @@
     <bean id="uploadFilesSteps" class="steps.APIUploadFilesSteps">
     </bean>
     <bean id="searchFilesAndFolders" class="steps.APISearchFilesAndFoldersSteps">
-    </bean>
-    <bean id="recordCategorySteps" class="steps.APIRecordCategorySteps">
     </bean>
     <bean id="designationSteps" class="steps.APIDesignationsSteps">
     </bean>

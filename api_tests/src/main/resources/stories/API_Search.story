@@ -1,5 +1,6 @@
 Meta:
 @story search
+@wip
 
 Scenario: API.The maximum number of search results for a single query is limited to 1000 records
 Given I sign in as admin user
