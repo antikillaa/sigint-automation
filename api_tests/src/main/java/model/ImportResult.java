@@ -7,6 +7,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 public class ImportResult {
 
   private Integer imported;
+  private Integer created;
   private HashMap<String, String> rejected;
 
   public Integer getImported() {
@@ -15,6 +16,14 @@ public class ImportResult {
 
   public void setImported(Integer imported) {
     this.imported = imported;
+  }
+
+  public Integer getCreated() {
+    return created;
+  }
+
+  public void setCreated(Integer created) {
+    this.created = created;
   }
 
   public HashMap<String, String> getRejected() {

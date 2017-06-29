@@ -8,7 +8,7 @@ import java.util.Random;
 
 public enum WhiteListType {
 
-    PHONE_NUMBER, EMAIL, TWITTER_ID;
+    PHONE_NUMBER, EMAIL_ADDRESS, TWITTER_ID;
 
     private static final List<WhiteListType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();
