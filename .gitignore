@@ -10,4 +10,8 @@ htmlEmail.html
 *.xls
 *.CF
 *.NC
+
+# generated files
 data
+ingestionData
+importData
