@@ -19,7 +19,7 @@ public class WhiteListIdentifierProvider extends DependencyDataProvider {
             case PHONE_NUMBER:
                 identifier = RandomGenerator.generatePhone();
                 break;
-            case EMAIL:
+            case EMAIL_ADDRESS:
                 identifier = RandomGenerator.generateEmail();
                 break;
             case TWITTER_ID:
