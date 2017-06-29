@@ -1,5 +1,7 @@
 package services;
 
+import static org.apache.commons.io.FilenameUtils.getBaseName;
+
 import errors.OperationResultError;
 import http.G4HttpClient;
 import http.G4Response;
@@ -38,7 +40,7 @@ public class UploadFilesService {
     }
 
     public String getRemotePath(G4File metafile, Source source) {
-        String basename = metafile.getName().substring(0, metafile.getName().lastIndexOf("."));
+        String basename = getBaseName(metafile.getName());
         String path = "/" + source.getType()
             + "/" + source.getName()
             + new SimpleDateFormat("/yyyy/MM/dd/").format(new Date())

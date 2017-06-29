@@ -1,5 +1,7 @@
 package http.requests;
 
+import static utils.StringUtils.stringContainsAny;
+
 import http.HttpMethod;
 import javax.ws.rs.core.MediaType;
 import json.JsonConverter;
@@ -79,10 +81,11 @@ public class UploadFilesRequest extends HttpRequest {
         String name;
         /*  Meta file contains relative paths of audio files.
             Place audio files into parentRemotePath subfolder to bind them together */
-        if (file.getName().contains(".xls") || file.getName().contains(".csv")) {
-            name = remotePath + file.getName();
+        String filename = file.getName();
+        if (stringContainsAny(filename, ".csv", ".xls", ".gz", ".FILT")) {
+            name = remotePath + filename;
         } else {
-            name = remotePath + file.getParentFile().getName() + "/" + file.getName();
+            name = remotePath + file.getParentFile().getName() + "/" + filename;
         }
 
         FileMeta fileMeta = new FileMeta();

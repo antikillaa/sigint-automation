@@ -1,5 +1,7 @@
 package steps;
 
+import static org.junit.Assert.assertNotNull;
+
 import app_context.AppContext;
 import conditions.Conditions;
 import conditions.Verify;
@@ -128,6 +130,9 @@ public class APISourceSteps extends APISteps {
     public void getDataSourceWithSourceTypeAndRecordType(String sType, String rType) {
         SourceType sourceType = appContext.getDictionary().getSourceType(sType);
         RecordType recordType = appContext.getDictionary().getRecordType(rType);
+
+        assertNotNull("Can't find source type " + sType, sourceType);
+        assertNotNull("Can't find record type " + rType, recordType);
 
         // if exist, return source
         List<Source> sources = service.list().getEntity();
