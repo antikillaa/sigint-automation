@@ -57,7 +57,7 @@ Given I generate 5 random whitelists
 And I write whitelists to CSV without header
 When I send import whitelists request
 Then Request is successful
-And 5 whitelists are imported
+And Imported 5 whitelists, created 5
 And I delete whitelists
 
 Scenario: API. Import whitelists with errors in file
@@ -66,7 +66,7 @@ And I write whitelists to CSV with header
 When I send import whitelists request
 Then Request is successful
 And Message contains "Type is not set"
-And 1 whitelists are imported
+And Imported 1 whitelists, created 1
 And I delete whitelists
 
 Scenario: API. Import whitelists with duplicate values
@@ -74,10 +74,10 @@ Given I generate 1 random whitelists
 And I write whitelists to CSV without header
 When I send import whitelists request
 Then Request is successful
-And 1 whitelists are imported
+And Imported 1 whitelists, created 1
 When I send import whitelists request
 Then Request is successful
-And 0 whitelists are imported
+And Imported 0 whitelists, created 0
 And Message contains "already exists"
 
 Scenario: Import non .csv file for whitelist records

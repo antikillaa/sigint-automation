@@ -254,12 +254,14 @@ public class APIDesignationMappingsSteps extends APISteps {
     context.put("importResult", result.getEntity());
   }
 
-  @Then("$count designation-mappings are imported")
-  public void numberOfImportedDMIsCorrect(final String count) {
-    Integer size = Integer.valueOf(count);
+  @Then("Imported $countImported designation-mappings, created $countCreated")
+  public void numberOfImportedDMIsCorrect(final String countImported, final String countCreated) {
+    Integer imported = Integer.valueOf(countImported);
+    Integer created = Integer.valueOf(countCreated);
     ImportResult importResult = context.get("importResult", ImportResult.class);
 
-    assertEquals("Incorrect number of imported designation-mappings", size, importResult.getImported());
+    assertEquals("Incorrect number of imported designation-mappings", imported, importResult.getImported());
+    assertEquals("Incorrect number of imported designation-mappings", created, importResult.getCreated());
   }
 
   @Then("I delete designation-mappings")

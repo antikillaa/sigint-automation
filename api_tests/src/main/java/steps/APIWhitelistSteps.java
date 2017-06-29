@@ -207,12 +207,14 @@ public class APIWhitelistSteps extends APISteps {
         context.put("importResult", result.getEntity());
     }
 
-    @Then("$count whitelists are imported")
-    public void numberOfImportedWhitelistsIsCorrect(final String count) {
-        Integer size = Integer.valueOf(count);
+    @Then("Imported $countImport whitelists, created $countCreated")
+    public void numberOfImportedWhitelistsIsCorrect(final String countImport, final String countCreated) {
+        Integer imported = Integer.valueOf(countImport);
+        Integer created = Integer.valueOf(countCreated);
         ImportResult importResult = context.get("importResult", ImportResult.class);
 
-        assertEquals("Incorrect number of imported whitelists", size, importResult.getImported());
+        assertEquals("Incorrect number of imported whitelists", imported, importResult.getImported());
+        assertEquals("Incorrect number of created whitelists", created, importResult.getCreated());
     }
 
     @Then("I delete whitelists")
