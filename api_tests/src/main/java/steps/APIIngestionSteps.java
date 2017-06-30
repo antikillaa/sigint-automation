@@ -1,16 +1,28 @@
 package steps;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import ingestion.IngestionService;
 import ingestion.docker.DockerDataGenerator;
 import ingestion.docker.IDockerAdapter;
-import ingestion.docker.adapters.tdata.*;
-import model.*;
+import ingestion.docker.adapters.ECDRGSMDockerAdapter;
+import ingestion.docker.adapters.EtisalatSubscriberDockerAdapter;
+import ingestion.docker.adapters.FSMSDockerAdapter;
+import ingestion.docker.adapters.SCDRDockerAdapter;
+import ingestion.docker.adapters.SCELLDockerAdapter;
+import ingestion.docker.adapters.SSMSDockerAdapter;
+import ingestion.docker.adapters.SVLRDockerAdapter;
+import ingestion.docker.adapters.TSMSDockerAdapter;
+import ingestion.docker.adapters.TVoiceDockerAdapter;
+import model.G4File;
 import model.Process;
+import model.RecordType;
+import model.Source;
+import model.SourceType;
+import model.UploadDetails;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 public class APIIngestionSteps extends APISteps {
 
@@ -30,6 +42,12 @@ public class APIIngestionSteps extends APISteps {
                     case "CDR":
                         dockerAdapter = new SCDRDockerAdapter();
                         break;
+                    case "VLR":
+                        dockerAdapter = new SVLRDockerAdapter();
+                        break;
+                    case "CELL":
+                        dockerAdapter = new SCELLDockerAdapter();
+                        break;
                 }
                 break;
             case "T":
@@ -44,6 +62,16 @@ public class APIIngestionSteps extends APISteps {
                 break;
             case "F":
                 dockerAdapter = new FSMSDockerAdapter();
+                break;
+            case "ETISALAT":
+                switch (recordType.getType()) {
+                    case "CDR":
+                        dockerAdapter = new ECDRGSMDockerAdapter();
+                        break;
+                    case "Subscriber":
+                        dockerAdapter = new EtisalatSubscriberDockerAdapter();
+                        break;
+                }
                 break;
             default:
                 log.error("Unknown source type: " + sType);

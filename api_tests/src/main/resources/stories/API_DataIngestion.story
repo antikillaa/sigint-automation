@@ -64,11 +64,6 @@ When I send upload data file request
 Then Request is successful
 And Uploaded file is processed
 And Original data file is searchable within the system
-!-- And <recordsCount> records are ingested
-!-- When I send get upload details request
-!-- Then Request is successful
-!-- And Upload details contain <recordsCount> - Total records
-!-- And Upload details contain <recordsCount> - <recordType> records
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -76,6 +71,54 @@ Examples:
 
 
 Scenario: API.F-SMS ingestion
+Meta: @skip
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> data file is renamed to make filename unique
+When I send upload data file request
+Then Request is successful
+And Uploaded file is processed
+And Original data file is searchable within the system
+
+Examples:
+| sourceType | recordType | recordsCount |
+| F          | SMS        | 1000         |
+
+
+Scenario: API.Phonebook ingestion
+Meta: @skip
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> data file is renamed to make filename unique
+When I send upload data file request
+Then Request is successful
+And Uploaded file is processed
+And Original data file is searchable within the system
+
+Examples:
+| sourceType | recordType | recordsCount |
+| Phonebook  | Phonebook  | 1000         |
+
+
+Scenario: API.ETISALAT-Subscriber ingestion
+Meta: @skip
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> data file is renamed to make filename unique
+When I send upload data file request
+Then Request is successful
+And Uploaded file is processed
+And Original data file is searchable within the system
+
+Examples:
+| sourceType | recordType | recordsCount |
+| E          | Subscriber | 1000         |
+
+
+Scenario: API.ETISALAT-CDR ingestion
 Meta: @nightly
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
@@ -85,15 +128,10 @@ When I send upload data file request
 Then Request is successful
 And Uploaded file is processed
 And Original data file is searchable within the system
-!-- And <recordsCount> records are ingested
-!-- When I send get upload details request
-!-- Then Request is successful
-!-- And Upload details contain <recordsCount> - Total records
-!-- And Upload details contain <recordsCount> - <recordType> records
 
 Examples:
 | sourceType | recordType | recordsCount |
-| F          | SMS        | 1000         |
+| ETISALAT   | CDR        | 1000         |
 
 
 Scenario: API.S-SMS ingestion
@@ -106,15 +144,26 @@ When I send upload data file request
 Then Request is successful
 And Uploaded file is processed
 And Original data file is searchable within the system
-!-- And <recordsCount> records are ingested
-!-- When I send get upload details request
-!-- Then Request is successful
-!-- And Upload details contain <recordsCount> - Total records
-!-- And Upload details contain <recordsCount> - <recordType> records
 
 Examples:
 | sourceType | recordType | recordsCount |
 | S          | SMS        | 1000         |
+
+
+Scenario: API.S-VLR ingestion
+Meta: @nightly
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> data file is renamed to make filename unique
+When I send upload data file request
+Then Request is successful
+And Uploaded file is processed
+And Original data file is searchable within the system
+
+Examples:
+| sourceType | recordType | recordsCount |
+| S          | VLR        | 1000         |
 
 
 Scenario: API.S-CDR ingestion
@@ -127,15 +176,26 @@ When I send upload data file request
 Then Request is successful
 And Uploaded file is processed
 And Original data file is searchable within the system
-!-- And <recordsCount> records are ingested
-!-- When I send get upload details request
-!-- Then Request is successful
-!-- And Upload details contain <recordsCount> - Total records
-!-- And Upload details contain <recordsCount> - <recordType> records
 
 Examples:
 | sourceType | recordType | recordsCount |
 | S          | CDR        | 100          |
+
+
+Scenario: API.S-CELL ingestion
+Meta: @skip
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> data file is renamed to make filename unique
+When I send upload data file request
+Then Request is successful
+And Uploaded file is processed
+And Original data file is searchable within the system
+
+Examples:
+| sourceType | recordType | recordsCount |
+| S          | CELL       | 100          |
 
 
 Scenario: API.T-Voice ingestion
@@ -150,11 +210,6 @@ Then Request is successful
 Then Uploaded file is processed
 Then Uploaded audio files are processed
 And Original data file is searchable within the system
-!-- And <recordsCount> records are ingested
-!-- When I send get upload details request
-!-- Then Request is successful
-!-- And Upload details contain <recordsCount> - Total records
-!-- And Upload details contain <recordsCount> - <recordType> records
 
 Examples:
 | sourceType | recordType | recordsCount |

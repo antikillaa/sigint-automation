@@ -92,4 +92,8 @@ public class StringUtils {
     public static boolean stringEquals(String expected, String actual) {
         return expected.equalsIgnoreCase(actual);
     }
+
+    public static boolean stringContainsAny(String inputStr, String... items) {
+        return Arrays.stream(items).parallel().anyMatch(inputStr::contains);
+    }
 }

@@ -1,15 +1,18 @@
-package ingestion.docker.adapters.tdata;
+package ingestion.docker.adapters;
+
+import static ingestion.docker.adapters.DockerImage.tDataImage;
 
 import com.spotify.docker.client.messages.ContainerConfig;
 import ingestion.docker.IDockerAdapter;
 
-public class TVoiceDockerAdapter extends TDataImage implements IDockerAdapter {
+public class TSMSDockerAdapter implements IDockerAdapter {
 
   private static final String[] filemasks = {"tactical*"};
+  private static final DockerImage dockerImage = tDataImage();
 
   @Override
   public ContainerConfig getContainerConfig(String recordsCount) {
-    return getConfig("-l", recordsCount, "-v", recordsCount, "-t", "tactical");
+    return dockerImage.getConfig("-l", recordsCount, "-s", recordsCount, "-t", "tactical");
   }
 
   @Override
@@ -19,6 +22,7 @@ public class TVoiceDockerAdapter extends TDataImage implements IDockerAdapter {
 
   @Override
   public String getImageName() {
-    return getImage();
+    return dockerImage.getImage();
   }
+
 }

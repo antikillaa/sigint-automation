@@ -1,28 +1,41 @@
 package steps;
 
+import static org.junit.Assert.assertEquals;
+
 import app_context.AppContext;
 import conditions.Conditions;
 import conditions.Verify;
 import error_reporter.ErrorReporter;
 import http.OperationResult;
 import ingestion.IngestionService;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import json.JsonConverter;
-import model.*;
+import model.FileMeta;
+import model.G4File;
+import model.G4Record;
+import model.GenerationMatrix;
+import model.GenerationMatrixRow;
+import model.LoggedUser;
+import model.MatchingResult;
+import model.PegasusMediaType;
 import model.Process;
+import model.Record;
+import model.RecordFilter;
+import model.SearchResultType;
+import model.Source;
+import model.TargetResultType;
+import model.UploadDetails;
+import model.UploadFilter;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.RecordService;
 import services.UploadFilesService;
 import utils.DateHelper;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
-import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("unchecked")
 public class APIUploadFilesSteps extends APISteps {
@@ -38,10 +51,10 @@ public class APIUploadFilesSteps extends APISteps {
         Source source = context.get("source", Source.class);
         LoggedUser user = AppContext.get().getLoggedUser();
 
-        if (file.getName().endsWith(".csv")) {
-            file.setMediaType(PegasusMediaType.TEXT_CSV_TYPE);
-        } else {
+        if ((file.getName().endsWith(".xls"))) {
             file.setMediaType(PegasusMediaType.MS_EXCEL_TYPE);
+        } else {
+            file.setMediaType(PegasusMediaType.TEXT_CSV_TYPE);
         }
         String remotePath = service.getRemotePath(file, source);
 
