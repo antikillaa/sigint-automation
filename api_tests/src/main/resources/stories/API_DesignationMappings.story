@@ -91,6 +91,6 @@ And I add broken designation-mapping to the list
 And I write designation-mappings to CSV with header
 When I send import designation-mappings request
 Then Request is successful
-And Message contains "Designation is not set"
+And Message contains "Designations are not set"
 And Imported 1 designation-mappings, created 1
 And I delete designation-mappings

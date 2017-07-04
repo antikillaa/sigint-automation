@@ -35,7 +35,19 @@ public class APIDesignationMappingsSteps extends APISteps {
   private static List<Designation> designationList;
 
   private static DesignationMapping getRandomDesignationMapping() {
-    return objectInitializer.randomEntity(DesignationMapping.class);
+    DesignationMapping designationMapping = objectInitializer.randomEntity(DesignationMapping.class);
+
+    // init designations list
+    if (designationList == null) {
+      OperationResult<List<Designation>> operationResult = designationService.list();
+      designationList = operationResult.getEntity();
+    }
+    // Assign random designation to the designation-mapping
+    Designation randomDesignation = RandomGenerator.getRandomItemFromList((designationList));
+    List<String> designations = Stream.of(randomDesignation.getName()).collect(Collectors.toList());
+    designationMapping.setDesignations(designations);
+
+    return designationMapping;
   }
 
   static List<DesignationMapping> getRandomDesignationMappings(int count) {
@@ -52,16 +64,6 @@ public class APIDesignationMappingsSteps extends APISteps {
   @When("I send create new random designation-mapping request")
   public void createRandomDesignationMapping() {
     DesignationMapping designationMapping = getRandomDesignationMapping();
-
-    // init designations list
-    if (designationList == null) {
-      OperationResult<List<Designation>> operationResult = designationService.list();
-      designationList = operationResult.getEntity();
-    }
-    // Assign random designation to the designation-mapping
-    Designation randomDesignation = RandomGenerator.getRandomItemFromList((designationList));
-    List<String> designations = Stream.of(randomDesignation.getName()).collect(Collectors.toList());
-    designationMapping.setDesignations(designations);
 
     context.put("designationMapping", designationMapping);
     service.add(designationMapping);
