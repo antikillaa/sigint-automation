@@ -7,6 +7,6 @@ public class AssignmentPriorityProvider implements EntityDataProvider {
 
     @Override
     public Integer generate(int length) {
-        return RandomGenerator.generateRandomInteger(0, 3);
+        return RandomGenerator.generateRandomInteger(0, 2);
     }
 }
