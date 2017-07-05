@@ -81,17 +81,21 @@ public class UserService implements EntityService<User> {
 
     @Override
     public OperationResult<List<User>> search(SearchFilter filter) {
-        throw new NotImplementedException();
+        log.info("Search users by filter: " + filter);
+
+        G4Response response = g4HttpClient.sendRequest(request.search(filter));
+
+        OperationResult<User[]> operationResult = new OperationResult<>(response, User[].class);
+        if (operationResult.isSuccess()) {
+            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
+        } else {
+            return new OperationResult<>(response);
+        }
     }
 
     @Override
     public OperationResult<List<User>> list() {
-        log.info("Getting users list");
-
-        G4Response response = g4HttpClient.sendRequest(request.list());
-
-        List<User> users = JsonConverter.jsonToObjectsList(response.getMessage(), User[].class);
-        return new OperationResult<>(response, users);
+        throw new NotImplementedException();
     }
 
     @Override
