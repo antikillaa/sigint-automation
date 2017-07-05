@@ -68,7 +68,7 @@ public class APIUserSteps extends APISteps {
 
     @When("I send get list of users")
     public void getListOfUsers() {
-        OperationResult<List<User>> operationResult = service.list();
+        OperationResult<List<User>> operationResult = service.search(null);
         context.put("userList", operationResult.getEntity());
     }
 

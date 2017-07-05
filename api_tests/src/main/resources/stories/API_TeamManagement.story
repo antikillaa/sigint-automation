@@ -42,7 +42,8 @@ Then Request is successful
 
 When I send delete parent team request
 Then I got response code 400
-And Message contains "Can't remove non-empty team."
+And Message contains "AUTH_NON_EMPTY_TEAM"
+And Message contains "Team containing users/teams cannot be deleted. Please first remove users/teams from this team and try again."
 
 When I send delete team request
 Then Request is successful
