@@ -1,6 +1,7 @@
 package http.requests;
 
 import http.HttpMethod;
+import model.SearchFilter;
 import model.User;
 
 public class UserRequest extends HttpRequest {
@@ -41,10 +42,11 @@ public class UserRequest extends HttpRequest {
         return this;
     }
 
-    public UserRequest list() {
+    public UserRequest search(SearchFilter filter) {
         this
-                .setURI(URI)
-                .setHttpMethod(HttpMethod.GET);
+                .setURI(URI + "search")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(filter);
         return this;
     }
 

@@ -1,11 +1,6 @@
 Meta:
 @story reportCategory
-@deprecated
 
-Narrative:
-As a user
-I want to perform an action
-So that I can achieve a business goal
 
 Scenario: API.Create, Update, Delete report category
 Given I sign in as admin user
