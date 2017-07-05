@@ -51,7 +51,7 @@ public class APITeamManagementSteps extends APISteps {
 
     @When("I send get list of teams")
     public void getListOfTeams() {
-        OperationResult<List<Team>> operationResult = teamService.list();
+        OperationResult<List<Team>> operationResult = teamService.search(null);
         context.put("teamList", operationResult.getEntity());
     }
 

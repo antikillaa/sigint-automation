@@ -42,13 +42,6 @@ public class TeamRequest extends HttpRequest {
     return this;
   }
 
-  public TeamRequest list() {
-    this
-            .setURI(URI)
-            .setHttpMethod(HttpMethod.GET);
-    return this;
-  }
-
   public TeamRequest search(SearchFilter filter) {
     this
             .setURI(URI + "search")

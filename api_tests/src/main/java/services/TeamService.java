@@ -8,6 +8,7 @@ import model.AuthResponseResult;
 import model.SearchFilter;
 import model.Team;
 import model.entities.Entities;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
@@ -92,16 +93,7 @@ public class TeamService implements EntityService<Team> {
 
     @Override
     public OperationResult<List<Team>> list() {
-        log.info("Getting list of Teams");
-
-        G4Response response = g4HttpClient.sendRequest(request.list());
-
-        OperationResult<Team[]> operationResult = new OperationResult<>(response, Team[].class);
-        if (operationResult.isSuccess()) {
-            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
-        } else {
-            return new OperationResult<>(response);
-        }
+        throw new NotImplementedException();
     }
 
 }

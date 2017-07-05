@@ -1,9 +1,11 @@
 package model;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.List;
 
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public abstract class SearchFilter<T extends AbstractEntity> {
 
     @JsonIgnore
@@ -26,32 +28,36 @@ public abstract class SearchFilter<T extends AbstractEntity> {
         return sortField;
     }
 
-    public void setSortField(String sortField) {
+    public SearchFilter<T> setSortField(String sortField) {
         this.sortField = sortField;
+        return this;
     }
 
     public Boolean isSortDirection() {
         return sortDirection;
     }
 
-    public void setSortDirection(Boolean sortDirection) {
+    public SearchFilter<T> setSortDirection(Boolean sortDirection) {
         this.sortDirection = sortDirection;
+        return this;
     }
 
     public Integer getPage() {
         return page;
     }
 
-    public void setPage(Integer page) {
+    public SearchFilter<T> setPage(Integer page) {
         this.page = page;
+        return this;
     }
 
     public Integer getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(Integer pageSize) {
+    public SearchFilter<T> setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+        return this;
     }
 
     boolean isAppliedToFilterList(List<String> entityFieldCollection, List<String> filterCollection) {
