@@ -2,8 +2,8 @@ package services;
 
 import app_context.AppContext;
 import data_for_entity.RandomEntities;
-import model.RecordType;
 import model.Record;
+import model.SourceType;
 import org.apache.commons.lang.RandomStringUtils;
 import utils.RandomGenerator;
 
@@ -37,9 +37,9 @@ public class RecordEntityService {
     public Record createReportRecord() {
         RandomEntities objectInitializer = new RandomEntities();
         Record record = objectInitializer.randomEntity(Record.class);
-        RecordType recordType = AppContext.get().getDictionary().getRecordType(record.getType());
-        record.setTypeEnglishName(recordType.getEnglishName());
-        record.setTypeArabicName(recordType.getArabicName());
+        SourceType sourceType = AppContext.get().getDictionary().getByRecordType(record.getType());
+        record.setTypeEnglishName(sourceType.getSubSource());
+        record.setTypeArabicName(sourceType.getSubSource());
         return record;
     }
 }

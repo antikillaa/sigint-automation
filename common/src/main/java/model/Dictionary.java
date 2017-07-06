@@ -4,7 +4,6 @@ import java.util.List;
 
 public class Dictionary {
 
-    private List<RecordType> recordTypes;
     private List<Source> sources;
     private List<SourceType> sourceTypes;
 
@@ -16,14 +15,6 @@ public class Dictionary {
         this.sources = sources;
     }
 
-    public List<RecordType> getRecordTypes() {
-        return recordTypes;
-    }
-
-    public void setRecordTypes(List<RecordType> recordTypes) {
-        this.recordTypes = recordTypes;
-    }
-
     public List<SourceType> getSourceTypes() {
         return sourceTypes;
     }
@@ -32,15 +23,22 @@ public class Dictionary {
         this.sourceTypes = sourceTypes;
     }
 
-    public SourceType getSourceType(String sType) {
+    public SourceType getBySourceType(String sType) {
         return sourceTypes.stream()
                 .filter(sourceType -> sourceType.getType() != null && sourceType.getType().equals(sType))
                 .findAny().orElse(null);
     }
 
-    public RecordType getRecordType(String rType) {
-        return recordTypes.stream()
-                .filter(recordType -> recordType.getType() != null && recordType.getType().equals(rType))
+    public SourceType getByRecordType(String rType) {
+        return sourceTypes.stream()
+                .filter(sourceType -> sourceType.getSubSource() != null && sourceType.getSubSource().equals(rType))
+                .findAny().orElse(null);
+    }
+
+    public SourceType getSourceType(String sType, String rType) {
+        return sourceTypes.stream()
+                .filter(sourceType -> sourceType.getType() != null && sourceType.getType().equals(sType))
+                .filter(sourceType -> sourceType.getSubSource() != null && sourceType.getSubSource().equals(rType))
                 .findAny().orElse(null);
     }
 }

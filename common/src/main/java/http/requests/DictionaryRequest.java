@@ -16,11 +16,4 @@ public class DictionaryRequest extends HttpRequest {
                 .setHttpMethod(HttpMethod.GET);
         return this;
     }
-
-    public DictionaryRequest subSources() {
-        this
-                .setURI(URI + "sub-sources")
-                .setHttpMethod(HttpMethod.GET);
-        return this;
-    }
 }
