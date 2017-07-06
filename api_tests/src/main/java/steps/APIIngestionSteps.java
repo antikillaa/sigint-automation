@@ -1,41 +1,28 @@
 package steps;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import ingestion.IngestionService;
 import ingestion.docker.DockerDataGenerator;
 import ingestion.docker.IDockerAdapter;
-import ingestion.docker.adapters.ECDRGSMDockerAdapter;
-import ingestion.docker.adapters.EtisalatSubscriberDockerAdapter;
-import ingestion.docker.adapters.FSMSDockerAdapter;
-import ingestion.docker.adapters.SCDRDockerAdapter;
-import ingestion.docker.adapters.SCELLDockerAdapter;
-import ingestion.docker.adapters.SSMSDockerAdapter;
-import ingestion.docker.adapters.SVLRDockerAdapter;
-import ingestion.docker.adapters.TSMSDockerAdapter;
-import ingestion.docker.adapters.TVoiceDockerAdapter;
-import model.G4File;
+import ingestion.docker.adapters.*;
+import model.*;
 import model.Process;
-import model.RecordType;
-import model.Source;
-import model.SourceType;
-import model.UploadDetails;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class APIIngestionSteps extends APISteps {
 
     @Given("$sType - $rType data file with $rCount records was generated")
     public void generateIngestionFiles(String sType, String rType, String rCount) {
 
-        SourceType sourceType = appContext.getDictionary().getSourceType(sType);
-        RecordType recordType = appContext.getDictionary().getRecordType(rType);
+        SourceType sourceType = appContext.getDictionary().getSourceType(sType, rType);
 
         IDockerAdapter dockerAdapter = null;
         switch (sourceType.getType()) {
             case "S":
-                switch (recordType.getType()) {
+                switch (sourceType.getSubSource()) {
                     case "SMS":
                         dockerAdapter = new SSMSDockerAdapter();
                         break;
@@ -51,7 +38,7 @@ public class APIIngestionSteps extends APISteps {
                 }
                 break;
             case "T":
-                switch (recordType.getType()) {
+                switch (sourceType.getSubSource()) {
                     case "SMS":
                         dockerAdapter = new TSMSDockerAdapter();
                         break;
@@ -64,7 +51,7 @@ public class APIIngestionSteps extends APISteps {
                 dockerAdapter = new FSMSDockerAdapter();
                 break;
             case "ETISALAT":
-                switch (recordType.getType()) {
+                switch (sourceType.getSubSource()) {
                     case "CDR":
                         dockerAdapter = new ECDRGSMDockerAdapter();
                         break;

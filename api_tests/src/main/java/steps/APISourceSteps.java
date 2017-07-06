@@ -1,13 +1,9 @@
 package steps;
 
-import static org.junit.Assert.assertNotNull;
-
-import app_context.AppContext;
 import conditions.Conditions;
 import conditions.Verify;
 import http.OperationResult;
 import json.JsonConverter;
-import model.RecordType;
 import model.Source;
 import model.SourceType;
 import model.entities.Entities;
@@ -21,6 +17,8 @@ import utils.RandomGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static org.junit.Assert.assertNotNull;
 
 @SuppressWarnings("unchecked")
 public class APISourceSteps extends APISteps {
@@ -128,18 +126,16 @@ public class APISourceSteps extends APISteps {
 
     @Given("Data source with $sourceType and $recordType exists")
     public void getDataSourceWithSourceTypeAndRecordType(String sType, String rType) {
-        SourceType sourceType = appContext.getDictionary().getSourceType(sType);
-        RecordType recordType = appContext.getDictionary().getRecordType(rType);
+        SourceType sourceType = appContext.getDictionary().getSourceType(sType, rType);
 
-        assertNotNull("Can't find source type " + sType, sourceType);
-        assertNotNull("Can't find record type " + rType, recordType);
+        assertNotNull("Can't find source type " + sType + " with record type " + rType, sourceType);
 
         // if exist, return source
         List<Source> sources = service.list().getEntity();
         for (Source source : sources) {
             if (Objects.equals(source.getType(), sourceType.getType())) {
                 try {
-                    if (Objects.equals(source.getRecordType(), recordType.getType())) {
+                    if (Objects.equals(source.getRecordType(), sourceType.getSubSource())) {
                         log.info(source.getName() + " source will be used");
                         context.put("source", source);
                         return;
@@ -153,8 +149,8 @@ public class APISourceSteps extends APISteps {
         // not exist, create source
         Source source = getRandomSource();
         source.setType(sourceType.getType());
-        source.setRecordType(recordType.getType());
-        source.setName(sourceType.getType() + "-" + recordType.getType());
+        source.setRecordType(sourceType.getSubSource());
+        source.setName(sourceType.getType() + "-" + sourceType.getSubSource());
         service.add(source);
         context.put("source", source);
     }
@@ -163,37 +159,4 @@ public class APISourceSteps extends APISteps {
         return objectInitializer.randomEntity(Source.class);
     }
 
-    /**
-     * cleanup data on env
-     * TODO remove after moved to CB
-     */
-    @Then("delete all old sources")
-    public void deleteOldSources() {
-        List<Source> sourceList = context.get("sourceList", List.class);
-        List<SourceType> sourceTypes = AppContext.get().getDictionary().getSourceTypes();
-        List<RecordType> recordTypes = AppContext.get().getDictionary().getRecordTypes();
-
-        for (Source source : sourceList) {
-            if (!source.isDeleted()) {
-                String[] strings = source.getName().split("-");
-                if (strings.length == 3) {
-                    for (SourceType sourceType : sourceTypes) {
-                        if (sourceType.getLetterCode().equals(strings[0])) {
-                            for (RecordType recordType : recordTypes) {
-                                if (recordType.getEnglishName().equals(strings[1])) {
-                                    if (strings[2].length() == 10) {
-                                        OperationResult operationResult = service.remove(source);
-                                        if (!operationResult.isSuccess())
-                                            throw new Error("Unable to remove source: " + source.getName());
-                                        break;
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
