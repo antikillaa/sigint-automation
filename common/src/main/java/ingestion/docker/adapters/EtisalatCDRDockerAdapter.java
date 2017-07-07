@@ -1,13 +1,13 @@
 package ingestion.docker.adapters;
 
-import static ingestion.docker.adapters.DockerImage.dataGeneratorImage;
-
 import com.spotify.docker.client.messages.ContainerConfig;
 import ingestion.docker.IDockerAdapter;
 
-public class ECDRGSMDockerAdapter implements IDockerAdapter {
+import static ingestion.docker.adapters.DockerImage.dataGeneratorImage;
 
-  private static final String[] filemasks = {"*CDF.FILT"};
+public class EtisalatCDRDockerAdapter implements IDockerAdapter {
+
+  private static final String[] filemasks = {"*.FILT"};
   private static final DockerImage dockerImage = dataGeneratorImage();
 
   @Override

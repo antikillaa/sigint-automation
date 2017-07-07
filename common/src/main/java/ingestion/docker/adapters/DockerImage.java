@@ -1,10 +1,10 @@
 package ingestion.docker.adapters;
 
-import static ingestion.IngestionService.INGESTION_DIR;
-
 import app_context.properties.DockerProperties;
 import com.spotify.docker.client.messages.ContainerConfig;
 import com.spotify.docker.client.messages.HostConfig;
+
+import static ingestion.IngestionService.INGESTION_DIR;
 
 class DockerImage {
 
@@ -52,7 +52,7 @@ class DockerImage {
   }
 
   static DockerImage dataGeneratorImage() {
-    final String IMAGE = "docker-registry.pegasus.ae/data-generator:1.00";
+    final String IMAGE = "docker-registry.pegasus.ae/data-generator:1.01";
     final String DATA_PATH = "/src/test_data";
 
     return new DockerImage(IMAGE, DATA_PATH);
