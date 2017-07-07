@@ -1,7 +1,5 @@
 package services;
 
-import static org.apache.commons.io.FilenameUtils.getBaseName;
-
 import errors.OperationResultError;
 import http.G4HttpClient;
 import http.G4Response;
@@ -12,9 +10,7 @@ import model.*;
 import model.Process;
 import org.apache.log4j.Logger;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class UploadFilesService {
@@ -37,17 +33,6 @@ public class UploadFilesService {
         G4Response uploadResponse = g4HttpClient.sendRequest(uploadFilesRequest.upload(file, source, ownerId, remotePath));
 
         return new OperationResult<>(uploadResponse, FileMeta.class);
-    }
-
-    public String getRemotePath(G4File metafile, Source source) {
-        String basename = getBaseName(metafile.getName());
-        String path = "/" + source.getType()
-            + "/" + source.getName()
-            + new SimpleDateFormat("/yyyy/MM/dd/").format(new Date())
-            + basename + "/";
-        log.info("Remote path: " + path);
-
-        return path;
     }
 
     /**

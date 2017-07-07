@@ -6,8 +6,8 @@ Meta: @nightly
 Given I sign in as admin user
 And Data source with F and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
-And <sourceType> - <recordType> data file is renamed to make filename unique
-When I send upload data file request
+And I create remote path for ingestion
+When I upload data files
 Then Request is successful
 And Uploaded file is processed
 And Message contains "file with id"
@@ -22,11 +22,10 @@ Meta: @nightly
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
-And <sourceType> - <recordType> data file is renamed to make filename unique
-When I send upload data file request
-Then Request is successful
+And I create remote path for ingestion
+When I upload data files
 
-When I send upload data file request
+When I upload data files
 Then I got response code 409
 And Message contains "FileAlreadyExistsException"
 
@@ -35,50 +34,15 @@ Examples:
 | F          | SMS        | 10           |
 
 
-Scenario: Upload duplicate data
-Meta: @nightly
-Given I sign in as admin user
-And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
-And <sourceType> - <recordType> data file is renamed to make filename unique
-When I send upload data file request
-Then Request is successful
-
-Given <sourceType> - <recordType> data file is renamed to make filename unique
-When I send upload data file request
-Then I got response code 400
-And Message contains "file is duplicate with etag"
-
-Examples:
-| sourceType | recordType | recordsCount |
-| S          | SMS        | 10           |
-
-
-Scenario: API.T-SMS ingestion
-Meta: @nightly
-Given I sign in as admin user
-And Data source with <sourceType> and T exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
-And <sourceType> - <recordType> data file is renamed to make filename unique
-When I send upload data file request
-Then Request is successful
-And Uploaded file is processed
-And Original data file is searchable within the system
-
-Examples:
-| sourceType | recordType | recordsCount |
-| T          | SMS        | 1000         |
-
 
 Scenario: API.F-SMS ingestion
 Meta: @skip
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
-And <sourceType> - <recordType> data file is renamed to make filename unique
-When I send upload data file request
-Then Request is successful
-And Uploaded file is processed
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -86,15 +50,15 @@ Examples:
 | F          | SMS        | 1000         |
 
 
+
 Scenario: API.Phonebook ingestion
 Meta: @skip
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
-And <sourceType> - <recordType> data file is renamed to make filename unique
-When I send upload data file request
-Then Request is successful
-And Uploaded file is processed
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -102,20 +66,20 @@ Examples:
 | Phonebook  | Phonebook  | 1000         |
 
 
+
 Scenario: API.ETISALAT-Subscriber ingestion
-Meta: @skip
+Meta: @nightly
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
-And <sourceType> - <recordType> data file is renamed to make filename unique
-When I send upload data file request
-Then Request is successful
-And Uploaded file is processed
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType | recordsCount |
-| E          | Subscriber | 1000         |
+| ETISALAT   | Subscriber | 100          |
 
 
 Scenario: API.ETISALAT-CDR ingestion
@@ -123,10 +87,9 @@ Meta: @nightly
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
-And <sourceType> - <recordType> data file is renamed to make filename unique
-When I send upload data file request
-Then Request is successful
-And Uploaded file is processed
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -134,15 +97,47 @@ Examples:
 | ETISALAT   | CDR        | 1000         |
 
 
+
+Scenario: API.S-Voice ingestion
+Meta: @nightly
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And I create remote path for ingestion
+When I upload audio files
+Then Uploaded files are processed
+When I upload data files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+
+Examples:
+| sourceType | recordType | recordsCount |
+| S          | Voice      | 10           |
+
+
+Scenario: API.S-Fax ingestion
+Meta: @nightly
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+
+Examples:
+| sourceType | recordType | recordsCount |
+| S          | Fax        | 100          |
+
+
 Scenario: API.S-SMS ingestion
 Meta: @nightly
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
-And <sourceType> - <recordType> data file is renamed to make filename unique
-When I send upload data file request
-Then Request is successful
-And Uploaded file is processed
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -155,10 +150,9 @@ Meta: @nightly
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
-And <sourceType> - <recordType> data file is renamed to make filename unique
-When I send upload data file request
-Then Request is successful
-And Uploaded file is processed
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -171,10 +165,9 @@ Meta: @nightly
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
-And <sourceType> - <recordType> data file is renamed to make filename unique
-When I send upload data file request
-Then Request is successful
-And Uploaded file is processed
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -187,10 +180,9 @@ Meta: @skip
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
-And <sourceType> - <recordType> data file is renamed to make filename unique
-When I send upload data file request
-Then Request is successful
-And Uploaded file is processed
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -198,22 +190,38 @@ Examples:
 | S          | CELL       | 100          |
 
 
+
+Scenario: API.T-SMS ingestion
+Meta: @nightly
+Given I sign in as admin user
+And Data source with <sourceType> and T exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+
+Examples:
+| sourceType | recordType | recordsCount |
+| T          | SMS        | 1000         |
+
+
 Scenario: API.T-Voice ingestion
 Meta: @nightly
 Given I sign in as admin user
 And Data source with <sourceType> and T exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
-And <sourceType> - <recordType> data file is renamed to make filename unique
+And I create remote path for ingestion
 When I upload audio files
-When I send upload data file request
-Then Request is successful
-Then Uploaded file is processed
-Then Uploaded audio files are processed
+Then Uploaded files are processed
+When I upload data files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType | recordsCount |
 | T          | Voice      | 10           |
+
 
 
 Scenario: API.Search and count data folders by path
@@ -243,7 +251,6 @@ Then Folders count result is equal to appropriate list size
 
 Scenario: API.Search and count data files by path
 Meta: @nightly
-
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 When I search data folders by source with date pattern "yyyy/MM/dd"

@@ -35,4 +35,15 @@ public class G4File extends File {
         this.mediaType = mediaType;
     }
 
+    public void setMediaTypeByFileExtension() {
+        String filename = this.getName();
+
+        if ((filename.endsWith(".wav"))) {
+            this.setMediaType(PegasusMediaType.AUDIO);
+        } else if ((filename.endsWith(".xls"))) {
+            this.setMediaType(PegasusMediaType.MS_EXCEL_TYPE);
+        } else  {
+            this.setMediaType(PegasusMediaType.TEXT_CSV_TYPE);
+        }
+    }
 }

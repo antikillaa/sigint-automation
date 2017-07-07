@@ -1,8 +1,9 @@
 package ingestion;
 
-import model.G4File;
+import java.io.File;
+import java.util.List;
 
 public interface IIngestionDataGenerator {
 
-  G4File generateIngestionFile(String recordsCount);
+  List<File> generateIngestionFiles(String recordsCount);
 }
