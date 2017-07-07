@@ -8,6 +8,8 @@ import model.*;
 import model.Process;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
+import utils.RandomGenerator;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,6 +19,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class APIIngestionSteps extends APISteps {
+
+    @Given("I pick random file from ingestion files list")
+    @SuppressWarnings("unchecked")
+    public void getRandomIngestionFile() {
+        List<File> files = context.get("g4files", List.class);
+
+        File randomFile = RandomGenerator.getRandomItemFromList((files));
+        context.put("g4file", new G4File(randomFile.getPath()));
+    }
 
     @Given("$sType - $rType data file with $rCount records was generated")
     public void generateIngestionFiles(String sType, String rType, String rCount) {

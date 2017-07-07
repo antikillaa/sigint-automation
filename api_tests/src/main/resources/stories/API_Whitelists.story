@@ -82,6 +82,7 @@ And Message contains "already exists"
 
 Scenario: Import non .csv file for whitelist records
 Given T - SMS data file with 10 records was generated
+And I pick random file from ingestion files list
 When I send import whitelists request
 Then I got response code 400
 And Message contains "Unable to import non csv files"
