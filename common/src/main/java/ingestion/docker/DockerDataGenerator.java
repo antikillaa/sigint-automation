@@ -1,9 +1,5 @@
 package ingestion.docker;
 
-import static ingestion.IngestionService.INGESTION_DIR;
-import static org.junit.Assert.assertNotNull;
-import static utils.FileHelper.getFilesByWildcards;
-
 import app_context.properties.DockerProperties;
 import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DefaultDockerClient.Builder;
@@ -15,12 +11,18 @@ import com.spotify.docker.client.messages.ContainerCreation;
 import com.spotify.docker.client.messages.RegistryAuth;
 import error_reporter.ErrorReporter;
 import ingestion.IIngestionDataGenerator;
+import org.apache.log4j.Logger;
+
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import model.G4File;
-import org.apache.log4j.Logger;
+
+import static ingestion.IngestionService.INGESTION_DIR;
+import static org.junit.Assert.assertNotNull;
+import static utils.FileHelper.extractTarGzFiles;
+import static utils.FileHelper.getFilesByWildcards;
 
 public class DockerDataGenerator implements IIngestionDataGenerator {
 
@@ -76,20 +78,29 @@ public class DockerDataGenerator implements IIngestionDataGenerator {
   }
 
   @Override
-  public G4File generateIngestionFile(String recordsCount) {
+  public List<File> generateIngestionFiles(String recordsCount) {
 
     generateDataInContainer(recordsCount);
 
     String path = INGESTION_DIR.normalize().toString();
+
+    // extract tar.gz if exists
+    File ingestionDir = new File(path);
+    try {
+      extractTarGzFiles(ingestionDir);
+    } catch (IOException e) {
+      log.error("Can't extract archives: " + e.getMessage());
+    }
+
     List<File> files = getFilesByWildcards(path, dockerAdapter.getFilemasks());
     if (files.isEmpty()) {
       ErrorReporter.raiseError(String.format("Can't find files by mask %s in %s",
           Arrays.toString(dockerAdapter.getFilemasks()), path));
-    } else if (files.size() > 1) {
-      log.info("List of found files: " + files);
+    } else {
+      log.info("Found " + files.size() + " file(s) by mask " + Arrays.toString(dockerAdapter.getFilemasks()));
+      files.forEach(file -> log.info(file.toString()));
     }
-    log.info(String.format("Working with %s file", files.get(0).getPath()));
 
-    return new G4File(files.get(0).getPath());
+    return files;
   }
 }

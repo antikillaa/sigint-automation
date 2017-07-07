@@ -229,6 +229,9 @@ public class G4HttpClient {
      * @return {@link G4Response} formed from request
      */
     private G4Response sendRequest(Builder builder, HttpRequest request) {
+        // clean MultiPart to avoid problems with static request instance reuse
+        request.cleanMultiPart();
+
         Entity payload = convertToEntity(request.getPayload(), request.getMediaType());
         Invocation invocation;
         int tryCount = 0;
@@ -251,8 +254,6 @@ public class G4HttpClient {
                     request.getURI(), JsonConverter.toJsonString(request.getPayload()),
                     response.readEntity(String.class)));
         }
-        // clean MultiPart to avoid problems with static request instance reuse
-        request.cleanMultiPart();
         return new G4Response(response.readEntity(String.class), response.getStatus());
     }
 

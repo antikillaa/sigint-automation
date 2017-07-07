@@ -1,41 +1,27 @@
 package steps;
 
-import static org.junit.Assert.assertEquals;
-
-import app_context.AppContext;
 import conditions.Conditions;
 import conditions.Verify;
 import error_reporter.ErrorReporter;
 import http.OperationResult;
 import ingestion.IngestionService;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 import json.JsonConverter;
-import model.FileMeta;
-import model.G4File;
-import model.G4Record;
-import model.GenerationMatrix;
-import model.GenerationMatrixRow;
-import model.LoggedUser;
-import model.MatchingResult;
-import model.PegasusMediaType;
+import model.*;
 import model.Process;
-import model.Record;
-import model.RecordFilter;
-import model.SearchResultType;
-import model.Source;
-import model.TargetResultType;
-import model.UploadDetails;
-import model.UploadFilter;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.RecordService;
 import services.UploadFilesService;
 import utils.DateHelper;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("unchecked")
 public class APIUploadFilesSteps extends APISteps {
@@ -44,59 +30,53 @@ public class APIUploadFilesSteps extends APISteps {
     private static final int WAITING_TIME = 6 * 60; // in seconds
     private static final int POLLING_INTERVAL = 20; // in seconds
 
-    @When("I send upload data file request")
-    public void uploadFile() {
 
-        G4File file = context.get("g4file", G4File.class);
-        Source source = context.get("source", Source.class);
-        LoggedUser user = AppContext.get().getLoggedUser();
-
-        if ((file.getName().endsWith(".xls"))) {
-            file.setMediaType(PegasusMediaType.MS_EXCEL_TYPE);
-        } else {
-            file.setMediaType(PegasusMediaType.TEXT_CSV_TYPE);
+    private void uploadFiles(List<File> files) {
+        if (files.isEmpty()) {
+            ErrorReporter.reportAndRaiseError("No files for uploading");
         }
-        String remotePath = service.getRemotePath(file, source);
 
-        OperationResult<FileMeta> uploadResult = service.upload(file, source, user.getId(), remotePath);
-        context.put("meta", uploadResult.getEntity());
+        Source source = context.get("source", Source.class);
+        LoggedUser user = appContext.getLoggedUser();
+        String remotePath = context.get("remotePath", String.class);
+
+        List<FileMeta> fileMetas = new ArrayList<>();
+        for (File file: files) {
+            G4File g4file = new G4File(file.getPath());
+            g4file.setMediaTypeByFileExtension();
+
+            OperationResult<FileMeta> uploadResult = service.upload(g4file, source, user.getId(), remotePath);
+            fileMetas.add(uploadResult.getEntity());
+            if (!uploadResult.isSuccess()) {
+                log.error("Can't upload " + file.getName());
+                break;
+            }
+        }
+        context.put("fileMetas", fileMetas);
+        DateHelper.setStartTime();
+    }
+
+    @When("I upload data files")
+    public void uploadFile() {
+        List<File> files = context.get("g4files", List.class);
+        uploadFiles(files);
     }
 
     @When("I upload audio files")
     public void uploadWavs() {
-
         List<File> files = IngestionService.getWavs();
-        if (files.isEmpty()) {
-            ErrorReporter.reportAndRaiseError("Can't find audio files");
-        }
-        G4File metafile = context.get("g4file", G4File.class);
-        Source source = context.get("source", Source.class);
-        LoggedUser user = AppContext.get().getLoggedUser();
-        String remotePath = service.getRemotePath(metafile, source);
-
-        List<FileMeta> audioMetas = new ArrayList<>();
-        for (File file: files) {
-            G4File g4file = new G4File(file.getPath());
-            g4file.setMediaType(PegasusMediaType.AUDIO);
-            OperationResult<FileMeta> uploadResult = service.upload(g4file, source, user.getId(), remotePath);
-            if (!uploadResult.isSuccess()) {
-                log.error("Can't upload " + file.getName());
-            }
-            audioMetas.add(uploadResult.getEntity());
-        }
-        context.put("audioMetas", audioMetas);
-        DateHelper.setStartTime();
+        uploadFiles(files);
     }
 
-    @Then("Uploaded audio files are processed")
+    @Then("Uploaded files are processed")
     public void audioFilesAreProcessed() {
-        List<FileMeta> audioMetas = context.get("audioMetas", List.class);
+        List<FileMeta> audioMetas = context.get("fileMetas", List.class);
 
         for (FileMeta audioMeta: audioMetas) {
             context.put("meta", audioMeta);
             fileIsProcessed();
         }
-        log.info(String.format("Audio processing time: %d seconds", DateHelper.getDuration()));
+        log.info(String.format("Files processing time: %d seconds", DateHelper.getDuration()));
     }
 
     @Then("Uploaded file is processed")

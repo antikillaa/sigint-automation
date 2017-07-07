@@ -8,6 +8,10 @@ import model.*;
 import model.Process;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -17,12 +21,10 @@ public class APIIngestionSteps extends APISteps {
     @Given("$sType - $rType data file with $rCount records was generated")
     public void generateIngestionFiles(String sType, String rType, String rCount) {
 
-        SourceType sourceType = appContext.getDictionary().getSourceType(sType, rType);
-
         IDockerAdapter dockerAdapter = null;
-        switch (sourceType.getType()) {
+        switch (sType) {
             case "S":
-                switch (sourceType.getSubSource()) {
+                switch (rType) {
                     case "SMS":
                         dockerAdapter = new SSMSDockerAdapter();
                         break;
@@ -35,10 +37,16 @@ public class APIIngestionSteps extends APISteps {
                     case "CELL":
                         dockerAdapter = new SCELLDockerAdapter();
                         break;
+                    case "Voice":
+                        dockerAdapter = new SVoiceDockerAdapter();
+                        break;
+                    case "Fax":
+                        dockerAdapter = new SFaxDockerAdapter();
+                        break;
                 }
                 break;
             case "T":
-                switch (sourceType.getSubSource()) {
+                switch (rType) {
                     case "SMS":
                         dockerAdapter = new TSMSDockerAdapter();
                         break;
@@ -50,10 +58,13 @@ public class APIIngestionSteps extends APISteps {
             case "F":
                 dockerAdapter = new FSMSDockerAdapter();
                 break;
+            case "Phonebook":
+                dockerAdapter = new PhonebookDockerAdapter();
+                break;
             case "ETISALAT":
-                switch (sourceType.getSubSource()) {
+                switch (rType) {
                     case "CDR":
-                        dockerAdapter = new ECDRGSMDockerAdapter();
+                        dockerAdapter = new EtisalatCDRDockerAdapter();
                         break;
                     case "Subscriber":
                         dockerAdapter = new EtisalatSubscriberDockerAdapter();
@@ -68,17 +79,21 @@ public class APIIngestionSteps extends APISteps {
 
         IngestionService ingestionService = new IngestionService(new DockerDataGenerator(dockerAdapter));
         IngestionService.cleanIngestionDir();
-        G4File file = ingestionService.getGenerator().generateIngestionFile(rCount);
+        List<File> files = ingestionService.getGenerator().generateIngestionFiles(rCount);
 
-        context.put("g4file", file);
+        context.put("g4files", files);
     }
 
-    @Given("$sType - $rType data file is renamed to make filename unique")
-    public void renameIngestionFile(String sType, String rType) {
-        G4File sourceFile = context.get("g4file", G4File.class);
-        G4File renamed = IngestionService.renameFile(sourceFile, String.format("%s_%s", sType, rType));
+    @Given("I create remote path for ingestion")
+    public void createRemotePath() {
+        Source source = context.get("source", Source.class);
 
-        context.put("g4file", renamed);
+        String path = "/" + source.getType()
+                + "/" + source.getName()
+                + new SimpleDateFormat("/yyyy/MM/dd/HH_mm_ss.SSS/").format(new Date());
+
+        log.info("Remote path: " + path);
+        context.put("remotePath", path);
     }
 
     @Then("Upload details contain $rCount - $rType records")
