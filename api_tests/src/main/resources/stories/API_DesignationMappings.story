@@ -61,6 +61,7 @@ And I delete designation-mappings
 
 Scenario: Import non .csv file for designation-mapping records
 Given T - SMS data file with 10 records was generated
+And I pick random file from ingestion files list
 When I send import designation-mappings request
 Then I got response code 400
 And Message contains "Unable to import non csv files"
