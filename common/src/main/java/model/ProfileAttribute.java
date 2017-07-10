@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ProfileAttribute {
 
     private ArrayList<String> sources = new ArrayList<>();
-    private ProfileAttributeType type;
+    private String type;
     private Object value;
     private String comments;
     private Boolean hidden;
@@ -24,11 +24,11 @@ public class ProfileAttribute {
         this.sources = sources;
     }
 
-    public ProfileAttributeType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(ProfileAttributeType type) {
+    public void setType(String type) {
         this.type = type;
     }
 

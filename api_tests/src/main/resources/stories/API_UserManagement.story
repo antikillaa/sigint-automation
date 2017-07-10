@@ -86,6 +86,8 @@ And Users group list size more than 0
 
 
 Scenario: Get the list of users
+Meta:
+@deprecated
 Given I sign in as admin user
 When I send get list of users
 Then Request is successful
@@ -134,21 +136,3 @@ When I sign in as new created user
 Then Request is successful
 When I send sign out request
 Then Request is successful
-
-
-Scenario: Cleanup groups
-Meta:
-@deprecated
-Given I sign in as admin user
-When I send get list of users group
-And I send get list of Roles request
-Then delete from groups phantom roles
-Then delete all groups without roles and users
-
-Scenario: Cleanup users
-Meta:
-@deprecated
-Given I sign in as admin user
-When I send get list of users
-Then Request is successful
-Then delete all users without roles and groups
