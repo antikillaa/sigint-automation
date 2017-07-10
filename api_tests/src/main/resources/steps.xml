@@ -39,7 +39,7 @@
     </bean>
     <bean id="profileSteps" class="steps.APIProfileSteps">
     </bean>
-    <bean id="recordsSearchSteps" class="steps.APIRecordsSearchSteps">
+    <bean id="recordsSearchSteps" class="steps.APISearchSteps">
     </bean>
     <bean id="whitelistsSteps" class="steps.APIWhitelistSteps">
     </bean>

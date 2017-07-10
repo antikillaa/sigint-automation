@@ -16,11 +16,11 @@ public class CBEntity extends AbstractEntity {
     private Date eventTime;
     private Map<String, Object> identifiers = new LinkedHashMap<>();
     private Map<String, Object> attributes = new LinkedHashMap<>();
-    private List<Object> events = new ArrayList<>();
+    private Object events;
     private CBEntities entities;
     private CBEntityAssignments assignments;
     private List<Geo> geo;
-    private ObjectType objectType;
+    private SearchObjectType objectType;
 
     public List<String> getSources() {
         return sources;
@@ -62,11 +62,11 @@ public class CBEntity extends AbstractEntity {
         this.eventTime = eventTime;
     }
 
-    public List<Object> getEvents() {
+    public Object getEvents() {
         return events;
     }
 
-    public void setEvents(List<Object> events) {
+    public void setEvents(Object events) {
         this.events = events;
     }
 
@@ -94,11 +94,11 @@ public class CBEntity extends AbstractEntity {
         this.geo = geo;
     }
 
-    public ObjectType getObjectType() {
+    public SearchObjectType getObjectType() {
         return objectType;
     }
 
-    public void setObjectType(ObjectType objectType) {
+    public void setObjectType(SearchObjectType objectType) {
         this.objectType = objectType;
     }
 
