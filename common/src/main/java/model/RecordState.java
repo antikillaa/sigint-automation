@@ -2,6 +2,6 @@ package model;
 
 public enum RecordState {
 
-    READY, ASSIGNED, PROCESSED;
+    INIT, READY, ASSIGNED, PROCESSED
 
 }

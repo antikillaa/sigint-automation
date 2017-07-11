@@ -12,7 +12,7 @@ import java.util.List;
 public class CBSearchFilter {
 
     private List<DataSourceCategory> sourceType = new ArrayList<>();
-    private ObjectType objectType = ObjectType.entity;
+    private SearchObjectType objectType = SearchObjectType.event;
     private String query = "";
     private Page page = new Page();
 
@@ -31,11 +31,11 @@ public class CBSearchFilter {
         }
     }
 
-    public ObjectType getObjectType() {
+    public SearchObjectType getObjectType() {
         return objectType;
     }
 
-    public void setObjectType(ObjectType objectType) {
+    public void setObjectType(SearchObjectType objectType) {
         this.objectType = objectType;
     }
 

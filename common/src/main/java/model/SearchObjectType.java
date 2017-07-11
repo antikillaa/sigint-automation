@@ -1,6 +1,6 @@
 package model;
 
-public enum ObjectType {
+public enum SearchObjectType {
 
     event, entity
 

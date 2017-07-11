@@ -1,19 +1,17 @@
 package json;
 
-import static utils.StringUtils.prettyPrint;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import model.entities.EntityList;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.MapType;
 import org.codehaus.jackson.map.type.TypeFactory;
 import org.glassfish.jersey.media.multipart.MultiPart;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+
+import static utils.StringUtils.prettyPrint;
 
 public class JsonConverter {
 
@@ -136,6 +134,19 @@ public class JsonConverter {
             log.error(e.getMessage(), e);
             throw new RuntimeException(error);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static LinkedHashMap<String, Object> toMap(String json) {
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            map = mapper.readValue(json, LinkedHashMap.class);
+            return map;
+        } catch (IOException e) {
+            log.error(e);
+        }
+        return map;
     }
 
 }
