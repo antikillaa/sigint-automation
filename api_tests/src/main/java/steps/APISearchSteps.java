@@ -10,6 +10,7 @@ import org.junit.Assert;
 import services.SearchService;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("unchecked")
 public class APISearchSteps extends APISteps {
@@ -60,10 +61,13 @@ public class APISearchSteps extends APISteps {
         String query = context.get("CBSearchQuery", String.class);
 
         for (CBEntity entity : entities) {
-            String json = JsonConverter.toJsonString(entity);
+            String json = JsonConverter.toJsonString(entity).replaceAll("(\\r\\n\\t|\\r\\n|\\n)", " ").trim();
             String regex = cbSearchQueryToRegex(query);
-            Boolean matches = json.replace("\n", "").matches(regex);
-            Assert.assertTrue(matches);
+
+            Boolean matches = Pattern.compile(regex, Pattern.MULTILINE | Pattern.CASE_INSENSITIVE | Pattern.UNIX_LINES)
+                    .matcher(json).matches();
+
+            Assert.assertTrue("Search query:" + query + ", doesn't matches this search result:\n" + json, matches);
         }
     }
 }
