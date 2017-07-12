@@ -1,15 +1,6 @@
 package steps;
 
-import static http.requests.UploadFoldersRequest.buildSearchFilter;
-import static http.requests.UploadFoldersRequest.searchByPath;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static utils.StringUtils.stripQuotes;
-
-import conditions.Conditions;
-import conditions.Verify;
 import error_reporter.ErrorReporter;
-import java.util.List;
 import model.FileMeta;
 import model.FileMetaFilter;
 import model.FolderMeta;
@@ -18,6 +9,14 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import services.UploadFilesService;
 import services.UploadFoldersService;
+
+import java.util.List;
+
+import static http.requests.UploadFoldersRequest.buildSearchFilter;
+import static http.requests.UploadFoldersRequest.searchByPath;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static utils.StringUtils.stripQuotes;
 
 public class APISearchFilesAndFoldersSteps extends APISteps {
 
@@ -115,8 +114,16 @@ public class APISearchFilesAndFoldersSteps extends APISteps {
     List<FileMeta> fileMetaList = filesService.searchDataFiles(filter);
 
     for (FileMeta fileMeta : fileMetaList) {
-      if (uploadedFileMeta.getId().equals(fileMeta.getId())) {
-        Verify.shouldBe(Conditions.equals(uploadedFileMeta, fileMeta));
+      if (uploadedFileMeta.getEtag().equals(fileMeta.getEtag())) {
+        assertEquals(uploadedFileMeta.getPath(), fileMeta.getPath());
+        assertEquals(uploadedFileMeta.getOwner(), fileMeta.getOwner());
+        assertEquals(uploadedFileMeta.getName(), fileMeta.getName());
+        assertEquals(uploadedFileMeta.getFile(), fileMeta.getFile());
+        assertEquals(uploadedFileMeta.getExtension(), fileMeta.getExtension());
+        assertEquals(uploadedFileMeta.getType(), fileMeta.getType());
+        assertEquals(uploadedFileMeta.getLength(), fileMeta.getLength());
+        assertEquals(uploadedFileMeta.getBucket(), fileMeta.getBucket());
+        assertEquals(uploadedFileMeta.getSourceId(), fileMeta.getSourceId());
         return;
       }
     }
