@@ -31,7 +31,7 @@ public class APIUploadFilesSteps extends APISteps {
     private static final int POLLING_INTERVAL = 20; // in seconds
 
 
-    private void uploadFiles(List<File> files) {
+    private void uploadFiles(final String key, List<File> files) {
         if (files.isEmpty()) {
             ErrorReporter.reportAndRaiseError("No files for uploading");
         }
@@ -52,28 +52,33 @@ public class APIUploadFilesSteps extends APISteps {
                 break;
             }
         }
-        context.put("fileMetas", fileMetas);
+        context.put(key, fileMetas);
         DateHelper.setStartTime();
     }
 
     @When("I upload data files")
     public void uploadFile() {
         List<File> files = context.get("g4files", List.class);
-        uploadFiles(files);
+        uploadFiles("fileMetas", files);
     }
 
     @When("I upload audio files")
     public void uploadWavs() {
         List<File> files = IngestionService.getWavs();
-        uploadFiles(files);
+        uploadFiles("audioMetas", files);
     }
 
-    @Then("Uploaded files are processed")
-    public void audioFilesAreProcessed() {
-        List<FileMeta> audioMetas = context.get("fileMetas", List.class);
+    @Then("Uploaded $data are processed")
+    public void audioFilesAreProcessed(final String data) {
+        List<FileMeta> fileMetas;
+        if (data.equalsIgnoreCase("data files")) {
+            fileMetas = context.get("fileMetas", List.class);
+        } else {
+            fileMetas = context.get("audioMetas", List.class);
+        }
 
-        for (FileMeta audioMeta: audioMetas) {
-            context.put("meta", audioMeta);
+        for (FileMeta uploadedFileMeta: fileMetas) {
+            context.put("meta", uploadedFileMeta);
             fileIsProcessed();
         }
         log.info(String.format("Files processing time: %d seconds", DateHelper.getDuration()));

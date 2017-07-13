@@ -42,7 +42,7 @@ And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
-Then Uploaded files are processed
+Then Uploaded data files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -58,7 +58,7 @@ And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
-Then Uploaded files are processed
+Then Uploaded data files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -74,7 +74,7 @@ And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
-Then Uploaded files are processed
+Then Uploaded data files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -89,7 +89,7 @@ And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
-Then Uploaded files are processed
+Then Uploaded data files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -105,9 +105,9 @@ And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload audio files
-Then Uploaded files are processed
 When I upload data files
-Then Uploaded files are processed
+Then Uploaded audio files are processed
+Then Uploaded data files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -122,7 +122,7 @@ And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
-Then Uploaded files are processed
+Then Uploaded data files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -137,7 +137,7 @@ And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
-Then Uploaded files are processed
+Then Uploaded data files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -152,7 +152,7 @@ And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
-Then Uploaded files are processed
+Then Uploaded data files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -167,7 +167,7 @@ And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
-Then Uploaded files are processed
+Then Uploaded data files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -182,7 +182,7 @@ And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
-Then Uploaded files are processed
+Then Uploaded data files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -198,7 +198,7 @@ And Data source with <sourceType> and T exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
-Then Uploaded files are processed
+Then Uploaded data files are processed
 And Original data file is searchable within the system
 
 Examples:
@@ -213,9 +213,9 @@ And Data source with <sourceType> and T exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload audio files
-Then Uploaded files are processed
 When I upload data files
-Then Uploaded files are processed
+Then Uploaded audio files are processed
+Then Uploaded data files are processed
 And Original data file is searchable within the system
 
 Examples:
