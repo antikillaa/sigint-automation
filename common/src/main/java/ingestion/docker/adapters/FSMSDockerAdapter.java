@@ -1,18 +1,18 @@
 package ingestion.docker.adapters;
 
-import static ingestion.docker.adapters.DockerImage.tDataImage;
-
 import com.spotify.docker.client.messages.ContainerConfig;
 import ingestion.docker.IDockerAdapter;
 
+import static ingestion.docker.adapters.DockerImage.dataGeneratorImage;
+
 public class FSMSDockerAdapter implements IDockerAdapter {
 
-  private static final String[] filemasks = {"F-SMS*"};
-  private static final DockerImage dockerImage = tDataImage();
+  private static final String[] filemasks = {"f_sms*"};
+  private static final DockerImage dockerImage = dataGeneratorImage();
 
   @Override
   public ContainerConfig getContainerConfig(String recordsCount) {
-    return dockerImage.getConfig("-l", recordsCount, "-t", "FSMS");
+    return dockerImage.getConfig("f-sms", "-n", recordsCount, "-o", dockerImage.getDataPath() + "/f_sms.csv");
   }
 
   @Override
