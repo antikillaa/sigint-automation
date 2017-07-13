@@ -29,25 +29,25 @@ public class APISearchSteps extends APISteps {
         CBSearchFilter filter = new CBSearchFilter(source, query, pageSize, pageNumber);
 
         OperationResult<List<CBEntity>> operationResult = service.search(filter);
-        List<CBEntity> profileEntities = operationResult.getEntity();
+        List<CBEntity> searchResults = operationResult.getEntity();
 
-        context.put("ProfileList", profileEntities);
-        context.put("CBSearchQuery", query);
+        context.put("searchResults", searchResults);
+        context.put("searchQuery", query);
     }
 
     @Then("Profile entity list size $criteria than $size")
     public void profileListShouldBeLess(String criteria, String size) {
-        List<CBEntity> entities = context.get("ProfileList", List.class);
+        List<CBEntity> entities = context.get("searchResults", List.class);
 
         switch (criteria) {
             case "more":
                 Assert.assertTrue(
-                        "Expected list size " + criteria + " than " + size + ", but was:" + entities.size(),
+                        "Expected search results count " + criteria + " than " + size + ", but was:" + entities.size(),
                         entities.size() > Integer.valueOf(size));
                 break;
             case "less":
                 Assert.assertTrue(
-                        "Expected list size " + criteria + " than " + size + ", but was:" + entities.size(),
+                        "Expected search results count " + criteria + " than " + size + ", but was:" + entities.size(),
                         entities.size() < Integer.valueOf(size));
                 break;
             default:
@@ -57,8 +57,8 @@ public class APISearchSteps extends APISteps {
 
     @Then("CB search results are correct")
     public void verifyCBSearch() {
-        List<CBEntity> entities = context.get("ProfileList", List.class);
-        String query = context.get("CBSearchQuery", String.class);
+        List<CBEntity> entities = context.get("searchResults", List.class);
+        String query = context.get("searchQuery", String.class);
 
         for (CBEntity entity : entities) {
             String json = JsonConverter.toJsonString(entity).replaceAll("(\\r\\n\\t|\\r\\n|\\n)", " ").trim();
