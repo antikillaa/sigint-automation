@@ -36,7 +36,7 @@ Examples:
 
 
 Scenario: API.F-SMS ingestion
-Meta: @skip
+Meta: @nightly
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -52,7 +52,7 @@ Examples:
 
 
 Scenario: API.Phonebook ingestion
-Meta: @skip
+Meta: @nightly
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -63,7 +63,7 @@ And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType | recordsCount |
-| Phonebook  | Phonebook  | 1000         |
+| PHONEBOOK  | Phonebook  | 1000         |
 
 
 
@@ -176,7 +176,7 @@ Examples:
 
 
 Scenario: API.S-CELL ingestion
-Meta: @skip
+Meta: @nightly
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
