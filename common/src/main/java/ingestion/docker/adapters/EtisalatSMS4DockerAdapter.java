@@ -5,14 +5,14 @@ import ingestion.docker.IDockerAdapter;
 
 import static ingestion.docker.adapters.DockerImage.dataGeneratorImage;
 
-public class EtisalatSubscriber1DockerAdapter implements IDockerAdapter {
+public class EtisalatSMS4DockerAdapter implements IDockerAdapter {
 
-  private static final String[] filemasks = {"*subdata-1*"};
+  private static final String[] filemasks = {"*.dat"};
   private static final DockerImage dockerImage = dataGeneratorImage();
 
   @Override
   public ContainerConfig getContainerConfig(String recordsCount) {
-    return dockerImage.getConfig("etisalat-subscriber-format1", "-n", recordsCount, "-d", dockerImage.getDataPath());
+    return dockerImage.getConfig("etisalat-sms-format4", "-n", recordsCount, "-d", dockerImage.getDataPath());
   }
 
   @Override

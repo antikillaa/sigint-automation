@@ -77,8 +77,20 @@ public class APIIngestionSteps extends APISteps {
                     case "CDR":
                         dockerAdapter = new EtisalatCDRDockerAdapter();
                         break;
-                    case "Subscriber":
-                        dockerAdapter = new EtisalatSubscriberDockerAdapter();
+                    case "Subscriber1":
+                        dockerAdapter = new EtisalatSubscriber1DockerAdapter();
+                        break;
+                    case "Subscriber2":
+                        dockerAdapter = new EtisalatSubscriber2DockerAdapter();
+                        break;
+                    case "SMS2":
+                        dockerAdapter = new EtisalatSMS2DockerAdapter();
+                        break;
+                    case "SMS3":
+                        dockerAdapter = new EtisalatSMS3DockerAdapter();
+                        break;
+                    case "SMS4":
+                        dockerAdapter = new EtisalatSMS4DockerAdapter();
                         break;
                 }
                 break;
