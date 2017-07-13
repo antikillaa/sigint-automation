@@ -36,7 +36,7 @@ Examples:
 
 
 Scenario: API.F-SMS ingestion
-Meta: @nightly
+Meta: @nightly @F-SMS
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -52,7 +52,7 @@ Examples:
 
 
 Scenario: API.Phonebook ingestion
-Meta: @nightly
+Meta: @nightly @Phonebook
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -68,7 +68,7 @@ Examples:
 
 
 Scenario: API.ETISALAT-Subscriber ingestion
-Meta: @nightly
+Meta: @nightly @E-Subscriber
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -83,7 +83,7 @@ Examples:
 
 
 Scenario: API.ETISALAT-CDR ingestion
-Meta: @nightly
+Meta: @nightly @E-CDR
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -99,7 +99,7 @@ Examples:
 
 
 Scenario: API.S-Voice ingestion
-Meta: @nightly
+Meta: @nightly @S-Voice
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -116,7 +116,7 @@ Examples:
 
 
 Scenario: API.S-Fax ingestion
-Meta: @nightly
+Meta: @nightly @S-Fax
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -131,7 +131,7 @@ Examples:
 
 
 Scenario: API.S-SMS ingestion
-Meta: @nightly
+Meta: @nightly @S-SMS
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -146,7 +146,7 @@ Examples:
 
 
 Scenario: API.S-VLR ingestion
-Meta: @nightly
+Meta: @nightly @S-VLR
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -161,7 +161,7 @@ Examples:
 
 
 Scenario: API.S-CDR ingestion
-Meta: @nightly
+Meta: @nightly @S-CDR
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -176,7 +176,7 @@ Examples:
 
 
 Scenario: API.S-CELL ingestion
-Meta: @nightly
+Meta: @nightly @S-CELL
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -192,7 +192,7 @@ Examples:
 
 
 Scenario: API.T-SMS ingestion
-Meta: @nightly
+Meta: @nightly @T-SMS
 Given I sign in as admin user
 And Data source with <sourceType> and T exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -207,7 +207,7 @@ Examples:
 
 
 Scenario: API.T-Voice ingestion
-Meta: @nightly
+Meta: @nightly @T-Voice
 Given I sign in as admin user
 And Data source with <sourceType> and T exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
