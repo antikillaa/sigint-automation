@@ -69,7 +69,7 @@ public class APIIngestionSteps extends APISteps {
             case "F":
                 dockerAdapter = new FSMSDockerAdapter();
                 break;
-            case "Phonebook":
+            case "PHONEBOOK":
                 dockerAdapter = new PhonebookDockerAdapter();
                 break;
             case "ETISALAT":
