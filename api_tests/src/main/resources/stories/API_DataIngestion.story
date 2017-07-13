@@ -9,8 +9,8 @@ And <sourceType> - <recordType> data file with <recordsCount> records was genera
 And I create remote path for ingestion
 When I upload data files
 Then Request is successful
-And Uploaded file is processed
-And Message contains "file with id"
+When I send get file meta request
+Then Message contains "file with id"
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -47,7 +47,7 @@ And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType | recordsCount |
-| F          | SMS        | 1000         |
+| F          | SMS        | 100          |
 
 
 
@@ -63,14 +63,44 @@ And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType | recordsCount |
-| PHONEBOOK  | Phonebook  | 1000         |
+| PHONEBOOK  | Phonebook  | 100          |
 
 
 
-Scenario: API.ETISALAT-Subscriber ingestion
-Meta: @nightly @E-Subscriber
+Scenario: API.ETISALAT-Subscriber format1 ingestion
+Meta: @nightly @E-Subscriber1
 Given I sign in as admin user
-And Data source with <sourceType> and <recordType> exists
+And Data source with <sourceType> and Subscriber exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded data files are processed
+And Original data file is searchable within the system
+
+Examples:
+| sourceType | recordType  | recordsCount |
+| ETISALAT   | Subscriber1 | 100          |
+
+
+Scenario: API.ETISALAT-Subscriber format2 ingestion
+Meta: @nightly @E-Subscriber2
+Given I sign in as admin user
+And Data source with <sourceType> and Subscriber exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded data files are processed
+And Original data file is searchable within the system
+
+Examples:
+| sourceType | recordType  | recordsCount |
+| ETISALAT   | Subscriber2 | 100          |
+
+
+Scenario: API.ETISALAT-SMS format2 ingestion
+Meta: @nightly @E-SMS2
+Given I sign in as admin user
+And Data source with <sourceType> and SMS exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
@@ -79,7 +109,37 @@ And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType | recordsCount |
-| ETISALAT   | Subscriber | 100          |
+| ETISALAT   | SMS2       | 100          |
+
+
+Scenario: API.ETISALAT-SMS format3 ingestion
+Meta: @nightly @E-SMS3
+Given I sign in as admin user
+And Data source with <sourceType> and SMS exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded data files are processed
+And Original data file is searchable within the system
+
+Examples:
+| sourceType | recordType | recordsCount |
+| ETISALAT   | SMS3       | 100          |
+
+
+Scenario: API.ETISALAT-SMS format4 ingestion
+Meta: @nightly @E-SMS4
+Given I sign in as admin user
+And Data source with <sourceType> and SMS exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded data files are processed
+And Original data file is searchable within the system
+
+Examples:
+| sourceType | recordType | recordsCount |
+| ETISALAT   | SMS4       | 100          |
 
 
 Scenario: API.ETISALAT-CDR ingestion
@@ -94,7 +154,7 @@ And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType | recordsCount |
-| ETISALAT   | CDR        | 1000         |
+| ETISALAT   | CDR        | 100          |
 
 
 
@@ -142,7 +202,7 @@ And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType | recordsCount |
-| S          | SMS        | 1000         |
+| S          | SMS        | 100          |
 
 
 Scenario: API.S-VLR ingestion
@@ -157,7 +217,7 @@ And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType | recordsCount |
-| S          | VLR        | 1000         |
+| S          | VLR        | 100          |
 
 
 Scenario: API.S-CDR ingestion
@@ -203,7 +263,7 @@ And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType | recordsCount |
-| T          | SMS        | 1000         |
+| T          | SMS        | 100          |
 
 
 Scenario: API.T-Voice ingestion

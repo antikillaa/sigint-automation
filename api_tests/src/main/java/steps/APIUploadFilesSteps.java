@@ -84,6 +84,13 @@ public class APIUploadFilesSteps extends APISteps {
         log.info(String.format("Files processing time: %d seconds", DateHelper.getDuration()));
     }
 
+    @When("I send get file meta request")
+    public void sendMetaRequest() {
+        FileMeta fileMeta = context.get("meta", FileMeta.class);
+        String fileId = fileMeta.getId();
+        service.meta(fileId);
+    }
+
     @Then("Uploaded file is processed")
     public void fileIsProcessed() {
         String fileProcesingError = String.format(
@@ -119,8 +126,7 @@ public class APIUploadFilesSteps extends APISteps {
         if (fileMeta != null && fileMeta.getMeta() != null) {
             String error = fileMeta.getMeta().getProperties().getError();
             if (error != null) {
-                log.error("Got 'error' in response:\n" + error);
-                return true;
+                ErrorReporter.reportAndRaiseError(error);
             }
             // FileMeta.etag == Process.md5
             log.info(String.format("%s%s meta: {'etag': '%s' , isProcessed: %s}",
