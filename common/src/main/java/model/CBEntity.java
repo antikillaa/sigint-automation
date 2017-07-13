@@ -12,6 +12,7 @@ public class CBEntity extends AbstractEntity {
     private List<String> sources;
     private String sourceType;
     private String recordType;
+    private String subSourceType;
     private Date modifiedOn;
     private Date eventTime;
     private Map<String, Object> identifiers = new LinkedHashMap<>();
@@ -116,5 +117,13 @@ public class CBEntity extends AbstractEntity {
 
     public void setAttributes(Map<String, Object> attributes) {
         this.attributes = attributes;
+    }
+
+    public String getSubSourceType() {
+        return subSourceType;
+    }
+
+    public void setSubSourceType(String subSourceType) {
+        this.subSourceType = subSourceType;
     }
 }
