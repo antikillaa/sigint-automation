@@ -91,8 +91,8 @@ public class UploadFilesRequest extends HttpRequest {
         fileMeta.setSourceId(source.getId());
         Meta meta = new Meta();
         MetaProperties properties = new MetaProperties();
-        properties.setRecordType(source.getRecordType());
-        properties.setSourceType(source.getType());
+        properties.setSubSourceType(source.getRecordType());
+        properties.setDataSourceType(source.getType());
         meta.setProperties(properties);
         fileMeta.setMeta(meta);
         fileMeta.setType(file.getMediaType().toString());

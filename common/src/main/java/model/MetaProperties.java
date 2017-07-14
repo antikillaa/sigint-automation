@@ -2,25 +2,34 @@ package model;
 
 public class MetaProperties {
     
-    private String recordType;
-    private String sourceType;
+    private String subSourceType;
+    private String dataSourceType;
+    private String service;
     private String error;
     private String processId;
-    
-    public String getRecordType() {
-        return recordType;
+
+    public String getSubSourceType() {
+        return subSourceType;
     }
-    
-    public void setRecordType(String recordType) {
-        this.recordType = recordType;
+
+    public void setSubSourceType(String subSourceType) {
+        this.subSourceType = subSourceType;
     }
-    
-    public String getSourceType() {
-        return sourceType;
+
+    public String getDataSourceType() {
+        return dataSourceType;
     }
-    
-    public void setSourceType(String sourceType) {
-        this.sourceType = sourceType;
+
+    public void setDataSourceType(String dataSourceType) {
+        this.dataSourceType = dataSourceType;
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
     }
 
     public String getError() {
