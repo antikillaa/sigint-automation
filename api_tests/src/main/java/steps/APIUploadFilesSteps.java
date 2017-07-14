@@ -53,7 +53,6 @@ public class APIUploadFilesSteps extends APISteps {
             }
         }
         context.put(key, fileMetas);
-        DateHelper.setStartTime();
     }
 
     @When("I upload data files")
@@ -77,6 +76,7 @@ public class APIUploadFilesSteps extends APISteps {
             fileMetas = context.get("audioMetas", List.class);
         }
 
+        DateHelper.setStartTime();
         for (FileMeta uploadedFileMeta: fileMetas) {
             context.put("meta", uploadedFileMeta);
             fileIsProcessed();
