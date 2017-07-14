@@ -13,7 +13,6 @@ import services.UploadFoldersService;
 import java.util.List;
 
 import static http.requests.UploadFoldersRequest.buildSearchFilter;
-import static http.requests.UploadFoldersRequest.searchByPath;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static utils.StringUtils.stripQuotes;
@@ -58,7 +57,7 @@ public class APISearchFilesAndFoldersSteps extends APISteps {
     List<FolderMeta> foldersList = context.get("foldersList", List.class);
 
     String filePath = foldersList.get(0).getName();
-    FileMetaFilter filter = searchByPath(filePath);
+    FileMetaFilter filter = new FileMetaFilter(filePath);
     List<FileMeta> fileMetaList = filesService.searchDataFiles(filter);
 
     context.put("uploadSearchFilter", filter);
@@ -110,7 +109,7 @@ public class APISearchFilesAndFoldersSteps extends APISteps {
   public void originalFilesAreSearchable() {
     FileMeta uploadedFileMeta = context.get("meta", FileMeta.class);
 
-    FileMetaFilter filter = searchByPath(uploadedFileMeta.getPath());
+    FileMetaFilter filter = new FileMetaFilter(uploadedFileMeta.getPath());
     List<FileMeta> fileMetaList = filesService.searchDataFiles(filter);
 
     for (FileMeta fileMeta : fileMetaList) {

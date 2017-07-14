@@ -1,24 +1,42 @@
 package model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class FileMetaFilter {
 
   private Query query;
+  private Page page;
+
+  public FileMetaFilter(String searchPath) {
+    this.query = new Query("LIKE", "path", searchPath);
+    this.page = new Page(1000, 0);
+  }
 
   public Query getQuery() {
     return query;
   }
 
-  public FileMetaFilter setQuery(Query query) {
+  public void setQuery(Query query) {
     this.query = query;
-    return this;
   }
 
-  public static class Query {
+  public Page getPage() {
+    return page;
+  }
+
+  public void setPage(Page page) {
+    this.page = page;
+  }
+
+  class Query {
     String type;
     String field;
     String value;
 
-    public Query(String type, String field, String value) {
+    Query(String type, String field, String value) {
       this.type = type;
       this.field = field;
       this.value = value;
@@ -46,6 +64,32 @@ public class FileMetaFilter {
 
     public void setValue(String value) {
       this.value = value;
+    }
+  }
+
+  class Page {
+    private int size;
+    private int number;
+
+    Page(int size, int number) {
+      this.size = size;
+      this.number = number;
+    }
+
+    public int getSize() {
+      return size;
+    }
+
+    public void setSize(int size) {
+      this.size = size;
+    }
+
+    public int getNumber() {
+      return number;
+    }
+
+    public void setNumber(int number) {
+      this.number = number;
     }
   }
 

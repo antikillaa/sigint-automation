@@ -2,7 +2,6 @@ package http.requests;
 
 import http.HttpMethod;
 import model.FileMetaFilter;
-import model.FileMetaFilter.Query;
 import model.PegasusMediaType;
 import model.Source;
 
@@ -37,22 +36,17 @@ public class UploadFoldersRequest extends HttpRequest {
     return this;
   }
 
-  static public FileMetaFilter searchByPath(String path) {
-    Query query = new Query("LIKE", "path", path);
-    return new FileMetaFilter().setQuery(query);
-  }
-
   static public FileMetaFilter buildSearchFilter(Source source, String datePattern) {
     String path = "/" + source.getType()
         + "/" + source.getName()
         + "/" + new SimpleDateFormat(datePattern).format(new Date());
 
-    return searchByPath(path);
+    return new FileMetaFilter(path);
   }
 
   static public FileMetaFilter buildSearchFilter(String datePattern) {
     String path = new SimpleDateFormat(datePattern).format(new Date());
 
-    return searchByPath(path);
+    return new FileMetaFilter(path);
   }
 }
