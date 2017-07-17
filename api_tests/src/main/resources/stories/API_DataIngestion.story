@@ -9,6 +9,7 @@ And <sourceType> - <recordType> data file with <recordsCount> records was genera
 And I create remote path for ingestion
 When I upload data files
 Then Request is successful
+When I wait for 10 seconds
 When I send get file meta request
 Then Message contains "file with id"
 
