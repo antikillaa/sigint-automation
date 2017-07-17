@@ -47,6 +47,7 @@ public class APIUploadFilesSteps extends APISteps {
 
             OperationResult<FileMeta> uploadResult = service.upload(g4file, source, user.getId(), remotePath);
             fileMetas.add(uploadResult.getEntity());
+            context.put("meta", uploadResult.getEntity());
             if (!uploadResult.isSuccess()) {
                 log.error("Can't upload " + file.getName());
                 break;
