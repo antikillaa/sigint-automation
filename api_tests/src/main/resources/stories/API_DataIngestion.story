@@ -2,7 +2,7 @@ Meta:
 @story ingestion
 
 Scenario: API.Ingestion with the wrong source type
-Meta: @nightly
+Meta: @nightly @Wrong-source-ingestion
 Given I sign in as admin user
 And Data source with F and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -18,7 +18,7 @@ Examples:
 
 
 Scenario: Upload several files with the same name into one source
-Meta: @nightly
+Meta: @nightly @Same-file-upload
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
@@ -285,7 +285,7 @@ Examples:
 
 
 Scenario: API.Search and count data folders by path
-Meta: @nightly
+Meta: @nightly @Search-folders-by-path
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 When I search data folders by source with date pattern "yyyy/MM"
@@ -301,7 +301,7 @@ Examples:
 
 
 Scenario: API.Search and count data folders by wildcard
-Meta: @nightly
+Meta: @nightly @Search-folders-by-wildcard
 Given I sign in as admin user
 When I search data folders with date pattern "*/yyyy"
 Then Found folders list size is more than 0
@@ -310,7 +310,7 @@ Then Folders count result is equal to appropriate list size
 
 
 Scenario: API.Search and count data files by path
-Meta: @nightly
+Meta: @nightly @Search-files-by-path
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 When I search data folders by source with date pattern "yyyy/MM/dd"
@@ -328,7 +328,7 @@ Examples:
 
 
 Scenario: API.Search and count data files by wildcard
-Meta: @nightly
+Meta: @nightly @Search-files-by-wildcard
 Given I sign in as admin user
 When I search data files with date pattern "*/yyyy/MM/dd/*"
 Then Found files list size is more than 0
