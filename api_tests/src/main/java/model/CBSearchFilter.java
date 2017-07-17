@@ -18,9 +18,10 @@ public class CBSearchFilter {
 
     public CBSearchFilter() {}
 
-    public CBSearchFilter(String source, String query, String pageSize, String pageNumber) {
+    public CBSearchFilter(String source, String objectType, String query, String pageSize, String pageNumber) {
         this.query = query;
         this.setSourceType(Collections.singletonList(DataSourceCategory.valueOf(source)));
+        this.objectType = SearchObjectType.valueOf(objectType);
 
         if (pageSize.toLowerCase().equals("null")) {
             setPage(null);

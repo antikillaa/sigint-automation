@@ -4,13 +4,12 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang.StringUtils.getLevenshteinDistance;
 
 public class StringUtils {
 
@@ -53,7 +52,7 @@ public class StringUtils {
     }
 
     public static String[] trimSpaces(String[] arr) {
-        for (int i=0;i< arr.length; i++) {
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = arr[i].trim();
         }
         return arr;
@@ -95,5 +94,34 @@ public class StringUtils {
 
     public static boolean stringContainsAny(String inputStr, String... items) {
         return Arrays.stream(items).parallel().anyMatch(inputStr::contains);
+    }
+
+    public static boolean fuzzySearch(String str, String query) {
+
+        if (query.contains("~")) {
+            Integer tildaIndex = query.indexOf("~");
+            String q = query.substring(0, tildaIndex);
+
+            Integer maxDistance = 3;
+            String suffix = query.substring(tildaIndex + 1);
+            if (!suffix.isEmpty()) {
+                maxDistance = Integer.valueOf(suffix);
+            }
+
+            String[] strings = str.split(" ");
+            Set<Integer> distances = new HashSet<>();
+            for (String s : strings) {
+                Integer distance = getLevenshteinDistance(stripQuotes(s), q);
+                distances.add(distance);
+                if (distance <= maxDistance)
+                    return true;
+            }
+
+            log.error("Pattern not founded, LevenshteinDistances:" + distances + " maxDistance:" + maxDistance);
+        } else {
+            log.error("Query string isn't fuzzy");
+        }
+
+        return false;
     }
 }
