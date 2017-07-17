@@ -8,6 +8,7 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.SearchService;
+import utils.StringUtils;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -19,14 +20,14 @@ public class APISearchSteps extends APISteps {
 
     private String cbSearchQueryToRegex(String query) {
         return ".*"
-                + query.replace("?", ".").replace("*", ".*")
+                + query.trim().replace("?", ".").replace("*", ".*")
                 + ".*";
     }
 
-    @When("I send CB search request - query:$query, source:$source, pageNumber:$pageNumber, pageSize:$pageSize")
-    public void recordSearch(String query, String source, String pageNumber, String pageSize) {
+    @When("I send CB search request - query:$query, source:$source, objectType:$objectType, pageNumber:$pageNumber, pageSize:$pageSize")
+    public void recordSearch(String query, String source, String objectType, String pageNumber, String pageSize) {
 
-        CBSearchFilter filter = new CBSearchFilter(source, query, pageSize, pageNumber);
+        CBSearchFilter filter = new CBSearchFilter(source, objectType, query, pageSize, pageNumber);
 
         OperationResult<List<CBEntity>> operationResult = service.search(filter);
         List<CBEntity> searchResults = operationResult.getEntity();
@@ -60,12 +61,18 @@ public class APISearchSteps extends APISteps {
         List<CBEntity> entities = context.get("searchResults", List.class);
         String query = context.get("searchQuery", String.class);
 
+        String regex = cbSearchQueryToRegex(query);
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE | Pattern.CASE_INSENSITIVE | Pattern.UNIX_LINES);
+
         for (CBEntity entity : entities) {
             String json = JsonConverter.toJsonString(entity).replaceAll("(\\r\\n\\t|\\r\\n|\\n)", " ").trim();
-            String regex = cbSearchQueryToRegex(query);
 
-            Boolean matches = Pattern.compile(regex, Pattern.MULTILINE | Pattern.CASE_INSENSITIVE | Pattern.UNIX_LINES)
-                    .matcher(json).matches();
+            Boolean matches;
+            if (query.contains("~")) {
+                matches = StringUtils.fuzzySearch(json, query);
+            } else {
+                matches = pattern.matcher(json).matches();
+            }
 
             Assert.assertTrue("Search query:" + query + ", doesn't matches this search result:\n" + json, matches);
         }
