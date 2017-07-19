@@ -52,10 +52,12 @@ Then CB search results are correct
 Examples:
 | source | objectType | query | pageNumber | pageSize |
 | SIGINT | event | quantity | 0 | NULL |
+| SIGINT | event | quantity\? | 0 | NULL |
 | SIGINT | event | qu?ntit? | 0 | NULL |
 | SIGINT | event | qua*ty   | 0 | NULL |
 | SIGINT | event | q?an*ty  | 0 | NULL |
 | CIO | event | Qatar | 0 | NULL |
+| CIO | event | Qatar\? | 0 | NULL |
 | CIO | event | Q?ta? | 0 | NULL |
 | CIO | event | Qa*r  | 0 | NULL |
 | CIO | event | Qa?a* | 0 | NULL |
