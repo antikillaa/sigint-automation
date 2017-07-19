@@ -44,13 +44,6 @@ class DockerImage {
     return containerBuilder.build();
   }
 
-  static DockerImage tDataImage() {
-    final String IMAGE = "docker-registry.pegasus.ae/tdata-generator:1.01";
-    final String DATA_PATH = "/src/test_data";
-
-    return new DockerImage(IMAGE, DATA_PATH);
-  }
-
   static DockerImage dataGeneratorImage() {
     final String IMAGE = "docker-registry.pegasus.ae/data-generator:1.02";
     final String DATA_PATH = "/src/test_data";
