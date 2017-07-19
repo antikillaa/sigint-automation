@@ -64,7 +64,7 @@ And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType | recordsCount |
-| PHONEBOOK  | Phonebook  | 100          |
+| PHONEBOOK  | PHONEBOOK  | 100          |
 
 
 
