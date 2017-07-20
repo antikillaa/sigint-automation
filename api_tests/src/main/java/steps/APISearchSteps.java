@@ -19,16 +19,18 @@ public class APISearchSteps extends APISteps {
 
     private static SearchService service = new SearchService();
 
+    /**
+     * Example:
+     * g?t: matches "git", "get", "got", etc., but doesn't match "gate", "great", etc
+     * g*t: matches "git", "get', "got", "great", etc., but doesn't match "guilty", "gets", etc
+     * good\?: matches "good?", but not "goods", since ? is escaped and taken literally
+     * red\*: matched "red*", but not "reddish" for the same reason
+     **/
     private String cbSearchQueryToRegex(String query) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder().append(".*");
+
         char[] chars = query.toCharArray();
-        /*
-            Example:
-            g?t: matches "git", "get", "got", etc., but doesn't match "gate", "great", etc
-            g*t: matches "git", "get', "got", "great", etc., but doesn't match "guilty", "gets", etc
-            good\?: matches "good?", but not "goods", since ? is escaped and taken literally
-            red\*: matched "red*", but not "reddish" for the same reason
-        */
+
         for (int i = 0; i < query.length(); i++) {
             sb.append(chars[i]);
             if ((chars[i] == '?' || chars[i] == '*') && (i == 0 || chars[i - 1] != '\\')) {
@@ -43,7 +45,7 @@ public class APISearchSteps extends APISteps {
             }
         }
 
-        return sb.toString();
+        return sb.append(".*").toString();
     }
 
     @When("I send CB search request - query:$query, source:$source, objectType:$objectType, pageNumber:$pageNumber, pageSize:$pageSize")
