@@ -68,7 +68,7 @@ Examples:
 
 
 
-Scenario: API.ETISALAT-Subscriber format1 ingestion
+Scenario: API.E-Subscriber format1 ingestion
 Meta: @nightly @E-Subscriber1
 Given I sign in as admin user
 And Data source with <sourceType> and Subscriber exists
@@ -80,10 +80,10 @@ And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType  | recordsCount |
-| ETISALAT   | Subscriber1 | 100          |
+| E          | Subscriber1 | 100          |
 
 
-Scenario: API.ETISALAT-Subscriber format2 ingestion
+Scenario: API.E-Subscriber format2 ingestion
 Meta: @nightly @E-Subscriber2
 Given I sign in as admin user
 And Data source with <sourceType> and Subscriber exists
@@ -95,10 +95,10 @@ And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType  | recordsCount |
-| ETISALAT   | Subscriber2 | 100          |
+| E          | Subscriber2 | 100          |
 
 
-Scenario: API.ETISALAT-SMS format2 ingestion
+Scenario: API.E-SMS format2 ingestion
 Meta: @nightly @E-SMS2
 Given I sign in as admin user
 And Data source with <sourceType> and SMS exists
@@ -110,10 +110,10 @@ And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType | recordsCount |
-| ETISALAT   | SMS2       | 100          |
+| E          | SMS2       | 100          |
 
 
-Scenario: API.ETISALAT-SMS format3 ingestion
+Scenario: API.E-SMS format3 ingestion
 Meta: @nightly @E-SMS3
 Given I sign in as admin user
 And Data source with <sourceType> and SMS exists
@@ -125,10 +125,10 @@ And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType | recordsCount |
-| ETISALAT   | SMS3       | 100          |
+| E          | SMS3       | 100          |
 
 
-Scenario: API.ETISALAT-SMS format4 ingestion
+Scenario: API.E-SMS format4 ingestion
 Meta: @nightly @E-SMS4
 Given I sign in as admin user
 And Data source with <sourceType> and SMS exists
@@ -140,10 +140,10 @@ And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType | recordsCount |
-| ETISALAT   | SMS4       | 100          |
+| E          | SMS4       | 100          |
 
 
-Scenario: API.ETISALAT-CDR ingestion
+Scenario: API.E-CDR ingestion
 Meta: @nightly @E-CDR
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
@@ -155,7 +155,7 @@ And Original data file is searchable within the system
 
 Examples:
 | sourceType | recordType | recordsCount |
-| ETISALAT   | CDR        | 100          |
+| E          | CDR        | 100          |
 
 
 

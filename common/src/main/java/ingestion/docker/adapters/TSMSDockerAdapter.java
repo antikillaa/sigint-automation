@@ -1,18 +1,18 @@
 package ingestion.docker.adapters;
 
-import static ingestion.docker.adapters.DockerImage.tDataImage;
-
 import com.spotify.docker.client.messages.ContainerConfig;
 import ingestion.docker.IDockerAdapter;
 
+import static ingestion.docker.adapters.DockerImage.dataGeneratorImage;
+
 public class TSMSDockerAdapter implements IDockerAdapter {
 
-  private static final String[] filemasks = {"tactical*"};
-  private static final DockerImage dockerImage = tDataImage();
+  private static final String[] filemasks = {"*.xls"};
+  private static final DockerImage dockerImage = dataGeneratorImage();
 
   @Override
   public ContainerConfig getContainerConfig(String recordsCount) {
-    return dockerImage.getConfig("-l", recordsCount, "-s", recordsCount, "-t", "tactical");
+    return dockerImage.getConfig("t-sms", "-n", recordsCount, "-d", dockerImage.getDataPath());
   }
 
   @Override

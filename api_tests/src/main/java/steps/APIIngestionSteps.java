@@ -72,7 +72,7 @@ public class APIIngestionSteps extends APISteps {
             case "PHONEBOOK":
                 dockerAdapter = new PhonebookDockerAdapter();
                 break;
-            case "ETISALAT":
+            case "E":
                 switch (rType) {
                     case "CDR":
                         dockerAdapter = new EtisalatCDRDockerAdapter();
