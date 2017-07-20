@@ -131,11 +131,12 @@ public class APIUploadFilesSteps extends APISteps {
             }
             // FileMeta.etag == Process.md5
             String filename = fileMeta.getFile() + fileMeta.getExtension();
+            String processId = fileMeta.getMeta().getProperties().getProcessId();
             log.info(String.format("%s processed: %s", filename, fileMeta.getMeta().getIsProcessed()));
             if (fileMeta.getEtag().length() > 0 & fileMeta.getMeta().getIsProcessed()) {
-                log.info(String.format("%s processId: %s",
-                        filename,
-                        fileMeta.getMeta().getProperties().getProcessId()));
+                if (processId != null) {
+                    log.info(String.format("%s processId: %s", filename, processId));
+                }
                 context.put("meta", fileMeta);
                 return true;
             }
