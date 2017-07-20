@@ -85,9 +85,10 @@ public class APISearchSteps extends APISteps {
         );
 
         int actualCount = 0;
-        for (int i = 0; i < 6; i++) {
-            // several attempts with 10 seconds delay
-            waitSeveralseconds("10");
+        int delay = 10;  // in seconds
+        for (int i = 0; i < 5; i++) {
+            // 5 attempts with 10, 20, 40, 80, 160 seconds delay
+            waitSeveralseconds(String.valueOf(delay));
             OperationResult<List<CBEntity>> operationResult = service.search(filter);
             List<CBEntity> searchResults = operationResult.getEntity();
             actualCount = searchResults.size();
@@ -96,6 +97,7 @@ public class APISearchSteps extends APISteps {
                 context.put("searchQuery", searchQuery);
                 return;
             }
+            delay = delay * 2;
         }
         String errorMsg = String.format("Expected %d %s-%s %s records in search, but was: %d",
                 expectedCount,
