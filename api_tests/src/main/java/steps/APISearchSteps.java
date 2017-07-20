@@ -70,7 +70,7 @@ public class APISearchSteps extends APISteps {
         int expectedCount = Integer.valueOf(size);
         Source source = context.get("source", Source.class);
         String objectType = "event";
-        if (stringContainsAny(source.getRecordType(), "CELL", "PHONEBOOK", "Subscriber")) {
+        if (stringContainsAny(source.getRecordType(), "CellTower", "PHONEBOOK", "Subscriber")) {
             objectType = "entity";
         }
         FileMeta meta = context.get("meta", FileMeta.class);
