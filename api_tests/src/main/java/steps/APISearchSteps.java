@@ -1,9 +1,12 @@
 package steps;
 
+import error_reporter.ErrorReporter;
 import http.OperationResult;
 import json.JsonConverter;
 import model.CBEntity;
 import model.CBSearchFilter;
+import model.FileMeta;
+import model.Source;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
@@ -13,6 +16,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static utils.StringUtils.fuzzySearch;
+import static utils.StringUtils.stringContainsAny;
 
 @SuppressWarnings("unchecked")
 public class APISearchSteps extends APISteps {
@@ -60,24 +64,71 @@ public class APISearchSteps extends APISteps {
         context.put("searchQuery", query);
     }
 
-    @Then("Profile entity list size $criteria than $size")
-    public void profileListShouldBeLess(String criteria, String size) {
+    @Then("$size ingested records are searchable in CB")
+    public void searchIngestedRecordsByProcessId(String size) {
+
+        int expectedCount = Integer.valueOf(size);
+        Source source = context.get("source", Source.class);
+        String objectType = "event";
+        if (stringContainsAny(source.getRecordType(), "CELL", "PHONEBOOK", "Subscriber")) {
+            objectType = "entity";
+        }
+        FileMeta meta = context.get("meta", FileMeta.class);
+        String searchQuery = "pid:" + meta.getMeta().getProperties().getProcessId();
+
+        CBSearchFilter filter = new CBSearchFilter(
+                "SIGINT",
+                objectType,
+                searchQuery,
+                "1000",
+                "0"
+        );
+
+        int actualCount = 0;
+        for (int i = 0; i < 6; i++) {
+            // several attempts with 10 seconds delay
+            waitSeveralseconds("10");
+            OperationResult<List<CBEntity>> operationResult = service.search(filter);
+            List<CBEntity> searchResults = operationResult.getEntity();
+            actualCount = searchResults.size();
+            if (expectedCount == actualCount) {
+                context.put("searchResults", searchResults);
+                context.put("searchQuery", searchQuery);
+                return;
+            }
+        }
+        String errorMsg = String.format("Expected %d %s-%s %s records in search, but was: %d",
+                expectedCount,
+                source.getType(),
+                source.getRecordType(),
+                objectType,
+                actualCount);
+        ErrorReporter.raiseError(errorMsg);
+    }
+
+    @Then("CB search result list size $criteria $size")
+    public void CBSearchListSizeShouldBe(String criteria, String size) {
         List<CBEntity> entities = context.get("searchResults", List.class);
 
+        int count = Integer.valueOf(size);
+        boolean condition;
+
         switch (criteria) {
-            case "more":
-                Assert.assertTrue(
-                        "Expected search results count " + criteria + " than " + size + ", but was:" + entities.size(),
-                        entities.size() > Integer.valueOf(size));
+            case ">":
+                condition = entities.size() > count;
                 break;
-            case "less":
-                Assert.assertTrue(
-                        "Expected search results count " + criteria + " than " + size + ", but was:" + entities.size(),
-                        entities.size() < Integer.valueOf(size));
+            case "<":
+                condition = entities.size() < count;
+                break;
+            case "==":
+                condition = entities.size() == count;
                 break;
             default:
-                throw new AssertionError("Unknown criteria value, expected:'less' or 'more', but was:" + criteria);
+                throw new AssertionError("Unknown criteria value, expected: >, < or ==");
         }
+        Assert.assertTrue(
+                "Expected search results count " + criteria + " " + size + ", but was: " + entities.size(),
+                condition);
     }
 
     @Then("CB search results are correct")

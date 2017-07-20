@@ -8,7 +8,7 @@ Given I sign in as admin user
 Scenario: API.The maximum number of search results for a single query is limited to 1000 records
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
-And Profile entity list size less than 1001
+And CB search result list size < 1001
 
 Examples:
 | source | objectType | query  | pageNumber | pageSize |
