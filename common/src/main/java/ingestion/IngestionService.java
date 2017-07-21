@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -17,6 +18,7 @@ public class IngestionService {
 
   public static final Path INGESTION_DIR = Paths.get(System.getProperty("user.dir"), "ingestionData");
   public static final Path IMPORT_DIR = Paths.get(System.getProperty("user.dir"), "importData");
+  public static final Path INJECTIONS_FILE = Paths.get(INGESTION_DIR.toString(), "data.injections");
   private final IIngestionDataGenerator ingestionDataGenerator;
 
   public IngestionService(IIngestionDataGenerator ingestionDataGenerator) {
@@ -42,6 +44,14 @@ public class IngestionService {
     } catch (IOException e) {
       log.error(e.getMessage());
     }
+  }
+
+  public static boolean pathExists(Path path) {
+    return Files.exists(path);
+  }
+
+  public static void removePath(Path path) {
+    FileUtils.deleteQuietly(new File(path.toString()));
   }
 
   public static List<File> getWavs() {

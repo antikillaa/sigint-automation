@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import static ingestion.IngestionService.INJECTIONS_FILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -101,8 +102,13 @@ public class APIIngestionSteps extends APISteps {
         assertNotNull("Can't assign docker adapter", dockerAdapter);
 
         IngestionService ingestionService = new IngestionService(new DockerDataGenerator(dockerAdapter));
-        IngestionService.cleanIngestionDir();
+        if (!IngestionService.pathExists(INJECTIONS_FILE)) {
+            IngestionService.cleanIngestionDir();
+        } else {
+            log.info("Predefined data detected. Skipping ingestion directory cleanup...");
+        }
         List<File> files = ingestionService.getGenerator().generateIngestionFiles(rCount);
+        IngestionService.removePath(INJECTIONS_FILE);
 
         context.put("g4files", files);
     }
