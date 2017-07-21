@@ -9,6 +9,7 @@ Scenario: API.The maximum number of search results for a single query is limited
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size < 1001
+And pageSize size in response < 1001
 
 Examples:
 | source | objectType | query  | pageNumber | pageSize |
@@ -52,12 +53,10 @@ Then CB search results are correct
 Examples:
 | source | objectType | query | pageNumber | pageSize |
 | SIGINT | event | quantity | 0 | NULL |
-| SIGINT | event | quantity\? | 0 | NULL |
 | SIGINT | event | qu?ntit? | 0 | NULL |
 | SIGINT | event | qua*ty   | 0 | NULL |
 | SIGINT | event | q?an*ty  | 0 | NULL |
 | CIO | event | Qatar | 0 | NULL |
-| CIO | event | Qatar\? | 0 | NULL |
 | CIO | event | Q?ta? | 0 | NULL |
 | CIO | event | Qa*r  | 0 | NULL |
 | CIO | event | Qa?a* | 0 | NULL |
