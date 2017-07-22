@@ -13,7 +13,7 @@ public class SourceNameProvider extends DependencyDataProvider {
         String recordType = (String) dependencyData.getData("recordType");
 
         if (sourceType == null || recordType == null) {
-            return null;
+            throw new AssertionError("SourceType or RecordType isNull");
         }
         return sourceType + "-" + recordType + "-" + RandomStringUtils.randomAlphabetic(10);
     }
