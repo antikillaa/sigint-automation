@@ -56,7 +56,7 @@ Given I generate 5 random designation-mappings
 And I write designation-mappings to CSV with header
 When I send import designation-mappings request
 Then Request is successful
-And Imported 5 designation-mappings, created 5
+And Imported 5 designation-mappings, modified 5
 And I delete designation-mappings
 
 Scenario: Import non .csv file for designation-mapping records
@@ -72,7 +72,7 @@ And I add the same designation-mapping with "Another designation" designation to
 And I write designation-mappings to CSV with header
 When I send import designation-mappings request
 Then Request is successful
-And Imported 2 designation-mappings, created 1
+And Imported 2 designation-mappings, modified 1
 And I delete designation-mappings
 
 Scenario: API. Import designation-mappings with duplicate values
@@ -80,10 +80,10 @@ Given I generate 1 random designation-mappings
 And I write designation-mappings to CSV with header
 When I send import designation-mappings request
 Then Request is successful
-And Imported 1 designation-mappings, created 1
+And Imported 1 designation-mappings, modified 1
 When I send import designation-mappings request
 Then Request is successful
-And Imported 0 designation-mappings, created 0
+And Imported 0 designation-mappings, modified 0
 And Message contains "already exists"
 
 Scenario: API. Import designation-mappings with errors in file
@@ -93,5 +93,5 @@ And I write designation-mappings to CSV with header
 When I send import designation-mappings request
 Then Request is successful
 And Message contains "Designations are not set"
-And Imported 1 designation-mappings, created 1
+And Imported 1 designation-mappings, modified 1
 And I delete designation-mappings
