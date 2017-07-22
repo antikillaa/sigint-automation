@@ -23,9 +23,13 @@ public class RecordTypeProvider extends DependencyDataProvider {
                     .filter(type -> type.getType() != null && type.getType().equals(sSourceType))
                     .collect(Collectors.toList());
 
-            return typeList.isEmpty() ? null : RandomGenerator.getRandomItemFromList(typeList).getSubSource();
+            if (typeList.isEmpty()) {
+                throw new AssertionError("Unable get subSource from dictionary for sourceType:" + sSourceType);
+            } else {
+                return RandomGenerator.getRandomItemFromList(typeList).getSubSource();
+            }
         } else {
-            return null;
+            throw new AssertionError("Unable generate subSource due sourceType is NULL");
         }
     }
 }

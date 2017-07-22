@@ -8,12 +8,14 @@ import utils.RandomGenerator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static utils.StringUtils.stringContainsAny;
+
 public class SourceTypeProvider implements EntityDataProvider {
 
     @Override
     public String generate(int length) {
         SourceType sourceType;
-        int ATTEMPT_NUMBER = 3;
+        int ATTEMPT_NUMBER = 5;
         int i = 0;
         do {
             i++;
@@ -21,9 +23,9 @@ public class SourceTypeProvider implements EntityDataProvider {
                     .getSourceTypes().stream()
                     .filter(sType -> sType.getType() != null)
                     .collect(Collectors.toList());
-            if (typeList.isEmpty()) return null;
+            if (typeList.isEmpty()) throw new AssertionError("Unable get any data source from dictionary!");
             sourceType = RandomGenerator.getRandomItemFromList(typeList);
-        } while (sourceType.getType().equals("X") && i < ATTEMPT_NUMBER);
+        } while (stringContainsAny(sourceType.getType(), "X", "H", "SY") && i < ATTEMPT_NUMBER); //FIXME after update dictionary
         return sourceType.getType();
     }
 }
