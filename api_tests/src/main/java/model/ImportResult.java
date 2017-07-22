@@ -1,36 +1,37 @@
 package model;
 
-import java.util.HashMap;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+import java.util.HashMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ImportResult {
 
-  private Integer imported;
-  private Integer created;
-  private HashMap<String, String> rejected;
+  private Integer importedRows;
+  private Integer modifiedObjects;
+  private HashMap<String, String> rejectedRows;
 
-  public Integer getImported() {
-    return imported;
+  public Integer getImportedRows() {
+    return importedRows;
   }
 
-  public void setImported(Integer imported) {
-    this.imported = imported;
+  public void setImportedRows(Integer importedRows) {
+    this.importedRows = importedRows;
   }
 
-  public Integer getCreated() {
-    return created;
+  public Integer getModifiedObjects() {
+    return modifiedObjects;
   }
 
-  public void setCreated(Integer created) {
-    this.created = created;
+  public void setModifiedObjects(Integer modifiedObjects) {
+    this.modifiedObjects = modifiedObjects;
   }
 
-  public HashMap<String, String> getRejected() {
-    return rejected;
+  public HashMap<String, String> getRejectedRows() {
+    return rejectedRows;
   }
 
-  public void setRejected(HashMap<String, String> rejected) {
-    this.rejected = rejected;
+  public void setRejectedRows(HashMap<String, String> rejectedRows) {
+    this.rejectedRows = rejectedRows;
   }
 }

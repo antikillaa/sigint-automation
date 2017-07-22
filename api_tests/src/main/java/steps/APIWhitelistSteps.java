@@ -1,16 +1,8 @@
 package steps;
 
 
-import static ingestion.IngestionService.cleanImportDir;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import error_reporter.ErrorReporter;
 import http.OperationResult;
-import java.util.ArrayList;
-import java.util.List;
 import json.JsonConverter;
 import model.G4File;
 import model.ImportResult;
@@ -22,6 +14,12 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import services.WhitelistService;
 import utils.RandomGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static ingestion.IngestionService.cleanImportDir;
+import static org.junit.Assert.*;
 
 public class APIWhitelistSteps extends APISteps {
 
@@ -207,14 +205,14 @@ public class APIWhitelistSteps extends APISteps {
         context.put("importResult", result.getEntity());
     }
 
-    @Then("Imported $countImport whitelists, created $countCreated")
-    public void numberOfImportedWhitelistsIsCorrect(final String countImport, final String countCreated) {
+    @Then("Imported $countImport whitelists, modified $countModified")
+    public void numberOfImportedWhitelistsIsCorrect(final String countImport, final String countModified) {
         Integer imported = Integer.valueOf(countImport);
-        Integer created = Integer.valueOf(countCreated);
+        Integer modified = Integer.valueOf(countModified);
         ImportResult importResult = context.get("importResult", ImportResult.class);
 
-        assertEquals("Incorrect number of imported whitelists", imported, importResult.getImported());
-        assertEquals("Incorrect number of created whitelists", created, importResult.getCreated());
+        assertEquals("Incorrect number of imported whitelists", imported, importResult.getImportedRows());
+        assertEquals("Incorrect number of modified whitelists", modified, importResult.getModifiedObjects());
     }
 
     @Then("I delete whitelists")

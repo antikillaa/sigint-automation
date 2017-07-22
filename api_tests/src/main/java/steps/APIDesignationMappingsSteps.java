@@ -1,25 +1,9 @@
 package steps;
 
-import static ingestion.IngestionService.cleanImportDir;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static utils.StringUtils.stringEquals;
-import static utils.StringUtils.stripQuotes;
-
 import error_reporter.ErrorReporter;
 import http.OperationResult;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import json.JsonConverter;
-import model.Designation;
-import model.DesignationMapping;
-import model.DesignationMappingFilter;
-import model.G4File;
-import model.ImportResult;
+import model.*;
 import model.entities.Entities;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -27,6 +11,17 @@ import org.jbehave.core.annotations.When;
 import services.DesignationMappingService;
 import services.DesignationService;
 import utils.RandomGenerator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static ingestion.IngestionService.cleanImportDir;
+import static org.junit.Assert.*;
+import static utils.StringUtils.stringEquals;
+import static utils.StringUtils.stripQuotes;
 
 public class APIDesignationMappingsSteps extends APISteps {
 
@@ -256,14 +251,14 @@ public class APIDesignationMappingsSteps extends APISteps {
     context.put("importResult", result.getEntity());
   }
 
-  @Then("Imported $countImported designation-mappings, created $countCreated")
-  public void numberOfImportedDMIsCorrect(final String countImported, final String countCreated) {
+  @Then("Imported $countImported designation-mappings, modified $countModified")
+  public void numberOfImportedDMIsCorrect(final String countImported, final String countModified) {
     Integer imported = Integer.valueOf(countImported);
-    Integer created = Integer.valueOf(countCreated);
+    Integer modified = Integer.valueOf(countModified);
     ImportResult importResult = context.get("importResult", ImportResult.class);
 
-    assertEquals("Incorrect number of imported designation-mappings", imported, importResult.getImported());
-    assertEquals("Incorrect number of imported designation-mappings", created, importResult.getCreated());
+    assertEquals("Incorrect number of imported designation-mappings", imported, importResult.getImportedRows());
+    assertEquals("Incorrect number of modified designation-mappings", modified, importResult.getModifiedObjects());
   }
 
   @Then("I delete designation-mappings")
