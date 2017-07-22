@@ -106,6 +106,8 @@ public class HttpRequest {
      * @return HttpRequest
      */
     protected HttpRequest addBodyString(String fieldName, String value) {
+        log.debug("Adding string to multipart body: " + value);
+
         FormDataBodyPart part = new FormDataBodyPart(fieldName, value);
         multiPart.bodyPart(part);
         setPayload(multiPart);
