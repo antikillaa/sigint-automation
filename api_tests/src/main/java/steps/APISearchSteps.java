@@ -2,11 +2,9 @@ package steps;
 
 import error_reporter.ErrorReporter;
 import http.OperationResult;
+import http.OperationsResults;
 import json.JsonConverter;
-import model.CBEntity;
-import model.CBSearchFilter;
-import model.FileMeta;
-import model.Source;
+import model.*;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
@@ -153,5 +151,34 @@ public class APISearchSteps extends APISteps {
 
             Assert.assertTrue("Search query:" + query + ", doesn't matches this search result:\n" + json, matches);
         }
+    }
+
+    @Then("pageSize size in response $criteria $size")
+    public void pageSizeInResponseShouldBe(String criteria, String size) {
+
+        OperationResult result = OperationsResults.getResult();
+        CBSearchResult cbSearchResult = JsonConverter.jsonToObject(result.getMessage(), CBSearchResult.class);
+        Integer pageSize = cbSearchResult.getPageSize();
+
+        int count = Integer.valueOf(size);
+        boolean condition;
+
+        switch (criteria) {
+            case ">":
+                condition = pageSize > count;
+                break;
+            case "<":
+                condition = pageSize < count;
+                break;
+            case "==":
+                condition = pageSize == count;
+                break;
+            default:
+                throw new AssertionError("Unknown criteria value, expected: >, < or ==");
+        }
+
+        Assert.assertTrue(
+                "Expected pageSize size " + criteria + " " + size + ", but was: " + pageSize,
+                condition);
     }
 }
