@@ -20,6 +20,8 @@ import java.util.stream.Stream;
 
 import static ingestion.IngestionService.cleanImportDir;
 import static org.junit.Assert.*;
+
+import static steps.APIDesignationsSteps.getRandomDesignation;
 import static utils.StringUtils.stringEquals;
 import static utils.StringUtils.stripQuotes;
 
@@ -216,13 +218,20 @@ public class APIDesignationMappingsSteps extends APISteps {
     context.put("designationMappingList", designationMappings);
   }
 
-  @Given("I add broken designation-mapping to the list")
+  @Given("I add $param designation-mapping to the list")
   @SuppressWarnings("unchecked")
-  public void addBrokenDesignationMapping() {
+  public void addBrokenDesignationMapping(final String param) {
     List<DesignationMapping> designationMappings = context.get("designationMappingList", List.class);
 
     DesignationMapping newDesignation = getRandomDesignationMapping();
-    newDesignation.setDesignations(new ArrayList<>(Collections.singletonList("")));
+    Designation randomDesignation = getRandomDesignation();
+    context.put("designation", randomDesignation);
+
+    if (param.equalsIgnoreCase("broken")) {
+      randomDesignation.setName("");
+    }
+
+    newDesignation.setDesignations(new ArrayList<>(Collections.singletonList(randomDesignation.getName())));
     designationMappings.add(newDesignation);
 
     context.put("designationMappingList", designationMappings);
