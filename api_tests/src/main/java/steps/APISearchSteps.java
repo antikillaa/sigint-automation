@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static junit.framework.TestCase.assertTrue;
+import static utils.StepHelper.compareByCriteria;
 import static utils.StringUtils.fuzzySearch;
-import static utils.StringUtils.stringContainsAny;
 
 @SuppressWarnings("unchecked")
 public class APISearchSteps extends APISteps {
@@ -63,24 +63,12 @@ public class APISearchSteps extends APISteps {
         context.put("searchQuery", query);
     }
 
-    @Then("$size ingested records are searchable in CB")
-    public void searchIngestedRecordsByProcessId(String size) {
-
-        int expectedCount;
-        boolean checkMinimal = false;
-        if (size.startsWith(">")) {
-            checkMinimal = true;
-            String minCount = size.substring(1, size.length());
-            expectedCount = Integer.valueOf(minCount);
-        } else {
-            expectedCount = Integer.valueOf(size);
-        }
+    @Then("Number of ingested $objectType records in CB $criteria $size")
+    public void searchIngestedRecordsByProcessId(String objectType, String criteria, String size) {
+//        (stringContainsAny(source.getRecordType(), "CellTower", "PHONEBOOK", "Subscriber"))
+        int expectedCount = Integer.valueOf(size);
 
         Source source = context.get("source", Source.class);
-        String objectType = "event";
-        if (stringContainsAny(source.getRecordType(), "CellTower", "PHONEBOOK", "Subscriber")) {
-            objectType = "entity";
-        }
         FileMeta meta = context.get("meta", FileMeta.class);
         String searchQuery = "pid:" + meta.getMeta().getProperties().getProcessId();
 
@@ -94,7 +82,6 @@ public class APISearchSteps extends APISteps {
 
         int actualCount = 0;
         int delay = 10;  // in seconds
-        boolean condition;
         for (int i = 0; i < 5; i++) {
             // 5 attempts with 10, 20, 40, 80, 160 seconds delay
             waitSeveralseconds(String.valueOf(delay));
@@ -102,24 +89,16 @@ public class APISearchSteps extends APISteps {
             List<CBEntity> searchResults = operationResult.getEntity();
             actualCount = searchResults.size();
 
-            if (checkMinimal) {
-                condition = actualCount > expectedCount;
-            } else {
-                condition = actualCount == expectedCount;
-            }
-            if (condition) {
+            if (compareByCriteria(criteria, actualCount, expectedCount)) {
                 context.put("searchResults", searchResults);
                 context.put("searchQuery", searchQuery);
                 return;
             }
             delay = delay * 2;
         }
-        String errorMsg = String.format("Expected %s %s-%s %s records in search, but was: %d",
-                size,
-                source.getType(),
-                source.getRecordType(),
-                objectType,
-                actualCount);
+        String errorMsg = String.format(
+                "Expected %s %s-%s %s records in search %s %d",
+                size, source.getType(), source.getRecordType(), objectType, criteria, actualCount);
         ErrorReporter.raiseError(errorMsg);
     }
 
@@ -127,22 +106,8 @@ public class APISearchSteps extends APISteps {
     public void CBSearchListSizeShouldBe(String criteria, String size) {
         List<CBEntity> entities = context.get("searchResults", List.class);
 
-        int count = Integer.valueOf(size);
-        boolean condition;
-
-        switch (criteria) {
-            case ">":
-                condition = entities.size() > count;
-                break;
-            case "<":
-                condition = entities.size() < count;
-                break;
-            case "==":
-                condition = entities.size() == count;
-                break;
-            default:
-                throw new AssertionError("Unknown criteria value, expected: >, < or ==");
-        }
+        int expectedCount = Integer.valueOf(size);
+        boolean condition = compareByCriteria(criteria, entities.size(), expectedCount);
         Assert.assertTrue(
                 "Expected search results count " + criteria + " " + size + ", but was: " + entities.size(),
                 condition);
@@ -198,22 +163,8 @@ public class APISearchSteps extends APISteps {
         CBSearchResult cbSearchResult = JsonConverter.jsonToObject(result.getMessage(), CBSearchResult.class);
         Integer pageSize = cbSearchResult.getPageSize();
 
-        int count = Integer.valueOf(size);
-        boolean condition;
-
-        switch (criteria) {
-            case ">":
-                condition = pageSize > count;
-                break;
-            case "<":
-                condition = pageSize < count;
-                break;
-            case "==":
-                condition = pageSize == count;
-                break;
-            default:
-                throw new AssertionError("Unknown criteria value, expected: >, < or ==");
-        }
+        int expectedCount = Integer.valueOf(size);
+        boolean condition = compareByCriteria(criteria, pageSize, expectedCount);
 
         Assert.assertTrue(
                 "Expected pageSize size " + criteria + " " + size + ", but was: " + pageSize,

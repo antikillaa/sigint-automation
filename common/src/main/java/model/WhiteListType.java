@@ -8,6 +8,7 @@ import java.util.Random;
 
 public enum WhiteListType {
 
+    // TODO: implement other identifier types in Phase 2
     PHONE_NUMBER, EMAIL_ADDRESS, TWITTER_ID;
 
     private static final List<WhiteListType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
