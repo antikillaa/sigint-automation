@@ -13,6 +13,7 @@ import services.SearchService;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static junit.framework.TestCase.assertTrue;
 import static utils.StringUtils.fuzzySearch;
 import static utils.StringUtils.stringContainsAny;
 
@@ -65,7 +66,16 @@ public class APISearchSteps extends APISteps {
     @Then("$size ingested records are searchable in CB")
     public void searchIngestedRecordsByProcessId(String size) {
 
-        int expectedCount = Integer.valueOf(size);
+        int expectedCount;
+        boolean checkMinimal = false;
+        if (size.startsWith(">")) {
+            checkMinimal = true;
+            String minCount = size.substring(1, size.length());
+            expectedCount = Integer.valueOf(minCount);
+        } else {
+            expectedCount = Integer.valueOf(size);
+        }
+
         Source source = context.get("source", Source.class);
         String objectType = "event";
         if (stringContainsAny(source.getRecordType(), "CellTower", "PHONEBOOK", "Subscriber")) {
@@ -84,21 +94,28 @@ public class APISearchSteps extends APISteps {
 
         int actualCount = 0;
         int delay = 10;  // in seconds
+        boolean condition;
         for (int i = 0; i < 5; i++) {
             // 5 attempts with 10, 20, 40, 80, 160 seconds delay
             waitSeveralseconds(String.valueOf(delay));
             OperationResult<List<CBEntity>> operationResult = service.search(filter);
             List<CBEntity> searchResults = operationResult.getEntity();
             actualCount = searchResults.size();
-            if (expectedCount == actualCount) {
+
+            if (checkMinimal) {
+                condition = actualCount > expectedCount;
+            } else {
+                condition = actualCount == expectedCount;
+            }
+            if (condition) {
                 context.put("searchResults", searchResults);
                 context.put("searchQuery", searchQuery);
                 return;
             }
             delay = delay * 2;
         }
-        String errorMsg = String.format("Expected %d %s-%s %s records in search, but was: %d",
-                expectedCount,
+        String errorMsg = String.format("Expected %s %s-%s %s records in search, but was: %d",
+                size,
                 source.getType(),
                 source.getRecordType(),
                 objectType,
@@ -131,10 +148,31 @@ public class APISearchSteps extends APISteps {
                 condition);
     }
 
-    @Then("CB search results are correct")
-    public void verifyCBSearch() {
+    @Then("Whitelisted identifiers are not searchable")
+    public void whitelistedCBSearch() {
+        List<String> whitelistedIdentifiers = context.get("whitelistedIdentifiers", List.class);
+
+        log.info("Check that identifiers are filtered from CB search by pid");
+        for (String identifier: whitelistedIdentifiers) {
+            context.put("searchQuery", identifier);
+            verifyCBSearch("doesn't contain");
+        }
+        log.info("Check that identifier entities are not created");
+        for (String identifier: whitelistedIdentifiers) {
+            recordSearch(identifier, "SIGINT", "entity", "0", "100");
+            CBSearchListSizeShouldBe("==", "0");
+        }
+    }
+
+    @Then("CB search $criteria results for query")
+    public void verifyCBSearch(String criteria) {
+        boolean searchable = false;
+        if (criteria.equalsIgnoreCase("contains")) {
+            searchable = true;
+        }
         List<CBEntity> entities = context.get("searchResults", List.class);
         String query = context.get("searchQuery", String.class);
+
 
         String regex = cbSearchQueryToRegex(query);
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE | Pattern.CASE_INSENSITIVE | Pattern.UNIX_LINES);
@@ -148,8 +186,8 @@ public class APISearchSteps extends APISteps {
             } else {
                 matches = pattern.matcher(json).matches();
             }
-
-            Assert.assertTrue("Search query:" + query + ", doesn't matches this search result:\n" + json, matches);
+            assertTrue("Search " + criteria + "results for query: " + query + " in response:\n" + json,
+                    matches == searchable);
         }
     }
 
