@@ -4,8 +4,10 @@ import ingestion.IngestionService;
 import ingestion.docker.DockerDataGenerator;
 import ingestion.docker.IDockerAdapter;
 import ingestion.docker.adapters.*;
-import model.*;
+import model.G4File;
 import model.Process;
+import model.Source;
+import model.UploadDetails;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import utils.RandomGenerator;
@@ -14,6 +16,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import static ingestion.IngestionService.INJECTIONS_FILE;
 import static org.junit.Assert.assertEquals;
@@ -116,13 +119,17 @@ public class APIIngestionSteps extends APISteps {
     @Given("I create remote path for ingestion")
     public void createRemotePath() {
         Source source = context.get("source", Source.class);
-
-        String path = "/" + source.getType()
-                + "/" + source.getName()
-                + new SimpleDateFormat("/yyyy/MM/dd/HH_mm_ss.SSS/").format(new Date());
+        SimpleDateFormat currentDate = new SimpleDateFormat("/yyyy/MM/dd/HH_mm_ss.SSS/");
+        currentDate.setTimeZone(TimeZone.getTimeZone("GMT"));
+        String path = "/" + source.getType() + "/" + source.getName() + currentDate.format(new Date());
 
         log.info("Remote path: " + path);
         context.put("remotePath", path);
+    }
+
+    @Given("I clean up ingestion directory")
+    public void cleanupIngestionDir() {
+        IngestionService.cleanIngestionDir();
     }
 
     @Then("Upload details contain $rCount - $rType records")
