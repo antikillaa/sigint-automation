@@ -73,7 +73,7 @@ Examples:
 Scenario: API.E-Subscriber format1 ingestion
 Meta: @nightly @E-Subscriber1
 Given I sign in as admin user
-And Data source with <sourceType> and Subscriber exists
+And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
@@ -89,7 +89,7 @@ Examples:
 Scenario: API.E-Subscriber format2 ingestion
 Meta: @nightly @E-Subscriber2
 Given I sign in as admin user
-And Data source with <sourceType> and Subscriber exists
+And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
@@ -105,7 +105,7 @@ Examples:
 Scenario: API.E-SMS format2 ingestion
 Meta: @nightly @E-SMS2
 Given I sign in as admin user
-And Data source with <sourceType> and SMS exists
+And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
@@ -121,7 +121,7 @@ Examples:
 Scenario: API.E-SMS format3 ingestion
 Meta: @nightly @E-SMS3
 Given I sign in as admin user
-And Data source with <sourceType> and SMS exists
+And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
@@ -137,7 +137,7 @@ Examples:
 Scenario: API.E-SMS format4 ingestion
 Meta: @nightly @E-SMS4
 Given I sign in as admin user
-And Data source with <sourceType> and SMS exists
+And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
@@ -269,7 +269,7 @@ Examples:
 Scenario: API.T-SMS ingestion
 Meta: @nightly @T-SMS
 Given I sign in as admin user
-And Data source with <sourceType> and T exists
+And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
@@ -285,7 +285,7 @@ Examples:
 Scenario: API.T-Voice ingestion
 Meta: @nightly @T-Voice
 Given I sign in as admin user
-And Data source with <sourceType> and T exists
+And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload audio files
