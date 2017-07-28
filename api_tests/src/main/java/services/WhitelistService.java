@@ -1,23 +1,22 @@
 package services;
 
-import static json.JsonConverter.toJsonString;
-import static org.junit.Assert.assertNotNull;
-
 import csv.CSVWhitelistWriter;
 import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.WhiteListRequest;
-import java.util.Arrays;
-import java.util.List;
-import model.G4File;
-import model.ImportResult;
-import model.Result;
-import model.SearchFilter;
-import model.Whitelist;
-import model.WhitelistSearchResult;
+import model.*;
 import model.entities.Entities;
 import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static ingestion.IngestionService.INJECTIONS_FILE;
+import static json.JsonConverter.toJsonString;
+import static org.junit.Assert.assertNotNull;
+import static utils.StringUtils.saveStringToFile;
 
 
 public class WhitelistService implements EntityService<Whitelist> {
@@ -114,6 +113,24 @@ public class WhitelistService implements EntityService<Whitelist> {
             log.error(e.getMessage());
         }
         return file;
+    }
+
+    public List<String> injectWhitelists(List<Whitelist> whitelists) {
+        DataInjection injections = new DataInjection();
+        List<String> phones = new ArrayList<>();
+
+        for (Whitelist whitelist: whitelists) {
+            // TODO: add email and twitter support
+            if (whitelist.getType() == WhiteListType.PHONE_NUMBER) {
+                phones.add(whitelist.getIdentifier());
+            }
+        }
+        injections.setPhones(phones);
+        String json = toJsonString(injections);
+        log.info(json);
+        saveStringToFile(json, INJECTIONS_FILE.toString());
+
+        return phones;
     }
 
     public OperationResult<ImportResult> upload(G4File file) {

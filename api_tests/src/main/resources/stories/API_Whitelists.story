@@ -86,3 +86,124 @@ And I pick random file from ingestion files list
 When I send import whitelists request
 Then I got response code 400
 And Message contains "Unable to import non csv files"
+
+
+Scenario: Filtering off whitelisted data during ingestion (SIGINT, T-Source)
+Meta: @nightly @whitelist-t
+Given I clean up ingestion directory
+When I send search whitelists by type with PHONE_NUMBER request
+Then Request is successful
+And Whitelists list size is more than 10
+
+Given I add 10 whitelists to injections file
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And I create remote path for ingestion
+When I upload audio files
+When I upload data files
+Then Uploaded audio files are processed
+Then Uploaded data files are processed
+And Number of ingested entity records in CB > 60
+And Number of ingested event records in CB < <recordsCount>
+And Whitelisted identifiers are not searchable
+
+Examples:
+| sourceType | recordType | recordsCount |
+| T          | Voice      | 25           |
+| T          | SMS        | 25           |
+
+Scenario: Filtering off whitelisted data during ingestion (SIGINT, Phonebook)
+Meta: @nightly @whitelist-phonebook
+Given I clean up ingestion directory
+When I send search whitelists by type with PHONE_NUMBER request
+Then Request is successful
+And Whitelists list size is more than 10
+
+Given I add 10 whitelists to injections file
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded data files are processed
+And Number of ingested entity records in CB == 30
+And Number of ingested event records in CB == 0
+And Whitelisted identifiers are not searchable
+
+Examples:
+| sourceType | recordType | recordsCount |
+| PHONEBOOK  | PHONEBOOK  | 25           |
+
+Scenario: Filtering off whitelisted data during ingestion (SIGINT, F-Source)
+Meta: @nightly @whitelist-f
+Given I clean up ingestion directory
+When I send search whitelists by type with PHONE_NUMBER request
+Then Request is successful
+And Whitelists list size is more than 10
+
+Given I add 10 whitelists to injections file
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded data files are processed
+And Number of ingested entity records in CB > 60
+And Number of ingested event records in CB < <recordsCount>
+And Whitelisted identifiers are not searchable
+
+Examples:
+| sourceType | recordType | recordsCount |
+| F          | SMS        | 25           |
+
+Scenario: Filtering off whitelisted data during ingestion (SIGINT, S-Source)
+Meta: @nightly @whitelist-s
+Given I clean up ingestion directory
+When I send search whitelists by type with PHONE_NUMBER request
+Then Request is successful
+And Whitelists list size is more than 10
+
+Given I add 10 whitelists to injections file
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And I create remote path for ingestion
+When I upload audio files
+When I upload data files
+Then Uploaded audio files are processed
+Then Uploaded data files are processed
+And Number of ingested entity records in CB > 35
+And Number of ingested event records in CB < <recordsCount>
+And Whitelisted identifiers are not searchable
+
+Examples:
+| sourceType | recordType | recordsCount |
+| S          | Voice      | 25           |
+| S          | CELL       | 25           |
+| S          | CDR        | 25           |
+| S          | VLR        | 25           |
+| S          | Fax        | 25           |
+| S          | SMS        | 25           |
+
+Scenario: Filtering off whitelisted data during ingestion (SIGINT, Etisalat-Source)
+Meta: @nightly @whitelist-e
+Given I clean up ingestion directory
+When I send search whitelists by type with PHONE_NUMBER request
+Then Request is successful
+And Whitelists list size is more than 10
+
+Given I add 10 whitelists to injections file
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And I create remote path for ingestion
+When I upload data files
+Then Uploaded data files are processed
+And Number of ingested entity records in CB > 25
+And Number of ingested event records in CB < <recordsCount>
+And Whitelisted identifiers are not searchable
+
+Examples:
+| sourceType | recordType  | recordsCount |
+| E          | CDR         | 25           |
+| E          | SMS2        | 25           |
+| E          | SMS3        | 25           |
+| E          | SMS4        | 25           |
+| E          | Subscriber1 | 25           |
+| E          | Subscriber2 | 25           |

@@ -33,7 +33,7 @@ public class APIUploadFilesSteps extends APISteps {
 
     private void uploadFiles(final String key, List<File> files) {
         if (files.isEmpty()) {
-            ErrorReporter.reportAndRaiseError("No files for uploading");
+            log.error("No files for uploading");
         }
 
         Source source = context.get("source", Source.class);

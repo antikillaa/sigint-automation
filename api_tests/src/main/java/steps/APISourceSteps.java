@@ -126,6 +126,14 @@ public class APISourceSteps extends APISteps {
 
     @Given("Data source with $sourceType and $recordType exists")
     public void getDataSourceWithSourceTypeAndRecordType(String sType, String rType) {
+        if (sType.equalsIgnoreCase("T")) {
+            rType = "T";
+        }
+        if (rType.toLowerCase().contains("subscriber")) {
+            rType = "Subscriber";
+        } else if (rType.toLowerCase().contains("sms")) {
+            rType = "SMS";
+        }
         SourceType sourceType = appContext.getDictionary().getSourceType(sType, rType);
 
         assertNotNull("Can't find source type " + sType + " with record type " + rType, sourceType);

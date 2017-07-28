@@ -1,8 +1,10 @@
 package utils;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -123,5 +125,13 @@ public class StringUtils {
         }
 
         return false;
+    }
+
+    public static void saveStringToFile(String data, String filepath) {
+        try {
+            FileUtils.writeStringToFile(new File(filepath), data, "utf-8");
+        } catch (IOException e) {
+            log.error("Can't create file " + filepath + ":\n" + e.getMessage());
+        }
     }
 }

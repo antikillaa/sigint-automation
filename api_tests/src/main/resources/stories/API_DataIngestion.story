@@ -45,7 +45,8 @@ And I create remote path for ingestion
 When I upload data files
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB == 400
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -62,7 +63,8 @@ And I create remote path for ingestion
 When I upload data files
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested entity records in CB == 200
+And Number of ingested event records in CB == 0
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -73,13 +75,14 @@ Examples:
 Scenario: API.E-Subscriber format1 ingestion
 Meta: @nightly @E-Subscriber1
 Given I sign in as admin user
-And Data source with <sourceType> and Subscriber exists
+And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested entity records in CB == 200
+And Number of ingested event records in CB == 0
 
 Examples:
 | sourceType | recordType  | recordsCount |
@@ -89,13 +92,14 @@ Examples:
 Scenario: API.E-Subscriber format2 ingestion
 Meta: @nightly @E-Subscriber2
 Given I sign in as admin user
-And Data source with <sourceType> and Subscriber exists
+And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested entity records in CB == 200
+And Number of ingested event records in CB == 0
 
 Examples:
 | sourceType | recordType  | recordsCount |
@@ -105,13 +109,14 @@ Examples:
 Scenario: API.E-SMS format2 ingestion
 Meta: @nightly @E-SMS2
 Given I sign in as admin user
-And Data source with <sourceType> and SMS exists
+And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB == 400
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -121,13 +126,14 @@ Examples:
 Scenario: API.E-SMS format3 ingestion
 Meta: @nightly @E-SMS3
 Given I sign in as admin user
-And Data source with <sourceType> and SMS exists
+And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB == 400
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -137,13 +143,14 @@ Examples:
 Scenario: API.E-SMS format4 ingestion
 Meta: @nightly @E-SMS4
 Given I sign in as admin user
-And Data source with <sourceType> and SMS exists
+And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB == 400
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -159,7 +166,8 @@ And I create remote path for ingestion
 When I upload data files
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB > 350
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -178,7 +186,8 @@ When I upload data files
 Then Uploaded audio files are processed
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB == 40
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -194,7 +203,8 @@ And I create remote path for ingestion
 When I upload data files
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB == 400
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -210,7 +220,8 @@ And I create remote path for ingestion
 When I upload data files
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB == 400
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -226,7 +237,8 @@ And I create remote path for ingestion
 When I upload data files
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB == 200
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -242,7 +254,8 @@ And I create remote path for ingestion
 When I upload data files
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB == 400
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -258,7 +271,8 @@ And I create remote path for ingestion
 When I upload data files
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB == 200
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -269,13 +283,14 @@ Examples:
 Scenario: API.T-SMS ingestion
 Meta: @nightly @T-SMS
 Given I sign in as admin user
-And Data source with <sourceType> and T exists
+And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB == 400
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -285,7 +300,7 @@ Examples:
 Scenario: API.T-Voice ingestion
 Meta: @nightly @T-Voice
 Given I sign in as admin user
-And Data source with <sourceType> and T exists
+And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload audio files
@@ -293,7 +308,8 @@ When I upload data files
 Then Uploaded audio files are processed
 Then Uploaded data files are processed
 And Original data file is searchable within the system
-And <recordsCount> ingested records are searchable in CB
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB == 40
 
 Examples:
 | sourceType | recordType | recordsCount |

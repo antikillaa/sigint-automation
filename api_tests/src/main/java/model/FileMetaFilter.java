@@ -12,7 +12,7 @@ public class FileMetaFilter {
 
   public FileMetaFilter(String searchPath) {
     this.query = new Query("LIKE", "path", searchPath);
-    this.page = new Page(1000, 0);
+    this.page = new Page(5000, 0);
   }
 
   public Query getQuery() {

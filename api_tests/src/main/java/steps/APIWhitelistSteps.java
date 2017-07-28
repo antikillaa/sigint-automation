@@ -238,4 +238,15 @@ public class APIWhitelistSteps extends APISteps {
             ErrorReporter.reportAndRaiseError(String.join(".\n", errors));
         }
     }
+
+    @Given("I add $size whitelists to injections file")
+    @SuppressWarnings("unchecked")
+    public void addWhitelistsToInjectionsFile(String size) {
+        Integer count = Integer.valueOf(size);
+        List<Whitelist> whitelists = context.get("whitelistEntitiesList", List.class);
+
+        List<Whitelist> subItems = whitelists.subList(0, count);
+        List<String> whitelistedIdentifiers = service.injectWhitelists(subItems);
+        context.put("whitelistedIdentifiers", whitelistedIdentifiers);
+    }
 }

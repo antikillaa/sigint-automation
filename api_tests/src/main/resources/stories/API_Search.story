@@ -48,7 +48,7 @@ Examples:
 Scenario: Wild Card Search
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
-Then CB search results are correct
+Then CB search contains results for query
 
 Examples:
 | source | objectType | query | pageNumber | pageSize |
@@ -65,7 +65,7 @@ Examples:
 Scenario: Fuzzy Search
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
-Then CB search results are correct
+Then CB search contains results for query
 
 Examples:
 | source | objectType | query | pageNumber | pageSize |

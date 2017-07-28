@@ -158,7 +158,7 @@ public class RandomGenerator {
     }
 
     public static String generateIMSI() {
-        return RandomStringUtils.randomNumeric(10);
+        return RandomStringUtils.randomNumeric(15);
     }
 
     public static String generateSMSText(boolean fromFile) {
