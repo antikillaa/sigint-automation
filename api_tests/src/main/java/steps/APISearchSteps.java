@@ -97,7 +97,7 @@ public class APISearchSteps extends APISteps {
             delay = delay * 2;
         }
         String errorMsg = String.format(
-                "Expected %s %s-%s %s records in search %s %d",
+                "Expected %s %s-%s %s records in search %s actual %d",
                 size, source.getType(), source.getRecordType(), objectType, criteria, actualCount);
         ErrorReporter.raiseError(errorMsg);
     }

@@ -4,7 +4,6 @@ import conditions.Conditions;
 import conditions.Verify;
 import error_reporter.ErrorReporter;
 import http.OperationResult;
-import ingestion.IngestionService;
 import json.JsonConverter;
 import model.*;
 import model.Process;
@@ -62,20 +61,9 @@ public class APIUploadFilesSteps extends APISteps {
         uploadFiles("fileMetas", files);
     }
 
-    @When("I upload audio files")
-    public void uploadWavs() {
-        List<File> files = IngestionService.getWavs();
-        uploadFiles("audioMetas", files);
-    }
-
-    @Then("Uploaded $data are processed")
-    public void audioFilesAreProcessed(final String data) {
-        List<FileMeta> fileMetas;
-        if (data.equalsIgnoreCase("data files")) {
-            fileMetas = context.get("fileMetas", List.class);
-        } else {
-            fileMetas = context.get("audioMetas", List.class);
-        }
+    @Then("Uploaded data files are processed")
+    public void audioFilesAreProcessed() {
+        List<FileMeta> fileMetas = context.get("fileMetas", List.class);
 
         DateHelper.setStartTime();
         for (FileMeta uploadedFileMeta: fileMetas) {
