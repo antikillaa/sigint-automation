@@ -99,11 +99,8 @@ Given I add 10 whitelists to injections file
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
-When I upload audio files
 When I upload data files
-Then Uploaded audio files are processed
-Then Uploaded data files are processed
-And Number of ingested entity records in CB > 60
+Then Number of ingested entity records in CB > 60
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
 
@@ -124,8 +121,7 @@ And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
-Then Uploaded data files are processed
-And Number of ingested entity records in CB == 30
+Then Number of ingested entity records in CB == 30
 And Number of ingested event records in CB == 0
 And Whitelisted identifiers are not searchable
 
@@ -145,8 +141,7 @@ And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
-Then Uploaded data files are processed
-And Number of ingested entity records in CB > 60
+Then Number of ingested entity records in CB > 60
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
 
@@ -165,11 +160,8 @@ Given I add 10 whitelists to injections file
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
-When I upload audio files
 When I upload data files
-Then Uploaded audio files are processed
-Then Uploaded data files are processed
-And Number of ingested entity records in CB > 35
+Then Number of ingested entity records in CB > 35
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
 
@@ -194,8 +186,7 @@ And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
 When I upload data files
-Then Uploaded data files are processed
-And Number of ingested entity records in CB > 25
+Then Number of ingested entity records in CB > 25
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
 

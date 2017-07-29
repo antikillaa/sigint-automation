@@ -16,8 +16,11 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static ingestion.IngestionService.INGESTION_DIR;
 import static org.junit.Assert.assertNotNull;
@@ -92,7 +95,15 @@ public class DockerDataGenerator implements IIngestionDataGenerator {
       log.error("Can't extract archives: " + e.getMessage());
     }
 
-    List<File> files = getFilesByWildcards(path, dockerAdapter.getFilemasks());
+    List<File> files = new ArrayList<>();
+    // Add files by priority in formats, described in filemasks array
+    // Ex. Voice sources should ingest audio files firstly
+    for (String filemask: dockerAdapter.getFilemasks()) {
+      List<File> filesByMask = getFilesByWildcards(path, new String[]{filemask});
+      files = Stream.concat(files.stream(), filesByMask.stream())
+              .collect(Collectors.toList());
+
+    }
     if (files.isEmpty()) {
       ErrorReporter.raiseError(String.format("Can't find files by mask %s in %s",
           Arrays.toString(dockerAdapter.getFilemasks()), path));

@@ -181,9 +181,7 @@ Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
-When I upload audio files
 When I upload data files
-Then Uploaded audio files are processed
 Then Uploaded data files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
@@ -303,9 +301,7 @@ Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> data file with <recordsCount> records was generated
 And I create remote path for ingestion
-When I upload audio files
 When I upload data files
-Then Uploaded audio files are processed
 Then Uploaded data files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>

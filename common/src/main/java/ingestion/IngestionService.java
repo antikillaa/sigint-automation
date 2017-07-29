@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-
-import static utils.FileHelper.getFilesByWildcards;
 
 public class IngestionService {
 
@@ -54,8 +51,4 @@ public class IngestionService {
     FileUtils.deleteQuietly(new File(path.toString()));
   }
 
-  public static List<File> getWavs() {
-    String path = INGESTION_DIR.normalize().toString();
-    return getFilesByWildcards(path, new String[]{"*.wav"});
-  }
 }
