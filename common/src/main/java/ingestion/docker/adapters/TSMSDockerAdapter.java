@@ -12,7 +12,7 @@ public class TSMSDockerAdapter implements IDockerAdapter {
 
   @Override
   public ContainerConfig getContainerConfig(String recordsCount) {
-    return dockerImage.getConfig("t-sms", "-n", recordsCount, "-d", dockerImage.getDataPath());
+    return dockerImage.getConfig("t-t", "--sms", recordsCount, "-d", dockerImage.getDataPath());
   }
 
   @Override

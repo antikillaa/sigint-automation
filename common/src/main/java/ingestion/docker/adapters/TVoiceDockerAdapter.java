@@ -12,7 +12,7 @@ public class TVoiceDockerAdapter implements IDockerAdapter {
 
   @Override
   public ContainerConfig getContainerConfig(String recordsCount) {
-    return dockerImage.getConfig("t-voice", "-n", recordsCount, "-d", dockerImage.getDataPath());
+    return dockerImage.getConfig("t-t", "--voice", recordsCount, "-d", dockerImage.getDataPath());
   }
 
   @Override
