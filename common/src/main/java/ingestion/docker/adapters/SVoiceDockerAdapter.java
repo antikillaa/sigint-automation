@@ -7,7 +7,7 @@ import static ingestion.docker.adapters.DockerImage.dataGeneratorImage;
 
 public class SVoiceDockerAdapter implements IDockerAdapter {
 
-  private static final String[] filemasks = {"*.md"};
+  private static final String[] filemasks = {"*.wav", "*.md"};
   private static final DockerImage dockerImage = dataGeneratorImage();
 
   @Override

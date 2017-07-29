@@ -7,7 +7,7 @@ import static ingestion.docker.adapters.DockerImage.dataGeneratorImage;
 
 public class SFaxDockerAdapter implements IDockerAdapter {
 
-  private static final String[] filemasks = {"*.md"};
+  private static final String[] filemasks = {"*.tif", "*.md"};
   private static final DockerImage dockerImage = dataGeneratorImage();
 
   @Override
