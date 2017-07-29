@@ -44,7 +44,9 @@ public class G4File extends File {
             this.setMediaType(PegasusMediaType.MS_EXCEL_TYPE);
         } else if ((filename.endsWith(".md"))) {
             this.setMediaType(PegasusMediaType.APPLICATION_JSON_TYPE);
-        } else  {
+        } else if (filename.endsWith(".tif")) {
+            this.setMediaType(PegasusMediaType.TIFF);
+        } else {
             this.setMediaType(PegasusMediaType.TEXT_CSV_TYPE);
         }
     }
