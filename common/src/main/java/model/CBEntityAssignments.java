@@ -10,7 +10,7 @@ public class CBEntityAssignments {
     private Object importance;
     private String state;
     private List<String> categories = new ArrayList<>();
-    private AssignmentPriority priority;
+    private Integer priority;
     private List<String> ownerId = new ArrayList<>();
     private List<String> teamIds = new ArrayList<>();
     private List<String> tags = new ArrayList<>();
@@ -55,11 +55,11 @@ public class CBEntityAssignments {
         this.categories = categories;
     }
 
-    public AssignmentPriority getPriority() {
+    public Integer getPriority() {
         return priority;
     }
 
-    public void setPriority(AssignmentPriority priority) {
+    public void setPriority(Integer priority) {
         this.priority = priority;
     }
 
