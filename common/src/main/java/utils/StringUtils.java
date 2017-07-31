@@ -46,11 +46,17 @@ public class StringUtils {
         return s.replaceAll("^\"|\"$", "");
     }
 
-    public static List<String> toList(String value) {
-        String[] strings = value.split(",");
+    public static List<String> splitToList(String value) {
+        // Remove whitespace and split by comma
+        String[] strings = splitToArray(value);
         return Arrays.stream(strings)
                 .filter(s -> !s.equals("[]"))
                 .collect(Collectors.toList());
+    }
+
+    public static String[] splitToArray(String value) {
+        // Remove whitespace and split by comma
+        return value.split("\\s*,\\s*");
     }
 
     public static String[] trimSpaces(String[] arr) {

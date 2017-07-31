@@ -1,10 +1,10 @@
 package model;
 
-import utils.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static utils.StringUtils.splitToList;
 
 public class OrganizationFilter extends SearchFilter<Organization> {
 
@@ -194,15 +194,15 @@ public class OrganizationFilter extends SearchFilter<Organization> {
         if (criteria.toLowerCase().equals("name")) {
             this.setActiveFilter(this.new NameFilter(value));
         } else if (criteria.toLowerCase().equals("orgtypes")) {
-            this.setActiveFilter(this.new OrgTypesFilter(StringUtils.toList(value)));
+            this.setActiveFilter(this.new OrgTypesFilter(splitToList(value)));
         } else if (criteria.toLowerCase().equals("datasources")) {
-            this.setActiveFilter(this.new DataSourcesFilter(StringUtils.toList(value)));
+            this.setActiveFilter(this.new DataSourcesFilter(splitToList(value)));
         } else if (criteria.toLowerCase().equals("titles")) {
-            this.setActiveFilter(this.new TitleFilter(StringUtils.toList(value)));
+            this.setActiveFilter(this.new TitleFilter(splitToList(value)));
         } else if (criteria.toLowerCase().equals("clearances")) {
-            this.setActiveFilter(this.new ClearanceFilter(StringUtils.toList(value)));
+            this.setActiveFilter(this.new ClearanceFilter(splitToList(value)));
         } else if (criteria.toLowerCase().equals("orgids")) {
-            this.setActiveFilter(this.new OrgIdsFilter(StringUtils.toList(value)));
+            this.setActiveFilter(this.new OrgIdsFilter(splitToList(value)));
         } else if (criteria.toLowerCase().equals("parentorgid")) {
             this.setActiveFilter(this.new ParentOrgIdFilter(value));
         } else {
