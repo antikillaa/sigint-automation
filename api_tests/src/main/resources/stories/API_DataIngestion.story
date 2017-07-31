@@ -5,9 +5,9 @@ Scenario: API.Ingestion with the wrong source type
 Meta: @nightly @Wrong-source-ingestion
 Given I sign in as admin user
 And Data source with F and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
+When I upload files
 Then Request is successful
 When I wait for 10 seconds
 When I send get file meta request
@@ -22,11 +22,11 @@ Scenario: Upload several files with the same name into one source
 Meta: @nightly @Same-file-upload
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
+When I upload files
 
-When I upload data files
+When I upload files
 Then I got response code 409
 And Message contains "FileAlreadyExistsException"
 
@@ -40,10 +40,10 @@ Scenario: API.F-SMS ingestion
 Meta: @nightly @F-SMS
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
 And Number of ingested entity records in CB == 400
@@ -58,10 +58,10 @@ Scenario: API.Phonebook ingestion
 Meta: @nightly @Phonebook
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested entity records in CB == 200
 And Number of ingested event records in CB == 0
@@ -76,10 +76,10 @@ Scenario: API.E-Subscriber format1 ingestion
 Meta: @nightly @E-Subscriber1
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested entity records in CB == 200
 And Number of ingested event records in CB == 0
@@ -93,10 +93,10 @@ Scenario: API.E-Subscriber format2 ingestion
 Meta: @nightly @E-Subscriber2
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested entity records in CB == 200
 And Number of ingested event records in CB == 0
@@ -110,10 +110,10 @@ Scenario: API.E-SMS format2 ingestion
 Meta: @nightly @E-SMS2
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
 And Number of ingested entity records in CB == 400
@@ -127,10 +127,10 @@ Scenario: API.E-SMS format3 ingestion
 Meta: @nightly @E-SMS3
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
 And Number of ingested entity records in CB == 400
@@ -144,10 +144,10 @@ Scenario: API.E-SMS format4 ingestion
 Meta: @nightly @E-SMS4
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
 And Number of ingested entity records in CB == 400
@@ -161,10 +161,10 @@ Scenario: API.E-CDR ingestion
 Meta: @nightly @E-CDR
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
 And Number of ingested entity records in CB > 350
@@ -179,10 +179,10 @@ Scenario: API.S-Voice ingestion
 Meta: @nightly @S-Voice
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
 And Number of ingested entity records in CB == 40
@@ -196,13 +196,13 @@ Scenario: API.S-Fax ingestion
 Meta: @nightly @S-Fax
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed, exclude: .tif
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
-And Number of ingested entity records in CB == 400
+And Number of ingested entity records in CB == 40
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -213,10 +213,10 @@ Scenario: API.S-SMS ingestion
 Meta: @nightly @S-SMS
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
 And Number of ingested entity records in CB == 400
@@ -230,10 +230,10 @@ Scenario: API.S-VLR ingestion
 Meta: @nightly @S-VLR
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
 And Number of ingested entity records in CB == 200
@@ -247,10 +247,10 @@ Scenario: API.S-CDR ingestion
 Meta: @nightly @S-CDR
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
 And Number of ingested entity records in CB == 400
@@ -264,10 +264,10 @@ Scenario: API.S-CELL ingestion
 Meta: @nightly @S-CELL
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
 And Number of ingested entity records in CB == 200
@@ -282,10 +282,10 @@ Scenario: API.T-SMS ingestion
 Meta: @nightly @T-SMS
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
 And Number of ingested entity records in CB == 400
@@ -299,10 +299,10 @@ Scenario: API.T-Voice ingestion
 Meta: @nightly @T-Voice
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
-Then Uploaded data files are processed
+When I upload files
+Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
 And Number of ingested entity records in CB == 40

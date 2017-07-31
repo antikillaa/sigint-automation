@@ -36,18 +36,25 @@ public class G4File extends File {
     }
 
     public void setMediaTypeByFileExtension() {
-        String filename = this.getName();
+        String[] filenameParts = this.getName().split("\\.");
+        String extension = filenameParts[filenameParts.length - 1].toLowerCase();
 
-        if ((filename.endsWith(".wav"))) {
-            this.setMediaType(PegasusMediaType.AUDIO);
-        } else if ((filename.endsWith(".xls"))) {
-            this.setMediaType(PegasusMediaType.MS_EXCEL_TYPE);
-        } else if ((filename.endsWith(".md"))) {
-            this.setMediaType(PegasusMediaType.APPLICATION_JSON_TYPE);
-        } else if (filename.endsWith(".tif")) {
-            this.setMediaType(PegasusMediaType.TIFF);
-        } else {
-            this.setMediaType(PegasusMediaType.TEXT_CSV_TYPE);
+        switch (extension) {
+            case "wav":
+                this.setMediaType(PegasusMediaType.AUDIO);
+                break;
+            case "xls":
+                this.setMediaType(PegasusMediaType.MS_EXCEL_TYPE);
+                break;
+            case "md":
+                this.setMediaType(PegasusMediaType.APPLICATION_JSON_TYPE);
+                break;
+            case "tif":
+                this.setMediaType(PegasusMediaType.TIFF);
+                break;
+            default:
+                this.setMediaType(PegasusMediaType.TEXT_CSV_TYPE);
+                break;
         }
     }
 }

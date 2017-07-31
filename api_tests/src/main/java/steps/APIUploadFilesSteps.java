@@ -19,8 +19,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static utils.StringUtils.splitToArray;
+import static utils.StringUtils.stringContainsAny;
 
 @SuppressWarnings("unchecked")
 public class APIUploadFilesSteps extends APISteps {
@@ -55,16 +58,33 @@ public class APIUploadFilesSteps extends APISteps {
         context.put(key, fileMetas);
     }
 
-    @When("I upload data files")
-    public void uploadFile() {
+    @When("I upload files")
+    public void uploadFiles() {
         List<File> files = context.get("g4files", List.class);
         uploadFiles("fileMetas", files);
     }
 
-    @Then("Uploaded data files are processed")
-    public void audioFilesAreProcessed() {
+    @Then("Uploaded files are processed")
+    public void uploadedFilesAreProcessed() {
         List<FileMeta> fileMetas = context.get("fileMetas", List.class);
+        checkFilesProcessing(fileMetas);
+    }
 
+    @Then("Uploaded files are processed, $criteria: $values")
+    public void uploadedFilesAreProcessedwithCriteria(String criteria, String values) {
+        List<FileMeta> fileMetas = context.get("fileMetas", List.class);
+        String[] extensions = splitToArray(values);
+        final boolean condition = criteria.equalsIgnoreCase("include");
+
+        List<FileMeta> filtered = fileMetas.stream()
+                .filter(fm -> condition == stringContainsAny(fm.getExtension(), extensions))
+                .collect(Collectors.toList());
+
+        log.debug("File list size after filtering: " + filtered.size());
+        checkFilesProcessing(filtered);
+    }
+
+    private void checkFilesProcessing(List<FileMeta> fileMetas) {
         DateHelper.setStartTime();
         for (FileMeta uploadedFileMeta: fileMetas) {
             context.put("meta", uploadedFileMeta);
