@@ -33,7 +33,7 @@ public class APIIngestionSteps extends APISteps {
         context.put("g4file", new G4File(randomFile.getPath()));
     }
 
-    @Given("$sType - $rType data file with $rCount records was generated")
+    @Given("$sType - $rType files with $rCount records are generated")
     public void generateIngestionFiles(String sType, String rType, String rCount) {
 
         IDockerAdapter dockerAdapter = null;

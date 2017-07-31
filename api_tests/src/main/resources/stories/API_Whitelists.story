@@ -81,7 +81,7 @@ And Imported 0 whitelists, modified 0
 And Message contains "already exists"
 
 Scenario: Import non .csv file for whitelist records
-Given T - SMS data file with 10 records was generated
+Given T - SMS files with 10 records are generated
 And I pick random file from ingestion files list
 When I send import whitelists request
 Then I got response code 400
@@ -97,9 +97,10 @@ And Whitelists list size is more than 10
 
 Given I add 10 whitelists to injections file
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
+When I upload files
+Then Uploaded files are processed, exclude: .wav
 Then Number of ingested entity records in CB > 60
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
@@ -118,9 +119,10 @@ And Whitelists list size is more than 10
 
 Given I add 10 whitelists to injections file
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
+When I upload files
+Then Uploaded files are processed
 Then Number of ingested entity records in CB == 30
 And Number of ingested event records in CB == 0
 And Whitelisted identifiers are not searchable
@@ -138,9 +140,10 @@ And Whitelists list size is more than 10
 
 Given I add 10 whitelists to injections file
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
+When I upload files
+Then Uploaded files are processed
 Then Number of ingested entity records in CB > 60
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
@@ -158,9 +161,10 @@ And Whitelists list size is more than 10
 
 Given I add 10 whitelists to injections file
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
+When I upload files
+Then Uploaded files are processed, exclude: .wav, .tif
 Then Number of ingested entity records in CB > 35
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
@@ -183,9 +187,10 @@ And Whitelists list size is more than 10
 
 Given I add 10 whitelists to injections file
 And Data source with <sourceType> and <recordType> exists
-And <sourceType> - <recordType> data file with <recordsCount> records was generated
+And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
-When I upload data files
+When I upload files
+Then Uploaded files are processed
 Then Number of ingested entity records in CB > 25
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
