@@ -116,7 +116,7 @@ When I upload files
 Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
-And Number of ingested entity records in CB == 400
+And Number of ingested entity records in CB > 390
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -133,7 +133,7 @@ When I upload files
 Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
-And Number of ingested entity records in CB == 400
+And Number of ingested entity records in CB > 390
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -150,7 +150,7 @@ When I upload files
 Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
-And Number of ingested entity records in CB == 400
+And Number of ingested entity records in CB > 390
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -202,7 +202,7 @@ When I upload files
 Then Uploaded files are processed, exclude: .tif
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
-And Number of ingested entity records in CB == 40
+And Number of ingested entity records in CB > 390
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -219,7 +219,7 @@ When I upload files
 Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
-And Number of ingested entity records in CB == 400
+And Number of ingested entity records in CB > 390
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -253,7 +253,7 @@ When I upload files
 Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
-And Number of ingested entity records in CB == 400
+And Number of ingested entity records in CB > 390
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -288,7 +288,7 @@ When I upload files
 Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
-And Number of ingested entity records in CB == 400
+And Number of ingested entity records in CB > 390
 
 Examples:
 | sourceType | recordType | recordsCount |
