@@ -8,7 +8,7 @@ public class CBEntityAssignments {
     private Object common;
     private List<String> designationIds = new ArrayList<>();
     private Object importance;
-    private RecordState state;
+    private String state;
     private List<String> categories = new ArrayList<>();
     private AssignmentPriority priority;
     private List<String> ownerId = new ArrayList<>();
@@ -39,11 +39,11 @@ public class CBEntityAssignments {
         this.importance = importance;
     }
 
-    public RecordState getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(RecordState state) {
+    public void setState(String state) {
         this.state = state;
     }
 
