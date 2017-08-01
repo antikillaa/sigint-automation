@@ -20,8 +20,8 @@ public class CBEntities {
     private List<CBEntity> payment = new ArrayList<>();
     @JsonProperty("Reservation")
     private List<CBEntity> reservation = new ArrayList<>();
+    private List<CBEntity> room = new ArrayList<>();
     private List<CBEntity> unknown = new ArrayList<>();
-    private List<CBEntities> room = new ArrayList<>();
 
     public List<CBEntity> getFrom() {
         return from;
@@ -95,11 +95,11 @@ public class CBEntities {
         this.unknown = unknown;
     }
 
-    public List<CBEntities> getRoom() {
+    public List<CBEntity> getRoom() {
         return room;
     }
 
-    public void setRoom(List<CBEntities> room) {
+    public void setRoom(List<CBEntity> room) {
         this.room = room;
     }
 }
