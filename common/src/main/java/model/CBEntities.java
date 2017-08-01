@@ -21,6 +21,7 @@ public class CBEntities {
     @JsonProperty("Reservation")
     private List<CBEntity> reservation = new ArrayList<>();
     private List<CBEntity> room = new ArrayList<>();
+    private List<CBEntity> forum = new ArrayList<>();
     private List<CBEntity> unknown = new ArrayList<>();
 
     public List<CBEntity> getFrom() {
@@ -101,5 +102,13 @@ public class CBEntities {
 
     public void setRoom(List<CBEntity> room) {
         this.room = room;
+    }
+
+    public List<CBEntity> getForum() {
+        return forum;
+    }
+
+    public void setForum(List<CBEntity> forum) {
+        this.forum = forum;
     }
 }
