@@ -133,6 +133,8 @@ public class APISourceSteps extends APISteps {
             rType = "Subscriber";
         } else if (rType.toLowerCase().contains("sms")) {
             rType = "SMS";
+        } else if (rType.toLowerCase().contains("celltower")) {
+            rType = "CellTower";
         }
         SourceType sourceType = appContext.getDictionary().getSourceType(sType, rType);
 

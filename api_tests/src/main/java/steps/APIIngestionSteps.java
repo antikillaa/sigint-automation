@@ -87,6 +87,12 @@ public class APIIngestionSteps extends APISteps {
                     case "Subscriber2":
                         dockerAdapter = new EtisalatSubscriber2DockerAdapter();
                         break;
+                    case "CellTower1":
+                        dockerAdapter = new EtisalatCellTower1DockerAdapter();
+                        break;
+                    case "CellTower2":
+                        dockerAdapter = new EtisalatCellTower2DockerAdapter();
+                        break;
                     case "SMS2":
                         dockerAdapter = new EtisalatSMS2DockerAdapter();
                         break;

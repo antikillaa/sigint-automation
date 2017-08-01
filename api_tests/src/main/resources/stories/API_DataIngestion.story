@@ -72,6 +72,40 @@ Examples:
 
 
 
+Scenario: API.E-CellTower format1 ingestion
+Meta: @nightly @E-CellTower1
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+And Number of ingested entity records in CB == <recordsCount>
+And Number of ingested event records in CB == 0
+
+Examples:
+| sourceType | recordType  | recordsCount |
+| E          | CellTower1  | 100          |
+
+
+Scenario: API.E-CellTower format2 ingestion
+Meta: @nightly @E-CellTower2
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+And Number of ingested entity records in CB == <recordsCount>
+And Number of ingested event records in CB == 0
+
+Examples:
+| sourceType | recordType  | recordsCount |
+| E          | CellTower2  | 100          |
+
+
 Scenario: API.E-Subscriber format1 ingestion
 Meta: @nightly @E-Subscriber1
 Given I sign in as admin user
