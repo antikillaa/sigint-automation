@@ -15,6 +15,7 @@ import java.util.List;
 import static http.requests.UploadFoldersRequest.buildSearchFilter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static utils.StepHelper.compareByCriteria;
 import static utils.StringUtils.stripQuotes;
 
 public class APISearchFilesAndFoldersSteps extends APISteps {
@@ -53,6 +54,7 @@ public class APISearchFilesAndFoldersSteps extends APISteps {
   }
 
   @When("I search data files by path")
+  @SuppressWarnings("unchecked")
   public void searchFilesByPath() {
     List<FolderMeta> foldersList = context.get("foldersList", List.class);
 
@@ -64,17 +66,19 @@ public class APISearchFilesAndFoldersSteps extends APISteps {
     context.put("filesList", fileMetaList);
   }
 
-  @Then("Found $type list size is more than $size")
-  public void filesListSizeIsMoreThan(String type, String size) {
+  @Then("Found $type list size $criteria $size")
+  public void filesListSizeIsMoreThan(String type, String criteria, String size) {
     int actualSize;
-    int minSize = Integer.valueOf(size);
+    int expectedSize = Integer.valueOf(size);
 
     if (isFileType(type)) {
       actualSize = context.get("filesList", List.class).size();
     } else {
       actualSize = context.get("foldersList", List.class).size();
     }
-    assertTrue(type + " list size is too low: " + actualSize, actualSize > minSize);
+    boolean condition = compareByCriteria(criteria, actualSize, expectedSize);
+
+    assertTrue(type + " list size " + criteria + " " + size + ", but was: " + actualSize, condition);
   }
 
   @When("I send count found $type request")
