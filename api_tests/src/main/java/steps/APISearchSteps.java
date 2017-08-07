@@ -63,14 +63,15 @@ public class APISearchSteps extends APISteps {
         context.put("searchQuery", query);
     }
 
-    @Then("Number of ingested $objectType records in CB $criteria $size")
-    public void searchIngestedRecordsByProcessId(String objectType, String criteria, String size) {
-//        (stringContainsAny(source.getRecordType(), "CellTower", "PHONEBOOK", "Subscriber"))
+    private void searchIngestedRecords(String objectType, String criteria, String size, String additionalQuery) {
         int expectedCount = Integer.valueOf(size);
 
         Source source = context.get("source", Source.class);
         FileMeta meta = context.get("meta", FileMeta.class);
         String searchQuery = "pid:" + meta.getMeta().getProperties().getProcessId();
+        if (additionalQuery != null) {
+            searchQuery = searchQuery + " " + additionalQuery;
+        }
 
         CBSearchFilter filter = new CBSearchFilter(
                 "SIGINT",
@@ -100,6 +101,16 @@ public class APISearchSteps extends APISteps {
                 "Expected %s %s-%s %s records in search %s actual %d",
                 size, source.getType(), source.getRecordType(), objectType, criteria, actualCount);
         ErrorReporter.raiseError(errorMsg);
+    }
+
+    @Then("Number of ingested $objectType records in CB $criteria $size, additional query string: $additional")
+    public void searchIngestedRecordsByProcessIdWithOptions(String objectType, String criteria, String size, String additional) {
+        searchIngestedRecords(objectType, criteria, size, additional);
+    }
+
+    @Then("Number of ingested $objectType records in CB $criteria $size")
+    public void searchIngestedRecordsByProcessId(String objectType, String criteria, String size) {
+        searchIngestedRecords(objectType, criteria, size, null);
     }
 
     @Then("CB search result list size $criteria $size")
