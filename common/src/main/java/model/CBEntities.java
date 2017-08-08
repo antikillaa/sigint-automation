@@ -22,6 +22,16 @@ public class CBEntities {
     private List<CBEntity> reservation = new ArrayList<>();
     private List<CBEntity> room = new ArrayList<>();
     private List<CBEntity> forum = new ArrayList<>();
+    @JsonProperty("Email")
+    private List<CBEntity> email = new ArrayList<>();
+    @JsonProperty("Visa")
+    private List<CBEntity> visa = new ArrayList<>();
+    @JsonProperty("PhoneNumber")
+    private List<CBEntity> phoneNumber = new ArrayList<>();
+    @JsonProperty("Membership")
+    private List<CBEntity> membership = new ArrayList<>();
+    @JsonProperty("Passport")
+    private List<CBEntity> passport = new ArrayList<>();
     private List<CBEntity> unknown = new ArrayList<>();
 
     public List<CBEntity> getFrom() {
@@ -110,5 +120,45 @@ public class CBEntities {
 
     public void setForum(List<CBEntity> forum) {
         this.forum = forum;
+    }
+
+    public List<CBEntity> getEmail() {
+        return email;
+    }
+
+    public void setEmail(List<CBEntity> email) {
+        this.email = email;
+    }
+
+    public List<CBEntity> getVisa() {
+        return visa;
+    }
+
+    public void setVisa(List<CBEntity> visa) {
+        this.visa = visa;
+    }
+
+    public List<CBEntity> getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(List<CBEntity> phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public List<CBEntity> getMembership() {
+        return membership;
+    }
+
+    public void setMembership(List<CBEntity> membership) {
+        this.membership = membership;
+    }
+
+    public List<CBEntity> getPassport() {
+        return passport;
+    }
+
+    public void setPassport(List<CBEntity> passport) {
+        this.passport = passport;
     }
 }
