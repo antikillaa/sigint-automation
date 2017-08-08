@@ -21,7 +21,7 @@
         <log4j.version>1.2.17</log4j.version>
         <report>true</report>
         <email>true</email>
-        <stand>develop</stand>
+        <stand>test</stand>
         <emailSender>gmail</emailSender>
         <stories>**/*Launcher.java</stories>
         <metaFilters>-TEEL *</metaFilters>

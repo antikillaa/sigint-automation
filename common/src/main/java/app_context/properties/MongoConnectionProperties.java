@@ -11,7 +11,7 @@ public class MongoConnectionProperties {
     private static Logger log = Logger.getLogger(MongoConnectionProperties.class);
 
     public static String getHost() {
-        Stand stand = Stand.DEVELOP;
+        Stand stand = Stand.TEST;
 
         String standString = G4Properties.getRunProperties().getActiveStand();
         try {
@@ -20,21 +20,26 @@ public class MongoConnectionProperties {
             ErrorReporter.reportAndRaiseError(String.format("Unknown stand is used: %s!." +
                     "Should be between %s", standString, Arrays.toString(Stand.values())));
         }
+
         String mongoHost = null;
-        if (stand.equals(Stand.DEVELOP)) {
-            mongoHost = G4Properties.getMongoProperties().getHostDevelop();
-        } else if (stand.equals(Stand.MASTER)) {
-
-            mongoHost = G4Properties.getMongoProperties().getHostMaster();
-        } else  {
-            ErrorReporter.raiseError("Unknown stand is passed:" + standString);
-
+        switch (stand) {
+            case TEST:
+                mongoHost = G4Properties.getMongoProperties().getHostTest();
+                break;
+            case DEVELOP:
+                mongoHost = G4Properties.getMongoProperties().getHostDevelop();
+                break;
+            case MASTER:
+                mongoHost = G4Properties.getMongoProperties().getHostMaster();
+                break;
+            default:
+                ErrorReporter.raiseError("Unknown stand is passed:" + standString);
+                break;
         }
         return mongoHost;
     }
 
     public static String getPort() {
         return G4Properties.getMongoProperties().getPort();
-
     }
 }

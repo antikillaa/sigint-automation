@@ -4,14 +4,15 @@ import java.io.InputStream;
 
 class MongoProperties extends ApplicationProperty {
 
-    MongoProperties(){}
+    MongoProperties() {
+    }
 
     @Override
     InputStream loadPropertyFile() {
         return getClass().getClassLoader().getResourceAsStream("mongodb.properties");
     }
 
-    String getHostDevelop(){
+    String getHostDevelop() {
         return getProperty().getProperty("host_develop");
     }
 
@@ -19,6 +20,12 @@ class MongoProperties extends ApplicationProperty {
         return getProperty().getProperty("port");
     }
 
-    String getHostMaster() {return getProperty().getProperty("host_master");}
-
+    String getHostTest(){
+        return getProperty().getProperty("host_test");
     }
+
+    String getHostMaster() {
+        return getProperty().getProperty("host_master");
+    }
+
+}
