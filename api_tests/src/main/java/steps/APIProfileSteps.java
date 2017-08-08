@@ -54,6 +54,12 @@ public class APIProfileSteps extends APISteps {
         Assert.assertEquals(expected.getEntities(), actual.getEntities());
         Assert.assertEquals(expected.getEntityCount(), actual.getEntityCount());
 
+        Assert.assertEquals(expected.getJsonType(), actual.getJsonType());
+        Assert.assertEquals(expected.getCategory(), actual.getCategory());
+        Assert.assertEquals(expected.getMergingProfilesIDs(), actual.getMergingProfilesIDs());
+        Assert.assertEquals(expected.getCriminalRecord(), actual.getCriminalRecord());
+        Assert.assertEquals(expected.getClassification(), actual.getClassification());
+
         if (expected.getTarget() == null) {
             Assert.assertTrue(actual.getTarget() == null || !actual.getTarget());
         } else {

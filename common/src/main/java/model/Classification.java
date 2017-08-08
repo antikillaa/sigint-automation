@@ -11,9 +11,9 @@ public enum Classification {
     C("C", "OUO", "CONFIDENTIAL"),
     S("S", "C", "SECRET"),
     TS("TS", "S", "TOP SECRET"),
-    TSCIO("TS-CIO", "TS", "TOP SECRET-CIO"),
-    TSOS("TS-OS", "TS", "TOP SECRET-OS"),
-    TSSCI("TS-SCI", "TS", "TOP SECRET-SCI");
+    TS_CIO("TS-CIO", "TS", "TOP SECRET-CIO"),
+    TS_OS("TS-OS", "TS", "TOP SECRET-OS"),
+    TS_SCI("TS-SCI", "TS", "TOP SECRET-SCI");
 
     private final String name;
     private final String parentName;
