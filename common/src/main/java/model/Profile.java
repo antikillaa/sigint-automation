@@ -32,11 +32,11 @@ public class Profile extends ProfileAndTargetGroup {
     @DataIgnore
     private Date activeUntil;
     @DataIgnore
-    private Integer entityCount;
+    private Integer entityCount = 0;
     @DataIgnore
     private Profile parent;
     @DataIgnore
-    private ArrayList<String> mergingProfilesIDs = new ArrayList<>();
+    private ArrayList<String> mergingProfilesIDs;
     @DataProvider(CriminalRecordProvider.class)
     private CriminalRecord criminalRecord;
     //@DataProvider(ClassificationProvider.class)
