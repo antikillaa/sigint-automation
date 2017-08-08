@@ -147,30 +147,51 @@ public class APIDesignationMappingsSteps extends APISteps {
     service.update(generatedDesignationMapping);
   }
 
-  @When("I send search designation-mappings by $criteria with $value request")
-  public void searchDesignationMappings(String criteria, String value) {
+  private void searchDMByParameters(String criteria, String value, String spam) {
     DesignationMapping designationMapping = context.get("designationMapping", DesignationMapping.class);
 
     boolean getValueFromEntity = stringEquals("random", value);
-    if (stringEquals("identifier", criteria)) {
-      value = getValueFromEntity ? designationMapping.getIdentifier() : value;
-    } else if (stringEquals("type", criteria)) {
-      value = getValueFromEntity ? String.valueOf(designationMapping.getType()) : value;
-    } else if (stringEquals("designation", criteria)) {
-      value = getValueFromEntity ? String.valueOf(designationMapping.getDesignations().get(0)) : value;
-    } else if (stringEquals("updatedAfter", criteria)) {
-      value = getValueFromEntity ? String.valueOf(designationMapping.getCreatedAt().getTime() - 60000) : value;
-    } else if (stringEquals("empty", criteria)) {
-      log.debug("Search without filter..");
-    } else {
-      throw new AssertionError("Unknown filter type");
+
+    switch (criteria.trim().toLowerCase()) {
+      case "identifier":
+        value = getValueFromEntity ? designationMapping.getIdentifier() : value;
+        break;
+      case "type":
+        value = getValueFromEntity ? String.valueOf(designationMapping.getType()) : value;
+        break;
+      case "designation":
+        value = getValueFromEntity ? String.valueOf(designationMapping.getDesignations().get(0)) : value;
+        break;
+      case "spam":
+        value = getValueFromEntity ? String.valueOf(designationMapping.isSpam()) : value;
+        break;
+      case "updatedafter":
+        value = getValueFromEntity ? String.valueOf(designationMapping.getCreatedAt().getTime() - 60000) : value;
+        break;
+      case "empty":
+        log.debug("Search without filter..");
+        break;
     }
 
-    DesignationMappingFilter filter = new DesignationMappingFilter().filterBy(criteria, value);
+    DesignationMappingFilter filter = new DesignationMappingFilter();
+    if (spam != null) {
+      filter.setSpam(Boolean.parseBoolean(spam));
+    }
+    filter = filter.filterBy(criteria, value);
     OperationResult<List<DesignationMapping>> operationResult = service.search(filter);
 
     context.put("designationMappingList", operationResult.getEntity());
     context.put("designationMappingFilter", filter);
+  }
+
+  @When("I send search designation-mappings by $criteria with $value request, with spam flag: $spam")
+  public void searchDesignationMappingsWithSpam(String criteria, String value, String spam) {
+    searchDMByParameters(criteria, value, spam);
+  }
+
+  @When("I send search designation-mappings by $criteria with $value request")
+  public void searchDesignationMappings(String criteria, String value) {
+    searchDMByParameters(criteria, value, null);
   }
 
   @Then("Designation-mappings search result is correct")
@@ -292,5 +313,16 @@ public class APIDesignationMappingsSteps extends APISteps {
     if (errors.size() > 0) {
       ErrorReporter.reportAndRaiseError(String.join(".\n", errors));
     }
+  }
+
+  @Given("I add $size designation-mappings to injections file")
+  @SuppressWarnings("unchecked")
+  public void addWhitelistsToInjectionsFile(String size) {
+    Integer count = Integer.valueOf(size);
+    List<DesignationMapping> designationMappings = context.get("designationMappingList", List.class);
+
+    List<DesignationMapping> subItems = designationMappings.subList(0, count);
+    List<String> designatedIdentifiers = service.injectDesignationMappings(subItems);
+    context.put("designatedIdentifiers", designatedIdentifiers);
   }
 }

@@ -1,12 +1,11 @@
 package model;
 
-import static utils.StringUtils.stringEquals;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -16,6 +15,7 @@ public class DesignationMappingFilter extends SearchFilter<DesignationMapping> {
   private List<String> types;
   private List<String> designations;
   private Date updatedAfter;
+  private Boolean spam;
 
   public String getIdentifier() {
     return identifier;
@@ -47,6 +47,14 @@ public class DesignationMappingFilter extends SearchFilter<DesignationMapping> {
 
   public void setUpdatedAfter(Date updatedAfter) {
     this.updatedAfter = updatedAfter;
+  }
+
+  public Boolean getSpam() {
+    return spam;
+  }
+
+  public void setSpam(Boolean spam) {
+    this.spam = spam;
   }
 
   @Override
@@ -91,6 +99,18 @@ public class DesignationMappingFilter extends SearchFilter<DesignationMapping> {
     }
   }
 
+  private class SpamFilter extends SearchFilter<DesignationMapping> {
+
+    SpamFilter(String value) {
+      spam = Boolean.valueOf(value);
+    }
+
+    @Override
+    public boolean isAppliedToEntity(DesignationMapping entity) {
+      return entity.isSpam() == spam;
+    }
+  }
+
   private class DesignationFilter extends SearchFilter<DesignationMapping> {
 
     DesignationFilter(String value) {
@@ -115,6 +135,7 @@ public class DesignationMappingFilter extends SearchFilter<DesignationMapping> {
       identifier = null;
       updatedAfter = null;
       types = null;
+      spam = null;
     }
 
     @Override
@@ -132,18 +153,27 @@ public class DesignationMappingFilter extends SearchFilter<DesignationMapping> {
    * @return filter entity for designation-mappings
    */
   public DesignationMappingFilter filterBy(String criteria, String value) {
-    if (stringEquals("identifier", criteria)) {
-      this.setActiveFilter(this.new IdentifierFilter(value));
-    } else if (stringEquals("type", criteria)) {
-      this.setActiveFilter(this.new TypeFilter(value));
-    } else if (stringEquals("designation", criteria)) {
-      this.setActiveFilter(this.new DesignationFilter(value));
-    } else if (stringEquals("updatedAfter", criteria)) {
-      this.setActiveFilter(this.new UpdateAfterFilter(new Date(Long.valueOf(value))));
-    } else if (stringEquals("empty", criteria)) {
-      this.setActiveFilter(this.new EmptyFilter());
-    } else {
-      throw new AssertionError("Unknown isAppliedToEntity type");
+    switch (criteria.trim().toLowerCase()) {
+      case "identifier":
+        this.setActiveFilter(this.new IdentifierFilter(value));
+        break;
+      case "type":
+        this.setActiveFilter(this.new TypeFilter(value));
+        break;
+      case "designation":
+        this.setActiveFilter(this.new DesignationFilter(value));
+        break;
+      case "spam":
+        this.setActiveFilter(this.new SpamFilter(value));
+        break;
+      case "updatedafter":
+        this.setActiveFilter(this.new UpdateAfterFilter(new Date(Long.valueOf(value))));
+        break;
+      case "empty":
+        this.setActiveFilter(this.new EmptyFilter());
+        break;
+      default:
+        throw new AssertionError("Unknown filter type: " + criteria);
     }
     return this;
   }

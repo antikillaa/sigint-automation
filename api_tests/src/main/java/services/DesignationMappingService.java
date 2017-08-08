@@ -1,23 +1,23 @@
 package services;
 
-import static org.junit.Assert.assertNotNull;
-
 import csv.CSVDesignationMappingWriter;
 import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.DesignationMappingRequest;
-import java.util.Arrays;
-import java.util.List;
 import json.JsonConverter;
-import model.DesignationMapping;
-import model.DesignationMappingSearchResult;
-import model.G4File;
-import model.ImportResult;
-import model.Result;
-import model.SearchFilter;
+import model.*;
 import model.entities.Entities;
 import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static ingestion.IngestionService.INJECTIONS_FILE;
+import static json.JsonConverter.toJsonString;
+import static org.junit.Assert.assertNotNull;
+import static utils.StringUtils.saveStringToFile;
 
 public class DesignationMappingService implements EntityService<DesignationMapping> {
 
@@ -155,5 +155,23 @@ public class DesignationMappingService implements EntityService<DesignationMappi
     G4Response response = g4HttpClient.sendRequest(request.upload(file));
 
     return new OperationResult<>(response, ImportResult.class);
+  }
+
+  public List<String> injectDesignationMappings(List<DesignationMapping> designationMappings) {
+    DataInjection injections = new DataInjection();
+    List<String> phones = new ArrayList<>();
+
+    for (DesignationMapping designationMapping: designationMappings) {
+      // TODO: add email and twitter support
+      if (designationMapping.getType() == WhiteListType.PHONE_NUMBER) {
+        phones.add(designationMapping.getIdentifier());
+      }
+    }
+    injections.setPhones(phones);
+    String json = toJsonString(injections);
+    log.info(json);
+    saveStringToFile(json, INJECTIONS_FILE.toString());
+
+    return phones;
   }
 }

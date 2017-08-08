@@ -47,6 +47,7 @@ Examples:
 | criteria      | value  |
 | identifier    | random |
 | type          | random |
+| spam          | random |
 | designation   | random |
 | updatedAfter  | random |
 | empty         |        |
@@ -109,3 +110,186 @@ When I send search designations by name with random request
 Then Request is successful
 And Designations list size is more than 0
 And Designations search result is correct
+
+Scenario: CB Search filters designated spam records by default (SIGINT, S-Source)
+Meta: @nightly @dm_enrichment
+Given I clean up ingestion directory
+When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: true
+Then Request is successful
+And Designation-mappings list size is more than 10
+
+Given I add 10 designation-mappings to injections file
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+Then Number of ingested entity records in CB > 25
+And Number of ingested event records in CB < <recordsCount>
+And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
+
+Examples:
+| sourceType | recordType | recordsCount |
+| S          | Voice      | 25           |
+| S          | CELL       | 25           |
+| S          | CDR        | 25           |
+| S          | VLR        | 25           |
+| S          | Fax        | 25           |
+| S          | SMS        | 25           |
+
+Scenario: CB Search filters designated spam records by default (SIGINT, T-Source)
+Meta: @nightly @dm_enrichment
+Given I clean up ingestion directory
+When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: true
+Then Request is successful
+And Designation-mappings list size is more than 10
+
+Given I add 10 designation-mappings to injections file
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+Then Number of ingested entity records in CB > 25
+And Number of ingested event records in CB < <recordsCount>
+And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
+
+Examples:
+| sourceType | recordType | recordsCount |
+| T          | Voice      | 25           |
+| T          | SMS        | 25           |
+
+Scenario: CB Search filters designated spam records by default (SIGINT, F-Source)
+Meta: @nightly @dm_enrichment
+Given I clean up ingestion directory
+When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: true
+Then Request is successful
+And Designation-mappings list size is more than 10
+
+Given I add 10 designation-mappings to injections file
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+Then Number of ingested entity records in CB > 25
+And Number of ingested event records in CB < <recordsCount>
+And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
+
+Examples:
+| sourceType | recordType | recordsCount |
+| F          | SMS        | 25           |
+
+Scenario: CB Search filters designated spam records by default (SIGINT, E-Source)
+Meta: @nightly @dm_enrichment
+Given I clean up ingestion directory
+When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: true
+Then Request is successful
+And Designation-mappings list size is more than 10
+
+Given I add 10 designation-mappings to injections file
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+Then Number of ingested entity records in CB > 25
+And Number of ingested event records in CB < <recordsCount>
+And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
+
+Examples:
+| sourceType | recordType | recordsCount |
+| E          | CDR        | 25           |
+| E          | SMS2       | 25           |
+| E          | SMS3       | 25           |
+| E          | SMS4       | 25           |
+
+
+Scenario: CB Search doesn't filter designated not-spam records (SIGINT, S-Source)
+Meta: @nightly @dm_enrichment
+Given I clean up ingestion directory
+When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: false
+Then Request is successful
+And Designation-mappings list size is more than 10
+
+Given I add 10 designation-mappings to injections file
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+Then Number of ingested entity records in CB > 25
+And Number of ingested event records in CB == <recordsCount>
+
+Examples:
+| sourceType | recordType | recordsCount |
+| S          | Voice      | 25           |
+| S          | CELL       | 25           |
+| S          | CDR        | 25           |
+| S          | VLR        | 25           |
+| S          | Fax        | 25           |
+| S          | SMS        | 25           |
+
+Scenario: CB Search doesn't filter designated not-spam records (SIGINT, T-Source)
+Meta: @nightly @dm_enrichment
+Given I clean up ingestion directory
+When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: false
+Then Request is successful
+And Designation-mappings list size is more than 10
+
+Given I add 10 designation-mappings to injections file
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+Then Number of ingested entity records in CB > 25
+And Number of ingested event records in CB == <recordsCount>
+
+Examples:
+| sourceType | recordType | recordsCount |
+| T          | Voice      | 25           |
+| T          | SMS        | 25           |
+
+Scenario: CB Search doesn't filter designated not-spam records (SIGINT, F-Source)
+Meta: @nightly @dm_enrichment
+Given I clean up ingestion directory
+When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: false
+Then Request is successful
+And Designation-mappings list size is more than 10
+
+Given I add 10 designation-mappings to injections file
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+Then Number of ingested entity records in CB > 25
+And Number of ingested event records in CB == <recordsCount>
+
+Examples:
+| sourceType | recordType | recordsCount |
+| F          | SMS        | 25           |
+
+Scenario: CB Search doesn't filter designated not-spam records (SIGINT, E-Source)
+Meta: @nightly @dm_enrichment
+Given I clean up ingestion directory
+When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: false
+Then Request is successful
+And Designation-mappings list size is more than 10
+
+Given I add 10 designation-mappings to injections file
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+Then Number of ingested entity records in CB > 25
+And Number of ingested event records in CB == <recordsCount>
+
+Examples:
+| sourceType | recordType | recordsCount |
+| E          | CDR        | 25           |
+| E          | SMS2       | 25           |
+| E          | SMS3       | 25           |
+| E          | SMS4       | 25           |
