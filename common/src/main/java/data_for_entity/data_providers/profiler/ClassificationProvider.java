@@ -6,7 +6,7 @@ import model.Classification;
 public class ClassificationProvider implements EntityDataProvider {
 
     @Override
-    public Classification generate(int length) {
-        return Classification.random();
+    public String generate(int length) {
+        return Classification.random().getName();
     }
 }

@@ -39,8 +39,8 @@ public class Profile extends ProfileAndTargetGroup {
     private ArrayList<String> mergingProfilesIDs = new ArrayList<>();
     @DataProvider(CriminalRecordProvider.class)
     private CriminalRecord criminalRecord;
-    //TODO @DataProvider(ClassificationProvider.class)
-    private Classification classification = Classification.C;
+    //@DataProvider(ClassificationProvider.class)
+    private String classification = "C";
 
     public Profile() {
         setJsonType(ProfileJsonType.Draft);
@@ -150,11 +150,11 @@ public class Profile extends ProfileAndTargetGroup {
         this.criminalRecord = criminalRecord;
     }
 
-    public Classification getClassification() {
+    public String getClassification() {
         return classification;
     }
 
-    public void setClassification(Classification classification) {
+    public void setClassification(String classification) {
         this.classification = classification;
     }
 }
