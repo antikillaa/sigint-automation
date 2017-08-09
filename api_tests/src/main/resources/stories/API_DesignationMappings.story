@@ -217,7 +217,7 @@ And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
-Then Uploaded files are processed
+Then Uploaded files are processed, exclude: .tif
 Then Number of ingested entity records in CB > 25
 And Number of ingested event records in CB == <recordsCount>
 
