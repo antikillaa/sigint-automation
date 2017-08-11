@@ -322,7 +322,7 @@ public class APIDesignationMappingsSteps extends APISteps {
     List<DesignationMapping> designationMappings = context.get("designationMappingList", List.class);
 
     List<DesignationMapping> subItems = designationMappings.subList(0, count);
-    List<String> designatedIdentifiers = service.injectDesignationMappings(subItems);
-    context.put("designatedIdentifiers", designatedIdentifiers);
+    service.injectDesignationMappings(subItems);
+    context.put("designationMappingList", subItems);
   }
 }

@@ -73,7 +73,7 @@ Examples:
 
 
 Scenario: API.E-CellTower format1 ingestion
-Meta: @nightly @E-CellTower1
+Meta: @nightly @E-CellTower1 @skip
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> files with <recordsCount> records are generated

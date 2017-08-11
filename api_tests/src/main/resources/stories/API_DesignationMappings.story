@@ -127,6 +127,7 @@ Then Uploaded files are processed
 Then Number of ingested entity records in CB > 25
 And Number of ingested event records in CB < <recordsCount>
 And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
+And Designated events have correct designations
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -153,6 +154,7 @@ Then Uploaded files are processed
 Then Number of ingested entity records in CB > 25
 And Number of ingested event records in CB < <recordsCount>
 And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
+And Designated events have correct designations
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -175,6 +177,7 @@ Then Uploaded files are processed
 Then Number of ingested entity records in CB > 25
 And Number of ingested event records in CB < <recordsCount>
 And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
+And Designated events have correct designations
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -196,6 +199,7 @@ Then Uploaded files are processed
 Then Number of ingested entity records in CB > 25
 And Number of ingested event records in CB < <recordsCount>
 And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
+And Designated events have correct designations
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -220,6 +224,7 @@ When I upload files
 Then Uploaded files are processed, exclude: .tif
 Then Number of ingested entity records in CB > 25
 And Number of ingested event records in CB == <recordsCount>
+And Designated events have correct designations
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -245,6 +250,7 @@ When I upload files
 Then Uploaded files are processed
 Then Number of ingested entity records in CB > 25
 And Number of ingested event records in CB == <recordsCount>
+And Designated events have correct designations
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -266,6 +272,7 @@ When I upload files
 Then Uploaded files are processed
 Then Number of ingested entity records in CB > 25
 And Number of ingested event records in CB == <recordsCount>
+And Designated events have correct designations
 
 Examples:
 | sourceType | recordType | recordsCount |
@@ -286,6 +293,7 @@ When I upload files
 Then Uploaded files are processed
 Then Number of ingested entity records in CB > 25
 And Number of ingested event records in CB == <recordsCount>
+And Designated events have correct designations
 
 Examples:
 | sourceType | recordType | recordsCount |

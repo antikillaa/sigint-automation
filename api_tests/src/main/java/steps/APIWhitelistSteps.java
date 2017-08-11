@@ -246,7 +246,7 @@ public class APIWhitelistSteps extends APISteps {
         List<Whitelist> whitelists = context.get("whitelistEntitiesList", List.class);
 
         List<Whitelist> subItems = whitelists.subList(0, count);
-        List<String> whitelistedIdentifiers = service.injectWhitelists(subItems);
-        context.put("whitelistedIdentifiers", whitelistedIdentifiers);
+        service.injectWhitelists(subItems);
+        context.put("whitelistEntitiesList", subItems);
     }
 }
