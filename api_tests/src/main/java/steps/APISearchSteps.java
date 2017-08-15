@@ -1,6 +1,5 @@
 package steps;
 
-import error_reporter.ErrorReporter;
 import http.OperationResult;
 import http.OperationsResults;
 import json.JsonConverter;
@@ -13,6 +12,7 @@ import services.SearchService;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static error_reporter.ErrorReporter.raiseError;
 import static junit.framework.TestCase.assertTrue;
 import static utils.StepHelper.compareByCriteria;
 import static utils.StringUtils.fuzzySearch;
@@ -100,7 +100,7 @@ public class APISearchSteps extends APISteps {
         String errorMsg = String.format(
                 "Expected %s %s-%s %s records in search %s actual %d",
                 size, source.getType(), source.getRecordType(), objectType, criteria, actualCount);
-        ErrorReporter.raiseError(errorMsg);
+        raiseError(errorMsg);
     }
 
     @Then("Number of ingested $objectType records in CB $criteria $size, additional query string: $additional")
@@ -124,17 +124,56 @@ public class APISearchSteps extends APISteps {
                 condition);
     }
 
+    @Then("Designated events have correct designations")
+    public void designationsArePresentedInCBSearch() {
+        List<DesignationMapping> designationMappings = context.get("designationMappingList", List.class);
+        FileMeta meta = context.get("meta", FileMeta.class);
+        String pid = "pid:" + meta.getMeta().getProperties().getProcessId();
+
+        int designatedEvents = 0;
+        for (DesignationMapping designationMapping: designationMappings) {
+            String identifier = designationMapping.getIdentifier();
+            recordSearch(
+                    "phone:" + identifier + " AND includeSpam:true AND " + pid,
+                    "SIGINT",
+                    "event",
+                    "0",
+                    "100"
+            );
+            List<CBEntity> entities = context.get("searchResults", List.class);
+            if (entities.isEmpty()) {
+                // skip not designated records
+                continue;
+            }
+            designatedEvents++; // increment if search result isn't empty
+            for (String designation: designationMapping.getDesignations()) {
+                log.info("Check '" + designation + "' designation in response");
+                for (CBEntity entity : entities) {
+                    String json = JsonConverter.toJsonString(entity);
+                    if (!json.contains(designation)) {
+                        raiseError("Event doesn't have '" + designation + "' designation:\n" + json);
+                    }
+                }
+            }
+        }
+        if (designatedEvents < 1) {
+            raiseError("Records aren't designated");
+        }
+    }
+
     @Then("Whitelisted identifiers are not searchable")
     public void whitelistedCBSearch() {
-        List<String> whitelistedIdentifiers = context.get("whitelistedIdentifiers", List.class);
+        List<Whitelist> filteredWhitelists = context.get("whitelistEntitiesList", List.class);
 
         log.info("Check that identifiers are filtered from CB search by pid");
-        for (String identifier: whitelistedIdentifiers) {
+        for (Whitelist filteredWhitelist: filteredWhitelists) {
+            String identifier = filteredWhitelist.getIdentifier();
             context.put("searchQuery", identifier);
             verifyCBSearch("doesn't contain");
         }
         log.info("Check that identifier entities are not created");
-        for (String identifier: whitelistedIdentifiers) {
+        for (Whitelist filteredWhitelist: filteredWhitelists) {
+            String identifier = filteredWhitelist.getIdentifier();
             recordSearch(identifier, "SIGINT", "entity", "0", "100");
             CBSearchListSizeShouldBe("==", "0");
         }
@@ -162,7 +201,7 @@ public class APISearchSteps extends APISteps {
             } else {
                 matches = pattern.matcher(json).matches();
             }
-            assertTrue("Search " + criteria + "results for query: " + query + " in response:\n" + json,
+            assertTrue("Search " + criteria + " results for query: " + query + " in response:\n" + json,
                     matches == searchable);
         }
     }
