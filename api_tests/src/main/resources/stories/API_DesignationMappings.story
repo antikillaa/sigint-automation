@@ -301,3 +301,22 @@ Examples:
 | E          | SMS2       | 25           |
 | E          | SMS3       | 25           |
 | E          | SMS4       | 25           |
+
+
+Scenario: Undesignated records are marked with default designation 'Undesignated'
+Meta: @nightly @dm_enrichment
+Given Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+And Number of ingested event records in CB == <recordsCount>
+And All events have default designation
+
+Examples:
+| sourceType | recordType | recordsCount |
+| F          | SMS        | 25           |
+| S          | SMS        | 25           |
+| T          | SMS        | 25           |
+| E          | SMS2       | 25           |
