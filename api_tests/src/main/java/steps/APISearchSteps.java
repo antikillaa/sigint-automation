@@ -124,6 +124,15 @@ public class APISearchSteps extends APISteps {
                 condition);
     }
 
+    @Then("All events have default designation")
+    public void checkDefaultDesignation() {
+        String defaultDesignation = "Undesignated";
+
+        log.info("Check that all records have default designation: " + defaultDesignation);
+        context.put("searchQuery", defaultDesignation);
+        verifyCBSearch("contains");
+    }
+
     @Then("Designated events have correct designations")
     public void designationsArePresentedInCBSearch() {
         List<DesignationMapping> designationMappings = context.get("designationMappingList", List.class);
