@@ -16,9 +16,13 @@ public class SearchFilters {
     @JsonProperty("workflow.priority")
     private Integer priority;
     @JsonProperty("worfklow.recordStatus")
-    private String recordStatus; // "report.reportIds"
+    private String worfklowRecordStatus; // "report.reportIds" // FIXME
+    @JsonProperty("workflow.recordStatus")
+    private String recordStatus; // 'UNPROCESSED"
     @JsonProperty("workflow.includeUnassignedRecords")
     private Boolean includeUnassignedRecords;
+    @JsonProperty("workflow.designations")
+    private List<String> designations;
     private AdvancedSearch advancedSearch;
     private List<String> dataSource; // ["TWITTER"]
     private List<String> type; // ["TWEET"]
@@ -26,6 +30,10 @@ public class SearchFilters {
     private SearchObjectType objectType; // "event"
     private Boolean hasLocation;
     private EventTime eventTime;
+    private String targetMatchType;
+    private List<String> target;
+    private List<String> groupIds;
+    private Boolean includeChildGroups;
     private List<String> profileCountry;
     private List<String> language;
     private List<String> tweetShowing;
@@ -37,6 +45,7 @@ public class SearchFilters {
     private String twitterUsername;
     private String insUsername;
     private String insUserId;
+    private Boolean includeSpam;
 
     public List<String> getDataSource() {
         return dataSource;
@@ -229,6 +238,62 @@ public class SearchFilters {
 
     public void setInsUserId(String insUserId) {
         this.insUserId = insUserId;
+    }
+
+    public Boolean getIncludeSpam() {
+        return includeSpam;
+    }
+
+    public void setIncludeSpam(Boolean includeSpam) {
+        this.includeSpam = includeSpam;
+    }
+
+    public List<String> getTarget() {
+        return target;
+    }
+
+    public void setTarget(List<String> target) {
+        this.target = target;
+    }
+
+    public String getTargetMatchType() {
+        return targetMatchType;
+    }
+
+    public void setTargetMatchType(String targetMatchType) {
+        this.targetMatchType = targetMatchType;
+    }
+
+    public List<String> getGroupIds() {
+        return groupIds;
+    }
+
+    public void setGroupIds(List<String> groupIds) {
+        this.groupIds = groupIds;
+    }
+
+    public Boolean getIncludeChildGroups() {
+        return includeChildGroups;
+    }
+
+    public void setIncludeChildGroups(Boolean includeChildGroups) {
+        this.includeChildGroups = includeChildGroups;
+    }
+
+    public List<String> getDesignations() {
+        return designations;
+    }
+
+    public void setDesignations(List<String> designations) {
+        this.designations = designations;
+    }
+
+    public String getWorfklowRecordStatus() {
+        return worfklowRecordStatus;
+    }
+
+    public void setWorfklowRecordStatus(String worfklowRecordStatus) {
+        this.worfklowRecordStatus = worfklowRecordStatus;
     }
 }
 

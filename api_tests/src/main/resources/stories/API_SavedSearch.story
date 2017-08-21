@@ -12,8 +12,8 @@ And SavedSearch result list size > 0
 And Sort by <sortKey> order <sortOrder> is valid
 Examples:
 | page | pageSize | sortKey | sortOrder |
-| 0    | 20       | expirationDate | ASC |
-| 0    | 20       | expirationDate | DESC|
+| 0    | 100      | expirationDate | ASC |
+| 0    | 100      | expirationDate | DESC|
 
 Scenario: Sort savedSearch by name
 When I send get savedSearches request: page:<page>, pageSize:<pageSize>, sortKey:<sortKey>, sortOrder:<sortOrder>
@@ -22,8 +22,8 @@ And SavedSearch result list size > 0
 And Sort by <sortKey> order <sortOrder> is valid
 Examples:
 | page | pageSize | sortKey | sortOrder |
-| 0    | 20       | name    | ASC |
-| 0    | 20       | name    | DESC|
+| 0    | 100      | name    | ASC |
+| 0    | 100      | name    | DESC|
 
 Scenario: Sort savedSearch by createdAt
 When I send get savedSearches request: page:<page>, pageSize:<pageSize>, sortKey:<sortKey>, sortOrder:<sortOrder>
@@ -32,8 +32,8 @@ And SavedSearch result list size > 0
 And Sort by <sortKey> order <sortOrder> is valid
 Examples:
 | page | pageSize | sortKey | sortOrder |
-| 0    | 20       | createdAt | ASC |
-| 0    | 20       | createdAt | DESC|
+| 0    | 100      | createdAt | ASC |
+| 0    | 100      | createdAt | DESC|
 
 Scenario: Sort savedSearch by assignmentPriority
 When I send get savedSearches request: page:<page>, pageSize:<pageSize>, sortKey:<sortKey>, sortOrder:<sortOrder>
@@ -42,5 +42,5 @@ And SavedSearch result list size > 0
 And Sort by <sortKey> order <sortOrder> is valid
 Examples:
 | page | pageSize | sortKey | sortOrder |
-| 0    | 20       | assignmentPriority | ASC |
-| 0    | 20       | assignmentPriority | DESC|
+| 0    | 100      | assignmentPriority | ASC |
+| 0    | 100      | assignmentPriority | DESC|
