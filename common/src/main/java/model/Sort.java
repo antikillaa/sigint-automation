@@ -2,18 +2,18 @@ package model;
 
 public class Sort {
 
-    private Direction direction;
+    private SortDirection direction;
     private String property;
     private boolean ignoreCase;
     private String nullHandling;
     private boolean ascending;
     private boolean descending;
 
-    public Direction getDirection() {
+    public SortDirection getDirection() {
         return direction;
     }
 
-    public void setDirection(Direction direction) {
+    public void setDirection(SortDirection direction) {
         this.direction = direction;
     }
 

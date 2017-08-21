@@ -1,6 +1,6 @@
 package model;
 
-public enum  Direction {
+public enum SortDirection {
 
     ASC, DESC
 
