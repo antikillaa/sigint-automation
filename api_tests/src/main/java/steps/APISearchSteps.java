@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import static error_reporter.ErrorReporter.raiseError;
+import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 import static utils.StepHelper.compareByCriteria;
 import static utils.StringUtils.fuzzySearch;
@@ -141,6 +142,9 @@ public class APISearchSteps extends APISteps {
 
         int designatedEvents = 0;
         for (DesignationMapping designationMapping: designationMappings) {
+            List<String> designations = designationMapping.getDesignations();
+            assertNotNull("Designation-mapping with null designations: " + designationMapping.getId(), designations);
+
             String identifier = designationMapping.getIdentifier();
             recordSearch(
                     "phone:" + identifier + " AND includeSpam:true AND " + pid,
@@ -155,7 +159,7 @@ public class APISearchSteps extends APISteps {
                 continue;
             }
             designatedEvents++; // increment if search result isn't empty
-            for (String designation: designationMapping.getDesignations()) {
+            for (String designation: designations) {
                 log.info("Check '" + designation + "' designation in response");
                 for (CBEntity entity : entities) {
                     String json = JsonConverter.toJsonString(entity);
