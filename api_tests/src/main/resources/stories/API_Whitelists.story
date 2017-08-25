@@ -101,13 +101,13 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed, exclude: .wav
-Then Number of ingested entity records in CB > 60
+Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
 
 Examples:
 | sourceType | recordType | recordsCount |
-| T          | Voice      | 25           |
+| T          | Voice      | 15           |
 | T          | SMS        | 25           |
 
 Scenario: Filtering off whitelisted data during ingestion (SIGINT, Phonebook)
@@ -144,7 +144,7 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > 60
+Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
 
@@ -165,13 +165,13 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed, exclude: .wav, .tif
-Then Number of ingested entity records in CB > 35
+Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
 
 Examples:
 | sourceType | recordType | recordsCount |
-| S          | Voice      | 25           |
+| S          | Voice      | 15           |
 | S          | CELL       | 25           |
 | S          | CDR        | 25           |
 | S          | VLR        | 25           |
@@ -191,7 +191,7 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > 25
+Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
 
