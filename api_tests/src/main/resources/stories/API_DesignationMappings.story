@@ -124,14 +124,14 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > 25
+Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB < <recordsCount>
 And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
 And Designated events have correct designations
 
 Examples:
 | sourceType | recordType | recordsCount |
-| S          | Voice      | 25           |
+| S          | Voice      | 10           |
 | S          | CELL       | 25           |
 | S          | CDR        | 25           |
 | S          | VLR        | 25           |
@@ -151,14 +151,14 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > 25
+Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB < <recordsCount>
 And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
 And Designated events have correct designations
 
 Examples:
 | sourceType | recordType | recordsCount |
-| T          | Voice      | 25           |
+| T          | Voice      | 10           |
 | T          | SMS        | 25           |
 
 Scenario: CB Search filters designated spam records by default (SIGINT, F-Source)
@@ -174,7 +174,7 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > 25
+Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB < <recordsCount>
 And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
 And Designated events have correct designations
@@ -196,7 +196,7 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > 25
+Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB < <recordsCount>
 And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
 And Designated events have correct designations
@@ -222,17 +222,17 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed, exclude: .tif
-Then Number of ingested entity records in CB > 25
+Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB == <recordsCount>
 And Designated events have correct designations
 
 Examples:
 | sourceType | recordType | recordsCount |
-| S          | Voice      | 25           |
+| S          | Voice      | 10           |
+| S          | Fax        | 25           |
 | S          | CELL       | 25           |
 | S          | CDR        | 25           |
 | S          | VLR        | 25           |
-| S          | Fax        | 25           |
 | S          | SMS        | 25           |
 
 Scenario: CB Search doesn't filter designated not-spam records (SIGINT, T-Source)
@@ -248,13 +248,13 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > 25
+Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB == <recordsCount>
 And Designated events have correct designations
 
 Examples:
 | sourceType | recordType | recordsCount |
-| T          | Voice      | 25           |
+| T          | Voice      | 10           |
 | T          | SMS        | 25           |
 
 Scenario: CB Search doesn't filter designated not-spam records (SIGINT, F-Source)
@@ -270,7 +270,7 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > 25
+Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB == <recordsCount>
 And Designated events have correct designations
 
@@ -291,7 +291,7 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > 25
+Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB == <recordsCount>
 And Designated events have correct designations
 

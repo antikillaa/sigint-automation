@@ -147,7 +147,7 @@ public class APISearchSteps extends APISteps {
 
             String identifier = designationMapping.getIdentifier();
             recordSearch(
-                    "phone:" + identifier + " AND includeSpam:true AND " + pid,
+                    "senderphone:" + identifier + " AND includeSpam:true AND " + pid,
                     "SIGINT",
                     "event",
                     "0",
