@@ -28,7 +28,7 @@ public class UploadFilesRequest extends HttpRequest {
      * @return GET meta of uploaded file request
      */
     public UploadFilesRequest meta(String id) {
-        setURI(URI + id + "/meta")
+        setURI(URI + "/" + id + "/meta")
                 .setHttpMethod(HttpMethod.GET) ;
 
         return this;
