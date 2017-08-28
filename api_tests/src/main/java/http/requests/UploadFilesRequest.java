@@ -12,8 +12,7 @@ import static utils.StringUtils.stringContainsAny;
 
 public class UploadFilesRequest extends HttpRequest {
 
-    private final static String URI = "/api/upload/files/";
-    private static String parentRemotePath;
+    private final static String URI = "/api/upload/files";
 
     public UploadFilesRequest() {
         super(URI);

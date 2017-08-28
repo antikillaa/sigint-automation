@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class UploadFoldersRequest extends HttpRequest {
 
-  private final static String URI = "/api/upload/folders/";
+  private final static String URI = "/api/upload/folders";
 
   public UploadFoldersRequest() {
     super(URI);
