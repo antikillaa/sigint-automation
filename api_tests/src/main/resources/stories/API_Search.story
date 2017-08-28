@@ -45,7 +45,7 @@ Examples:
 | PROFILER | entity |    | 0 | 1100 |
 
 
-Scenario: Wild Card Search
+Scenario: SIGINT. Wild Card Search
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 Then CB search contains results for query
@@ -56,13 +56,9 @@ Examples:
 | SIGINT | event | qu?ntit? | 0 | NULL |
 | SIGINT | event | qua*ty   | 0 | NULL |
 | SIGINT | event | q?an*ty  | 0 | NULL |
-| CIO | event | Qatar | 0 | NULL |
-| CIO | event | Q?ta? | 0 | NULL |
-| CIO | event | Qa*r  | 0 | NULL |
-| CIO | event | Qa?a* | 0 | NULL |
 
 
-Scenario: Fuzzy Search
+Scenario: SIGINT. Fuzzy Search
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 Then CB search contains results for query
