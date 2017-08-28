@@ -25,6 +25,7 @@ public class SavedSearch extends AbstractEntity {
     private SavedSearchMetadata metadata;
     private Date endDate;
     private Boolean historical;
+    private Integer lastExecutionResultsFound;
 
     public List<TargetGroup> getTargetGroups() {
         return targetGroups;
@@ -184,5 +185,13 @@ public class SavedSearch extends AbstractEntity {
 
     public void setMetadata(SavedSearchMetadata metadata) {
         this.metadata = metadata;
+    }
+
+    public Integer getLastExecutionResultsFound() {
+        return lastExecutionResultsFound;
+    }
+
+    public void setLastExecutionResultsFound(Integer lastExecutionResultsFound) {
+        this.lastExecutionResultsFound = lastExecutionResultsFound;
     }
 }

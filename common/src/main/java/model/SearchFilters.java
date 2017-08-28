@@ -28,6 +28,9 @@ public class SearchFilters {
     private List<String> type; // ["TWEET"]
     private String eventFeed; // "OSINT"
     private SearchObjectType objectType; // "event"
+    private String personName;
+    private String personPassportNumber;
+    private String travellerReference;
     private Boolean hasLocation;
     private EventTime eventTime;
     private String targetMatchType;
@@ -294,6 +297,30 @@ public class SearchFilters {
 
     public void setWorfklowRecordStatus(String worfklowRecordStatus) {
         this.worfklowRecordStatus = worfklowRecordStatus;
+    }
+
+    public String getPersonName() {
+        return personName;
+    }
+
+    public void setPersonName(String personName) {
+        this.personName = personName;
+    }
+
+    public String getTravellerReference() {
+        return travellerReference;
+    }
+
+    public void setTravellerReference(String travellerReference) {
+        this.travellerReference = travellerReference;
+    }
+
+    public String getPersonPassportNumber() {
+        return personPassportNumber;
+    }
+
+    public void setPersonPassportNumber(String personPassportNumber) {
+        this.personPassportNumber = personPassportNumber;
     }
 }
 

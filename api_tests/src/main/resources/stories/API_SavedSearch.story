@@ -5,16 +5,6 @@ Lifecycle:
 Before:
 Given I sign in as admin user
 
-Scenario: Sort savedSearch by expirationDate
-When I send get savedSearches request: page:<page>, pageSize:<pageSize>, sortKey:<sortKey>, sortOrder:<sortOrder>
-Then Request is successful
-And SavedSearch result list size > 0
-And Sort by <sortKey> order <sortOrder> is valid
-Examples:
-| page | pageSize | sortKey | sortOrder |
-| 0    | 100      | expirationDate | ASC |
-| 0    | 100      | expirationDate | DESC|
-
 Scenario: Sort savedSearch by name
 When I send get savedSearches request: page:<page>, pageSize:<pageSize>, sortKey:<sortKey>, sortOrder:<sortOrder>
 Then Request is successful
@@ -44,3 +34,13 @@ Examples:
 | page | pageSize | sortKey | sortOrder |
 | 0    | 100      | assignmentPriority | ASC |
 | 0    | 100      | assignmentPriority | DESC|
+
+Scenario: Sort savedSearch by expirationDate
+When I send get savedSearches request: page:<page>, pageSize:<pageSize>, sortKey:<sortKey>, sortOrder:<sortOrder>
+Then Request is successful
+And SavedSearch result list size > 0
+And Sort by <sortKey> order <sortOrder> is valid
+Examples:
+| page | pageSize | sortKey | sortOrder |
+| 0    | 100      | expirationDate | ASC |
+| 0    | 100      | expirationDate | DESC|
