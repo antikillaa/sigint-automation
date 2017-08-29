@@ -13,7 +13,7 @@ public class EtisalatCellTower2DockerAdapter implements IDockerAdapter {
   @Override
   public ContainerConfig getContainerConfig(String recordsCount) {
     return dockerImage.getConfig("etisalat-celltower-format2", "-n", recordsCount,
-            "-o", dockerImage.getDataPath() + "/e_celltower2.csv");
+            "-o", dockerImage.getDataPath() + "/cell_lbs_data_090723.csv");
   }
 
   @Override
