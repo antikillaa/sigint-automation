@@ -196,9 +196,21 @@ public class RandomGenerator {
 
     public static String generateEmail() {
         int size = generateRandomInteger(3, 15);
-        String username = RandomStringUtils.randomAlphanumeric(size);
-        return username + "@gmail.com";
+        return RandomStringUtils.randomAlphanumeric(size) + "@gmail.com";
     }
 
+    public static String generateTwitterHandle() {
+        int size = generateRandomInteger(5, 12);
+        return  "@" + RandomStringUtils.randomAlphanumeric(size).toLowerCase();
+    }
+
+    public static String generateID() {
+        int size = generateRandomInteger(5, 10);
+        return  RandomStringUtils.randomNumeric(size);
+    }
+
+    public static String generateYoutubeChannelId() {
+        return RandomStringUtils.randomAlphanumeric(24);
+    }
 }
 
