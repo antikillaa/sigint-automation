@@ -1,10 +1,11 @@
 package model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -64,7 +65,7 @@ public class WhitelistFilter extends SearchFilter<Whitelist>{
 
     @Override
     public boolean isAppliedToEntity(Whitelist entity) {
-      return entity.getIdentifier().equals(query);
+      return entity.getIdentifier().contains(query);
     }
   }
 
@@ -76,7 +77,7 @@ public class WhitelistFilter extends SearchFilter<Whitelist>{
 
     @Override
     public boolean isAppliedToEntity(Whitelist entity) {
-      return entity.getDescription().equals(query);
+      return entity.getDescription().contains(query);
     }
   }
 
