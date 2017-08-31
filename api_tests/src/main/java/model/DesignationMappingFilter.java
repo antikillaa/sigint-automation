@@ -82,7 +82,7 @@ public class DesignationMappingFilter extends SearchFilter<DesignationMapping> {
 
     @Override
     public boolean isAppliedToEntity(DesignationMapping entity) {
-      return entity.getIdentifier().equals(identifier);
+      return entity.getIdentifier().contains(identifier);
     }
   }
 

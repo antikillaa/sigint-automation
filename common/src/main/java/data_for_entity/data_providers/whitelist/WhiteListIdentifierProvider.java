@@ -3,7 +3,6 @@ package data_for_entity.data_providers.whitelist;
 import data_for_entity.data_providers.DependencyData;
 import data_for_entity.data_providers.DependencyDataProvider;
 import model.WhiteListType;
-import org.apache.commons.lang.RandomStringUtils;
 import utils.RandomGenerator;
 
 
@@ -22,8 +21,16 @@ public class WhiteListIdentifierProvider extends DependencyDataProvider {
             case EMAIL_ADDRESS:
                 identifier = RandomGenerator.generateEmail();
                 break;
+            case YOUTUBE_CHANNEL_ID:
+                identifier = RandomGenerator.generateYoutubeChannelId();
+                break;
+            case TWITTER_HANDLE:
+                identifier = RandomGenerator.generateTwitterHandle();
+                break;
             case TWITTER_ID:
-                identifier = "@" + RandomStringUtils.randomAlphanumeric(10);
+            case INSTAGRAM_ID:
+            case DARK_WEB_AUTHOR_ID:
+                identifier = RandomGenerator.generateID();
                 break;
             default:
                 identifier = "default_value";
