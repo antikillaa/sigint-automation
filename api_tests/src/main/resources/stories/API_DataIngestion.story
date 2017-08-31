@@ -11,7 +11,7 @@ When I upload files
 Then Request is successful
 When I wait for 10 seconds
 When I send get file meta request
-Then Message contains "file with id"
+Then Message contains "Too many errors during parsing file"
 
 Examples:
 | sourceType | recordType | recordsCount |

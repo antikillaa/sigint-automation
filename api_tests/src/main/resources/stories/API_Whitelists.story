@@ -89,7 +89,7 @@ And Message contains "Unable to import non csv files"
 
 
 Scenario: Filtering off whitelisted data during ingestion (SIGINT, T-Source)
-Meta: @nightly @whitelist-t
+Meta: @nightly @wl_enrichment @whitelist-t
 Given I clean up ingestion directory
 When I send search whitelists by type with PHONE_NUMBER request
 Then Request is successful
@@ -111,7 +111,7 @@ Examples:
 | T          | SMS        | 25           |
 
 Scenario: Filtering off whitelisted data during ingestion (SIGINT, Phonebook)
-Meta: @nightly @whitelist-phonebook
+Meta: @nightly @wl_enrichment @whitelist-phonebook
 Given I clean up ingestion directory
 When I send search whitelists by type with PHONE_NUMBER request
 Then Request is successful
@@ -132,7 +132,7 @@ Examples:
 | PHONEBOOK  | PHONEBOOK  | 25           |
 
 Scenario: Filtering off whitelisted data during ingestion (SIGINT, F-Source)
-Meta: @nightly @whitelist-f
+Meta: @nightly @wl_enrichment @whitelist-f
 Given I clean up ingestion directory
 When I send search whitelists by type with PHONE_NUMBER request
 Then Request is successful
@@ -153,7 +153,7 @@ Examples:
 | F          | SMS        | 25           |
 
 Scenario: Filtering off whitelisted data during ingestion (SIGINT, S-Source)
-Meta: @nightly @whitelist-s
+Meta: @nightly @wl_enrichment @whitelist-s
 Given I clean up ingestion directory
 When I send search whitelists by type with PHONE_NUMBER request
 Then Request is successful
@@ -179,7 +179,7 @@ Examples:
 | S          | SMS        | 25           |
 
 Scenario: Filtering off whitelisted data during ingestion (SIGINT, Etisalat-Source)
-Meta: @nightly @whitelist-e
+Meta: @nightly @wl_enrichment @whitelist-e
 Given I clean up ingestion directory
 When I send search whitelists by type with PHONE_NUMBER request
 Then Request is successful
