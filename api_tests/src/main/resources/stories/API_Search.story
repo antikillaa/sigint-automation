@@ -52,10 +52,10 @@ Then CB search contains results for query
 
 Examples:
 | source | objectType | query | pageNumber | pageSize |
-| SIGINT | event | quantity | 0 | NULL |
-| SIGINT | event | qu?ntit? | 0 | NULL |
-| SIGINT | event | qua*ty   | 0 | NULL |
-| SIGINT | event | q?an*ty  | 0 | NULL |
+| SIGINT | event | knowledge | 0 | NULL |
+| SIGINT | event | kno?le?ge | 0 | NULL |
+| SIGINT | event | *knowledge   | 0 | NULL |
+| SIGINT | event | *knowle?ge  | 0 | NULL |
 
 
 Scenario: SIGINT. Fuzzy Search
@@ -65,7 +65,7 @@ Then CB search contains results for query
 
 Examples:
 | source | objectType | query | pageNumber | pageSize |
-| SIGINT | event | quantuty~1 | 0 | NULL |
-| SIGINT | event | quamtty~2  | 0 | NULL |
-| SIGINT | event | uqantuty~3 | 0 | NULL |
-| SIGINT | event | uqantuty~  | 0 | NULL |
+| SIGINT | event | knoeledge~1 | 0 | NULL |
+| SIGINT | event | knowledge~2  | 0 | NULL |
+| SIGINT | event | knwldg~3 | 0 | NULL |
+| SIGINT | event | nowledge~  | 0 | NULL |
