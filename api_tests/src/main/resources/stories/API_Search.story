@@ -65,7 +65,7 @@ Then CB search contains results for query
 
 Examples:
 | source | objectType | query | pageNumber | pageSize |
-| SIGINT | event | quantuty~1 | 0 | NULL |
-| SIGINT | event | quamtty~2  | 0 | NULL |
-| SIGINT | event | uqantuty~3 | 0 | NULL |
-| SIGINT | event | uqantuty~  | 0 | NULL |
+| SIGINT | event | knoeledge~1 | 0 | NULL |
+| SIGINT | event | knowledge~2  | 0 | NULL |
+| SIGINT | event | knwldg~3 | 0 | NULL |
+| SIGINT | event | nowledge~  | 0 | NULL |
