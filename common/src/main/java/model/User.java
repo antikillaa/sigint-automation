@@ -3,6 +3,7 @@ package model;
 import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.DataProvider;
 import data_for_entity.annotations.WithDataSize;
+import data_for_entity.data_providers.EmailProvider;
 import data_for_entity.data_providers.user_password.UserPasswordProvider;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -16,7 +17,8 @@ import java.util.List;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class User extends Organization {
 
-    private String name; // "admin@pegasus.ae"
+    private String name;
+    @DataProvider(EmailProvider.class)
     private String email;
     @DataIgnore
     private List<String> languages = new ArrayList<>();
