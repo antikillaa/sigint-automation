@@ -5,7 +5,9 @@ import org.apache.commons.beanutils.BeanUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Objects;
 
+import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 public abstract class AbstractEntity implements Comparable {
@@ -22,7 +24,7 @@ public abstract class AbstractEntity implements Comparable {
     }
 
     public <T extends AbstractEntity> Boolean equals(T object) {
-        Boolean equals = TRUE;
+
         for (Field field : object.getClass().getDeclaredFields()) {
             if (Modifier.isStatic(field.getModifiers())) {
                 continue;
@@ -38,12 +40,11 @@ public abstract class AbstractEntity implements Comparable {
             if (originalValue == null && requestValue == null) {
                 continue;
             }
-            equals = originalValue.equals(requestValue);
-            if (!equals) {
-                return equals;
+            if (!Objects.equals(originalValue, requestValue)) {
+                return FALSE;
             }
         }
-        return equals;
+        return TRUE;
     }
 
     @Override

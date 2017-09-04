@@ -17,10 +17,14 @@ public class SourceTypeProvider implements EntityDataProvider {
         SourceType sourceType;
         int ATTEMPT_NUMBER = 5;
         int i = 0;
+
+        List<SourceType> sourceTypes = AppContext.get().getDictionary().getSourceTypes();
+        if (sourceTypes == null) {
+            throw new AssertionError("Got null sourceTypes list in Context");
+        }
         do {
             i++;
-            List<SourceType> typeList = AppContext.get().getDictionary()
-                    .getSourceTypes().stream()
+            List<SourceType> typeList = sourceTypes.stream()
                     .filter(sType -> sType.getType() != null)
                     .collect(Collectors.toList());
             if (typeList.isEmpty()) throw new AssertionError("Unable get any data source from dictionary!");

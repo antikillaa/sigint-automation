@@ -9,6 +9,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.log4j.Logger;
 
 import java.io.*;
+import java.net.URL;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -58,17 +59,21 @@ public class FileHelper {
         IOUtils.closeQuietly(out);
     }
 
-    public static String readTxtFile(String fileName) {
+    static String readTxtFile(String fileName) {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        File file = new File(classloader.getResource(fileName).getFile());
-        try {
-            FileReader reader = new FileReader(file);
+        URL fileURL = classloader.getResource(fileName);
+        if (fileURL == null) {
+            throw new AssertionError("Got null URL for " + fileName);
+        }
+        File file = new File(fileURL.getFile());
+
+        try (FileReader reader = new FileReader(file)) {
             char[] buffer = new char[(int) file.length()];
             reader.read(buffer);
             return new String(buffer);
         } catch (IOException e) {
             log.error(e.getMessage());
-            return null;
+            return "";
         }
     }
 
@@ -87,7 +92,7 @@ public class FileHelper {
      */
     public static void extractTarGzFiles(File dir) throws IOException {
         File listDir[] = dir.listFiles();
-        if (listDir.length == 0) {
+        if (listDir == null || listDir.length == 0) {
             return;
         }
 

@@ -81,6 +81,9 @@ class FieldOptionsManager {
             dataDependencies = new DataDependencies();
             dataDependencies.setFields(dependencyFields);
             Class<? extends DependencyDataProvider> providerClass = annotationReader.getDependencyProvider();
+            if (providerClass == null) {
+                throw new AssertionError("Got null providerClass");
+            }
             DependencyDataProvider provider = new DefaultInstanceManager().createInstance(providerClass);
             dataDependencies.setProvider(provider);
             
