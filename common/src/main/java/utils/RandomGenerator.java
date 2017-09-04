@@ -165,13 +165,10 @@ public class RandomGenerator {
         if (fromFile) {
             String text = FileHelper.readTxtFile("sms_text.txt");
 
-            if (text != null) {
-                int sms_length = new Random().nextInt(160);
-                int beginIndex = new Random().nextInt(text.length() - sms_length);
-                return text.substring(beginIndex, beginIndex + sms_length);
-            } else {
-                return "";
-            }
+            int sms_length = new Random().nextInt(160);
+            int beginIndex = new Random().nextInt(text.length() - sms_length);
+            return text.substring(beginIndex, beginIndex + sms_length);
+
         } else {
             return RandomStringUtils.randomAlphanumeric(12);
         }
