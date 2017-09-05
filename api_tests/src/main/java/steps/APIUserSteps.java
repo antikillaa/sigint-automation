@@ -29,7 +29,7 @@ public class APIUserSteps extends APISteps {
     private static final int LOGIN_DELAY = 5000;
 
     private String generatePassword() {
-        return (String) new UserPasswordProvider().generate(PASSWORD_LENGTH);
+        return new UserPasswordProvider().generate(PASSWORD_LENGTH);
     }
 
     @AfterStory
@@ -153,11 +153,11 @@ public class APIUserSteps extends APISteps {
 
         if (userLogonDatetime == null) {
             ErrorReporter.reportAndRaiseError("Logon datetime is not initialized");
-        }
-
-        long deltaInMillis = System.currentTimeMillis() - userLogonDatetime.getTime();
-        if (deltaInMillis > LOGIN_DELAY) {
-            ErrorReporter.reportAndRaiseError("Incorrect logon datetime: " + userLogonDatetime);
+        } else {
+            long deltaInMillis = System.currentTimeMillis() - userLogonDatetime.getTime();
+            if (deltaInMillis > LOGIN_DELAY) {
+                ErrorReporter.reportAndRaiseError("Incorrect logon datetime: " + userLogonDatetime);
+            }
         }
     }
 }

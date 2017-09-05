@@ -1,6 +1,7 @@
 package steps;
 
 import controllers.APILogin;
+import data_for_entity.data_providers.user_password.UserPasswordProvider;
 import model.User;
 import model.entities.Entities;
 import org.apache.log4j.Logger;
@@ -18,18 +19,22 @@ public class APILoginSteps extends APISteps {
         login.signInAsUser(role);
         checkResultSuccess();
     }
-    
+
     @When("I sent sign in request as $role user with correct credentials")
     public void signInasCorrectUser(String role) {
         login.signInAsUser(role);
     }
-    
+
     @When("I sent sign in request as $role user with incorrect credentials")
     public void signInAsIncorrectUser(String role) {
-        User user = new User();
-        user.setName("test");
-        user.setPassword("test");
-        login.signInAsUser(user);
+        User user = APILogin.getUserByRole(role);
+
+        if (user != null) {
+            user.setPassword(new UserPasswordProvider().generate(10));
+            login.signInAsUser(user);
+        } else {
+            throw new AssertionError("Unable get user by role:" + role);
+        }
     }
 
     @When("I send sign out request")

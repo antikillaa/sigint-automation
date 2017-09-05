@@ -209,7 +209,7 @@ public class UserService implements EntityService<User> {
                 OperationResult<User> userOperationResult = userService.add(newUser);
                 if (userOperationResult.isSuccess()) {
                     User user = userOperationResult.getEntity();
-                    user.setNewPassword((String) new UserPasswordProvider().generate(PASSWORD_LENGTH));
+                    user.setNewPassword(new UserPasswordProvider().generate(PASSWORD_LENGTH));
                     OperationResult<AuthResponseResult> firstPasswordChangeResult = userService.changeTempPassword(user);
                     if (firstPasswordChangeResult.isSuccess()) {
                         return user;
