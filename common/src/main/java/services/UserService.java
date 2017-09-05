@@ -198,33 +198,33 @@ public class UserService implements EntityService<User> {
         Responsibility responsibility = randomEntities.randomEntity(Responsibility.class);
         responsibility.setPermissions(Arrays.asList(permissions));
         OperationResult<Responsibility> responsibilityOperationResult = responsibilityService.add(responsibility);
-        if (responsibilityOperationResult.isSuccess()) {
-            Title title = randomEntities.randomEntity(Title.class);
-            title.setResponsibilities(Collections.singletonList(responsibilityOperationResult.getEntity().getId()));
-            OperationResult<Title> titleOperationResult = titleService.add(title);
-            if (titleOperationResult.isSuccess()) {
-                User newUser = randomEntities.randomEntity(User.class);
-                newUser.setParentTeamId("00"); // default Team
-                newUser.getDefaultPermission().setTitles(Collections.singletonList(titleOperationResult.getEntity().getId()));
-                OperationResult<User> userOperationResult = userService.add(newUser);
-                if (userOperationResult.isSuccess()) {
-                    User user = userOperationResult.getEntity();
-                    user.setNewPassword(new UserPasswordProvider().generate(PASSWORD_LENGTH));
-                    OperationResult<AuthResponseResult> firstPasswordChangeResult = userService.changeTempPassword(user);
-                    if (firstPasswordChangeResult.isSuccess()) {
-                        return user;
-                    } else {
-                        throw new AssertionError("Unable change password for new User: " + JsonConverter.toJsonString(newUser));
-                    }
-                } else {
-                    throw new AssertionError("Unable create User: " + JsonConverter.toJsonString(newUser));
-                }
-            } else {
-                throw new AssertionError("Unable create Title: " + JsonConverter.toJsonString(title));
-            }
-        } else {
+        if (!responsibilityOperationResult.isSuccess()) {
             throw new AssertionError("Unable create Responsibility: " + JsonConverter.toJsonString(responsibility));
         }
+
+        Title title = randomEntities.randomEntity(Title.class);
+        title.setResponsibilities(Collections.singletonList(responsibilityOperationResult.getEntity().getId()));
+        OperationResult<Title> titleOperationResult = titleService.add(title);
+        if (!titleOperationResult.isSuccess()) {
+            throw new AssertionError("Unable create Title: " + JsonConverter.toJsonString(title));
+        }
+
+        User newUser = randomEntities.randomEntity(User.class);
+        newUser.setParentTeamId("00"); // default Team
+        newUser.getDefaultPermission().setTitles(Collections.singletonList(titleOperationResult.getEntity().getId()));
+        OperationResult<User> userOperationResult = userService.add(newUser);
+        if (!userOperationResult.isSuccess()) {
+            throw new AssertionError("Unable create User: " + JsonConverter.toJsonString(newUser));
+        }
+
+        User user = userOperationResult.getEntity();
+        user.setNewPassword(new UserPasswordProvider().generate(PASSWORD_LENGTH));
+        OperationResult<AuthResponseResult> firstPasswordChangeResult = userService.changeTempPassword(user);
+        if (!firstPasswordChangeResult.isSuccess()) {
+            throw new AssertionError("Unable change password for new User: " + JsonConverter.toJsonString(newUser));
+        }
+
+        return user;
     }
 
     public List<OperationResult> removeAll() {
