@@ -30,8 +30,12 @@ public class APILoginSteps extends APISteps {
         User user = APILogin.getUserByRole(role);
 
         if (user != null) {
+            String currentPassword = user.getPassword();
             user.setPassword(new UserPasswordProvider().generate(10));
+
             login.signInAsUser(user);
+
+            user.setPassword(currentPassword);
         } else {
             throw new AssertionError("Unable get user by role:" + role);
         }

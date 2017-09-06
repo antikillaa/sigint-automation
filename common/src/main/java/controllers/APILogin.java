@@ -1,7 +1,6 @@
 package controllers;
 
 import app_context.AppContext;
-import errors.NullReturnException;
 import http.G4HttpClient;
 import http.OperationResult;
 import model.LoggedUser;
@@ -28,15 +27,17 @@ public class APILogin {
     private static AppContext context = AppContext.get();
     private static Logger log = Logger.getLogger(APILogin.class);
     private static final String ADMIN_ROLE = "admin";
-    private static boolean сleanupIsNeeded;
+    private static boolean cleaningIsRequired;
 
     public static User getUserByRole(String role) {
-        try {
-            return Entities.getUsers().getEntity(role);
-        } catch (NullReturnException e) {
-            log.error("Cannot find user by given role:" + role);
-            return null;
+        User searchedUser = null;
+        for (User user : Entities.getUsers()) {
+            if (user.getRoles() != null && user.getRoles().contains(role.toUpperCase())) {
+                searchedUser = user;
+                break;
+            }
         }
+        return searchedUser;
     }
 
     /**
@@ -98,7 +99,7 @@ public class APILogin {
             log.debug("Users are not found. Creating new user with required permissions");
             signInAsUser(getUserByRole(ADMIN_ROLE));
             User user = UserService.createUserWithPermissions(permissions);
-            сleanupIsNeeded = true;
+            cleaningIsRequired = true;
             manager.addUser(user, permissions);
             log.debug("User is created");
             return user;
@@ -116,7 +117,7 @@ public class APILogin {
 
     @AfterStory
     public void afterStoryTearDown() {
-        if (сleanupIsNeeded) {
+        if (cleaningIsRequired) {
             log.info("TearDown for temp users, titles & responsibilities");
 
             Assert.assertTrue("Unable login as admin user!", signInAsUser(ADMIN_ROLE).isSuccess());
@@ -144,7 +145,7 @@ public class APILogin {
                 }
             }
 
-            сleanupIsNeeded = false;
+            cleaningIsRequired = false;
         }
     }
 }
