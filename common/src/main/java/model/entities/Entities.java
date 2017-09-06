@@ -66,7 +66,7 @@ public class Entities {
         return targetGroups;
     }
 
-    private static UsersList initDefaultUsers() {
+    private static UsersList getDefaultUsers() {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         InputStream users_input = classloader.getResourceAsStream("default_users.json");
         return JsonConverter.jsonToObjectsList(users_input, UsersList.class);
@@ -74,7 +74,7 @@ public class Entities {
 
     public static EntityList<User> getUsers() {
         if (users == null) {
-            users = initDefaultUsers();
+            users = getDefaultUsers();
         }
         return users;
     }
