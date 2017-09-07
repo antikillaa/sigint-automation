@@ -2,9 +2,13 @@ package json;
 
 import model.entities.EntityList;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.MapType;
 import org.codehaus.jackson.map.type.TypeFactory;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.ObjectNode;
+import org.codehaus.jackson.node.ValueNode;
 import org.glassfish.jersey.media.multipart.MultiPart;
 
 import java.io.IOException;
@@ -149,4 +153,34 @@ public class JsonConverter {
         return map;
     }
 
+    public Map<String, String> flattenJsonMap(String json) {
+        Map<String, String> map = new HashMap<>();
+        try {
+            addKeys("", new ObjectMapper().readTree(json), map);
+        } catch (IOException e) {
+            log.error(e);
+        }
+        return map;
+    }
+
+    private void addKeys(String currentPath, JsonNode jsonNode, Map<String, String> map) {
+        if (jsonNode.isObject()) {
+            ObjectNode objectNode = (ObjectNode) jsonNode;
+            Iterator<Map.Entry<String, JsonNode>> iter = objectNode.getFields();
+            String pathPrefix = currentPath.isEmpty() ? "" : currentPath + ".";
+
+            while (iter.hasNext()) {
+                Map.Entry<String, JsonNode> entry = iter.next();
+                addKeys(pathPrefix + entry.getKey(), entry.getValue(), map);
+            }
+        } else if (jsonNode.isArray()) {
+            ArrayNode arrayNode = (ArrayNode) jsonNode;
+            for (int i = 0; i < arrayNode.size(); i++) {
+                addKeys(currentPath + "[" + i + "]", arrayNode.get(i), map);
+            }
+        } else if (jsonNode.isValueNode()) {
+            ValueNode valueNode = (ValueNode) jsonNode;
+            map.put(currentPath, valueNode.asText());
+        }
+    }
 }
