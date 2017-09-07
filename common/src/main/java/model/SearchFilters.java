@@ -46,9 +46,11 @@ public class SearchFilters {
     private String youtubeChannelId;
     private String twitterAccountId;
     private String twitterUsername;
+    private List<String> tweetCountry;
     private String insUsername;
     private String insUserId;
     private Boolean includeSpam;
+
 
     public List<String> getDataSource() {
         return dataSource;
@@ -321,6 +323,14 @@ public class SearchFilters {
 
     public void setPersonPassportNumber(String personPassportNumber) {
         this.personPassportNumber = personPassportNumber;
+    }
+
+    public List<String> getTweetCountry() {
+        return tweetCountry;
+    }
+
+    public void setTweetCountry(List<String> tweetCountry) {
+        this.tweetCountry = tweetCountry;
     }
 }
 
