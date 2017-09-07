@@ -252,7 +252,7 @@ public class APISearchSteps extends APISteps {
             Map<String, String> flattenJSON = new JsonConverter().flattenJsonMap(json);
 
             for (String value : flattenJSON.values()) {
-                String[] strings = value.split("\\s+|\\n");
+                String[] strings = value.split("\\s+|\\n+|\\W+");
                 for (String s : strings) {
                     Integer distance = getLevenshteinDistance(s.toLowerCase(), q.toLowerCase());
                     distances.put(value.toLowerCase(), distance);
