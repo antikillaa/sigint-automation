@@ -9,14 +9,16 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.SearchService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import static error_reporter.ErrorReporter.raiseError;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
+import static org.apache.commons.lang.StringUtils.getLevenshteinDistance;
 import static utils.StepHelper.compareByCriteria;
-import static utils.StringUtils.fuzzySearch;
 
 @SuppressWarnings("unchecked")
 public class APISearchSteps extends APISteps {
@@ -232,5 +234,38 @@ public class APISearchSteps extends APISteps {
         Assert.assertTrue(
                 "Expected pageSize size " + criteria + " " + size + ", but was: " + pageSize,
                 condition);
+    }
+
+    private boolean fuzzySearch(String json, String query) {
+
+        if (query.contains("~")) {
+            Integer tildaIndex = query.indexOf("~");
+            String q = query.substring(0, tildaIndex);
+
+            Integer maxDistance = 3;
+            String suffix = query.substring(tildaIndex + 1);
+            if (!suffix.isEmpty()) {
+                maxDistance = Integer.valueOf(suffix);
+            }
+
+            Map<String, Integer> distances = new HashMap<>();
+            Map<String, String> flattenJSON = new JsonConverter().flattenJsonMap(json);
+
+            for (String value : flattenJSON.values()) {
+                String[] strings = value.split("\\s+|\\n");
+                for (String s : strings) {
+                    Integer distance = getLevenshteinDistance(s.toLowerCase(), q.toLowerCase());
+                    distances.put(value.toLowerCase(), distance);
+                    if (distance <= maxDistance)
+                        return true;
+                }
+            }
+
+            log.error("Pattern not founded, LevenshteinDistances:" + distances + " maxDistance:" + maxDistance);
+        } else {
+            log.error("Query string isn't fuzzy");
+        }
+
+        return false;
     }
 }
