@@ -2,6 +2,7 @@ package model;
 
 import java.util.*;
 
+@Deprecated
 public enum InformationRequestDistribution{
 
     SIGINT, CIO, ANALYSIS, OA;

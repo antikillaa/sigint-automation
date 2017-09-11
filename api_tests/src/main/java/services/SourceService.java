@@ -4,14 +4,15 @@ import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.SourceRequest;
-import java.util.Arrays;
-import java.util.List;
 import model.Result;
 import model.SearchFilter;
 import model.Source;
 import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class SourceService implements EntityService<Source> {
 
@@ -96,7 +97,7 @@ public class SourceService implements EntityService<Source> {
 
         G4Response response = g4HttpClient.sendRequest(request.update(entity));
 
-        OperationResult operationResult = new OperationResult<>(response);
+        OperationResult<Source> operationResult = new OperationResult<>(response);
         if (operationResult.isSuccess()) {
             Entities.getSources().addOrUpdateEntity(entity);
             return new OperationResult<>(response, entity);

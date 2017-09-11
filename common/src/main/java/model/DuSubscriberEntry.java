@@ -13,6 +13,7 @@ import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@Deprecated
 public class DuSubscriberEntry extends G4Entity {
     
     private String sourceId="du";

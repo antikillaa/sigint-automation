@@ -12,6 +12,7 @@ import services.TagService;
 
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class APITagSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APITagSteps.class);

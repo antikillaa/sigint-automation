@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-
+@Deprecated
 public enum InformationRequestPriority {
 
     CRITICAL(2, 1), NORMAL(0, 5), HIGH(1,3);
