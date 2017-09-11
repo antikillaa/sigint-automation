@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("unchecked")
 public class APIUserGroupSteps extends APISteps {
 
     private static final Logger log = Logger.getLogger(APIUserGroupSteps.class);

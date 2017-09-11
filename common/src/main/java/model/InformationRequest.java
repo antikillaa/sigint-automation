@@ -13,6 +13,7 @@ import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@Deprecated
 public class InformationRequest extends G4Entity {
     
     @DataIgnore
@@ -20,8 +21,6 @@ public class InformationRequest extends G4Entity {
     private String externalRequestNumber;
     @DataProvider(RFIPrioritiesProvider.class)
     private Integer priority;
-    @DataIgnore
-    private String createdBy;
     @DataIgnore
     private String assignedTo;
     private String subject;

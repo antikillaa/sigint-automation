@@ -10,6 +10,7 @@ import utils.RandomGenerator;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@Deprecated
 public class Phonebook extends G4Entity {
     
     private String phoneNumber;

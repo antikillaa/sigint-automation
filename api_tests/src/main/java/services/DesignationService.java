@@ -4,8 +4,6 @@ import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.DesignationsRequest;
-import java.util.Arrays;
-import java.util.List;
 import json.JsonConverter;
 import model.Designation;
 import model.DesignationSearchResult;
@@ -13,6 +11,9 @@ import model.Result;
 import model.SearchFilter;
 import model.entities.Entities;
 import org.apache.log4j.Logger;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class DesignationService implements EntityService<Designation> {
 
@@ -104,7 +105,7 @@ public class DesignationService implements EntityService<Designation> {
 
     G4Response response = g4HttpClient.sendRequest(request.update(entity));
 
-    OperationResult operationResult = new OperationResult<>(response);
+    OperationResult<Designation> operationResult = new OperationResult<>(response);
     if (operationResult.isSuccess()) {
       Entities.getDesignations().addOrUpdateEntity(entity);
       return new OperationResult<>(response, entity);

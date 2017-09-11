@@ -7,19 +7,14 @@ import java.io.InputStream;
 
 public class Entities {
 
-    private static RFIList RFIs;
     private static UsersList users;
     private static TargetGroupsList targetGroups;
     private static TargetsList targets;
-    private static PhonebookList phonebooks;
-    private static DuSubscriberList duSubscriberses;
-    private static EtisalatSubscriberList etisalatSubscribers;
     private static RoleList roles;
     private static GroupList groups;
     private static RecordList records;
     private static ReportList reports;
     private static SourceList sources;
-    private static RecordCategoriesList recordCategories;
     private static ReportCategoriesList reportCategories;
     private static ProfileList profiles;
     private static WhitelistsList whitelists;
@@ -79,28 +74,6 @@ public class Entities {
         return users;
     }
 
-    public static EntityList<InformationRequest> getRFIs() {
-        if (RFIs == null) {
-            RFIs = new RFIList();
-        }
-        return RFIs;
-    }
-
-
-    public static EntityList<Phonebook> getPhonebooks() {
-        if (phonebooks == null) {
-            phonebooks = new PhonebookList();
-        }
-        return phonebooks;
-    }
-
-    public static EntityList<DuSubscriberEntry> getDuSubscriberses() {
-        if (duSubscriberses == null) {
-            duSubscriberses = new DuSubscriberList();
-        }
-        return duSubscriberses;
-    }
-
     public static EntityList<Record> getRecords() {
         if (records == null) {
             records = new RecordList();
@@ -136,13 +109,6 @@ public class Entities {
         return sources;
     }
 
-    public static EntityList<RecordCategory> getRecordCategories() {
-        if (recordCategories == null) {
-            recordCategories = new RecordCategoriesList();
-        }
-        return recordCategories;
-    }
-
     public static EntityList<ReportCategory> getReportCategories() {
         if (reportCategories == null) {
             reportCategories = new ReportCategoriesList();
@@ -156,14 +122,6 @@ public class Entities {
         }
         return profiles;
     }
-
-    public static EntityList<EtisalatSubscriberEntry> getEtisalatSubscribers() {
-        if (etisalatSubscribers == null) {
-            etisalatSubscribers = new EtisalatSubscriberList();
-        }
-        return etisalatSubscribers;
-    }
-
 
     public static EntityList<Whitelist> getWhitelists() {
         if (whitelists == null) {

@@ -14,6 +14,7 @@ import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@Deprecated
 public class EtisalatSubscriberEntry extends G4Entity {
     
     
