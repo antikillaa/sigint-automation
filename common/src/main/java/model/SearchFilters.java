@@ -24,7 +24,9 @@ public class SearchFilters {
     @JsonProperty("workflow.designations")
     private List<String> designations;
     private AdvancedSearch advancedSearch;
+    private List<String> publisherName;
     private List<String> dataSource; // ["TWITTER"]
+    private List<String> subSource;
     private List<String> type; // ["TWEET"]
     private String eventFeed; // "OSINT"
     private SearchObjectType objectType; // "event"
@@ -49,6 +51,8 @@ public class SearchFilters {
     private List<String> tweetCountry;
     private String insUsername;
     private String insUserId;
+    private String passengerSeqNumber;
+    private String flightBookingNumber;
     private Boolean includeSpam;
 
 
@@ -331,6 +335,38 @@ public class SearchFilters {
 
     public void setTweetCountry(List<String> tweetCountry) {
         this.tweetCountry = tweetCountry;
+    }
+
+    public String getPassengerSeqNumber() {
+        return passengerSeqNumber;
+    }
+
+    public void setPassengerSeqNumber(String passengerSeqNumber) {
+        this.passengerSeqNumber = passengerSeqNumber;
+    }
+
+    public List<String> getPublisherName() {
+        return publisherName;
+    }
+
+    public void setPublisherName(List<String> publisherName) {
+        this.publisherName = publisherName;
+    }
+
+    public String getFlightBookingNumber() {
+        return flightBookingNumber;
+    }
+
+    public void setFlightBookingNumber(String flightBookingNumber) {
+        this.flightBookingNumber = flightBookingNumber;
+    }
+
+    public List<String> getSubSource() {
+        return subSource;
+    }
+
+    public void setSubSource(List<String> subSource) {
+        this.subSource = subSource;
     }
 }
 
