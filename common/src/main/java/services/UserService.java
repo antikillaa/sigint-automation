@@ -180,7 +180,7 @@ public class UserService implements EntityService<User> {
      * @return 'Report role' for G4 user
      * <br>note: ADMIN user has 'approver' role
      */
-    String getReportRole(User user) {
+    public String getReportRole(User user) {
         List<String> roles = user.getEffectivePermission().getActions();
         if (roles.contains("REPORT_UPDATE_APPROVER")) {
             return "approver";
