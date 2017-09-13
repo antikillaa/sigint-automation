@@ -6,11 +6,11 @@ Meta:
 
 Lifecycle:
 Before:
-Given I sign in as admin user
+Given I sign in as user with permissions UM_ADMIN
 When I send create a new user
 Then Request is successful
 After:
-Given I sign in as admin user
+Given I sign in as user with permissions UM_ADMIN
 When I send delete user request
 Then Request is successful
 
