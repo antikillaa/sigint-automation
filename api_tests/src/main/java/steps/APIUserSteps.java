@@ -156,6 +156,7 @@ public class APIUserSteps extends APISteps {
         } else {
             long deltaInMillis = System.currentTimeMillis() - userLogonDatetime.getTime();
             if (deltaInMillis > LOGIN_DELAY) {
+                log.error("Delta in millis: " + deltaInMillis);
                 ErrorReporter.reportAndRaiseError("Incorrect logon datetime: " + userLogonDatetime);
             }
         }

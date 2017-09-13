@@ -4,14 +4,12 @@ import controllers.APILogin;
 import data_for_entity.data_providers.user_password.UserPasswordProvider;
 import model.User;
 import model.entities.Entities;
-import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.When;
 
 
 public class APILoginSteps extends APISteps {
 
-    private static Logger log = Logger.getLogger(APILoginSteps.class);
     private static APILogin login = new APILogin();
 
     @Given("I sign in as $role user")
