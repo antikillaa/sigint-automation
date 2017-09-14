@@ -52,7 +52,7 @@ public class APISearchSteps extends APISteps {
             }
         }
 
-        return sb.append(".*").toString();
+        return sb.append(".*").toString().replace(".*.*", ".*");
     }
 
     @When("I send CB search request - query:$query, source:$source, objectType:$objectType, pageNumber:$pageNumber, pageSize:$pageSize")
@@ -197,6 +197,8 @@ public class APISearchSteps extends APISteps {
 
     @Then("CB search $criteria results for query")
     public void verifyCBSearch(String criteria) {
+        log.info("CB search result validation");
+
         boolean searchable = false;
         if (criteria.equalsIgnoreCase("contains")) {
             searchable = true;

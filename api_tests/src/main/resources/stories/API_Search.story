@@ -98,10 +98,10 @@ Then CB search contains results for query
 
 Examples:
 | source | objectType | query | pageNumber | pageSize |
-| SIGINT | event | knowledge | 0 | NULL |
-| SIGINT | event | kno?le?ge | 0 | NULL |
-| SIGINT | event | *knowledge   | 0 | NULL |
-| SIGINT | event | *knowle?ge  | 0 | NULL |
+| SIGINT | event | knowledge | 0 | 100 |
+| SIGINT | event | kno?le?ge | 0 | 100 |
+| SIGINT | event | *knowledge   | 0 | 100 |
+| SIGINT | event | *knowle?ge  | 0 | 100 |
 
 
 Scenario: OSINT. Wild Card Search
@@ -111,10 +111,10 @@ Then CB search contains results for query
 
 Examples:
 | source | objectType | query | pageNumber | pageSize |
-| OSINT | event | knowledge | 0 | NULL |
-| OSINT | event | kno?le?ge | 0 | NULL |
-| OSINT | event | *knowledge   | 0 | NULL |
-| OSINT | event | *knowle?ge  | 0 | NULL |
+| OSINT | event | knowledge | 0 | 100 |
+| OSINT | event | kno?le?ge | 0 | 100 |
+| OSINT | event | *knowledge   | 0 | 100 |
+| OSINT | event | *knowle?ge  | 0 | 100 |
 
 
 Scenario: CIO. Wild Card Search
@@ -124,10 +124,10 @@ Then CB search contains results for query
 
 Examples:
 | source | objectType | query | pageNumber | pageSize |
-| CIO | event | knowledge | 0 | NULL |
-| CIO | event | kno?le?ge | 0 | NULL |
-| CIO | event | *knowledge   | 0 | NULL |
-| CIO | event | *knowle?ge  | 0 | NULL |
+| CIO | event | knowledge | 0 | 100 |
+| CIO | event | kno?le?ge | 0 | 100 |
+| CIO | event | *knowledge   | 0 | 100 |
+| CIO | event | *knowle?ge  | 0 | 100 |
 
 
 Scenario: SIGINT. Fuzzy Search
@@ -137,10 +137,10 @@ Then CB search contains results for query
 
 Examples:
 | source | objectType | query | pageNumber | pageSize |
-| SIGINT | event | knoeledge~1 | 0 | NULL |
-| SIGINT | event | knowledge~2  | 0 | NULL |
-| SIGINT | event | knwldg~3 | 0 | NULL |
-| SIGINT | event | nowledge~  | 0 | NULL |
+| SIGINT | event | knoeledge~1 | 0 | 100 |
+| SIGINT | event | knowledge~2  | 0 | 100 |
+| SIGINT | event | knwldg~3 | 0 | 100 |
+| SIGINT | event | nowledge~  | 0 | 100 |
 
 
 Scenario: OSINT. Fuzzy Search
@@ -150,10 +150,10 @@ Then CB search contains results for query
 
 Examples:
 | source | objectType | query | pageNumber | pageSize |
-| OSINT | event | knoeledge~1 | 0 | NULL |
-| OSINT | event | knowledge~2  | 0 | NULL |
-| OSINT | event | knwldg~3 | 0 | NULL |
-| OSINT | event | nowledge~  | 0 | NULL |
+| OSINT | event | knoeledge~1 | 0 | 100 |
+| OSINT | event | knowledge~2  | 0 | 100 |
+| OSINT | event | knwldg~3 | 0 | 100 |
+| OSINT | event | nowledge~  | 0 | 100 |
 
 
 Scenario: CIO. Fuzzy Search
@@ -163,7 +163,7 @@ Then CB search contains results for query
 
 Examples:
 | source | objectType | query | pageNumber | pageSize |
-| SIGINT | event | knoeledge~1 | 0 | NULL |
-| SIGINT | event | knowledge~2  | 0 | NULL |
-| SIGINT | event | knwldg~3 | 0 | NULL |
-| SIGINT | event | nowledge~  | 0 | NULL |
+| SIGINT | event | knoeledge~1 | 0 | 100 |
+| SIGINT | event | knowledge~2  | 0 | 100 |
+| SIGINT | event | knwldg~3 | 0 | 100 |
+| SIGINT | event | nowledge~  | 0 | 100 |
