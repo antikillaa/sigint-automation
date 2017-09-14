@@ -24,6 +24,7 @@ import static utils.StepHelper.compareByCriteria;
 public class APISearchSteps extends APISteps {
 
     private static SearchService service = new SearchService();
+    private static final String processIdQuery = "PROCESS_ID:";
 
     /**
      * Example:
@@ -71,7 +72,7 @@ public class APISearchSteps extends APISteps {
 
         Source source = context.get("source", Source.class);
         FileMeta meta = context.get("meta", FileMeta.class);
-        String searchQuery = "pid:" + meta.getMeta().getProperties().getProcessId();
+        String searchQuery = processIdQuery + meta.getMeta().getProperties().getProcessId();
         if (additionalQuery != null) {
             searchQuery = searchQuery + " " + additionalQuery;
         }
@@ -140,7 +141,7 @@ public class APISearchSteps extends APISteps {
     public void designationsArePresentedInCBSearch() {
         List<DesignationMapping> designationMappings = context.get("designationMappingList", List.class);
         FileMeta meta = context.get("meta", FileMeta.class);
-        String pid = "pid:" + meta.getMeta().getProperties().getProcessId();
+        String pid = processIdQuery + meta.getMeta().getProperties().getProcessId();
 
         int designatedEvents = 0;
         for (DesignationMapping designationMapping: designationMappings) {
