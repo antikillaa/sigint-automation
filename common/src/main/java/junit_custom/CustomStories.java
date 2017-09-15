@@ -1,6 +1,5 @@
 package junit_custom;
 
-import failure_strategy.Statistic;
 import org.jbehave.core.junit.JUnitStories;
 import org.junit.Test;
 
@@ -11,9 +10,10 @@ public abstract class CustomStories extends JUnitStories {
         try {
             super.run();
         } catch (Throwable throwable) {
-            if (new Statistic().hasFailuresWithoutBugs()) {
+            // Jira/Zephyr integration
+            // if (new Statistic().hasFailuresWithoutBugs()) {
                 throw new AssertionError(throwable);
-            }
+            // }
         }
     }
 
