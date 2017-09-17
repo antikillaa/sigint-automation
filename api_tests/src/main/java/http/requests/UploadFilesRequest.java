@@ -12,7 +12,7 @@ import static utils.StringUtils.stringContainsAny;
 
 public class UploadFilesRequest extends HttpRequest {
 
-    private final static String URI = "/api/upload/files";
+    private final static String URI = "/api/upload-sigint/files";
 
     public UploadFilesRequest() {
         super(URI);
