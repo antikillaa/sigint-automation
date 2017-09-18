@@ -24,7 +24,7 @@ import static utils.StepHelper.compareByCriteria;
 public class APISearchSteps extends APISteps {
 
     private static SearchService service = new SearchService();
-    private static final String processIdQuery = "PROCESS_ID:";
+    private static final String processIdQuery = "pid:";
 
     /**
      * Example:
