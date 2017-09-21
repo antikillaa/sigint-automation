@@ -1,13 +1,13 @@
 package ingestion.docker.adapters;
 
-import static ingestion.docker.adapters.DockerImage.dataGeneratorImage;
-
 import com.spotify.docker.client.messages.ContainerConfig;
 import ingestion.docker.IDockerAdapter;
 
+import static ingestion.docker.adapters.DockerImage.dataGeneratorImage;
+
 public class PhonebookDockerAdapter implements IDockerAdapter {
 
-  private static final String[] filemasks = {"phonebook*"};
+  private static final String[] filemasks = {"*.csv"};
   private static final DockerImage dockerImage = dataGeneratorImage();
 
   @Override

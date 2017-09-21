@@ -7,7 +7,7 @@ import static ingestion.docker.adapters.DockerImage.dataGeneratorImage;
 
 public class FSMSDockerAdapter implements IDockerAdapter {
 
-  private static final String[] filemasks = {"f_sms*"};
+  private static final String[] filemasks = {"*.csv"};
   private static final DockerImage dockerImage = dataGeneratorImage();
 
   @Override

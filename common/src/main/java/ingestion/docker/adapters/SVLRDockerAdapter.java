@@ -1,13 +1,13 @@
 package ingestion.docker.adapters;
 
-import static ingestion.docker.adapters.DockerImage.dataGeneratorImage;
-
 import com.spotify.docker.client.messages.ContainerConfig;
 import ingestion.docker.IDockerAdapter;
 
+import static ingestion.docker.adapters.DockerImage.dataGeneratorImage;
+
 public class SVLRDockerAdapter implements IDockerAdapter {
 
-  private static final String[] filemasks = {"s_vlr*"};
+  private static final String[] filemasks = {"*.csv"};
   private static final DockerImage dockerImage = dataGeneratorImage();
 
   @Override
