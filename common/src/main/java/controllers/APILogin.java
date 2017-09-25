@@ -9,7 +9,7 @@ import model.Token;
 import model.User;
 import model.entities.Entities;
 import org.apache.log4j.Logger;
-import org.jbehave.core.annotations.AfterStory;
+import org.jbehave.core.annotations.AfterStories;
 import org.jbehave.core.annotations.Given;
 import org.junit.Assert;
 import services.ResponsibilityService;
@@ -115,7 +115,7 @@ public class APILogin {
         signInAsUser(user);
     }
 
-    @AfterStory
+    @AfterStories
     public void afterStoryTearDown() {
         if (cleaningIsRequired) {
             log.info("TearDown for temp users, titles & responsibilities");
