@@ -3,7 +3,6 @@ package http.requests;
 import http.HttpMethod;
 import model.DesignationMapping;
 import model.G4File;
-import model.PegasusMediaType;
 import model.SearchFilter;
 
 public class DesignationMappingRequest extends HttpRequest {
@@ -67,7 +66,7 @@ public class DesignationMappingRequest extends HttpRequest {
   }
 
   public DesignationMappingRequest upload(G4File file) {
-    addBodyFile("file", file, PegasusMediaType.TEXT_CSV_TYPE);
+    addBodyFile("file", file, file.getMediaType());
     this
         .setURI(URI + "import")
         .setHttpMethod(HttpMethod.POST);

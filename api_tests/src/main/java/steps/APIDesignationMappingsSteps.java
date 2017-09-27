@@ -276,6 +276,7 @@ public class APIDesignationMappingsSteps extends APISteps {
   @When("I send import designation-mappings request")
   public void importDesignationMappings() {
     G4File csvFile = context.get("g4file", G4File.class);
+    csvFile.setMediaTypeByFileExtension();
     OperationResult<ImportResult> result = service.upload(csvFile);
 
     context.put("importResult", result.getEntity());
