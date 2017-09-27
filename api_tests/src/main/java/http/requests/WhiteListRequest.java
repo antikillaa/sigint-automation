@@ -3,7 +3,6 @@ package http.requests;
 
 import http.HttpMethod;
 import model.G4File;
-import model.PegasusMediaType;
 import model.SearchFilter;
 import model.Whitelist;
 
@@ -65,7 +64,7 @@ public class WhiteListRequest extends HttpRequest {
     }
 
     public WhiteListRequest upload(G4File file) {
-        addBodyFile("file", file, PegasusMediaType.TEXT_CSV_TYPE);
+        addBodyFile("file", file, file.getMediaType());
         this
             .setURI(URI + "import")
             .setHttpMethod(HttpMethod.POST);

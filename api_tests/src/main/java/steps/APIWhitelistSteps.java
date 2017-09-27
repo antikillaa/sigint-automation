@@ -200,6 +200,7 @@ public class APIWhitelistSteps extends APISteps {
     @When("I send import whitelists request")
     public void importWhitelists() {
         G4File csvFile = context.get("g4file", G4File.class);
+        csvFile.setMediaTypeByFileExtension();
         OperationResult<ImportResult> result = service.upload(csvFile);
 
         context.put("importResult", result.getEntity());
