@@ -54,7 +54,10 @@ public class SearchFilters {
     private String passengerSeqNumber;
     private String flightBookingNumber;
     private Boolean includeSpam;
-
+    private DurationRange duration;
+    private SpeechDurationRange speechDuration;
+    private String speechQualityForAudioKeywordMatching;
+    private String speechQualityForVoiceIdMatching;
 
     public List<String> getDataSource() {
         return dataSource;
@@ -368,6 +371,38 @@ public class SearchFilters {
     public void setSubSource(List<String> subSource) {
         this.subSource = subSource;
     }
+
+    public DurationRange getDuration() {
+        return duration;
+    }
+
+    public void setDuration(DurationRange duration) {
+        this.duration = duration;
+    }
+
+    public SpeechDurationRange getSpeechDuration() {
+        return speechDuration;
+    }
+
+    public void setSpeechDuration(SpeechDurationRange speechDuration) {
+        this.speechDuration = speechDuration;
+    }
+
+    public String getSpeechQualityForAudioKeywordMatching() {
+        return speechQualityForAudioKeywordMatching;
+    }
+
+    public void setSpeechQualityForAudioKeywordMatching(String speechQualityForAudioKeywordMatching) {
+        this.speechQualityForAudioKeywordMatching = speechQualityForAudioKeywordMatching;
+    }
+
+    public String getSpeechQualityForVoiceIdMatching() {
+        return speechQualityForVoiceIdMatching;
+    }
+
+    public void setSpeechQualityForVoiceIdMatching(String speechQualityForVoiceIdMatching) {
+        this.speechQualityForVoiceIdMatching = speechQualityForVoiceIdMatching;
+    }
 }
 
 class FavoriteCount {
@@ -399,6 +434,48 @@ class EventTime {
     }
 
     public void setTo(Date to) {
+        this.to = to;
+    }
+}
+
+class DurationRange {
+    private Integer from;
+    private Integer to;
+
+    public Integer getFrom() {
+        return from;
+    }
+
+    public void setFrom(Integer from) {
+        this.from = from;
+    }
+
+    public Integer getTo() {
+        return to;
+    }
+
+    public void setTo(Integer to) {
+        this.to = to;
+    }
+}
+
+class SpeechDurationRange {
+    private Integer from;
+    private Integer to;
+
+    public Integer getFrom() {
+        return from;
+    }
+
+    public void setFrom(Integer from) {
+        this.from = from;
+    }
+
+    public Integer getTo() {
+        return to;
+    }
+
+    public void setTo(Integer to) {
         this.to = to;
     }
 }
