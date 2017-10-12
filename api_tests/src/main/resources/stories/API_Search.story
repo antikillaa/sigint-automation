@@ -167,3 +167,17 @@ Examples:
 | SIGINT | event | knowledge~2  | 0 | 100 |
 | SIGINT | event | knwldg~3 | 0 | 100 |
 | SIGINT | event | nowledge~  | 0 | 100 |
+
+
+Scenario: Search. Workflow filters. Record status
+When I send workflow search request: record status:<recordStatus>, source:<source>, objectType:<objectType>,
+pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search results match the recordStatus filters
+
+Examples:
+| source | objectType | recordStatus | pageNumber | pageSize |
+| SIGINT | event | unassigned | 0 | 200 |
+| SIGINT | event | unprocessed | 0 | 200 |
+| SIGINT | event | reported | 0 | 200 |
+| SIGINT | event | unimportant | 0 | 200 |

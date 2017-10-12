@@ -22,6 +22,7 @@ public class CBEntity extends AbstractEntity {
     private CBEntityAssignments assignments;
     private List<Geo> geo;
     private SearchObjectType objectType;
+    private Reports reports = new Reports();
 
     public List<String> getSources() {
         return sources;
@@ -125,5 +126,25 @@ public class CBEntity extends AbstractEntity {
 
     public void setSubSourceType(String subSourceType) {
         this.subSourceType = subSourceType;
+    }
+
+    public Reports getReports() {
+        return reports;
+    }
+
+    public void setReports(Reports reports) {
+        this.reports = reports;
+    }
+
+    public class Reports {
+        private List<String> reportIds = new ArrayList<>();
+
+        public List<String> getReportIds() {
+            return reportIds;
+        }
+
+        public void setReportIds(List<String> reportIds) {
+            this.reportIds = reportIds;
+        }
     }
 }

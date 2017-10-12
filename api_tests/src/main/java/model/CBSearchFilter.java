@@ -20,7 +20,7 @@ public class CBSearchFilter {
 
     public CBSearchFilter(String source, String objectType, String query, String pageSize, String pageNumber) {
         this.query = query;
-        this.setSourceType(Collections.singletonList(DataSourceCategory.valueOf(source)));
+        this.setSourceType(source);
         this.objectType = SearchObjectType.valueOf(objectType);
 
         if (pageSize.toLowerCase().equals("null")) {
@@ -36,8 +36,8 @@ public class CBSearchFilter {
         return objectType;
     }
 
-    public void setObjectType(SearchObjectType objectType) {
-        this.objectType = objectType;
+    public void setObjectType(String objectType) {
+        this.objectType = SearchObjectType.valueOf(objectType);
     }
 
     public String getQuery() {
@@ -60,8 +60,8 @@ public class CBSearchFilter {
         return sourceType;
     }
 
-    public void setSourceType(List<DataSourceCategory> sourceType) {
-        this.sourceType = sourceType;
+    public void setSourceType(String sourceType) {
+        this.sourceType = Collections.singletonList(DataSourceCategory.valueOf(sourceType));
     }
 
     public void setPageSize(int pageSize) {

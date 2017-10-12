@@ -8,10 +8,12 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.SearchService;
+import utils.SearchQueryBuilder;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static error_reporter.ErrorReporter.raiseError;
@@ -25,6 +27,7 @@ public class APISearchSteps extends APISteps {
 
     private static SearchService service = new SearchService();
     private static final String processIdQuery = "pid:";
+    private static final Integer UNIMPORTANT = -1;
 
     /**
      * Example:
@@ -144,7 +147,7 @@ public class APISearchSteps extends APISteps {
         String pid = processIdQuery + meta.getMeta().getProperties().getProcessId();
 
         int designatedEvents = 0;
-        for (DesignationMapping designationMapping: designationMappings) {
+        for (DesignationMapping designationMapping : designationMappings) {
             List<String> designations = designationMapping.getDesignations();
             assertNotNull("Designation-mapping with null designations: " + designationMapping.getId(), designations);
 
@@ -162,7 +165,7 @@ public class APISearchSteps extends APISteps {
                 continue;
             }
             designatedEvents++; // increment if search result isn't empty
-            for (String designation: designations) {
+            for (String designation : designations) {
                 log.info("Check '" + designation + "' designation in response");
                 for (CBEntity entity : entities) {
                     String json = JsonConverter.toJsonString(entity);
@@ -182,13 +185,13 @@ public class APISearchSteps extends APISteps {
         List<Whitelist> filteredWhitelists = context.get("whitelistEntitiesList", List.class);
 
         log.info("Check that identifiers are filtered from CB search by pid");
-        for (Whitelist filteredWhitelist: filteredWhitelists) {
+        for (Whitelist filteredWhitelist : filteredWhitelists) {
             String identifier = filteredWhitelist.getIdentifier();
             context.put("searchQuery", identifier);
             verifyCBSearch("doesn't contain");
         }
         log.info("Check that identifier entities are not created");
-        for (Whitelist filteredWhitelist: filteredWhitelists) {
+        for (Whitelist filteredWhitelist : filteredWhitelists) {
             String identifier = filteredWhitelist.getIdentifier();
             recordSearch(identifier, "SIGINT", "entity", "0", "100");
             CBSearchListSizeShouldBe("==", "0");
@@ -270,5 +273,55 @@ public class APISearchSteps extends APISteps {
         }
 
         return false;
+    }
+
+    @When("I send workflow search request: record status:$recordStatus, source:$source, objectType:$objectType, pageNumber:$pageNumber, pageSize:$pageSize")
+    public void searchWorkflowFiltersRecordStatus(String recordStatus, String source, String objectType, String pageNumber, String pageSize) {
+        String query = new SearchQueryBuilder().recordStatusToQuery(recordStatus);
+        CBSearchFilter filter = new CBSearchFilter(source, objectType, query, pageSize, pageNumber);
+
+        OperationResult<List<CBEntity>> operationResult = service.search(filter);
+        List<CBEntity> searchResults = operationResult.getEntity();
+
+        context.put("searchResults", searchResults);
+        context.put("recordStatusFilter", recordStatus);
+    }
+
+    @Then("CB search results match the recordStatus filters")
+    public void matchSearchResultsWithFilters() {
+        List<CBEntity> entities = context.get("searchResults", List.class);
+        String[] recordStatuses = context.get("recordStatusFilter", String.class).split("\\s+");
+
+        for (CBEntity entity : entities) {
+            for (String recordStatus : recordStatuses) {
+                switch (recordStatus.toLowerCase()) {
+                    case "unassigned":
+                        Assert.assertTrue(
+                                "Search by RecordStatus:Unassigned, return assigned record:" + JsonConverter.toJsonString(entity),
+                                entity.getAssignments().getOwnerId().isEmpty());
+                        break;
+                    case "unprocessed":
+                        Assert.assertTrue(
+                                "Search by RecordStatus::Unprocessed return record with reportIds:" + JsonConverter.toJsonString(entity),
+                                entity.getReports() == null || entity.getReports().getReportIds().isEmpty());
+                        Assert.assertFalse(
+                                "Search by RecordStatus:Unprocessed return Unimportance record:" + JsonConverter.toJsonString(entity),
+                                Objects.equals(entity.getAssignments().getImportance(), UNIMPORTANT));
+                        break;
+                    case "reported":
+                        Assert.assertFalse(
+                                "Search by RecordStatus:Reported return record without reportIds:" + JsonConverter.toJsonString(entity),
+                                entity.getReports().getReportIds().isEmpty());
+                        break;
+                    case "unimportant":
+                        Assert.assertTrue(
+                                "Search by RecordStatus:Unimportant return NOT unimportance record:" + JsonConverter.toJsonString(entity),
+                                Objects.equals(entity.getAssignments().getImportance(), UNIMPORTANT));
+                        break;
+                    default:
+                        throw new AssertionError("Unknown recordStatus filter value: " + recordStatus);
+                }
+            }
+        }
     }
 }

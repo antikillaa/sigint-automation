@@ -7,7 +7,7 @@ public class CBEntityAssignments {
 
     private Object common;
     private List<String> designationIds = new ArrayList<>();
-    private Object importance;
+    private Integer importance;
     private String state;
     private List<String> categories = new ArrayList<>();
     private Integer priority;
@@ -31,11 +31,11 @@ public class CBEntityAssignments {
         this.designationIds = designationIds;
     }
 
-    public Object getImportance() {
+    public Integer getImportance() {
         return importance;
     }
 
-    public void setImportance(Object importance) {
+    public void setImportance(Integer importance) {
         this.importance = importance;
     }
 
