@@ -5,6 +5,9 @@ import java.util.List;
 public class SearchNode {
     private String type;
     private List<String> words;
+    private String firstWord;
+    private String secondWord;
+    private Integer distance;
     private SearchFilters filters;
 
     public String getType() {
@@ -29,5 +32,29 @@ public class SearchNode {
 
     public void setWords(List<String> words) {
         this.words = words;
+    }
+
+    public String getFirstWord() {
+        return firstWord;
+    }
+
+    public void setFirstWord(String firstWord) {
+        this.firstWord = firstWord;
+    }
+
+    public String getSecondWord() {
+        return secondWord;
+    }
+
+    public void setSecondWord(String secondWord) {
+        this.secondWord = secondWord;
+    }
+
+    public Integer getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Integer distance) {
+        this.distance = distance;
     }
 }

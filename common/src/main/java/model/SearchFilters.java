@@ -37,6 +37,8 @@ public class SearchFilters {
     private EventTime eventTime;
     private String targetMatchType;
     private List<String> target;
+    private List<TargetGroup> targetGroups;
+    private List<String> targetGroup;
     private List<String> groupIds;
     private Boolean includeChildGroups;
     private List<String> profileCountry;
@@ -403,79 +405,107 @@ public class SearchFilters {
     public void setSpeechQualityForVoiceIdMatching(String speechQualityForVoiceIdMatching) {
         this.speechQualityForVoiceIdMatching = speechQualityForVoiceIdMatching;
     }
-}
 
-class FavoriteCount {
-    private Integer from;
-
-    public Integer getFrom() {
-        return from;
+    public List<TargetGroup> getTargetGroups() {
+        return targetGroups;
     }
 
-    public void setFrom(Integer from) {
-        this.from = from;
-    }
-}
-
-class EventTime {
-    private Date from;
-    private Date to;
-
-    public Date getFrom() {
-        return from;
+    public void setTargetGroups(List<TargetGroup> targetGroups) {
+        this.targetGroups = targetGroups;
     }
 
-    public void setFrom(Date from) {
-        this.from = from;
+    public List<String> getTargetGroup() {
+        return targetGroup;
     }
 
-    public Date getTo() {
-        return to;
+    public void setTargetGroup(List<String> targetGroup) {
+        this.targetGroup = targetGroup;
     }
 
-    public void setTo(Date to) {
-        this.to = to;
-    }
-}
+    public class TargetGroup extends AbstractEntity {
+        private String name;
 
-class DurationRange {
-    private Integer from;
-    private Integer to;
+        public String getName() {
+            return name;
+        }
 
-    public Integer getFrom() {
-        return from;
-    }
-
-    public void setFrom(Integer from) {
-        this.from = from;
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 
-    public Integer getTo() {
-        return to;
+    public class FavoriteCount {
+        private Integer from;
+
+        public Integer getFrom() {
+            return from;
+        }
+
+        public void setFrom(Integer from) {
+            this.from = from;
+        }
     }
 
-    public void setTo(Integer to) {
-        this.to = to;
+    public class EventTime {
+        private Date from;
+        private Date to;
+
+        public Date getFrom() {
+            return from;
+        }
+
+        public void setFrom(Date from) {
+            this.from = from;
+        }
+
+        public Date getTo() {
+            return to;
+        }
+
+        public void setTo(Date to) {
+            this.to = to;
+        }
     }
-}
 
-class SpeechDurationRange {
-    private Integer from;
-    private Integer to;
+    public class DurationRange {
+        private Integer from;
+        private Integer to;
 
-    public Integer getFrom() {
-        return from;
+        public Integer getFrom() {
+            return from;
+        }
+
+        public void setFrom(Integer from) {
+            this.from = from;
+        }
+
+        public Integer getTo() {
+            return to;
+        }
+
+        public void setTo(Integer to) {
+            this.to = to;
+        }
     }
 
-    public void setFrom(Integer from) {
-        this.from = from;
-    }
+    public class SpeechDurationRange {
+        private Integer from;
+        private Integer to;
 
-    public Integer getTo() {
-        return to;
-    }
+        public Integer getFrom() {
+            return from;
+        }
 
-    public void setTo(Integer to) {
-        this.to = to;
+        public void setFrom(Integer from) {
+            this.from = from;
+        }
+
+        public Integer getTo() {
+            return to;
+        }
+
+        public void setTo(Integer to) {
+            this.to = to;
+        }
     }
 }
