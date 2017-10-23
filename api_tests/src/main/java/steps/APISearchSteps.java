@@ -347,4 +347,24 @@ public class APISearchSteps extends APISteps {
                     entity);
         }
     }
+
+
+    @Then("CB search results contains only dataSourceType from query")
+    public void cbSearchResultsContainsOnlyDataSourceTypeFromQuery() {
+        String query = context.get("searchQuery", String.class);
+        final String DATA_SOURCE = "dataSource:\"";
+        final String QUOTES = "\"";
+
+        Integer beginIndex = query.indexOf(DATA_SOURCE) + DATA_SOURCE.length();
+        Integer endIndex = query.indexOf(QUOTES, beginIndex);
+        String dataSourceType = query.substring(beginIndex, endIndex);
+
+        List<CBEntity> entities = context.get("searchResults", List.class);
+
+        CBEntity wrongEntity = entities.stream()
+                .filter(cbEntity -> !cbEntity.getSources().contains(dataSourceType))
+                .findAny().orElse(null);
+
+        Assert.assertNull("Search by:" + query + " return:" + JsonConverter.toJsonString(wrongEntity), wrongEntity);
+    }
 }

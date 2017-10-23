@@ -143,3 +143,24 @@ Examples:
 | SIGINT | event | unprocessed | 0 | 200 |
 | SIGINT | event | reported | 0 | 200 |
 | SIGINT | event | unimportant | 0 | 200 |
+
+
+Scenario: Search. SIGINT. Data Source filters.
+When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+And CB search results contains only dataSourceType from query
+
+Examples:
+| source | objectType | query  | pageNumber | pageSize |
+| SIGINT | event | dataSource:"E" | 0 | 100 |
+| SIGINT | entity | dataSource:"E" | 0 | 100 |
+| SIGINT | event | dataSource:"F" | 0 | 100 |
+| SIGINT | entity | dataSource:"F" | 0 | 100 |
+| SIGINT | event | dataSource:"H" | 0 | 100 |
+| SIGINT | entity | dataSource:"H" | 0 | 100 |
+| SIGINT | event | dataSource:"S" | 0 | 100 |
+| SIGINT | entity | dataSource:"S" | 0 | 100 |
+| SIGINT | event | dataSource:"T" | 0 | 100 |
+| SIGINT | entity | dataSource:"T" | 0 | 100 |
+| SIGINT | entity | dataSource:"PHONEBOOK" | 0 | 100 |
