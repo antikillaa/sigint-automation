@@ -14,6 +14,7 @@ Scenario: SIGINT. The maximum number of search results for a single query is lim
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
+And CB search results contains only sourceType:<source> and objectType:<objectType> records
 And CB search result list size < 1001
 And pageSize size in response < 1001
 
@@ -31,6 +32,7 @@ Scenario: OSINT. The maximum number of search results for a single query is limi
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
+And CB search results contains only sourceType:<source> and objectType:<objectType> records
 And CB search result list size < 1001
 And pageSize size in response < 1001
 
@@ -48,6 +50,7 @@ Scenario: GOVINT. The maximum number of search results for a single query is lim
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
+And CB search results contains only sourceType:<source> and objectType:<objectType> records
 And CB search result list size < 1001
 And pageSize size in response < 1001
 
@@ -65,6 +68,7 @@ Scenario: PROFILER. The maximum number of search results for a single query is l
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
+And CB search results contains only sourceType:<source> and objectType:<objectType> records
 And CB search result list size < 1001
 And pageSize size in response < 1001
 

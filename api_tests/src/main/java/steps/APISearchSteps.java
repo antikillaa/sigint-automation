@@ -324,4 +324,27 @@ public class APISearchSteps extends APISteps {
             }
         }
     }
+
+    @Then("CB search results contains only sourceType:$sourceType and objectType:$objectType records")
+    public void cbSearchResultsContainsOnlySourceTypeAndObjectTypeRecords(String sourceType, String objectType) {
+        List<CBEntity> entities = context.get("searchResults", List.class);
+
+        CBEntity entity = entities.stream()
+                .filter(cbEntity -> !cbEntity.getSourceType().equals(sourceType))
+                .findAny().orElse(null);
+
+        Assert.assertNull(
+                "Search by sourceType:" + sourceType + "return:" + JsonConverter.toJsonString(entity),
+                entity);
+
+        if (!sourceType.equals("PROFILER")) {
+            entity = entities.stream()
+                    .filter(cbEntity -> !cbEntity.getObjectType().name().equals(objectType))
+                    .findAny().orElse(null);
+
+            Assert.assertNull(
+                    "Search by object type:" + objectType + "return:" + JsonConverter.toJsonString(entity),
+                    entity);
+        }
+    }
 }
