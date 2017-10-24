@@ -139,28 +139,44 @@ And CB search results match the recordStatus filters
 
 Examples:
 | source | objectType | recordStatus | pageNumber | pageSize |
-| SIGINT | event | unassigned | 0 | 200 |
-| SIGINT | event | unprocessed | 0 | 200 |
-| SIGINT | event | reported | 0 | 200 |
-| SIGINT | event | unimportant | 0 | 200 |
+| SIGINT | event | unassigned | 0 | 300 |
+| SIGINT | event | unprocessed | 0 | 300 |
+| SIGINT | event | reported | 0 | 300 |
+| SIGINT | event | unimportant | 0 | 300 |
 
 
 Scenario: Search. SIGINT. Data Source filters.
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
-And CB search results contains only dataSourceType from query
+And CB search results contains only sourceType from query
 
 Examples:
 | source | objectType | query  | pageNumber | pageSize |
-| SIGINT | event | dataSource:"E" | 0 | 100 |
-| SIGINT | entity | dataSource:"E" | 0 | 100 |
-| SIGINT | event | dataSource:"F" | 0 | 100 |
-| SIGINT | entity | dataSource:"F" | 0 | 100 |
-| SIGINT | event | dataSource:"H" | 0 | 100 |
-| SIGINT | entity | dataSource:"H" | 0 | 100 |
-| SIGINT | event | dataSource:"S" | 0 | 100 |
-| SIGINT | entity | dataSource:"S" | 0 | 100 |
-| SIGINT | event | dataSource:"T" | 0 | 100 |
-| SIGINT | entity | dataSource:"T" | 0 | 100 |
-| SIGINT | entity | dataSource:"PHONEBOOK" | 0 | 100 |
+| SIGINT | event | dataSource:"E" | 0 | 300 |
+| SIGINT | entity | dataSource:"E" | 0 | 300 |
+| SIGINT | event | dataSource:"F" | 0 | 300 |
+| SIGINT | entity | dataSource:"F" | 0 | 300 |
+| SIGINT | event | dataSource:"H" | 0 | 300 |
+| SIGINT | entity | dataSource:"H" | 0 | 300 |
+| SIGINT | event | dataSource:"S" | 0 | 300 |
+| SIGINT | entity | dataSource:"S" | 0 | 300 |
+| SIGINT | event | dataSource:"T" | 0 | 300 |
+| SIGINT | entity | dataSource:"T" | 0 | 300 |
+| SIGINT | entity | dataSource:"PHONEBOOK" | 0 | 300 |
+
+
+Scenario: Search. Data Subsource filters
+When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+And CB search results contains only subSource from query
+
+Examples:
+| source | objectType | query  | pageNumber | pageSize |
+| SIGINT | event | subSource:"CDR" | 0 | 300 |
+| SIGINT | entity | subSource:"CELL" | 0 | 300 |
+| SIGINT | event | subSource:"Fax" | 0 | 300 |
+| SIGINT | entity | subSource:"SMS" | 0 | 300 |
+| SIGINT | event | subSource:"VLR" | 0 | 300 |
+| SIGINT | entity | subSource:"Voice" | 0 | 300 |

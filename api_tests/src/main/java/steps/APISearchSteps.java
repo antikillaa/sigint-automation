@@ -349,7 +349,7 @@ public class APISearchSteps extends APISteps {
     }
 
 
-    @Then("CB search results contains only dataSourceType from query")
+    @Then("CB search results contains only sourceType from query")
     public void cbSearchResultsContainsOnlyDataSourceTypeFromQuery() {
         String query = context.get("searchQuery", String.class);
         final String DATA_SOURCE = "dataSource:\"";
@@ -367,4 +367,24 @@ public class APISearchSteps extends APISteps {
 
         Assert.assertNull("Search by:" + query + " return:" + JsonConverter.toJsonString(wrongEntity), wrongEntity);
     }
+
+    @Then("CB search results contains only subSource from query")
+    public void cbSearchResultsContainsOnlyDataSubSourceFromQuery() {
+        String query = context.get("searchQuery", String.class);
+        final String SUBSOURCE = "subSource:\"";
+        final String QUOTES = "\"";
+
+        Integer beginIndex = query.indexOf(SUBSOURCE) + SUBSOURCE.length();
+        Integer endIndex = query.indexOf(QUOTES, beginIndex);
+        String subSource = query.substring(beginIndex, endIndex);
+
+        List<CBEntity> entities = context.get("searchResults", List.class);
+
+        CBEntity wrongEntity = entities.stream()
+                .filter(cbEntity -> !cbEntity.getSubSourceType().contains(subSource))
+                .findAny().orElse(null);
+
+        Assert.assertNull("Search by:" + query + " return:" + JsonConverter.toJsonString(wrongEntity), wrongEntity);
+    }
+
 }
