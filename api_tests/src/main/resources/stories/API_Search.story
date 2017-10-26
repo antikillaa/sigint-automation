@@ -131,7 +131,7 @@ Examples:
 | OSINT | event | nowledge~  | 0 | 100 |
 
 
-Scenario: Search. Workflow filters. Record status
+Scenario: Search. [SIGINT] Workflow filters. Record status
 When I send workflow search request: record status:<recordStatus>, source:<source>, objectType:<objectType>,
 pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
@@ -145,7 +145,7 @@ Examples:
 | SIGINT | event | unimportant | 0 | 300 |
 
 
-Scenario: Search. SIGINT. Data Source filters.
+Scenario: Search. [SIGINT] Data Source filters.
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -166,7 +166,7 @@ Examples:
 | SIGINT | entity | dataSource:"PHONEBOOK" | 0 | 300 |
 
 
-Scenario: Search. Data Subsource filters
+Scenario: Search. [SIGINT] Data Subsource filters
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -175,8 +175,37 @@ And CB search results contains only subSource from query
 Examples:
 | source | objectType | query  | pageNumber | pageSize |
 | SIGINT | event | subSource:"CDR" | 0 | 300 |
+| SIGINT | entity | subSource:"CDR" | 0 | 300 |
+| SIGINT | event | subSource:"CELL" | 0 | 300 |
 | SIGINT | entity | subSource:"CELL" | 0 | 300 |
 | SIGINT | event | subSource:"Fax" | 0 | 300 |
+| SIGINT | entity | subSource:"Fax" | 0 | 300 |
+| SIGINT | event | subSource:"SMS" | 0 | 300 |
 | SIGINT | entity | subSource:"SMS" | 0 | 300 |
 | SIGINT | event | subSource:"VLR" | 0 | 300 |
+| SIGINT | entity | subSource:"VLR" | 0 | 300 |
+| SIGINT | event | subSource:"Voice" | 0 | 300 |
 | SIGINT | entity | subSource:"Voice" | 0 | 300 |
+
+
+Scenario: Search. [SIGINT] Record Type filters
+When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+And CB search results contains only recordType from query
+
+Examples:
+| source | objectType | query  | pageNumber | pageSize |
+| SIGINT | event | type:"CALL" | 0 | 300 |
+| SIGINT | event | type:"LOCATION" | 0 | 300 |
+| SIGINT | event | type:"EMAIL" | 0 | 300 |
+| SIGINT | event | type:"FAX" | 0 | 300 |
+| SIGINT | event | type:"VLR" | 0 | 300 |
+| SIGINT | event | type:"MMS_ROAMING" | 0 | 300 |
+| SIGINT | event | type:"SMS" | 0 | 300 |
+| SIGINT | event | type:"MMS" | 0 | 300 |
+| SIGINT | event | type:"VSMS" | 0 | 300 |
+| SIGINT | event | type:"SIP_VIDEO" | 0 | 300 |
+| SIGINT | entity | type:"EMAIL_ACCOUNT" | 0 | 300 |
+| SIGINT | entity | type:"PHONE" | 0 | 300 |
+| SIGINT | entity | type:"TELECOM_SUBSCRIBER" | 0 | 300 |
