@@ -125,8 +125,8 @@ And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed, exclude: .tif
 Then Number of ingested entity records in CB > <recordsCount>
-And Number of ingested event records in CB < <recordsCount>
-And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
+And Number of ingested event records in CB < <recordsCount>, additional query string: AND includeSpam:false
+And Number of ingested event records in CB == <recordsCount>
 And Designated events have correct designations
 
 Examples:
@@ -152,8 +152,8 @@ And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
 Then Number of ingested entity records in CB > <recordsCount>
-And Number of ingested event records in CB < <recordsCount>
-And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
+And Number of ingested event records in CB < <recordsCount>, additional query string: AND includeSpam:false
+And Number of ingested event records in CB == <recordsCount>
 And Designated events have correct designations
 
 Examples:
@@ -175,8 +175,8 @@ And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
 Then Number of ingested entity records in CB > <recordsCount>
-And Number of ingested event records in CB < <recordsCount>
-And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
+And Number of ingested event records in CB < <recordsCount>, additional query string: AND includeSpam:false
+And Number of ingested event records in CB == <recordsCount>
 And Designated events have correct designations
 
 Examples:
@@ -197,8 +197,8 @@ And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
 Then Number of ingested entity records in CB > <recordsCount>
-And Number of ingested event records in CB < <recordsCount>
-And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:true
+And Number of ingested event records in CB < <recordsCount>, additional query string: AND includeSpam:false
+And Number of ingested event records in CB == <recordsCount>
 And Designated events have correct designations
 
 Examples:
@@ -223,7 +223,7 @@ And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed, exclude: .tif
 Then Number of ingested entity records in CB > <recordsCount>
-And Number of ingested event records in CB == <recordsCount>
+And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:false
 And Designated events have correct designations
 
 Examples:
@@ -249,7 +249,7 @@ And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
 Then Number of ingested entity records in CB > <recordsCount>
-And Number of ingested event records in CB == <recordsCount>
+And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:false
 And Designated events have correct designations
 
 Examples:
@@ -271,7 +271,7 @@ And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
 Then Number of ingested entity records in CB > <recordsCount>
-And Number of ingested event records in CB == <recordsCount>
+And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:false
 And Designated events have correct designations
 
 Examples:
@@ -292,7 +292,7 @@ And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
 Then Number of ingested entity records in CB > <recordsCount>
-And Number of ingested event records in CB == <recordsCount>
+And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:false
 And Designated events have correct designations
 
 Examples:
@@ -311,7 +311,7 @@ And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
 And Original data file is searchable within the system
-And Number of ingested event records in CB == <recordsCount>
+And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:false
 And All events have default designation
 
 Examples:
