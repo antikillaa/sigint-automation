@@ -6,7 +6,6 @@ import json.JsonConverter;
 import model.*;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.junit.Assert;
 import services.SearchService;
 import utils.SearchQueryBuilder;
 
@@ -17,10 +16,14 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static error_reporter.ErrorReporter.raiseError;
+import static json.JsonConverter.toJsonString;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
 import static org.apache.commons.lang.StringUtils.getLevenshteinDistance;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static utils.StepHelper.compareByCriteria;
+import static utils.StringUtils.extractStringsInQuotes;
 
 @SuppressWarnings("unchecked")
 public class APISearchSteps extends APISteps {
@@ -126,9 +129,7 @@ public class APISearchSteps extends APISteps {
 
         int expectedCount = Integer.valueOf(size);
         boolean condition = compareByCriteria(criteria, entities.size(), expectedCount);
-        Assert.assertTrue(
-                "Expected search results count " + criteria + " " + size + ", but was: " + entities.size(),
-                condition);
+        assertTrue("Expected search results count " + criteria + " " + size + ", but was: " + entities.size(), condition);
     }
 
     @Then("All events have default designation")
@@ -168,7 +169,7 @@ public class APISearchSteps extends APISteps {
             for (String designation : designations) {
                 log.info("Check '" + designation + "' designation in response");
                 for (CBEntity entity : entities) {
-                    String json = JsonConverter.toJsonString(entity);
+                    String json = toJsonString(entity);
                     if (!json.contains(designation)) {
                         raiseError("Event doesn't have '" + designation + "' designation:\n" + json);
                     }
@@ -214,7 +215,7 @@ public class APISearchSteps extends APISteps {
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE | Pattern.CASE_INSENSITIVE | Pattern.UNIX_LINES);
 
         for (CBEntity entity : entities) {
-            String json = JsonConverter.toJsonString(entity).replaceAll("(\\r\\n\\t|\\r\\n|\\n)", " ").trim();
+            String json = toJsonString(entity).replaceAll("(\\r\\n\\t|\\r\\n|\\n)", " ").trim();
 
             Boolean matches;
             if (query.contains("~")) {
@@ -237,9 +238,7 @@ public class APISearchSteps extends APISteps {
         int expectedCount = Integer.valueOf(size);
         boolean condition = compareByCriteria(criteria, pageSize, expectedCount);
 
-        Assert.assertTrue(
-                "Expected pageSize size " + criteria + " " + size + ", but was: " + pageSize,
-                condition);
+        assertTrue("Expected pageSize size " + criteria + " " + size + ", but was: " + pageSize, condition);
     }
 
     private boolean fuzzySearch(String json, String query) {
@@ -296,26 +295,21 @@ public class APISearchSteps extends APISteps {
             for (String recordStatus : recordStatuses) {
                 switch (recordStatus.toLowerCase()) {
                     case "unassigned":
-                        Assert.assertTrue(
-                                "Search by RecordStatus:Unassigned, return assigned record:" + JsonConverter.toJsonString(entity),
+                        assertTrue("Search by RecordStatus:Unassigned, return assigned record:" + toJsonString(entity),
                                 entity.getAssignments().getOwnerId().isEmpty());
                         break;
                     case "unprocessed":
-                        Assert.assertTrue(
-                                "Search by RecordStatus::Unprocessed return record with reportIds:" + JsonConverter.toJsonString(entity),
+                        assertTrue("Search by RecordStatus::Unprocessed return record with reportIds:" + toJsonString(entity),
                                 entity.getReports() == null || entity.getReports().getReportIds().isEmpty());
-                        Assert.assertFalse(
-                                "Search by RecordStatus:Unprocessed return Unimportance record:" + JsonConverter.toJsonString(entity),
+                        assertFalse("Search by RecordStatus:Unprocessed return Unimportance record:" + toJsonString(entity),
                                 Objects.equals(entity.getAssignments().getImportance(), UNIMPORTANT));
                         break;
                     case "reported":
-                        Assert.assertFalse(
-                                "Search by RecordStatus:Reported return record without reportIds:" + JsonConverter.toJsonString(entity),
+                        assertFalse("Search by RecordStatus:Reported return record without reportIds:" + toJsonString(entity),
                                 entity.getReports().getReportIds().isEmpty());
                         break;
                     case "unimportant":
-                        Assert.assertTrue(
-                                "Search by RecordStatus:Unimportant return NOT unimportance record:" + JsonConverter.toJsonString(entity),
+                        assertTrue("Search by RecordStatus:Unimportant return NOT unimportance record:" + toJsonString(entity),
                                 Objects.equals(entity.getAssignments().getImportance(), UNIMPORTANT));
                         break;
                     default:
@@ -333,30 +327,21 @@ public class APISearchSteps extends APISteps {
                 .filter(cbEntity -> !cbEntity.getSourceType().equals(sourceType))
                 .findAny().orElse(null);
 
-        Assert.assertNull(
-                "Search by sourceType:" + sourceType + "return:" + JsonConverter.toJsonString(entity),
-                entity);
+        assertNull("Search by sourceType:" + sourceType + "return:" + toJsonString(entity), entity);
 
         if (!sourceType.equals("PROFILER")) {
             entity = entities.stream()
                     .filter(cbEntity -> !cbEntity.getObjectType().name().equals(objectType))
                     .findAny().orElse(null);
 
-            Assert.assertNull(
-                    "Search by object type:" + objectType + "return:" + JsonConverter.toJsonString(entity),
-                    entity);
+            assertNull("Search by object type:" + objectType + "return:" + toJsonString(entity), entity);
         }
     }
 
     @Then("CB search results contains only sourceType from query")
     public void cbSearchResultsContainsOnlyDataSourceTypeFromQuery() {
         String query = context.get("searchQuery", String.class);
-        final String DATA_SOURCE = "dataSource:\"";
-        final String QUOTES = "\"";
-
-        Integer beginIndex = query.indexOf(DATA_SOURCE) + DATA_SOURCE.length();
-        Integer endIndex = query.indexOf(QUOTES, beginIndex);
-        String dataSourceType = query.substring(beginIndex, endIndex);
+        String dataSourceType = extractStringsInQuotes(query).get(0);
 
         List<CBEntity> entities = context.get("searchResults", List.class);
 
@@ -364,18 +349,13 @@ public class APISearchSteps extends APISteps {
                 .filter(cbEntity -> !cbEntity.getSources().contains(dataSourceType))
                 .findAny().orElse(null);
 
-        Assert.assertNull("Search by:" + query + " return:" + JsonConverter.toJsonString(wrongEntity), wrongEntity);
+        assertNull("Search by:" + query + " return:" + toJsonString(wrongEntity), wrongEntity);
     }
 
     @Then("CB search results contains only subSource from query")
     public void cbSearchResultsContainsOnlyDataSubSourceFromQuery() {
         String query = context.get("searchQuery", String.class);
-        final String SUBSOURCE = "subSource:\"";
-        final String QUOTES = "\"";
-
-        Integer beginIndex = query.indexOf(SUBSOURCE) + SUBSOURCE.length();
-        Integer endIndex = query.indexOf(QUOTES, beginIndex);
-        String subSource = query.substring(beginIndex, endIndex);
+        String subSource = extractStringsInQuotes(query).get(0);
 
         List<CBEntity> entities = context.get("searchResults", List.class);
 
@@ -383,18 +363,13 @@ public class APISearchSteps extends APISteps {
                 .filter(cbEntity -> !cbEntity.getSubSourceType().contains(subSource))
                 .findAny().orElse(null);
 
-        Assert.assertNull("Search by:" + query + " return:" + JsonConverter.toJsonString(wrongEntity), wrongEntity);
+        assertNull("Search by:" + query + " return:" + toJsonString(wrongEntity), wrongEntity);
     }
 
     @Then("CB search results contains only recordType from query")
     public void cbSearchResultsContainsOnlyRecordTypeFromQuery() {
         String query = context.get("searchQuery", String.class);
-        final String RECORD_TYPE = "type:\"";
-        final String QUOTES = "\"";
-
-        Integer beginIndex = query.indexOf(RECORD_TYPE) + RECORD_TYPE.length();
-        Integer endIndex = query.indexOf(QUOTES, beginIndex);
-        String recordType = query.substring(beginIndex, endIndex);
+        String recordType = extractStringsInQuotes(query).get(0);
 
         List<CBEntity> entities = context.get("searchResults", List.class);
 
@@ -402,6 +377,6 @@ public class APISearchSteps extends APISteps {
                 .filter(cbEntity -> !cbEntity.getRecordType().contains(recordType))
                 .findAny().orElse(null);
 
-        Assert.assertNull("Search by:" + query + " return:" + JsonConverter.toJsonString(wrongEntity), wrongEntity);
+        assertNull("Search by:" + query + " return:" + toJsonString(wrongEntity), wrongEntity);
     }
 }
