@@ -6,10 +6,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -111,5 +108,16 @@ public class StringUtils {
         } catch (IOException e) {
             log.error("Can't create file " + filepath + ":\n" + e.getMessage());
         }
+    }
+
+    public static List<String> extractStringsInQuotes(String text) {
+        List<String> results = new ArrayList<>();
+
+        Pattern p = Pattern.compile("\"([^\"]*)\"");
+        Matcher m = p.matcher(text);
+        while (m.find()) {
+            results.add(m.group(1));
+        }
+        return results;
     }
 }
