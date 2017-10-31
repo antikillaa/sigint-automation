@@ -6,7 +6,7 @@ import model.Tag;
 
 public class TagRequest extends HttpRequest {
 
-    private static final String URI = "/api/workflow/record-tags";
+    private static final String URI = "/api/admin/record-tags";
 
     /**
      * Build HTTP request.

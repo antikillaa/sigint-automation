@@ -5,7 +5,7 @@ import model.Source;
 
 public class SourceRequest extends HttpRequest {
 
-    private final static String URI = "/api/workflow/sources/";
+    private final static String URI = "/api/admin/sources/";
 
     public SourceRequest() {
         super(URI);

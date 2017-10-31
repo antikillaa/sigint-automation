@@ -4,7 +4,7 @@ import http.HttpMethod;
 
 public class DictionaryRequest extends HttpRequest {
 
-    private static final String URI = "/api/workflow/dictionaries/";
+    private static final String URI = "/api/admin/dictionaries /";
 
     public DictionaryRequest() {
         super(URI);

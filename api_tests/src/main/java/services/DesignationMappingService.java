@@ -25,7 +25,7 @@ public class DesignationMappingService implements EntityService<DesignationMappi
   private static DesignationMappingRequest request = new DesignationMappingRequest();
 
   /**
-   * API: POST /api/workflow/designation-mappings
+   * API: POST /api/admin/designation-mappings
    *
    * @param entity Designation-mapping entity
    * @return OperationResult with entity
@@ -44,7 +44,7 @@ public class DesignationMappingService implements EntityService<DesignationMappi
   }
 
   /**
-   * API: DELETE /api/workflow/designation-mappings/{id}
+   * API: DELETE /api/admin/designation-mappings/{id}
    *
    * @param entity Designation-mapping entity
    * @return OperationResult with result
@@ -78,7 +78,7 @@ public class DesignationMappingService implements EntityService<DesignationMappi
 
   /**
    * GET list of Designation-mappings.
-   * API: GET /api/workflow/designation-mappings getDesignationMappings
+   * API: GET /api/admin/designation-mappings getDesignationMappings
    *
    * @return OperationResult with list of entities
    */
@@ -99,7 +99,7 @@ public class DesignationMappingService implements EntityService<DesignationMappi
   }
 
   /**
-   * API: PUT /api/workflow/designation-mappings/{id}
+   * API: PUT /api/admin/designation-mappings/{id}
    *
    * @param entity Designation-mapping entity
    * @return OperationResult with entity
@@ -121,7 +121,7 @@ public class DesignationMappingService implements EntityService<DesignationMappi
   }
 
   /**
-   * API: GET /api/workflow/designation-mappings/{id}
+   * API: GET /api/admin/designation-mappings/{id}
    *
    * @param id id of entity
    * @return Designation-mapping entity

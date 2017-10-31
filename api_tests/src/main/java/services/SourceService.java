@@ -20,7 +20,7 @@ public class SourceService implements EntityService<Source> {
     private static SourceRequest request = new SourceRequest();
 
     /**
-     * API: PUT /api/workflow/sources
+     * API: PUT /api/admin/sources
      *
      * @param entity Source entity
      * @return HTTP status code
@@ -39,7 +39,7 @@ public class SourceService implements EntityService<Source> {
     }
 
     /**
-     * API: DELETE /api/workflow/sources/{id}
+     * API: DELETE /api/admin/sources/{id}
      *
      * @param entity Source entity
      * @return HTTP status code
@@ -63,7 +63,7 @@ public class SourceService implements EntityService<Source> {
 
     /**
      * GET list of Sources. Filter {"deleted":false}
-     * API: GET /api/workflow/sources getSources
+     * API: GET /api/admin/sources getSources
      *
      * @return HTTP status code
      */
@@ -85,7 +85,7 @@ public class SourceService implements EntityService<Source> {
     }
 
     /**
-     * API: POST /api/workflow/sources
+     * API: POST /api/admin/sources
      *
      * @param entity Source entity
      * @return HTTP status code
@@ -108,7 +108,7 @@ public class SourceService implements EntityService<Source> {
     }
 
     /**
-     * API: GET /api/workflow/sources/{id}
+     * API: GET /api/admin/sources/{id}
      *
      * @param id id of entity
      * @return Source entity
