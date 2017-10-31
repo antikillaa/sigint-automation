@@ -8,7 +8,7 @@ import model.Whitelist;
 
 public class WhiteListRequest extends HttpRequest {
 
-    private final static String URI = "/api/workflow/whitelist/";
+    private final static String URI = "/api/admin/whitelist/";
 
     public WhiteListRequest() {
         super(URI);
