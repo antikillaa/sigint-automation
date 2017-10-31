@@ -37,6 +37,8 @@ public class DictionaryService {
         OperationResult<List<SourceType>> resultSources = getSources();
         if (resultSources.isSuccess()) {
             dictionary.setSourceTypes(resultSources.getEntity());
+        } else {
+            log.error("Can't get the sources dict: " + resultSources.getMessage());
         }
 
         return dictionary;
