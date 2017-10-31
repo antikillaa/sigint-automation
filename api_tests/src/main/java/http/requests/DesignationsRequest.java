@@ -6,7 +6,7 @@ import model.SearchFilter;
 
 public class DesignationsRequest extends HttpRequest {
 
-  private static final String URI = "/api/workflow/designations/";
+  private static final String URI = "/api/admin/designations/";
 
   /**
    * Build HTTP request.

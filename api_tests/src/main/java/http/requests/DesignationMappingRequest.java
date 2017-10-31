@@ -7,7 +7,7 @@ import model.SearchFilter;
 
 public class DesignationMappingRequest extends HttpRequest {
 
-  private static final String URI = "/api/workflow/designation-mappings/";
+  private static final String URI = "/api/admin/designation-mappings/";
 
   /**
    * Build HTTP request.

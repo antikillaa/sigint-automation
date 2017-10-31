@@ -21,7 +21,7 @@ public class DesignationService implements EntityService<Designation> {
   private static DesignationsRequest request = new DesignationsRequest();
 
   /**
-   * API: PUT /api/workflow/designations
+   * API: PUT /api/admin/designations
    *
    * @param entity Designation entity
    * @return HTTP status code
@@ -40,7 +40,7 @@ public class DesignationService implements EntityService<Designation> {
   }
 
   /**
-   * API: DELETE /api/workflow/designations/{id}
+   * API: DELETE /api/admin/designations/{id}
    *
    * @param entity Designation entity
    * @return HTTP status code
@@ -73,7 +73,7 @@ public class DesignationService implements EntityService<Designation> {
 
   /**
    * GET list of Designations.
-   * API: GET /api/workflow/designations getDesignations
+   * API: GET /api/admin/designations getDesignations
    *
    * @return HTTP status code
    */
@@ -94,7 +94,7 @@ public class DesignationService implements EntityService<Designation> {
   }
 
   /**
-   * API: POST /api/workflow/designations
+   * API: POST /api/admin/designations
    *
    * @param entity Designation entity
    * @return HTTP status code
@@ -116,7 +116,7 @@ public class DesignationService implements EntityService<Designation> {
   }
 
   /**
-   * API: GET /api/workflow/designations/{id}
+   * API: GET /api/admin/designations/{id}
    *
    * @param id id of entity
    * @return Designation entity
