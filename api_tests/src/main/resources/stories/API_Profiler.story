@@ -6,7 +6,7 @@ Before:
 Given I sign in as admin user
 
 
-Scenario: API.(New profiler) Addition of new target group
+Scenario: API.Addition of new target group
 When I send create target group request
 Then Request is successful
 And Created target group is correct
@@ -15,7 +15,7 @@ When I send delete target group request
 Then Request is successful
 
 
-Scenario: (New profiler) Deleting of target group
+Scenario: Deleting of target group
 When I send create target group request
 Then Request is successful
 And Created target group is correct
@@ -24,7 +24,7 @@ When I send delete target group request
 Then Request is successful
 
 
-Scenario: API.(New profiler) Addition of new profile draft
+Scenario: API.Addition of new profile draft
 When I send create profile draft request
 Then Request is successful
 And Profile draft is correct
@@ -32,7 +32,7 @@ When I send delete profile draft request
 Then Request is successful
 
 
-Scenario: (New profiler) Deleting of profile draft
+Scenario: Deleting of profile draft
 When I send create profile draft request
 Then Request is successful
 And Profile draft is correct
@@ -40,7 +40,7 @@ When I send delete profile draft request
 Then Request is successful
 
 
-Scenario: (New profiler) Displaying of profile draft details
+Scenario: Displaying of profile draft details
 When I send create profile draft request
 Then Request is successful
 And Profile draft is correct
@@ -51,7 +51,7 @@ When I send delete profile draft request
 Then Request is successful
 
 
-Scenario: API.(New profiler) Publishing of new profile draft
+Scenario: API.Publishing of new profile draft
 When I send create profile draft request
 Then Request is successful
 And Profile draft is correct
@@ -75,7 +75,7 @@ When I send delete target group request
 Then Request is successful
 
 
-Scenario: (New profiler) Deleting of profile
+Scenario: Deleting of profile
 When I send create profile draft request
 Then Request is successful
 And Profile draft is correct
@@ -99,7 +99,7 @@ When I send delete target group request
 Then Request is successful
 
 
-Scenario: (New profiler) Updating of profile draft
+Scenario: Updating of profile draft
 When I send create profile draft request
 Then Request is successful
 And Profile draft is correct
@@ -123,13 +123,13 @@ When I send delete target group request
 Then Request is successful
 
 
-Scenario: API.(New profiler) Get list of all profile drafts
+Scenario: API.Get list of all profile drafts
 When I send get list of profile drafts request
 Then Request is successful
 And Profile drafts list size more than 0
 
 
-Scenario: API.(New profiler) Displaying of top level target groups list
+Scenario: API.Displaying of top level target groups list
 When I send create target group request
 Then Request is successful
 When I send get list of top target groups request
@@ -141,6 +141,8 @@ Then Request is successful
 
 
 Scenario: API.Merge two profiles into one
+Meta:
+@wip
 When I send create profile draft request
 Then Request is successful
 When I send create target group request
@@ -176,8 +178,16 @@ Then Request is unsuccessful
 When I send get second merged profile details request
 Then Request is unsuccessful
 
+!-- teardown test data
+When I send delete profile request
+Then Request is successful
+When I send delete target group request
+Then Request is successful
+When I send delete target group request
+Then Request is successful
 
-Scenario: (New profiler) Addition of new child target group
+
+Scenario: Addition of new child target group
 When I send create target group request
 Then Request is successful
 And Created target group is correct
@@ -199,7 +209,7 @@ When I send delete target group request
 Then Request is successful
 
 
-Scenario: API.(New profiler) Get contents of target group
+Scenario: API.Get contents of target group
 When I send create target group request
 Then Request is successful
 And Created target group is correct
