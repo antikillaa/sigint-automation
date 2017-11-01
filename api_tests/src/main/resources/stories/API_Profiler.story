@@ -141,8 +141,6 @@ Then Request is successful
 
 
 Scenario: API.Merge two profiles into one
-Meta:
-@wip
 When I send create profile draft request
 Then Request is successful
 When I send create target group request
