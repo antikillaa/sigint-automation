@@ -1,8 +1,13 @@
 package utils;
 
+import model.TimeRange;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 public class SearchQueryBuilder {
 
-    public String recordStatusToQuery(String recordStatus) {
+    public static String recordStatusToQuery(String recordStatus) {
         String query;
         switch (recordStatus.toLowerCase()) {
             case "unassigned":
@@ -30,5 +35,11 @@ public class SearchQueryBuilder {
                 throw new AssertionError("Unknown recordStatus filter value: " + recordStatus);
         }
         return query;
+    }
+
+    public static String timeRangeToQuery(TimeRange timeRange) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+        return String.format("eventTime:[\"%s\"..\"%s\"]",
+                dateFormat.format(timeRange.getStartDate()), dateFormat.format(timeRange.getEndDate()));
     }
 }

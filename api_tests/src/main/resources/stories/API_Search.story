@@ -209,3 +209,14 @@ Examples:
 | SIGINT | entity | type:"EMAIL_ACCOUNT" | 0 | 300 |
 | SIGINT | entity | type:"PHONE" | 0 | 300 |
 | SIGINT | entity | type:"TELECOM_SUBSCRIBER" | 0 | 300 |
+
+
+Scenario: Search. [SIGINT] EventTime filter
+When I send CB search request - eventTime:<eventTime>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+And CB search results contains only eventTime from query
+
+Examples:
+| source | objectType | eventTime | pageNumber | pageSize |
+| SIGINT | event | LAST_MONTH | 0 | 300 |

@@ -7,7 +7,6 @@ import model.*;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import services.SearchService;
-import utils.SearchQueryBuilder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +21,8 @@ import static junit.framework.TestCase.assertTrue;
 import static org.apache.commons.lang.StringUtils.getLevenshteinDistance;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static utils.DateHelper.*;
+import static utils.SearchQueryBuilder.*;
 import static utils.StepHelper.compareByCriteria;
 import static utils.StringUtils.extractStringsInQuotes;
 
@@ -276,7 +277,7 @@ public class APISearchSteps extends APISteps {
 
     @When("I send workflow search request: record status:$recordStatus, source:$source, objectType:$objectType, pageNumber:$pageNumber, pageSize:$pageSize")
     public void searchWorkflowFiltersRecordStatus(String recordStatus, String source, String objectType, String pageNumber, String pageSize) {
-        String query = new SearchQueryBuilder().recordStatusToQuery(recordStatus);
+        String query = recordStatusToQuery(recordStatus);
         CBSearchFilter filter = new CBSearchFilter(source, objectType, query, pageSize, pageNumber);
 
         OperationResult<List<CBEntity>> operationResult = service.search(filter);
@@ -375,6 +376,35 @@ public class APISearchSteps extends APISteps {
 
         CBEntity wrongEntity = entities.stream()
                 .filter(cbEntity -> !cbEntity.getRecordType().contains(recordType))
+                .findAny().orElse(null);
+
+        assertNull("Search by:" + query + " return:" + toJsonString(wrongEntity), wrongEntity);
+    }
+
+    @When("I send CB search request - eventTime:$eventTime, source:$source, objectType:$objectType, pageNumber:$pageNumber, pageSize:$pageSize")
+    public void searchByEventTime(String eventTime, String source, String objectType, String pageNumber, String pageSize) {
+
+        TimeRange timeRange = stringToTimeRange(eventTime);
+        String query = timeRangeToQuery(timeRange);
+
+        CBSearchFilter filter = new CBSearchFilter(source, objectType, query, pageSize, pageNumber);
+
+        OperationResult<List<CBEntity>> operationResult = service.search(filter);
+        List<CBEntity> searchResults = operationResult.getEntity();
+
+        context.put("searchResults", searchResults);
+        context.put("timeRange", timeRange);
+        context.put("query", query);
+    }
+
+    @Then("CB search results contains only eventTime from query")
+    public void cbSearchResultsContainsOnlyEventTimeFromQuery() {
+        List<CBEntity> entities = context.get("searchResults", List.class);
+        TimeRange timeRange = context.get("timeRange", TimeRange.class);
+        String query = context.get("query", String.class);
+
+        CBEntity wrongEntity = entities.stream()
+                .filter(cbEntity -> !inRange(cbEntity.getEventTime(), timeRange))
                 .findAny().orElse(null);
 
         assertNull("Search by:" + query + " return:" + toJsonString(wrongEntity), wrongEntity);

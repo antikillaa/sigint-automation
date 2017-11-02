@@ -1,5 +1,8 @@
 package utils;
 
+import model.TimeRange;
+import org.apache.log4j.Logger;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -7,7 +10,6 @@ import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-import org.apache.log4j.Logger;
 
 public class DateHelper {
 
@@ -85,4 +87,22 @@ public class DateHelper {
         return dur.getSeconds();
     }
 
+    public static TimeRange stringToTimeRange(String eventTime) {
+        TimeRange timeRange = new TimeRange();
+        Calendar calendar = Calendar.getInstance();
+        switch (eventTime) {
+            case "LAST_MONTH":
+                timeRange.setEndDate(calendar.getTime());
+                calendar.add(Calendar.MONTH, -1);
+                timeRange.setStartDate(calendar.getTime());
+                break;
+            default:
+                throw new AssertionError("Unknown eventTime value:" + eventTime);
+        }
+        return timeRange;
+    }
+
+    public static boolean inRange(Date testDate, TimeRange timeRange) {
+        return testDate.after(timeRange.getStartDate()) && testDate.before(timeRange.getEndDate());
+    }
 }
