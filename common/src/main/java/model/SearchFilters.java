@@ -60,6 +60,7 @@ public class SearchFilters {
     private SpeechDurationRange speechDuration;
     private String speechQualityForAudioKeywordMatching;
     private String speechQualityForVoiceIdMatching;
+    private List<String> senderCountry;
 
     public List<String> getDataSource() {
         return dataSource;
@@ -420,6 +421,14 @@ public class SearchFilters {
 
     public void setTargetGroup(List<String> targetGroup) {
         this.targetGroup = targetGroup;
+    }
+
+    public List<String> getSenderCountry() {
+        return senderCountry;
+    }
+
+    public void setSenderCountry(List<String> senderCountry) {
+        this.senderCountry = senderCountry;
     }
 
     public class TargetGroup extends AbstractEntity {
