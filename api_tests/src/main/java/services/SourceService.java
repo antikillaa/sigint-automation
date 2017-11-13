@@ -4,6 +4,7 @@ import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.SourceRequest;
+import json.JsonConverter;
 import model.Result;
 import model.SearchFilter;
 import model.Source;
@@ -27,8 +28,7 @@ public class SourceService implements EntityService<Source> {
      */
     @Override
     public OperationResult<Source> add(Source entity) {
-        log.info("Creating new Source..");
-
+        log.info("Creating new Source:" + JsonConverter.toJsonString(entity));
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
 
         OperationResult<Source> operationResult = new OperationResult<>(response, Source.class);
@@ -95,6 +95,7 @@ public class SourceService implements EntityService<Source> {
         log.info("Updating Source id: " + entity.getId());
         entity.setVersion(entity.getVersion() == null ? 1 : entity.getVersion() + 1);
 
+        log.info(JsonConverter.toJsonString(entity));
         G4Response response = g4HttpClient.sendRequest(request.update(entity));
 
         OperationResult<Source> operationResult = new OperationResult<>(response);
