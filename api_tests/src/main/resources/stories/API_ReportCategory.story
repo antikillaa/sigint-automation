@@ -1,5 +1,6 @@
 Meta:
 @story reportCategory
+@deprecated
 
 
 Scenario: API.Create, Update, Delete report category
