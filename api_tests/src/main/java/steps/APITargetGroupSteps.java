@@ -153,20 +153,25 @@ public class APITargetGroupSteps extends APISteps {
     @Then("Created target group $criteria list")
     public void targetGroupsContainNewTargetGroup(String criteria) {
         TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
-        List<TargetGroup> list = context.get("targetGroupList", List.class);
-        Boolean contains = false;
-        for (TargetGroup entity : list) {
-            if (entity.getId().equals(targetGroup.getId())) {
-                contains = true;
+        List<TargetGroup> targetGroups = context.get("targetGroupList", List.class);
+
+        TargetGroup foundGroups = targetGroups.stream()
+                .filter(group -> Objects.equals(group.getId(), targetGroup.getId()))
+                .findFirst().orElse(null);
+
+        switch (criteria.toLowerCase()) {
+            case "in":
+                Assert.assertNotNull(
+                        "Target group not founded in response. TargetGroup:" + JsonConverter.toJsonString(targetGroup),
+                        foundGroups);
                 break;
-            }
-        }
-        if (criteria.toLowerCase().equals("in")) {
-            Verify.shouldBe(isTrue.element(contains));
-        } else if (criteria.toLowerCase().equals("not in")) {
-            Verify.shouldNotBe(isTrue.element(contains));
-        } else {
-            throw new AssertionError("Incorrect argument passed to step");
+            case "not in":
+                Assert.assertNull(
+                        "Target group founded in response. TargetGroup:" + JsonConverter.toJsonString(targetGroup),
+                        foundGroups);
+                break;
+            default:
+                throw new AssertionError("Incorrect argument passed to step");
         }
     }
 
