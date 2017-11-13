@@ -3,33 +3,29 @@ package data_for_entity.data_providers.source;
 import app_context.AppContext;
 import data_for_entity.data_providers.EntityDataProvider;
 import model.SourceType;
-import utils.RandomGenerator;
+import org.junit.Assert;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static utils.StringUtils.stringContainsAny;
+import static utils.RandomGenerator.getRandomItemFromList;
 
 public class SourceTypeProvider implements EntityDataProvider {
 
+    private AppContext context = AppContext.get();
+
     @Override
     public String generate(int length) {
-        SourceType sourceType;
-        int ATTEMPT_NUMBER = 5;
-        int i = 0;
+        List<SourceType> sourceTypes = context.getDictionary().getSourceTypes();
+        Assert.assertNotNull("Got null sourceTypes list from dictionary", sourceTypes);
 
-        List<SourceType> sourceTypes = AppContext.get().getDictionary().getSourceTypes();
-        if (sourceTypes == null) {
-            throw new AssertionError("Got null sourceTypes list in Context");
-        }
-        do {
-            i++;
-            List<SourceType> typeList = sourceTypes.stream()
-                    .filter(sType -> sType.getType() != null)
-                    .collect(Collectors.toList());
-            if (typeList.isEmpty()) throw new AssertionError("Unable get any data source from dictionary!");
-            sourceType = RandomGenerator.getRandomItemFromList(typeList);
-        } while (stringContainsAny(sourceType.getType(), "X", "H", "SY") && i < ATTEMPT_NUMBER); //FIXME after update dictionary
-        return sourceType.getType();
+        List<SourceType> typeList = sourceTypes.stream()
+                .filter(sType -> sType.getType() != null &&
+                        sType.getEventFeed().equals("SIGINT") &&
+                        sType.getSubSource() != null
+                ).collect(Collectors.toList());
+
+        if (typeList.isEmpty()) throw new AssertionError("Unable get any data source from dictionary!");
+        return getRandomItemFromList(typeList).getType();
     }
 }
