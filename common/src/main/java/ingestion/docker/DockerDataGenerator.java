@@ -5,6 +5,7 @@ import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DefaultDockerClient.Builder;
 import com.spotify.docker.client.DockerCertificates;
 import com.spotify.docker.client.DockerClient;
+import com.spotify.docker.client.LogStream;
 import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.ContainerCreation;
@@ -64,14 +65,21 @@ public class DockerDataGenerator implements IIngestionDataGenerator {
   private void generateDataInContainer(String recordsCount) {
     assertNotNull("Can't init container config", dockerAdapter.getContainerConfig(recordsCount));
     try {
-      log.info("Pulling image");
+      log.info("Pulling image...");
       docker.pull(dockerAdapter.getImageName());
-      log.info("Create container");
+      log.info("Creating container...");
       final ContainerCreation creation = docker.createContainer(dockerAdapter.getContainerConfig(recordsCount));
       final String id = creation.id();
       // Start container, wait for execution and delete after that
       docker.startContainer(id);
       docker.waitContainer(id);
+
+      final String logs;
+      try (LogStream stream = docker.logs(id, DockerClient.LogsParam.stdout(), DockerClient.LogsParam.stderr())) {
+        logs = stream.readFully();
+      }
+      log.info("Output:\n" + logs);
+
       docker.removeContainer(id);
       docker.close();
 
