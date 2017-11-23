@@ -53,4 +53,6 @@
     </bean>
     <bean id="savedSearchSteps" class="steps.APISavedSearchSteps">
     </bean>
+    <bean id="targetsMigrationSteps" class="steps.APITargetsMigrationSteps">
+    </bean>
 </beans>

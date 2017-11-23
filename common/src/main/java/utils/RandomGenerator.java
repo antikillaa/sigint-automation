@@ -202,12 +202,18 @@ public class RandomGenerator {
     }
 
     public static String generateID() {
-        int size = generateRandomInteger(5, 10);
-        return  RandomStringUtils.randomNumeric(size);
+        int size = generateRandomInteger(10, 15);
+        return RandomStringUtils.randomAlphanumeric(size).toLowerCase();
     }
 
     public static String generateYoutubeChannelId() {
         return RandomStringUtils.randomAlphanumeric(24);
+    }
+
+    public static Date randomMonthRangeDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, generateRandomInteger(-30, 30));
+        return calendar.getTime();
     }
 }
 

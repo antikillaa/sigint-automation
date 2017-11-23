@@ -2,8 +2,13 @@ package model;
 
 import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.DataProvider;
+import data_for_entity.annotations.WithCollectionSize;
+import data_for_entity.annotations.WithDataDependencies;
+import data_for_entity.data_providers.RandomDateProvider;
+import data_for_entity.data_providers.profiler.ClassificationProvider;
 import data_for_entity.data_providers.profiler.CriminalRecordProvider;
 import data_for_entity.data_providers.profiler.ProfileCategoryProvider;
+import data_for_entity.data_providers.profiler.TargetStatusProvider;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -14,7 +19,8 @@ import java.util.Date;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Profile extends ProfileAndTargetGroup {
 
-    private ProfileType type = ProfileType.Individual;
+    @DataIgnore
+    private String type = "Individual";
     private ProfileProperties properties;
     @DataIgnore
     private ArrayList<CBEntity> entities = new ArrayList<>();
@@ -27,9 +33,9 @@ public class Profile extends ProfileAndTargetGroup {
     private String category;
     @DataIgnore
     private ProfileConsolidatedAttributes consolidatedAttributes;
-    @DataIgnore
-    private TargetStatus active = TargetStatus.ACTIVE;
-    @DataIgnore
+    @WithDataDependencies(provider = TargetStatusProvider.class, fields = {"activeUntil"})
+    private TargetStatus active;
+    @DataProvider(RandomDateProvider.class)
     private Date activeUntil;
     @DataIgnore
     private Integer entityCount = 0;
@@ -39,18 +45,20 @@ public class Profile extends ProfileAndTargetGroup {
     private ArrayList<String> mergingProfilesIDs;
     @DataProvider(CriminalRecordProvider.class)
     private CriminalRecord criminalRecord;
-    //@DataProvider(ClassificationProvider.class)
-    private String classification = "C";
+    @DataProvider(ClassificationProvider.class)
+    private String classification; // "C";
+    @WithCollectionSize(10)
+    private ArrayList<Identifier> identifiers = new ArrayList<>();
 
     public Profile() {
         setJsonType(ProfileJsonType.Draft);
     }
 
-    public ProfileType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(ProfileType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -156,5 +164,13 @@ public class Profile extends ProfileAndTargetGroup {
 
     public void setClassification(String classification) {
         this.classification = classification;
+    }
+
+    public ArrayList<Identifier> getIdentifiers() {
+        return identifiers;
+    }
+
+    public void setIdentifiers(ArrayList<Identifier> identifiers) {
+        this.identifiers = identifiers;
     }
 }
