@@ -132,7 +132,7 @@ And Profile drafts list size more than 0
 Scenario: API.Displaying of top level target groups list
 When I send create target group request
 Then Request is successful
-When I send get list of top target groups request
+When I send get list of target groups request
 Then Request is successful
 Then Created target group in list
 

@@ -14,6 +14,7 @@ import org.junit.Assert;
 import services.TargetGroupService;
 import utils.RandomGenerator;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -135,13 +136,20 @@ public class APITargetGroupSteps extends APISteps {
         equalsTargetGroups(viewedTargetGroup, createdTarget);
     }
 
-    @When("I send get list of top target groups request")
+    @When("I send get list of target groups request")
     public void getListOfTargetGroupsRequest() {
         TargetGroupSearchFilter filter = new TargetGroupSearchFilter();
         filter.setSortField("name");
 
-        OperationResult<List<TargetGroup>> operationResult = service.search(filter);
-        context.put("targetGroupList", operationResult.getEntity());
+        List<TargetGroup> targetGroups = new ArrayList<>();
+        OperationResult<List<TargetGroup>> operationResult;
+        do {
+            operationResult = service.search(filter);
+            targetGroups.addAll(operationResult.getEntity());
+            filter.setPage(filter.getPage() + 1);
+        } while (operationResult.getEntity().size() == filter.getPageSize());
+
+        context.put("targetGroupList", targetGroups);
     }
 
     @When("I get random target group from targetGroup list")
