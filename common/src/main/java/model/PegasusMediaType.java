@@ -12,5 +12,6 @@ public class PegasusMediaType {
     public static final MediaType MS_EXCEL_TYPE = new MediaType("application", "vnd.ms-excel");
     public static final MediaType AUDIO = new MediaType("audio", "wav");
     public static final MediaType TIFF = new MediaType("image", "tiff");
+    public static final MediaType PEGASUS_XLSX = new MediaType("application", "vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 }
 

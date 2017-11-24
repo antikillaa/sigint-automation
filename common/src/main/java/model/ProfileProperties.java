@@ -1,6 +1,8 @@
 package model;
 
 import data_for_entity.annotations.DataIgnore;
+import data_for_entity.annotations.WithFieldDataType;
+import data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -11,9 +13,10 @@ import java.util.Date;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ProfileProperties {
 
-    private String description = "";
+    @WithFieldDataType(FieldDataType.STRING)
+    private String description;
     @DataIgnore
-    private ProfileType type = ProfileType.Individual;
+    private String type = "Individual";
     @DataIgnore
     @JsonProperty("__creation_time")
     private Date creationTime;
@@ -38,11 +41,11 @@ public class ProfileProperties {
         this.description = description;
     }
 
-    public ProfileType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(ProfileType type) {
+    public void setType(String type) {
         this.type = type;
     }
 

@@ -3,7 +3,6 @@ package utils;
 import model.TimeRange;
 import org.apache.log4j.Logger;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
@@ -22,25 +21,16 @@ public class DateHelper {
         return calendar.getTime();
     }
 
-    public static Date dateToFormat(Date date, String format) {
+    public static String dateToFormat(Date date, String format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(format);
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return dateFormat.format(date);
+    }
 
-        if (date != null) {
-            try {
-                return dateFormat.parse(dateFormat.format(date));
-            } catch (ParseException e) {
-                log.error(e.getMessage());
-                return null;
-            }
-        }
-        return null;
-    }
-    
     public static Date getDateFromUnixTimestamp(long timeStamp) {
-        return new Date(timeStamp*1000);
+        return new Date(timeStamp * 1000);
     }
-    
+
     /**
      * Checks if param date is already passed in comparision to now
      *

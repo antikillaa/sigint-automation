@@ -6,7 +6,8 @@ import data_for_entity.data_providers.profiler.AssignmentPriorityProvider;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -14,7 +15,7 @@ import java.util.List;
 public class ProfileAndTargetGroup extends AbstractEntity {
 
     @DataIgnore
-    private List<String> assignedTeams = Collections.singletonList("00"); // Default team
+    private List<String> assignedTeams = new ArrayList<>(Arrays.asList("00")); // Default team
     @DataIgnore
     private Object assignedUsers;
     @DataProvider(AssignmentPriorityProvider.class)

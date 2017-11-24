@@ -52,7 +52,7 @@ class ObjectAggregator {
         if (!tasksCompleted) {
             logger.warn("Not all fields are generated! View debug logs for details");
         }
-        logger.info("Object is created with filled fields");
+        logger.debug("Object is created with filled fields:" + instance);
         return instance;
     }
     
