@@ -101,7 +101,7 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed, exclude: .wav
-Then Number of ingested entity records in CB > <recordsCount>
+Then Number of ingested entity records in CB > 10
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
 
@@ -123,7 +123,7 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB == 30
+Then Number of ingested entity records in CB == 15
 And Number of ingested event records in CB == 0
 And Whitelisted identifiers are not searchable
 
@@ -144,7 +144,7 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > <recordsCount>
+Then Number of ingested entity records in CB > 13
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
 
@@ -165,7 +165,7 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed, exclude: .wav, .tif
-Then Number of ingested entity records in CB > <recordsCount>
+Then Number of ingested entity records in CB > 10
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
 
@@ -191,7 +191,7 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > <recordsCount>
+Then Number of ingested entity records in CB > 13
 And Number of ingested event records in CB < <recordsCount>
 And Whitelisted identifiers are not searchable
 

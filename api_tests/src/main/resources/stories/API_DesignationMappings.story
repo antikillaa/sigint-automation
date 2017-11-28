@@ -124,9 +124,8 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed, exclude: .tif
-Then Number of ingested entity records in CB > <recordsCount>
-And Number of ingested event records in CB < <recordsCount>, additional query string: AND includeSpam:false
 And Number of ingested event records in CB == <recordsCount>
+And Number of ingested event records in CB < <recordsCount>, additional query string: AND includeSpam:false
 And Designated events have correct designations
 
 Examples:
@@ -151,9 +150,8 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > <recordsCount>
-And Number of ingested event records in CB < <recordsCount>, additional query string: AND includeSpam:false
 And Number of ingested event records in CB == <recordsCount>
+And Number of ingested event records in CB < <recordsCount>, additional query string: AND includeSpam:false
 And Designated events have correct designations
 
 Examples:
@@ -174,9 +172,8 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > <recordsCount>
-And Number of ingested event records in CB < <recordsCount>, additional query string: AND includeSpam:false
 And Number of ingested event records in CB == <recordsCount>
+And Number of ingested event records in CB < <recordsCount>, additional query string: AND includeSpam:false
 And Designated events have correct designations
 
 Examples:
@@ -196,9 +193,8 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > <recordsCount>
-And Number of ingested event records in CB < <recordsCount>, additional query string: AND includeSpam:false
 And Number of ingested event records in CB == <recordsCount>
+And Number of ingested event records in CB < <recordsCount>, additional query string: AND includeSpam:false
 And Designated events have correct designations
 
 Examples:
@@ -222,7 +218,6 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed, exclude: .tif
-Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:false
 And Designated events have correct designations
 
@@ -248,7 +243,6 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:false
 And Designated events have correct designations
 
@@ -270,7 +264,6 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:false
 And Designated events have correct designations
 
@@ -291,7 +284,6 @@ And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
 When I upload files
 Then Uploaded files are processed
-Then Number of ingested entity records in CB > <recordsCount>
 And Number of ingested event records in CB == <recordsCount>, additional query string: AND includeSpam:false
 And Designated events have correct designations
 
