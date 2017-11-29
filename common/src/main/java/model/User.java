@@ -34,6 +34,8 @@ public class User extends Organization {
     private String password;
     @DataIgnore
     private String newPassword;
+    @DataIgnore
+    private String adminPassword;
 
     private Boolean isDeleted = false;
     @DataIgnore
@@ -112,6 +114,14 @@ public class User extends Organization {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    public String getAdminPassword() {
+        return adminPassword;
+    }
+
+    public void setAdminPassword(String adminPassword) {
+        this.adminPassword = adminPassword;
     }
 
     public Boolean getIsDeleted() {

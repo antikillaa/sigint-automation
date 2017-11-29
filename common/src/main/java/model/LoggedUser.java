@@ -7,9 +7,16 @@ public class LoggedUser {
     public LoggedUser(User user) {
         this.user = user;
     }
-    
+
+    public User getUser() {
+        return user;
+    }
+
     public String getId() {
         return user.getId();
     }
-    
+
+    public String getPassword() {
+        return user.getPassword();
+    }
 }

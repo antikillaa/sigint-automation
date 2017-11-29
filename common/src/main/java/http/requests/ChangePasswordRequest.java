@@ -20,9 +20,9 @@ public class ChangePasswordRequest extends HttpRequest {
     return this;
   }
 
-  public ChangePasswordRequest updatePassword(UserPassword entity) {
+  public ChangePasswordRequest updatePassword(UserPassword entity, String userId) {
     this
-        .setURI(USER_URI + entity.getId())
+        .setURI(USER_URI + userId)
         .setHttpMethod(HttpMethod.PUT)
         .setPayload(entity);
     return this;

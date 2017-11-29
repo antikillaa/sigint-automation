@@ -1,5 +1,6 @@
 package services;
 
+import app_context.AppContext;
 import http.G4HttpClient;
 import http.OperationResult;
 import model.AbstractEntity;
@@ -11,6 +12,7 @@ import java.util.List;
 public interface EntityService<T extends AbstractEntity> {
 
     G4HttpClient g4HttpClient = new G4HttpClient();
+    AppContext appContext = AppContext.get();
 
     /**
      * ADD new entity

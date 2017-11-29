@@ -46,6 +46,9 @@ public class UserService implements EntityService<User> {
     public OperationResult<User> add(User entity) {
         log.info("Creating new user");
 
+        String adminPassword = appContext.getLoggedUser().getPassword();
+        entity.setAdminPassword(adminPassword);
+
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
 
         OperationResult<User> operationResult = new OperationResult<>(response, User.class);
@@ -102,6 +105,9 @@ public class UserService implements EntityService<User> {
     public OperationResult<User> update(User entity) {
         log.info("Update user id:" + entity.getId() + " name:" + entity.getName());
 
+        String adminPassword = appContext.getLoggedUser().getPassword();
+        entity.setAdminPassword(adminPassword);
+
         G4Response response = g4HttpClient.sendRequest(request.update(entity));
 
         OperationResult<User> operationResult = new OperationResult<>(response, User.class);
@@ -141,12 +147,23 @@ public class UserService implements EntityService<User> {
     }
 
     public OperationResult<AuthResponseResult> changePassword(User user) {
-        log.info(String.format("Changing %s's password from %s to %s",
-            user.getName(), user.getPassword(), user.getNewPassword()));
+        String adminPassword = appContext.getLoggedUser().getPassword();
+        String id = appContext.getLoggedUser().getId();
 
-        UserPassword userPassword = new UserPassword(user);
+        UserPassword.UserPasswordBuilder builder = new UserPassword.UserPasswordBuilder()
+                .newPassword(user.getNewPassword());
 
-        G4Response response = g4HttpClient.sendRequest(changePasswordRequest.updatePassword(userPassword));
+        if (Objects.equals(id, user.getId())) {
+            log.info(String.format("Changing password for currently logged in %s from %s to %s",
+                    user.getName(), user.getPassword(), user.getNewPassword()));
+            builder.oldPassword(user.getPassword());
+        } else {
+            log.info(String.format("Changing %s's password from %s to %s",
+                    user.getName(), user.getPassword(), user.getNewPassword()));
+            builder.adminPassword(adminPassword);
+        }
+
+        G4Response response = g4HttpClient.sendRequest(changePasswordRequest.updatePassword(builder.build(), user.getId()));
         return processPasswordResponse(user, response);
     }
 
@@ -154,7 +171,11 @@ public class UserService implements EntityService<User> {
         log.info(String.format("Setting first password for %s user: %s",
             user.getName(), user.getNewPassword()));
 
-        UserPassword userPassword = new UserPassword(user);
+        UserPassword userPassword = new UserPassword.UserPasswordBuilder()
+                .name(user.getName())
+                .newPassword(user.getNewPassword())
+                .oldPassword(user.getPassword())
+                .build();
 
         G4Response response = g4HttpClient.sendRequest(changePasswordRequest.updateTempPassword(userPassword));
         return processPasswordResponse(user, response);
@@ -221,6 +242,7 @@ public class UserService implements EntityService<User> {
         user.setNewPassword(new UserPasswordProvider().generate(PASSWORD_LENGTH));
         OperationResult<AuthResponseResult> firstPasswordChangeResult = userService.changeTempPassword(user);
         if (!firstPasswordChangeResult.isSuccess()) {
+            log.error(firstPasswordChangeResult.getMessage());
             throw new AssertionError("Unable change password for new User: " + JsonConverter.toJsonString(newUser));
         }
 
