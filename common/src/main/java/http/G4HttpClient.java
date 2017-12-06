@@ -41,6 +41,8 @@ public class G4HttpClient {
     private static final String KEYSTORE_CLIENT_FILE = "keystore_client";
     private static final String KEYSTORE_CLIENT_PWD = "123456";
 
+    private static final String CSRF_VALUE = "qa-automation";
+
     private Protocol protocol;
 
     /**
@@ -136,13 +138,15 @@ public class G4HttpClient {
         Builder builder = buildClient()
                 .register(MultiPartFeature.class)
                 .target(URL)
-                .request(request.getMediaType());
+                .request(request.getMediaType())
+                .header("x-csrf-token", CSRF_VALUE);
 
         Cookie cookie = getCookie();
         if (cookie != null) {
-            builder.cookie(cookie);
+            builder.header("Cookie", "csrf=" + CSRF_VALUE + "; t=" + cookie.getValue());
             log.debug("Cookie: " + cookie.getName() + "=" + cookie.getValue());
         } else {
+            builder.header("Cookie", "csrf=" + CSRF_VALUE);
             log.debug("Without authentication.");
         }
         return builder;
