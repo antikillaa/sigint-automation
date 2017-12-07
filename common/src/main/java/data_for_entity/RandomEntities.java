@@ -43,9 +43,8 @@ public class RandomEntities {
      * @return object with passed type with filled fields.
      */
     public <T>T randomEntity(Class<T> objectType) {
-        logger.info("Creating object with type: "+ objectType);
+        logger.debug("Creating object with type: "+ objectType);
         return objectType.cast(objectInitializer.generateObjectFields(objectType));
-       
     }
     
     public <T> List<T> randomEntities(Class<T> classType, int collectionSize) {

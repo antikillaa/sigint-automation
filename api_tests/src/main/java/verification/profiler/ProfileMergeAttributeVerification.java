@@ -181,8 +181,9 @@ abstract class ProfileMergeAttributeVerification {
         protected void verifyAttribute(Profile profile1, Profile profile2, Profile mergedProfile) {
             log.info("Verification: Type of merged profile");
 
-            // type, now it's only 'Individual'
-            Assert.assertEquals(mergedProfile.getType(), ProfileType.Individual);
+            // now it's only 'Individual' value
+            Assert.assertEquals(mergedProfile.getType(), profile1.getType());
+            Assert.assertEquals(mergedProfile.getType(), profile2.getType());
         }
     }
 

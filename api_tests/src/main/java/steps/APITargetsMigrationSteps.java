@@ -63,6 +63,7 @@ public class APITargetsMigrationSteps extends APISteps {
         writeGroups(groups);
         writeTargets(targets);
         writeIdentifiers(targets);
+        writeManualAttributes(targets);
         G4File file = writeFile();
 
         context.put("importTargetsFile", file);

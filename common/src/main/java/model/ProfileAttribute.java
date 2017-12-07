@@ -11,7 +11,7 @@ public class ProfileAttribute {
 
     private ArrayList<String> sources = new ArrayList<>();
     private String type;
-    private Object value;
+    private String value;
     private String comments;
     private Boolean hidden;
     private ValidationStatus validationStatus;
@@ -32,11 +32,11 @@ public class ProfileAttribute {
         this.type = type;
     }
 
-    public Object getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(Object value) {
+    public void setValue(String value) {
         this.value = value;
     }
 

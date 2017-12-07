@@ -4,18 +4,15 @@ import http.G4HttpClient;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.TargetMigrationRequest;
-import model.G4File;
-import model.Profile;
-import model.ProfileCategory;
-import model.TargetGroup;
+import model.*;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Assert;
-import utils.DateHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,7 +22,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static utils.DateHelper.dateToFormat;
 import static utils.RandomGenerator.generateRandomInteger;
+import static utils.RandomGenerator.getRandomItemFromList;
 
 
 public class TargetsMigrationService {
@@ -36,6 +36,7 @@ public class TargetsMigrationService {
     private static G4HttpClient g4HttpClient = new G4HttpClient();
     private static final TargetMigrationRequest request = new TargetMigrationRequest();
     private static Logger log = Logger.getLogger(TargetsMigrationService.class);
+    private static final String DATE_FORMAT = "YYYY-MM-dd";
 
     public static void writeTargets(List<Profile> targets) {
 
@@ -49,17 +50,17 @@ public class TargetsMigrationService {
         while (iterator.hasNext()) {
             try {
                 Profile target = iterator.next();
-                List<String> targetFields = new ArrayList<>(); // new target row
+                List<String> fields = new ArrayList<>(); // new target row
 
-                targetFields.add(target.getId()); // ID
-                targetFields.add(target.getName()); // name
-                targetFields.add(target.getProperties().getDescription()); // description
-                targetFields.add(target.getCategory().equals("Person of Interest") ?
-                        ProfileCategory.POI.name() : ProfileCategory.Dangerous.name()); // category
-                targetFields.add(target.getCriminalRecord().name()); // criminalRecord
-                targetFields.add(target.getClassification()); // classification
-                targetFields.add(target.getActive().name()); // active
-                targetFields.add(DateHelper.dateToFormat(target.getActiveUntil(), "YYYY-MM-dd"));// activeUntil
+                fields.add(target.getId()); // ID
+                fields.add(target.getName()); // name
+                fields.add(target.getProperties().getDescription()); // description
+                fields.add(target.getCategory().equals("Person of Interest") ?
+                        ProfileCategory.POI.getDisplayName() : ProfileCategory.Dangerous.getDisplayName()); // category
+                fields.add(target.getCriminalRecord().name()); // criminalRecord
+                fields.add(target.getClassification()); // classification
+                fields.add(target.getActive().name()); // active
+                fields.add(dateToFormat(target.getActiveUntil(), DATE_FORMAT));// activeUntil
 
                 // fill targetGroupsID
                 List<TargetGroup> targetGroups = target.getGroups();
@@ -67,10 +68,10 @@ public class TargetsMigrationService {
                 for (TargetGroup group : targetGroups) {
                     groupIDs = groupIDs.isEmpty() ? groupIDs.concat(group.getId()) : groupIDs.concat("," + group.getId());
                 }
-                targetFields.add(groupIDs);
+                fields.add(groupIDs);
 
-                Object[] array = new Object[targetFields.size()];
-                Object[] row = targetFields.toArray(array);
+                Object[] array = new Object[fields.size()];
+                Object[] row = fields.toArray(array);
 
                 data.put(rowNum, row);
                 rowNum++;
@@ -89,15 +90,15 @@ public class TargetsMigrationService {
         data.put(1, new Object[]{"ID", "targetGroup", "parentID", "team"}); // columns name
 
         for (int i = 0; i < groups.size(); i++) {
-            List<String> groupFields = new ArrayList<>(); // new group row
-            groupFields.add(groups.get(i).getId()); // ID
-            groupFields.add(groups.get(i).getName()); // name
+            List<String> fields = new ArrayList<>(); // new group row
+            fields.add(groups.get(i).getId()); // ID
+            fields.add(groups.get(i).getName()); // name
 
             // parentID
             if (i % 2 == 1) {
-                groupFields.add(groups.get(generateRandomInteger(0, i - 1)).getId());
+                fields.add(groups.get(generateRandomInteger(0, i - 1)).getId());
             } else {
-                groupFields.add("");
+                fields.add("");
             }
 
             // team
@@ -105,10 +106,10 @@ public class TargetsMigrationService {
             for (String team : groups.get(i).getAssignedTeams()) {
                 fieldTeam = fieldTeam.isEmpty() ? fieldTeam.concat(team) : fieldTeam.concat(", " + team);
             }
-            groupFields.add(fieldTeam); // team
+            fields.add(fieldTeam); // team
 
-            Object[] array = new Object[groupFields.size()];
-            Object[] row = groupFields.toArray(array);
+            Object[] array = new Object[fields.size()];
+            Object[] row = fields.toArray(array);
 
             Integer rowNum = i + 2;
             data.put(rowNum, row);
@@ -128,19 +129,19 @@ public class TargetsMigrationService {
             Integer identifiersCount = target.getIdentifiers().size();
             for (int j = 0; j < identifiersCount; j++) {
                 try {
-                    List<String> identifiersFields = new ArrayList<>();// new identifiers row
+                    List<String> fields = new ArrayList<>();// new identifiers row
 
-                    identifiersFields.add(target.getId()); // ID
-                    identifiersFields.add(target.getName()); // target
-                    identifiersFields.add(target.getIdentifiers().get(j).getType().name()); // type
+                    fields.add(target.getId()); // ID
+                    fields.add(target.getName()); // target
+                    fields.add(target.getIdentifiers().get(j).getType().name()); // type
 
                     Assert.assertFalse(target.getIdentifiers().get(j).getValue().isEmpty());
-                    identifiersFields.add(target.getIdentifiers().get(j).getValue()); // name
+                    fields.add(target.getIdentifiers().get(j).getValue()); // name
 
-                    identifiersFields.add(target.getIdentifiers().get(j).getSources().get(0).name()); // source
+                    fields.add(target.getIdentifiers().get(j).getSources().get(0).name()); // source
 
-                    Object[] array = new Object[identifiersFields.size()];
-                    Object[] row = identifiersFields.toArray(array);
+                    Object[] array = new Object[fields.size()];
+                    Object[] row = fields.toArray(array);
 
                     Integer rowNum = identifiersTotal + 2;
                     data.put(rowNum, row);
@@ -150,6 +151,65 @@ public class TargetsMigrationService {
             }
         }
         writeSheet(data, "Target_Identifiers_List");
+    }
+
+    public static void writeManualAttributes(List<Profile> targets) {
+        log.info("Target_Manual_Attributes_List data...");
+
+        List<String> types = Arrays.asList("NAME", "GENDER", "NATIONALITY", "DATE OF BIRTH", "DOCUMENT");
+        List<String> genders = Arrays.asList("M", "W");
+
+        Map<Integer, Object[]> data = new HashMap<>();
+        data.put(1, new Object[]{"ID", "target", "type", "value", "document country"}); // columns name
+
+        Integer attributtesTotal = 0;
+        for (Profile target : targets) {
+            Integer numAttributes = generateRandomInteger(0, 5);
+            for (int i = 0; i < numAttributes; i++) {
+                List<String> fields = new ArrayList<>();// new manual attributes row
+                fields.add(target.getId()); // ID
+                fields.add(target.getName()); // target
+
+                String currType = getRandomItemFromList(types);
+                fields.add(currType); // type
+
+                switch (currType) { // value
+                    case "NAME":
+                        fields.add(randomAlphabetic(10));
+                        break;
+                    case "GENDER":
+                        fields.add(getRandomItemFromList(genders));
+                        break;
+                    case "NATIONALITY":
+                        fields.add(CountyCode.random().name());
+                        break;
+                    case "DATE OF BIRTH":
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.add(Calendar.DAY_OF_MONTH, generateRandomInteger(-28000, -3000));
+                        fields.add(dateToFormat(calendar.getTime(), DATE_FORMAT));
+                        break;
+                    case "DOCUMENT":
+                        fields.add(RandomStringUtils.randomNumeric(10));
+                        break;
+                    default:
+                        log.error("Wrong attribute type:" + currType);
+                        break;
+                }
+
+                if (currType.equals("DOCUMENT")) { // document country
+                    fields.add(CountyCode.random().name());
+                } else {
+                    fields.add("");
+                }
+
+                Object[] array = new Object[fields.size()];
+                Object[] row = fields.toArray(array);
+                Integer rowNum = attributtesTotal + 2;
+                data.put(rowNum, row);
+                attributtesTotal++;
+            }
+        }
+        writeSheet(data, "Target_Manual_Attributes_List");
     }
 
     private static void writeSheet(Map<Integer, Object[]> data, String sheetName) {
