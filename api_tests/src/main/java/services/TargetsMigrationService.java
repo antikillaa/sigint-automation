@@ -6,7 +6,6 @@ import http.OperationResult;
 import http.requests.TargetMigrationRequest;
 import model.*;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -23,6 +22,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static utils.DateHelper.dateToFormat;
 import static utils.RandomGenerator.generateRandomInteger;
 import static utils.RandomGenerator.getRandomItemFromList;
@@ -157,7 +157,7 @@ public class TargetsMigrationService {
         log.info("Target_Manual_Attributes_List data...");
 
         List<String> types = Arrays.asList("NAME", "GENDER", "NATIONALITY", "DATE OF BIRTH", "DOCUMENT");
-        List<String> genders = Arrays.asList("M", "W");
+        List<String> genders = Arrays.asList("M", "F");
 
         Map<Integer, Object[]> data = new HashMap<>();
         data.put(1, new Object[]{"ID", "target", "type", "value", "document country"}); // columns name
@@ -189,7 +189,7 @@ public class TargetsMigrationService {
                         fields.add(dateToFormat(calendar.getTime(), DATE_FORMAT));
                         break;
                     case "DOCUMENT":
-                        fields.add(RandomStringUtils.randomNumeric(10));
+                        fields.add(randomNumeric(10));
                         break;
                     default:
                         log.error("Wrong attribute type:" + currType);
@@ -271,6 +271,4 @@ public class TargetsMigrationService {
         }
         return operationResult;
     }
-
-
 }

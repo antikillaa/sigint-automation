@@ -10,7 +10,9 @@ Meta:
 @target_migration
 When Produce targets <targetCount>, groups <groupsCount>
 And Write targets to file
+!-- And Upload targets excel file
+!-- Then Request is successful
 
 Examples:
 | targetCount | groupsCount |
-| 300 | 30 |
+| 5000 | 100 |
