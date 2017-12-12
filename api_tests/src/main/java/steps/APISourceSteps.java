@@ -136,14 +136,14 @@ public class APISourceSteps extends APISteps {
         } else if (rType.toLowerCase().contains("celltower")) {
             rType = "CellTower";
         }
-        SourceType sourceType = appContext.getDictionary().getSourceType(sType, rType);
 
+        SourceType sourceType = appContext.getDictionary().getSourceType(sType, rType);
         assertNotNull("Can't find source type " + sType + " with record type " + rType, sourceType);
 
         // if exist, return source
         List<Source> sources = service.list().getEntity();
         for (Source source : sources) {
-            if (Objects.equals(source.getType(), sourceType.getType())) {
+            if (Objects.equals(source.getType(), sourceType.getDataSource())) {
                 try {
                     if (Objects.equals(source.getRecordType(), sourceType.getSubSource())) {
                         log.info(source.getName() + " source will be used");
