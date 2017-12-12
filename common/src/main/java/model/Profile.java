@@ -47,7 +47,7 @@ public class Profile extends ProfileAndTargetGroup {
     private CriminalRecord criminalRecord;
     @DataProvider(ClassificationProvider.class)
     private String classification; // "C";
-    @WithCollectionSize(10)
+    @WithCollectionSize(4)
     private ArrayList<Identifier> identifiers = new ArrayList<>();
 
     public Profile() {

@@ -14,6 +14,7 @@ import services.ProfileService;
 import verification.profiler.ProfileMergeVerification;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unchecked")
 public class APIProfileSteps extends APISteps {
@@ -180,5 +181,15 @@ public class APIProfileSteps extends APISteps {
         } else {
             service.view(secondProfileToMerge.getId());
         }
+    }
+
+
+    @Then("Remove all draft profiles")
+    public void removeAllDrafts() {
+        List<Profile> profiles = context.get("profileDraftsList", List.class);
+
+        profiles = profiles.stream()
+                .peek(draftService::remove)
+                .collect(Collectors.toList());
     }
 }

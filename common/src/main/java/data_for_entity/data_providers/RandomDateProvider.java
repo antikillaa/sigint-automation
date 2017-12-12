@@ -8,6 +8,11 @@ public class RandomDateProvider implements EntityDataProvider {
 
     @Override
     public Date generate(int length) {
-        return RandomGenerator.randomMonthRangeDate();
+        try {
+            return RandomGenerator.randomMonthRangeDate();
+        } catch (Exception e) {
+            log.error(e);
+            throw e;
+        }
     }
 }

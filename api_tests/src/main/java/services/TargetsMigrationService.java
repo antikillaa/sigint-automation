@@ -147,6 +147,7 @@ public class TargetsMigrationService {
                     data.put(rowNum, row);
                     identifiersTotal++;
                 } catch (Exception e) { // FIXME skip invalid random data
+
                 }
             }
         }
@@ -164,7 +165,7 @@ public class TargetsMigrationService {
 
         Integer attributtesTotal = 0;
         for (Profile target : targets) {
-            Integer numAttributes = generateRandomInteger(0, 5);
+            Integer numAttributes = generateRandomInteger(0, 3);
             for (int i = 0; i < numAttributes; i++) {
                 List<String> fields = new ArrayList<>();// new manual attributes row
                 fields.add(target.getId()); // ID

@@ -11,11 +11,13 @@ public enum DataSourceType {
     F,
     S,
     T,
-    SY,
+    PHONEBOOK,
+    //SUBSCRIBER,
+    //SY,
     DARK_WEB,
     DARK_WEB_REPORTS,
     INSTAGRAM,
-    NEWS,
+    //NEWS,
     TWITTER,
     YOUTUBE,
     SITA,
@@ -24,12 +26,10 @@ public enum DataSourceType {
     KARMA,
     ODD_JOBS,
     ZELZAL,
-    TARGET,
-    TARGET_GROUP,
-    H,
-    PHONEBOOK,
-    FLASHPOINT,
-    SUBSCRIBER;
+    //TARGET,
+    //TARGET_GROUP,
+    //FLASHPOINT,
+    H;
 
     private static final List<DataSourceType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();

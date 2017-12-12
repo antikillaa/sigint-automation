@@ -6,9 +6,7 @@ import model.Profile;
 import model.TargetGroup;
 import org.jbehave.core.annotations.When;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static services.TargetsMigrationService.*;
 import static utils.RandomGenerator.*;
@@ -18,7 +16,9 @@ public class APITargetsMigrationSteps extends APISteps {
     private static List<Profile> targets = new ArrayList<>();
     private static List<TargetGroup> groups = new ArrayList<>();
     private static List<String> teamNames = new ArrayList<>(Arrays.asList("migration second team","migration team"));
-    private static List<String> groupNames = new ArrayList<>(Arrays.asList("QE Group","Test's Group","DEV Group","Minsk Group","Support Group", "Shared Group", "Robbers", "Terrorists", "Others people"));
+    private static List<String> groupNames = new ArrayList<>(Arrays.asList("QE Group", "Test's Group", "DEV Group",
+            "Minsk Group", "Support Group", "Shared Group", "Robbers", "Terrorists", "Others people", "مجموعة كي",
+            "مجموعة تيست", "مجموعة ديف", "مجموعة مينسك", "مجموعة الدعم", "المجموعة المشتركة", "اللصوص", "الإرهابيون", "آخرون"));
 
     @When("Produce targets $targetCount, groups $groupsCount")
     public void produceTargets(String targetCount, String groupsCount) {
@@ -30,14 +30,16 @@ public class APITargetsMigrationSteps extends APISteps {
             TargetGroup group = objectInitializer.randomEntity(TargetGroup.class);
 
             group.setId(generateID()); // update ID
-            group.setName(getRandomItemFromList(groupNames)); // update name
+            group.setName(getRandomItemFromList(groupNames) + " " + (i + 1)); // update name
 
             // update team
-            List<String> teams = new ArrayList<>();
-            Integer teamsCount = generateRandomInteger(1, 3);
-            while (teams.size() < teamsCount) {
-                teams.add(getRandomItemFromList(teamNames));
+            Set<String> teamsSet = new HashSet<>();
+            Integer teamsCount = generateRandomInteger(1, 2);
+            while (teamsSet.size() < teamsCount) {
+                teamsSet.add(getRandomItemFromList(teamNames));
             }
+            List<String> teams = new ArrayList<>();
+            teams.addAll(teamsSet);
             group.setAssignedTeams(teams);
 
             groups.add(group);
@@ -47,11 +49,13 @@ public class APITargetsMigrationSteps extends APISteps {
             Profile profile = objectInitializer.randomEntity(Profile.class);
             profile.setId(generateID()); // set ID
 
-            Integer targetGroupsCount = generateRandomInteger(1, 5);
-            ArrayList<TargetGroup> targetGroups = new ArrayList<>();
-            for (int j = 0; j < targetGroupsCount; j++) {
-                targetGroups.add(getRandomItemFromList(groups));
+            Integer targetGroupsCount = generateRandomInteger(1, 2);
+            Set<TargetGroup> groupsSet = new HashSet<>();
+            while (groupsSet.size() < targetGroupsCount) {
+                groupsSet.add(getRandomItemFromList(groups));
             }
+            ArrayList<TargetGroup> targetGroups = new ArrayList<>();
+            targetGroups.addAll(groupsSet);
             profile.setGroups(targetGroups); //set targetGroupsID
 
             targets.add(profile);

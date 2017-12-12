@@ -5,7 +5,6 @@ import data_for_entity.data_providers.DependencyDataProvider;
 import model.TargetStatus;
 import org.apache.log4j.Logger;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,9 +26,8 @@ public class TargetStatusProvider extends DependencyDataProvider {
         Date date;
         try {
             date = sdf.parse(activeUntil);
-        } catch (ParseException e) {
-            log.error(e);
-            throw new AssertionError(e);
+        } catch (Exception e) {
+            return null;
         }
 
         List<TargetStatus> expired = new ArrayList<>(asList(TargetStatus.INACTIVE, TargetStatus.ARCHIVED));

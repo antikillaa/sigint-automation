@@ -15,4 +15,4 @@ And Write targets to file
 
 Examples:
 | targetCount | groupsCount |
-| 5000 | 100 |
+| 1500 | 100 |
