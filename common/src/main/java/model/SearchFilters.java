@@ -26,7 +26,7 @@ public class SearchFilters {
     private AdvancedSearch advancedSearch;
     private List<String> publisherName;
     private List<String> dataSource; // ["TWITTER"]
-    private List<String> subSource;
+    private List<String> subSourceId;
     private List<String> type; // ["TWEET"]
     private String eventFeed; // "OSINT"
     private SearchObjectType objectType; // "event"
@@ -367,12 +367,12 @@ public class SearchFilters {
         this.flightBookingNumber = flightBookingNumber;
     }
 
-    public List<String> getSubSource() {
-        return subSource;
+    public List<String> getSubSourceId() {
+        return subSourceId;
     }
 
-    public void setSubSource(List<String> subSource) {
-        this.subSource = subSource;
+    public void setSubSourceId(List<String> subSourceId) {
+        this.subSourceId = subSourceId;
     }
 
     public DurationRange getDuration() {

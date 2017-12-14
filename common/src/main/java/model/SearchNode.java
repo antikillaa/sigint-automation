@@ -5,6 +5,7 @@ import java.util.List;
 public class SearchNode {
     private String type;
     private String phrase;
+    private String relevance;
     private List<String> words;
     private String firstWord;
     private String secondWord;
@@ -65,5 +66,13 @@ public class SearchNode {
 
     public void setPhrase(String phrase) {
         this.phrase = phrase;
+    }
+
+    public String getRelevance() {
+        return relevance;
+    }
+
+    public void setRelevance(String relevance) {
+        this.relevance = relevance;
     }
 }
