@@ -54,6 +54,7 @@ public class ProfileDraftService implements EntityService<Profile> {
     public OperationResult<List<Profile>> list() {
         log.info("Get all profiles");
         G4Response response = g4HttpClient.sendRequest(request.list());
+        log.info("code:" + response.getCode() + ", message:" + response.getMessage());
 
         OperationResult<Profile[]> operationResult = new OperationResult<>(response, Profile[].class, "data");
         if (operationResult.isSuccess()) {

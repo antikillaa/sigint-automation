@@ -17,7 +17,7 @@ public enum DataSourceType {
     DARK_WEB,
     DARK_WEB_REPORTS,
     INSTAGRAM,
-    //NEWS,
+    NEWS,
     TWITTER,
     YOUTUBE,
     SITA,
