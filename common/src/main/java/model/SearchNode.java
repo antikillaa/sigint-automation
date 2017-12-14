@@ -4,6 +4,7 @@ import java.util.List;
 
 public class SearchNode {
     private String type;
+    private String phrase;
     private List<String> words;
     private String firstWord;
     private String secondWord;
@@ -56,5 +57,13 @@ public class SearchNode {
 
     public void setDistance(Integer distance) {
         this.distance = distance;
+    }
+
+    public String getPhrase() {
+        return phrase;
+    }
+
+    public void setPhrase(String phrase) {
+        this.phrase = phrase;
     }
 }
