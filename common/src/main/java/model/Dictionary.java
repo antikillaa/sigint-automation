@@ -25,7 +25,7 @@ public class Dictionary {
 
     public SourceType getBySourceType(String sType) {
         return sourceTypes.stream()
-                .filter(sourceType -> sourceType.getType() != null && sourceType.getType().equals(sType))
+                .filter(sourceType -> sourceType.getDataSource() != null && sourceType.getDataSource().equals(sType))
                 .findAny().orElse(null);
     }
 

@@ -158,9 +158,9 @@ public class APISourceSteps extends APISteps {
 
         // not exist, create source
         Source source = getRandomSource();
-        source.setType(sourceType.getType());
+        source.setType(sourceType.getDataSource());
         source.setRecordType(sourceType.getSubSource());
-        source.setName(sourceType.getType() + "-" + sourceType.getSubSource());
+        source.setName(sourceType.getDataSource() + "-" + sourceType.getSubSource());
         service.add(source);
         context.put("source", source);
     }

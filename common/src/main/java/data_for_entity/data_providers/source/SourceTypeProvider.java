@@ -20,12 +20,12 @@ public class SourceTypeProvider implements EntityDataProvider {
         Assert.assertNotNull("Got null sourceTypes list from dictionary", sourceTypes);
 
         List<SourceType> typeList = sourceTypes.stream()
-                .filter(sType -> sType.getType() != null &&
+                .filter(sType -> sType.getDataSource() != null &&
                         sType.getEventFeed().equals("SIGINT") &&
                         sType.getSubSource() != null
                 ).collect(Collectors.toList());
 
         if (typeList.isEmpty()) throw new AssertionError("Unable get any data source from dictionary!");
-        return getRandomItemFromList(typeList).getType();
+        return getRandomItemFromList(typeList).getDataSource();
     }
 }

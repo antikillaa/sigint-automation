@@ -2,48 +2,9 @@ package model;
 
 public class SourceType extends AbstractEntity {
 
-    private String type;
-    private String letterCode;
-    private String englishName;
-    private String arabicName;
     private String eventFeed;
     private String dataSource;
     private String subSource;
-
-    public SourceType() {
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getLetterCode() {
-        return letterCode;
-    }
-
-    public void setLetterCode(String letterCode) {
-        this.letterCode = letterCode;
-    }
-
-    public String getEnglishName() {
-        return englishName;
-    }
-
-    public void setEnglishName(String englishName) {
-        this.englishName = englishName;
-    }
-
-    public String getArabicName() {
-        return arabicName;
-    }
-
-    public void setArabicName(String arabicName) {
-        this.arabicName = arabicName;
-    }
 
     public String getSubSource() {
         return subSource;

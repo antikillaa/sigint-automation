@@ -24,7 +24,7 @@ public class RecordTypeProvider extends DependencyDataProvider {
 
         if (sSourceType != null) {
             List<SourceType> typeList = sourceTypes.stream()
-                    .filter(type -> type.getType() != null && type.getType().equals(sSourceType))
+                    .filter(type -> type.getDataSource() != null && type.getDataSource().equals(sSourceType))
                     .collect(Collectors.toList());
 
             if (typeList.isEmpty()) {
