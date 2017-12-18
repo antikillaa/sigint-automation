@@ -210,7 +210,7 @@ public class RandomGenerator {
                 .append(randomAlphanumeric(4)).append("-")
                 .append(randomAlphanumeric(4)).append("-")
                 .append(randomAlphanumeric(4)).append("-")
-                .append(randomAlphanumeric(12)).append("-")
+                .append(randomAlphanumeric(12))
                 .toString().toLowerCase();
     }
 

@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static json.JsonConverter.toJsonString;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
@@ -48,8 +49,8 @@ public class TargetsMigrationService {
         Integer rowNum = 2;
         Iterator<Profile> iterator = targets.iterator();
         while (iterator.hasNext()) {
+            Profile target = iterator.next();
             try {
-                Profile target = iterator.next();
                 List<String> fields = new ArrayList<>(); // new target row
 
                 fields.add(target.getId()); // ID
@@ -82,7 +83,8 @@ public class TargetsMigrationService {
 
                 data.put(rowNum, row);
                 rowNum++;
-            } catch (NullPointerException e) { // FIXME skip invalid random data
+            } catch (NullPointerException e) {
+                log.error("Skipping target with invalid fields data:" + toJsonString(target));
                 iterator.remove();
             }
         }
@@ -153,8 +155,8 @@ public class TargetsMigrationService {
                     Integer rowNum = identifiersTotal + 2;
                     data.put(rowNum, row);
                     identifiersTotal++;
-                } catch (Exception e) { // FIXME skip invalid random data
-
+                } catch (Exception e) {
+                    log.warn("Skipping target_Identifier with invalid value:" + toJsonString(target.getIdentifiers().get(j)));
                 }
             }
         }
