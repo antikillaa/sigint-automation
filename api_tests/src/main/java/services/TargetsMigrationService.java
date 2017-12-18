@@ -23,9 +23,9 @@ import java.util.*;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
+import static org.apache.commons.lang3.RandomUtils.nextInt;
 import static utils.DateHelper.dateToFormat;
-import static utils.RandomGenerator.generateRandomInteger;
-import static utils.RandomGenerator.getRandomItemFromList;
+import static utils.RandomGenerator.*;
 
 
 public class TargetsMigrationService {
@@ -41,7 +41,7 @@ public class TargetsMigrationService {
     public static void writeTargets(List<Profile> targets) {
 
         Map<Integer, Object[]> data = new HashMap<>();
-        data.put(1, new Object[]{"ID", "name", "description", "category", "criminalRecord", "classification", "active", "activeUntil", "targetGroupsID"}); // columns name
+        data.put(1, new Object[]{"ID", "name", "description", "category", "criminalRecord", "classification", "active", "activeUntil", "targetGroupsID", "g4Id"}); // columns name
 
         log.info("Targets_List data...");
 
@@ -69,6 +69,13 @@ public class TargetsMigrationService {
                     groupIDs = groupIDs.isEmpty() ? groupIDs.concat(group.getId()) : groupIDs.concat("," + group.getId());
                 }
                 fields.add(groupIDs);
+
+                // g4Id
+                if (nextInt(0, 10) == 0) { // generate 10% of record with g4Id
+                    fields.add(generateID());
+                } else {
+                    fields.add("");
+                }
 
                 Object[] array = new Object[fields.size()];
                 Object[] row = fields.toArray(array);

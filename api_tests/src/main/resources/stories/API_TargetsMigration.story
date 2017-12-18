@@ -1,9 +1,9 @@
 Meta:
 @skip
 
-Lifecycle:
-Before:
-Given I sign in as admin user
+!-- Lifecycle:
+!-- Before:
+!-- Given I sign in as admin user
 
 Scenario: Targets migration
 Meta:
@@ -15,4 +15,4 @@ And Write targets to file
 
 Examples:
 | targetCount | groupsCount |
-| 1500 | 100 |
+| 1000 | 100 |

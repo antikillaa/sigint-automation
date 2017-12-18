@@ -1,12 +1,14 @@
 package utils;
 
 import app_context.AppContext;
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
+import static org.apache.commons.lang3.RandomUtils.nextInt;
 
 public class RandomGenerator {
 
@@ -45,33 +47,33 @@ public class RandomGenerator {
 
     public static String getRandomLanguageCode() {
         List<String> countryCodes = Arrays.asList(Locale.getISOCountries());
-        return countryCodes.get(RandomUtils.nextInt(countryCodes.size()));
+        return countryCodes.get(nextInt(0, countryCodes.size()));
 
     }
 
     public static String getRandomCountry() {
         List<String> countries = new LinkedList<>(context.getCountries().values());
-        return countries.get(RandomUtils.nextInt(countries.size() - 1));
+        return countries.get(nextInt(0, countries.size() - 1));
     }
 
     public static String getRandomLanguage() {
         List<String> languages = new LinkedList<>(context.getLanguages().values());
-        return languages.get(RandomUtils.nextInt(languages.size() - 1));
+        return languages.get(nextInt(0, languages.size() - 1));
     }
 
     public static LinkedHashSet<String> generateRandomStrings(int maxNumber) {
         LinkedHashSet<String> strings = new LinkedHashSet<>();
-        int numMaxStrings = RandomUtils.nextInt(maxNumber);
+        int numMaxStrings = nextInt(0, maxNumber);
         int i = 0;
         do {
-            strings.add(RandomStringUtils.randomAlphanumeric(5));
+            strings.add(randomAlphanumeric(5));
             i++;
         } while (i < numMaxStrings);
         return strings;
     }
 
     public static <T> T getRandomItemFromList(List<T> list) {
-        int index = RandomUtils.nextInt(list.size());
+        int index = nextInt(0, list.size());
         return list.get(index);
     }
 
@@ -93,7 +95,7 @@ public class RandomGenerator {
     }
 
     public static int getRandomDuration() {
-        return (RandomUtils.nextInt(120) + 1) * 60;
+        return (nextInt(0, 120) + 1) * 60;
     }
 
     private static Date getStartDate(Date date) {
@@ -117,7 +119,7 @@ public class RandomGenerator {
 
     public static String generateCountryCode() {
         List<String> countryCodes = Arrays.asList(Locale.getISOCountries());
-        return countryCodes.get(RandomUtils.nextInt(countryCodes.size()));
+        return countryCodes.get(nextInt(0, countryCodes.size()));
     }
 
     public static String getCountryName(String countryCode) {
@@ -146,7 +148,7 @@ public class RandomGenerator {
 
     public static LinkedHashSet<String> generateKeywords(int maxNumber) {
         LinkedHashSet<String> keys = new LinkedHashSet<>();
-        int maxKeywords = RandomUtils.nextInt(maxNumber + 1);
+        int maxKeywords = nextInt(0, maxNumber + 1);
 
         int i = 0;
         do {
@@ -170,7 +172,7 @@ public class RandomGenerator {
             return text.substring(beginIndex, beginIndex + sms_length);
 
         } else {
-            return RandomStringUtils.randomAlphanumeric(12);
+            return randomAlphanumeric(12);
         }
     }
 
@@ -182,8 +184,8 @@ public class RandomGenerator {
      */
     public static String generateSMSText(String mention) {
         Random random = new Random();
-        String prefix = RandomStringUtils.randomAlphanumeric(random.nextInt(15));
-        String suffix = random.nextBoolean() ? " " : "" + RandomStringUtils.randomAlphanumeric(random.nextInt(15));
+        String prefix = randomAlphanumeric(random.nextInt(15));
+        String suffix = random.nextBoolean() ? " " : "" + randomAlphanumeric(random.nextInt(15));
         return prefix +
                 (random.nextBoolean() ? " " : "") +
                 mention +
@@ -193,21 +195,27 @@ public class RandomGenerator {
 
     public static String generateEmail() {
         int size = generateRandomInteger(3, 15);
-        return RandomStringUtils.randomAlphanumeric(size) + "@gmail.com";
+        return randomAlphanumeric(size) + "@gmail.com";
     }
 
     public static String generateTwitterHandle() {
         int size = generateRandomInteger(5, 12);
-        return  "@" + RandomStringUtils.randomAlphanumeric(size).toLowerCase();
+        return  "@" + randomAlphanumeric(size).toLowerCase();
     }
 
     public static String generateID() {
-        int size = generateRandomInteger(10, 15);
-        return RandomStringUtils.randomAlphanumeric(size).toLowerCase();
+        StringBuilder sb = new StringBuilder();
+        return sb
+                .append(randomAlphanumeric(8)).append("-")
+                .append(randomAlphanumeric(4)).append("-")
+                .append(randomAlphanumeric(4)).append("-")
+                .append(randomAlphanumeric(4)).append("-")
+                .append(randomAlphanumeric(12)).append("-")
+                .toString().toLowerCase();
     }
 
     public static String generateYoutubeChannelId() {
-        return RandomStringUtils.randomAlphanumeric(24);
+        return randomAlphanumeric(24);
     }
 
     public static Date randomMonthRangeDate() {
