@@ -7,37 +7,41 @@ import data_for_entity.provider_resolver.ProviderResolver;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 class DependencyProviderResolver extends ProviderResolver {
-    
+
     private Object instance;
     private Field field;
-    
-    DependencyProviderResolver(Field field, Object instance) {
+    private Map<String, Task> taskMap;
+
+    DependencyProviderResolver(Field field, Object instance, Map<String, Task> taskMap) {
         this.field = field;
         this.instance = instance;
+        this.taskMap = taskMap;
     }
-    
-    
+
     private DataDependencies readDataDependency() {
         FieldOptionsManager optionsManager = new FieldOptionsManager(field);
         return optionsManager.getDependencies();
     }
-    
+
     /**
      * Helps to create {@link DependencyData} object.
+     *
      * @param dependencyFields List of fields that current field is depend on.
      * @return {@link DependencyData} instance.
      */
-    private  DependencyData createDependencyData(List<ObjectField> dependencyFields) {
+    private DependencyData createDependencyData(List<ObjectField> dependencyFields) {
         DependencyData dependencyData = new DependencyData();
-        for(ObjectField field: dependencyFields) {
+        for (ObjectField field : dependencyFields) {
+            taskMap.get(field.getName()).getResult();
             dependencyData.insertData(field.getName(), field.getValue(instance));
         }
         return dependencyData;
     }
-    
-    
+
+
     @Override
     protected EntityDataProvider getInternalProvider() {
         DataDependencies dataDependencies = readDataDependency();
@@ -51,6 +55,5 @@ class DependencyProviderResolver extends ProviderResolver {
         DependencyDataProvider provider = dataDependencies.getProvider();
         provider.setDependencyData(createDependencyData(dependencyFields));
         return provider;
-        
     }
 }

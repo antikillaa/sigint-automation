@@ -1,7 +1,6 @@
 package data_for_entity.instance_managers;
 
 import error_reporter.ErrorReporter;
-import org.apache.log4j.Logger;
 
 public class DefaultInstanceManager implements InstanceManager{
 
