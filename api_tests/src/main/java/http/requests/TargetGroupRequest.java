@@ -1,7 +1,7 @@
 package http.requests;
 
-import model.SearchFilter;
 import http.HttpMethod;
+import model.SearchFilter;
 import model.TargetGroup;
 
 public class TargetGroupRequest extends HttpRequest {
@@ -55,23 +55,6 @@ public class TargetGroupRequest extends HttpRequest {
         this
                 .setURI(URI + params)
                 .setHttpMethod(HttpMethod.GET);
-        return this;
-    }
-
-    @Deprecated
-    public TargetGroupRequest listG4Compatibility() {
-        this
-                .setURI("/api/profiler/target-groups")
-                .setHttpMethod(HttpMethod.GET);
-        return this;
-    }
-
-    @Deprecated
-    public TargetGroupRequest searchG4Compatibility(SearchFilter filter) {
-        this
-                .setURI("/api/profiler/target-groups/search")
-                .setHttpMethod(HttpMethod.POST)
-                .setPayload(filter);
         return this;
     }
 

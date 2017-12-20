@@ -8,7 +8,6 @@ import json.JsonConverter;
 import model.ProfileAndTargetGroup;
 import model.SearchFilter;
 import model.TargetGroup;
-import model.TargetGroupSearchResult;
 import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
@@ -90,44 +89,6 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         return operationResult;
     }
 
-    /**
-     * Get target groups list. Target Group API for G4 backward compatibility
-     * GET /target-groups getTargetGroups
-     *
-     * @return list of TargetGroup
-     */
-    @Deprecated
-    public OperationResult<List<TargetGroup>> listG4Compatibility() {
-        log.info("Get list of target groups");
-        G4Response response = g4HttpClient.sendRequest(request.listG4Compatibility());
-
-        List<TargetGroup> targetGroupList =
-                JsonConverter.jsonToObjectsList(response.getMessage(), TargetGroup[].class, "result");
-        return new OperationResult<>(response, targetGroupList);
-    }
-
-    /**
-     * Search target-groups by filter
-     * POST /target-groups/search search
-     *
-     * @param filter search filter for payload
-     * @return {@link OperationResult<List<TargetGroup>> }
-     */
-    @Deprecated
-    public OperationResult<List<TargetGroup>> searchG4Compatibility(SearchFilter filter) {
-        log.info("Search targetGroups by filter:" + JsonConverter.toJsonString(filter));
-
-        G4Response response = g4HttpClient.sendRequest(request.searchG4Compatibility(filter));
-
-        OperationResult<TargetGroupSearchResult> operationResult =
-                new OperationResult<>(response, TargetGroupSearchResult.class, "result");
-
-        if (operationResult.isSuccess()) {
-            return new OperationResult<>(response, operationResult.getEntity().getResult());
-        } else {
-            throw new OperationResultError(operationResult);
-        }
-    }
 
     /**
      * POST /targetGroups/{groupId}/targetGroups createChildGroup
@@ -153,7 +114,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
      * GET /targetGroups/{groupId}/contents
      *
      * @param groupID groupID
-     * @return {@link OperationResult< ProfileAndTargetGroup []>}
+     * @return {@link OperationResult<>}
      */
     public OperationResult<ProfileAndTargetGroup[]> getContent(String groupID) {
         log.info("Get content of target group id: " + groupID);
