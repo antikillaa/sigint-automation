@@ -243,3 +243,28 @@ When I send delete target group request
 Then Request is successful
 When I send delete target group request
 Then Request is successful
+
+
+Scenario: Add hit for profiler
+Meta:
+@wip
+
+When I search target group members by query:<target>
+Then Request is successful
+When Get profiles from targets search results
+Then Profile list size > 0
+When get random profile from profile list
+When I send get profile details request
+And add <recordsCount> phoneNumbers from profile to injection file
+
+Given Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+And Number of ingested event records in CB == <recordsCount>
+
+Examples:
+| target     | sourceType | recordType | recordsCount |
+| adubatovka | S          | SMS        | 1            |

@@ -2,6 +2,8 @@ package steps;
 
 import errors.NullReturnException;
 import http.OperationResult;
+import model.DataInjection;
+import model.IdentifierType;
 import model.Profile;
 import model.TargetGroup;
 import model.entities.Entities;
@@ -13,8 +15,14 @@ import services.ProfileDraftService;
 import services.ProfileService;
 import verification.profiler.ProfileMergeVerification;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static ingestion.IngestionService.INJECTIONS_FILE;
+import static json.JsonConverter.toJsonString;
+import static utils.RandomGenerator.getRandomItemFromList;
+import static utils.StepHelper.compareByCriteria;
+import static utils.StringUtils.saveStringToFile;
 
 @SuppressWarnings("unchecked")
 public class APIProfileSteps extends APISteps {
@@ -91,7 +99,11 @@ public class APIProfileSteps extends APISteps {
     @When("I send get profile details request")
     public void getProfileDetails() {
         Profile profile = context.get("profile", Profile.class);
-        service.view(profile.getId());
+        OperationResult<Profile> result = service.view(profile.getId());
+
+        if (result.isSuccess()) {
+            context.put("profile", result.getEntity());
+        }
     }
 
     @Then("Profile is correct")
@@ -116,11 +128,18 @@ public class APIProfileSteps extends APISteps {
         context.put("profileDraftsList", operationResult.getEntity());
     }
 
-    @Then("Profile drafts list size more than $size")
-    public void profileDraftsListMoreThan(String size) {
+    @Then("Profile drafts list size $criteria $value")
+    public void profileDraftsListMoreThan(String criteria, String value) {
         List<Profile> profiles = context.get("profileDraftsList", List.class);
 
-        Assert.assertTrue(profiles.size() > Integer.valueOf(size));
+        Assert.assertTrue(compareByCriteria(criteria, profiles.size(), Integer.valueOf(value)));
+    }
+
+    @Then("Profile list size $criteria $value")
+    public void profileListMoreThan(String criteria, String value) {
+        List<Profile> profiles = context.get("profileList", List.class);
+
+        Assert.assertTrue(compareByCriteria(criteria, profiles.size(), Integer.valueOf(value)));
     }
 
     @When("I add profile draft to target group")
@@ -171,12 +190,12 @@ public class APIProfileSteps extends APISteps {
         verification.verify(firstProfileToMerge, secondProfileToMerge, mergedProfile);
     }
 
-    @When("I send get $name merged profile details request")
-    public void getOneOfMergedProfile(String name) {
+    @When("I send get $number merged profile details request")
+    public void getOneOfMergedProfile(String number) {
         Profile firstProfileToMerge = context.get("firstProfileToMerge", Profile.class);
         Profile secondProfileToMerge = context.get("secondProfileToMerge", Profile.class);
 
-        if (name.equals("first")) {
+        if (number.equals("first")) {
             service.view(firstProfileToMerge.getId());
         } else {
             service.view(secondProfileToMerge.getId());
@@ -188,8 +207,34 @@ public class APIProfileSteps extends APISteps {
     public void removeAllDrafts() {
         List<Profile> profiles = context.get("profileDraftsList", List.class);
 
-        profiles = profiles.stream()
-                .peek(draftService::remove)
-                .collect(Collectors.toList());
+        profiles.forEach(draftService::remove);
+    }
+
+    @When("get random profile from profile list")
+    public void getRandomProfileFromList() {
+        List<Profile> profiles = context.get("profileList", List.class);
+
+        context.put("profile", getRandomItemFromList(profiles));
+    }
+
+
+    @When("add $count phoneNumbers from profile to injection file")
+    public void addPhoneToInjectionFile(String count) {
+        Profile profile = context.get("profile", Profile.class);
+
+        List<String> targetPhones = new ArrayList<>();
+        profile.getIdentifiers().stream()
+                .filter(identifier -> identifier.getType() == IdentifierType.PHONE_NUMBER)
+                .forEach(identifier -> targetPhones.add(identifier.getValue()));
+
+        DataInjection injections = new DataInjection();
+        List<String> phones = new ArrayList<>();
+        Integer phoneCount = Integer.valueOf(count);
+        for (int i = 0; i < phoneCount; i++) {
+            phones.add(getRandomItemFromList(targetPhones));
+        }
+        injections.setPhones(phones);
+
+        saveStringToFile(toJsonString(injections), INJECTIONS_FILE.toString());
     }
 }

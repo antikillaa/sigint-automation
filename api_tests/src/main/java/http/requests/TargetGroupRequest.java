@@ -3,6 +3,7 @@ package http.requests;
 import http.HttpMethod;
 import model.SearchFilter;
 import model.TargetGroup;
+import model.TargetGroupSearchFilter;
 
 public class TargetGroupRequest extends HttpRequest {
 
@@ -50,6 +51,19 @@ public class TargetGroupRequest extends HttpRequest {
     public TargetGroupRequest list(SearchFilter filter) {
         String params = "/root?page=" + filter.getPage() +
                 "&pageSize=" + filter.getPageSize() +
+                "&sortKey=" + filter.getSortField() +
+                "&sortOrder=" + (filter.isSortDirection() ? "ASC" : "DESC");
+        this
+                .setURI(URI + params)
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
+    public TargetGroupRequest search(SearchFilter searchFilter) {
+        TargetGroupSearchFilter filter = (TargetGroupSearchFilter) searchFilter;
+        String params = "/search?page=" + filter.getPage() +
+                "&pageSize=" + filter.getPageSize() +
+                (filter.getQuery().isEmpty() ? "" : "&query=" + filter.getQuery()) +
                 "&sortKey=" + filter.getSortField() +
                 "&sortOrder=" + (filter.isSortDirection() ? "ASC" : "DESC");
         this

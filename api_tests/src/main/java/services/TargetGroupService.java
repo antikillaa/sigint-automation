@@ -4,7 +4,7 @@ import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.TargetGroupRequest;
-import json.JsonConverter;
+import model.Profile;
 import model.ProfileAndTargetGroup;
 import model.SearchFilter;
 import model.TargetGroup;
@@ -12,7 +12,14 @@ import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static json.JsonConverter.jsonToObject;
+import static json.JsonConverter.jsonToObjectsList;
+import static json.JsonConverter.toJsonString;
 
 public class TargetGroupService implements EntityService<TargetGroup> {
 
@@ -47,11 +54,15 @@ public class TargetGroupService implements EntityService<TargetGroup> {
 
     @Override
     public OperationResult<List<TargetGroup>> search(SearchFilter filter) {
-        log.info("Get list of target groups");
+        throw new NotImplementedException("");
+    }
+
+    public OperationResult<List<TargetGroup>> getTopLevelGroups(SearchFilter filter) {
+        log.info("Get top of list of target groups");
         G4Response response = g4HttpClient.sendRequest(request.list(filter));
 
         List<TargetGroup> targetGroupList =
-                JsonConverter.jsonToObjectsList(response.getMessage(), TargetGroup[].class, "data");
+                jsonToObjectsList(response.getMessage(), TargetGroup[].class, "data");
 
         return new OperationResult<>(response, targetGroupList);
     }
@@ -122,5 +133,27 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         G4Response response = g4HttpClient.sendRequest(request.getContent(groupID));
 
         return new OperationResult<>(response, ProfileAndTargetGroup[].class, "data");
+    }
+
+    public OperationResult<List<ProfileAndTargetGroup>> searchTargetGroupMembers(SearchFilter filter) {
+        log.info("Get list of targets and target_groups");
+        G4Response response = g4HttpClient.sendRequest(request.search(filter));
+
+        OperationResult<ProfileAndTargetGroup[]> operationResult =
+                new OperationResult<>(response, ProfileAndTargetGroup[].class, "data");
+
+        if (operationResult.isSuccess()) {
+            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
+        } else {
+            return new OperationResult<>(response);
+        }
+    }
+
+    public List<Profile> extractProfilesFromResponse(OperationResult<List<ProfileAndTargetGroup>> result) {
+        List<Object> list = jsonToObjectsList(result.getMessage(), Object[].class, "data");
+        return list.stream()
+                .filter(o ->  ((LinkedHashMap) o).get("jsonType").equals("Profile"))
+                .map(o -> jsonToObject(toJsonString(o), Profile.class))
+                .collect(Collectors.toList());
     }
 }
