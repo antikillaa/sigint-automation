@@ -3,17 +3,20 @@ package model;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class DataInjection {
 
-    private List<String> phones;
-    private List<String> phrases;
-    private List<String> names;
+    private List<String> phones = new ArrayList<>();
+    private List<String> phrases = new ArrayList<>();
+    private List<String> names = new ArrayList<>();
     @JsonProperty("family_names")
-    private List<String> familyNames;
-    private List<String> addresses;
+    private List<String> familyNames = new ArrayList<>();
+    private List<String> addresses = new ArrayList<>();
+    private List<Integer> imsis = new ArrayList<>();
+    private List<Integer> imeis = new ArrayList<>();
 
     public List<String> getPhones() {
         return phones;
@@ -53,5 +56,21 @@ public class DataInjection {
 
     public void setAddresses(List<String> addresses) {
         this.addresses = addresses;
+    }
+
+    public List<Integer> getImsis() {
+        return imsis;
+    }
+
+    public void setImsis(List<Integer> imsis) {
+        this.imsis = imsis;
+    }
+
+    public List<Integer> getImeis() {
+        return imeis;
+    }
+
+    public void setImeis(List<Integer> imeis) {
+        this.imeis = imeis;
     }
 }

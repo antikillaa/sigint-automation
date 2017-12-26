@@ -4,10 +4,15 @@ import http.HttpMethod;
 import model.SearchFilter;
 import model.TargetGroup;
 import model.TargetGroupSearchFilter;
+import org.apache.log4j.Logger;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 public class TargetGroupRequest extends HttpRequest {
 
     private static final String URI = "/api/profiler/targetGroups";
+    private static final Logger log = Logger.getLogger(TargetGroupRequest.class);
 
     public TargetGroupRequest() {
         super(URI);
@@ -61,11 +66,17 @@ public class TargetGroupRequest extends HttpRequest {
 
     public TargetGroupRequest search(SearchFilter searchFilter) {
         TargetGroupSearchFilter filter = (TargetGroupSearchFilter) searchFilter;
-        String params = "/search?page=" + filter.getPage() +
-                "&pageSize=" + filter.getPageSize() +
-                (filter.getQuery().isEmpty() ? "" : "&query=" + filter.getQuery()) +
-                "&sortKey=" + filter.getSortField() +
-                "&sortOrder=" + (filter.isSortDirection() ? "ASC" : "DESC");
+        String params;
+        try {
+            params = "/search?page=" + filter.getPage() +
+                    "&pageSize=" + filter.getPageSize() +
+                    (filter.getQuery().isEmpty() ? "" : "&query=" + URLEncoder.encode(filter.getQuery(), "UTF-8")) +
+                    "&sortKey=" + filter.getSortField() +
+                    "&sortOrder=" + (filter.isSortDirection() ? "ASC" : "DESC");
+        } catch (UnsupportedEncodingException e) {
+            log.error(e);
+            throw new AssertionError(e);
+        }
         this
                 .setURI(URI + params)
                 .setHttpMethod(HttpMethod.GET);

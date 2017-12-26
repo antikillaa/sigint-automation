@@ -107,6 +107,16 @@ public class StringUtils {
             FileUtils.writeStringToFile(new File(filepath), data, "utf-8");
         } catch (IOException e) {
             log.error("Can't create file " + filepath + ":\n" + e.getMessage());
+            throw new AssertionError(e);
+        }
+    }
+
+    public static String readStringFromFile(String filepath) {
+        try {
+            return FileUtils.readFileToString(new File(filepath), "utf-8");
+        } catch (IOException e) {
+            log.error("Can't read file " + filepath + ":\n" + e.getMessage());
+            throw new AssertionError(e);
         }
     }
 

@@ -15,13 +15,17 @@ import services.ProfileDraftService;
 import services.ProfileService;
 import verification.profiler.ProfileMergeVerification;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ingestion.IngestionService.INJECTIONS_FILE;
+import static json.JsonConverter.jsonToObject;
 import static json.JsonConverter.toJsonString;
 import static utils.RandomGenerator.getRandomItemFromList;
 import static utils.StepHelper.compareByCriteria;
+import static utils.StringUtils.readStringFromFile;
 import static utils.StringUtils.saveStringToFile;
 
 @SuppressWarnings("unchecked")
@@ -218,23 +222,51 @@ public class APIProfileSteps extends APISteps {
     }
 
 
-    @When("add $count phoneNumbers from profile to injection file")
-    public void addPhoneToInjectionFile(String count) {
-        Profile profile = context.get("profile", Profile.class);
-
-        List<String> targetPhones = new ArrayList<>();
-        profile.getIdentifiers().stream()
-                .filter(identifier -> identifier.getType() == IdentifierType.PHONE_NUMBER)
-                .forEach(identifier -> targetPhones.add(identifier.getValue()));
-
-        DataInjection injections = new DataInjection();
-        List<String> phones = new ArrayList<>();
-        Integer phoneCount = Integer.valueOf(count);
-        for (int i = 0; i < phoneCount; i++) {
-            phones.add(getRandomItemFromList(targetPhones));
+    @When("add $count $type from profile:$profileName to injection file")
+    public void addPhoneToInjectionFile(String count, String type, String profileName) {
+        Profile profile;
+        try {
+             profile = Entities.getProfiles().getEntity(profileName);
+        } catch (NullReturnException e) {
+            log.error(e);
+            throw new AssertionError(e);
         }
-        injections.setPhones(phones);
+
+        IdentifierType identifierType = IdentifierType.valueOf(type);
+        List<String> identifiersList = getTargetIdentifiersList(profile, identifierType, Integer.valueOf(count));
+
+        DataInjection injections = new File(INJECTIONS_FILE.toString()).exists() ?
+                jsonToObject(readStringFromFile(INJECTIONS_FILE.toString()), DataInjection.class) : new DataInjection();
+
+        switch (identifierType) {
+            case PHONE_NUMBER:
+                Assert.assertTrue(injections.getPhones().add(getRandomItemFromList(identifiersList)));
+                break;
+            case IMSI:
+                List<Integer> imsis = identifiersList.stream().map(Integer::valueOf).collect(Collectors.toList());
+                Assert.assertTrue(injections.getImsis().add(getRandomItemFromList(imsis)));
+            break;
+            case IMEI:
+                List<Integer> imeis = identifiersList.stream().map(Integer::valueOf).collect(Collectors.toList());
+                Assert.assertTrue(injections.getImeis().add(getRandomItemFromList(imeis)));
+                break;
+            default:
+                throw new AssertionError("Unsupported identifierType:" + identifierType);
+        }
 
         saveStringToFile(toJsonString(injections), INJECTIONS_FILE.toString());
+    }
+
+    private List<String> getTargetIdentifiersList(Profile profile, IdentifierType identifierType, Integer count) {
+        List<String> targetIdentifiers = new ArrayList<>();
+        profile.getIdentifiers().stream()
+                .filter(identifier -> identifier.getType() == identifierType)
+                .forEach(identifier -> targetIdentifiers.add(identifier.getValue()));
+
+        List<String> identifiers = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            identifiers.add(getRandomItemFromList(targetIdentifiers));
+        }
+        return identifiers;
     }
 }
