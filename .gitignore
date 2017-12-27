@@ -1,4 +1,5 @@
 .idea
+.allure
 build/
 log4j
 *.iml
