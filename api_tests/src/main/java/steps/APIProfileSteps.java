@@ -2,6 +2,8 @@ package steps;
 
 import errors.NullReturnException;
 import http.OperationResult;
+import model.DataInjection;
+import model.IdentifierType;
 import model.Profile;
 import model.TargetGroup;
 import model.entities.Entities;
@@ -13,8 +15,18 @@ import services.ProfileDraftService;
 import services.ProfileService;
 import verification.profiler.ProfileMergeVerification;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ingestion.IngestionService.INJECTIONS_FILE;
+import static json.JsonConverter.jsonToObject;
+import static json.JsonConverter.toJsonString;
+import static utils.RandomGenerator.getRandomItemFromList;
+import static utils.StepHelper.compareByCriteria;
+import static utils.StringUtils.readStringFromFile;
+import static utils.StringUtils.saveStringToFile;
 
 @SuppressWarnings("unchecked")
 public class APIProfileSteps extends APISteps {
@@ -91,7 +103,11 @@ public class APIProfileSteps extends APISteps {
     @When("I send get profile details request")
     public void getProfileDetails() {
         Profile profile = context.get("profile", Profile.class);
-        service.view(profile.getId());
+        OperationResult<Profile> result = service.view(profile.getId());
+
+        if (result.isSuccess()) {
+            context.put("profile", result.getEntity());
+        }
     }
 
     @Then("Profile is correct")
@@ -116,11 +132,18 @@ public class APIProfileSteps extends APISteps {
         context.put("profileDraftsList", operationResult.getEntity());
     }
 
-    @Then("Profile drafts list size more than $size")
-    public void profileDraftsListMoreThan(String size) {
+    @Then("Profile drafts list size $criteria $value")
+    public void profileDraftsListMoreThan(String criteria, String value) {
         List<Profile> profiles = context.get("profileDraftsList", List.class);
 
-        Assert.assertTrue(profiles.size() > Integer.valueOf(size));
+        Assert.assertTrue(compareByCriteria(criteria, profiles.size(), Integer.valueOf(value)));
+    }
+
+    @Then("Profile list size $criteria $value")
+    public void profileListMoreThan(String criteria, String value) {
+        List<Profile> profiles = context.get("profileList", List.class);
+
+        Assert.assertTrue(compareByCriteria(criteria, profiles.size(), Integer.valueOf(value)));
     }
 
     @When("I add profile draft to target group")
@@ -171,12 +194,12 @@ public class APIProfileSteps extends APISteps {
         verification.verify(firstProfileToMerge, secondProfileToMerge, mergedProfile);
     }
 
-    @When("I send get $name merged profile details request")
-    public void getOneOfMergedProfile(String name) {
+    @When("I send get $number merged profile details request")
+    public void getOneOfMergedProfile(String number) {
         Profile firstProfileToMerge = context.get("firstProfileToMerge", Profile.class);
         Profile secondProfileToMerge = context.get("secondProfileToMerge", Profile.class);
 
-        if (name.equals("first")) {
+        if (number.equals("first")) {
             service.view(firstProfileToMerge.getId());
         } else {
             service.view(secondProfileToMerge.getId());
@@ -188,8 +211,62 @@ public class APIProfileSteps extends APISteps {
     public void removeAllDrafts() {
         List<Profile> profiles = context.get("profileDraftsList", List.class);
 
-        profiles = profiles.stream()
-                .peek(draftService::remove)
-                .collect(Collectors.toList());
+        profiles.forEach(draftService::remove);
+    }
+
+    @When("get random profile from profile list")
+    public void getRandomProfileFromList() {
+        List<Profile> profiles = context.get("profileList", List.class);
+
+        context.put("profile", getRandomItemFromList(profiles));
+    }
+
+
+    @When("add $count $type from profile:$profileName to injection file")
+    public void addPhoneToInjectionFile(String count, String type, String profileName) {
+        Profile profile;
+        try {
+             profile = Entities.getProfiles().getEntity(profileName);
+        } catch (NullReturnException e) {
+            log.error(e);
+            throw new AssertionError(e);
+        }
+
+        IdentifierType identifierType = IdentifierType.valueOf(type);
+        List<String> identifiersList = getTargetIdentifiersList(profile, identifierType, Integer.valueOf(count));
+
+        DataInjection injections = new File(INJECTIONS_FILE.toString()).exists() ?
+                jsonToObject(readStringFromFile(INJECTIONS_FILE.toString()), DataInjection.class) : new DataInjection();
+
+        switch (identifierType) {
+            case PHONE_NUMBER:
+                Assert.assertTrue(injections.getPhones().add(getRandomItemFromList(identifiersList)));
+                break;
+            case IMSI:
+                List<Integer> imsis = identifiersList.stream().map(Integer::valueOf).collect(Collectors.toList());
+                Assert.assertTrue(injections.getImsis().add(getRandomItemFromList(imsis)));
+            break;
+            case IMEI:
+                List<Integer> imeis = identifiersList.stream().map(Integer::valueOf).collect(Collectors.toList());
+                Assert.assertTrue(injections.getImeis().add(getRandomItemFromList(imeis)));
+                break;
+            default:
+                throw new AssertionError("Unsupported identifierType:" + identifierType);
+        }
+
+        saveStringToFile(toJsonString(injections), INJECTIONS_FILE.toString());
+    }
+
+    private List<String> getTargetIdentifiersList(Profile profile, IdentifierType identifierType, Integer count) {
+        List<String> targetIdentifiers = new ArrayList<>();
+        profile.getIdentifiers().stream()
+                .filter(identifier -> identifier.getType() == identifierType)
+                .forEach(identifier -> targetIdentifiers.add(identifier.getValue()));
+
+        List<String> identifiers = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            identifiers.add(getRandomItemFromList(targetIdentifiers));
+        }
+        return identifiers;
     }
 }

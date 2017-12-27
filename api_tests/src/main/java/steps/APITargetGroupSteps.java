@@ -4,7 +4,10 @@ import conditions.Conditions;
 import conditions.Verify;
 import http.OperationResult;
 import json.JsonConverter;
-import model.*;
+import model.Profile;
+import model.ProfileAndTargetGroup;
+import model.TargetGroup;
+import model.TargetGroupSearchFilter;
 import model.entities.Entities;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
@@ -12,7 +15,6 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.TargetGroupService;
-import utils.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static conditions.Conditions.isTrue;
+import static utils.RandomGenerator.getRandomItemFromList;
 
 @SuppressWarnings("unchecked")
 public class APITargetGroupSteps extends APISteps {
@@ -144,7 +147,7 @@ public class APITargetGroupSteps extends APISteps {
         List<TargetGroup> targetGroups = new ArrayList<>();
         OperationResult<List<TargetGroup>> operationResult;
         do {
-            operationResult = service.search(filter);
+            operationResult = service.getTopLevelGroups(filter);
             targetGroups.addAll(operationResult.getEntity());
             filter.setPage(filter.getPage() + 1);
         } while (operationResult.getEntity().size() == filter.getPageSize());
@@ -155,7 +158,7 @@ public class APITargetGroupSteps extends APISteps {
     @When("I get random target group from targetGroup list")
     public void getTargetGroupFrolList() {
         List<TargetGroup> targetGroups = context.get("targetGroupList", List.class);
-        context.put("targetGroup", RandomGenerator.getRandomItemFromList(targetGroups));
+        context.put("targetGroup", getRandomItemFromList(targetGroups));
     }
 
     @Then("Created target group $criteria list")
@@ -290,5 +293,23 @@ public class APITargetGroupSteps extends APISteps {
 
         boolean matched = Arrays.stream(profileAndGroups).anyMatch(p -> p.getId().equals(profile.getId()));
         Verify.shouldBe(isTrue.element(matched));
+    }
+
+    @When("I search target group members by query:$name")
+    public void searchProfileByName(String name) {
+        TargetGroupSearchFilter filter = new TargetGroupSearchFilter();
+        filter.setQuery(name).setSortField("name");
+
+        OperationResult<List<ProfileAndTargetGroup>> operationResult = service.searchTargetGroupMembers(filter);
+        context.put("operationResult", operationResult);
+    }
+
+    @When("Get profiles from targets search results")
+    public void extractProfiles() {
+        OperationResult<List<ProfileAndTargetGroup>> operationResult =
+                context.get("operationResult", OperationResult.class);
+
+        List<Profile> profiles = service.extractProfilesFromResponse(operationResult);
+        context.put("profileList", profiles);
     }
 }
