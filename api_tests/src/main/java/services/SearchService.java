@@ -3,7 +3,6 @@ package services;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.SearchRequest;
-import json.JsonConverter;
 import model.CBEntity;
 import model.CBSearchFilter;
 import model.CBSearchResult;
@@ -12,6 +11,8 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.List;
+
+import static json.JsonConverter.toJsonString;
 
 public class SearchService implements EntityService<CBEntity> {
 
@@ -34,7 +35,7 @@ public class SearchService implements EntityService<CBEntity> {
     }
 
     public OperationResult<List<CBEntity>> search(CBSearchFilter filter) {
-        log.info("CB_Search with filter: " + JsonConverter.toJsonString(filter));
+        log.info("CB_Search with filter: " + toJsonString(filter));
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
         log.info(response.getMessage());
 
@@ -42,7 +43,7 @@ public class SearchService implements EntityService<CBEntity> {
         if (operationResult.isSuccess() && operationResult.getEntity().getStatus().getHttpStatusCode().equals(200)) {
             return new OperationResult<>(response, operationResult.getEntity().getData());
         } else {
-            throw new AssertionError(response);
+            throw new AssertionError(toJsonString(response));
         }
     }
 
