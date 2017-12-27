@@ -91,7 +91,7 @@ public class ProfileService implements EntityService<Profile> {
         log.info("GET /api/profiler/profiles/" + profileId + "/identifierAggregations");
         G4Response response = g4HttpClient.sendRequest(request.identifiersSummary(profileId));
 
-        OperationResult<IdentifierSummary[]> operationResult = new OperationResult<>(response, IdentifierSummary[].class);
+        OperationResult<IdentifierSummary[]> operationResult = new OperationResult<>(response, IdentifierSummary[].class, "data");
         if (operationResult.isSuccess()) {
             try {
                 Entities.getProfiles().getEntity(profileId).setIdentifiersSummary(new ArrayList<>(Arrays.asList(operationResult.getEntity())));
