@@ -62,4 +62,11 @@ public class ProfileRequest extends HttpRequest {
                 .setPayload(mergeIDs);
         return this;
     }
+
+    public ProfileRequest identifiersSummary(String profileID) {
+        this
+                .setURI(URI + "/" + profileID + "/identifierAggregations")
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
 }

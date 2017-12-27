@@ -49,6 +49,8 @@ public class Profile extends ProfileAndTargetGroup {
     private String classification; // "C";
     @WithCollectionSize(4)
     private ArrayList<Identifier> identifiers = new ArrayList<>();
+    @DataIgnore
+    private ArrayList<IdentifierSummary> identifiersSummary;
 
     public Profile() {
         setJsonType(ProfileJsonType.Draft);
@@ -172,5 +174,13 @@ public class Profile extends ProfileAndTargetGroup {
 
     public void setIdentifiers(ArrayList<Identifier> identifiers) {
         this.identifiers = identifiers;
+    }
+
+    public ArrayList<IdentifierSummary> getIdentifiersSummary() {
+        return identifiersSummary;
+    }
+
+    public void setIdentifiersSummary(ArrayList<IdentifierSummary> identifiersSummary) {
+        this.identifiersSummary = identifiersSummary;
     }
 }

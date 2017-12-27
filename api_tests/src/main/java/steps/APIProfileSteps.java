@@ -2,10 +2,7 @@ package steps;
 
 import errors.NullReturnException;
 import http.OperationResult;
-import model.DataInjection;
-import model.IdentifierType;
-import model.Profile;
-import model.TargetGroup;
+import model.*;
 import model.entities.Entities;
 import model.entities.EntityList;
 import org.jbehave.core.annotations.Then;
@@ -113,7 +110,7 @@ public class APIProfileSteps extends APISteps {
     @Then("Profile is correct")
     public void profileIsCorrect() throws NullReturnException {
         Profile requested = context.get("profile", Profile.class);
-        Profile created = Entities.getProfiles().getEntity(requested.getName());
+        Profile created = service.getByName(requested.getName());
 
         profilesShouldBeEquals(requested, created);
     }
@@ -224,13 +221,7 @@ public class APIProfileSteps extends APISteps {
 
     @When("add $count $type from profile:$profileName to injection file")
     public void addPhoneToInjectionFile(String count, String type, String profileName) {
-        Profile profile;
-        try {
-             profile = Entities.getProfiles().getEntity(profileName);
-        } catch (NullReturnException e) {
-            log.error(e);
-            throw new AssertionError(e);
-        }
+        Profile profile = service.getByName(profileName);
 
         IdentifierType identifierType = IdentifierType.valueOf(type);
         List<String> identifiersList = getTargetIdentifiersList(profile, identifierType, Integer.valueOf(count));
@@ -268,5 +259,27 @@ public class APIProfileSteps extends APISteps {
             identifiers.add(getRandomItemFromList(targetIdentifiers));
         }
         return identifiers;
+    }
+
+    @When("send get profile identifierAggregations request")
+    public void getProfileidentifierAggregations() {
+        Profile profile = context.get("profile", Profile.class);
+
+        OperationResult<List<IdentifierSummary>> result = service.getIdentifierAggregations(profile.getId());
+        context.put("identifierSummaryList", result.getEntity());
+    }
+
+
+    @Then("identifierAggregations hit counts for:$identifierType of profile:$name should incremented")
+    public void identifierAggregationsCountsShouldIncremented(String identifierType, String name) {
+        Profile profile = service.getByName(name);
+        List<IdentifierSummary> identifiers = profile.getIdentifiersSummary();
+        List<IdentifierSummary> updatedIdentifiers = service.getIdentifierAggregations(profile.getId()).getEntity();
+
+        final Integer[] hitCount = {0};
+        identifiers.forEach(identifier -> hitCount[0] -= identifier.getTargetHitsCount());
+        updatedIdentifiers.forEach(identifier -> hitCount[0] += identifier.getTargetHitsCount());
+
+        Assert.assertTrue(hitCount[0].equals(1));
     }
 }

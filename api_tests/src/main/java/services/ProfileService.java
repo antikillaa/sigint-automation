@@ -1,5 +1,7 @@
 package services;
 
+import errors.NullReturnException;
+import model.IdentifierSummary;
 import model.SearchFilter;
 import model.entities.Entities;
 import http.G4Response;
@@ -10,6 +12,8 @@ import model.RequestResult;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ProfileService implements EntityService<Profile> {
@@ -83,4 +87,31 @@ public class ProfileService implements EntityService<Profile> {
         return operationResult;
     }
 
+    public OperationResult<List<IdentifierSummary>> getIdentifierAggregations(String profileId) {
+        log.info("GET /api/profiler/profiles/" + profileId + "/identifierAggregations");
+        G4Response response = g4HttpClient.sendRequest(request.identifiersSummary(profileId));
+
+        OperationResult<IdentifierSummary[]> operationResult = new OperationResult<>(response, IdentifierSummary[].class);
+        if (operationResult.isSuccess()) {
+            try {
+                Entities.getProfiles().getEntity(profileId).setIdentifiersSummary(new ArrayList<>(Arrays.asList(operationResult.getEntity())));
+            } catch (NullReturnException e) {
+                log.error(e);
+            }
+            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
+        } else {
+            return new OperationResult<>(response);
+        }
+    }
+
+    public Profile getByName(String name) {
+        for (Profile entity : Entities.getProfiles()) {
+            if (entity.getName().equals(name)) {
+                return entity;
+            }
+        }
+
+        log.error("Can't find profile by name:" + name);
+        throw new AssertionError("Can't find profile by name:" + name);
+    }
 }

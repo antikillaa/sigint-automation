@@ -126,7 +126,7 @@ Then Request is successful
 Scenario: API.Get list of all profile drafts
 When I send get list of profile drafts request
 Then Request is successful
-And Profile drafts list size more than 0
+And Profile drafts list size > 0
 
 
 Scenario: API.Displaying of top level target groups list
@@ -252,7 +252,8 @@ Then Request is successful
 When Get profiles from targets search results
 Then Profile list size > 0
 When get random profile from profile list
-When I send get profile details request
+And I send get profile details request
+And send get profile identifierAggregations request
 !-- find second profiler
 When I search target group members by query:<from_target>
 Then Request is successful
@@ -260,6 +261,7 @@ When Get profiles from targets search results
 Then Profile list size > 0
 When get random profile from profile list
 When I send get profile details request
+And send get profile identifierAggregations request
 !-- add targets identifiers to injection file
 And add <recordsCount> <identifierType> from profile:<to_target> to injection file
 And add <recordsCount> <identifierType> from profile:<from_target> to injection file
@@ -271,6 +273,9 @@ When I upload files
 Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
+!-- verification
+Then identifierAggregations hit counts for:<identifierType> of profile:<to_target> should incremented
+Then identifierAggregations hit counts for:<identifierType> of profile:<from_target> should incremented
 
 Examples:
 | to_target  | from_target | identifierType | sourceType | recordType | recordsCount |

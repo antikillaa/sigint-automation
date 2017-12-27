@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class Identifier extends AbstractEntity {
 
     @DataIgnore
-    private String jsonType = "Identifier";
+    private ProfileJsonType jsonType = ProfileJsonType.Identifier;
     private String name;
     @DataIgnore
     private Object properties;
@@ -30,11 +30,11 @@ public class Identifier extends AbstractEntity {
     @WithDataDependencies(provider = IdentifierValueProvider.class, fields = {"type"})
     private String value;
 
-    public String getJsonType() {
+    public ProfileJsonType getJsonType() {
         return jsonType;
     }
 
-    public void setJsonType(String jsonType) {
+    public void setJsonType(ProfileJsonType jsonType) {
         this.jsonType = jsonType;
     }
 
