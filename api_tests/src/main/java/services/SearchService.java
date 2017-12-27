@@ -6,11 +6,11 @@ import http.requests.SearchRequest;
 import json.JsonConverter;
 import model.CBEntity;
 import model.CBSearchFilter;
+import model.CBSearchResult;
 import model.SearchFilter;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class SearchService implements EntityService<CBEntity> {
@@ -34,15 +34,15 @@ public class SearchService implements EntityService<CBEntity> {
     }
 
     public OperationResult<List<CBEntity>> search(CBSearchFilter filter) {
-        log.info("Records search with filter: " + JsonConverter.toJsonString(filter));
+        log.info("CB_Search with filter: " + JsonConverter.toJsonString(filter));
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
         log.info(response.getMessage());
 
-        OperationResult<CBEntity[]> operationResult = new OperationResult<>(response, CBEntity[].class, "data");
-        if (operationResult.isSuccess()) {
-            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
+        OperationResult<CBSearchResult> operationResult = new OperationResult<>(response, CBSearchResult.class);
+        if (operationResult.isSuccess() && operationResult.getEntity().getStatus().getHttpStatusCode().equals(200)) {
+            return new OperationResult<>(response, operationResult.getEntity().getData());
         } else {
-            return new OperationResult<>(response);
+            throw new AssertionError(response);
         }
     }
 
