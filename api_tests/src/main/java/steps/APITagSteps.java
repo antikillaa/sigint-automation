@@ -49,8 +49,6 @@ public class APITagSteps extends APISteps {
 
         if (criteria.toLowerCase().equals("name")) {
             value = value.equals("random") ? tag.getName() : value;
-        } else if (criteria.toLowerCase().equals("updatedafter")) {
-            value = value.equals("random") ? String.valueOf(tag.getCreatedAt().getTime() - 60000) : value;
         } else if (criteria.toLowerCase().equals("empty")) {
             log.debug("Search without filter..");
         } else {

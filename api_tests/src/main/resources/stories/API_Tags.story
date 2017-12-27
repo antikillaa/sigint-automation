@@ -51,7 +51,6 @@ Then Request is successful
 Examples:
 | criteria      | value  |
 | name          | random |
-| updatedAfter  | random |
 | empty         |        |
 
 
