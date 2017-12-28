@@ -27,6 +27,7 @@ public class SearchFilters {
     private List<String> publisherName;
     private List<String> dataSource; // ["TWITTER"]
     private List<String> subSourceId;
+    private List<String> subSource; // ["SMS"]
     private List<String> type; // ["TWEET"]
     private String eventFeed; // "OSINT"
     private SearchObjectType objectType; // "event"
@@ -429,6 +430,14 @@ public class SearchFilters {
 
     public void setSenderCountry(List<String> senderCountry) {
         this.senderCountry = senderCountry;
+    }
+
+    public List<String> getSubSource() {
+        return subSource;
+    }
+
+    public void setSubSource(List<String> subSource) {
+        this.subSource = subSource;
     }
 
     public class TargetGroup extends AbstractEntity {
