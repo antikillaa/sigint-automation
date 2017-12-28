@@ -277,8 +277,12 @@ public class APIProfileSteps extends APISteps {
         List<IdentifierSummary> updatedIdentifiers = service.getIdentifierAggregations(profile.getId()).getEntity();
 
         final Integer[] hitCount = {0};
-        identifiers.forEach(identifier -> hitCount[0] -= identifier.getTargetHitsCount());
-        updatedIdentifiers.forEach(identifier -> hitCount[0] += identifier.getTargetHitsCount());
+        identifiers.stream()
+                .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
+                .forEach(identifier -> hitCount[0] -= identifier.getTargetHitsCount());
+        updatedIdentifiers.stream()
+                .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
+                .forEach(identifier -> hitCount[0] += identifier.getTargetHitsCount());
 
         Assert.assertTrue(hitCount[0].equals(1));
     }

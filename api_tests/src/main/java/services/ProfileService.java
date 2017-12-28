@@ -1,20 +1,22 @@
 package services;
 
 import errors.NullReturnException;
-import model.IdentifierSummary;
-import model.SearchFilter;
-import model.entities.Entities;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.ProfileRequest;
+import model.IdentifierSummary;
 import model.Profile;
 import model.RequestResult;
+import model.SearchFilter;
+import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static json.JsonConverter.toJsonString;
 
 public class ProfileService implements EntityService<Profile> {
 
@@ -100,7 +102,7 @@ public class ProfileService implements EntityService<Profile> {
             }
             return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
         } else {
-            return new OperationResult<>(response);
+            throw new AssertionError("GET /api/profiler/profiles/" + profileId + "/identifierAggregations return:\n" + toJsonString(response));
         }
     }
 
