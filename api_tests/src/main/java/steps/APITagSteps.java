@@ -1,7 +1,7 @@
 package steps;
 
-import json.JsonConverter;
 import http.OperationResult;
+import json.JsonConverter;
 import model.Tag;
 import model.TagFilter;
 import org.apache.log4j.Logger;

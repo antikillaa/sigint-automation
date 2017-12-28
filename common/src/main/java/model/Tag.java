@@ -1,19 +1,16 @@
 package model;
 
+import data_for_entity.annotations.DataIgnore;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Tag extends G4Entity {
 
-    private Integer version;
     private String name;
+    @DataIgnore
     private String teamId;
+    @DataIgnore
     private String teamName;
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
 
     public String getName() {
         return name;

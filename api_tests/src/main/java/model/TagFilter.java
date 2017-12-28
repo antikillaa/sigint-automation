@@ -27,6 +27,7 @@ public class TagFilter extends SearchFilter<Tag>{
 
         NameFilter(String value) {
             name = value;
+            sortField = "name";
         }
 
         @Override
@@ -58,6 +59,8 @@ public class TagFilter extends SearchFilter<Tag>{
      */
     public TagFilter filterBy(String criteria, String value) {
         if (criteria.toLowerCase().equals("name")) {
+            this.name = value;
+            this.sortField = "name";
             this.setActiveFilter(this.new NameFilter(value));
         } else if (criteria.toLowerCase().equals("empty")) {
             this.setActiveFilter(this.new EmptyFilter());

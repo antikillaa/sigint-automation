@@ -1,16 +1,18 @@
 package services;
 
-import model.SearchFilter;
-import model.entities.Entities;
+import app_context.AppContext;
 import http.G4Response;
-import json.JsonConverter;
 import http.OperationResult;
 import http.requests.TagRequest;
+import json.JsonConverter;
 import model.Result;
+import model.SearchFilter;
 import model.Tag;
 import model.TagSearchResult;
+import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
+import utils.RandomGenerator;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,13 +23,16 @@ public class TagService implements EntityService<Tag> {
     private static TagRequest request = new TagRequest();
 
     @Override
-    public OperationResult<Result> add(Tag entity) {
+    public OperationResult<Tag> add(Tag entity) {
+        List<String> teamIds = AppContext.get().getLoggedUser().getUser().getParentTeamIds();
+        entity.setTeamId(RandomGenerator.getRandomItemFromList(teamIds));
+
         log.info("Create tag: " + entity.getName());
         G4Response response = g4HttpClient.sendRequest(request.create(entity));
 
-        OperationResult<Result> operationResult = new OperationResult<>(response, Result.class);
+        OperationResult<Tag> operationResult = new OperationResult<>(response, Tag.class);
         if (operationResult.isSuccess()) {
-            Entities.getTags().addOrUpdateEntity(entity);
+            Entities.getTags().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
     }
