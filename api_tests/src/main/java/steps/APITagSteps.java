@@ -11,6 +11,7 @@ import org.junit.Assert;
 import services.TagService;
 
 import java.util.List;
+import java.util.Objects;
 
 @SuppressWarnings("unchecked")
 public class APITagSteps extends APISteps {
@@ -74,7 +75,7 @@ public class APITagSteps extends APISteps {
         Tag tag = context.get("tag", Tag.class);
 
         for (Tag entity : tags) {
-            if (entity.getName().equals(tag.getName())) {
+            if (Objects.equals(entity.getName(), tag.getName())) {
                 context.put("tag", entity);
                 return;
             }
