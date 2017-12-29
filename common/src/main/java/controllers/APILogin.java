@@ -15,15 +15,14 @@ import org.junit.Assert;
 import services.ResponsibilityService;
 import services.TitleService;
 import services.UserService;
-import users_management.StorageUsersManager;
 import utils.StringUtils;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class APILogin {
 
     private static AuthService signService = new AuthService();
+    private static UserService userService = new UserService();
     private static AppContext context = AppContext.get();
     private static Logger log = Logger.getLogger(APILogin.class);
     private static final String ADMIN_ROLE = "admin";
@@ -90,27 +89,20 @@ public class APILogin {
         return operationResult;
     }
 
-    private User getUserWithPermissions(String... permissions) {
-        StorageUsersManager manager = StorageUsersManager.getManager();
-        log.debug("Finding users with permissions: " + Arrays.toString(permissions));
-
-        List<User> users = manager.getUsersWithPermissions(permissions);
-        if (users.size() == 0) {
-            log.debug("Users are not found. Creating new user with required permissions");
-            signInAsUser(getUserByRole(ADMIN_ROLE));
-            User user = UserService.createUserWithPermissions(permissions);
-            cleaningIsRequired = true;
-            manager.addUser(user, permissions);
-            log.debug("User is created");
-            return user;
-        }
-        return users.stream().findAny().orElse(null);
-    }
-
     @Given("I sign in as user with permissions $permissions")
     public void signInWithPermissions(String permString) {
         String[] permissions = StringUtils.trimSpaces(permString.split(","));
-        User user = getUserWithPermissions(permissions);
+        signInAsUser(getUserByRole(ADMIN_ROLE));
+
+        User user;
+        List<User> users = userService.getUsersWithPermissions(permissions);
+        if (users.size() == 0) {
+            user = userService.createUserWithPermissions(permissions);
+            cleaningIsRequired = true;
+            userService.addUser(user, permissions);
+        } else {
+            user = users.stream().findAny().orElse(null);
+        }
         Assert.assertNotNull(user);
         signInAsUser(user);
     }

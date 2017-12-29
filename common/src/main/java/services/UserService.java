@@ -22,9 +22,7 @@ public class UserService implements EntityService<User> {
     private static final ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
     private static String defaultTeamId;
     private static RandomEntities randomEntities = new RandomEntities();
-    private static UserService userService = new UserService();
-    private static ResponsibilityService responsibilityService = new ResponsibilityService();
-    private static TitleService titleService = new TitleService();
+    private static Map<String, List<User>> userMap = new HashMap<>();
 
     private static final int PASSWORD_LENGTH = 10;
 
@@ -59,6 +57,7 @@ public class UserService implements EntityService<User> {
             }
             Entities.getUsers().addOrUpdateEntity(user);
             Entities.getOrganizations().addOrUpdateEntity(user);
+            log.info("User is created:" + user.getName());
         } else {
             log.error("Can't create User " + entity.toString());
         }
@@ -169,7 +168,7 @@ public class UserService implements EntityService<User> {
 
     public OperationResult<AuthResponseResult> changeTempPassword(User user) {
         log.info(String.format("Setting first password for %s user: %s",
-            user.getName(), user.getNewPassword()));
+                user.getName(), user.getNewPassword()));
 
         UserPassword userPassword = new UserPassword.UserPasswordBuilder()
                 .name(user.getName())
@@ -184,9 +183,9 @@ public class UserService implements EntityService<User> {
     private static OperationResult<AuthResponseResult> processPasswordResponse(User user, G4Response response) {
 
         OperationResult<AuthResponseResult> operationResult =
-            new OperationResult<>(response, AuthResponseResult.class);
+                new OperationResult<>(response, AuthResponseResult.class);
 
-        if (operationResult.isSuccess())  {
+        if (operationResult.isSuccess()) {
             user.setPassword(user.getNewPassword());
             Entities.getUsers().addOrUpdateEntity(user);
             Entities.getOrganizations().addOrUpdateEntity(user);
@@ -215,17 +214,18 @@ public class UserService implements EntityService<User> {
         }
     }
 
-    public static User createUserWithPermissions(String... permissions) {
+    public User createUserWithPermissions(String... permissions) {
+        log.info("Creating new user with required permissions:" + Arrays.toString(permissions));
         Responsibility responsibility = randomEntities.randomEntity(Responsibility.class);
         responsibility.setPermissions(Arrays.asList(permissions));
-        OperationResult<Responsibility> responsibilityOperationResult = responsibilityService.add(responsibility);
+        OperationResult<Responsibility> responsibilityOperationResult = new ResponsibilityService().add(responsibility);
         if (!responsibilityOperationResult.isSuccess()) {
             throw new AssertionError("Unable create Responsibility: " + JsonConverter.toJsonString(responsibility));
         }
 
         Title title = randomEntities.randomEntity(Title.class);
         title.setResponsibilities(Collections.singletonList(responsibilityOperationResult.getEntity().getId()));
-        OperationResult<Title> titleOperationResult = titleService.add(title);
+        OperationResult<Title> titleOperationResult = new TitleService().add(title);
         if (!titleOperationResult.isSuccess()) {
             throw new AssertionError("Unable create Title: " + JsonConverter.toJsonString(title));
         }
@@ -233,14 +233,15 @@ public class UserService implements EntityService<User> {
         User newUser = randomEntities.randomEntity(User.class);
         newUser.setParentTeamId("00"); // default Team
         newUser.getDefaultPermission().setTitles(Collections.singletonList(titleOperationResult.getEntity().getId()));
-        OperationResult<User> userOperationResult = userService.add(newUser);
+
+        OperationResult<User> userOperationResult = add(newUser);
         if (!userOperationResult.isSuccess()) {
             throw new AssertionError("Unable create User: " + JsonConverter.toJsonString(newUser));
         }
 
         User user = userOperationResult.getEntity();
         user.setNewPassword(new UserPasswordProvider().generate(PASSWORD_LENGTH));
-        OperationResult<AuthResponseResult> firstPasswordChangeResult = userService.changeTempPassword(user);
+        OperationResult<AuthResponseResult> firstPasswordChangeResult = changeTempPassword(user);
         if (!firstPasswordChangeResult.isSuccess()) {
             log.error(firstPasswordChangeResult.getMessage());
             throw new AssertionError("Unable change password for new User: " + JsonConverter.toJsonString(newUser));
@@ -252,11 +253,46 @@ public class UserService implements EntityService<User> {
     public List<OperationResult> removeAll() {
         List<OperationResult> operationResults = new ArrayList<>();
 
-        Long count = new ArrayList<>(Entities.getUsers().getEntities()).stream()
+        new ArrayList<>(Entities.getUsers().getEntities()).stream()
                 .filter(user -> user.getCreatedBy() != null)
-                .peek(user -> operationResults.add(remove(user)))
-                .count();
+                .forEach(user -> operationResults.add(remove(user)));
 
         return operationResults;
+    }
+
+    private void initializeUserMap() {
+        List<Permission> existingPermissions = PermissionService.getPermissions();
+        if (existingPermissions.size() == 0) {
+            ErrorReporter.raiseError("List of permissions wasn't loaded from mongo DB!");
+        }
+
+        existingPermissions.forEach(permission -> userMap.put(permission.getName(), new ArrayList<>()));
+    }
+
+    public List<User> getUsersWithPermissions(String... permissions) {
+        log.debug("Finding users with permissions: " + Arrays.toString(permissions));
+        if (userMap.isEmpty()) {
+            initializeUserMap();
+        }
+        List<User> users = new ArrayList<>();
+        for (String permission : permissions) {
+            if (users.size() == 0) {
+                users.addAll(userMap.get(permission));
+            } else {
+                users.retainAll(userMap.get(permission));
+                if (users.size() == 0) {
+                    log.debug("User with permissions: " + Arrays.toString(permissions) + "not found!");
+                    return users;
+                }
+            }
+        }
+        log.trace("With permissions: " + Arrays.toString(permissions) + " users found: " + users.size());
+        return users;
+    }
+
+    public void addUser(User user, String... permissions) {
+        for (String permission : permissions) {
+            userMap.get(permission).add(user);
+        }
     }
 }

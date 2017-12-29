@@ -15,6 +15,14 @@ public class PermissionService implements EntityService<Permission> {
 
     private static Logger log = Logger.getLogger(PermissionService.class);
     private static PermissionRequest request = new PermissionRequest();
+    private static List<Permission> permissions;
+
+    public static List<Permission> getPermissions() {
+        if (permissions == null) {
+            new PermissionService().list();
+        }
+        return permissions;
+    }
 
     @Override
     public OperationResult<?> add(Permission entity) {
@@ -38,8 +46,9 @@ public class PermissionService implements EntityService<Permission> {
 
         OperationResult<Permission[]> operationResult = new OperationResult<>(response, Permission[].class);
         if (operationResult.isSuccess()) {
-            Permission[] permissions = operationResult.getEntity();
-            return new OperationResult<>(response, Arrays.asList(permissions));
+            List<Permission> permissions = Arrays.asList(operationResult.getEntity());
+            PermissionService.permissions = permissions;
+            return new OperationResult<>(response, permissions);
         } else {
             throw new AssertionError("Unable to get list of permissions!");
         }
