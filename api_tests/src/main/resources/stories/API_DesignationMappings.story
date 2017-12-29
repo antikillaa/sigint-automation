@@ -61,7 +61,7 @@ And Imported 5 designation-mappings, modified 5
 And I delete designation-mappings
 
 Scenario: Import non .csv file for designation-mapping records
-Given T - SMS files with 10 records are generated
+Given S - Fax files with 1 records are generated
 And I pick random file from ingestion files list
 When I send import designation-mappings request
 Then I got response code 400

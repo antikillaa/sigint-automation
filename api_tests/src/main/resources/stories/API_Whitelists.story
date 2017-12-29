@@ -81,7 +81,7 @@ And Imported 0 whitelists, modified 0
 And Message contains "already exists"
 
 Scenario: Import non .csv file for whitelist records
-Given T - SMS files with 10 records are generated
+Given S - Fax files with 1 records are generated
 And I pick random file from ingestion files list
 When I send import whitelists request
 Then I got response code 400
