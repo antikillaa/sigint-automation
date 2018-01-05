@@ -19,7 +19,6 @@ public class ProfileDraftService implements EntityService<Profile> {
     private static final ProfileDraftRequest request = new ProfileDraftRequest();
     private static final Logger log = Logger.getLogger(ProfileDraftService.class);
 
-    // TODO POST /profiles/{profileId}/draft getOrCreateDraft
 
     @Override
     public OperationResult<Profile> add(Profile entity) {

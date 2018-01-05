@@ -59,7 +59,7 @@ public class FileHelper {
         IOUtils.closeQuietly(out);
     }
 
-    static String readTxtFile(String fileName) {
+    public static String readTxtFile(String fileName) {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         URL fileURL = classloader.getResource(fileName);
         if (fileURL == null) {

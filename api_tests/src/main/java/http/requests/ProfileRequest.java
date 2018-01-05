@@ -1,6 +1,7 @@
 package http.requests;
 
 import http.HttpMethod;
+import model.Profile;
 
 import java.util.ArrayList;
 
@@ -69,4 +70,21 @@ public class ProfileRequest extends HttpRequest {
                 .setHttpMethod(HttpMethod.GET);
         return this;
     }
+
+    public ProfileRequest summary(String profileID) {
+        this
+                .setURI(URI + "/" + profileID + "/summary")
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
+    public ProfileRequest getOrCreateDraft(String profileID) {
+        Profile profile = new Profile();
+        profile.setId(profileID);
+        this
+                .setURI(URI + "/" + profileID + "/draft")
+                .setHttpMethod(HttpMethod.POST);
+        return this;
+    }
+
 }

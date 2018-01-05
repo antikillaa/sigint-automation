@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Profile extends ProfileAndTargetGroup {
 
     @DataIgnore

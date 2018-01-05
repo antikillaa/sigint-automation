@@ -312,4 +312,14 @@ public class APITargetGroupSteps extends APISteps {
         List<Profile> profiles = service.extractProfilesFromResponse(operationResult);
         context.put("profileList", profiles);
     }
+
+    @When("I delete all empty groups")
+    public void deleteAllEmptyGroup() {
+        getListOfTargetGroupsRequest();
+        List<TargetGroup> groups = context.get("targetGroupList", List.class);
+
+        groups.stream()
+                .filter(targetGroup -> (long) (targetGroup.getNoGroups() + targetGroup.getNoProfiles() + targetGroup.getNoSavedSearches()) == 0)
+                .forEach(service::remove);
+    }
 }

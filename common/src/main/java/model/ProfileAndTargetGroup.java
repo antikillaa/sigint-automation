@@ -3,6 +3,7 @@ package model;
 import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.DataProvider;
 import data_for_entity.data_providers.profiler.AssignmentPriorityProvider;
+import data_for_entity.data_providers.profiler.ProfileAndTargetGroupNameProvider;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -22,6 +23,7 @@ public class ProfileAndTargetGroup extends AbstractEntity {
     private Integer assignmentPriority; // 0, 1, 2 (Regular, High, Urgent)
     @DataIgnore
     private ProfileJsonType jsonType;
+    @DataProvider(ProfileAndTargetGroupNameProvider.class)
     private String name;
 
     public Object getAssignedUsers() {
