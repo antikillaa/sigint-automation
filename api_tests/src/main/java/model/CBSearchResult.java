@@ -9,6 +9,7 @@ public class CBSearchResult {
     private Integer page;
     private List<CBEntity> data;
     private ResponseStatus status;
+    private Boolean partialResult;
 
     public Integer getTotalCount() {
         return totalCount;
@@ -48,6 +49,14 @@ public class CBSearchResult {
 
     public void setStatus(ResponseStatus status) {
         this.status = status;
+    }
+
+    public Boolean getPartialResult() {
+        return partialResult;
+    }
+
+    public void setPartialResult(Boolean partialResult) {
+        this.partialResult = partialResult;
     }
 
     public class ResponseStatus {
