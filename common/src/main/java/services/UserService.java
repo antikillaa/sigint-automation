@@ -263,7 +263,7 @@ public class UserService implements EntityService<User> {
     private void initializeUserMap() {
         List<Permission> existingPermissions = PermissionService.getPermissions();
         if (existingPermissions.size() == 0) {
-            ErrorReporter.raiseError("List of permissions wasn't loaded from mongo DB!");
+            ErrorReporter.raiseError("List of permissions wasn't loaded");
         }
 
         existingPermissions.forEach(permission -> userMap.put(permission.getName(), new ArrayList<>()));
