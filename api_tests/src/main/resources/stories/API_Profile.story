@@ -70,6 +70,7 @@ Then Request is successful
 
 
 Scenario: Add hit(s) for existing targets
+Meta: @nightly
 !-- find first profiler
 When I search target group members by query:<to_target>
 Then Request is successful
