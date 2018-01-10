@@ -2,7 +2,7 @@ package errors;
 
 import http.OperationResult;
 
-public class OperationResultError extends RuntimeException {
+public class OperationResultError extends AssertionError {
 
     public OperationResultError(String message) {
         super(message);
