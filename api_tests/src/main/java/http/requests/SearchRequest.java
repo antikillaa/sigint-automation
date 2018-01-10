@@ -5,7 +5,7 @@ import model.CBSearchFilter;
 
 public class SearchRequest extends HttpRequest {
 
-    private final static String URI = "/api/search/search/";
+    private final static String URI = "/api/search/";
 
     /**
      * Build HTTP request.
@@ -22,7 +22,22 @@ public class SearchRequest extends HttpRequest {
      */
     public SearchRequest search(CBSearchFilter filter) {
         this
-                .setURI(URI)
+                .setURI(URI + "search")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(filter);
+        return this;
+    }
+
+    /**
+     * POST /api/search/count
+     *
+     * @param filter Search filter.
+     *               <br>Example: {"sourceType":["SIGINT"],"objectType":"event","query":"(445539262923) AND (includeSpam:\"false\")"}
+     * @return {@link SearchRequest} instance
+     */
+    public SearchRequest count(CBSearchFilter filter) {
+        this
+                .setURI(URI + "count")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(filter);
         return this;

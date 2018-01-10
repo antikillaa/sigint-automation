@@ -220,3 +220,19 @@ And CB search results contains only eventTime from query
 Examples:
 | source | objectType | eventTime | pageNumber | pageSize |
 | SIGINT | event | LAST_MONTH | 0 | 300 |
+
+
+Scenario: POST /api/search/count
+When I send CB search count request - query:<query>, source:<source>, objectType:<objectType>
+Then Request is successful
+And TotalCount in search result <criteria> <size>
+
+Examples:
+| source | objectType | query | criteria | size |
+| SIGINT | event      | | > | 0 |
+| SIGINT | entity     | | > | 0 |
+| OSINT  | event      | | > | 0 |
+| OSINT  | entity     | | > | 0 |
+| GOVINT | event      | | > | 0 |
+| GOVINT | entity     | | > | 0 |
+| PROFILER | entity   | | > | 0 |

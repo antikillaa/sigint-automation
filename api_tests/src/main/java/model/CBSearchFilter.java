@@ -6,6 +6,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -14,22 +15,29 @@ public class CBSearchFilter {
     private List<DataSourceCategory> sourceType = new ArrayList<>();
     private SearchObjectType objectType = SearchObjectType.event;
     private String query = "";
-    private Page page = new Page();
+    private Page page;
 
-    public CBSearchFilter() {}
+    public CBSearchFilter() {
+    }
 
     public CBSearchFilter(String source, String objectType, String query, String pageSize, String pageNumber) {
         this.query = query;
         this.setSourceType(source);
         this.objectType = SearchObjectType.valueOf(objectType);
 
-        if (pageSize.toLowerCase().equals("null")) {
-            setPage(null);
-        } else {
-            setPageSize(Integer.valueOf(pageSize));
+        // pagination
+        if (pageNumber != null && !Objects.equals(pageNumber.toLowerCase(), "null")) {
+            this.page = new Page();
             setPageNumber(Integer.valueOf(pageNumber));
-            setQuery(query);
+            setPageSize((pageSize == null || Objects.equals(pageSize.toLowerCase(), "null")) ?
+                    null : Integer.valueOf(pageSize));
         }
+    }
+
+    public CBSearchFilter(String source, String objectType, String query) {
+        this.query = query;
+        this.setSourceType(source);
+        this.objectType = SearchObjectType.valueOf(objectType);
     }
 
     public SearchObjectType getObjectType() {
@@ -64,31 +72,31 @@ public class CBSearchFilter {
         this.sourceType = Collections.singletonList(DataSourceCategory.valueOf(sourceType));
     }
 
-    public void setPageSize(int pageSize) {
+    public void setPageSize(Integer pageSize) {
         this.page.setPageSize(pageSize);
     }
 
-    public void setPageNumber(int pageNumber) {
+    public void setPageNumber(Integer pageNumber) {
         this.page.setPageNumber(pageNumber);
     }
 
     class Page {
-        private int pageSize;
-        private int pageNumber;
+        private Integer pageSize;
+        private Integer pageNumber;
 
-        public int getPageSize() {
+        public Integer getPageSize() {
             return pageSize;
         }
 
-        public void setPageSize(int pageSize) {
+        public void setPageSize(Integer pageSize) {
             this.pageSize = pageSize;
         }
 
-        public int getPageNumber() {
+        public Integer getPageNumber() {
             return pageNumber;
         }
 
-        public void setPageNumber(int pageNumber) {
+        public void setPageNumber(Integer pageNumber) {
             this.pageNumber = pageNumber;
         }
     }

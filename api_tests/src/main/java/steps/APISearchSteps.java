@@ -409,4 +409,23 @@ public class APISearchSteps extends APISteps {
 
         assertNull("Search by:" + query + " return:" + toJsonString(wrongEntity), wrongEntity);
     }
+
+    @When("I send CB search count request - query:$query, source:$source, objectType:$objectType")
+    public void cbSearchResultCount(String query, String source, String objectType) {
+        CBSearchFilter filter = new CBSearchFilter(source, objectType, query);
+
+        OperationResult<CBSearchResult> result = service.count(filter);
+
+        context.put("CBSearchResult", result.getEntity());
+        context.put("searchQuery", query);
+    }
+
+    @Then("TotalCount in search result $criteria $size")
+    public void SearchResultTolalCountShouldBe(String criteria, String size) {
+        CBSearchResult cbSearchResult = context.get("CBSearchResult", CBSearchResult.class);
+
+        int expectedCount = Integer.valueOf(size);
+        boolean condition = compareByCriteria(criteria, cbSearchResult.getTotalCount(), expectedCount);
+        assertTrue("Expected search results count " + criteria + " " + size + ", but was: " + cbSearchResult.getTotalCount(), condition);
+    }
 }
