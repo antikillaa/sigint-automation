@@ -20,11 +20,7 @@ And pageSize size in response < 1001
 
 Examples:
 | source | objectType | query  | pageNumber | pageSize |
-| SIGINT | event |       | 0 | NULL |
-| SIGINT | event |       | 0 | 100  |
 | SIGINT | event |       | 0 | 1100 |
-| SIGINT | entity |      | 0 | NULL |
-| SIGINT | entity |      | 0 | 100  |
 | SIGINT | entity |      | 0 | 1100 |
 
 
@@ -38,11 +34,7 @@ And pageSize size in response < 1001
 
 Examples:
 | source | objectType | query  | pageNumber | pageSize |
-| OSINT	 | event |       | 0 | NULL |
-| OSINT	 | event |       | 0 | 100  |
 | OSINT  | event |       | 0 | 1100 |
-| OSINT	 | entity |      | 0 | NULL |
-| OSINT	 | entity |      | 0 | 100  |
 | OSINT  | entity |      | 0 | 1100 |
 
 
@@ -56,11 +48,7 @@ And pageSize size in response < 1001
 
 Examples:
 | source | objectType | query  | pageNumber | pageSize |
-| GOVINT | event |       | 0 | NULL |
-| GOVINT | event |       | 0 | 100  |
 | GOVINT | event |       | 0 | 1100 |
-| GOVINT | entity |      | 0 | NULL |
-| GOVINT | entity |      | 0 | 100  |
 | GOVINT | entity |      | 0 | 1100 |
 
 
@@ -74,8 +62,6 @@ And pageSize size in response < 1001
 
 Examples:
 | source | objectType | query  | pageNumber | pageSize |
-| PROFILER | entity |    | 0 | NULL |
-| PROFILER | entity |    | 0 | 100  |
 | PROFILER | entity |    | 0 | 1100 |
 
 
