@@ -44,14 +44,15 @@ public class SearchFilters {
     private Boolean includeChildGroups;
     private List<String> profileCountry;
     private List<String> language;
-    private List<String> tweetShowing;
     private FavoriteCount favoriteCount;
     private String youtubeChannelName;
     private List<String> youtubeCategory;
     private String youtubeChannelId;
+    private List<String> tweetShowing;
     private String twitterAccountId;
     private String twitterUsername;
     private List<String> tweetCountry;
+    private RetweetCount retweetCount;
     private String insUsername;
     private String insUserId;
     private String passengerSeqNumber;
@@ -62,6 +63,7 @@ public class SearchFilters {
     private String speechQualityForAudioKeywordMatching;
     private String speechQualityForVoiceIdMatching;
     private List<String> senderCountry;
+    private Location location;
 
     public List<String> getDataSource() {
         return dataSource;
@@ -440,6 +442,22 @@ public class SearchFilters {
         this.subSource = subSource;
     }
 
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public RetweetCount getRetweetCount() {
+        return retweetCount;
+    }
+
+    public void setRetweetCount(RetweetCount retweetCount) {
+        this.retweetCount = retweetCount;
+    }
+
     public class TargetGroup extends AbstractEntity {
         private String name;
 
@@ -524,6 +542,18 @@ public class SearchFilters {
 
         public void setTo(Integer to) {
             this.to = to;
+        }
+    }
+
+    public class RetweetCount {
+        private Integer from;
+
+        public Integer getFrom() {
+            return from;
+        }
+
+        public void setFrom(Integer from) {
+            this.from = from;
         }
     }
 }
