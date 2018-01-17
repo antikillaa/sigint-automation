@@ -15,8 +15,6 @@ public class SearchFilters {
     private List<String> tags;
     @JsonProperty("workflow.priority")
     private Integer priority;
-    @JsonProperty("worfklow.recordStatus")
-    private String worfklowRecordStatus; // "report.reportIds" // FIXME
     @JsonProperty("workflow.recordStatus")
     private String recordStatus; // 'UNPROCESSED"
     @JsonProperty("workflow.includeUnassignedRecords")
@@ -304,14 +302,6 @@ public class SearchFilters {
 
     public void setDesignations(List<String> designations) {
         this.designations = designations;
-    }
-
-    public String getWorfklowRecordStatus() {
-        return worfklowRecordStatus;
-    }
-
-    public void setWorfklowRecordStatus(String worfklowRecordStatus) {
-        this.worfklowRecordStatus = worfklowRecordStatus;
     }
 
     public String getPersonName() {
