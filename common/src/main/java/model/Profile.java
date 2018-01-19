@@ -51,6 +51,8 @@ public class Profile extends ProfileAndTargetGroup {
     private ArrayList<Identifier> identifiers = new ArrayList<>();
     @DataIgnore
     private ArrayList<IdentifierSummary> identifiersSummary;
+    @DataIgnore
+    private String uploadedImage;
 
     public Profile() {
         setJsonType(ProfileJsonType.Draft);
@@ -182,5 +184,13 @@ public class Profile extends ProfileAndTargetGroup {
 
     public void setIdentifiersSummary(ArrayList<IdentifierSummary> identifiersSummary) {
         this.identifiersSummary = identifiersSummary;
+    }
+
+    public String getUploadedImage() {
+        return uploadedImage;
+    }
+
+    public void setUploadedImage(String uploadedImage) {
+        this.uploadedImage = uploadedImage;
     }
 }

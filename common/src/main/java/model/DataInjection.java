@@ -15,8 +15,8 @@ public class DataInjection {
     @JsonProperty("family_names")
     private List<String> familyNames = new ArrayList<>();
     private List<String> addresses = new ArrayList<>();
-    private List<Integer> imsis = new ArrayList<>();
-    private List<Integer> imeis = new ArrayList<>();
+    private List<Long> imsis = new ArrayList<>();
+    private List<Long> imeis = new ArrayList<>();
 
     public List<String> getPhones() {
         return phones;
@@ -58,19 +58,19 @@ public class DataInjection {
         this.addresses = addresses;
     }
 
-    public List<Integer> getImsis() {
+    public List<Long> getImsis() {
         return imsis;
     }
 
-    public void setImsis(List<Integer> imsis) {
+    public void setImsis(List<Long> imsis) {
         this.imsis = imsis;
     }
 
-    public List<Integer> getImeis() {
+    public List<Long> getImeis() {
         return imeis;
     }
 
-    public void setImeis(List<Integer> imeis) {
+    public void setImeis(List<Long> imeis) {
         this.imeis = imeis;
     }
 }

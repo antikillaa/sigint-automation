@@ -1,6 +1,7 @@
 package steps;
 
 import errors.NullReturnException;
+import errors.OperationResultError;
 import http.OperationResult;
 import model.*;
 import model.entities.Entities;
@@ -12,16 +13,21 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 import services.ProfileDraftService;
 import services.ProfileService;
+import services.TargetGroupService;
 import verification.profiler.ProfileMergeVerification;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static ingestion.IngestionService.INJECTIONS_FILE;
 import static json.JsonConverter.jsonToObject;
 import static json.JsonConverter.toJsonString;
+import static steps.APITargetGroupSteps.getRandomTargetGroup;
 import static utils.FileHelper.readTxtFile;
 import static utils.RandomGenerator.getRandomItemFromList;
 import static utils.StepHelper.compareByCriteria;
@@ -237,11 +243,11 @@ public class APIProfileSteps extends APISteps {
                 Assert.assertTrue(injections.getPhones().add(getRandomItemFromList(identifiersList)));
                 break;
             case IMSI:
-                List<Integer> imsis = identifiersList.stream().map(Integer::valueOf).collect(Collectors.toList());
+                List<Long> imsis = identifiersList.stream().map(Long::valueOf).collect(Collectors.toList());
                 Assert.assertTrue(injections.getImsis().add(getRandomItemFromList(imsis)));
                 break;
             case IMEI:
-                List<Integer> imeis = identifiersList.stream().map(Integer::valueOf).collect(Collectors.toList());
+                List<Long> imeis = identifiersList.stream().map(Long::valueOf).collect(Collectors.toList());
                 Assert.assertTrue(injections.getImeis().add(getRandomItemFromList(imeis)));
                 break;
             default:
@@ -290,10 +296,45 @@ public class APIProfileSteps extends APISteps {
         Assert.assertTrue(hitCount[0].equals(1));
     }
 
-    @Given("Create test target from json:$target_file")
+    @Given("Find or create test target from json:$target_file")
     public void uploadTestTarget(String targetFile) {
         Profile target = jsonToObject(readTxtFile(targetFile), Profile.class);
-        OperationResult<Profile> result = draftService.add(target);
+
+        // find target in system
+        log.info("Try find target:" + target.getName() + " in system...");
+        TargetGroupService groupService = new TargetGroupService();
+        TargetGroupSearchFilter filter = new TargetGroupSearchFilter();
+        filter.setQuery(target.getName()).setSortField("name");
+        OperationResult<List<ProfileAndTargetGroup>> operationResult = groupService.searchTargetGroupMembers(filter);
+        List<Profile> profiles = groupService.extractProfilesFromResponse(operationResult);
+
+        if (profiles.isEmpty()) {
+            log.info("Target not found, create and publish target from:" + targetFile);
+            // create draft target
+            OperationResult<Profile> result = draftService.add(target);
+            if (result.isSuccess()) {
+                // add target to group
+                target = result.getEntity();
+                OperationResult<TargetGroup> groupOperationResult = groupService.add(getRandomTargetGroup());
+                if (groupOperationResult.isSuccess()) {
+                    target.getGroups().add(groupOperationResult.getEntity());
+                } else {
+                    throw new OperationResultError(groupOperationResult);
+                }
+                // publish target
+                result = draftService.publish(target);
+                if (!result.isSuccess()) {
+                    throw new OperationResultError(result);
+                } else {
+                    context.put("profile", result.getEntity());
+                }
+            } else {
+                throw new OperationResultError(result);
+            }
+        } else {
+            log.info("Target " + target.getName() + " already exist in system");
+            context.put("profile", getRandomItemFromList(profiles));
+        }
     }
 
     @When("I send get profile summary request")
@@ -306,14 +347,19 @@ public class APIProfileSteps extends APISteps {
         }
     }
 
-    @When("I send getOrCreate profile request")
+    @When("Edit (create draft of) existing profile")
     public void getOrCreateProfileRequest() {
-        Profile profile = Entities.getProfiles().getLatest();
+        Profile profile = context.get("profile", Profile.class);
 
         if (profile != null) {
             OperationResult<Profile> result = service.getOrCreateDraft(profile.getId());
+            if (result.isSuccess()) {
+                context.put("profileDraft", result.getEntity());
+            } else {
+                throw new OperationResultError(result);
+            }
         } else {
-            throw new AssertionError("Profile doesn't created");
+            throw new AssertionError("Profile doesn't exist");
         }
     }
 
@@ -323,5 +369,46 @@ public class APIProfileSteps extends APISteps {
                 .stream()
                 .filter(profile -> profile.getName().contains("QE auto"))
                 .forEach(service::remove);
+    }
+
+    @When("upload new target image:$image to target")
+    public void uploadTargetImage(String image) {
+        Profile profile = context.get("profileDraft", Profile.class);
+
+        URL url = getClass().getClassLoader().getResource(image);
+        if (url != null) {
+            File file = new File(url.getFile());
+            OperationResult<FileMetaData> result = draftService.uploadImage(profile, file);
+            profile.setUploadedImage(result.getEntity().getFileId());
+
+            context.put("profileDraft", profile);
+            context.put("fileMetaData", result.getEntity());
+        } else {
+            throw new AssertionError("File: " + image +" not found");
+        }
+    }
+
+    @When("delete all profile drafts")
+    public void deleteAllPrifileDrafts() {
+        OperationResult<List<Profile>> operationResult = draftService.list();
+
+        if (operationResult.isSuccess()) {
+            operationResult.getEntity()
+                    .stream()
+                    .filter(profile -> Objects.equals(profile.getJsonType(), ProfileJsonType.Draft))
+                    .forEach(service::remove);
+        }
+    }
+
+    @Then("Profile contain uploaded image")
+    public void profileShouldContainUploadedImage() {
+        Profile profile = context.get("profile", Profile.class);
+        FileMetaData fileMetaData = context.get("fileMetaData", FileMetaData.class);
+
+
+        Pattern pattern = Pattern.compile("(/api/upload-platform/files/).*(/content)");
+        Assert.assertTrue(pattern.matcher(profile.getUploadedImage()).find());
+        Assert.assertTrue(pattern.matcher(fileMetaData.getFileId()).find());
+        //Assert.assertEquals(fileMetaData.getFileId(), profile.getUploadedImage()); FIXME CB-9350
     }
 }

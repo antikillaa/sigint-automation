@@ -3,6 +3,9 @@ package http.requests;
 import http.HttpMethod;
 import model.Profile;
 
+import javax.ws.rs.core.MediaType;
+import java.io.File;
+
 public class ProfileDraftRequest extends HttpRequest {
 
     private static final String URI = "/api/profiler/profileDrafts";
@@ -59,6 +62,21 @@ public class ProfileDraftRequest extends HttpRequest {
                 .setURI(URI + "/" + profile.getId())
                 .setHttpMethod(HttpMethod.PUT)
                 .setPayload(profile);
+        return this;
+    }
+
+    /**
+     * POST /api/profiler/profileDrafts/{id}/image/upload
+     *
+     * @param profileID profile ID
+     * @param file      image file
+     * @return {@link ProfileDraftRequest}
+     */
+    public ProfileDraftRequest imageUpload(String profileID, File file) {
+        addBodyFile("file", file, new MediaType("image", "jpeg"));
+        this
+                .setURI(URI + "/" + profileID + "/image/upload")
+                .setHttpMethod(HttpMethod.POST);
         return this;
     }
 }

@@ -61,3 +61,7 @@ And Profile drafts list size > 0
 
 When I send delete profile draft request
 Then Request is successful
+
+Scenario: Remove all draft
+Meta: @skip
+When delete all profile drafts

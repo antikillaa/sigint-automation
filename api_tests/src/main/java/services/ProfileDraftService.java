@@ -1,16 +1,18 @@
 package services;
 
 import errors.OperationResultError;
-import model.SearchFilter;
-import model.entities.Entities;
 import http.G4Response;
-import json.JsonConverter;
 import http.OperationResult;
 import http.requests.ProfileDraftRequest;
+import json.JsonConverter;
+import model.FileMetaData;
 import model.Profile;
+import model.SearchFilter;
+import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -106,5 +108,17 @@ public class ProfileDraftService implements EntityService<Profile> {
             Entities.getProfiles().removeEntity(profile);
         }
         return operationResult;
+    }
+
+    public OperationResult<FileMetaData> uploadImage(Profile profile, File file) {
+        log.info("Uploading image to profile id: " + profile.getId() + ", name: " + profile.getName());
+        G4Response response = g4HttpClient.sendRequest(request.imageUpload(profile.getId(), file));
+
+        OperationResult<FileMetaData> result = new OperationResult<>(response, FileMetaData.class, "data");
+        if (result.isSuccess()) {
+            return result;
+        } else {
+            throw new OperationResultError(result);
+        }
     }
 }

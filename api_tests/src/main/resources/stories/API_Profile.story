@@ -4,20 +4,30 @@ Meta:
 Lifecycle:
 Before:
 Given I sign in as admin user
-When I send create profile draft request
-Then Request is successful
-Then Profile draft is correct
 
-When I send create target group request
-Then Request is successful
-And Created target group is correct
-When I add profile draft to target group
-
+Scenario: Find in system or create test target from json
+Given Find or create test target from json:<target>
+When Edit (create draft of) existing profile
+When upload new target image:<image> to target
 When I send publish profile draft request
-Then Request is successful
+And I send get profile details request
+Then Profile contain uploaded image
+
+Examples:
+| target | image |
+| profiles/Darkwing_Duck.json | profiles/Darkwing_Duck.jpg |
+| profiles/Launchpad_McQuack.json | profiles/Launchpad_McQuack.jpeg |
 
 
 Scenario: API.Publishing of new profile draft
+When I send create profile draft request
+Then Request is successful
+When I send create target group request
+Then Request is successful
+When I add profile draft to target group
+When I send publish profile draft request
+Then Request is successful
+
 When I send get profile details request
 Then Request is successful
 And Profile is correct
@@ -29,6 +39,14 @@ Then Request is successful
 
 
 Scenario: Deleting of profile
+When I send create profile draft request
+Then Request is successful
+When I send create target group request
+Then Request is successful
+When I add profile draft to target group
+When I send publish profile draft request
+Then Request is successful
+
 When I send get profile details request
 Then Request is successful
 
@@ -38,6 +56,14 @@ When I send delete target group request
 Then Request is successful
 
 Scenario: API.Merge two profiles into one
+When I send create profile draft request
+Then Request is successful
+When I send create target group request
+Then Request is successful
+When I add profile draft to target group
+When I send publish profile draft request
+Then Request is successful
+
 When I send create profile draft request
 Then Request is successful
 When I add profile draft to target group
@@ -104,10 +130,20 @@ Then identifierAggregations hit counts for:<identifierType> of profile:<from_tar
 
 Examples:
 | to_target  | from_target | identifierType | sourceType | recordType | recordsCount |
-| adubatovka | alexd friend | PHONE_NUMBER  | S          | SMS        | 1            |
+| Darkwing Duck, Drake Mallard | Launchpad McQuack | PHONE_NUMBER  | S | SMS | 1 |
+| Darkwing Duck, Drake Mallard | Launchpad McQuack | IMSI  | F | SMS | 1 |
+| Darkwing Duck, Drake Mallard | Launchpad McQuack | IMEI  | T | SMS | 1 |
 
 
 Scenario: Get profile summary
+When I send create profile draft request
+Then Request is successful
+When I send create target group request
+Then Request is successful
+When I add profile draft to target group
+When I send publish profile draft request
+Then Request is successful
+
 When I send get profile summary request
 Then Request is successful
 And Profile is correct
@@ -116,31 +152,3 @@ When I send delete profile request
 Then Request is successful
 When I send delete target group request
 Then Request is successful
-
-
-Scenario: API.GetORCreate profile
-Meta: @skip
-When I send getOrCreate profile request
-Then Request is successful
-And Profile is correct
-
-When I send delete profile request
-Then Request is successful
-When I send delete target group request
-Then Request is successful
-
-
-Scenario: Load test target
-Meta: @skip
-Given Create test target from json:<target>
-
-When I send delete profile request
-Then Request is successful
-When I send delete target group request
-Then Request is successful
-
-Examples:
-| target |
-| profiles/test_target.json |
-
-

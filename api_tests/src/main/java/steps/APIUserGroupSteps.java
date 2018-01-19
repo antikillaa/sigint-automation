@@ -82,7 +82,7 @@ public class APIUserGroupSteps extends APISteps {
         Assert.assertFalse(groupList.size() > Integer.valueOf(size));
     }
 
-    @Then("delete all groups without roles and users")
+    @When("delete all groups without roles and users")
     public void deleteAllOldGroups() {
         List<Group> groupList = context.get("groupList", List.class);
         for (Group group : groupList) {

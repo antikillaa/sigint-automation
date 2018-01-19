@@ -35,6 +35,10 @@ public class G4File extends File {
         this.mediaType = mediaType;
     }
 
+    public void setMediaType(String type, String subType) {
+        this.mediaType = new MediaType(type, subType);
+    }
+
     public void setMediaTypeByFileExtension() {
         String[] filenameParts = this.getName().split("\\.");
         String extension = filenameParts[filenameParts.length - 1].toLowerCase();
