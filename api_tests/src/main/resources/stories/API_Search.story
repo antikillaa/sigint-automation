@@ -72,10 +72,10 @@ Then CB search contains results for query
 
 Examples:
 | source | objectType | query | pageNumber | pageSize |
-| SIGINT | event | knowledge | 0 | 100 |
-| SIGINT | event | kno?le?ge | 0 | 100 |
-| SIGINT | event | *knowledge   | 0 | 100 |
-| SIGINT | event | *knowle?ge  | 0 | 100 |
+| SIGINT | event | knowledge | 0 | 20 |
+| SIGINT | event | kno?le?ge | 0 | 20 |
+| SIGINT | event | k*ledge   | 0 | 20 |
+| SIGINT | event | k*le?ge  | 0 | 20 |
 
 
 Scenario: OSINT. Wild Card Search
@@ -85,10 +85,10 @@ Then CB search contains results for query
 
 Examples:
 | source | objectType | query | pageNumber | pageSize |
-| OSINT | event | knowledge | 0 | 100 |
-| OSINT | event | kno?le?ge | 0 | 100 |
-| OSINT | event | *knowledge   | 0 | 100 |
-| OSINT | event | *knowle?ge  | 0 | 100 |
+| OSINT | event | knowledge | 0 | 20 |
+| OSINT | event | kno?le?ge | 0 | 20 |
+| OSINT | event | k*ledge   | 0 | 20 |
+| OSINT | event | k*le?ge  | 0 | 20 |
 
 
 Scenario: SIGINT. Fuzzy Search
@@ -98,10 +98,10 @@ Then CB search contains results for query
 
 Examples:
 | source | objectType | query | pageNumber | pageSize |
-| SIGINT | event | knoeledge~1 | 0 | 100 |
-| SIGINT | event | knowledge~2  | 0 | 100 |
-| SIGINT | event | knwldg~3 | 0 | 100 |
-| SIGINT | event | nowledge~  | 0 | 100 |
+| SIGINT | event | knoeledge~1 | 0 | 20 |
+| SIGINT | event | knowledge~2  | 0 | 20 |
+| SIGINT | event | knwldg~3 | 0 | 20 |
+| SIGINT | event | nowledge~  | 0 | 20 |
 
 
 Scenario: OSINT. Fuzzy Search
@@ -111,10 +111,10 @@ Then CB search contains results for query
 
 Examples:
 | source | objectType | query | pageNumber | pageSize |
-| OSINT | event | knoeledge~1 | 0 | 100 |
-| OSINT | event | knowledge~2  | 0 | 100 |
-| OSINT | event | knwldg~3 | 0 | 100 |
-| OSINT | event | nowledge~  | 0 | 100 |
+| OSINT | event | knoeledge~1 | 0 | 20 |
+| OSINT | event | knowledge~2  | 0 | 20 |
+| OSINT | event | knwldg~3 | 0 | 20 |
+| OSINT | event | nowledge~  | 0 | 20 |
 
 
 Scenario: Search. [SIGINT] Workflow filters. Record status
