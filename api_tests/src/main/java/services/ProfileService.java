@@ -1,6 +1,5 @@
 package services;
 
-import errors.NullReturnException;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.HttpRequest;
@@ -111,11 +110,7 @@ public class ProfileService implements EntityService<Profile> {
 
         OperationResult<IdentifierSummary[]> operationResult = new OperationResult<>(response, IdentifierSummary[].class, "data");
         if (operationResult.isSuccess()) {
-            try {
-                Entities.getProfiles().getEntity(profileId).setIdentifiersSummary(new ArrayList<>(Arrays.asList(operationResult.getEntity())));
-            } catch (NullReturnException e) {
-                log.error(e);
-            }
+            Entities.getProfiles().getEntity(profileId).setIdentifiersSummary(new ArrayList<>(Arrays.asList(operationResult.getEntity())));
             return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
         } else {
             throw new AssertionError("GET /api/profiler/profiles/" + profileId + "/identifierAggregations return:\n" + toJsonString(response));

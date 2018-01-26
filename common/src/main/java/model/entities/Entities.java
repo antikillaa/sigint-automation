@@ -25,6 +25,7 @@ public class Entities {
     private static OrganizationList organizations;
     private static DesignationList designations;
     private static DesignationMappingList designationMappings;
+    private static CBEntityList cbEntities;
 
     public static EntityList<DesignationMapping> getDesignationMappings() {
         if (designationMappings == null) {
@@ -156,5 +157,12 @@ public class Entities {
             organizations = new OrganizationList();
         }
         return organizations;
+    }
+
+    public static EntityList<CBEntity> getCBEntities() {
+        if (cbEntities == null) {
+            cbEntities = new CBEntityList();
+        }
+        return cbEntities;
     }
 }

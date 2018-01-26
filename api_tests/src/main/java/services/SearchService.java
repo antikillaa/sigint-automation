@@ -39,7 +39,6 @@ public class SearchService implements EntityService<CBEntity> {
     public OperationResult<List<CBEntity>> search(CBSearchFilter filter) {
         log.info("CB_Search with filter: " + toJsonString(filter));
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
-        log.info(response.getMessage());
 
         OperationResult<CBSearchResult> operationResult = new OperationResult<>(response, CBSearchResult.class);
         if (operationResult.isSuccess() && Objects.equals(operationResult.getEntity().getStatus().getCode(), CBSearchResult.CodeStatus.SUCCESS)) {

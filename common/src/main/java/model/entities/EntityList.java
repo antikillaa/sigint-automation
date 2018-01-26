@@ -1,7 +1,6 @@
 package model.entities;
 
 import model.AbstractEntity;
-import errors.NullReturnException;
 import org.apache.commons.lang.math.RandomUtils;
 
 import java.util.*;
@@ -78,13 +77,13 @@ public abstract class EntityList<T extends AbstractEntity> implements Iterable<T
         }
     }
 
-    public T getEntity(String param) throws NullReturnException {
+    public T getEntity(String param) {
         for (T entity : entities) {
             if (entity.getId().equals(param)) {
                 return entity;
             }
         }
-        throw new NullReturnException("Entity not found by id:" + param);
+        return null;
     }
 
     public T getLatest() {
