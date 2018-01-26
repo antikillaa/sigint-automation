@@ -4,10 +4,7 @@ import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.ProfileDraftRequest;
-import json.JsonConverter;
-import model.FileMetaData;
-import model.Profile;
-import model.SearchFilter;
+import model.*;
 import model.entities.Entities;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
@@ -15,6 +12,8 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+
+import static json.JsonConverter.toJsonString;
 
 public class ProfileDraftService implements EntityService<Profile> {
 
@@ -24,7 +23,7 @@ public class ProfileDraftService implements EntityService<Profile> {
 
     @Override
     public OperationResult<Profile> add(Profile entity) {
-        log.info("Creating new ProfileDraft: " + JsonConverter.toJsonString(entity));
+        log.info("Creating new ProfileDraft: " + toJsonString(entity));
         G4Response response = g4HttpClient.sendRequest(request.create(entity));
 
         OperationResult<Profile> operationResult = new OperationResult<>(response, Profile.class, "data");
@@ -69,7 +68,7 @@ public class ProfileDraftService implements EntityService<Profile> {
 
     @Override
     public OperationResult<Profile> update(Profile entity) {
-        log.info("Updating profile id:" + entity.getId() + " profile:" + JsonConverter.toJsonString(entity));
+        log.info("Updating profile id:" + entity.getId() + " profile:" + toJsonString(entity));
         G4Response response = g4HttpClient.sendRequest(request.update(entity));
 
         OperationResult<Profile> operationResult = new OperationResult<>(response, Profile.class, "data");
@@ -116,6 +115,59 @@ public class ProfileDraftService implements EntityService<Profile> {
 
         OperationResult<FileMetaData> result = new OperationResult<>(response, FileMetaData.class, "data");
         if (result.isSuccess()) {
+            return result;
+        } else {
+            throw new OperationResultError(result);
+        }
+    }
+
+    public OperationResult<List<CBEntity>> getVoiceEvents(Profile profile) {
+        log.info("Get voice events for profileId: " + profile.getId() + " name:" + profile.getName());
+        G4Response response = g4HttpClient.sendRequest(request.voiceEvents(profile.getId()));
+        log.info(response.getCode() + " " + response.getMessage());
+
+        OperationResult<CBEntity[]> result = new OperationResult<>(response, CBEntity[].class, "data");
+        if (result.isSuccess()) {
+            return new OperationResult<>(response, Arrays.asList(result.getEntity()));
+        } else {
+            throw new OperationResultError(result);
+        }
+    }
+
+    public OperationResult<Voice> getVoiceModel(String profileId) {
+        log.info("Get voice print for profileId: " + profileId);
+        G4Response response = g4HttpClient.sendRequest(request.voice(profileId));
+
+        OperationResult<Voice> result = new OperationResult<>(response, Voice.class, "data");
+        if (result.isSuccess()) {
+            return result;
+        } else {
+            throw new OperationResultError(result);
+        }
+    }
+
+    public OperationResult<Voice> createVoiceModel(Profile profile, Voice voice) {
+        log.info("Create VoiceID for profile id:" + profile.getId() + " name: " + profile.getName() + ", payload:" + toJsonString(voice));
+        G4Response response = g4HttpClient.sendRequest(request.createVoice(profile.getId(), voice));
+
+        OperationResult<Voice> result = new OperationResult<>(response, Voice.class, "data");
+        if (result.isSuccess()) {
+            profile.setVoiceModelId(result.getEntity().getId());
+            return result;
+        } else {
+            throw new OperationResultError(result);
+        }
+    }
+
+    public OperationResult<VoiceFile> uploadAudioFile(Profile profile, File file) {
+        log.info("Create voice print for profile id:" + profile.getId() + ", name:" + profile.getName());
+        log.info("Uploading file:" + file.getAbsolutePath());
+        G4Response response = g4HttpClient.sendRequest(request.uploadAudioFile(profile.getId(), file));
+        log.info(response.getCode() + " " + response.getMessage());
+
+        OperationResult<VoiceFile> result = new OperationResult<>(response, VoiceFile.class, "data");
+        if (result.isSuccess()) {
+            profile.getVoiceFiles().add(result.getEntity());
             return result;
         } else {
             throw new OperationResultError(result);

@@ -96,7 +96,6 @@ Then Request is successful
 
 
 Scenario: Add hit(s) for existing targets
-Meta: @nightly
 !-- find first profiler
 When I search target group members by query:<to_target>
 Then Request is successful
@@ -152,3 +151,23 @@ When I send delete profile request
 Then Request is successful
 When I send delete target group request
 Then Request is successful
+
+
+Scenario: VoicePrint from manual audio
+When I send create profile draft request
+Then Request is successful
+When I send create target group request
+Then Request is successful
+When I add profile draft to target group
+When I send publish profile draft request
+Then Request is successful
+
+Given S - Voice files with 1 records are generated
+When Edit (create draft of) existing profile
+
+When upload audio file to profile
+Then uploaded audio file is processed
+When get voice events from draft profile
+When create voiceID for draft profile
+When I send publish profile draft request
+Then profile contain created voiceID

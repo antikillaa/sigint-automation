@@ -53,6 +53,10 @@ public class Profile extends ProfileAndTargetGroup {
     private ArrayList<IdentifierSummary> identifiersSummary;
     @DataIgnore
     private String uploadedImage;
+    @DataIgnore
+    private ArrayList<VoiceFile> voiceFiles = new ArrayList<>();
+    @DataIgnore
+    private String voiceModelId;
 
     public Profile() {
         setJsonType(ProfileJsonType.Draft);
@@ -192,5 +196,21 @@ public class Profile extends ProfileAndTargetGroup {
 
     public void setUploadedImage(String uploadedImage) {
         this.uploadedImage = uploadedImage;
+    }
+
+    public ArrayList<VoiceFile> getVoiceFiles() {
+        return voiceFiles;
+    }
+
+    public void setVoiceFiles(ArrayList<VoiceFile> voiceFiles) {
+        this.voiceFiles = voiceFiles;
+    }
+
+    public String getVoiceModelId() {
+        return voiceModelId;
+    }
+
+    public void setVoiceModelId(String voiceModelId) {
+        this.voiceModelId = voiceModelId;
     }
 }

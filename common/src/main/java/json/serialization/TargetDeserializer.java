@@ -1,8 +1,7 @@
 package json.serialization;
 
-import model.entities.Entities;
-import errors.NullReturnException;
 import model.TargetGroup;
+import model.entities.Entities;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
@@ -23,15 +22,10 @@ public class TargetDeserializer extends JsonDeserializer<List<TargetGroup>> {
         while (iter.hasNext()) {
             JsonNode groupNode = iter.next();
             String targetGroupId = groupNode.get("id").getTextValue();
-            try {
-                TargetGroup targetGroup = Entities.getTargetGroups().getEntity(targetGroupId);
-                targetGroups.add(targetGroup);
-            } catch (NullReturnException e) {
-                throw new AssertionError("Target group with id:"+targetGroupId+" is not found!");
-            }
+
+            TargetGroup targetGroup = Entities.getTargetGroups().getEntity(targetGroupId);
+            targetGroups.add(targetGroup);
         }
-
         return targetGroups;
-
     }
 }

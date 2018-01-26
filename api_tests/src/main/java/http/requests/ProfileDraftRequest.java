@@ -2,6 +2,7 @@ package http.requests;
 
 import http.HttpMethod;
 import model.Profile;
+import model.Voice;
 
 import javax.ws.rs.core.MediaType;
 import java.io.File;
@@ -76,6 +77,45 @@ public class ProfileDraftRequest extends HttpRequest {
         addBodyFile("file", file, new MediaType("image", "jpeg"));
         this
                 .setURI(URI + "/" + profileID + "/image/upload")
+                .setHttpMethod(HttpMethod.POST);
+        return this;
+    }
+
+    /**
+     * GET /api/profiler/profileDrafts/{id}/voice/events
+     */
+    public ProfileDraftRequest voiceEvents(String profileID) {
+        this
+                .setURI(URI + "/" + profileID + "/voice/events")
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
+    /**
+     * GET /api/profiler/profileDrafts/{id}/voice
+     */
+    public ProfileDraftRequest voice(String profileID) {
+        this
+                .setURI(URI + "/" + profileID + "/voice")
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
+    /**
+     * POST /api/profiler/profileDrafts/{id}/voice
+     */
+    public ProfileDraftRequest createVoice(String profileID, Voice voice) {
+        this
+                .setURI(URI + "/" + profileID + "/voice")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(voice);
+        return this;
+    }
+
+    public ProfileDraftRequest uploadAudioFile(String profileID, File file) {
+        addBodyFile("file", file, new MediaType("audio", "x-m4a"));
+        this
+                .setURI(URI + "/" + profileID + "/voice/upload")
                 .setHttpMethod(HttpMethod.POST);
         return this;
     }

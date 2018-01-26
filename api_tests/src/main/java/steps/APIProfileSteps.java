@@ -4,6 +4,7 @@ import errors.NullReturnException;
 import errors.OperationResultError;
 import http.OperationResult;
 import model.*;
+import model.entities.CBEntityList;
 import model.entities.Entities;
 import model.entities.EntityList;
 import org.jbehave.core.annotations.AfterStory;
@@ -14,11 +15,13 @@ import org.junit.Assert;
 import services.ProfileDraftService;
 import services.ProfileService;
 import services.TargetGroupService;
+import utils.DateHelper;
 import verification.profiler.ProfileMergeVerification;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -28,6 +31,7 @@ import static ingestion.IngestionService.INJECTIONS_FILE;
 import static json.JsonConverter.jsonToObject;
 import static json.JsonConverter.toJsonString;
 import static steps.APITargetGroupSteps.getRandomTargetGroup;
+import static utils.DateHelper.isTimeout;
 import static utils.FileHelper.readTxtFile;
 import static utils.RandomGenerator.getRandomItemFromList;
 import static utils.StepHelper.compareByCriteria;
@@ -384,7 +388,7 @@ public class APIProfileSteps extends APISteps {
             context.put("profileDraft", profile);
             context.put("fileMetaData", result.getEntity());
         } else {
-            throw new AssertionError("File: " + image +" not found");
+            throw new AssertionError("File: " + image + " not found");
         }
     }
 
@@ -405,10 +409,86 @@ public class APIProfileSteps extends APISteps {
         Profile profile = context.get("profile", Profile.class);
         FileMetaData fileMetaData = context.get("fileMetaData", FileMetaData.class);
 
-
         Pattern pattern = Pattern.compile("(/api/upload-platform/files/).*(/content)");
         Assert.assertTrue(pattern.matcher(profile.getUploadedImage()).find());
         Assert.assertTrue(pattern.matcher(fileMetaData.getFileId()).find());
-        //Assert.assertEquals(fileMetaData.getFileId(), profile.getUploadedImage()); FIXME CB-9350
+    }
+
+    @When("upload audio file to profile")
+    public void uploadAudioFile() {
+        List<File> files = context.get("g4files", List.class);
+        Profile draft = context.get("profileDraft", Profile.class);
+
+        File audioFile = files.stream()
+                .filter(file -> file.getName().contains(".wav"))
+                .findFirst().orElse(null);
+        Assert.assertNotNull(audioFile);
+
+        OperationResult<VoiceFile> result = draftService.uploadAudioFile(draft, audioFile);
+
+        context.put("voiceFile", result.getEntity());
+        context.put("profileDraft", draft);
+    }
+
+    @Then("uploaded audio file is processed")
+    public void uploadedAudioFileIsProcesse() {
+        VoiceFile voiceFile = context.get("voiceFile", VoiceFile.class);
+        Profile draft = context.get("profileDraft", Profile.class);
+
+        Integer WAITING_TIME = 3 * 60;
+        Integer POLLING_INTERVAL = 10;
+        Date deadline = DateHelper.getDateWithShift(WAITING_TIME);
+
+        CBEntityList entities = new CBEntityList();
+        entities.setEntities(draftService.getVoiceEvents(draft).getEntity());
+
+        while (entities.getEntity(voiceFile.getVoiceEventId()) == null && !isTimeout(deadline)) {
+            DateHelper.waitTime(POLLING_INTERVAL);
+            entities.setEntities(draftService.getVoiceEvents(draft).getEntity());
+        }
+        Assert.assertNotNull("Unable process uploaded audio voice", entities.getEntity(voiceFile.getVoiceEventId()));
+
+        context.put("voiceEvents", entities.getEntities());
+    }
+
+    @When("get voice events from draft profile")
+    public void createVoiceID() {
+        Profile draft = context.get("profileDraft", Profile.class);
+
+        OperationResult<List<CBEntity>> result = draftService.getVoiceEvents(draft);
+        context.put("voiceEvents", result.getEntity());
+    }
+
+    @When("create voiceID for draft profile")
+    public void createVoiceIDForDraftProfile() {
+        List<CBEntity> voiceEvents = context.get("voiceEvents", List.class);
+        Profile draft = context.get("profileDraft", Profile.class);
+
+        CBEntity voiceEvent = voiceEvents.stream()
+                .filter(cbEntity -> cbEntity.getAttributes() != null)
+                .findAny().orElse(null);
+        Assert.assertNotNull("Unable find voiceEvent with filled attributes", voiceEvent);
+        log.info(toJsonString(voiceEvent));
+
+        // create VoiceID from random channel of random voice event in this target
+        VoiceRecord record = new VoiceRecord();
+        record.setId(voiceEvent.getId());
+        List<String> channelId = (ArrayList<String>) voiceEvent.getAttributes().get("CHANNEL_ID");
+        record.setChannel(Integer.valueOf(getRandomItemFromList(channelId)));
+
+        Voice voice = new Voice();
+        voice.getRecords().add(record);
+
+        OperationResult<Voice> result = draftService.createVoiceModel(draft, voice);
+        context.put("voice", result.getEntity());
+        context.put("profileDraft", draft);
+    }
+
+    @Then("profile contain created voiceID")
+    public void profileContainVoiceID() {
+        Voice voice = context.get("voice", Voice.class);
+        Profile profile = context.get("profile", Profile.class);
+
+        Assert.assertEquals(voice.getId(), profile.getVoiceModelId());
     }
 }
