@@ -5,9 +5,10 @@ import data_for_entity.annotations.DataProvider;
 import data_for_entity.annotations.WithDataDependencies;
 import data_for_entity.data_providers.whitelist.WhiteListIdentifierProvider;
 import data_for_entity.data_providers.whitelist.WhiteListTypeProvider;
-import java.util.List;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
