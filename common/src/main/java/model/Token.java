@@ -7,6 +7,7 @@ public class Token {
     public static final String tokenProperty = "accessToken";
     public static final String tokenCookieProperty = "t";
     private String value;
+    private String id;
 
     @JsonProperty(tokenProperty)
     public void setValue(String value) {
@@ -17,4 +18,11 @@ public class Token {
         return value;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }
