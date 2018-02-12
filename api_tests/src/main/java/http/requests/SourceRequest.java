@@ -14,7 +14,7 @@ public class SourceRequest extends HttpRequest {
     public SourceRequest add(Source source) {
         this
                 .setURI(URI)
-                .setHttpMethod(HttpMethod.PUT)
+                .setHttpMethod(HttpMethod.POST)
                 .setPayload(source);
         return this;
     }
@@ -36,7 +36,7 @@ public class SourceRequest extends HttpRequest {
     public SourceRequest update(Source source) {
         this
                 .setURI(URI + source.getId())
-                .setHttpMethod(HttpMethod.POST)
+                .setHttpMethod(HttpMethod.PUT)
                 .setPayload(source);
         return this;
     }

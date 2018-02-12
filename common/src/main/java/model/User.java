@@ -17,8 +17,10 @@ import java.util.List;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class User extends Organization {
 
+    @DataProvider(EmailProvider.class)
     private String name;
     @DataProvider(EmailProvider.class)
+    // TODO: remove email field, cause it's similar to name
     private String email;
     @DataIgnore
     private List<String> languages = new ArrayList<>();
