@@ -13,5 +13,8 @@ public class PegasusMediaType {
     public static final MediaType AUDIO = new MediaType("audio", "wav");
     public static final MediaType TIFF = new MediaType("image", "tiff");
     public static final MediaType PEGASUS_XLSX = new MediaType("application", "vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+    public static final MediaType ZDF = new MediaType("text", "xml");
+    public static final MediaType EML = new MediaType("message", "rfc822");
 }
 

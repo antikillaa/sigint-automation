@@ -58,6 +58,9 @@ public class APIIngestionSteps extends APISteps {
                     case "Fax":
                         dockerAdapter = new SFaxDockerAdapter();
                         break;
+                    case "Email":
+                        dockerAdapter = new SEmailDockerAdapter();
+                        break;
                 }
                 break;
             case "T":

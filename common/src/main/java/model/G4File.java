@@ -56,6 +56,12 @@ public class G4File extends File {
             case "tif":
                 this.setMediaType(PegasusMediaType.TIFF);
                 break;
+            case "xml":
+                this.setMediaType(PegasusMediaType.ZDF);
+                break;
+            case "eml":
+                this.setMediaType(PegasusMediaType.EML);
+                break;
             default:
                 this.setMediaType(PegasusMediaType.TEXT_CSV_TYPE);
                 break;
