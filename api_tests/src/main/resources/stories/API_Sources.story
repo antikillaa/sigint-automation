@@ -2,7 +2,6 @@ Meta:
 @story source
 
 Scenario: API.Create, Read, Update, Delete source
-
 Given I sign in as admin user
 
 When I send create new random Source request
