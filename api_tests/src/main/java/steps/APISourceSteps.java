@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @SuppressWarnings("unchecked")
@@ -38,7 +39,10 @@ public class APISourceSteps extends APISteps {
         Source source = context.get("source", Source.class);
         Source latestSource = Entities.getSources().getLatest();
 
-        Verify.shouldBe(Conditions.equals(source, latestSource));
+        assertEquals(source.getName(), latestSource.getName());
+        assertEquals(source.getRecordType(), latestSource.getRecordType());
+        assertEquals(source.getType(), latestSource.getType());
+        assertEquals(source.getLocation(), latestSource.getLocation());
     }
 
     @When("I send get list of sources request")

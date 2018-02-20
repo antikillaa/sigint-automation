@@ -12,7 +12,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class DesignationMapping extends G4Entity {
+public class DesignationMapping extends BaseEntity {
 
   @DataIgnore
   private Long version;
