@@ -11,7 +11,7 @@ public class BaseEntity extends AbstractEntity {
     @WithFieldDataType(FieldDataType.DATE)
     private Date createdAt;
     @DataIgnore
-    private String createdBy;
+    private ModifiedBy createdBy;
     @DataIgnore
     private Date modifiedAt;
     @DataIgnore
@@ -25,11 +25,11 @@ public class BaseEntity extends AbstractEntity {
         this.createdAt = createdAt;
     }
 
-    public String getCreatedBy() {
+    public ModifiedBy getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(ModifiedBy createdBy) {
         this.createdBy = createdBy;
     }
 

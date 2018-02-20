@@ -10,7 +10,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class Whitelist extends G4Entity {
+public class Whitelist extends BaseEntity {
 
     @DataIgnore
     private Long version;

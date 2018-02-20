@@ -14,7 +14,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class Source extends G4Entity {
+public class Source extends BaseEntity {
 
     @DataProvider(SourceTypeProvider.class)
     private String type;
