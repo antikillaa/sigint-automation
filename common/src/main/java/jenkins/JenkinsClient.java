@@ -8,9 +8,11 @@ import http.OperationResult;
 import http.requests.HttpRequest;
 import org.apache.log4j.Logger;
 
+import static http.G4HttpClient.Protocol.HTTP;
+
 class JenkinsClient {
     
-    private G4HttpClient g4HttpClient = new G4HttpClient();
+    private G4HttpClient g4HttpClient = new G4HttpClient(G4Properties.getRunProperties().getApplicationURL(), HTTP);
     private String jenkinsURL;
     private String jenkinsUsername;
     private String jenkinsPassword;

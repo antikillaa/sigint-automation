@@ -10,7 +10,7 @@ import model.SearchFilter;
 import model.Tag;
 import model.TagSearchResult;
 import model.entities.Entities;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 import utils.RandomGenerator;
 
@@ -77,11 +77,11 @@ public class TagService implements EntityService<Tag> {
 
     @Override
     public OperationResult<Tag> update(Tag entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<Tag> view(String id) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 }

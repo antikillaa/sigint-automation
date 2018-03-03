@@ -2,7 +2,7 @@ package data_for_entity.data_providers.record;
 
 import data_for_entity.data_providers.DependencyData;
 import data_for_entity.data_providers.DependencyDataProvider;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 
 public class RecordBodySMSProvider extends DependencyDataProvider {
 

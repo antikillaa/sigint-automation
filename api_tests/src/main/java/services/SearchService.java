@@ -8,7 +8,7 @@ import model.CBEntity;
 import model.CBSearchFilter;
 import model.CBSearchResult;
 import model.SearchFilter;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -23,17 +23,17 @@ public class SearchService implements EntityService<CBEntity> {
 
     @Override
     public OperationResult<?> add(CBEntity entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult remove(CBEntity entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<List<CBEntity>> search(SearchFilter filter) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     public OperationResult<List<CBEntity>> search(CBSearchFilter filter) {
@@ -50,17 +50,17 @@ public class SearchService implements EntityService<CBEntity> {
 
     @Override
     public OperationResult<List<CBEntity>> list() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<CBEntity> update(CBEntity entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<CBEntity> view(String id) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     public OperationResult<CBSearchResult> count(CBSearchFilter filter) {

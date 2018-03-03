@@ -8,7 +8,7 @@ import http.OperationResult;
 import http.requests.ReportCategoriesRequest;
 import model.ReportCategory;
 import model.Result;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -48,7 +48,7 @@ public class ReportCategoryService implements EntityService<ReportCategory> {
 
     @Override
     public OperationResult<List<ReportCategory>> search(SearchFilter filter) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     /**

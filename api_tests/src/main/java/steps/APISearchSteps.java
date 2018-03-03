@@ -18,7 +18,7 @@ import static error_reporter.ErrorReporter.raiseError;
 import static json.JsonConverter.toJsonString;
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
-import static org.apache.commons.lang.StringUtils.getLevenshteinDistance;
+import static org.apache.commons.lang3.StringUtils.getLevenshteinDistance;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static utils.DateHelper.*;

@@ -5,7 +5,7 @@ import http.G4Response;
 import http.OperationResult;
 import http.requests.PermissionRequest;
 import model.Permission;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
@@ -26,17 +26,17 @@ public class PermissionService implements EntityService<Permission> {
 
     @Override
     public OperationResult<?> add(Permission entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult remove(Permission entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<List<Permission>> search(SearchFilter filter) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
@@ -56,11 +56,11 @@ public class PermissionService implements EntityService<Permission> {
 
     @Override
     public OperationResult<Permission> update(Permission entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<Permission> view(String id) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 }

@@ -6,7 +6,7 @@ import http.requests.SavedSearchRequest;
 import json.JsonConverter;
 import model.SavedSearch;
 import model.SearchFilter;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
@@ -19,12 +19,12 @@ public class SavedSearchService implements EntityService<SavedSearch> {
 
     @Override
     public OperationResult<?> add(SavedSearch entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult remove(SavedSearch entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
@@ -44,16 +44,16 @@ public class SavedSearchService implements EntityService<SavedSearch> {
 
     @Override
     public OperationResult<List<SavedSearch>> list() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<SavedSearch> update(SavedSearch entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<SavedSearch> view(String id) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 }

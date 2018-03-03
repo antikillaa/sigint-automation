@@ -1,5 +1,6 @@
 package services;
 
+import app_context.properties.G4Properties;
 import http.G4HttpClient;
 import http.G4Response;
 import http.OperationResult;
@@ -21,6 +22,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static http.G4HttpClient.Protocol.HTTP;
 import static json.JsonConverter.toJsonString;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
@@ -34,7 +36,7 @@ public class TargetsMigrationService {
     private static final Path IMPORT_DIR = Paths.get(System.getProperty("user.dir"), "importTargetsData");
     private static final String FILENAME = "import-data.xlsx";
     private static XSSFWorkbook workbook = new XSSFWorkbook();
-    private static G4HttpClient g4HttpClient = new G4HttpClient();
+    private static G4HttpClient g4HttpClient = new G4HttpClient(G4Properties.getRunProperties().getApplicationURL(), HTTP);
     private static final TargetMigrationRequest request = new TargetMigrationRequest();
     private static Logger log = Logger.getLogger(TargetsMigrationService.class);
     private static final String DATE_FORMAT = "YYYY-MM-dd";

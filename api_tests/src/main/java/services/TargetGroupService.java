@@ -9,7 +9,7 @@ import model.ProfileAndTargetGroup;
 import model.SearchFilter;
 import model.TargetGroup;
 import model.entities.Entities;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
@@ -69,7 +69,7 @@ public class TargetGroupService implements EntityService<TargetGroup> {
 
     @Override
     public OperationResult<List<TargetGroup>> list() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override

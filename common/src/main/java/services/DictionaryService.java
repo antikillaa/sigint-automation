@@ -1,5 +1,6 @@
 package services;
 
+import app_context.properties.G4Properties;
 import http.G4HttpClient;
 import http.G4Response;
 import http.OperationResult;
@@ -11,10 +12,12 @@ import org.apache.log4j.Logger;
 import java.util.Arrays;
 import java.util.List;
 
+import static http.G4HttpClient.Protocol.HTTP;
+
 public class DictionaryService {
 
     private static final Logger log = Logger.getLogger(DictionaryService.class);
-    private static G4HttpClient g4HttpClient = new G4HttpClient();
+    private static G4HttpClient g4HttpClient = new G4HttpClient(G4Properties.getRunProperties().getApplicationURL(), HTTP);
     private static DictionaryRequest request = new DictionaryRequest();
 
     public static OperationResult<List<SourceType>> getSources() {

@@ -8,7 +8,7 @@ import model.Group;
 import model.RequestResult;
 import model.SearchFilter;
 import model.entities.Entities;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public class GroupService implements EntityService<Group> {
 
     @Override
     public OperationResult<List<Group>> search(SearchFilter filter) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
@@ -85,6 +85,6 @@ public class GroupService implements EntityService<Group> {
 
     @Override
     public OperationResult<Group> view(String id) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 }

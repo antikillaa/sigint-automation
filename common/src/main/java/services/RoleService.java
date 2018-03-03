@@ -8,7 +8,7 @@ import model.RequestResult;
 import model.Role;
 import model.SearchFilter;
 import model.entities.Entities;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -60,7 +60,7 @@ public class RoleService implements EntityService<Role> {
 
     @Override
     public OperationResult<List<Role>> search(SearchFilter filter) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
@@ -88,6 +88,6 @@ public class RoleService implements EntityService<Role> {
 
     @Override
     public OperationResult<Role> view(String id) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 }

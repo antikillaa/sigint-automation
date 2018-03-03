@@ -1,20 +1,24 @@
 package services;
 
+import app_context.properties.G4Properties;
 import errors.OperationResultError;
 import http.G4HttpClient;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.UploadFoldersRequest;
-import java.util.Arrays;
-import java.util.List;
 import model.FileMetaFilter;
 import model.FolderMeta;
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static http.G4HttpClient.Protocol.HTTP;
+
 public class UploadFoldersService {
 
   private static final Logger log = Logger.getLogger(UploadFoldersService.class);
-  private static G4HttpClient g4HttpClient = new G4HttpClient();
+  private static G4HttpClient g4HttpClient = new G4HttpClient(G4Properties.getRunProperties().getApplicationURL(), HTTP);
   private static UploadFoldersRequest request = new UploadFoldersRequest();
 
   public List<FolderMeta> searchFolders(FileMetaFilter filter) {

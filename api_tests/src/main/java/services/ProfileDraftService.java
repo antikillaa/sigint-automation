@@ -6,7 +6,7 @@ import http.OperationResult;
 import http.requests.ProfileDraftRequest;
 import model.*;
 import model.entities.Entities;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -47,7 +47,7 @@ public class ProfileDraftService implements EntityService<Profile> {
 
     @Override
     public OperationResult<List<Profile>> search(SearchFilter filter) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override

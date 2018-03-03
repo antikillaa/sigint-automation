@@ -10,7 +10,7 @@ import http.requests.UserRequest;
 import json.JsonConverter;
 import model.*;
 import model.entities.Entities;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -97,7 +97,7 @@ public class UserService implements EntityService<User> {
 
     @Override
     public OperationResult<List<User>> list() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
@@ -123,7 +123,7 @@ public class UserService implements EntityService<User> {
 
     @Override
     public OperationResult<User> view(String id) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     /**

@@ -13,13 +13,15 @@ import zapi.model.ExecutionStatus;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import static http.G4HttpClient.Protocol.HTTP;
+
 /**
  * Zephyr API
  */
 class ZAPI {
 
     private String server = G4Properties.getJiraProperties().getJiraServer();
-    private G4HttpClient g4HttpClient = new G4HttpClient().setHost(server);
+    private G4HttpClient g4HttpClient = new G4HttpClient(server, HTTP);
     private String username = G4Properties.getJiraProperties().getUsername();
     private String password = G4Properties.getJiraProperties().getPassword();
 

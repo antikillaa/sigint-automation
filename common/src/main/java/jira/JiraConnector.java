@@ -4,16 +4,15 @@ import app_context.properties.G4Properties;
 import errors.NullReturnException;
 import http.G4HttpClient;
 import http.G4Response;
-import json.JsonConverter;
 import http.OperationResult;
 import http.requests.HttpRequest;
-import java.util.List;
-import jira.model.Issue;
-import jira.model.JiraProject;
-import jira.model.ProjectVersion;
-import jira.model.Session;
-import jira.model.SessionInfo;
+import jira.model.*;
+import json.JsonConverter;
 import org.apache.log4j.Logger;
+
+import java.util.List;
+
+import static http.G4HttpClient.Protocol.HTTP;
 
 /**
  * JiraConnector
@@ -21,7 +20,7 @@ import org.apache.log4j.Logger;
 public class JiraConnector {
 
     private static final Logger log = Logger.getLogger(JiraConnector.class);
-    private static final G4HttpClient client = new G4HttpClient().setHost(G4Properties.getJiraProperties().getJiraServer());
+    private static final G4HttpClient client = new G4HttpClient(G4Properties.getJiraProperties().getJiraServer(), HTTP);
 
     /**
      * JiraConnector instance. Try to connect and initialize cookie.

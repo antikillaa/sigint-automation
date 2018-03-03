@@ -4,7 +4,7 @@ import app_context.AppContext;
 import data_for_entity.RandomEntities;
 import model.Record;
 import model.SourceType;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import utils.RandomGenerator;
 
 import java.util.Objects;

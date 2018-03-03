@@ -8,7 +8,7 @@ import model.AuthResponseResult;
 import model.Responsibility;
 import model.SearchFilter;
 import model.entities.Entities;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class ResponsibilityService implements EntityService<Responsibility> {
 
     @Override
     public OperationResult<List<Responsibility>> search(SearchFilter filter) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override

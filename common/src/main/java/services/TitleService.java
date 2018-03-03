@@ -8,7 +8,7 @@ import model.AuthResponseResult;
 import model.SearchFilter;
 import model.Title;
 import model.entities.Entities;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class TitleService implements EntityService<Title> {
 
     @Override
     public OperationResult<List<Title>> search(SearchFilter filter) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override

@@ -7,7 +7,7 @@ import http.requests.ProfileDraftRequest;
 import http.requests.ProfileRequest;
 import model.*;
 import model.entities.Entities;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -65,17 +65,17 @@ public class ProfileService implements EntityService<Profile> {
 
     @Override
     public OperationResult<List<Profile>> search(SearchFilter filter) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<List<Profile>> list() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<Profile> update(Profile entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override

@@ -1,5 +1,6 @@
 package controllers;
 
+import app_context.properties.G4Properties;
 import http.G4HttpClient;
 import http.G4Response;
 import http.OperationResult;
@@ -7,9 +8,11 @@ import http.requests.AuthRequest;
 import model.RequestResult;
 import model.Token;
 
+import static http.G4HttpClient.Protocol.HTTP;
+
 class AuthService {
 
-    private static G4HttpClient g4HttpClient = new G4HttpClient();
+    private static G4HttpClient g4HttpClient = new G4HttpClient(G4Properties.getRunProperties().getApplicationURL(), HTTP);
     private static AuthRequest request = new AuthRequest();
 
     OperationResult<Token> signIn(String name, String password) {

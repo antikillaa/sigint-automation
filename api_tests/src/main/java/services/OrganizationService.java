@@ -6,7 +6,7 @@ import http.requests.OrganizationRequest;
 import json.JsonConverter;
 import model.Organization;
 import model.SearchFilter;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
@@ -19,12 +19,12 @@ public class OrganizationService implements EntityService<Organization> {
 
     @Override
     public OperationResult<?> add(Organization entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult remove(Organization entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
@@ -43,16 +43,16 @@ public class OrganizationService implements EntityService<Organization> {
 
     @Override
     public OperationResult<List<Organization>> list() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<Organization> update(Organization entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<Organization> view(String id) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 }

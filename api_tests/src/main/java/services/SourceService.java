@@ -9,7 +9,7 @@ import model.Result;
 import model.SearchFilter;
 import model.Source;
 import model.entities.Entities;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
@@ -58,7 +58,7 @@ public class SourceService implements EntityService<Source> {
 
     @Override
     public OperationResult<List<Source>> search(SearchFilter filter) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     /**

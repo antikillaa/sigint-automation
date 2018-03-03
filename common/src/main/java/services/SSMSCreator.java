@@ -1,7 +1,7 @@
 package services;
 
 import model.SSMS;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import utils.RandomGenerator;
 
 import java.util.*;

@@ -9,7 +9,7 @@ import model.Record;
 import model.RecordSearchResult;
 import model.SearchFilter;
 import model.entities.Entities;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public class RecordService implements EntityService<Record> {
 
     @Override
     public OperationResult remove(Record entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     /**
@@ -67,7 +67,7 @@ public class RecordService implements EntityService<Record> {
 
     @Override
     public OperationResult<List<Record>> list() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override

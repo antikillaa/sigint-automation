@@ -9,7 +9,7 @@ import model.ProfileAndTargetGroup;
 import model.TargetGroup;
 import model.TargetGroupSearchFilter;
 import model.entities.Entities;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;

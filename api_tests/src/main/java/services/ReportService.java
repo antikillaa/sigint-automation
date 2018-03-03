@@ -7,7 +7,7 @@ import http.requests.ReportRequest;
 import model.Report;
 import model.SearchFilter;
 import model.entities.Entities;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -40,27 +40,27 @@ public class ReportService implements EntityService<Report> {
 
     @Override
     public OperationResult remove(Report entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<List<Report>> search(SearchFilter filter) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<List<Report>> list() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<Report> update(Report entity) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
     @Override
     public OperationResult<Report> view(String id) {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
 }

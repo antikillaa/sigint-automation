@@ -1,5 +1,6 @@
 package services;
 
+import app_context.properties.G4Properties;
 import errors.OperationResultError;
 import http.G4HttpClient;
 import http.G4Response;
@@ -13,10 +14,12 @@ import org.apache.log4j.Logger;
 import java.util.Arrays;
 import java.util.List;
 
+import static http.G4HttpClient.Protocol.HTTP;
+
 public class UploadFilesService {
 
     private static final Logger log = Logger.getLogger(UploadFilesService.class);
-    private static G4HttpClient g4HttpClient = new G4HttpClient();
+    private static G4HttpClient g4HttpClient = new G4HttpClient(G4Properties.getRunProperties().getApplicationURL(), HTTP);
     private static UploadFilesRequest uploadFilesRequest = new UploadFilesRequest();
     private static UploadRequest uploadRequest = new UploadRequest();
 

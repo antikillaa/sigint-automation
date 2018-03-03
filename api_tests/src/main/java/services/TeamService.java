@@ -8,7 +8,7 @@ import model.AuthResponseResult;
 import model.SearchFilter;
 import model.Team;
 import model.entities.Entities;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
@@ -93,7 +93,7 @@ public class TeamService implements EntityService<Team> {
 
     @Override
     public OperationResult<List<Team>> list() {
-        throw new NotImplementedException();
+        throw new NotImplementedException("");
     }
 
 }
