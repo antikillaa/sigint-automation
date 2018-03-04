@@ -128,7 +128,7 @@ public class APIDesignationMappingsSteps extends APISteps {
     assertTrue("Got null object from collection ",latestDesignationMapping != null);
     assertTrue("Got null object from context ",designationMapping != null);
 
-    assertEquals("identifier mismatch", designationMapping.getIdentifier(), latestDesignationMapping.getIdentifier());
+    assertEquals("identifier mismatch", designationMapping.getIdentifier().toLowerCase(), latestDesignationMapping.getIdentifier());
     assertEquals("type mismatch", designationMapping.getType(), latestDesignationMapping.getType());
     assertEquals("designations mismatch", designationMapping.getDesignations(), latestDesignationMapping.getDesignations());
     assertEquals("spam flag mismatch", designationMapping.isSpam(), latestDesignationMapping.isSpam());
