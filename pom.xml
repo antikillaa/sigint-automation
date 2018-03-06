@@ -88,11 +88,6 @@
         </dependency>
     </dependencies>
 
-    <!--<dependencyManagement>-->
-        <!--<dependencies>-->
-        <!--</dependencies>-->
-    <!--</dependencyManagement>-->
-
     <build>
         <plugins>
             <plugin>
