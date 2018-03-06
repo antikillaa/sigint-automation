@@ -47,7 +47,7 @@ public class UIReportsSteps extends UISteps {
     public void fillOutRequiredFieldsOnCreateReportScreen() {
         Record record  = getRecordFromContext();
         Report report = randomEntities.randomEntity(Report.class);
-        report.setRecordType(record.getType().name());
+        report.setRecordType(record.getType());
         report.setSourceType(record.getSourceName());
         getReportsFormFactory().getRecordBasedForm().fillForm(report);
         context.put("report", report);
@@ -56,8 +56,8 @@ public class UIReportsSteps extends UISteps {
     @When("I fill out required fields on 'Create Manual Report' page")
     public void fillOutRequiredFieldsOnCreateManualReportPage() {
         Report report = randomEntities.randomEntity(Report.class);
-        report.setRecordType(RandomGenerator.getRandomItemFromList(AppContext.get().getDictionary().getRecordTypes()).getType());
-        report.setSourceType(RandomGenerator.getRandomItemFromList(AppContext.get().getDictionary().getSources()).getType().name());
+        report.setRecordType(RandomGenerator.getRandomItemFromList(AppContext.get().getDictionary().getSources()).getRecordType());
+        report.setSourceType(RandomGenerator.getRandomItemFromList(AppContext.get().getDictionary().getSources()).getType());
 
         getReportsFormFactory().getManualForm().fillForm(report);
         context.put("report", report);
