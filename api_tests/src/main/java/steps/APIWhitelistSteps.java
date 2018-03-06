@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ingestion.IngestionService.cleanImportDir;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 import static org.junit.Assert.*;
 
 public class APIWhitelistSteps extends APISteps {
@@ -81,8 +83,8 @@ public class APIWhitelistSteps extends APISteps {
         Whitelist fromContext = context.get("whitelist", Whitelist.class);
         Whitelist latest = Entities.getWhitelists().getLatest();
 
+        assertThat(fromContext.getIdentifier(), is(equalToIgnoringCase(latest.getIdentifier())));
         assertEquals("type mismatch", fromContext.getType(), latest.getType());
-        assertEquals("identifier mismatch", fromContext.getIdentifier(), latest.getIdentifier());
         assertEquals("description mismatch", fromContext.getDescription(), latest.getDescription());
 
         context.put("whitelist", latest);

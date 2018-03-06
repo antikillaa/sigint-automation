@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static ingestion.IngestionService.cleanImportDir;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 import static org.junit.Assert.*;
 
 import static steps.APIDesignationsSteps.getRandomDesignation;
@@ -128,7 +130,7 @@ public class APIDesignationMappingsSteps extends APISteps {
     assertTrue("Got null object from collection ",latestDesignationMapping != null);
     assertTrue("Got null object from context ",designationMapping != null);
 
-    assertEquals("identifier mismatch", designationMapping.getIdentifier().toLowerCase(), latestDesignationMapping.getIdentifier());
+    assertThat(designationMapping.getIdentifier(), is(equalToIgnoringCase(latestDesignationMapping.getIdentifier())));
     assertEquals("type mismatch", designationMapping.getType(), latestDesignationMapping.getType());
     assertEquals("designations mismatch", designationMapping.getDesignations(), latestDesignationMapping.getDesignations());
     assertEquals("spam flag mismatch", designationMapping.isSpam(), latestDesignationMapping.isSpam());
