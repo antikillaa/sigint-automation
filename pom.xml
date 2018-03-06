@@ -19,13 +19,19 @@
         <jersey.version>2.25</jersey.version>
         <log4j.version>1.2.17</log4j.version>
         <poi.version>3.17</poi.version>
+        <!--Stories related-->
+        <stories>**/*Launcher.java</stories>
+        <metaFilters>-TEEL *</metaFilters>
+        <reportBuildStatus>false</reportBuildStatus>
+        <!--Framework set-up-->
+        <remoteRun>true</remoteRun>
+        <sigintURL></sigintURL>
+        <webBrowser>chrome</webBrowser>
+        <seleniumHub>10.2.1.99</seleniumHub>
         <report>true</report>
         <email>true</email>
         <stand>test</stand>
         <emailSender>gmail</emailSender>
-        <stories>**/*Launcher.java</stories>
-        <metaFilters>-TEEL *</metaFilters>
-        <reportBuildStatus>false</reportBuildStatus>
     </properties>
 
     <profiles>
@@ -49,46 +55,43 @@
         </profile>
     </profiles>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-mapper-asl</artifactId>
-                <version>1.9.13</version>
-            </dependency>
-            <dependency>
-                <groupId>com.codeborne</groupId>
-                <artifactId>selenide</artifactId>
-                <version>4.3</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>3.7</version>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>${log4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi</artifactId>
-                <version>${poi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi-ooxml</artifactId>
-                <version>${poi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.12</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>ae.pegasus.qatools</groupId>
+            <artifactId>jbehave-framework</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.supercsv</groupId>
+            <artifactId>super-csv</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>4.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.spotify</groupId>
+            <artifactId>docker-client</artifactId>
+            <version>8.4.0</version>
+        </dependency>
+    </dependencies>
+
+    <!--<dependencyManagement>-->
+        <!--<dependencies>-->
+        <!--</dependencies>-->
+    <!--</dependencyManagement>-->
 
     <build>
         <plugins>
@@ -125,14 +128,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>log4j</groupId>
-                        <artifactId>log4j</artifactId>
-                        <version>${log4j.version}</version>
-                        <scope>compile</scope>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>io.qameta.allure</groupId>
