@@ -11,6 +11,7 @@ public class SearchNode {
     private String secondWord;
     private Integer distance;
     private SearchFilters filters;
+    private String level;
 
     public String getType() {
         return type;
@@ -74,5 +75,13 @@ public class SearchNode {
 
     public void setRelevance(String relevance) {
         this.relevance = relevance;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 }
