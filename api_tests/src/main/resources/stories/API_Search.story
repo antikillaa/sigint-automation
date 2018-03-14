@@ -117,7 +117,7 @@ Examples:
 | OSINT | event | nowledge~  | 0 | 20 |
 
 
-Scenario: Search. [SIGINT] Workflow filters. Record status
+Scenario: Search. [SIGINT] Workflow filters. Record status: Unassigned
 When I send workflow search request: record status:<recordStatus>, source:<source>, objectType:<objectType>,
 pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
@@ -126,8 +126,38 @@ And CB search results match the recordStatus filters
 Examples:
 | source | objectType | recordStatus | pageNumber | pageSize |
 | SIGINT | event | unassigned | 0 | 300 |
+
+
+Scenario: Search. [SIGINT] Workflow filters. Record status: Unprocessed
+When I send workflow search request: record status:<recordStatus>, source:<source>, objectType:<objectType>,
+pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search results match the recordStatus filters
+
+Examples:
+| source | objectType | recordStatus | pageNumber | pageSize |
 | SIGINT | event | unprocessed | 0 | 300 |
+
+
+Scenario: Search. [SIGINT] Workflow filters. Record status: Reported
+When I send workflow search request: record status:<recordStatus>, source:<source>, objectType:<objectType>,
+pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search results match the recordStatus filters
+
+Examples:
+| source | objectType | recordStatus | pageNumber | pageSize |
 | SIGINT | event | reported | 0 | 300 |
+
+
+Scenario: Search. [SIGINT] Workflow filters. Record status: Unimportant
+When I send workflow search request: record status:<recordStatus>, source:<source>, objectType:<objectType>,
+pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search results match the recordStatus filters
+
+Examples:
+| source | objectType | recordStatus | pageNumber | pageSize |
 | SIGINT | event | unimportant | 0 | 300 |
 
 

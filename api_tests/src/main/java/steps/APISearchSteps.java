@@ -21,8 +21,10 @@ import static junit.framework.TestCase.assertTrue;
 import static org.apache.commons.lang3.StringUtils.getLevenshteinDistance;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-import static utils.DateHelper.*;
-import static utils.SearchQueryBuilder.*;
+import static utils.DateHelper.inRange;
+import static utils.DateHelper.stringToTimeRange;
+import static utils.SearchQueryBuilder.recordStatusToQuery;
+import static utils.SearchQueryBuilder.timeRangeToQuery;
 import static utils.StepHelper.compareByCriteria;
 import static utils.StringUtils.extractStringsInQuotes;
 
@@ -31,7 +33,6 @@ public class APISearchSteps extends APISteps {
 
     private static SearchService service = new SearchService();
     private static final String processIdQuery = "pid:";
-    private static final Integer UNIMPORTANT = -1;
 
     /**
      * Example:
@@ -302,8 +303,8 @@ public class APISearchSteps extends APISteps {
                     case "unprocessed":
                         assertTrue("Search by RecordStatus::Unprocessed return record with reportIds:" + toJsonString(entity),
                                 entity.getReports() == null || entity.getReports().getReportIds().isEmpty());
-                        assertFalse("Search by RecordStatus:Unprocessed return Unimportance record:" + toJsonString(entity),
-                                Objects.equals(entity.getAssignments().getImportance(), UNIMPORTANT));
+                        assertTrue("Search by RecordStatus:Unprocessed return processed record:" + toJsonString(entity),
+                                entity.getAssignments().getImportance() == null);
                         break;
                     case "reported":
                         assertFalse("Search by RecordStatus:Reported return record without reportIds:" + toJsonString(entity),
@@ -311,7 +312,7 @@ public class APISearchSteps extends APISteps {
                         break;
                     case "unimportant":
                         assertTrue("Search by RecordStatus:Unimportant return NOT unimportance record:" + toJsonString(entity),
-                                Objects.equals(entity.getAssignments().getImportance(), UNIMPORTANT));
+                                Objects.equals(entity.getAssignments().getImportance(), -1));
                         break;
                     default:
                         throw new AssertionError("Unknown recordStatus filter value: " + recordStatus);
