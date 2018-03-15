@@ -5,12 +5,9 @@ import ae.pegasus.framework.ingestion.docker.DockerDataGenerator;
 import ae.pegasus.framework.ingestion.docker.IDockerAdapter;
 import ae.pegasus.framework.ingestion.docker.adapters.*;
 import ae.pegasus.framework.model.G4File;
-import ae.pegasus.framework.model.Process;
 import ae.pegasus.framework.model.Source;
-import ae.pegasus.framework.model.UploadDetails;
 import ae.pegasus.framework.utils.RandomGenerator;
 import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -19,7 +16,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 import static ae.pegasus.framework.ingestion.IngestionService.INJECTIONS_FILE;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class APIIngestionSteps extends APISteps {
@@ -37,9 +33,11 @@ public class APIIngestionSteps extends APISteps {
     public void generateIngestionFiles(String sType, String rType, String rCount) {
 
         IDockerAdapter dockerAdapter = null;
-        switch (sType) {
+        String sTypeUpper = sType.toUpperCase();
+        String rTypeUpper = rType.toUpperCase();
+        switch (sTypeUpper) {
             case "S":
-                switch (rType) {
+                switch (rTypeUpper) {
                     case "SMS":
                         dockerAdapter = new SSMSDockerAdapter();
                         break;
@@ -52,23 +50,26 @@ public class APIIngestionSteps extends APISteps {
                     case "CELL":
                         dockerAdapter = new SCELLDockerAdapter();
                         break;
-                    case "Voice":
+                    case "VOICE":
                         dockerAdapter = new SVoiceDockerAdapter();
                         break;
-                    case "Fax":
+                    case "FAX":
                         dockerAdapter = new SFaxDockerAdapter();
                         break;
-                    case "Email":
+                    case "EMAIL":
                         dockerAdapter = new SEmailDockerAdapter();
+                        break;
+                    case "VOIP":
+                        dockerAdapter = new SVoipDockerAdapter();
                         break;
                 }
                 break;
             case "T":
-                switch (rType) {
+                switch (rTypeUpper) {
                     case "SMS":
                         dockerAdapter = new TSMSDockerAdapter();
                         break;
-                    case "Voice":
+                    case "VOICE":
                         dockerAdapter = new TVoiceDockerAdapter();
                         break;
                 }
@@ -80,20 +81,20 @@ public class APIIngestionSteps extends APISteps {
                 dockerAdapter = new PhonebookDockerAdapter();
                 break;
             case "E":
-                switch (rType) {
+                switch (rTypeUpper) {
                     case "CDR":
                         dockerAdapter = new EtisalatCDRDockerAdapter();
                         break;
-                    case "Subscriber1":
+                    case "SUBSCRIBER1":
                         dockerAdapter = new EtisalatSubscriber1DockerAdapter();
                         break;
-                    case "Subscriber2":
+                    case "SUBSCRIBER2":
                         dockerAdapter = new EtisalatSubscriber2DockerAdapter();
                         break;
-                    case "CellTower1":
+                    case "CELLTOWER1":
                         dockerAdapter = new EtisalatCellTower1DockerAdapter();
                         break;
-                    case "CellTower2":
+                    case "CELLTOWER2":
                         dockerAdapter = new EtisalatCellTower2DockerAdapter();
                         break;
                     case "SMS2":
@@ -139,32 +140,5 @@ public class APIIngestionSteps extends APISteps {
     @Given("I clean up ingestion directory")
     public void cleanupIngestionDir() {
         IngestionService.cleanIngestionDir();
-    }
-
-    @Then("Upload details contain $rCount - $rType records")
-    public void summaryContainsRecordsWithType(String rCount, String rType) {
-        Integer expectedCount = Integer.valueOf(rCount);
-        Integer actualCount;
-
-        Source source = context.get("source", Source.class);
-        Process process = context.get("uploadDetails", UploadDetails.class).getProcess();
-        context.put("process", process);
-
-        assertEquals("Wrong source id detected", source.getId(), process.getSourceId());
-        switch (rType.toLowerCase()) {
-            case "sms":
-                actualCount = process.getSmsCount();
-                break;
-            case "voice":
-                actualCount = process.getVoiceCount();
-                break;
-            case "cdr":
-                actualCount = process.getVoiceCount();
-                break;
-            default:
-                actualCount = process.getRecordsCount();
-                break;
-        }
-        assertEquals(rCount + " count calculation fails", expectedCount, actualCount);
     }
 }

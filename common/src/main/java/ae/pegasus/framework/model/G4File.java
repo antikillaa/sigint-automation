@@ -62,6 +62,9 @@ public class G4File extends File {
             case "eml":
                 this.setMediaType(PegasusMediaType.EML);
                 break;
+            case "protobuf":
+                this.setMediaType(PegasusMediaType.PROTOBUF);
+                break;
             default:
                 this.setMediaType(PegasusMediaType.TEXT_CSV_TYPE);
                 break;

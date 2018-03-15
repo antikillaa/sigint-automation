@@ -330,6 +330,23 @@ Examples:
 | S          | Email      | 10           |
 
 
+Scenario: API.S-VoIP ingestion
+Meta: @nightly @S-VOIP
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB > 5
+
+Examples:
+| sourceType | recordType | recordsCount |
+| S          | VOIP       | 10           |
+
+
 
 Scenario: API.T-SMS ingestion
 Meta: @nightly @T-SMS
