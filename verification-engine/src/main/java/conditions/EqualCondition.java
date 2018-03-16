@@ -1,6 +1,5 @@
 package conditions;
 
-import json.JsonConverter;
 import model.G4Entity;
 import model.Record;
 import model.UIRecord;
@@ -12,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import static json.JsonConverter.toJsonString;
 
 
 public class EqualCondition implements ExpectedCondition {
@@ -125,16 +126,15 @@ public class EqualCondition implements ExpectedCondition {
 
         @Override
         public String toString() {
-            return "Object condition with object1: " + JsonConverter.toJsonString(obj1) +
-                    " and object2: " + JsonConverter.toJsonString(obj2);
+            return "Object condition with object1: " + toJsonString(obj1) + " and object2: " + toJsonString(obj2);
         }
 
         public Boolean check() {
             if ((obj1 == null) && (obj2 == null)) {
                 return true;
             }
-            String json1 = JsonConverter.toJsonString(obj1);
-            String json2 = JsonConverter.toJsonString(obj2);
+            String json1 = toJsonString(obj1);
+            String json2 = toJsonString(obj2);
 
             return json1.equals(json2);
         }
@@ -151,7 +151,7 @@ public class EqualCondition implements ExpectedCondition {
         }
 
         public String toString() {
-            return String.format("Compare two G4 entities: %s and %s", obj1.toString(), obj2.toString());
+            return String.format("Compare two G4 entities: %s and %s", toJsonString(obj1), toJsonString(obj2));
         }
 
         public Boolean check() {
@@ -184,7 +184,7 @@ public class EqualCondition implements ExpectedCondition {
                 equals = condition.check();
 
                 if (!equals) {
-                    log.debug(String.format("Not equaled values: %s and %s", originalValue, requestValue));
+                    log.warn(String.format("%s.%nNot equaled values: %s and %s", condition, originalValue, requestValue));
                     return false;
                 }
             }
