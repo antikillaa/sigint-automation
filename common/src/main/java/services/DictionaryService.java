@@ -20,10 +20,9 @@ public class DictionaryService {
     private static G4HttpClient g4HttpClient = new G4HttpClient(G4Properties.getRunProperties().getApplicationURL(), HTTP);
     private static DictionaryRequest request = new DictionaryRequest();
 
-    public static OperationResult<List<SourceType>> getSources() {
-        log.info("Dictionaries. Get sources.");
+    private static OperationResult<List<SourceType>> getSources(DictionaryRequest httpRequest) {
 
-        G4Response response = g4HttpClient.sendRequest(request.sources());
+        G4Response response = g4HttpClient.sendRequest(httpRequest);
 
         OperationResult<SourceType[]> operationResult = new OperationResult<>(response, SourceType[].class);
         if (operationResult.isSuccess()) {
@@ -33,11 +32,23 @@ public class DictionaryService {
         }
     }
 
+    public static OperationResult<List<SourceType>> getAllSources() {
+        log.info("Dictionaries. Get sources.");
+
+        return getSources(request.listAvailableSources());
+    }
+
+    public static OperationResult<List<SourceType>> getManualSources() {
+        log.info("Dictionaries. Get manual sources.");
+
+        return getSources(request.listAvailableManualSources());
+    }
+
     public static Dictionary loadDictionary() {
         log.info("Load workflow dictionary.");
         Dictionary dictionary = new Dictionary();
 
-        OperationResult<List<SourceType>> resultSources = getSources();
+        OperationResult<List<SourceType>> resultSources = getAllSources();
         if (resultSources.isSuccess()) {
             dictionary.setSourceTypes(resultSources.getEntity());
         } else {

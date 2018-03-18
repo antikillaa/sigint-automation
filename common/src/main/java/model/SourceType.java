@@ -11,6 +11,37 @@ public class SourceType extends AbstractEntity {
     private String dataSource;
     private String subSource;
 
+    public SourceType() {
+        // dummy constructor for jackson serialization
+    }
+
+    public SourceType(String eventFeed, String dataSource, String subSource) {
+        this.eventFeed = eventFeed;
+        this.dataSource = dataSource;
+        this.subSource = subSource;
+    }
+
+    @Override
+    public String toString() {
+        return "SourceType{" + eventFeed +
+                ", " + dataSource +
+                ", " + subSource +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object that){
+        if(this == that) return true;
+
+        if(!(that instanceof SourceType)) return false;
+
+        SourceType thatSourceType = (SourceType) that;
+        return
+                this.eventFeed.equals(thatSourceType.eventFeed)
+                && this.dataSource.equals(thatSourceType.dataSource)
+                && this.subSource.equals(thatSourceType.subSource);
+    }
+
     public String getSubSource() {
         return subSource;
     }
