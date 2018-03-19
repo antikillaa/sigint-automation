@@ -17,22 +17,22 @@ Then Request is successful
 Scenario: API.Check short password
 When I change user password to 123456
 Then I got response code 400
-And Message contains "at least 8"
+And Message contains "MIN_LENGTH"
 
 Scenario: API.Check long weak password
 When I change user password to LONGPASSWORDHERE
 Then I got response code 400
-And Message contains "not valid"
+And Message contains "CHARACTERS"
 
 Scenario: API.Check dictionary password
 When I change user password to P@ssWord1
 Then I got response code 400
-And Message contains "too weak"
+And Message contains "STRENGTH"
 
 Scenario: API.Check password with more than two successive identical characters
 When I change user password to My-very-G00d-paswooord
 Then I got response code 400
-And Message contains "more than 2 repeated"
+And Message contains "REPEAT_CHARACTERS"
 
 Scenario: API.Check random password
 !-- upper and lower case letters, and digits
@@ -66,7 +66,7 @@ Then I got response code 200
 Scenario: API.Check password with username
 When I change user password to username
 Then I got response code 400
-And Message contains "not valid"
+And Message contains "USERNAME_MATCH"
 
 Scenario: API.Check password with emoji symbols
 When I change user password to Em0j1🚀🚃🚑🚕
@@ -84,13 +84,13 @@ Then Request is successful
 
 When I change user password to When-I-came-to-your-door
 Then I got response code 400
-And Message contains "must be different"
+And Message contains "HISTORY_MATCH"
 When I change user password to They-said-it-wasn't-you
 Then I got response code 400
-And Message contains "must be different"
+And Message contains "HISTORY_MATCH"
 When I change user password to But-I-saw-you-peep-through
 Then I got response code 400
-And Message contains "must be different"
+And Message contains "HISTORY_MATCH"
 
 When I change user password to This-happened-once-before
 Then Request is successful
