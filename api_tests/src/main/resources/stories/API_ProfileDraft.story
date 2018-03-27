@@ -36,9 +36,9 @@ Then Request is successful
 
 
 Scenario: Updating of profile draft
-When I send create target group request
+When I send create finder file request
 Then Request is successful
-When I add profile draft to target group
+When I add profile draft to finder file
 
 When I send update profile request
 Then Request is successful
@@ -50,7 +50,7 @@ And Profile draft is correct
 
 When I send delete profile draft request
 Then Request is successful
-When I send delete target group request
+When I send delete finder file request
 Then Request is successful
 
 

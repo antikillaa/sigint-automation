@@ -3,10 +3,11 @@ package verification.profiler;
 import json.JsonConverter;
 import model.*;
 import org.apache.log4j.Logger;
-import org.junit.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 abstract class ProfileMergeAttributeVerification {
 
@@ -38,11 +39,11 @@ abstract class ProfileMergeAttributeVerification {
             log.info("Verification: ActiveUntil of merged profile");
 
             if (profile1.getActiveUntil() != null) {
-                Assert.assertFalse(
+                assertFalse(
                         mergedProfile.getActiveUntil().before(profile1.getActiveUntil())
                 );
             } else if (profile2.getActiveUntil() != null) {
-                Assert.assertFalse(
+                assertFalse(
                         mergedProfile.getActiveUntil().before(profile2.getActiveUntil())
                 );
             }
@@ -56,13 +57,13 @@ abstract class ProfileMergeAttributeVerification {
             log.info("Verification: isActive of merged profile");
 
             if (profile1.getActive().equals(TargetStatus.ACTIVE) || profile2.getActive().equals(TargetStatus.ACTIVE)) {
-                Assert.assertTrue("At least one old merged target was ACTIVE, new target shouldBe ACTIVE too",
+                assertTrue("At least one old merged target was ACTIVE, new target shouldBe ACTIVE too",
                         mergedProfile.getActive().equals(TargetStatus.ACTIVE));
             } else if (profile1.getActive().equals(TargetStatus.INACTIVE) || profile2.getActive().equals(TargetStatus.INACTIVE)) {
-                Assert.assertTrue("At least one old merged target was INACTIVE, new target shouldBe INACTIVE too",
+                assertTrue("At least one old merged target was INACTIVE, new target shouldBe INACTIVE too",
                         mergedProfile.getActive().equals(TargetStatus.INACTIVE));
             } else {
-                Assert.assertTrue("At least one old merged target was ARCHIVED, new target shouldBe ARCHIVED too",
+                assertTrue("At least one old merged target was ARCHIVED, new target shouldBe ARCHIVED too",
                         mergedProfile.getActive().equals(TargetStatus.ARCHIVED));
             }
         }
@@ -75,7 +76,7 @@ abstract class ProfileMergeAttributeVerification {
             log.info("Verification: ConsolidatedAttributes of merged profile");
 
             //TODO update validation for consolidatedAttributes
-            Assert.assertNotNull(mergedProfile.getConsolidatedAttributes());
+            assertNotNull(mergedProfile.getConsolidatedAttributes());
         }
     }
 
@@ -89,7 +90,7 @@ abstract class ProfileMergeAttributeVerification {
             entities.addAll(profile2.getEntities());
 
             for (CBEntity entity : entities) {
-                Assert.assertTrue(mergedProfile.getEntities().contains(entity));
+                assertTrue(mergedProfile.getEntities().contains(entity));
             }
         }
     }
@@ -101,10 +102,10 @@ abstract class ProfileMergeAttributeVerification {
             log.info("Verification: EntityCount of merged profile");
 
             // entityCount
-            if (mergedProfile.getEntityCount() == null || mergedProfile.getEntityCount().equals(0)) {
-                Assert.assertTrue(mergedProfile.getEntities().isEmpty());
+            if (mergedProfile.getIdentifierCount() == null || mergedProfile.getIdentifierCount().equals(0)) {
+                assertTrue(mergedProfile.getEntities().isEmpty());
             } else {
-                Assert.assertTrue(mergedProfile.getEntityCount() == mergedProfile.getEntities().size());
+                assertTrue(mergedProfile.getIdentifierCount() == mergedProfile.getEntities().size());
             }
         }
     }
@@ -115,7 +116,7 @@ abstract class ProfileMergeAttributeVerification {
         protected void verifyAttribute(Profile profile1, Profile profile2, Profile mergedProfile) {
             log.info("Verification: JsonType of merged profile");
 
-            Assert.assertTrue(mergedProfile.getJsonType().equals(ProfileJsonType.Draft));
+            assertTrue(mergedProfile.getJsonType().equals(ProfileJsonType.Draft));
         }
     }
 
@@ -125,8 +126,8 @@ abstract class ProfileMergeAttributeVerification {
         protected void verifyAttribute(Profile profile1, Profile profile2, Profile mergedProfile) {
             log.info("Verification: MergedIDs of merged profile");
 
-            Assert.assertTrue(mergedProfile.getMergingProfilesIDs().contains(profile1.getId()));
-            Assert.assertTrue(mergedProfile.getMergingProfilesIDs().contains(profile2.getId()));
+            assertTrue(mergedProfile.getMergingProfilesIDs().contains(profile1.getId()));
+            assertTrue(mergedProfile.getMergingProfilesIDs().contains(profile2.getId()));
         }
     }
 
@@ -136,9 +137,9 @@ abstract class ProfileMergeAttributeVerification {
         public void verifyAttribute(Profile profile1, Profile profile2, Profile mergedProfile) {
             log.info("Verification: Name of merged profile");
 
-            Assert.assertTrue("Merged target name should contain all names of original targets",
+            assertTrue("Merged target name should contain all names of original targets",
                     mergedProfile.getName().contains(profile1.getName()));
-            Assert.assertTrue("Merged target name should contain all names of original targets",
+            assertTrue("Merged target name should contain all names of original targets",
                     mergedProfile.getName().contains(profile2.getName()));
         }
     }
@@ -151,9 +152,9 @@ abstract class ProfileMergeAttributeVerification {
 
             // target category
             if (profile1.getCategory().equals("Dangerous") || profile2.getCategory().equals("Dangerous")) {
-                Assert.assertTrue(mergedProfile.getCategory().equals(ProfileCategory.Dangerous.getDisplayName()));
+                assertTrue(mergedProfile.getCategory().equals(ProfileCategory.Dangerous.getDisplayName()));
             } else {
-                Assert.assertTrue(mergedProfile.getCategory().equals(ProfileCategory.POI.getDisplayName()));
+                assertTrue(mergedProfile.getCategory().equals(ProfileCategory.POI.getDisplayName()));
             }
         }
     }
@@ -170,7 +171,7 @@ abstract class ProfileMergeAttributeVerification {
             String jsonMergedGroups = JsonConverter.toJsonString(mergedProfile.getGroups());
             for (TargetGroup group : groups) {
                 String jsonGroup = JsonConverter.toJsonString(group);
-                Assert.assertTrue(jsonMergedGroups.contains(jsonGroup));
+                assertTrue(jsonMergedGroups.contains(jsonGroup));
             }
         }
     }
@@ -182,8 +183,8 @@ abstract class ProfileMergeAttributeVerification {
             log.info("Verification: Type of merged profile");
 
             // now it's only 'Individual' value
-            Assert.assertEquals(mergedProfile.getType(), profile1.getType());
-            Assert.assertEquals(mergedProfile.getType(), profile2.getType());
+            assertEquals(mergedProfile.getType(), profile1.getType());
+            assertEquals(mergedProfile.getType(), profile2.getType());
         }
     }
 

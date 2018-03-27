@@ -12,9 +12,10 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Profile extends ProfileAndTargetGroup {
 
     @DataIgnore
@@ -37,7 +38,7 @@ public class Profile extends ProfileAndTargetGroup {
     @DataIgnore
     private Date activeUntil;
     @DataIgnore
-    private Integer entityCount = 0;
+    private Integer identifierCount = 0;
     @DataIgnore
     private Profile parent;
     @DataIgnore
@@ -56,6 +57,14 @@ public class Profile extends ProfileAndTargetGroup {
     private ArrayList<VoiceFile> voiceFiles = new ArrayList<>();
     @DataIgnore
     private String voiceModelId;
+    @DataIgnore
+    private List<Object> attachments = new ArrayList<>();
+    @DataIgnore
+    private Date historicalQueryTime;
+    @DataIgnore
+    private Object lastLocation;
+    @DataIgnore
+    private List<String> rfis;
 
     public Profile() {
         setJsonType(ProfileJsonType.Draft);
@@ -125,12 +134,12 @@ public class Profile extends ProfileAndTargetGroup {
         this.activeUntil = activeUntil;
     }
 
-    public Integer getEntityCount() {
-        return entityCount;
+    public Integer getIdentifierCount() {
+        return identifierCount;
     }
 
-    public void setEntityCount(Integer entityCount) {
-        this.entityCount = entityCount;
+    public void setIdentifierCount(Integer identifierCount) {
+        this.identifierCount = identifierCount;
     }
 
     public Profile getParent() {
@@ -219,5 +228,37 @@ public class Profile extends ProfileAndTargetGroup {
 
     public void setFileIds(ArrayList<String> fileIds) {
         this.fileIds = fileIds;
+    }
+
+    public List<Object> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<Object> attachments) {
+        this.attachments = attachments;
+    }
+
+    public Date getHistoricalQueryTime() {
+        return historicalQueryTime;
+    }
+
+    public void setHistoricalQueryTime(Date historicalQueryTime) {
+        this.historicalQueryTime = historicalQueryTime;
+    }
+
+    public Object getLastLocation() {
+        return lastLocation;
+    }
+
+    public void setLastLocation(Object lastLocation) {
+        this.lastLocation = lastLocation;
+    }
+
+    public List<String> getRfis() {
+        return rfis;
+    }
+
+    public void setRfis(List<String> rfis) {
+        this.rfis = rfis;
     }
 }

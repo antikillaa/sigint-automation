@@ -75,7 +75,7 @@ public class APIProfileSteps extends APISteps {
         assertTrue(APITargetGroupSteps.equalsTargetGroups(actual.getGroups(), expected.getGroups()));
 
         assertEquals(expected.getEntities(), actual.getEntities());
-        //FIXME Assert.assertEquals(expected.getEntityCount(), actual.getEntityCount());
+        //FIXME Assert.assertEquals(expected.getIdentifierCount(), actual.getIdentifierCount());
 
         assertEquals(expected.getJsonType(), actual.getJsonType());
         assertEquals(expected.getCategory(), actual.getCategory());
@@ -172,7 +172,7 @@ public class APIProfileSteps extends APISteps {
 
         Profile updatedProfile = getRandomProfile();
         updatedProfile.setId(profile.getId());
-        updatedProfile.setGroups(profile.getGroups());
+        updatedProfile.setFileIds(profile.getFileIds());
         context.put("profileDraft", updatedProfile);
 
         draftService.update(updatedProfile);
