@@ -22,9 +22,9 @@ Examples:
 Scenario: API.Publishing of new profile draft
 When I send create profile draft request
 Then Request is successful
-When I send create target group request
+When I send create finder file request
 Then Request is successful
-When I add profile draft to target group
+When I add profile draft to finder file
 When I send publish profile draft request
 Then Request is successful
 
@@ -34,16 +34,16 @@ And Profile is correct
 
 When I send delete profile request
 Then Request is successful
-When I send delete target group request
+When I send delete finder file request
 Then Request is successful
 
 
-Scenario: Deleting of profile
+Scenario: API.Deleting of profile
 When I send create profile draft request
 Then Request is successful
-When I send create target group request
+When I send create finder file request
 Then Request is successful
-When I add profile draft to target group
+When I add profile draft to finder file
 When I send publish profile draft request
 Then Request is successful
 
@@ -52,21 +52,21 @@ Then Request is successful
 
 When I send delete profile request
 Then Request is successful
-When I send delete target group request
+When I send delete finder file request
 Then Request is successful
 
 Scenario: API.Merge two profiles into one
 When I send create profile draft request
 Then Request is successful
-When I send create target group request
+When I send create finder file request
 Then Request is successful
-When I add profile draft to target group
+When I add profile draft to finder file
 When I send publish profile draft request
 Then Request is successful
 
 When I send create profile draft request
 Then Request is successful
-When I add profile draft to target group
+When I add profile draft to finder file
 When I send publish profile draft request
 Then Request is successful
 
@@ -91,13 +91,13 @@ Then Request is unsuccessful
 
 When I send delete profile request
 Then Request is successful
-When I send delete target group request
+When I send delete finder file request
 Then Request is successful
 
 
 Scenario: Add hit(s) for existing targets
 !-- find first profiler
-When I search target group members by query:<to_target>
+When I search finder file members by query:<to_target>
 Then Request is successful
 When Get profiles from targets search results
 Then Profile list size > 0
@@ -105,7 +105,7 @@ When get random profile from profile list
 And I send get profile details request
 And send get profile identifierAggregations request
 !-- find second profiler
-When I search target group members by query:<from_target>
+When I search finder file members by query:<from_target>
 Then Request is successful
 When Get profiles from targets search results
 Then Profile list size > 0
@@ -137,9 +137,9 @@ Examples:
 Scenario: Get profile summary
 When I send create profile draft request
 Then Request is successful
-When I send create target group request
+When I send create finder file request
 Then Request is successful
-When I add profile draft to target group
+When I add profile draft to finder file
 When I send publish profile draft request
 Then Request is successful
 
@@ -149,16 +149,16 @@ And Profile is correct
 
 When I send delete profile request
 Then Request is successful
-When I send delete target group request
+When I send delete finder file request
 Then Request is successful
 
 
 Scenario: VoicePrint from manual audio
 When I send create profile draft request
 Then Request is successful
-When I send create target group request
+When I send create finder file request
 Then Request is successful
-When I add profile draft to target group
+When I add profile draft to finder file
 When I send publish profile draft request
 Then Request is successful
 
