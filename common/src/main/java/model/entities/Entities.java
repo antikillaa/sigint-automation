@@ -26,6 +26,7 @@ public class Entities {
     private static DesignationList designations;
     private static DesignationMappingList designationMappings;
     private static CBEntityList cbEntities;
+    private static FinderFileList cbFinderFiles;
 
     public static EntityList<DesignationMapping> getDesignationMappings() {
         if (designationMappings == null) {
@@ -164,5 +165,12 @@ public class Entities {
             cbEntities = new CBEntityList();
         }
         return cbEntities;
+    }
+
+    public static FinderFileList getFinderFiles() {
+        if (cbFinderFiles == null) {
+            cbFinderFiles = new FinderFileList();
+        }
+        return cbFinderFiles;
     }
 }

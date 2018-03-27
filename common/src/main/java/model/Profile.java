@@ -3,8 +3,6 @@ package model;
 import data_for_entity.annotations.DataIgnore;
 import data_for_entity.annotations.DataProvider;
 import data_for_entity.annotations.WithCollectionSize;
-import data_for_entity.annotations.WithDataDependencies;
-import data_for_entity.data_providers.RandomDateProvider;
 import data_for_entity.data_providers.profiler.ClassificationProvider;
 import data_for_entity.data_providers.profiler.CriminalRecordProvider;
 import data_for_entity.data_providers.profiler.ProfileCategoryProvider;
@@ -27,15 +25,16 @@ public class Profile extends ProfileAndTargetGroup {
     @DataIgnore
     private ArrayList<TargetGroup> groups = new ArrayList<>();
     @DataIgnore
+    private ArrayList<String> fileIds = new ArrayList<>();
+    @DataIgnore
     private Boolean target;
     @DataProvider(ProfileCategoryProvider.class)
-    //@JsonDeserialize(using = ProfileCategoryDeserializer.class)
     private String category;
     @DataIgnore
     private ProfileConsolidatedAttributes consolidatedAttributes;
-    @WithDataDependencies(provider = TargetStatusProvider.class, fields = {"activeUntil"})
+    @DataProvider(TargetStatusProvider.class)
     private TargetStatus active;
-    @DataProvider(RandomDateProvider.class)
+    @DataIgnore
     private Date activeUntil;
     @DataIgnore
     private Integer entityCount = 0;
@@ -212,5 +211,13 @@ public class Profile extends ProfileAndTargetGroup {
 
     public void setVoiceModelId(String voiceModelId) {
         this.voiceModelId = voiceModelId;
+    }
+
+    public ArrayList<String> getFileIds() {
+        return fileIds;
+    }
+
+    public void setFileIds(ArrayList<String> fileIds) {
+        this.fileIds = fileIds;
     }
 }
