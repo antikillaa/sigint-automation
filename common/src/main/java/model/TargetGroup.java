@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@Deprecated
 public class TargetGroup extends ProfileAndTargetGroup {
 
     @DataIgnore

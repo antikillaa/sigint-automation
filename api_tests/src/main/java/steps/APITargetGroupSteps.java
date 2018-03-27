@@ -72,9 +72,7 @@ public class APITargetGroupSteps extends APISteps {
             Verify.shouldBe(Conditions.equals(expected.getProfiles(), actual.getProfiles()));
             Verify.shouldBe(Conditions.equals(expected.getThreatScore(), actual.getThreatScore()));
             Verify.shouldBe(Conditions.equals(expected.isDeleted(), actual.isDeleted()));
-            Verify.shouldBe(Conditions.equals(expected.getAssignedTeams(), expected.getAssignedTeams()));
-            Verify.shouldBe(Conditions.equals(expected.getAssignedUsers(), expected.getAssignedUsers()));
-            Verify.shouldBe(Conditions.equals(expected.getAssignmentPriority(), expected.getAssignmentPriority()));
+
             // Note: new targetGroups keep description in TargetGroupProperties
             Assert.assertTrue(expected.getDescription() == null ?
                     Objects.equals(expected.getProperties().getDescription(), actual.getProperties().getDescription()) :

@@ -11,7 +11,6 @@ import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.junit.Assert;
 import services.ProfileDraftService;
 import services.ProfileService;
 import services.TargetGroupService;
@@ -30,6 +29,7 @@ import java.util.stream.Collectors;
 import static ingestion.IngestionService.INJECTIONS_FILE;
 import static json.JsonConverter.jsonToObject;
 import static json.JsonConverter.toJsonString;
+import static org.junit.Assert.*;
 import static steps.APITargetGroupSteps.getRandomTargetGroup;
 import static utils.DateHelper.isTimeout;
 import static utils.FileHelper.readTxtFile;
@@ -67,26 +67,26 @@ public class APIProfileSteps extends APISteps {
     }
 
     private void profilesShouldBeEquals(Profile expected, Profile actual) {
-        Assert.assertEquals(expected.getName(), actual.getName());
-        Assert.assertEquals(expected.getType(), actual.getType());
-        Assert.assertEquals(expected.getActive(), actual.getActive());
-        Assert.assertEquals(expected.getProperties().getDescription(), actual.getProperties().getDescription());
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getType(), actual.getType());
+        assertEquals(expected.getActive(), actual.getActive());
+        assertEquals(expected.getProperties().getDescription(), actual.getProperties().getDescription());
 
-        Assert.assertTrue(APITargetGroupSteps.equalsTargetGroups(actual.getGroups(), expected.getGroups()));
+        assertTrue(APITargetGroupSteps.equalsTargetGroups(actual.getGroups(), expected.getGroups()));
 
-        Assert.assertEquals(expected.getEntities(), actual.getEntities());
+        assertEquals(expected.getEntities(), actual.getEntities());
         //FIXME Assert.assertEquals(expected.getEntityCount(), actual.getEntityCount());
 
-        Assert.assertEquals(expected.getJsonType(), actual.getJsonType());
-        Assert.assertEquals(expected.getCategory(), actual.getCategory());
-        Assert.assertEquals(expected.getMergingProfilesIDs(), actual.getMergingProfilesIDs());
-        Assert.assertEquals(expected.getCriminalRecord(), actual.getCriminalRecord());
-        Assert.assertEquals(expected.getClassification(), actual.getClassification());
+        assertEquals(expected.getJsonType(), actual.getJsonType());
+        assertEquals(expected.getCategory(), actual.getCategory());
+        assertEquals(expected.getMergingProfilesIDs(), actual.getMergingProfilesIDs());
+        assertEquals(expected.getCriminalRecord(), actual.getCriminalRecord());
+        assertEquals(expected.getClassification(), actual.getClassification());
 
         if (expected.getTarget() == null) {
-            Assert.assertTrue(actual.getTarget() == null || !actual.getTarget());
+            assertTrue(actual.getTarget() == null || !actual.getTarget());
         } else {
-            Assert.assertEquals(expected.getTarget(), actual.getTarget());
+            assertEquals(expected.getTarget(), actual.getTarget());
         }
     }
 
@@ -146,22 +146,22 @@ public class APIProfileSteps extends APISteps {
     public void profileDraftsListMoreThan(String criteria, String value) {
         List<Profile> profiles = context.get("profileDraftsList", List.class);
 
-        Assert.assertTrue(compareByCriteria(criteria, profiles.size(), Integer.valueOf(value)));
+        assertTrue(compareByCriteria(criteria, profiles.size(), Integer.valueOf(value)));
     }
 
     @Then("Profile list size $criteria $value")
     public void profileListMoreThan(String criteria, String value) {
         List<Profile> profiles = context.get("profileList", List.class);
 
-        Assert.assertTrue(compareByCriteria(criteria, profiles.size(), Integer.valueOf(value)));
+        assertTrue(compareByCriteria(criteria, profiles.size(), Integer.valueOf(value)));
     }
 
-    @When("I add profile draft to target group")
-    public void addProfileDraftToTargetGroup() {
+    @When("I add profile draft to finder file")
+    public void addProfileDraftToFinderFile() {
         Profile profile = Entities.getProfiles().getLatest();
-        TargetGroup targetGroup = Entities.getTargetGroups().getLatest();
+        FinderFile finderFile = Entities.getFinderFiles().getLatest();
 
-        profile.getGroups().add(targetGroup);
+        profile.getFileIds().add(finderFile.getId());
 
         context.put("profileDraft", profile);
     }
@@ -181,11 +181,11 @@ public class APIProfileSteps extends APISteps {
     @When("I send merge two profile into one request")
     public void mergeTwoProfileIntoOne() {
         EntityList<Profile> profileEntityList = Entities.getProfiles();
-        Assert.assertTrue("Profile EntityList size shouldHave at least 2 profiles", profileEntityList.size() > 1);
+        assertTrue("Profile EntityList size shouldHave at least 2 profiles", profileEntityList.size() > 1);
         Profile firstProfile = profileEntityList.getLatest();
         Profile secondProfile = profileEntityList.getEntities().get(profileEntityList.size() - 2);
-        Assert.assertNotNull(firstProfile.getId());
-        Assert.assertNotNull(secondProfile.getId());
+        assertNotNull(firstProfile.getId());
+        assertNotNull(secondProfile.getId());
 
         context.put("firstProfileToMerge", firstProfile);
         context.put("secondProfileToMerge", secondProfile);
@@ -244,15 +244,15 @@ public class APIProfileSteps extends APISteps {
 
         switch (identifierType) {
             case PHONE_NUMBER:
-                Assert.assertTrue(injections.getPhones().add(getRandomItemFromList(identifiersList)));
+                assertTrue(injections.getPhones().add(getRandomItemFromList(identifiersList)));
                 break;
             case IMSI:
                 List<Long> imsis = identifiersList.stream().map(Long::valueOf).collect(Collectors.toList());
-                Assert.assertTrue(injections.getImsis().add(getRandomItemFromList(imsis)));
+                assertTrue(injections.getImsis().add(getRandomItemFromList(imsis)));
                 break;
             case IMEI:
                 List<Long> imeis = identifiersList.stream().map(Long::valueOf).collect(Collectors.toList());
-                Assert.assertTrue(injections.getImeis().add(getRandomItemFromList(imeis)));
+                assertTrue(injections.getImeis().add(getRandomItemFromList(imeis)));
                 break;
             default:
                 throw new AssertionError("Unsupported identifierType:" + identifierType);
@@ -297,7 +297,7 @@ public class APIProfileSteps extends APISteps {
                 .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
                 .forEach(identifier -> hitCount[0] += identifier.getTargetHitsCount());
 
-        Assert.assertTrue(hitCount[0].equals(1));
+        assertTrue(hitCount[0].equals(1));
     }
 
     @Given("Find or create test target from json:$target_file")
@@ -410,8 +410,8 @@ public class APIProfileSteps extends APISteps {
         FileMetaData fileMetaData = context.get("fileMetaData", FileMetaData.class);
 
         Pattern pattern = Pattern.compile("(/api/upload-platform/files/).*(/content)");
-        Assert.assertTrue(pattern.matcher(profile.getUploadedImage()).find());
-        Assert.assertTrue(pattern.matcher(fileMetaData.getFileId()).find());
+        assertTrue(pattern.matcher(profile.getUploadedImage()).find());
+        assertTrue(pattern.matcher(fileMetaData.getFileId()).find());
     }
 
     @When("upload audio file to profile")
@@ -422,7 +422,7 @@ public class APIProfileSteps extends APISteps {
         File audioFile = files.stream()
                 .filter(file -> file.getName().contains(".wav"))
                 .findFirst().orElse(null);
-        Assert.assertNotNull(audioFile);
+        assertNotNull(audioFile);
 
         OperationResult<VoiceFile> result = draftService.uploadAudioFile(draft, audioFile);
 
@@ -446,7 +446,7 @@ public class APIProfileSteps extends APISteps {
             DateHelper.waitTime(POLLING_INTERVAL);
             entities.setEntities(draftService.getVoiceEvents(draft).getEntity());
         }
-        Assert.assertNotNull("Unable process uploaded audio voice", entities.getEntity(voiceFile.getVoiceEventId()));
+        assertNotNull("Unable process uploaded audio voice", entities.getEntity(voiceFile.getVoiceEventId()));
 
         context.put("voiceEvents", entities.getEntities());
     }
@@ -467,13 +467,14 @@ public class APIProfileSteps extends APISteps {
         CBEntity voiceEvent = voiceEvents.stream()
                 .filter(cbEntity -> cbEntity.getAttributes() != null)
                 .findAny().orElse(null);
-        Assert.assertNotNull("Unable find voiceEvent with filled attributes", voiceEvent);
+        assertNotNull("Unable find voiceEvent with filled attributes", voiceEvent);
         log.info(toJsonString(voiceEvent));
 
         // create VoiceID from random channel of random voice event in this target
         VoiceRecord record = new VoiceRecord();
         record.setId(voiceEvent.getId());
         List<String> channelId = (ArrayList<String>) voiceEvent.getAttributes().get("CHANNEL_ID");
+        assertFalse("CHANNEL_ID field is empty!\n" + toJsonString(voiceEvent), channelId.isEmpty());
         record.setChannel(Integer.valueOf(getRandomItemFromList(channelId)));
 
         Voice voice = new Voice();
@@ -489,6 +490,6 @@ public class APIProfileSteps extends APISteps {
         Voice voice = context.get("voice", Voice.class);
         Profile profile = context.get("profile", Profile.class);
 
-        Assert.assertEquals(voice.getId(), profile.getVoiceModelId());
+        assertEquals(voice.getId(), profile.getVoiceModelId());
     }
 }

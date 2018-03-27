@@ -2,6 +2,6 @@ package model;
 
 public enum ProfileJsonType {
 
-    Profile, Draft, TargetGroup, Identifier, IdentifierSummary, VoiceFile
+    Profile, Draft, TargetGroup, Identifier, IdentifierSummary, VoiceFile, File, EnrichedFile
 
 }
