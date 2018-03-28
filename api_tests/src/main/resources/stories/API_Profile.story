@@ -16,7 +16,7 @@ Then Profile contain uploaded image
 Examples:
 | target | image |
 | profiles/Darkwing_Duck.json | profiles/Darkwing_Duck.jpg |
-| profiles/Launchpad_McQuack.json | profiles/Launchpad_McQuack.jpeg |
+| profiles/Launchpad_McQuack.json | profiles/Launchpad_McQuack.jpg |
 
 
 Scenario: API.Publishing of new profile draft

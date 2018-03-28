@@ -1,10 +1,7 @@
 package steps;
 
 import http.OperationResult;
-import model.FinderFile;
-import model.FinderFileSearchFilter;
-import model.Profile;
-import model.ProfileAndTargetGroup;
+import model.*;
 import model.entities.Entities;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -185,7 +182,24 @@ public class APIFinderFileSteps extends APISteps {
     }
 
 
+    @When("I search finder file members by query:$name")
+    public void searchProfileByName(String name) {
+        FinderFileSearchFilter filter = new FinderFileSearchFilter();
+        filter.setQuery(name).setSortField("name").setPageSize(100);
 
+        OperationResult<List<ProfileAndTargetGroup>> operationResult = service.searchFileMembers(filter);
+        context.put("operationResult", operationResult);
+    }
+
+
+    @When("Get profiles from targets search results")
+    public void extractProfiles() {
+        OperationResult<List<ProfileAndTargetGroup>> operationResult =
+                context.get("operationResult", OperationResult.class);
+
+        List<Profile> profiles = service.extractProfilesFromResponse(operationResult);
+        context.put("profileList", profiles);
+    }
 
 
 //    @Then("Viewed target group is correct")
@@ -251,26 +265,6 @@ public class APIFinderFileSteps extends APISteps {
 //
 //        Assert.assertTrue(groups.size() > Integer.valueOf(size));
 //    }
-//
-//
-//    @When("I search target group members by query:$name")
-//    public void searchProfileByName(String name) {
-//        TargetGroupSearchFilter filter = new TargetGroupSearchFilter();
-//        filter.setQuery(name).setSortField("name");
-//
-//        OperationResult<List<ProfileAndTargetGroup>> operationResult = service.searchTargetGroupMembers(filter);
-//        context.put("operationResult", operationResult);
-//    }
-//
-//    @When("Get profiles from targets search results")
-//    public void extractProfiles() {
-//        OperationResult<List<ProfileAndTargetGroup>> operationResult =
-//                context.get("operationResult", OperationResult.class);
-//
-//        List<Profile> profiles = service.extractProfilesFromResponse(operationResult);
-//        context.put("profileList", profiles);
-//    }
-//
 //
 //
 //   /**

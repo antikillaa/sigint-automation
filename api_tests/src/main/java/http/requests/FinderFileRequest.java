@@ -2,8 +2,8 @@ package http.requests;
 
 import http.HttpMethod;
 import model.FinderFile;
+import model.FinderFileSearchFilter;
 import model.SearchFilter;
-import model.TargetGroupSearchFilter;
 import org.apache.log4j.Logger;
 
 import java.io.UnsupportedEncodingException;
@@ -59,7 +59,7 @@ public class FinderFileRequest extends HttpRequest {
     }
 
     public FinderFileRequest search(SearchFilter searchFilter) {
-        TargetGroupSearchFilter filter = (TargetGroupSearchFilter) searchFilter;
+        FinderFileSearchFilter filter = (FinderFileSearchFilter) searchFilter;
         String params;
         try {
             params = "/search?page=" + filter.getPage() +
