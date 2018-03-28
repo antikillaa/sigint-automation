@@ -302,15 +302,6 @@ public class APITargetGroupSteps extends APISteps {
         context.put("operationResult", operationResult);
     }
 
-    @When("Get profiles from targets search results")
-    public void extractProfiles() {
-        OperationResult<List<ProfileAndTargetGroup>> operationResult =
-                context.get("operationResult", OperationResult.class);
-
-        List<Profile> profiles = service.extractProfilesFromResponse(operationResult);
-        context.put("profileList", profiles);
-    }
-
     @When("I delete all empty groups")
     public void deleteAllEmptyGroup() {
         getListOfTargetGroupsRequest();

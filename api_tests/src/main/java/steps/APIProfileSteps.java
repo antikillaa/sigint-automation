@@ -11,9 +11,9 @@ import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import services.FinderFileService;
 import services.ProfileDraftService;
 import services.ProfileService;
-import services.TargetGroupService;
 import utils.DateHelper;
 import verification.profiler.ProfileMergeVerification;
 
@@ -30,7 +30,7 @@ import static ingestion.IngestionService.INJECTIONS_FILE;
 import static json.JsonConverter.jsonToObject;
 import static json.JsonConverter.toJsonString;
 import static org.junit.Assert.*;
-import static steps.APITargetGroupSteps.getRandomTargetGroup;
+import static steps.APIFinderFileSteps.getRandomFinderFile;
 import static utils.DateHelper.isTimeout;
 import static utils.FileHelper.readTxtFile;
 import static utils.RandomGenerator.getRandomItemFromList;
@@ -306,24 +306,33 @@ public class APIProfileSteps extends APISteps {
 
         // find target in system
         log.info("Try find target:" + target.getName() + " in system...");
-        TargetGroupService groupService = new TargetGroupService();
-        TargetGroupSearchFilter filter = new TargetGroupSearchFilter();
-        filter.setQuery(target.getName()).setSortField("name");
-        OperationResult<List<ProfileAndTargetGroup>> operationResult = groupService.searchTargetGroupMembers(filter);
-        List<Profile> profiles = groupService.extractProfilesFromResponse(operationResult);
+        FinderFileService fileService = new FinderFileService();
+        FinderFileSearchFilter filter = new FinderFileSearchFilter();
+        filter
+                .setQuery(target.getName())
+                .setSortField("name")
+                .setPageSize(100);
+
+        OperationResult<List<ProfileAndTargetGroup>> operationResult = fileService.searchFileMembers(filter);
+        Profile finalTarget = target;
+        List<Profile> profiles = fileService
+                .extractProfilesFromResponse(operationResult)
+                .stream()
+                .filter(profile -> profile.getName().contains(finalTarget.getName()))
+                .collect(Collectors.toList());
 
         if (profiles.isEmpty()) {
             log.info("Target not found, create and publish target from:" + targetFile);
             // create draft target
             OperationResult<Profile> result = draftService.add(target);
             if (result.isSuccess()) {
-                // add target to group
+                // add target to file
                 target = result.getEntity();
-                OperationResult<TargetGroup> groupOperationResult = groupService.add(getRandomTargetGroup());
-                if (groupOperationResult.isSuccess()) {
-                    target.getGroups().add(groupOperationResult.getEntity());
+                OperationResult<FinderFile> fileOperationResult = fileService.add(getRandomFinderFile());
+                if (fileOperationResult.isSuccess()) {
+                    target.getFileIds().add(fileOperationResult.getEntity().getId());
                 } else {
-                    throw new OperationResultError(groupOperationResult);
+                    throw new OperationResultError(fileOperationResult);
                 }
                 // publish target
                 result = draftService.publish(target);

@@ -4,7 +4,6 @@ import errors.OperationResultError;
 import http.G4Response;
 import http.OperationResult;
 import http.requests.TargetGroupRequest;
-import model.Profile;
 import model.ProfileAndTargetGroup;
 import model.SearchFilter;
 import model.TargetGroup;
@@ -13,13 +12,9 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static json.JsonConverter.jsonToObject;
 import static json.JsonConverter.jsonToObjectsList;
-import static json.JsonConverter.toJsonString;
 
 public class TargetGroupService implements EntityService<TargetGroup> {
 
@@ -147,13 +142,5 @@ public class TargetGroupService implements EntityService<TargetGroup> {
         } else {
             return new OperationResult<>(response);
         }
-    }
-
-    public List<Profile> extractProfilesFromResponse(OperationResult<List<ProfileAndTargetGroup>> result) {
-        List<Object> list = jsonToObjectsList(result.getMessage(), Object[].class, "data");
-        return list.stream()
-                .filter(o ->  ((LinkedHashMap) o).get("jsonType").equals("Profile"))
-                .map(o -> jsonToObject(toJsonString(o), Profile.class))
-                .collect(Collectors.toList());
     }
 }

@@ -98,7 +98,7 @@ public class FinderFileService implements EntityService<FinderFile> {
         return new OperationResult<>(response, ProfileAndTargetGroup[].class, "data");
     }
 
-    public OperationResult<List<ProfileAndTargetGroup>> searchTargetGroupMembers(SearchFilter filter) {
+    public OperationResult<List<ProfileAndTargetGroup>> searchFileMembers(SearchFilter filter) {
         log.info("Get list of targets and finder files");
         G4Response response = g4HttpClient.sendRequest(request.search(filter));
 
@@ -115,7 +115,7 @@ public class FinderFileService implements EntityService<FinderFile> {
     public List<Profile> extractProfilesFromResponse(OperationResult<List<ProfileAndTargetGroup>> result) {
         List<Object> list = jsonToObjectsList(result.getMessage(), Object[].class, "data");
         return list.stream()
-                .filter(o ->  ((LinkedHashMap) o).get("jsonType").equals("Profile"))
+                .filter(o ->  ((LinkedHashMap) o).get("type").equals("Profile"))
                 .map(o -> jsonToObject(toJsonString(o), Profile.class))
                 .collect(Collectors.toList());
     }
