@@ -7,12 +7,11 @@ import model.*;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import services.SearchService;
+import utils.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static error_reporter.ErrorReporter.raiseError;
 import static json.JsonConverter.toJsonString;
@@ -411,22 +410,28 @@ public class APISearchSteps extends APISteps {
         assertNull("Search by:" + query + " return:" + toJsonString(wrongEntity), wrongEntity);
     }
 
-    @When("I send CB search count request - query:$query, source:$source, objectType:$objectType")
-    public void cbSearchResultCount(String query, String source, String objectType) {
-        CBSearchFilter filter = new CBSearchFilter(source, objectType, query);
+    @When("I send CB search count request - query:$query, objectType:$objectType, sources:$source")
+    public void cbSearchResultCount(String query, String objectType, String sources) {
+        List<DataSourceCategory> sourceCategories = new ArrayList<>();
+        Arrays.stream(StringUtils.trimSpaces(sources.split(",")))
+                .forEach(s -> sourceCategories.add(DataSourceCategory.valueOf(s)));
+        CBSearchFilter filter = new CBSearchFilter(sourceCategories, objectType, query);
 
-        OperationResult<CBSearchResult> result = service.count(filter);
+        OperationResult<CBSearchResult[]> result = service.count(filter);
 
         context.put("CBSearchResult", result.getEntity());
         context.put("searchQuery", query);
     }
 
-    @Then("TotalCount in search result $criteria $size")
+    @Then("TotalCount's in search results $criteria $size")
     public void SearchResultTolalCountShouldBe(String criteria, String size) {
-        CBSearchResult cbSearchResult = context.get("CBSearchResult", CBSearchResult.class);
+        CBSearchResult[] cbSearchResult = context.get("CBSearchResult", CBSearchResult[].class);
 
         int expectedCount = Integer.valueOf(size);
-        boolean condition = compareByCriteria(criteria, cbSearchResult.getTotalCount(), expectedCount);
-        assertTrue("Expected search results count " + criteria + " " + size + ", but was: " + cbSearchResult.getTotalCount(), condition);
+        List<CBSearchResult> collect = Arrays.stream(cbSearchResult)
+                .filter(result -> !compareByCriteria(criteria, result.getTotalCount(), expectedCount))
+                .collect(Collectors.toList());
+
+        assertTrue("Expected search results count " + criteria + " " + size + ", but was: " + toJsonString(collect), collect.isEmpty());
     }
 }

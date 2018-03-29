@@ -11,6 +11,7 @@ import model.SearchFilter;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -63,14 +64,16 @@ public class SearchService implements EntityService<CBEntity> {
         throw new NotImplementedException("");
     }
 
-    public OperationResult<CBSearchResult> count(CBSearchFilter filter) {
+    public OperationResult<CBSearchResult[]> count(CBSearchFilter filter) {
         log.info("CB_Search_count with filter: " + toJsonString(filter));
         G4Response response = g4HttpClient.sendRequest(request.count(filter));
         log.info(response.getMessage());
 
-        OperationResult<CBSearchResult> result = new OperationResult<>(response, CBSearchResult.class);
-        if (result.isSuccess() && Objects.equals(result.getEntity().getStatus().getCode(), CBSearchResult.CodeStatus.SUCCESS)) {
-            return result;
+        OperationResult<CBSearchResult[]> result = new OperationResult<>(response, CBSearchResult[].class);
+        if (result.isSuccess() &&
+                Arrays.stream(result.getEntity())
+                        .allMatch(r -> Objects.equals(r.getStatus().getCode(), CBSearchResult.CodeStatus.SUCCESS))) {
+                return result;
         } else {
             throw new OperationResultError(result);
         }

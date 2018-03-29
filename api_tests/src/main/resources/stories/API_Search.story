@@ -239,16 +239,11 @@ Examples:
 
 
 Scenario: POST /api/search/count
-When I send CB search count request - query:<query>, source:<source>, objectType:<objectType>
+When I send CB search count request - query:<query>, objectType:<objectType>, sources:<source>
 Then Request is successful
-And TotalCount in search result <criteria> <size>
+And TotalCount's in search results <criteria> <size>
 
 Examples:
-| source | objectType | query | criteria | size |
-| SIGINT | event      | | > | 0 |
-| SIGINT | entity     | | > | 0 |
-| OSINT  | event      | | > | 0 |
-| OSINT  | entity     | | > | 0 |
-| GOVINT | event      | | > | 0 |
-| GOVINT | entity     | | > | 0 |
-| PROFILER | entity   | | > | 0 |
+| source                            | objectType| query | criteria  | size  |
+| SIGINT, OSINT, GOVINT             | event     |       | >         | 0     |
+| SIGINT, OSINT, GOVINT, PROFILER   | entity    |       | >         | 0     |

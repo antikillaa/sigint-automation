@@ -40,6 +40,12 @@ public class CBSearchFilter {
         this.objectType = SearchObjectType.valueOf(objectType);
     }
 
+    public CBSearchFilter(List<DataSourceCategory> sources, String objectType, String query) {
+        this.query = query;
+        this.setSourceType(sources);
+        this.objectType = SearchObjectType.valueOf(objectType);
+    }
+
     public SearchObjectType getObjectType() {
         return objectType;
     }
@@ -66,6 +72,10 @@ public class CBSearchFilter {
 
     public List<DataSourceCategory> getSourceType() {
         return sourceType;
+    }
+
+    public void setSourceType(List<DataSourceCategory> sourceTypes) {
+        this.sourceType = sourceTypes;
     }
 
     public void setSourceType(String sourceType) {

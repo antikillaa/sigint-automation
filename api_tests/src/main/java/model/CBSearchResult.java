@@ -4,6 +4,7 @@ import java.util.List;
 
 public class CBSearchResult {
 
+    private DataSourceCategory eventFeed;
     private Integer totalCount;
     private Integer pageSize;
     private Integer page;
@@ -17,6 +18,22 @@ public class CBSearchResult {
 
     public void setTotalCount(Integer totalCount) {
         this.totalCount = totalCount;
+    }
+
+    public ResponseStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ResponseStatus status) {
+        this.status = status;
+    }
+
+    public DataSourceCategory getEventFeed() {
+        return eventFeed;
+    }
+
+    public void setEventFeed(DataSourceCategory eventFeed) {
+        this.eventFeed = eventFeed;
     }
 
     public Integer getPageSize() {
@@ -41,14 +58,6 @@ public class CBSearchResult {
 
     public void setData(List<CBEntity> data) {
         this.data = data;
-    }
-
-    public ResponseStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ResponseStatus status) {
-        this.status = status;
     }
 
     public Boolean getPartialResult() {
