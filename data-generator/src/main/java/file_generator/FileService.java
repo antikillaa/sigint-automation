@@ -1,6 +1,6 @@
 package file_generator;
 
-import model.G4Entity;
+import ae.pegasus.framework.model.G4Entity;
 import model.G4File;
 import org.apache.log4j.Logger;
 

@@ -5,7 +5,7 @@ import model.FSMS;
 import model.G4Record;
 import model.GenerationMatrix;
 import model.GenerationMatrixRow;
-import utils.RandomGenerator;
+import ae.pegasus.framework.utils.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;

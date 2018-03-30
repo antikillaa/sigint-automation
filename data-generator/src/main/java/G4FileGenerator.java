@@ -1,4 +1,4 @@
-import model.G4Entity;
+import ae.pegasus.framework.model.G4Entity;
 import data_generator.DataGenerator;
 import file_generator.FileGenerator;
 import model.*;

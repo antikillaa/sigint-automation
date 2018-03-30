@@ -1,10 +1,10 @@
 package emailing.email;
 
-import app_context.properties.G4Properties;
+import ae.pegasus.framework.app_context.properties.G4Properties;
 import emailing.email.html_body_builder.FailingContentBuilder;
 import emailing.email.html_body_builder.StableContentBuilder;
 import emailing.email.html_body_builder.StillFailingContentBuilder;
-import error_reporter.ErrorReporter;
+import ae.pegasus.framework.error_reporter.ErrorReporter;
 import jenkins.JenkinsJobsNames;
 import jenkins.JenkinsService;
 import jenkins.JobStatus;

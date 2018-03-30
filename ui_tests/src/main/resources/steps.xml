@@ -3,10 +3,10 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
-    <bean id="loginSteps" class="steps.UILoginSteps" />
-    <bean id="recordsSteps" class="steps.UIRecordsSteps" />
-    <bean id="reportsSteps" class="steps.UIReportsSteps" />
-    <bean id="uiSteps" class="steps.UISteps" />
-    <bean id="testSteps" class="steps.GlobalSteps">
+    <bean id="loginSteps" class="ae.pegasus.framework.steps.UILoginSteps" />
+    <bean id="recordsSteps" class="ae.pegasus.framework.steps.UIRecordsSteps" />
+    <bean id="reportsSteps" class="ae.pegasus.framework.steps.UIReportsSteps" />
+    <bean id="uiSteps" class="ae.pegasus.framework.steps.UISteps" />
+    <bean id="testSteps" class="GlobalSteps">
     </bean>
 </beans>

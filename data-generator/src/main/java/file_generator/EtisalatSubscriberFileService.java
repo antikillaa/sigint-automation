@@ -2,8 +2,8 @@ package file_generator;
 
 import model.EtisalatSubscriberEntry;
 import model.G4File;
-import utils.FileHelper;
-import utils.RandomGenerator;
+import ae.pegasus.framework.utils.FileHelper;
+import ae.pegasus.framework.utils.RandomGenerator;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

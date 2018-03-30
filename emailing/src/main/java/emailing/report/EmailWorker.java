@@ -1,6 +1,6 @@
 package emailing.report;
 
-import app_context.properties.G4Properties;
+import ae.pegasus.framework.app_context.properties.G4Properties;
 import emailing.email.EmailFactory;
 import emailing.email.HtmlEmail;
 import emailing.report.email_senders.EmailSenders;

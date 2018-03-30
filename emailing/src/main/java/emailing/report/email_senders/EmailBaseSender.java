@@ -1,6 +1,6 @@
 package emailing.report.email_senders;
 
-import app_context.properties.G4Properties;
+import ae.pegasus.framework.app_context.properties.G4Properties;
 import app_context.properties.MailProperties;
 import org.apache.log4j.Logger;
 

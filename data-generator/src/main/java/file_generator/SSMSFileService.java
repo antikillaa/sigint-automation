@@ -3,7 +3,7 @@ package file_generator;
 import model.G4File;
 import model.PegasusMediaType;
 import model.SSMS;
-import utils.FileHelper;
+import ae.pegasus.framework.utils.FileHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
