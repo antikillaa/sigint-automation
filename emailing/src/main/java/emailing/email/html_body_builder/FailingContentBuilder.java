@@ -6,8 +6,8 @@ import emailing.html_elements.ElementsFabric;
 import emailing.html_elements.HtmlBuilder;
 import emailing.html_elements.HtmlElement;
 import emailing.html_elements.Style;
-import reporter.ReportResults;
-import reporter.TestCase;
+import ae.pegasus.framework.reporter.ReportResults;
+import ae.pegasus.framework.reporter.TestCase;
 
 public class FailingContentBuilder extends EmailContentBuilder {
     

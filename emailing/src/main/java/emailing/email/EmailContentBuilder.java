@@ -1,6 +1,7 @@
 package emailing.email;
 
-import app_context.properties.G4Properties;
+import ae.pegasus.framework.app_context.properties.G4Properties;
+import ae.pegasus.framework.reporter.ReportResults;
 import app_context.properties.JenkinsProperties;
 import emailing.html_elements.ElementsFabric;
 import emailing.html_elements.HtmlBuilder;
@@ -8,7 +9,6 @@ import emailing.html_elements.HtmlElement;
 import emailing.html_elements.Style;
 import failure_strategy.Statistic;
 import org.apache.log4j.Logger;
-import reporter.ReportResults;
 
 import java.net.URI;
 import java.net.URISyntaxException;

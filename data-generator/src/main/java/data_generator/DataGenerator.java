@@ -1,12 +1,12 @@
 package data_generator;
 
-import data_for_entity.RandomEntities;
+import ae.pegasus.framework.data_for_entity.RandomEntities;
 import data_for_entity.data_providers.data_target.SMSTextProvider;
 import model.FSMS;
 import model.G4Record;
 import model.GenerationMatrix;
 import model.Target;
-import utils.RandomGenerator;
+import ae.pegasus.framework.utils.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;

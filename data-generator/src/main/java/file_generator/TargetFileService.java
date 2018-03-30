@@ -1,6 +1,6 @@
 package file_generator;
 
-import json.JsonConverter;
+import ae.pegasus.framework.json.JsonConverter;
 import model.G4File;
 import model.Target;
 import model.TargetGroup;

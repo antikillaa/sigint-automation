@@ -5,7 +5,7 @@ import emailing.html_elements.ElementsFabric;
 import emailing.html_elements.HtmlBuilder;
 import emailing.html_elements.HtmlElement;
 import emailing.html_elements.Style;
-import reporter.ReportResults;
+import ae.pegasus.framework.reporter.ReportResults;
 
 public class StableContentBuilder extends EmailContentBuilder {
     

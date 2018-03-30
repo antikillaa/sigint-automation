@@ -2,7 +2,7 @@ package file_generator;
 
 import model.DuSubscriberEntry;
 import model.G4File;
-import utils.FileHelper;
+import ae.pegasus.framework.utils.FileHelper;
 
 import java.util.Date;
 import java.util.List;
