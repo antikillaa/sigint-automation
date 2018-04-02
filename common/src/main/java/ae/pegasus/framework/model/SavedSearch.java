@@ -9,7 +9,7 @@ public class SavedSearch extends AbstractEntity {
     private String description;
     private String queryString;
     private Boolean active;
-    private List<TargetGroup> targetGroups;
+    private List<FinderFile> containers;
     private List<String> assignmentTeamIds;
     private List<String> sourceTypeIds;
     private String repeatRange;
@@ -27,13 +27,6 @@ public class SavedSearch extends AbstractEntity {
     private Boolean historical;
     private Integer lastExecutionResultsFound;
 
-    public List<TargetGroup> getTargetGroups() {
-        return targetGroups;
-    }
-
-    public void setTargetGroups(List<TargetGroup> targetGroups) {
-        this.targetGroups = targetGroups;
-    }
 
     public List<String> getAssignmentTeamIds() {
         return assignmentTeamIds;
@@ -193,5 +186,13 @@ public class SavedSearch extends AbstractEntity {
 
     public void setLastExecutionResultsFound(Integer lastExecutionResultsFound) {
         this.lastExecutionResultsFound = lastExecutionResultsFound;
+    }
+
+    public List<FinderFile> getContainers() {
+        return containers;
+    }
+
+    public void setContainers(List<FinderFile> containers) {
+        this.containers = containers;
     }
 }

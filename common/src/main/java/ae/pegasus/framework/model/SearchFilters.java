@@ -49,6 +49,7 @@ public class SearchFilters {
     private List<String> tweetShowing;
     private String twitterAccountId;
     private String twitterUsername;
+    private String twitterMentionHandle;
     private List<String> tweetCountry;
     private RetweetCount retweetCount;
     private String insUsername;
@@ -446,6 +447,14 @@ public class SearchFilters {
 
     public void setRetweetCount(RetweetCount retweetCount) {
         this.retweetCount = retweetCount;
+    }
+
+    public String getTwitterMentionHandle() {
+        return twitterMentionHandle;
+    }
+
+    public void setTwitterMentionHandle(String twitterMentionHandle) {
+        this.twitterMentionHandle = twitterMentionHandle;
     }
 
     public class TargetGroup extends AbstractEntity {

@@ -5,8 +5,8 @@ import java.util.List;
 public class Location {
 
     private LocationType type;
-    private List<Long> coordinates; //[53.84586,24.00425],
-    private Long radius;
+    private List<Double> coordinates;
+    private Double radius;
     private LocationProperties properties;
 
     public LocationType getType() {
@@ -17,19 +17,19 @@ public class Location {
         this.type = type;
     }
 
-    public List<Long> getCoordinates() {
+    public List<Double> getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(List<Long> coordinates) {
+    public void setCoordinates(List<Double> coordinates) {
         this.coordinates = coordinates;
     }
 
-    public Long getRadius() {
+    public Double getRadius() {
         return radius;
     }
 
-    public void setRadius(Long radius) {
+    public void setRadius(Double radius) {
         this.radius = radius;
     }
 
@@ -42,7 +42,7 @@ public class Location {
     }
 
     public class LocationProperties {
-        private String radius_units; // "km"
+        private String radius_units;
 
         public String getRadius_units() {
             return radius_units;
