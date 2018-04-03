@@ -149,4 +149,9 @@ public class ProfileService implements EntityService<Profile> {
         }
         return result;
     }
+
+    public Profile addToFile(Profile profile, FinderFile file) {
+        profile.getFiles().add(new Profile.FinderFile(file.getId(), file.getName()));
+        return profile;
+    }
 }

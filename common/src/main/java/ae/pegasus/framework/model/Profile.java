@@ -26,7 +26,7 @@ public class Profile extends ProfileAndTargetGroup {
     @DataIgnore
     private ArrayList<TargetGroup> groups = new ArrayList<>();
     @DataIgnore
-    private ArrayList<String> fileIds = new ArrayList<>();
+    private ArrayList<FinderFile> files = new ArrayList<>();
     @DataIgnore
     private Boolean target;
     @DataProvider(ProfileCategoryProvider.class)
@@ -222,14 +222,6 @@ public class Profile extends ProfileAndTargetGroup {
         this.voiceModelId = voiceModelId;
     }
 
-    public ArrayList<String> getFileIds() {
-        return fileIds;
-    }
-
-    public void setFileIds(ArrayList<String> fileIds) {
-        this.fileIds = fileIds;
-    }
-
     public List<Object> getAttachments() {
         return attachments;
     }
@@ -260,5 +252,34 @@ public class Profile extends ProfileAndTargetGroup {
 
     public void setRfis(List<String> rfis) {
         this.rfis = rfis;
+    }
+
+    public ArrayList<FinderFile> getFiles() {
+        return files;
+    }
+
+    public void setFiles(ArrayList<FinderFile> files) {
+        this.files = files;
+    }
+
+    public static class FinderFile extends AbstractEntity {
+
+        public FinderFile() {}
+
+        public FinderFile(String id, String name) {
+            setId(id);
+            setName(name);
+        }
+
+        private String name;
+
+        public String getName() {
+            return name;
+        }
+
+        public FinderFile setName(String name) {
+            this.name = name;
+            return this;
+        }
     }
 }

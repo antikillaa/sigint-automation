@@ -161,8 +161,7 @@ public class APIProfileSteps extends APISteps {
         Profile profile = Entities.getProfiles().getLatest();
         FinderFile finderFile = Entities.getFinderFiles().getLatest();
 
-        profile.getFileIds().add(finderFile.getId());
-
+        service.addToFile(profile, finderFile);
         context.put("profileDraft", profile);
     }
 
@@ -172,7 +171,7 @@ public class APIProfileSteps extends APISteps {
 
         Profile updatedProfile = getRandomProfile();
         updatedProfile.setId(profile.getId());
-        updatedProfile.setFileIds(profile.getFileIds());
+        updatedProfile.setFiles(profile.getFiles());
         context.put("profileDraft", updatedProfile);
 
         draftService.update(updatedProfile);
@@ -330,7 +329,7 @@ public class APIProfileSteps extends APISteps {
                 target = result.getEntity();
                 OperationResult<FinderFile> fileOperationResult = fileService.add(getRandomFinderFile());
                 if (fileOperationResult.isSuccess()) {
-                    target.getFileIds().add(fileOperationResult.getEntity().getId());
+                    target = service.addToFile(target, fileOperationResult.getEntity());
                 } else {
                     throw new OperationResultError(fileOperationResult);
                 }
