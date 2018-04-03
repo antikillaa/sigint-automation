@@ -63,6 +63,7 @@ public class SearchFilters {
     private String speechQualityForVoiceIdMatching;
     private List<String> senderCountry;
     private Location location;
+    private String tumblrUsername;
 
     public List<String> getDataSource() {
         return dataSource;
@@ -455,6 +456,14 @@ public class SearchFilters {
 
     public void setTwitterMentionHandle(String twitterMentionHandle) {
         this.twitterMentionHandle = twitterMentionHandle;
+    }
+
+    public String getTumblrUsername() {
+        return tumblrUsername;
+    }
+
+    public void setTumblrUsername(String tumblrUsername) {
+        this.tumblrUsername = tumblrUsername;
     }
 
     public class TargetGroup extends AbstractEntity {
