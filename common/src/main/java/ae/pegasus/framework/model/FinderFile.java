@@ -33,6 +33,8 @@ public class FinderFile extends AbstractEntity {
     private ArrayList<ParentChain> parentChain = new ArrayList<>();
     @DataIgnore
     private String parentFileId;
+    @DataIgnore
+    private Boolean deleted = false;
 
     public ProfileJsonType getType() {
         return type;
@@ -120,6 +122,14 @@ public class FinderFile extends AbstractEntity {
 
     public void setParentFileId(String parentFileId) {
         this.parentFileId = parentFileId;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 
     public static class ParentChain extends AbstractEntity {
