@@ -86,10 +86,10 @@ abstract class ProfileMergeAttributeVerification {
         protected void verifyAttribute(Profile profile1, Profile profile2, Profile mergedProfile) {
             log.info("Verification: Entities of merged profile");
 
-            List<CBEntity> entities = profile1.getEntities();
+            List<SearchRecord> entities = profile1.getEntities();
             entities.addAll(profile2.getEntities());
 
-            for (CBEntity entity : entities) {
+            for (SearchRecord entity : entities) {
                 assertTrue(mergedProfile.getEntities().contains(entity));
             }
         }

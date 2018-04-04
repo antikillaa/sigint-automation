@@ -2,13 +2,13 @@ package ae.pegasus.framework.model;
 
 import java.util.List;
 
-public class CBSearchResult {
+public class SearchResult<T extends SearchEntity> {
 
     private DataSourceCategory eventFeed;
     private Integer totalCount;
     private Integer pageSize;
     private Integer page;
-    private List<CBEntity> data;
+    private List<T> data;
     private ResponseStatus status;
     private Boolean partialResult;
 
@@ -28,14 +28,6 @@ public class CBSearchResult {
         this.status = status;
     }
 
-    public DataSourceCategory getEventFeed() {
-        return eventFeed;
-    }
-
-    public void setEventFeed(DataSourceCategory eventFeed) {
-        this.eventFeed = eventFeed;
-    }
-
     public Integer getPageSize() {
         return pageSize;
     }
@@ -52,11 +44,11 @@ public class CBSearchResult {
         this.page = page;
     }
 
-    public List<CBEntity> getData() {
+    public List<T> getData() {
         return data;
     }
 
-    public void setData(List<CBEntity> data) {
+    public void setData(List<T> data) {
         this.data = data;
     }
 
@@ -68,7 +60,15 @@ public class CBSearchResult {
         this.partialResult = partialResult;
     }
 
-    public class ResponseStatus {
+    public DataSourceCategory getEventFeed() {
+        return eventFeed;
+    }
+
+    public void setEventFeed(DataSourceCategory eventFeed) {
+        this.eventFeed = eventFeed;
+    }
+
+    public static class ResponseStatus {
 
         private Integer httpStatusCode;
         private CodeStatus code;

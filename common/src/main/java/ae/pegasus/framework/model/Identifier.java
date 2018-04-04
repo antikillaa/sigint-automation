@@ -11,6 +11,7 @@ import ae.pegasus.framework.data_for_entity.data_providers.profiler.ValidationSt
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Identifier extends AbstractEntity {
@@ -29,6 +30,10 @@ public class Identifier extends AbstractEntity {
     private ValidationStatus validationStatus;
     @WithDataDependencies(provider = IdentifierValueProvider.class, fields = {"type"})
     private String value;
+    @DataIgnore
+    private String valueHighlight;
+    @DataIgnore
+    private List<String> targets;
 
     public ProfileJsonType getJsonType() {
         return jsonType;
@@ -84,5 +89,21 @@ public class Identifier extends AbstractEntity {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getValueHighlight() {
+        return valueHighlight;
+    }
+
+    public void setValueHighlight(String valueHighlight) {
+        this.valueHighlight = valueHighlight;
+    }
+
+    public List<String> getTargets() {
+        return targets;
+    }
+
+    public void setTargets(List<String> targets) {
+        this.targets = targets;
     }
 }

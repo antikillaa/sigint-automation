@@ -22,7 +22,7 @@ public class Profile extends ProfileAndTargetGroup {
     private String type = "Individual";
     private ProfileProperties properties;
     @DataIgnore
-    private ArrayList<CBEntity> entities = new ArrayList<>();
+    private ArrayList<SearchRecord> entities = new ArrayList<>();
     @DataIgnore
     private ArrayList<TargetGroup> groups = new ArrayList<>();
     @DataIgnore
@@ -86,11 +86,11 @@ public class Profile extends ProfileAndTargetGroup {
         this.properties = properties;
     }
 
-    public ArrayList<CBEntity> getEntities() {
+    public ArrayList<SearchRecord> getEntities() {
         return entities;
     }
 
-    public void setEntities(ArrayList<CBEntity> entities) {
+    public void setEntities(ArrayList<SearchRecord> entities) {
         this.entities = entities;
     }
 

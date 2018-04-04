@@ -463,16 +463,16 @@ public class APIProfileSteps extends APISteps {
     public void createVoiceID() {
         Profile draft = context.get("profileDraft", Profile.class);
 
-        OperationResult<List<CBEntity>> result = draftService.getVoiceEvents(draft);
+        OperationResult<List<SearchRecord>> result = draftService.getVoiceEvents(draft);
         context.put("voiceEvents", result.getEntity());
     }
 
     @When("create voiceID for draft profile")
     public void createVoiceIDForDraftProfile() {
-        List<CBEntity> voiceEvents = context.get("voiceEvents", List.class);
+        List<SearchRecord> voiceEvents = context.get("voiceEvents", List.class);
         Profile draft = context.get("profileDraft", Profile.class);
 
-        CBEntity voiceEvent = voiceEvents.stream()
+        SearchRecord voiceEvent = voiceEvents.stream()
                 .filter(cbEntity -> cbEntity.getAttributes() != null)
                 .findAny().orElse(null);
         assertNotNull("Unable find voiceEvent with filled attributes", voiceEvent);

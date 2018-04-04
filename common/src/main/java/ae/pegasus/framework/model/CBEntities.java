@@ -8,157 +8,166 @@ import java.util.List;
 
 public class CBEntities {
 
-    private List<CBEntity> from = new ArrayList<>();
-    private List<CBEntity> to = new ArrayList<>();
-    private List<CBEntity> cc = new ArrayList<>();
-    private List<CBEntity> bcc = new ArrayList<>();
+    private List<SearchRecord> from = new ArrayList<>();
+    private List<SearchRecord> root = new ArrayList<>();
+    private List<SearchRecord> to = new ArrayList<>();
+    private List<SearchRecord> cc = new ArrayList<>();
+    private List<SearchRecord> bcc = new ArrayList<>();
     @JsonProperty("Ticket")
-    private List<CBEntity> ticket = new ArrayList<>();
+    private List<SearchRecord> ticket = new ArrayList<>();
     @JsonProperty("Identity")
-    private List<CBEntity> identity = new ArrayList<>();
+    private List<SearchRecord> identity = new ArrayList<>();
     @JsonProperty("Payment")
-    private List<CBEntity> payment = new ArrayList<>();
+    private List<SearchRecord> payment = new ArrayList<>();
     @JsonProperty("Reservation")
-    private List<CBEntity> reservation = new ArrayList<>();
-    private List<CBEntity> room = new ArrayList<>();
-    private List<CBEntity> forum = new ArrayList<>();
+    private List<SearchRecord> reservation = new ArrayList<>();
+    private List<SearchRecord> room = new ArrayList<>();
+    private List<SearchRecord> forum = new ArrayList<>();
     @JsonProperty("Email")
-    private List<CBEntity> email = new ArrayList<>();
+    private List<SearchRecord> email = new ArrayList<>();
     @JsonProperty("Visa")
-    private List<CBEntity> visa = new ArrayList<>();
+    private List<SearchRecord> visa = new ArrayList<>();
     @JsonProperty("PhoneNumber")
-    private List<CBEntity> phoneNumber = new ArrayList<>();
+    private List<SearchRecord> phoneNumber = new ArrayList<>();
     @JsonProperty("Membership")
-    private List<CBEntity> membership = new ArrayList<>();
+    private List<SearchRecord> membership = new ArrayList<>();
     @JsonProperty("Passport")
-    private List<CBEntity> passport = new ArrayList<>();
-    private List<CBEntity> unknown = new ArrayList<>();
+    private List<SearchRecord> passport = new ArrayList<>();
+    private List<SearchRecord> unknown = new ArrayList<>();
 
-    public List<CBEntity> getFrom() {
+    public List<SearchRecord> getFrom() {
         return from;
     }
 
-    public void setFrom(List<CBEntity> from) {
+    public void setFrom(List<SearchRecord> from) {
         this.from = from;
     }
 
-    public List<CBEntity> getTo() {
+    public List<SearchRecord> getTo() {
         return to;
     }
 
-    public void setTo(List<CBEntity> to) {
+    public void setTo(List<SearchRecord> to) {
         this.to = to;
     }
 
-    public List<CBEntity> getCc() {
+    public List<SearchRecord> getCc() {
         return cc;
     }
 
-    public void setCc(List<CBEntity> cc) {
+    public void setCc(List<SearchRecord> cc) {
         this.cc = cc;
     }
 
-    public List<CBEntity> getBcc() {
+    public List<SearchRecord> getBcc() {
         return bcc;
     }
 
-    public void setBcc(List<CBEntity> bcc) {
+    public void setBcc(List<SearchRecord> bcc) {
         this.bcc = bcc;
     }
 
-    public List<CBEntity> getTicket() {
+    public List<SearchRecord> getTicket() {
         return ticket;
     }
 
-    public void setTicket(List<CBEntity> ticket) {
+    public void setTicket(List<SearchRecord> ticket) {
         this.ticket = ticket;
     }
 
-    public List<CBEntity> getIdentity() {
+    public List<SearchRecord> getIdentity() {
         return identity;
     }
 
-    public void setIdentity(List<CBEntity> identity) {
+    public void setIdentity(List<SearchRecord> identity) {
         this.identity = identity;
     }
 
-    public List<CBEntity> getPayment() {
+    public List<SearchRecord> getPayment() {
         return payment;
     }
 
-    public void setPayment(List<CBEntity> payment) {
+    public void setPayment(List<SearchRecord> payment) {
         this.payment = payment;
     }
 
-    public List<CBEntity> getReservation() {
+    public List<SearchRecord> getReservation() {
         return reservation;
     }
 
-    public void setReservation(List<CBEntity> reservation) {
+    public void setReservation(List<SearchRecord> reservation) {
         this.reservation = reservation;
     }
 
-    public List<CBEntity> getUnknown() {
+    public List<SearchRecord> getUnknown() {
         return unknown;
     }
 
-    public void setUnknown(List<CBEntity> unknown) {
+    public void setUnknown(List<SearchRecord> unknown) {
         this.unknown = unknown;
     }
 
-    public List<CBEntity> getRoom() {
+    public List<SearchRecord> getRoom() {
         return room;
     }
 
-    public void setRoom(List<CBEntity> room) {
+    public void setRoom(List<SearchRecord> room) {
         this.room = room;
     }
 
-    public List<CBEntity> getForum() {
+    public List<SearchRecord> getForum() {
         return forum;
     }
 
-    public void setForum(List<CBEntity> forum) {
+    public void setForum(List<SearchRecord> forum) {
         this.forum = forum;
     }
 
-    public List<CBEntity> getEmail() {
+    public List<SearchRecord> getEmail() {
         return email;
     }
 
-    public void setEmail(List<CBEntity> email) {
+    public void setEmail(List<SearchRecord> email) {
         this.email = email;
     }
 
-    public List<CBEntity> getVisa() {
+    public List<SearchRecord> getVisa() {
         return visa;
     }
 
-    public void setVisa(List<CBEntity> visa) {
+    public void setVisa(List<SearchRecord> visa) {
         this.visa = visa;
     }
 
-    public List<CBEntity> getPhoneNumber() {
+    public List<SearchRecord> getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(List<CBEntity> phoneNumber) {
+    public void setPhoneNumber(List<SearchRecord> phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<CBEntity> getMembership() {
+    public List<SearchRecord> getMembership() {
         return membership;
     }
 
-    public void setMembership(List<CBEntity> membership) {
+    public void setMembership(List<SearchRecord> membership) {
         this.membership = membership;
     }
 
-    public List<CBEntity> getPassport() {
+    public List<SearchRecord> getPassport() {
         return passport;
     }
 
-    public void setPassport(List<CBEntity> passport) {
+    public void setPassport(List<SearchRecord> passport) {
         this.passport = passport;
+    }
+
+    public List<SearchRecord> getRoot() {
+        return root;
+    }
+
+    public void setRoot(List<SearchRecord> root) {
+        this.root = root;
     }
 }

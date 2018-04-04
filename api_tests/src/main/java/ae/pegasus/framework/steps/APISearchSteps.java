@@ -67,11 +67,12 @@ public class APISearchSteps extends APISteps {
 
         CBSearchFilter filter = new CBSearchFilter(source, objectType, query, pageSize, pageNumber);
 
-        OperationResult<List<CBEntity>> operationResult = service.search(filter);
-        List<CBEntity> searchResults = operationResult.getEntity();
+        OperationResult<List<SearchEntity>> operationResult = service.search(filter);
+        List<SearchEntity> searchResults = operationResult.getEntity();
 
         context.put("searchResults", searchResults);
         context.put("searchQuery", query);
+        context.put("cbSearchFilter", filter);
     }
 
     private void searchIngestedRecords(String objectType, String criteria, String size, String additionalQuery) {
@@ -97,8 +98,8 @@ public class APISearchSteps extends APISteps {
         for (int i = 0; i < 5; i++) {
             // 5 attempts with 10, 20, 40, 80, 160 seconds delay
             waitSeveralseconds(String.valueOf(delay));
-            OperationResult<List<CBEntity>> operationResult = service.search(filter);
-            List<CBEntity> searchResults = operationResult.getEntity();
+            OperationResult<List<SearchEntity>> operationResult = service.search(filter);
+            List<SearchEntity> searchResults = operationResult.getEntity();
             actualCount = searchResults.size();
 
             if (compareByCriteria(criteria, actualCount, expectedCount)) {
@@ -126,7 +127,7 @@ public class APISearchSteps extends APISteps {
 
     @Then("CB search result list size $criteria $size")
     public void CBSearchListSizeShouldBe(String criteria, String size) {
-        List<CBEntity> entities = context.get("searchResults", List.class);
+        List<SearchRecord> entities = context.get("searchResults", List.class);
 
         int expectedCount = Integer.valueOf(size);
         boolean condition = compareByCriteria(criteria, entities.size(), expectedCount);
@@ -161,7 +162,7 @@ public class APISearchSteps extends APISteps {
                     "0",
                     "100"
             );
-            List<CBEntity> entities = context.get("searchResults", List.class);
+            List<SearchRecord> entities = context.get("searchResults", List.class);
             if (entities.isEmpty()) {
                 // skip not designated records
                 continue;
@@ -169,7 +170,7 @@ public class APISearchSteps extends APISteps {
             designatedEvents++; // increment if search result isn't empty
             for (String designation : designations) {
                 log.info("Check '" + designation + "' designation in response");
-                for (CBEntity entity : entities) {
+                for (SearchRecord entity : entities) {
                     String json = toJsonString(entity);
                     if (!json.contains(designation)) {
                         raiseError("Event doesn't have '" + designation + "' designation:\n" + json);
@@ -208,14 +209,14 @@ public class APISearchSteps extends APISteps {
         if (criteria.equalsIgnoreCase("contains")) {
             searchable = true;
         }
-        List<CBEntity> entities = context.get("searchResults", List.class);
+        List<SearchEntity> entities = context.get("searchResults", List.class);
         String query = context.get("searchQuery", String.class);
 
 
         String regex = cbSearchQueryToRegex(query);
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE | Pattern.CASE_INSENSITIVE | Pattern.UNIX_LINES);
 
-        for (CBEntity entity : entities) {
+        for (SearchEntity entity : entities) {
             String json = toJsonString(entity).replaceAll("(\\r\\n\\t|\\r\\n|\\n)", " ").trim();
 
             Boolean matches;
@@ -233,8 +234,8 @@ public class APISearchSteps extends APISteps {
     public void pageSizeInResponseShouldBe(String criteria, String size) {
 
         OperationResult result = OperationsResults.getResult();
-        CBSearchResult cbSearchResult = JsonConverter.jsonToObject(result.getMessage(), CBSearchResult.class);
-        Integer pageSize = cbSearchResult.getPageSize();
+        SearchResult searchResult = JsonConverter.jsonToObject(result.getMessage(), SearchResult.class);
+        Integer pageSize = searchResult.getPageSize();
 
         int expectedCount = Integer.valueOf(size);
         boolean condition = compareByCriteria(criteria, pageSize, expectedCount);
@@ -280,8 +281,8 @@ public class APISearchSteps extends APISteps {
         String query = recordStatusToQuery(recordStatus);
         CBSearchFilter filter = new CBSearchFilter(source, objectType, query, pageSize, pageNumber);
 
-        OperationResult<List<CBEntity>> operationResult = service.search(filter);
-        List<CBEntity> searchResults = operationResult.getEntity();
+        OperationResult<List<SearchEntity>> operationResult = service.search(filter);
+        List<SearchEntity> searchResults = operationResult.getEntity();
 
         context.put("searchResults", searchResults);
         context.put("recordStatusFilter", recordStatus);
@@ -289,10 +290,10 @@ public class APISearchSteps extends APISteps {
 
     @Then("CB search results match the recordStatus filters")
     public void matchSearchResultsWithFilters() {
-        List<CBEntity> entities = context.get("searchResults", List.class);
+        List<SearchRecord> entities = context.get("searchResults", List.class);
         String[] recordStatuses = context.get("recordStatusFilter", String.class).split("\\s+");
 
-        for (CBEntity entity : entities) {
+        for (SearchRecord entity : entities) {
             for (String recordStatus : recordStatuses) {
                 switch (recordStatus.toLowerCase()) {
                     case "unassigned":
@@ -320,11 +321,12 @@ public class APISearchSteps extends APISteps {
         }
     }
 
-    @Then("CB search results contains only sourceType:$sourceType and objectType:$objectType records")
-    public void cbSearchResultsContainsOnlySourceTypeAndObjectTypeRecords(String sourceType, String objectType) {
-        List<CBEntity> entities = context.get("searchResults", List.class);
+    @Then("CB search results contains only sourceType:$sourceType and type:$resultType records")
+    public void cbSearchResultsContainsOnlySourceTypeAndObjectTypeRecords(String sourceType, String resultType) {
+        List<SearchEntity> entities = context.get("searchResults", List.class);
+        CBSearchFilter filter = context.get("cbSearchFilter", CBSearchFilter.class);
 
-        CBEntity entity = entities.stream()
+        SearchEntity entity = entities.stream()
                 .filter(cbEntity -> !cbEntity.getSourceType().equals(sourceType))
                 .findAny().orElse(null);
 
@@ -332,10 +334,10 @@ public class APISearchSteps extends APISteps {
 
         if (!sourceType.equals("PROFILER")) {
             entity = entities.stream()
-                    .filter(cbEntity -> !cbEntity.getObjectType().name().equals(objectType))
+                    .filter(cbEntity -> !cbEntity.getType().equals(resultType))
                     .findAny().orElse(null);
 
-            assertNull("Search by object type:" + objectType + "return:" + toJsonString(entity), entity);
+            assertNull("Search by object type:" + filter.getObjectType() + "return:" + toJsonString(entity), entity);
         }
     }
 
@@ -344,9 +346,9 @@ public class APISearchSteps extends APISteps {
         String query = context.get("searchQuery", String.class);
         String dataSourceType = extractStringsInQuotes(query).get(0);
 
-        List<CBEntity> entities = context.get("searchResults", List.class);
+        List<SearchRecord> entities = context.get("searchResults", List.class);
 
-        CBEntity wrongEntity = entities.stream()
+        SearchRecord wrongEntity = entities.stream()
                 .filter(cbEntity -> !cbEntity.getSources().contains(dataSourceType))
                 .findAny().orElse(null);
 
@@ -358,9 +360,9 @@ public class APISearchSteps extends APISteps {
         String query = context.get("searchQuery", String.class);
         String subSource = extractStringsInQuotes(query).get(0);
 
-        List<CBEntity> entities = context.get("searchResults", List.class);
+        List<SearchRecord> entities = context.get("searchResults", List.class);
 
-        CBEntity wrongEntity = entities.stream()
+        SearchRecord wrongEntity = entities.stream()
                 .filter(cbEntity -> !cbEntity.getSubSourceType().contains(subSource))
                 .findAny().orElse(null);
 
@@ -372,9 +374,9 @@ public class APISearchSteps extends APISteps {
         String query = context.get("searchQuery", String.class);
         String recordType = extractStringsInQuotes(query).get(0);
 
-        List<CBEntity> entities = context.get("searchResults", List.class);
+        List<SearchRecord> entities = context.get("searchResults", List.class);
 
-        CBEntity wrongEntity = entities.stream()
+        SearchRecord wrongEntity = entities.stream()
                 .filter(cbEntity -> !cbEntity.getRecordType().contains(recordType))
                 .findAny().orElse(null);
 
@@ -389,8 +391,8 @@ public class APISearchSteps extends APISteps {
 
         CBSearchFilter filter = new CBSearchFilter(source, objectType, query, pageSize, pageNumber);
 
-        OperationResult<List<CBEntity>> operationResult = service.search(filter);
-        List<CBEntity> searchResults = operationResult.getEntity();
+        OperationResult<List<SearchEntity>> operationResult = service.search(filter);
+        List<SearchEntity> searchResults = operationResult.getEntity();
 
         context.put("searchResults", searchResults);
         context.put("timeRange", timeRange);
@@ -399,11 +401,11 @@ public class APISearchSteps extends APISteps {
 
     @Then("CB search results contains only eventTime from query")
     public void cbSearchResultsContainsOnlyEventTimeFromQuery() {
-        List<CBEntity> entities = context.get("searchResults", List.class);
+        List<SearchRecord> entities = context.get("searchResults", List.class);
         TimeRange timeRange = context.get("timeRange", TimeRange.class);
         String query = context.get("query", String.class);
 
-        CBEntity wrongEntity = entities.stream()
+        SearchRecord wrongEntity = entities.stream()
                 .filter(cbEntity -> !inRange(cbEntity.getEventTime(), timeRange))
                 .findAny().orElse(null);
 
@@ -417,18 +419,18 @@ public class APISearchSteps extends APISteps {
                 .forEach(s -> sourceCategories.add(DataSourceCategory.valueOf(s)));
         CBSearchFilter filter = new CBSearchFilter(sourceCategories, objectType, query);
 
-        OperationResult<CBSearchResult[]> result = service.count(filter);
+        OperationResult<SearchResult[]> result = service.count(filter);
 
-        context.put("CBSearchResult", result.getEntity());
+        context.put("SearchResult", result.getEntity());
         context.put("searchQuery", query);
     }
 
     @Then("TotalCount's in search results $criteria $size")
     public void SearchResultTolalCountShouldBe(String criteria, String size) {
-        CBSearchResult[] cbSearchResult = context.get("CBSearchResult", CBSearchResult[].class);
+        SearchResult[] searchResult = context.get("SearchResult", SearchResult[].class);
 
         int expectedCount = Integer.valueOf(size);
-        List<CBSearchResult> collect = Arrays.stream(cbSearchResult)
+        List<SearchResult> collect = Arrays.stream(searchResult)
                 .filter(result -> !compareByCriteria(criteria, result.getTotalCount(), expectedCount))
                 .collect(Collectors.toList());
 

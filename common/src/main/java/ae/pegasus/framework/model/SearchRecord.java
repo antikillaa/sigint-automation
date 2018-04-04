@@ -8,13 +8,8 @@ import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class CBEntity extends AbstractEntity {
+public class SearchRecord extends SearchEntity {
 
-    private DataSourceCategory eventFeed;
-    private List<String> sources;
-    private String sourceType;
-    private String recordType;
-    private String subSourceType;
     private Date modifiedOn;
     private Date eventTime;
     private Date endTime;
@@ -26,30 +21,6 @@ public class CBEntity extends AbstractEntity {
     private List<Geo> geo;
     private SearchObjectType objectType;
     private Reports reports = new Reports();
-
-    public List<String> getSources() {
-        return sources;
-    }
-
-    public void setSources(List<String> sources) {
-        this.sources = sources;
-    }
-
-    public String getSourceType() {
-        return sourceType;
-    }
-
-    public void setSourceType(String sourceType) {
-        this.sourceType = sourceType;
-    }
-
-    public String getRecordType() {
-        return recordType;
-    }
-
-    public void setRecordType(String recordType) {
-        this.recordType = recordType;
-    }
 
     public Date getModifiedOn() {
         return modifiedOn;
@@ -107,28 +78,12 @@ public class CBEntity extends AbstractEntity {
         this.objectType = objectType;
     }
 
-    public Map<String, Object> getIdentifiers() {
-        return identifiers;
-    }
-
-    public void setIdentifiers(Map<String, Object> identifiers) {
-        this.identifiers = identifiers;
-    }
-
     public Map<String, Object> getAttributes() {
         return attributes;
     }
 
     public void setAttributes(Map<String, Object> attributes) {
         this.attributes = attributes;
-    }
-
-    public String getSubSourceType() {
-        return subSourceType;
-    }
-
-    public void setSubSourceType(String subSourceType) {
-        this.subSourceType = subSourceType;
     }
 
     public Reports getReports() {
@@ -139,20 +94,20 @@ public class CBEntity extends AbstractEntity {
         this.reports = reports;
     }
 
-    public DataSourceCategory getEventFeed() {
-        return eventFeed;
-    }
-
-    public void setEventFeed(DataSourceCategory eventFeed) {
-        this.eventFeed = eventFeed;
-    }
-
     public Date getEndTime() {
         return endTime;
     }
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public Map<String, Object> getIdentifiers() {
+        return identifiers;
+    }
+
+    public void setIdentifiers(Map<String, Object> identifiers) {
+        this.identifiers = identifiers;
     }
 
     public class Reports {

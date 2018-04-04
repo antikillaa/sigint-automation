@@ -160,7 +160,7 @@ public class Entities {
         return organizations;
     }
 
-    public static EntityList<CBEntity> getCBEntities() {
+    public static EntityList<SearchRecord> getCBEntities() {
         if (cbEntities == null) {
             cbEntities = new CBEntityList();
         }

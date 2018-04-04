@@ -466,7 +466,8 @@ public class SearchFilters {
         this.tumblrUsername = tumblrUsername;
     }
 
-    public class TargetGroup extends AbstractEntity {
+    public static class TargetGroup extends AbstractEntity {
+
         private String name;
 
         public String getName() {
