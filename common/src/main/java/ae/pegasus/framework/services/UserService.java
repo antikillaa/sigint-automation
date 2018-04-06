@@ -77,6 +77,9 @@ public class UserService implements EntityService<User> {
         if (operationResult.isSuccess()) {
             Entities.getUsers().removeEntity(entity);
             Entities.getOrganizations().removeEntity(entity);
+            userMap.values()
+                    .forEach(users -> users
+                            .removeIf(user -> user.getName().equals(entity.getName())));
         }
         return operationResult;
     }

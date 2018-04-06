@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 import static ae.pegasus.framework.utils.StringUtils.splitToList;
 
 public class OrganizationFilter extends SearchFilter<Organization> {
@@ -166,7 +167,15 @@ public class OrganizationFilter extends SearchFilter<Organization> {
 
         @Override
         public boolean isAppliedToEntity(Organization entity) {
-            return parentOrgId.equals(entity.getParentTeamId());
+            switch (entity.getOrganizationType()) {
+                case TEAM:
+                    return entity.getParentTeamId().contains(parentOrgId);
+                case USER:
+                    return entity.getParentTeamIds().contains(parentOrgId);
+                default:
+                    throw new AssertionError("Unknown organization type:" + entity.getOrganizationType()
+                            + "\nEntity:" + toJsonString(entity));
+            }
         }
     }
 

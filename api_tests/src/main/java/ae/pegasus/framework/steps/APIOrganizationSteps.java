@@ -1,7 +1,6 @@
 package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.Organization;
 import ae.pegasus.framework.model.OrganizationFilter;
 import ae.pegasus.framework.model.entities.Entities;
@@ -11,6 +10,8 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 
 import java.util.List;
+
+import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 
 @SuppressWarnings("unchecked")
 public class APIOrganizationSteps extends APISteps {
@@ -52,13 +53,11 @@ public class APIOrganizationSteps extends APISteps {
         List<Organization> organizations = context.get("organizationList", List.class);
         OrganizationFilter organizationFilter = context.get("organizationFilter", OrganizationFilter.class);
 
-        Long count = organizations.stream()
-                .peek(organization -> Assert.assertTrue(
+        organizations.forEach(organization -> Assert.assertTrue(
                         "Entity does not applied to filter!" +
-                                "\n Entity:" + JsonConverter.toJsonString(organization) +
-                                "\n Filter:" + JsonConverter.toJsonString(organizationFilter),
-                        organizationFilter.isAppliedToEntity(organization)))
-                .count();
+                                "\n Entity:" + toJsonString(organization) +
+                                "\n Filter:" + toJsonString(organizationFilter),
+                        organizationFilter.isAppliedToEntity(organization)));
     }
 
     @Then("Users and Teams list size more than $size")
