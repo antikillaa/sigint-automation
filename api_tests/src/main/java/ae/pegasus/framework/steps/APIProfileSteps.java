@@ -257,6 +257,7 @@ public class APIProfileSteps extends APISteps {
                 throw new AssertionError("Unsupported identifierType:" + identifierType);
         }
 
+        log.info("INJECTIONS_FILE:" + toJsonString(injections));
         saveStringToFile(toJsonString(injections), INJECTIONS_FILE.toString());
     }
 

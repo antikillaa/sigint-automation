@@ -96,6 +96,7 @@ Then Request is successful
 
 
 Scenario: Add hit(s) for existing targets
+Given I clean up ingestion directory
 !-- find first profiler
 When I search finder file members by query:<to_target>
 Then Request is successful
@@ -130,8 +131,8 @@ Then identifierAggregations hit counts for:<identifierType> of profile:<from_tar
 Examples:
 | to_target  | from_target | identifierType | sourceType | recordType | recordsCount |
 | Darkwing Duck, Drake Mallard | Launchpad McQuack | PHONE_NUMBER  | S | SMS | 1 |
-| Darkwing Duck, Drake Mallard | Launchpad McQuack | IMSI  | F | SMS | 1 |
 | Darkwing Duck, Drake Mallard | Launchpad McQuack | IMEI  | T | SMS | 1 |
+| Darkwing Duck, Drake Mallard | Launchpad McQuack | IMSI  | F | SMS | 1 |
 
 
 Scenario: Get profile summary
