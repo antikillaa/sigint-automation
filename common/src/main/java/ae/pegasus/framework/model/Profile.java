@@ -34,7 +34,8 @@ public class Profile extends ProfileAndTargetGroup {
     @DataIgnore
     private ProfileConsolidatedAttributes consolidatedAttributes;
     @DataProvider(TargetStatusProvider.class)
-    private TargetStatus active;
+    @DataIgnore
+    private TargetStatus active = TargetStatus.ACTIVE;
     @DataIgnore
     private Date activeUntil;
     @DataIgnore
@@ -47,6 +48,7 @@ public class Profile extends ProfileAndTargetGroup {
     private CriminalRecord criminalRecord;
     @DataProvider(ClassificationProvider.class)
     private String classification; // "C";
+    @DataIgnore
     @WithCollectionSize(4)
     private ArrayList<Identifier> identifiers = new ArrayList<>();
     @DataIgnore
@@ -65,6 +67,10 @@ public class Profile extends ProfileAndTargetGroup {
     private Object lastLocation;
     @DataIgnore
     private List<String> rfis;
+    @DataIgnore
+    private Integer threatImpact = 20;
+    @DataIgnore
+    private Integer threatLikelihood = 20;
 
     public Profile() {
         setJsonType(ProfileJsonType.Draft);
@@ -260,6 +266,22 @@ public class Profile extends ProfileAndTargetGroup {
 
     public void setFiles(ArrayList<FinderFile> files) {
         this.files = files;
+    }
+
+    public Integer getThreatImpact() {
+        return threatImpact;
+    }
+
+    public void setThreatImpact(Integer threatImpact) {
+        this.threatImpact = threatImpact;
+    }
+
+    public Integer getThreatLikelihood() {
+        return threatLikelihood;
+    }
+
+    public void setThreatLikelihood(Integer threatLikelihood) {
+        this.threatLikelihood = threatLikelihood;
     }
 
     public static class FinderFile extends AbstractEntity {
