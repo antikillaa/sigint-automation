@@ -303,8 +303,8 @@ public class APISearchSteps extends APISteps {
                     case "unprocessed":
                         assertTrue("Search by RecordStatus::Unprocessed return record with reportIds:" + toJsonString(entity),
                                 entity.getReports() == null || entity.getReports().getReportIds().isEmpty());
-                        assertTrue("Search by RecordStatus:Unprocessed return processed record:" + toJsonString(entity),
-                                entity.getAssignments().getImportance() == null);
+                        assertFalse("Search by RecordStatus:Unprocessed return unimportance record:" + toJsonString(entity),
+                                Objects.equals(entity.getAssignments().getImportance(), -1));
                         break;
                     case "reported":
                         assertFalse("Search by RecordStatus:Reported return record without reportIds:" + toJsonString(entity),
