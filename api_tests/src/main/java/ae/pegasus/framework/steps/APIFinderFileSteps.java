@@ -52,7 +52,8 @@ public class APIFinderFileSteps extends APISteps {
     private void filesShouldBeEqual(FinderFile expected, FinderFile created) {
         assertEquals(expected.getType(), created.getType());
         assertEquals(expected.getBaseType(), created.getBaseType());
-        assertEquals(expected.getClassification(), created.getClassification());
+        assertEquals(expected.getReqPermissions(), created.getReqPermissions());
+        assertEquals(expected.getAggregatedTypeCounts(), created.getAggregatedTypeCounts());
         assertEquals(expected.getName(), created.getName());
         assertEquals(expected.getDescription(), created.getDescription());
         assertEquals(expected.getDescription(), created.getDescription());

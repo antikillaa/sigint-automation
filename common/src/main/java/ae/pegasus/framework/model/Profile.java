@@ -3,15 +3,13 @@ package ae.pegasus.framework.model;
 import ae.pegasus.framework.data_for_entity.annotations.DataIgnore;
 import ae.pegasus.framework.data_for_entity.annotations.DataProvider;
 import ae.pegasus.framework.data_for_entity.annotations.WithCollectionSize;
-import ae.pegasus.framework.data_for_entity.data_providers.profiler.ClassificationProvider;
-import ae.pegasus.framework.data_for_entity.data_providers.profiler.CriminalRecordProvider;
-import ae.pegasus.framework.data_for_entity.data_providers.profiler.ProfileCategoryProvider;
-import ae.pegasus.framework.data_for_entity.data_providers.profiler.TargetStatusProvider;
+import ae.pegasus.framework.data_for_entity.data_providers.profiler.*;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -27,6 +25,9 @@ public class Profile extends ProfileAndTargetGroup {
     private ArrayList<TargetGroup> groups = new ArrayList<>();
     @DataIgnore
     private ArrayList<FinderFile> files = new ArrayList<>();
+    @WithCollectionSize(1)
+    @DataProvider(TeamsIdProvider.class)
+    private HashSet<String> assignedTeams = new HashSet<>();
     @DataIgnore
     private Boolean target;
     @DataProvider(ProfileCategoryProvider.class)
@@ -282,6 +283,14 @@ public class Profile extends ProfileAndTargetGroup {
 
     public void setThreatLikelihood(Integer threatLikelihood) {
         this.threatLikelihood = threatLikelihood;
+    }
+
+    public HashSet<String> getAssignedTeams() {
+        return assignedTeams;
+    }
+
+    public void setAssignedTeams(HashSet<String> assignedTeams) {
+        this.assignedTeams = assignedTeams;
     }
 
     public static class FinderFile extends AbstractEntity {

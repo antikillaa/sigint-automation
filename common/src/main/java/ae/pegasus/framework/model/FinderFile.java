@@ -2,7 +2,7 @@ package ae.pegasus.framework.model;
 
 import ae.pegasus.framework.data_for_entity.annotations.DataIgnore;
 import ae.pegasus.framework.data_for_entity.annotations.DataProvider;
-import ae.pegasus.framework.data_for_entity.data_providers.profiler.ClassificationProvider;
+import ae.pegasus.framework.data_for_entity.annotations.WithCollectionSize;
 import ae.pegasus.framework.data_for_entity.data_providers.profiler.ProfileAndTargetGroupNameProvider;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -16,8 +16,8 @@ public class FinderFile extends AbstractEntity {
     private ProfileJsonType type = ProfileJsonType.File;
     @DataIgnore
     private ProfileJsonType baseType = ProfileJsonType.File;
-    @DataProvider(ClassificationProvider.class)
-    private String classification = "OUO";
+    @WithCollectionSize(1)
+    private ArrayList<FilePermission> reqPermissions = new ArrayList<>();
     @DataProvider(ProfileAndTargetGroupNameProvider.class)
     private String name;
     private String description;
@@ -33,6 +33,8 @@ public class FinderFile extends AbstractEntity {
     private ArrayList<ParentChain> parentChain = new ArrayList<>();
     @DataIgnore
     private String parentFileId;
+    @DataIgnore
+    private Boolean hasContents;
     @DataIgnore
     private Boolean deleted = false;
 
@@ -50,14 +52,6 @@ public class FinderFile extends AbstractEntity {
 
     public void setBaseType(ProfileJsonType baseType) {
         this.baseType = baseType;
-    }
-
-    public String getClassification() {
-        return classification;
-    }
-
-    public void setClassification(String classification) {
-        this.classification = classification;
     }
 
     public String getName() {
@@ -130,6 +124,22 @@ public class FinderFile extends AbstractEntity {
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public Boolean getHasContents() {
+        return hasContents;
+    }
+
+    public void setHasContents(Boolean hasContents) {
+        this.hasContents = hasContents;
+    }
+
+    public ArrayList<FilePermission> getReqPermissions() {
+        return reqPermissions;
+    }
+
+    public void setReqPermissions(ArrayList<FilePermission> reqPermissions) {
+        this.reqPermissions = reqPermissions;
     }
 
     public static class ParentChain extends AbstractEntity {

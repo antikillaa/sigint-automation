@@ -26,7 +26,7 @@ public class FinderFileService implements EntityService<FinderFile> {
 
     @Override
     public OperationResult<FinderFile> add(FinderFile entity) {
-        log.info("Creating finder file");
+        log.info("Creating finder file:" + toJsonString(entity));
         G4Response response = g4HttpClient.sendRequest(request.add(entity));
 
         OperationResult<FinderFile> operationResult = new OperationResult<>(response, FinderFile.class, "data");
