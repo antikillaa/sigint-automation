@@ -80,6 +80,20 @@ public class APIIngestionSteps extends APISteps {
             case "PHONEBOOK":
                 dockerAdapter = new PhonebookDockerAdapter();
                 break;
+            case "O":
+                switch (rTypeUpper) {
+                    case "SMS":
+                        dockerAdapter = new OSMSDockerAdapter();
+                        break;
+                }
+                break;
+            case "DU":
+                switch (rTypeUpper) {
+                    case "SMS":
+                        dockerAdapter = new DUSMSDockerAdapter();
+                        break;
+                }
+                break;
             case "E":
                 switch (rTypeUpper) {
                     case "CDR":
