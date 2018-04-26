@@ -444,7 +444,7 @@ public class APIProfileSteps extends APISteps {
         VoiceFile voiceFile = context.get("voiceFile", VoiceFile.class);
         Profile draft = context.get("profileDraft", Profile.class);
 
-        Integer WAITING_TIME = 3 * 60;
+        Integer WAITING_TIME = 5 * 60;
         Integer POLLING_INTERVAL = 10;
         Date deadline = DateHelper.getDateWithShift(WAITING_TIME);
 
