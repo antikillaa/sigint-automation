@@ -54,6 +54,7 @@ public class SearchFilters {
     private RetweetCount retweetCount;
     private String insUsername;
     private String insUserId;
+    private List<String> insMediaType;
     private String passengerSeqNumber;
     private String flightBookingNumber;
     private Boolean includeSpam;
@@ -464,6 +465,14 @@ public class SearchFilters {
 
     public void setTumblrUsername(String tumblrUsername) {
         this.tumblrUsername = tumblrUsername;
+    }
+
+    public List<String> getInsMediaType() {
+        return insMediaType;
+    }
+
+    public void setInsMediaType(List<String> insMediaType) {
+        this.insMediaType = insMediaType;
     }
 
     public static class TargetGroup extends AbstractEntity {
