@@ -52,7 +52,7 @@ class DockerImage {
   }
 
   static DockerImage dataManagerImage() {
-    final String IMAGE = "docker-registry.pegasus.ae/data-manager:0.01";
+    final String IMAGE = "docker-registry.pegasus.ae/data-manager:0.02";
     final String DATA_PATH = "/opt/app/output_content";
 
     return new DockerImage(IMAGE, DATA_PATH);
