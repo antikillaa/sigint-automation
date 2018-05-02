@@ -384,7 +384,7 @@ Examples:
 
 
 Scenario: API.O-SMS ingestion
-Meta: @nightly @O-SMS @wip @skip
+Meta: @nightly @O-SMS @skip
 Given I sign in as admin user
 !-- And Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> files with <recordsCount> records are generated
