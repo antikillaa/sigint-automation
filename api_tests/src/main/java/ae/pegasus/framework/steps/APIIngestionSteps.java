@@ -92,6 +92,9 @@ public class APIIngestionSteps extends APISteps {
                     case "SMS":
                         dockerAdapter = new DUSMSDockerAdapter();
                         break;
+                    case "VLR":
+                        dockerAdapter = new DUVLRDockerAdapter();
+                        break;
                 }
                 break;
             case "E":
