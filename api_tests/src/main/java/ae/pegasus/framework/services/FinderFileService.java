@@ -1,13 +1,9 @@
 package ae.pegasus.framework.services;
 
-import ae.pegasus.framework.errors.OperationResultError;
 import ae.pegasus.framework.http.G4Response;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.http.requests.FinderFileRequest;
-import ae.pegasus.framework.model.FinderFile;
-import ae.pegasus.framework.model.Profile;
-import ae.pegasus.framework.model.ProfileAndTargetGroup;
-import ae.pegasus.framework.model.SearchFilter;
+import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
@@ -53,12 +49,14 @@ public class FinderFileService implements EntityService<FinderFile> {
         throw new NotImplementedException("");
     }
 
-    public OperationResult<List<FinderFile>> getTopLevelFiles(SearchFilter filter) {
-        log.info("Get top of list of files, page:" + filter.getPage() + ", pageSize:" + filter.getPageSize());
-        G4Response response = g4HttpClient.sendRequest(request.list(filter));
+    public OperationResult<List<FinderFile>> getFilesRoot(SearchFilter filter) {
+        log.info("Get root of files, page:" + filter.getPage() + ", pageSize:" + filter.getPageSize());
+        G4Response response = g4HttpClient.sendRequest(request.root(filter));
 
-        List<FinderFile> fileList = jsonToObjectsList(response.getMessage(), FinderFile[].class, "data");
-        return new OperationResult<>(response, fileList);
+        OperationResult<FinderFile[]> operationResult = new OperationResult<>(response, FinderFile[].class, "data");
+        return operationResult.isSuccess() ?
+                new OperationResult<>(response, Arrays.asList(operationResult.getEntity())) :
+                new OperationResult<>(response);
     }
 
     @Override
@@ -68,15 +66,12 @@ public class FinderFileService implements EntityService<FinderFile> {
 
     @Override
     public OperationResult<FinderFile> update(FinderFile entity) {
-        log.info("Updating finder file");
+        log.info("Updating finder file: " + toJsonString(entity));
         G4Response response = g4HttpClient.sendRequest(request.update(entity));
 
-        OperationResult<FinderFile> operationResult = new OperationResult<>(response, FinderFile.class, "result");
+        OperationResult<FinderFile> operationResult = new OperationResult<>(response, FinderFile.class, "data");
         if (operationResult.isSuccess()) {
             Entities.getFinderFiles().addOrUpdateEntity(operationResult.getEntity());
-        } else {
-            log.error("Update finder file process was failed");
-            throw new OperationResultError(operationResult);
         }
         return operationResult;
     }
@@ -108,18 +103,40 @@ public class FinderFileService implements EntityService<FinderFile> {
         OperationResult<ProfileAndTargetGroup[]> operationResult =
                 new OperationResult<>(response, ProfileAndTargetGroup[].class, "data");
 
-        if (operationResult.isSuccess()) {
-            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
-        } else {
-            return new OperationResult<>(response);
+        return operationResult.isSuccess() ?
+                new OperationResult<>(response, Arrays.asList(operationResult.getEntity())) :
+                new OperationResult<>(response);
+    }
+
+    public List extractEntitiesByTypeFromResponse(OperationResult<List<ProfileAndTargetGroup>> result, ProfileJsonType type) {
+        List<Object> list = jsonToObjectsList(result.getMessage(), Object[].class, "data");
+        switch (type) {
+            case Profile:
+            case Draft:
+                return list.stream()
+                        .filter(o -> ((LinkedHashMap) o).get("type").equals("Profile"))
+                        .map(o -> jsonToObject(toJsonString(o), Profile.class))
+                        .collect(Collectors.toList());
+            case EnrichedFile:
+            case File:
+                return list.stream()
+                        .filter(o -> ((LinkedHashMap) o).get("type").equals("File"))
+                        .map(o -> jsonToObject(toJsonString(o), FinderFile.class))
+                        .collect(Collectors.toList());
+            default:
+                throw new AssertionError("Not implemented extractEntitiesByTypeFromResponse() by type:" + type);
         }
     }
 
-    public List<Profile> extractProfilesFromResponse(OperationResult<List<ProfileAndTargetGroup>> result) {
-        List<Object> list = jsonToObjectsList(result.getMessage(), Object[].class, "data");
-        return list.stream()
-                .filter(o ->  ((LinkedHashMap) o).get("type").equals("Profile"))
-                .map(o -> jsonToObject(toJsonString(o), Profile.class))
-                .collect(Collectors.toList());
+    public OperationResult<List<ProfileAndTargetGroup>> cbFinderSearch(SearchFilter filter) {
+        log.info("CB Finder search with filter:" + toJsonString(filter));
+        G4Response response = g4HttpClient.sendRequest(request.cbFinderSearch(filter));
+
+        OperationResult<ProfileAndTargetGroup[]> operationResult =
+                new OperationResult<>(response, ProfileAndTargetGroup[].class, "data");
+
+        return operationResult.isSuccess() ?
+                new OperationResult<>(response, Arrays.asList(operationResult.getEntity())) :
+                new OperationResult<>(response);
     }
 }

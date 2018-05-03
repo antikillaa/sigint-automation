@@ -204,7 +204,7 @@ public class UserService implements EntityService<User> {
      * <br>note: ADMIN user has 'approver' role
      */
     public String getReportRole(User user) {
-        List<String> roles = user.getEffectivePermission().getActions();
+        List<String> roles = user.getDefaultPermission().getActions();
         if (roles.contains("REPORT_UPDATE_APPROVER")) {
             return "approver";
         } else if (roles.contains("REPORT_UPDATE_ANALYST")) {

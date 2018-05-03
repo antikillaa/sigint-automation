@@ -42,13 +42,16 @@ public class FinderFileRequest extends HttpRequest {
 
     public FinderFileRequest update(FinderFile finderFile) {
         this
-                .setHttpMethod(HttpMethod.POST)
+                .setURI(URI + "/" + finderFile.getId())
+                .setHttpMethod(HttpMethod.PUT)
                 .setPayload(finderFile);
         return this;
     }
 
-    public FinderFileRequest list(SearchFilter filter) {
-        String params = "/root?page=" + filter.getPage() +
+    public FinderFileRequest root(SearchFilter filter) {
+        String params = "/root?" +
+                "hasContents=true" +
+                "&page=" + filter.getPage() +
                 "&pageSize=" + filter.getPageSize() +
                 "&sortKey=" + filter.getSortField() +
                 "&sortOrder=" + (filter.isSortDirection() ? "ASC" : "DESC");
@@ -62,7 +65,9 @@ public class FinderFileRequest extends HttpRequest {
         FinderFileSearchFilter filter = (FinderFileSearchFilter) searchFilter;
         String params;
         try {
-            params = "/search?page=" + filter.getPage() +
+            params = "/search?" +
+                    "hasContents=true" +
+                    "&page=" + filter.getPage() +
                     "&pageSize=" + filter.getPageSize() +
                     (filter.getQuery().isEmpty() ? "" : "&query=" + URLEncoder.encode(filter.getQuery(), "UTF-8")) +
                     "&sortKey=" + filter.getSortField() +
@@ -73,6 +78,27 @@ public class FinderFileRequest extends HttpRequest {
         }
         this
                 .setURI(URI + params)
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
+    public FinderFileRequest cbFinderSearch(SearchFilter searchFilter) {
+        FinderFileSearchFilter filter = (FinderFileSearchFilter) searchFilter;
+        String params;
+        try {
+            params = "/search?" +
+                    "hasContents=true" +
+                    "&page=" + filter.getPage() +
+                    "&pageSize=" + filter.getPageSize() +
+                    (filter.getQuery().isEmpty() ? "" : "&query=" + URLEncoder.encode(filter.getQuery(), "UTF-8")) +
+                    "&sortKey=" + filter.getSortField() +
+                    "&sortOrder=" + (filter.isSortDirection() ? "ASC" : "DESC");
+        } catch (UnsupportedEncodingException e) {
+            log.error(e);
+            throw new AssertionError(e);
+        }
+        this
+                .setURI("/api/fileinfo/fileinfo" + params)
                 .setHttpMethod(HttpMethod.GET);
         return this;
     }

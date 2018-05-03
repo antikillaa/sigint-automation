@@ -8,6 +8,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class FinderFile extends AbstractEntity {
@@ -37,6 +38,10 @@ public class FinderFile extends AbstractEntity {
     private Boolean hasContents;
     @DataIgnore
     private Boolean deleted = false;
+    @DataIgnore
+    private FinderFile payload;
+    @DataIgnore
+    private List<String> files = new ArrayList<>();
 
     public ProfileJsonType getType() {
         return type;
@@ -140,6 +145,22 @@ public class FinderFile extends AbstractEntity {
 
     public void setReqPermissions(ArrayList<FilePermission> reqPermissions) {
         this.reqPermissions = reqPermissions;
+    }
+
+    public FinderFile getPayload() {
+        return payload;
+    }
+
+    public void setPayload(FinderFile payload) {
+        this.payload = payload;
+    }
+
+    public List<String> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<String> files) {
+        this.files = files;
     }
 
     public static class ParentChain extends AbstractEntity {

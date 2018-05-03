@@ -5,7 +5,6 @@ import ae.pegasus.framework.data_for_entity.annotations.DataProvider;
 import ae.pegasus.framework.data_for_entity.annotations.WithDataSize;
 import ae.pegasus.framework.data_for_entity.data_providers.EmailProvider;
 import ae.pegasus.framework.data_for_entity.data_providers.user_password.UserPasswordProvider;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class User extends Organization {
 
@@ -41,7 +39,7 @@ public class User extends Organization {
 
     private Boolean isDeleted = false;
     @DataIgnore
-    private UserPermission effectivePermission = new UserPermission();
+    private UserPermission defaultPermission = new UserPermission();
 
     public User() {
         setOrganizationType(OrganizationType.USER);
@@ -150,11 +148,11 @@ public class User extends Organization {
         this.imageURL = imageURL;
     }
 
-    public UserPermission getEffectivePermission() {
-        return effectivePermission;
+    public UserPermission getDefaultPermission() {
+        return defaultPermission;
     }
 
-    public void setEffectivePermission(UserPermission effectivePermission) {
-        this.effectivePermission = effectivePermission;
+    public void setDefaultPermission(UserPermission defaultPermission) {
+        this.defaultPermission = defaultPermission;
     }
 }

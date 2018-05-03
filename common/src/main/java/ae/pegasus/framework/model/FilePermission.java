@@ -5,6 +5,9 @@ import ae.pegasus.framework.data_for_entity.annotations.DataProvider;
 import ae.pegasus.framework.data_for_entity.data_providers.profiler.ClassificationProvider;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class FilePermission {
 
@@ -13,7 +16,7 @@ public class FilePermission {
     @DataProvider(ClassificationProvider.class)
     private String classification;
     @DataIgnore
-    private String dataSources;
+    private List<String> dataSources = new ArrayList<>();
     @DataIgnore
     private String orgUnit;
 
@@ -41,11 +44,11 @@ public class FilePermission {
         this.orgUnit = orgUnit;
     }
 
-    public String getDataSources() {
+    public List<String> getDataSources() {
         return dataSources;
     }
 
-    public void setDataSources(String dataSources) {
+    public void setDataSources(List<String> dataSources) {
         this.dataSources = dataSources;
     }
 }
