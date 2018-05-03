@@ -468,7 +468,7 @@ Examples:
 | DU         | SMS        | 100          |
 
 
-Scenario: API.DU-SMS ingestion
+Scenario: API.DU-VLR ingestion
 Meta: @nightly @DU-VLR
 Given I sign in as admin user
 And Data source with <sourceType> and <recordType> exists
@@ -482,6 +482,21 @@ And Number of ingested event records in CB == <recordsCount>
 Examples:
 | sourceType | recordType | recordsCount |
 | DU         | VLR        | 100          |
+
+Scenario: API.DU-IMSISubConsumer ingestion
+Meta: @nightly @DU-IMSISubConsumer
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+And Number of ingested entity records in CB == <recordsCount>
+
+Examples:
+| sourceType | recordType | recordsCount |
+| DU         | IMSIToSubConsumer        | 100          |
 
 Scenario: API.Search and count data folders by path
 Meta: @nightly @Search-folders-by-path

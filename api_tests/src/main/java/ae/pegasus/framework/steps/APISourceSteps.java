@@ -142,6 +142,8 @@ public class APISourceSteps extends APISteps {
             rType = "CellTower";
         } else if (rType.toLowerCase().contains("nld")) {
             rType = "NLD";
+        } else if (rType.toLowerCase().contains("imsitosub")) {
+            rType = "IMSIToSubscriber";
         }
 
         SourceType sourceType = appContext.getDictionary().getSourceType(sType, rType);
