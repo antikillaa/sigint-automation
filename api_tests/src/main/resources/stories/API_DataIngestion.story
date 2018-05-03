@@ -210,6 +210,57 @@ Examples:
 | E          | CDR        | 100          |
 
 
+Scenario: API.E-NLD_AIF ingestion
+Meta: @nightly @E-NLD_AIF
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB == 0
+
+Examples:
+| sourceType | recordType | recordsCount     |
+| E          | NLD_AIF    | 100              |
+
+
+Scenario: API.E-NLD_IUCS ingestion
+Meta: @nightly @E-NLD_IUCS
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB == 0
+
+Examples:
+| sourceType | recordType | recordsCount     |
+| E          | NLD_IUCS   | 100              |
+
+
+Scenario: API.E-NLD_IUPS ingestion
+Meta: @nightly @E-NLD_IUPS
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+And Number of ingested event records in CB == <recordsCount>
+And Number of ingested entity records in CB == 0
+
+Examples:
+| sourceType | recordType | recordsCount     |
+| E          | NLD_IUPS   | 100              |
+
+
 
 Scenario: API.S-Voice ingestion
 Meta: @nightly @S-Voice

@@ -123,6 +123,15 @@ public class APIIngestionSteps extends APISteps {
                     case "SMS4":
                         dockerAdapter = new EtisalatSMS4DockerAdapter();
                         break;
+                    case "NLD_AIF":
+                        dockerAdapter = new EtisalatNLDAIFDockerAdapter();
+                        break;
+                    case "NLD_IUCS":
+                        dockerAdapter = new EtisalatNLDIUCSDockerAdapter();
+                        break;
+                    case "NLD_IUPS":
+                        dockerAdapter = new EtisalatNLDIUPSDockerAdapter();
+                        break;
                 }
                 break;
             default:
