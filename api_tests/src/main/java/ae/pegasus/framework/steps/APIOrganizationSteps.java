@@ -3,20 +3,24 @@ package ae.pegasus.framework.steps;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.Organization;
 import ae.pegasus.framework.model.OrganizationFilter;
+import ae.pegasus.framework.model.Team;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.OrganizationService;
+import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 
 import java.util.List;
 
+import static ae.pegasus.framework.json.JsonConverter.jsonToObject;
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 
 @SuppressWarnings("unchecked")
 public class APIOrganizationSteps extends APISteps {
 
     private static OrganizationService organizationService = new OrganizationService();
+    private static APITeamSteps teamSteps = new APITeamSteps();
 
 
     @When("I send search users and teams by $criteria with $value request")
@@ -46,6 +50,23 @@ public class APIOrganizationSteps extends APISteps {
 
         context.put("organizationList", operationResult.getEntity());
         context.put("organizationFilter", filter);
+    }
+
+    @Given("OrgUnit with name:\"$name\" exists")
+    public void getOrCreateOrgUnitByName(String name) {
+        searchUsersAndTeamsByCriteria("name", name);
+        List<Organization> organizations = context.get("organizationList", List.class);
+
+        Organization organization = organizations.stream()
+                .filter(org -> org.getFullName().equals(name))
+                .findAny().orElse(null);
+
+        if (organization == null) {
+            teamSteps.createTeam(name);
+        } else {
+            Team team = jsonToObject(toJsonString(organization), Team.class);
+            context.put("team", team);
+        }
     }
 
     @Then("Users and Teams search result are correct")

@@ -5,15 +5,14 @@ import ae.pegasus.framework.data_for_entity.annotations.DataProvider;
 import ae.pegasus.framework.data_for_entity.annotations.WithDataSize;
 import ae.pegasus.framework.data_for_entity.data_providers.EmailProvider;
 import ae.pegasus.framework.data_for_entity.data_providers.user_password.UserPasswordProvider;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class User extends Organization {
 
@@ -39,9 +38,16 @@ public class User extends Organization {
     @DataIgnore
     private String adminPassword;
 
+    @DataIgnore
     private Boolean isDeleted = false;
     @DataIgnore
+    private Boolean locked = false;
+    @DataIgnore
+    private UserPermission defaultPermission = new UserPermission();
+    @DataIgnore
     private UserPermission effectivePermission = new UserPermission();
+    @DataIgnore
+    private Map<String, List<String>> parentTeams;
 
     public User() {
         setOrganizationType(OrganizationType.USER);
@@ -150,11 +156,35 @@ public class User extends Organization {
         this.imageURL = imageURL;
     }
 
+    public UserPermission getDefaultPermission() {
+        return defaultPermission;
+    }
+
+    public void setDefaultPermission(UserPermission defaultPermission) {
+        this.defaultPermission = defaultPermission;
+    }
+
+    public Map<String, List<String>> getParentTeams() {
+        return parentTeams;
+    }
+
+    public void setParentTeams(Map<String, List<String>> parentTeams) {
+        this.parentTeams = parentTeams;
+    }
+
     public UserPermission getEffectivePermission() {
         return effectivePermission;
     }
 
     public void setEffectivePermission(UserPermission effectivePermission) {
         this.effectivePermission = effectivePermission;
+    }
+
+    public Boolean getLocked() {
+        return locked;
+    }
+
+    public void setLocked(Boolean locked) {
+        this.locked = locked;
     }
 }

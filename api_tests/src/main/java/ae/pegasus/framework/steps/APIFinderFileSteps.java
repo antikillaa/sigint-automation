@@ -1,10 +1,7 @@
 package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.model.FinderFile;
-import ae.pegasus.framework.model.FinderFileSearchFilter;
-import ae.pegasus.framework.model.Profile;
-import ae.pegasus.framework.model.ProfileAndTargetGroup;
+import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.FinderFileService;
 import org.apache.log4j.Logger;
@@ -18,6 +15,9 @@ import java.util.List;
 import java.util.Objects;
 
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
+import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
+import static ae.pegasus.framework.utils.StepHelper.compareByCriteria;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("unchecked")
@@ -78,9 +78,11 @@ public class APIFinderFileSteps extends APISteps {
         List<FinderFile> finderFiles = new ArrayList<>();
         OperationResult<List<FinderFile>> operationResult;
         do {
-            operationResult = service.getTopLevelFiles(filter);
-            finderFiles.addAll(operationResult.getEntity());
-            filter.setPage(filter.getPage() + 1);
+            operationResult = service.getFilesRoot(filter);
+            if (operationResult.isSuccess()) {
+                finderFiles.addAll(operationResult.getEntity());
+                filter.setPage(filter.getPage() + 1);
+            } else break;
         } while (operationResult.getEntity().size() == filter.getPageSize());
 
         context.put("finderFileList", finderFiles);
@@ -172,13 +174,13 @@ public class APIFinderFileSteps extends APISteps {
                         .anyMatch(p -> p.getId().equals(profile.getId())));
     }
 
-    @When("I delete all QE auto files")
+    @When("I delete all empty QE auto files")
     public void deleteAllEmptyFiles() {
-        getListOfFinderFileRequest();
         List<FinderFile> files = context.get("finderFileList", List.class);
-
         files.stream()
-                .filter(file -> file.getName().contains("QE auto"))
+                .filter(file -> file.getName().contains("QE auto")
+                        && file.getPayload() != null
+                        && !file.getPayload().getHasContents())
                 .forEach(service::remove);
     }
 
@@ -192,14 +194,90 @@ public class APIFinderFileSteps extends APISteps {
         context.put("operationResult", operationResult);
     }
 
+    @When("I send CB Finder search with query:$query")
+    public void cbFinderSearch(String query) {
+        FinderFileSearchFilter filter = new FinderFileSearchFilter();
+        filter.setQuery(query).setSortField("name").setPageSize(100);
 
-    @When("Get profiles from targets search results")
-    public void extractProfiles() {
+        OperationResult<List<ProfileAndTargetGroup>> operationResult = service.cbFinderSearch(filter);
+        context.put("operationResult", operationResult);
+    }
+
+    @When("Get random $type from from CBFinder search results")
+    public void getRandomFileFromCBFinderSearchResults(String type) {
         OperationResult<List<ProfileAndTargetGroup>> operationResult =
                 context.get("operationResult", OperationResult.class);
 
-        List<Profile> profiles = service.extractProfilesFromResponse(operationResult);
-        context.put("profileList", profiles);
+        switch (type) {
+            case "profile":
+                List<Profile> profiles = service.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.Profile);
+                Profile profile = getRandomItemFromList(profiles);
+                context.put("profile", profile);
+                Entities.getProfiles().addOrUpdateEntity(profile);
+                break;
+            case "file":
+                List<FinderFile> files = service.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.File);
+                FinderFile file = getRandomItemFromList(files);
+                context.put("finderFile", file);
+                Entities.getFinderFiles().addOrUpdateEntity(file);
+                break;
+            default:
+                throw new AssertionError("Unknown step parameter:" + type);
+        }
+    }
+
+    @When("Get $type from CBFinder search results")
+    public void extractProfiles(String type) {
+        OperationResult<List<ProfileAndTargetGroup>> operationResult =
+                context.get("operationResult", OperationResult.class);
+
+        switch (type) {
+            case "profiles":
+                List<Profile> profiles = service.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.Profile);
+                context.put("profileList", profiles);
+                break;
+            case "files":
+                List<FinderFile> files = service.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.File);
+                context.put("finderFileList", files);
+                break;
+            default:
+                throw new AssertionError("Unknown step parameter:" + type);
+        }
+    }
+
+    @Then("CB Finder search result list size $criteria $size")
+    public void cbFinderSearchResultsListSizeShouldBe(String criteria, String value) {
+        OperationResult<List<ProfileAndTargetGroup>> operationResult = context.get("operationResult", OperationResult.class);
+
+        int expectedCount = Integer.valueOf(value);
+        List<ProfileAndTargetGroup> entities = operationResult.getEntity();
+        boolean condition = compareByCriteria(criteria, entities.size(), expectedCount);
+        assertTrue("Expected cb finder search results count " + criteria + " " + value + ", but was: " + entities.size(), condition);
+    }
+
+
+    @Then("Finder files list size $criteria $size")
+    public void targetGroupListMoreThan(String criteria, String size) {
+        List<FinderFile> files = context.get("finderFileList", List.class);
+
+        int expectedCount = Integer.valueOf(size);
+        boolean condition = compareByCriteria(criteria, files.size(), expectedCount);
+        assertTrue("Expected cb finder search results count " + criteria + " " + size + ", but was: " + files.size(), condition);
+    }
+
+
+    @When("I send update finder file request")
+    public void updateTargetGroupRequest() {
+        FinderFile createdFinderFile = Entities.getFinderFiles().getLatest();
+        FinderFile randomFinderFile = getRandomFinderFile();
+
+        createdFinderFile.setName(randomFinderFile.getName());
+        createdFinderFile.setDescription(randomFinderFile.getDescription());
+        createdFinderFile.getReqPermissions().get(0).setClassification(
+                randomFinderFile.getReqPermissions().get(0).getClassification());
+
+        context.put("finderFile", createdFinderFile);
+        service.update(createdFinderFile);
     }
 
 
@@ -217,21 +295,6 @@ public class APIFinderFileSteps extends APISteps {
 //        context.put("targetGroup", getRandomItemFromList(targetGroups));
 //    }
 //
-//
-//    @When("I send update target group request")
-//    public void updateTargetGroupRequest() {
-//        TargetGroup createdTargetGroup = Entities.getTargetGroups().getLatest();
-//        TargetGroup updatedTargetGroup = updateTargetGroup(createdTargetGroup);
-//        OperationResult<TargetGroup> operationResult = service.update(updatedTargetGroup);
-//        context.put("updatedTargetGroup", operationResult.getEntity());
-//    }
-//
-//    @Then("Target group updated correctly")
-//    public void targetGroupUpdatedCorrectly() {
-//        TargetGroup updatedTargetGroup = context.get("updatedTargetGroup", TargetGroup.class);
-//        TargetGroup responseTargetGroup = Entities.getTargetGroups().getLatest();
-//        equalsTargetGroups(responseTargetGroup, updatedTargetGroup);
-//    }
 //
 //    @Then("existing group is listed in list only once")
 //    public void groupNotDuplicated() {
@@ -253,20 +316,6 @@ public class APIFinderFileSteps extends APISteps {
 //    static TargetGroup getRandomTargetGroup() {
 //        return objectInitializer.randomEntity(TargetGroup.class);
 //    }
-//
-//    private TargetGroup updateTargetGroup(TargetGroup targetGroup) {
-//        targetGroup.setName(RandomStringUtils.randomAlphabetic(10));
-//        targetGroup.setDescription(RandomStringUtils.randomAlphabetic(20));
-//        return targetGroup;
-//    }
-//
-//    @Then("Target group list size more than $size")
-//    public void targetGroupListMoreThan(String size) {
-//        List<TargetGroup> groups = context.get("targetGroupList", List.class);
-//
-//        Assert.assertTrue(groups.size() > Integer.valueOf(size));
-//    }
-//
 //
 //   /**
 //     * Verify two targetGroups

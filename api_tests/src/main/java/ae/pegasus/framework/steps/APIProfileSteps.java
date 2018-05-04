@@ -313,15 +313,17 @@ public class APIProfileSteps extends APISteps {
                 .setSortField("name")
                 .setPageSize(100);
 
+        // get only profiles
         OperationResult<List<ProfileAndTargetGroup>> operationResult = fileService.searchFileMembers(filter);
+        List<Profile> profiles = fileService.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.Profile);
+
+        // filter them by exact name
         Profile finalTarget = target;
-        List<Profile> profiles = fileService
-                .extractProfilesFromResponse(operationResult)
-                .stream()
+        List<Profile> filteredProfiles = profiles.stream()
                 .filter(profile -> profile.getName().contains(finalTarget.getName()))
                 .collect(Collectors.toList());
 
-        if (profiles.isEmpty()) {
+        if (filteredProfiles.isEmpty()) {
             log.info("Target not found, create and publish target from:" + targetFile);
             // create draft target
             OperationResult<Profile> result = draftService.add(target);

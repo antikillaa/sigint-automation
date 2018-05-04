@@ -100,7 +100,7 @@ Given I clean up ingestion directory
 !-- find first profiler
 When I search finder file members by query:<to_target>
 Then Request is successful
-When Get profiles from targets search results
+When Get profiles from CBFinder search results
 Then Profile list size > 0
 When get random profile from profile list
 And I send get profile details request
@@ -108,7 +108,7 @@ And send get profile identifierAggregations request
 !-- find second profiler
 When I search finder file members by query:<from_target>
 Then Request is successful
-When Get profiles from targets search results
+When Get profiles from CBFinder search results
 Then Profile list size > 0
 When get random profile from profile list
 When I send get profile details request

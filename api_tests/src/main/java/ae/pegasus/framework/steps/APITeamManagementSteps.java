@@ -13,19 +13,20 @@ import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("unchecked")
 public class APITeamManagementSteps extends APISteps {
 
     private static TeamService teamService = new TeamService();
 
-    private Team createRandomTeam() {
+    private Team generateRandomTeam() {
         return objectInitializer.randomEntity(Team.class);
     }
 
     @When("I send create a new team")
     public void createNewTeam() {
-        Team team = createRandomTeam();
+        Team team = generateRandomTeam();
         context.put("team", team);
 
         teamService.add(team);
@@ -81,7 +82,7 @@ public class APITeamManagementSteps extends APISteps {
     public void updateTeam() {
         Team team = Entities.getTeams().getLatest();
 
-        Team updatedTeam = createRandomTeam();
+        Team updatedTeam = generateRandomTeam();
         updatedTeam.setId(team.getId());
         context.put("team", updatedTeam);
 
@@ -130,5 +131,16 @@ public class APITeamManagementSteps extends APISteps {
         Team parentTeam = Entities.getTeams().getEntity(parentTeamId);
 
         teamService.remove(parentTeam);
+    }
+
+
+    @When("I delete all empty teams")
+    public void deleteAllEmptyTeams() {
+        List<Team> teams = context.get("teamList", List.class);
+        teams.stream()
+                .filter(team -> team.getDescription() != null && !team.getDescription().isEmpty()
+                        && !Pattern.compile("[^A-Za-z]").matcher(team.getFullName()).find()
+                        && !Pattern.compile("[^A-Za-z]").matcher(team.getDescription()).find())
+                .forEach(team -> teamService.remove(team));
     }
 }

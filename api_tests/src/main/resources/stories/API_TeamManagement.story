@@ -120,3 +120,10 @@ Then Request is successful
 When I send move team to other parent team
 Then Request is successful
 And Team is correct
+
+
+Scenario: API.Cleanup Teams
+Meta: @skip
+When I send get list of teams
+Then Request is successful
+When I delete all empty teams
