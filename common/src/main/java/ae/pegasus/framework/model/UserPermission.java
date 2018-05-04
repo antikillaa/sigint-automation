@@ -10,6 +10,7 @@ import java.util.List;
 public class UserPermission {
 
     private List<String> titles = new ArrayList<>();
+    private List<TeamTitle> teamTitles;
     private List<String> actions = new ArrayList<>();
     private PermissionRecord record = new PermissionRecord();
 
@@ -37,10 +38,20 @@ public class UserPermission {
         this.record = record;
     }
 
+    public List<TeamTitle> getTeamTitles() {
+        return teamTitles;
+    }
+
+    public void setTeamTitles(List<TeamTitle> teamTitles) {
+        this.teamTitles = teamTitles;
+    }
+
     public class PermissionRecord {
 
         private List<String> clearances = Arrays.asList("TS-CIO","TS-SCI","TS-OS");
-        private List<String> dataSources = new ArrayList<>();
+        private List<String> dataSources = Arrays.asList("PR", "INSTAGRAM", "E", "F", "H", "RFA", "ODD_JOBS", "O", "DU",
+                "UDB", "S", "T", "DARK_WEB", "RFI", "DARK_WEB_REPORTS", "ZELZAL", "SITA", "YOUTUBE", "GPLUS", "KARMA",
+                "TUMBLR", "NEWS", "OperatorReport", "PHONEBOOK", "TWITTER", "FORUM");
         private List<String> organizations = new ArrayList<>();
 
         public List<String> getClearances() {

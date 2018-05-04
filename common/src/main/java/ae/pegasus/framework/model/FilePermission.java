@@ -2,6 +2,7 @@ package ae.pegasus.framework.model;
 
 import ae.pegasus.framework.data_for_entity.annotations.DataIgnore;
 import ae.pegasus.framework.data_for_entity.annotations.DataProvider;
+import ae.pegasus.framework.data_for_entity.data_providers.OrgUnitProvider;
 import ae.pegasus.framework.data_for_entity.data_providers.profiler.ClassificationProvider;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -17,7 +18,7 @@ public class FilePermission {
     private String classification;
     @DataIgnore
     private List<String> dataSources = new ArrayList<>();
-    @DataIgnore
+    @DataProvider(OrgUnitProvider.class)
     private String orgUnit;
 
     public String getActionPermission() {

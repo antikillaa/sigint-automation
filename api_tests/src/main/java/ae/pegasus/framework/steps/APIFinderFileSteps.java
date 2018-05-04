@@ -273,7 +273,8 @@ public class APIFinderFileSteps extends APISteps {
 
         createdFinderFile.setName(randomFinderFile.getName());
         createdFinderFile.setDescription(randomFinderFile.getDescription());
-        createdFinderFile.setReqPermissions(randomFinderFile.getReqPermissions());
+        createdFinderFile.getReqPermissions().get(0).setClassification(
+                randomFinderFile.getReqPermissions().get(0).getClassification());
 
         context.put("finderFile", createdFinderFile);
         service.update(createdFinderFile);

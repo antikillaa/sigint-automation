@@ -1,5 +1,6 @@
 package ae.pegasus.framework.services;
 
+import ae.pegasus.framework.app_context.RunContext;
 import ae.pegasus.framework.data_for_entity.RandomEntities;
 import ae.pegasus.framework.data_for_entity.data_providers.user_password.UserPasswordProvider;
 import ae.pegasus.framework.error_reporter.ErrorReporter;
@@ -10,6 +11,7 @@ import ae.pegasus.framework.http.requests.UserRequest;
 import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
+import ae.pegasus.framework.utils.RandomGenerator;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
@@ -23,6 +25,7 @@ public class UserService implements EntityService<User> {
     private static String defaultTeamId;
     private static RandomEntities randomEntities = new RandomEntities();
     private static Map<String, List<User>> userMap = new HashMap<>();
+    private static RunContext context = RunContext.get();
 
     private static final int PASSWORD_LENGTH = 10;
 
@@ -232,10 +235,23 @@ public class UserService implements EntityService<User> {
         if (!titleOperationResult.isSuccess()) {
             throw new AssertionError("Unable create Title: " + JsonConverter.toJsonString(title));
         }
+        title = titleOperationResult.getEntity();
 
         User newUser = randomEntities.randomEntity(User.class);
-        newUser.setParentTeamId("00"); // default Team
-        newUser.getDefaultPermission().setTitles(Collections.singletonList(titleOperationResult.getEntity().getId()));
+        String teamID = RandomGenerator.getRandomItemFromList(
+                appContext.getLoggedUser().getUser().getDefaultPermission().getRecord().getOrganizations());
+
+        newUser.setParentTeamIds(Collections.singletonList(teamID));
+        newUser.getDefaultPermission().setTitles(Collections.singletonList(title.getId()));
+
+        Map<String, List<String>> parentTeams = new HashMap<>();
+        parentTeams.put(teamID, Collections.singletonList("MEMBER"));
+        newUser.setParentTeams(parentTeams);
+
+        TeamTitle teamTitle = new TeamTitle();
+        teamTitle.setOrgUnitId(teamID);
+        teamTitle.setTitles(Arrays.asList(title.getId()));
+        newUser.getDefaultPermission().setTeamTitles(Arrays.asList(teamTitle));
 
         OperationResult<User> userOperationResult = add(newUser);
         if (!userOperationResult.isSuccess()) {
