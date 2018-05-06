@@ -528,6 +528,51 @@ Examples:
 | sourceType | recordType | recordsCount |
 | DU         | IMSIToSubEnterPrise        | 100          |
 
+Scenario: API.DU-NLD_VLR ingestion
+Meta: @nightly @DU-NLD_VLR
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+And Number of ingested entity records in CB == <recordsCount>
+
+Examples:
+| sourceType | recordType | recordsCount |
+| DU         | NLDVLR        | 100
+
+Scenario: API.DU-NLD_HO ingestion
+Meta: @nightly @DU-NLD_HO
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+And Number of ingested entity records in CB == <recordsCount>
+
+Examples:
+| sourceType | recordType | recordsCount |
+| DU         | NLDHO        | 100
+
+Scenario: API.DU-NLD_4glur ingestion
+Meta: @nightly @DU-NLD_4glur
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+And Number of ingested entity records in CB == <recordsCount>
+
+Examples:
+| sourceType | recordType | recordsCount |
+| DU         | NLD4glur        | 100
+
 Scenario: API.Search and count data folders by path
 Meta: @nightly @Search-folders-by-path
 Given I sign in as admin user
