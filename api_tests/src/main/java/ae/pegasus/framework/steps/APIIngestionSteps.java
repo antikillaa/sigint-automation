@@ -104,6 +104,15 @@ public class APIIngestionSteps extends APISteps {
                     case "IMSITOSUBENTERPRISE":
                         dockerAdapter = new DUIMSISubEnterpriseDockerAdapter();
                         break;
+                    case "NLDVLR":
+                        dockerAdapter = new DUNLDVLRDockerAdapter();
+                        break;
+                    case "NLDHO":
+                        dockerAdapter = new DUNLDHODockerAdapter();
+                        break;
+                    case "NLD4GLUR":
+                        dockerAdapter = new DUNLD4glurDockerAdapter();
+                        break;
                 }
                 break;
             case "E":
