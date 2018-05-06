@@ -98,6 +98,12 @@ public class APIIngestionSteps extends APISteps {
                     case "IMSITOSUBCONSUMER":
                         dockerAdapter = new DUIMSISubConsumerDockerAdapter();
                         break;
+                    case "IMSITOSUBMOBILE":
+                        dockerAdapter = new DUIMSISubMobileDockerAdapter();
+                        break;
+                    case "IMSITOSUBENTERPRISE":
+                        dockerAdapter = new DUIMSISubEnterpriseDockerAdapter();
+                        break;
                 }
                 break;
             case "E":

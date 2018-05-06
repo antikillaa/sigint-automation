@@ -498,6 +498,36 @@ Examples:
 | sourceType | recordType | recordsCount |
 | DU         | IMSIToSubConsumer        | 100          |
 
+Scenario: API.DU-IMSISubMobile ingestion
+Meta: @nightly @DU-IMSISubMobile
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+And Number of ingested entity records in CB == <recordsCount>
+
+Examples:
+| sourceType | recordType | recordsCount |
+| DU         | IMSIToSubMobile        | 100          |
+
+Scenario: API.DU-IMSISubEnterprise ingestion
+Meta: @nightly @DU-IMSISubEnterprise
+Given I sign in as admin user
+And Data source with <sourceType> and <recordType> exists
+And <sourceType> - <recordType> files with <recordsCount> records are generated
+And I create remote path for ingestion
+When I upload files
+Then Uploaded files are processed
+And Original data file is searchable within the system
+And Number of ingested entity records in CB == <recordsCount>
+
+Examples:
+| sourceType | recordType | recordsCount |
+| DU         | IMSIToSubEnterPrise        | 100          |
+
 Scenario: API.Search and count data folders by path
 Meta: @nightly @Search-folders-by-path
 Given I sign in as admin user
