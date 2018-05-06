@@ -95,6 +95,9 @@ public class APIIngestionSteps extends APISteps {
                     case "VLR":
                         dockerAdapter = new DUVLRDockerAdapter();
                         break;
+                    case "IMSITOSUBCONSUMER":
+                        dockerAdapter = new DUIMSISubConsumerDockerAdapter();
+                        break;
                 }
                 break;
             case "E":
