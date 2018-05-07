@@ -1,7 +1,5 @@
 package ae.pegasus.framework.steps;
 
-import ae.pegasus.framework.conditions.Conditions;
-import ae.pegasus.framework.conditions.Verify;
 import ae.pegasus.framework.data_for_entity.RandomEntities;
 import ae.pegasus.framework.errors.NullReturnException;
 import ae.pegasus.framework.http.OperationResult;
@@ -14,6 +12,8 @@ import org.junit.Assert;
 
 import java.util.List;
 import java.util.regex.Pattern;
+
+import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 
 @SuppressWarnings("unchecked")
 public class APITeamManagementSteps extends APISteps {
@@ -38,7 +38,7 @@ public class APITeamManagementSteps extends APISteps {
         Team created = Entities.getTeams().getLatest();
 
         Assert.assertEquals(created.getDescription(), team.getDescription());
-        Verify.shouldBe(Conditions.equals(created.getDefaultPermission(), team.getDefaultPermission()));
+        Assert.assertEquals(toJsonString(created.getDefaultPermission()), toJsonString(team.getDefaultPermission()));
         Assert.assertEquals(created.getFullName(), team.getFullName());
         Assert.assertEquals(created.getOrganizationType(), team.getOrganizationType());
         Assert.assertEquals(created.getParentTeamId(), team.getParentTeamId());
