@@ -16,6 +16,7 @@ import java.util.*;
 
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
+import static org.junit.Assert.assertFalse;
 
 public class UserService implements EntityService<User> {
 
@@ -25,6 +26,9 @@ public class UserService implements EntityService<User> {
     private static String defaultTeamId;
     private static RandomEntities randomEntities = new RandomEntities();
     private static Map<String, List<User>> userMap = new HashMap<>();
+
+    private static TitleService titleService = new TitleService();
+    private static ResponsibilityService responsibilityService = new ResponsibilityService();
 
     private static final int PASSWORD_LENGTH = 10;
 
@@ -224,14 +228,14 @@ public class UserService implements EntityService<User> {
         log.info("Creating new user with required permissions:" + Arrays.toString(permissions));
         Responsibility responsibility = randomEntities.randomEntity(Responsibility.class);
         responsibility.setPermissions(Arrays.asList(permissions));
-        OperationResult<Responsibility> responsibilityOperationResult = new ResponsibilityService().add(responsibility);
+        OperationResult<Responsibility> responsibilityOperationResult = responsibilityService.add(responsibility);
         if (!responsibilityOperationResult.isSuccess()) {
             throw new AssertionError("Unable create Responsibility: " + toJsonString(responsibility));
         }
 
         Title title = randomEntities.randomEntity(Title.class);
         title.setResponsibilities(Collections.singletonList(responsibilityOperationResult.getEntity().getId()));
-        OperationResult<Title> titleOperationResult = new TitleService().add(title);
+        OperationResult<Title> titleOperationResult = titleService.add(title);
         if (!titleOperationResult.isSuccess()) {
             throw new AssertionError("Unable create Title: " + toJsonString(title));
         }
@@ -266,6 +270,31 @@ public class UserService implements EntityService<User> {
         }
 
         return user;
+    }
+
+    public void setPermissions(User user, String... permissions) {
+        log.info("User: " + user.getName() + "\nNew permissions:" + Arrays.toString(permissions));
+
+        // create new responsibility
+        Responsibility responsibility = randomEntities.randomEntity(Responsibility.class);
+        responsibility.setPermissions(Arrays.asList(permissions));
+        OperationResult<Responsibility> responsibilityOperationResult = responsibilityService.add(responsibility);
+        if (!responsibilityOperationResult.isSuccess()) {
+            throw new AssertionError("Unable create Responsibility: " + toJsonString(responsibility));
+        }
+
+        // get user title
+        List<TeamTitle> teamTitles = user.getDefaultPermission().getTeamTitles();
+        assertFalse("Current user without TeamTitles!", teamTitles.isEmpty());
+
+        // update user title with new responsibilities
+        TeamTitle teamTitle = getRandomItemFromList(teamTitles);
+        String titleID = getRandomItemFromList(teamTitle.getTitles());
+        Title title = titleService.view(titleID).getEntity();
+        title.setResponsibilities(Collections.singletonList(responsibilityOperationResult.getEntity().getId()));
+        OperationResult<Title> titleOperationResult = titleService.update(title);
+        if (!titleOperationResult.isSuccess())
+            throw new AssertionError("Unable update Title: " + toJsonString(title));
     }
 
     public List<OperationResult> removeAll() {

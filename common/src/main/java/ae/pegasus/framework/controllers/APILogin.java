@@ -107,6 +107,17 @@ public class APILogin {
         signInAsUser(user);
     }
 
+    @Given("Set new permissions: $permissions to current user and relogin")
+    public void setNewPermissionToCurrentUserAndRelogin(String permString) {
+        String[] permissions = StringUtils.trimSpaces(permString.split(","));
+        User user = AppContext.get().getLoggedUser().getUser();
+
+        signInAsUser(getUserByRole(ADMIN_ROLE));
+        cleaningIsRequired = true;
+        userService.setPermissions(user, permissions);
+        signInAsUser(user);
+    }
+
     @AfterStories
     public void afterStoryTearDown() {
         if (cleaningIsRequired) {
