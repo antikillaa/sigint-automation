@@ -1,6 +1,5 @@
 package ae.pegasus.framework.services;
 
-import ae.pegasus.framework.app_context.RunContext;
 import ae.pegasus.framework.data_for_entity.RandomEntities;
 import ae.pegasus.framework.data_for_entity.data_providers.user_password.UserPasswordProvider;
 import ae.pegasus.framework.error_reporter.ErrorReporter;
@@ -8,14 +7,15 @@ import ae.pegasus.framework.http.G4Response;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.http.requests.ChangePasswordRequest;
 import ae.pegasus.framework.http.requests.UserRequest;
-import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
-import ae.pegasus.framework.utils.RandomGenerator;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.*;
+
+import static ae.pegasus.framework.json.JsonConverter.toJsonString;
+import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
 
 public class UserService implements EntityService<User> {
 
@@ -25,7 +25,6 @@ public class UserService implements EntityService<User> {
     private static String defaultTeamId;
     private static RandomEntities randomEntities = new RandomEntities();
     private static Map<String, List<User>> userMap = new HashMap<>();
-    private static RunContext context = RunContext.get();
 
     private static final int PASSWORD_LENGTH = 10;
 
@@ -63,6 +62,7 @@ public class UserService implements EntityService<User> {
             log.info("User is created:" + user.getName());
         } else {
             log.error("Can't create User " + entity.toString());
+            log.error("Response:" + response.getMessage());
         }
         return operationResult;
     }
@@ -226,23 +226,22 @@ public class UserService implements EntityService<User> {
         responsibility.setPermissions(Arrays.asList(permissions));
         OperationResult<Responsibility> responsibilityOperationResult = new ResponsibilityService().add(responsibility);
         if (!responsibilityOperationResult.isSuccess()) {
-            throw new AssertionError("Unable create Responsibility: " + JsonConverter.toJsonString(responsibility));
+            throw new AssertionError("Unable create Responsibility: " + toJsonString(responsibility));
         }
 
         Title title = randomEntities.randomEntity(Title.class);
         title.setResponsibilities(Collections.singletonList(responsibilityOperationResult.getEntity().getId()));
         OperationResult<Title> titleOperationResult = new TitleService().add(title);
         if (!titleOperationResult.isSuccess()) {
-            throw new AssertionError("Unable create Title: " + JsonConverter.toJsonString(title));
+            throw new AssertionError("Unable create Title: " + toJsonString(title));
         }
         title = titleOperationResult.getEntity();
 
         User newUser = randomEntities.randomEntity(User.class);
-        String teamID = RandomGenerator.getRandomItemFromList(
-                appContext.getLoggedUser().getUser().getDefaultPermission().getRecord().getOrganizations());
-
-        newUser.setParentTeamIds(Collections.singletonList(teamID));
         newUser.getDefaultPermission().setTitles(Collections.singletonList(title.getId()));
+
+        String teamID = getRandomItemFromList(appContext.getLoggedUser().getUser().getParentTeamIds());
+        newUser.setParentTeamIds(Collections.singletonList(teamID));
 
         Map<String, List<String>> parentTeams = new HashMap<>();
         parentTeams.put(teamID, Collections.singletonList("MEMBER"));
@@ -250,12 +249,12 @@ public class UserService implements EntityService<User> {
 
         TeamTitle teamTitle = new TeamTitle();
         teamTitle.setOrgUnitId(teamID);
-        teamTitle.setTitles(Arrays.asList(title.getId()));
-        newUser.getDefaultPermission().setTeamTitles(Arrays.asList(teamTitle));
+        teamTitle.setTitles(Collections.singletonList(title.getId()));
+        newUser.getDefaultPermission().setTeamTitles(Collections.singletonList(teamTitle));
 
         OperationResult<User> userOperationResult = add(newUser);
         if (!userOperationResult.isSuccess()) {
-            throw new AssertionError("Unable create User: " + JsonConverter.toJsonString(newUser));
+            throw new AssertionError("Unable create User: " + toJsonString(newUser));
         }
 
         User user = userOperationResult.getEntity();
@@ -263,7 +262,7 @@ public class UserService implements EntityService<User> {
         OperationResult<AuthResponseResult> firstPasswordChangeResult = changeTempPassword(user);
         if (!firstPasswordChangeResult.isSuccess()) {
             log.error(firstPasswordChangeResult.getMessage());
-            throw new AssertionError("Unable change password for new User: " + JsonConverter.toJsonString(newUser));
+            throw new AssertionError("Unable change password for new User: " + toJsonString(newUser));
         }
 
         return user;

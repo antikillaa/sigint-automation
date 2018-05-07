@@ -23,6 +23,7 @@ public class User extends Organization {
     private String email;
     @DataIgnore
     private List<String> languages = new ArrayList<>();
+    @DataIgnore
     private String imageURL;
     private String staffId;
     @DataIgnore
