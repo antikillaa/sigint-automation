@@ -10,7 +10,7 @@ import java.util.List;
 public class UserPermission {
 
     private List<String> titles = new ArrayList<>();
-    private List<TeamTitle> teamTitles;
+    private List<TeamTitle> teamTitles = new ArrayList<>();
     private List<String> actions = new ArrayList<>();
     private PermissionRecord record = new PermissionRecord();
 

@@ -13,25 +13,25 @@ BE: Unauthenticated users cannot access any file-system endpoint
 BE: All file endpoints will only return files that the user is authorized to see
 
 Scenario: API.To view or check existence of a file, a user must have FILE_VIEW permission
-Given I sign in as user with permissions FILE_VIEW
+Given I sign in as user with permissions UM_USER
+When I send get list of finder file request
+Then Request is unsuccessful
+
+Given Set new permissions: FILE_VIEW to current user and relogin
 When I send get list of finder file request
 Then Request is successful
 Then Finder files list size > 0
 
-Given I sign in as user with permissions UM_USER
-When I send get list of finder file request
-Then Request is unsuccessful
-
 
 Scenario: API.To create a file, a user must have FILE_CREATE permissions
-Given I sign in as user with permissions FILE_CREATE
+Given I sign in as user with permissions UM_USER
+When I send create finder file request
+Then Request is unsuccessful
+
+Given Set new permissions: FILE_CREATE to current user and relogin
 When I send create finder file request
 Then Request is successful
 Then Created finder file is correct
-
-Given I sign in as user with permissions UM_USER
-When I send create finder file request
-Then Request is unsuccessful
 
 
 Scenario: API.To update a file, a user must have FILE_UPDATE permissions
@@ -42,7 +42,7 @@ Then Created finder file is correct
 When I send update finder file request
 Then Request is unsuccessful
 
-Given I sign in as user with permissions FILE_VIEW, FILE_UPDATE
+Given Set new permissions: FILE_VIEW, FILE_CREATE, FILE_UPDATE to current user and relogin
 When I send update finder file request
 Then Request is successful
 Then Created finder file is correct
@@ -58,7 +58,7 @@ When Get random file from from CBFinder search results
 And I send delete finder file request
 Then Request is unsuccessful
 
-Given I sign in as user with permissions FILE_VIEW, FILE_DELETE
+Given Set new permissions: FILE_VIEW, FILE_DELETE to current user and relogin
 When I send CB Finder search with query:<query>
 Then Request is successful
 When Get files from CBFinder search results
