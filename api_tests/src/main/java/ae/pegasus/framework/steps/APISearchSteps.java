@@ -297,8 +297,9 @@ public class APISearchSteps extends APISteps {
             for (String recordStatus : recordStatuses) {
                 switch (recordStatus.toLowerCase()) {
                     case "unassigned":
+                        List<String> ownerId = entity.getAssignments().getOwnerId();
                         assertTrue("Search by RecordStatus:Unassigned, return assigned record:" + toJsonString(entity),
-                                entity.getAssignments().getOwnerId().isEmpty());
+                                ownerId == null || ownerId.isEmpty());
                         break;
                     case "unprocessed":
                         assertTrue("Search by RecordStatus::Unprocessed return record with reportIds:" + toJsonString(entity),

@@ -13,25 +13,34 @@ public class CBEntities {
     private List<SearchRecord> to = new ArrayList<>();
     private List<SearchRecord> cc = new ArrayList<>();
     private List<SearchRecord> bcc = new ArrayList<>();
-    @JsonProperty("Ticket")
-    private List<SearchRecord> ticket = new ArrayList<>();
-    @JsonProperty("Identity")
-    private List<SearchRecord> identity = new ArrayList<>();
-    @JsonProperty("Payment")
-    private List<SearchRecord> payment = new ArrayList<>();
-    @JsonProperty("Reservation")
-    private List<SearchRecord> reservation = new ArrayList<>();
     private List<SearchRecord> room = new ArrayList<>();
     private List<SearchRecord> forum = new ArrayList<>();
+    @JsonProperty("Ticket")
+    private List<SearchRecord> sitaTicket = new ArrayList<>();
+    private List<SearchRecord> ticket = new ArrayList<>();
+    @JsonProperty("Identity")
+    private List<SearchRecord> sitaIdentity = new ArrayList<>();
+    private List<SearchRecord> identity = new ArrayList<>();
+    @JsonProperty("Payment")
+    private List<SearchRecord> sitaPayment = new ArrayList<>();
+    private List<SearchRecord> payment = new ArrayList<>();
+    @JsonProperty("Reservation")
+    private List<SearchRecord> sitaReservation = new ArrayList<>();
+    private List<SearchRecord> reservation = new ArrayList<>();
     @JsonProperty("Email")
+    private List<SearchRecord> sitaEmail = new ArrayList<>();
     private List<SearchRecord> email = new ArrayList<>();
     @JsonProperty("Visa")
+    private List<SearchRecord> sitaVisa = new ArrayList<>();
     private List<SearchRecord> visa = new ArrayList<>();
     @JsonProperty("PhoneNumber")
-    private List<SearchRecord> phoneNumber = new ArrayList<>();
+    private List<SearchRecord> sitaPhone = new ArrayList<>();
+    private List<SearchRecord> phonenumber = new ArrayList<>();
     @JsonProperty("Membership")
+    private List<SearchRecord> sitaMembership = new ArrayList<>();
     private List<SearchRecord> membership = new ArrayList<>();
     @JsonProperty("Passport")
+    private List<SearchRecord> sitaPassport = new ArrayList<>();
     private List<SearchRecord> passport = new ArrayList<>();
     private List<SearchRecord> unknown = new ArrayList<>();
 
@@ -139,14 +148,6 @@ public class CBEntities {
         this.visa = visa;
     }
 
-    public List<SearchRecord> getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(List<SearchRecord> phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public List<SearchRecord> getMembership() {
         return membership;
     }
@@ -169,5 +170,85 @@ public class CBEntities {
 
     public void setRoot(List<SearchRecord> root) {
         this.root = root;
+    }
+
+    public List<SearchRecord> getSitaTicket() {
+        return sitaTicket;
+    }
+
+    public void setSitaTicket(List<SearchRecord> sitaTicket) {
+        this.sitaTicket = sitaTicket;
+    }
+
+    public List<SearchRecord> getSitaIdentity() {
+        return sitaIdentity;
+    }
+
+    public void setSitaIdentity(List<SearchRecord> sitaIdentity) {
+        this.sitaIdentity = sitaIdentity;
+    }
+
+    public List<SearchRecord> getSitaVisa() {
+        return sitaVisa;
+    }
+
+    public void setSitaVisa(List<SearchRecord> sitaVisa) {
+        this.sitaVisa = sitaVisa;
+    }
+
+    public List<SearchRecord> getSitaPhone() {
+        return sitaPhone;
+    }
+
+    public void setSitaPhone(List<SearchRecord> sitaPhone) {
+        this.sitaPhone = sitaPhone;
+    }
+
+    public List<SearchRecord> getSitaReservation() {
+        return sitaReservation;
+    }
+
+    public void setSitaReservation(List<SearchRecord> sitaReservation) {
+        this.sitaReservation = sitaReservation;
+    }
+
+    public List<SearchRecord> getSitaPayment() {
+        return sitaPayment;
+    }
+
+    public void setSitaPayment(List<SearchRecord> sitaPayment) {
+        this.sitaPayment = sitaPayment;
+    }
+
+    public List<SearchRecord> getSitaEmail() {
+        return sitaEmail;
+    }
+
+    public void setSitaEmail(List<SearchRecord> sitaEmail) {
+        this.sitaEmail = sitaEmail;
+    }
+
+    public List<SearchRecord> getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(List<SearchRecord> phonenumber) {
+        this.phonenumber = phonenumber;
+    }
+
+    public List<SearchRecord> getSitaMembership() {
+        return sitaMembership;
+    }
+
+    public void setSitaMembership(List<SearchRecord> sitaMembership) {
+        this.sitaMembership = sitaMembership;
+    }
+
+    public List<SearchRecord> getSitaPassport() {
+        return sitaPassport;
+    }
+
+    public void setSitaPassport(List<SearchRecord> sitaPassport) {
+        this.sitaPassport = sitaPassport;
     }
 }
