@@ -10,7 +10,8 @@ Given Find or create test target from json:<target>
 When Edit (create draft of) existing profile
 When upload new target image:<image> to target
 When I send publish profile draft request
-And I send get profile details request
+Then Request is successful
+When I send get profile details request
 Then Profile contain uploaded image
 
 Examples:

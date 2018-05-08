@@ -121,6 +121,11 @@ public class ProfileDraftService implements EntityService<Profile> {
         }
     }
 
+    public OperationResult deleteImage(String profileID) {
+        G4Response response = g4HttpClient.sendRequest(request.deleteImage(profileID));
+        return new OperationResult(response);
+    }
+
     public OperationResult<List<SearchRecord>> getVoiceEvents(Profile profile) {
         log.info("Get voice events for profileId: " + profile.getId() + " name:" + profile.getName());
         G4Response response = g4HttpClient.sendRequest(request.voiceEvents(profile.getId()));

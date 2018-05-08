@@ -1,11 +1,12 @@
 package ae.pegasus.framework.http.requests;
 
-import ae.pegasus.framework.http.HttpMethod;
 import ae.pegasus.framework.model.Profile;
 import ae.pegasus.framework.model.Voice;
 
 import javax.ws.rs.core.MediaType;
 import java.io.File;
+
+import static ae.pegasus.framework.http.HttpMethod.*;
 
 public class ProfileDraftRequest extends HttpRequest {
 
@@ -22,7 +23,7 @@ public class ProfileDraftRequest extends HttpRequest {
     public ProfileDraftRequest create(Profile profile) {
         this
                 .setURI(URI)
-                .setHttpMethod(HttpMethod.POST)
+                .setHttpMethod(POST)
                 .setPayload(profile);
         return this;
     }
@@ -30,21 +31,21 @@ public class ProfileDraftRequest extends HttpRequest {
     public ProfileDraftRequest delete(String id) {
         this
                 .setURI(URI + "/" + id)
-                .setHttpMethod(HttpMethod.DELETE);
+                .setHttpMethod(DELETE);
         return this;
     }
 
     public ProfileDraftRequest view(String id) {
         this
                 .setURI(URI + "/" + id)
-                .setHttpMethod(HttpMethod.GET);
+                .setHttpMethod(GET);
         return this;
     }
 
     public ProfileDraftRequest publish(Profile profile) {
         this
                 .setURI(URI + "/" + profile.getId() + "/publish")
-                .setHttpMethod(HttpMethod.POST)
+                .setHttpMethod(POST)
                 .setPayload(profile);
         return this;
     }
@@ -52,7 +53,7 @@ public class ProfileDraftRequest extends HttpRequest {
     public ProfileDraftRequest list() {
         this
                 .setURI(URI)
-                .setHttpMethod(HttpMethod.GET);
+                .setHttpMethod(GET);
         return this;
     }
 
@@ -61,7 +62,7 @@ public class ProfileDraftRequest extends HttpRequest {
                 profile.getProperties().getProfileVersion() == null ? 1 : profile.getProperties().getProfileVersion() + 1);
         this
                 .setURI(URI + "/" + profile.getId())
-                .setHttpMethod(HttpMethod.PUT)
+                .setHttpMethod(PUT)
                 .setPayload(profile);
         return this;
     }
@@ -77,7 +78,14 @@ public class ProfileDraftRequest extends HttpRequest {
         addBodyFile("file", file, new MediaType("image", "jpeg"));
         this
                 .setURI(URI + "/" + profileID + "/image/upload")
-                .setHttpMethod(HttpMethod.POST);
+                .setHttpMethod(POST);
+        return this;
+    }
+
+    public ProfileDraftRequest deleteImage(String profileID) {
+        this
+                .setURI(URI + "/" + profileID + "/image/delete")
+                .setHttpMethod(DELETE);
         return this;
     }
 
@@ -87,7 +95,7 @@ public class ProfileDraftRequest extends HttpRequest {
     public ProfileDraftRequest voiceEvents(String profileID) {
         this
                 .setURI(URI + "/" + profileID + "/voice/events")
-                .setHttpMethod(HttpMethod.GET);
+                .setHttpMethod(GET);
         return this;
     }
 
@@ -97,7 +105,7 @@ public class ProfileDraftRequest extends HttpRequest {
     public ProfileDraftRequest voice(String profileID) {
         this
                 .setURI(URI + "/" + profileID + "/voice")
-                .setHttpMethod(HttpMethod.GET);
+                .setHttpMethod(GET);
         return this;
     }
 
@@ -107,7 +115,7 @@ public class ProfileDraftRequest extends HttpRequest {
     public ProfileDraftRequest createVoice(String profileID, Voice voice) {
         this
                 .setURI(URI + "/" + profileID + "/voice")
-                .setHttpMethod(HttpMethod.POST)
+                .setHttpMethod(POST)
                 .setPayload(voice);
         return this;
     }
@@ -116,7 +124,7 @@ public class ProfileDraftRequest extends HttpRequest {
         addBodyFile("file", file, new MediaType("audio", "x-m4a"));
         this
                 .setURI(URI + "/" + profileID + "/voice/upload")
-                .setHttpMethod(HttpMethod.POST);
+                .setHttpMethod(POST);
         return this;
     }
 }

@@ -16,6 +16,7 @@ import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import org.junit.Assert;
 
 import java.io.File;
 import java.net.URL;
@@ -336,6 +337,10 @@ public class APIProfileSteps extends APISteps {
                 } else {
                     throw new OperationResultError(fileOperationResult);
                 }
+                // add assigned team
+                Assert.assertTrue("Unable add assigned team to target",
+                        target.getAssignedTeams()
+                                .add(getRandomItemFromList(appContext.getLoggedUser().getUser().getParentTeamIds())));
                 // publish target
                 result = draftService.publish(target);
                 if (!result.isSuccess()) {
@@ -389,6 +394,12 @@ public class APIProfileSteps extends APISteps {
     @When("upload new target image:$image to target")
     public void uploadTargetImage(String image) {
         Profile profile = context.get("profileDraft", Profile.class);
+
+        if (profile.getUploadedImage() != null && !profile.getUploadedImage().isEmpty()) {
+            if (!draftService.deleteImage(profile.getId()).isSuccess()) {
+                log.error("Unable delete current target image");
+            }
+        }
 
         URL url = getClass().getClassLoader().getResource(image);
         if (url != null) {
