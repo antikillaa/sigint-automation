@@ -11,6 +11,7 @@ public enum DataSourceType {
     F,
     S,
     T,
+    O,
     PHONEBOOK,
     //SUBSCRIBER,
     //SY,
