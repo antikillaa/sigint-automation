@@ -175,7 +175,7 @@ public class APIFinderFileSteps extends APISteps {
     }
 
     @When("I delete all empty QE auto files")
-    public void deleteAllEmptyFiles() {
+    public void deleteAllEmptyQEFiles() {
         List<FinderFile> files = context.get("finderFileList", List.class);
         files.stream()
                 .filter(file -> file.getName().contains("QE auto")
@@ -184,6 +184,13 @@ public class APIFinderFileSteps extends APISteps {
                 .forEach(service::remove);
     }
 
+    @When("I delete all empty files")
+    public void deleteAllEmptyFiles() {
+        List<FinderFile> files = context.get("finderFileList", List.class);
+        files.stream()
+                .filter(file -> !file.getHasContents())
+                .forEach(service::remove);
+    }
 
     @When("I search finder file members by query:$name")
     public void searchProfileByName(String name) {

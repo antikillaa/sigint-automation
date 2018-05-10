@@ -123,3 +123,10 @@ Then Request is successful
 
 When I send delete finder file request
 Then Request is successful
+
+
+Scenario: Delete all empty files
+Meta: @skip
+Given I sign in as admin user
+When I send get list of finder file request
+When I delete all empty files

@@ -51,6 +51,8 @@ public class FinderFileRequest extends HttpRequest {
     public FinderFileRequest root(SearchFilter filter) {
         String params = "/root?" +
                 "hasContents=true" +
+                "&parentChain=true" +
+                "&query=" +
                 "&page=" + filter.getPage() +
                 "&pageSize=" + filter.getPageSize() +
                 "&sortKey=" + filter.getSortField() +
