@@ -38,7 +38,7 @@ public class SearchQueryBuilder {
     }
 
     public static String timeRangeToQuery(TimeRange timeRange) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         return String.format("eventTime:[\"%s\"..\"%s\"]",
                 dateFormat.format(timeRange.getStartDate()), dateFormat.format(timeRange.getEndDate()));
     }
