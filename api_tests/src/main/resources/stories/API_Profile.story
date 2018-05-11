@@ -99,24 +99,15 @@ Then Request is successful
 Scenario: Add hit(s) for existing targets
 Given I clean up ingestion directory
 !-- find first profiler
-When I search finder file members by query:<to_target>
+When I search finder file members by query:<target>
 Then Request is successful
 When Get profiles from CBFinder search results
 Then Profile list size > 0
 When get random profile from profile list
 And I send get profile details request
 And send get profile identifierAggregations request
-!-- find second profiler
-When I search finder file members by query:<from_target>
-Then Request is successful
-When Get profiles from CBFinder search results
-Then Profile list size > 0
-When get random profile from profile list
-When I send get profile details request
-And send get profile identifierAggregations request
 !-- add targets identifiers to injection file
-And add <recordsCount> <identifierType> from profile:<to_target> to injection file
-And add <recordsCount> <identifierType> from profile:<from_target> to injection file
+And add <recordsCount> <identifierType> from profile:<target> to injection file
 !-- data ingestion
 Given Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> files with <recordsCount> records are generated
@@ -126,14 +117,13 @@ Then Uploaded files are processed
 And Original data file is searchable within the system
 And Number of ingested event records in CB == <recordsCount>
 !-- verification
-Then identifierAggregations hit counts for:<identifierType> of profile:<to_target> should incremented
-Then identifierAggregations hit counts for:<identifierType> of profile:<from_target> should incremented
+Then identifierAggregations hit counts for:<identifierType> of profile:<target> should incremented
 
 Examples:
-| to_target  | from_target | identifierType | sourceType | recordType | recordsCount |
-| Darkwing Duck, Drake Mallard | Launchpad McQuack | PHONE_NUMBER  | S | SMS | 1 |
-| Darkwing Duck, Drake Mallard | Launchpad McQuack | IMEI  | T | SMS | 1 |
-| Darkwing Duck, Drake Mallard | Launchpad McQuack | IMSI  | F | SMS | 1 |
+| target | identifierType | sourceType | recordType | recordsCount |
+| Darkwing Duck, Drake Mallard | PHONE_NUMBER  | S | SMS | 1 |
+| Darkwing Duck, Drake Mallard | IMEI | T | SMS | 1 |
+| Darkwing Duck, Drake Mallard | IMSI | F | SMS | 1 |
 
 
 Scenario: Get profile summary
