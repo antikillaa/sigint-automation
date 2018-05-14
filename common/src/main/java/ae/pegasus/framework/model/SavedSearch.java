@@ -19,6 +19,7 @@ public class SavedSearch extends AbstractEntity {
     private String userId;
     private Date lastExecutionTime;
     private String objectType;
+    private String type;
     private Date createdAt;
     private List<String> objectTypeIds;
     private Integer numberOfResults;
@@ -26,6 +27,7 @@ public class SavedSearch extends AbstractEntity {
     private Date endDate;
     private Boolean historical;
     private Integer lastExecutionResultsFound;
+    private List<String> reqPermissions;
 
 
     public List<String> getAssignmentTeamIds() {
@@ -194,5 +196,21 @@ public class SavedSearch extends AbstractEntity {
 
     public void setContainers(List<FinderFile> containers) {
         this.containers = containers;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public List<String> getReqPermissions() {
+        return reqPermissions;
+    }
+
+    public void setReqPermissions(List<String> reqPermissions) {
+        this.reqPermissions = reqPermissions;
     }
 }
