@@ -68,6 +68,7 @@ Examples:
 Scenario: SIGINT. Wild Card Search
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
+And CB search result list size > 0
 Then CB search contains results for query
 
 Examples:
@@ -81,6 +82,7 @@ Examples:
 Scenario: OSINT. Wild Card Search
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
+And CB search result list size > 0
 Then CB search contains results for query
 
 Examples:
@@ -94,6 +96,7 @@ Examples:
 Scenario: SIGINT. Fuzzy Search
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
+And CB search result list size > 0
 Then CB search contains results for query
 
 Examples:
@@ -105,8 +108,10 @@ Examples:
 
 
 Scenario: OSINT. Fuzzy Search
+Meta: @wip
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
+And CB search result list size > 0
 Then CB search contains results for query
 
 Examples:
@@ -121,6 +126,7 @@ Scenario: Search. [SIGINT] Workflow filters. Record status: Unassigned
 When I send workflow search request: record status:<recordStatus>, source:<source>, objectType:<objectType>,
 pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
+And CB search result list size > 0
 And CB search results match the recordStatus filters
 
 Examples:
@@ -132,6 +138,7 @@ Scenario: Search. [SIGINT] Workflow filters. Record status: Unprocessed
 When I send workflow search request: record status:<recordStatus>, source:<source>, objectType:<objectType>,
 pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
+And CB search result list size > 0
 And CB search results match the recordStatus filters
 
 Examples:
@@ -143,6 +150,7 @@ Scenario: Search. [SIGINT] Workflow filters. Record status: Reported
 When I send workflow search request: record status:<recordStatus>, source:<source>, objectType:<objectType>,
 pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
+And CB search result list size > 0
 And CB search results match the recordStatus filters
 
 Examples:
@@ -154,6 +162,7 @@ Scenario: Search. [SIGINT] Workflow filters. Record status: Unimportant
 When I send workflow search request: record status:<recordStatus>, source:<source>, objectType:<objectType>,
 pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
+And CB search result list size > 0
 And CB search results match the recordStatus filters
 
 Examples:
@@ -238,6 +247,7 @@ Examples:
 Scenario: POST /api/search/count
 When I send CB search count request - query:<query>, objectType:<objectType>, sources:<source>
 Then Request is successful
+And CB search result list size > 0
 And TotalCount's in search results <criteria> <size>
 
 Examples:
