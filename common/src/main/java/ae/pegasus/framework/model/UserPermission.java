@@ -48,10 +48,10 @@ public class UserPermission {
 
     public class PermissionRecord {
 
-        private List<String> clearances = Arrays.asList("TS-OS","TS-CIO","TS-SCI");
-        private List<String> dataSources = Arrays.asList("PR", "INSTAGRAM", "E", "F", "H", "RFA", "ODD_JOBS", "O", "DU",
-                "UDB", "S", "T", "DARK_WEB", "RFI", "DARK_WEB_REPORTS", "ZELZAL", "SITA", "YOUTUBE", "GPLUS", "KARMA",
-                "TUMBLR", "NEWS", "OperatorReport", "PHONEBOOK", "TWITTER", "FORUM");
+        private List<String> clearances = Arrays.asList("TS-OS", "TS-CIO", "TS-SCI");
+        private List<String> dataSources = Arrays.asList("PR", "INSTAGRAM", "E", "ETISALAT_SUBSCRIBER", "F", "H",
+                "ODD_JOBS", "O", "DU", "UDB", "S", "DARK_WEB", "T", "DARK_WEB_REPORTS", "ZELZAL", "EID", "IM", "SITA",
+                "YOUTUBE", "GPLUS", "KARMA", "TUMBLR", "NEWS", "FORUM", "PHONEBOOK", "TWITTER");
         private List<String> organizations = new ArrayList<>();
 
         public List<String> getClearances() {
