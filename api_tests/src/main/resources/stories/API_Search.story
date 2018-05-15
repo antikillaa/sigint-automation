@@ -108,7 +108,6 @@ Examples:
 
 
 Scenario: OSINT. Fuzzy Search
-Meta: @wip
 When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0

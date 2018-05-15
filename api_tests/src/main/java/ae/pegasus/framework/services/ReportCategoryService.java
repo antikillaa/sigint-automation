@@ -68,15 +68,6 @@ public class ReportCategoryService implements EntityService<ReportCategory> {
         return new OperationResult<>(response, reportCategories);
     }
 
-    public OperationResult<List<ReportCategory>> filter(Long updatedAfter) {
-        G4Response response = g4HttpClient.sendRequest(request.filter(updatedAfter));
-
-        List<ReportCategory> reportCategories =
-                JsonConverter.jsonToObjectsList(response.getMessage(), ReportCategory[].class, "result");
-
-        return new OperationResult<>(response, reportCategories);
-    }
-
     @Override
     public OperationResult<ReportCategory> update(ReportCategory entity) {
         log.info("Update report category with id: " + entity.getId());

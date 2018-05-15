@@ -1,8 +1,7 @@
 package ae.pegasus.framework.model;
 
 import ae.pegasus.framework.data_for_entity.annotations.DataIgnore;
-import ae.pegasus.framework.data_for_entity.annotations.WithFieldDataType;
-import ae.pegasus.framework.data_for_entity.data_types.FieldDataType;
+import ae.pegasus.framework.data_for_entity.annotations.WithCollectionSize;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -16,12 +15,13 @@ public class ReportCategory extends G4Entity implements Comparable {
     @DataIgnore
     private Integer version;
     private String name;
+    @WithCollectionSize(3)
     private ArrayList<String> values = new ArrayList<>();
     private Integer order;
-    @WithFieldDataType(FieldDataType.BOOLEAN)
-    private Boolean hidden;
     @DataIgnore
-    private Boolean deleted;
+    private Boolean hidden = false;
+    @DataIgnore
+    private Boolean deleted = false;
     @DataIgnore
     private String currentValue;
 

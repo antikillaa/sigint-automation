@@ -1,16 +1,18 @@
 package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.ReportCategory;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.ReportCategoryService;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.junit.Assert;
 
 import java.util.List;
+
+import static ae.pegasus.framework.json.JsonConverter.toJsonString;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("unchecked")
 public class APIReportCategorySteps extends APISteps {
@@ -42,7 +44,7 @@ public class APIReportCategorySteps extends APISteps {
         List<ReportCategory> reportCategories =
                 context.get("reportCategoryList", List.class);
 
-        Assert.assertTrue(reportCategories.size() > minSize);
+        assertTrue(reportCategories.size() > minSize);
     }
 
     @When("I create new report category")
@@ -57,19 +59,19 @@ public class APIReportCategorySteps extends APISteps {
         ReportCategory createdCategory = Entities.getReportCategories().getLatest();
         ReportCategory generatedCategory = context.get("reportCategory", ReportCategory.class);
 
-        log.debug("requested: " + JsonConverter.toJsonString(generatedCategory));
-        log.debug("created: " + JsonConverter.toJsonString(createdCategory));
+        log.info("requested: " + toJsonString(generatedCategory));
+        log.info("created: " + toJsonString(createdCategory));
 
-        Assert.assertEquals("hidden mismatch", generatedCategory.getHidden(), createdCategory.getHidden());
-        Assert.assertEquals("option values mismatch", generatedCategory.getValues(), createdCategory.getValues());
-        Assert.assertEquals("category name mismatch", generatedCategory.getName(), createdCategory.getName());
+        assertEquals("hidden mismatch", generatedCategory.getHidden(), createdCategory.getHidden());
+        assertEquals("option values mismatch", generatedCategory.getValues(), createdCategory.getValues());
+        assertEquals("category name mismatch", generatedCategory.getName(), createdCategory.getName());
     }
 
     @Then("Report category is marked as deleted")
     public void reportCategoryIsDeleted() {
         ReportCategory deletedCategory = context.get("deletedReportCategory", ReportCategory.class);
         OperationResult<ReportCategory> result = reportCategoryService.view(deletedCategory.getId());
-        Assert.assertEquals("report category should be deleted",
+        assertEquals("report category should be deleted",
             true, result.getEntity().getDeleted());
     }
 
