@@ -18,7 +18,7 @@ public class FinderFile extends AbstractEntity {
     @DataIgnore
     private ProfileJsonType baseType = ProfileJsonType.File;
     @WithCollectionSize(1)
-    private ArrayList<FilePermission> reqPermissions = new ArrayList<>();
+    private ArrayList<ReqPermission> reqPermissions = new ArrayList<>();
     @DataProvider(ProfileAndTargetGroupNameProvider.class)
     private String name;
     private String description;
@@ -139,11 +139,11 @@ public class FinderFile extends AbstractEntity {
         this.hasContents = hasContents;
     }
 
-    public ArrayList<FilePermission> getReqPermissions() {
+    public ArrayList<ReqPermission> getReqPermissions() {
         return reqPermissions;
     }
 
-    public void setReqPermissions(ArrayList<FilePermission> reqPermissions) {
+    public void setReqPermissions(ArrayList<ReqPermission> reqPermissions) {
         this.reqPermissions = reqPermissions;
     }
 

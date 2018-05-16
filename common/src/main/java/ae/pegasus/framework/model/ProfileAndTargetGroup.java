@@ -2,9 +2,12 @@ package ae.pegasus.framework.model;
 
 import ae.pegasus.framework.data_for_entity.annotations.DataIgnore;
 import ae.pegasus.framework.data_for_entity.annotations.DataProvider;
+import ae.pegasus.framework.data_for_entity.annotations.WithCollectionSize;
 import ae.pegasus.framework.data_for_entity.data_providers.profiler.ProfileAndTargetGroupNameProvider;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -14,6 +17,8 @@ public class ProfileAndTargetGroup extends AbstractEntity {
     private ProfileJsonType jsonType;
     @DataProvider(ProfileAndTargetGroupNameProvider.class)
     private String name;
+    @WithCollectionSize(1)
+    private ArrayList<ReqPermission> reqPermissions = new ArrayList<>();
 
     public ProfileJsonType getJsonType() {
         return jsonType;
@@ -29,5 +34,13 @@ public class ProfileAndTargetGroup extends AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ArrayList<ReqPermission> getReqPermissions() {
+        return reqPermissions;
+    }
+
+    public void setReqPermissions(ArrayList<ReqPermission> reqPermissions) {
+        this.reqPermissions = reqPermissions;
     }
 }

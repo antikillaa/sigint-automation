@@ -1,10 +1,6 @@
 package ae.pegasus.framework.http.requests;
 
 import ae.pegasus.framework.model.Profile;
-import ae.pegasus.framework.model.Voice;
-
-import javax.ws.rs.core.MediaType;
-import java.io.File;
 
 import static ae.pegasus.framework.http.HttpMethod.*;
 
@@ -64,67 +60,6 @@ public class ProfileDraftRequest extends HttpRequest {
                 .setURI(URI + "/" + profile.getId())
                 .setHttpMethod(PUT)
                 .setPayload(profile);
-        return this;
-    }
-
-    /**
-     * POST /api/profiler/profileDrafts/{id}/image/upload
-     *
-     * @param profileID profile ID
-     * @param file      image file
-     * @return {@link ProfileDraftRequest}
-     */
-    public ProfileDraftRequest imageUpload(String profileID, File file) {
-        addBodyFile("file", file, new MediaType("image", "jpeg"));
-        this
-                .setURI(URI + "/" + profileID + "/image/upload")
-                .setHttpMethod(POST);
-        return this;
-    }
-
-    public ProfileDraftRequest deleteImage(String profileID) {
-        this
-                .setURI(URI + "/" + profileID + "/image/delete")
-                .setHttpMethod(DELETE);
-        return this;
-    }
-
-    /**
-     * GET /api/profiler/profileDrafts/{id}/voice/events
-     */
-    public ProfileDraftRequest voiceEvents(String profileID) {
-        this
-                .setURI(URI + "/" + profileID + "/voice/events")
-                .setHttpMethod(GET);
-        return this;
-    }
-
-    /**
-     * GET /api/profiler/profileDrafts/{id}/voice
-     */
-    public ProfileDraftRequest voice(String profileID) {
-        this
-                .setURI(URI + "/" + profileID + "/voice")
-                .setHttpMethod(GET);
-        return this;
-    }
-
-    /**
-     * POST /api/profiler/profileDrafts/{id}/voice
-     */
-    public ProfileDraftRequest createVoice(String profileID, Voice voice) {
-        this
-                .setURI(URI + "/" + profileID + "/voice")
-                .setHttpMethod(POST)
-                .setPayload(voice);
-        return this;
-    }
-
-    public ProfileDraftRequest uploadAudioFile(String profileID, File file) {
-        addBodyFile("file", file, new MediaType("audio", "x-m4a"));
-        this
-                .setURI(URI + "/" + profileID + "/voice/upload")
-                .setHttpMethod(POST);
         return this;
     }
 }

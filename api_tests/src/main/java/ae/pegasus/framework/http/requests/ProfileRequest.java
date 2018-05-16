@@ -2,8 +2,15 @@ package ae.pegasus.framework.http.requests;
 
 import ae.pegasus.framework.http.HttpMethod;
 import ae.pegasus.framework.model.Profile;
+import ae.pegasus.framework.model.Voice;
 
+import javax.ws.rs.core.MediaType;
+import java.io.File;
 import java.util.ArrayList;
+
+import static ae.pegasus.framework.http.HttpMethod.DELETE;
+import static ae.pegasus.framework.http.HttpMethod.GET;
+import static ae.pegasus.framework.http.HttpMethod.POST;
 
 public class ProfileRequest extends HttpRequest {
 
@@ -87,4 +94,56 @@ public class ProfileRequest extends HttpRequest {
         return this;
     }
 
+    public ProfileRequest create(Profile profile) {
+        this
+                .setURI(URI)
+                .setHttpMethod(POST)
+                .setPayload(profile);
+        return this;
+    }
+
+    public ProfileRequest imageUpload(String profileID, File file) {
+        addBodyFile("file", file, new MediaType("image", "jpeg"));
+        this
+                .setURI(URI + "/" + profileID + "/image/upload")
+                .setHttpMethod(POST);
+        return this;
+    }
+
+    public ProfileRequest deleteImage(String profileID) {
+        this
+                .setURI(URI + "/" + profileID + "/image/delete")
+                .setHttpMethod(DELETE);
+        return this;
+    }
+
+    public ProfileRequest voiceEvents(String profileID) {
+        this
+                .setURI(URI + "/" + profileID + "/voice/events")
+                .setHttpMethod(GET);
+        return this;
+    }
+
+    public ProfileRequest voice(String profileID) {
+        this
+                .setURI(URI + "/" + profileID + "/voice")
+                .setHttpMethod(GET);
+        return this;
+    }
+
+    public ProfileRequest createVoice(String profileID, Voice voice) {
+        this
+                .setURI(URI + "/" + profileID + "/voice")
+                .setHttpMethod(POST)
+                .setPayload(voice);
+        return this;
+    }
+
+    public ProfileRequest uploadAudioFile(String profileID, File file) {
+        addBodyFile("file", file, new MediaType("audio", "x-m4a"));
+        this
+                .setURI(URI + "/" + profileID + "/voice/upload")
+                .setHttpMethod(POST);
+        return this;
+    }
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class FilePermission {
+public class ReqPermission {
 
     @DataIgnore
     private String actionPermission;
