@@ -176,7 +176,7 @@ And CB search result list size > 0
 And CB search results contains only sourceType from query
 
 Examples:
-| source | objectType | query  | pageNumber | pageSize |
+| eventFeed | objectType | query  | pageNumber | pageSize |
 | SIGINT | event | dataSource:"E" | 0 | 300 |
 | SIGINT | event | dataSource:"F" | 0 | 300 |
 | SIGINT | event | dataSource:"H" | 0 | 300 |
@@ -194,7 +194,7 @@ And CB search result list size > 0
 And CB search results contains only subSource from query
 
 Examples:
-| source | objectType | query  | pageNumber | pageSize |
+| eventFeed | objectType | query  | pageNumber | pageSize |
 | SIGINT | event | subSource:"CDR" | 0 | 300 |
 | SIGINT | entity | subSource:"CDR" | 0 | 300 |
 | SIGINT | event | subSource:"CELL" | 0 | 300 |
@@ -216,7 +216,7 @@ And CB search result list size > 0
 And CB search results contains only recordType from query
 
 Examples:
-| source | objectType | query  | pageNumber | pageSize |
+| eventFeed | objectType | query  | pageNumber | pageSize |
 | SIGINT | event | type:"CALL" | 0 | 300 |
 | SIGINT | event | type:"LOCATION" | 0 | 300 |
 | SIGINT | event | type:"EMAIL" | 0 | 300 |
