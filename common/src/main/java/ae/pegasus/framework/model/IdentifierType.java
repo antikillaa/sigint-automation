@@ -29,7 +29,8 @@ public enum IdentifierType {
     VISA_NUMBER("Country Visa number"),
     PAYMENT_CARD_NUMBER("Payment card number"),
     BANK_ACCOUNT_NUMBER("Bank account number"),
-    FREQUENT_FLYER_NUMBER("Frequent flyer number/ membership card");
+    FREQUENT_FLYER_NUMBER("Frequent flyer number/ membership card"),
+    VOIP_ID("VoIP ID");
 
 
     private final String descriptions;

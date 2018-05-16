@@ -33,7 +33,7 @@ And CB search result list size < 1001
 And pageSize size in response < 1001
 
 Examples:
-| source | objectType | resultType | query  | pageNumber | pageSize |
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | OSINT  | event | EventVO |      | 0 | 1100 |
 | OSINT  | entity | EntityVO |     | 0 | 1100 |
 
@@ -47,7 +47,7 @@ And CB search result list size < 1001
 And pageSize size in response < 1001
 
 Examples:
-| source | objectType | resultType | query  | pageNumber | pageSize |
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | GOVINT | event | EventVO |      | 0 | 1100 |
 | GOVINT | entity | EntityVO |     | 0 | 1100 |
 
@@ -61,7 +61,7 @@ And CB search result list size < 1001
 And pageSize size in response < 1001
 
 Examples:
-| source | objectType | resultType | query  | pageNumber | pageSize |
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | PROFILER | entity | TargetVO |   | 0 | 1100 |
 
 
@@ -72,7 +72,7 @@ And CB search result list size > 0
 Then CB search contains results for query
 
 Examples:
-| source | objectType | query | pageNumber | pageSize |
+| eventFeed | objectType | query | pageNumber | pageSize |
 | SIGINT | event | knowledge | 0 | 20 |
 | SIGINT | event | kno?le?ge | 0 | 20 |
 | SIGINT | event | k*ledge   | 0 | 20 |
@@ -86,7 +86,7 @@ And CB search result list size > 0
 Then CB search contains results for query
 
 Examples:
-| source | objectType | query | pageNumber | pageSize |
+| eventFeed | objectType | query | pageNumber | pageSize |
 | OSINT | event | knowledge | 0 | 20 |
 | OSINT | event | kno?le?ge | 0 | 20 |
 | OSINT | event | k*ledge   | 0 | 20 |
@@ -100,7 +100,7 @@ And CB search result list size > 0
 Then CB search contains results for query
 
 Examples:
-| source | objectType | query | pageNumber | pageSize |
+| eventFeed | objectType | query | pageNumber | pageSize |
 | SIGINT | event | knoeledge~1 | 0 | 20 |
 | SIGINT | event | knowledge~2  | 0 | 20 |
 | SIGINT | event | knwldg~3 | 0 | 20 |
@@ -114,7 +114,7 @@ And CB search result list size > 0
 Then CB search contains results for query
 
 Examples:
-| source | objectType | query | pageNumber | pageSize |
+| eventFeed | objectType | query | pageNumber | pageSize |
 | OSINT | event | knoeledge~1 | 0 | 20 |
 | OSINT | event | knowledge~2  | 0 | 20 |
 | OSINT | event | knwldg~3 | 0 | 20 |
