@@ -11,24 +11,24 @@ Before:
 Given I sign in as admin user
 
 Scenario: SIGINT. The maximum number of search results for a single query is limited to 1000 records
-When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
-And CB search results contains only sourceType:<source> and type:<resultType> records
+And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
 And CB search result list size < 1001
 And pageSize size in response < 1001
 
 Examples:
-| source | objectType | resultType | query  | pageNumber | pageSize |
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | SIGINT | event | EventVO |      | 0 | 1100 |
 | SIGINT | entity | EntityVO |     | 0 | 1100 |
 
 
 Scenario: OSINT. The maximum number of search results for a single query is limited to 1000 records
-When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
-And CB search results contains only sourceType:<source> and type:<resultType> records
+And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
 And CB search result list size < 1001
 And pageSize size in response < 1001
 
@@ -39,10 +39,10 @@ Examples:
 
 
 Scenario: GOVINT. The maximum number of search results for a single query is limited to 1000 records
-When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
-And CB search results contains only sourceType:<source> and type:<resultType> records
+And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
 And CB search result list size < 1001
 And pageSize size in response < 1001
 
@@ -53,10 +53,10 @@ Examples:
 
 
 Scenario: PROFILER. The maximum number of search results for a single query is limited to 1000 records
-When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
-And CB search results contains only sourceType:<source> and type:<resultType> records
+And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
 And CB search result list size < 1001
 And pageSize size in response < 1001
 
@@ -66,7 +66,7 @@ Examples:
 
 
 Scenario: SIGINT. Wild Card Search
-When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
 Then CB search contains results for query
@@ -80,7 +80,7 @@ Examples:
 
 
 Scenario: OSINT. Wild Card Search
-When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
 Then CB search contains results for query
@@ -94,7 +94,7 @@ Examples:
 
 
 Scenario: SIGINT. Fuzzy Search
-When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
 Then CB search contains results for query
@@ -108,7 +108,7 @@ Examples:
 
 
 Scenario: OSINT. Fuzzy Search
-When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
 Then CB search contains results for query
@@ -170,7 +170,7 @@ Examples:
 
 
 Scenario: Search. [SIGINT] Data Source filters.
-When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
 And CB search results contains only sourceType from query
@@ -188,7 +188,7 @@ Examples:
 
 
 Scenario: Search. [SIGINT] Data Subsource filters
-When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
 And CB search results contains only subSource from query
@@ -210,7 +210,7 @@ Examples:
 
 
 Scenario: Search. [SIGINT] Record Type filters
-When I send CB search request - query:<query>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
 And CB search results contains only recordType from query

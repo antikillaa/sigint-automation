@@ -20,9 +20,9 @@ public class CBSearchFilter {
     public CBSearchFilter() {
     }
 
-    public CBSearchFilter(String source, String objectType, String query, String pageSize, String pageNumber) {
+    public CBSearchFilter(String eventFeed, String objectType, String query, String pageSize, String pageNumber) {
         this.query = query;
-        this.setSourceType(source);
+        this.setSourceType(eventFeed);
         this.objectType = SearchObjectType.valueOf(objectType);
 
         // pagination

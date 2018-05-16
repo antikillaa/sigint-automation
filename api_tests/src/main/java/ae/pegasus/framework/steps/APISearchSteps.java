@@ -62,10 +62,10 @@ public class APISearchSteps extends APISteps {
         return sb.append(".*").toString().replace(".*.*", ".*");
     }
 
-    @When("I send CB search request - query:$query, source:$source, objectType:$objectType, pageNumber:$pageNumber, pageSize:$pageSize")
-    public void recordSearch(String query, String source, String objectType, String pageNumber, String pageSize) {
+    @When("I send CB search request - query:$query, eventFeed:$eventFeed, objectType:$objectType, pageNumber:$pageNumber, pageSize:$pageSize")
+    public void recordSearch(String query, String eventFeed, String objectType, String pageNumber, String pageSize) {
 
-        CBSearchFilter filter = new CBSearchFilter(source, objectType, query, pageSize, pageNumber);
+        CBSearchFilter filter = new CBSearchFilter(eventFeed, objectType, query, pageSize, pageNumber);
 
         OperationResult<List<SearchEntity>> operationResult = service.search(filter);
         List<SearchEntity> searchResults = operationResult.getEntity();
@@ -322,22 +322,20 @@ public class APISearchSteps extends APISteps {
         }
     }
 
-    @Then("CB search results contains only sourceType:$sourceType and type:$resultType records")
-    public void cbSearchResultsContainsOnlySourceTypeAndObjectTypeRecords(String sourceType, String resultType) {
+    @Then("CB search results contains only eventFeed:$eventFeed and type:$resultType records")
+    public void cbSearchResultsContainsOnlySourceTypeAndObjectTypeRecords(String eventFeed, String resultType) {
         List<SearchEntity> entities = context.get("searchResults", List.class);
         CBSearchFilter filter = context.get("cbSearchFilter", CBSearchFilter.class);
 
         SearchEntity entity = entities.stream()
-                .filter(cbEntity -> !cbEntity.getSourceType().equals(sourceType))
+                .filter(cbEntity -> !Objects.equals(cbEntity.getEventFeed(), DataSourceCategory.valueOf(eventFeed)))
                 .findAny().orElse(null);
+        assertNull("Search by eventFeed:" + eventFeed + ", return:\n" + toJsonString(entity), entity);
 
-        assertNull("Search by sourceType:" + sourceType + "return:" + toJsonString(entity), entity);
-
-        if (!sourceType.equals("PROFILER")) {
+        if (!eventFeed.equals("PROFILER")) {
             entity = entities.stream()
                     .filter(cbEntity -> !cbEntity.getType().equals(resultType))
                     .findAny().orElse(null);
-
             assertNull("Search by object type:" + filter.getObjectType() + "return:" + toJsonString(entity), entity);
         }
     }

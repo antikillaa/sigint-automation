@@ -3,6 +3,8 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+    <bean id="basicSteps" class="ae.pegasus.framework.steps.BasicSteps" >
+    </bean>
     <bean id="loginSteps" class="ae.pegasus.framework.steps.APILoginSteps">
     </bean>
     <bean id="apiLoginController" class="ae.pegasus.framework.controllers.APILogin">
