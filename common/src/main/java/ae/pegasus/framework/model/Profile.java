@@ -44,7 +44,7 @@ public class Profile extends ProfileAndTargetGroup {
     @DataIgnore
     private Profile parent;
     @DataIgnore
-    private ArrayList<String> mergingProfilesIDs;
+    private ArrayList<String> mergingProfilesIDs = new ArrayList<>();
     @DataProvider(CriminalRecordProvider.class)
     private CriminalRecord criminalRecord;
     @DataProvider(ClassificationProvider.class)
@@ -53,7 +53,7 @@ public class Profile extends ProfileAndTargetGroup {
     @WithCollectionSize(4)
     private ArrayList<Identifier> identifiers = new ArrayList<>();
     @DataIgnore
-    private ArrayList<IdentifierSummary> identifiersSummary;
+    private ArrayList<IdentifierSummary> identifiersSummary = new ArrayList<>();
     @DataIgnore
     private String uploadedImage;
     @DataIgnore
@@ -67,7 +67,7 @@ public class Profile extends ProfileAndTargetGroup {
     @DataIgnore
     private Object lastLocation;
     @DataIgnore
-    private List<String> rfis;
+    private List<String> rfis = new ArrayList<>();
     @DataIgnore
     private Integer threatImpact = 20;
     @DataIgnore
