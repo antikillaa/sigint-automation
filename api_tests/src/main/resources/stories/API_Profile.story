@@ -7,9 +7,7 @@ Given I sign in as admin user
 
 Scenario: Find in system or create test target from json
 Given Find or create test target from json:<target>
-When Edit (create draft of) existing profile
 When upload new target image:<image> to target
-When I send publish profile draft request
 Then Request is successful
 When I send get profile details request
 Then Profile contain uploaded image
@@ -20,13 +18,10 @@ Examples:
 | profiles/Launchpad_McQuack.json | profiles/Launchpad_McQuack.jpg |
 
 
-Scenario: API.Publishing of new profile draft
-When I send create profile draft request
-Then Request is successful
+Scenario: API.Create profile
 When I send create finder file request
 Then Request is successful
-When I add profile draft to finder file
-When I send publish profile draft request
+When I send create profile request
 Then Request is successful
 
 When I send get profile details request
@@ -40,12 +35,9 @@ Then Request is successful
 
 
 Scenario: API.Deleting of profile
-When I send create profile draft request
-Then Request is successful
 When I send create finder file request
 Then Request is successful
-When I add profile draft to finder file
-When I send publish profile draft request
+When I send create profile request
 Then Request is successful
 
 When I send get profile details request
@@ -57,18 +49,12 @@ When I send delete finder file request
 Then Request is successful
 
 Scenario: API.Merge two profiles into one
-When I send create profile draft request
-Then Request is successful
+Meta: @skip
 When I send create finder file request
 Then Request is successful
-When I add profile draft to finder file
-When I send publish profile draft request
+When I send create profile request
 Then Request is successful
-
-When I send create profile draft request
-Then Request is successful
-When I add profile draft to finder file
-When I send publish profile draft request
+When I send create profile request
 Then Request is successful
 
 When I send merge two profile into one request
@@ -127,12 +113,9 @@ Examples:
 
 
 Scenario: Get profile summary
-When I send create profile draft request
-Then Request is successful
 When I send create finder file request
 Then Request is successful
-When I add profile draft to finder file
-When I send publish profile draft request
+When I send create profile request
 Then Request is successful
 
 When I send get profile summary request
@@ -146,20 +129,16 @@ Then Request is successful
 
 
 Scenario: VoicePrint from manual audio
-When I send create profile draft request
-Then Request is successful
 When I send create finder file request
 Then Request is successful
-When I add profile draft to finder file
-When I send publish profile draft request
+When I send create profile request
 Then Request is successful
 
 Given S - Voice files with 1 records are generated
-When Edit (create draft of) existing profile
 
 When upload audio file to profile
 Then uploaded audio file is processed
-When get voice events from draft profile
-When create voiceID for draft profile
-When I send publish profile draft request
+When get voice events from profile
+When create voiceID for profile
+When I send get profile details request
 Then profile contain created voiceID

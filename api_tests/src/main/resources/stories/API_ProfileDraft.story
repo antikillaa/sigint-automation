@@ -1,5 +1,6 @@
 Meta:
 @story profileDraft
+@deprecated
 
 Lifecycle:
 Before:

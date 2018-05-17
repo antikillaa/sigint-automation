@@ -8,7 +8,6 @@ import ae.pegasus.framework.model.entities.CBEntityList;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.model.entities.EntityList;
 import ae.pegasus.framework.services.FinderFileService;
-import ae.pegasus.framework.services.ProfileDraftService;
 import ae.pegasus.framework.services.ProfileService;
 import ae.pegasus.framework.utils.DateHelper;
 import ae.pegasus.framework.verification.profiler.ProfileMergeVerification;
@@ -23,7 +22,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -42,29 +40,20 @@ import static org.junit.Assert.*;
 @SuppressWarnings("unchecked")
 public class APIProfileSteps extends APISteps {
 
-    private static final ProfileDraftService draftService = new ProfileDraftService();
     private static final ProfileService service = new ProfileService();
 
-    @When("I send create profile draft request")
-    public void createProfileDraft() {
+    @When("I send create profile request")
+    public void createProfile() {
         Profile profile = getRandomProfile();
-        context.put("profileDraft", profile);
+        FinderFile finderFile = Entities.getFinderFiles().getLatest();
 
-        draftService.add(profile);
+        service.addToFile(profile, finderFile);
+        service.add(profile);
+        context.put("profile", profile);
     }
 
     private static Profile getRandomProfile() {
         return objectInitializer.randomEntity(Profile.class);
-    }
-
-    @Then("Profile draft is correct")
-    public void profileDraftIsCorrect() {
-        Profile requestedProfile = context.get("profileDraft", Profile.class);
-        Profile createdProfile = Entities.getProfiles().getLatest();
-
-        profilesShouldBeEquals(requestedProfile, createdProfile);
-
-        context.put("profileDraft", createdProfile);
     }
 
     private void profilesShouldBeEquals(Profile expected, Profile actual) {
@@ -91,29 +80,9 @@ public class APIProfileSteps extends APISteps {
         }
     }
 
-    @When("I send delete profile draft request")
-    public void deleteLatestProfile() {
-        Profile profile = Entities.getProfiles().getLatest();
-        draftService.remove(profile);
-    }
-
-    @When("I send get profile draft details request")
-    public void getProfileDraftDetails() {
-        Profile createdProfile = Entities.getProfiles().getLatest();
-        context.put("profileDraft", createdProfile);
-        draftService.view(createdProfile.getId());
-    }
-
-    @When("I send publish profile draft request")
-    public void publishProfileDraft() {
-        Profile profile = context.get("profileDraft", Profile.class);
-        OperationResult<Profile> operationResult = draftService.publish(profile);
-        context.put("profile", operationResult.getEntity());
-    }
-
     @When("I send get profile details request")
     public void getProfileDetails() {
-        Profile profile = context.get("profile", Profile.class);
+        Profile profile = Entities.getProfiles().getLatest();
         OperationResult<Profile> result = service.view(profile.getId());
 
         if (result.isSuccess()) {
@@ -136,20 +105,6 @@ public class APIProfileSteps extends APISteps {
         service.remove(profile);
     }
 
-    @When("I send get list of profile drafts request")
-    public void getProfileDraftsList() {
-        OperationResult<List<Profile>> operationResult = draftService.list();
-
-        context.put("profileDraftsList", operationResult.getEntity());
-    }
-
-    @Then("Profile drafts list size $criteria $value")
-    public void profileDraftsListMoreThan(String criteria, String value) {
-        List<Profile> profiles = context.get("profileDraftsList", List.class);
-
-        assertTrue(compareByCriteria(criteria, profiles.size(), Integer.valueOf(value)));
-    }
-
     @Then("Profile list size $criteria $value")
     public void profileListMoreThan(String criteria, String value) {
         List<Profile> profiles = context.get("profileList", List.class);
@@ -157,25 +112,16 @@ public class APIProfileSteps extends APISteps {
         assertTrue(compareByCriteria(criteria, profiles.size(), Integer.valueOf(value)));
     }
 
-    @When("I add profile draft to finder file")
-    public void addProfileDraftToFinderFile() {
-        Profile profile = Entities.getProfiles().getLatest();
-        FinderFile finderFile = Entities.getFinderFiles().getLatest();
-
-        service.addToFile(profile, finderFile);
-        context.put("profileDraft", profile);
-    }
-
     @When("I send update profile request")
     public void updateProfile() {
-        Profile profile = context.get("profileDraft", Profile.class);
+        Profile profile = context.get("profile", Profile.class);
 
         Profile updatedProfile = getRandomProfile();
         updatedProfile.setId(profile.getId());
         updatedProfile.setFiles(profile.getFiles());
-        context.put("profileDraft", updatedProfile);
+        context.put("profile", updatedProfile);
 
-        draftService.update(updatedProfile);
+        service.update(updatedProfile);
     }
 
     @When("I send merge two profile into one request")
@@ -191,14 +137,14 @@ public class APIProfileSteps extends APISteps {
         context.put("secondProfileToMerge", secondProfile);
 
         OperationResult<Profile> operationResult = service.merge(firstProfile, secondProfile);
-        context.put("profileDraft", operationResult.getEntity());
+        context.put("profile", operationResult.getEntity());
     }
 
-    @Then("Merged profile draft is correct")
+    @Then("Merged profile is correct")
     public void mergedProfileShouldBeCorrect() {
         Profile firstProfileToMerge = context.get("firstProfileToMerge", Profile.class);
         Profile secondProfileToMerge = context.get("secondProfileToMerge", Profile.class);
-        Profile mergedProfile = context.get("profileDraft", Profile.class);
+        Profile mergedProfile = context.get("profile", Profile.class);
 
         ProfileMergeVerification verification = new ProfileMergeVerification();
         verification.verify(firstProfileToMerge, secondProfileToMerge, mergedProfile);
@@ -214,14 +160,6 @@ public class APIProfileSteps extends APISteps {
         } else {
             service.view(secondProfileToMerge.getId());
         }
-    }
-
-
-    @Then("Remove all draft profiles")
-    public void removeAllDrafts() {
-        List<Profile> profiles = context.get("profileDraftsList", List.class);
-
-        profiles.forEach(draftService::remove);
     }
 
     @When("get random profile from profile list")
@@ -305,6 +243,10 @@ public class APIProfileSteps extends APISteps {
     public void uploadTestTarget(String targetFile) {
         Profile target = jsonToObject(readTxtFile(targetFile), Profile.class);
 
+        // set requirement permissions
+        Profile randomProfile = objectInitializer.randomEntity(Profile.class);
+        target.setReqPermissions(randomProfile.getReqPermissions());
+
         // find target in system
         log.info("Try find target:" + target.getName() + " in system...");
         FinderFileService fileService = new FinderFileService();
@@ -326,34 +268,27 @@ public class APIProfileSteps extends APISteps {
 
         if (filteredProfiles.isEmpty()) {
             log.info("Target not found, create and publish target from:" + targetFile);
-            // create draft target
-            OperationResult<Profile> result = draftService.add(target);
-            if (result.isSuccess()) {
-                // add target to file
-                target = result.getEntity();
-                OperationResult<FinderFile> fileOperationResult = fileService.add(getRandomFinderFile());
-                if (fileOperationResult.isSuccess()) {
-                    target = service.addToFile(target, fileOperationResult.getEntity());
-                } else {
-                    throw new OperationResultError(fileOperationResult);
-                }
+            //create file
+            OperationResult<FinderFile> fileOperationResult = fileService.add(getRandomFinderFile());
+            if (fileOperationResult.isSuccess()) {
+                // add to file
+                target = service.addToFile(target, fileOperationResult.getEntity());
                 // add assigned team
                 Assert.assertTrue("Unable add assigned team to target",
                         target.getAssignedTeams()
                                 .add(getRandomItemFromList(appContext.getLoggedUser().getUser().getParentTeamIds())));
-                // publish target
-                result = draftService.publish(target);
-                if (!result.isSuccess()) {
-                    throw new OperationResultError(result);
+                OperationResult<Profile> targetResult = service.add(target);
+                if (targetResult.isSuccess()) {
+                    context.put("profile", targetResult.getEntity());
                 } else {
-                    context.put("profile", result.getEntity());
+                    throw new OperationResultError(targetResult);
                 }
             } else {
-                throw new OperationResultError(result);
+                throw new OperationResultError(fileOperationResult);
             }
         } else {
             log.info("Target " + target.getName() + " already exist in system");
-            context.put("profile", getRandomItemFromList(profiles));
+            context.put("profile", service.view(getRandomItemFromList(filteredProfiles).getId()).getEntity());
         }
     }
 
@@ -367,22 +302,6 @@ public class APIProfileSteps extends APISteps {
         }
     }
 
-    @When("Edit (create draft of) existing profile")
-    public void getOrCreateProfileRequest() {
-        Profile profile = context.get("profile", Profile.class);
-
-        if (profile != null) {
-            OperationResult<Profile> result = service.getOrCreateDraft(profile.getId());
-            if (result.isSuccess()) {
-                context.put("profileDraft", result.getEntity());
-            } else {
-                throw new OperationResultError(result);
-            }
-        } else {
-            throw new AssertionError("Profile doesn't exist");
-        }
-    }
-
     @AfterStory
     public void cleanUp() {
         new ArrayList<>(Entities.getProfiles().getEntities())
@@ -393,10 +312,10 @@ public class APIProfileSteps extends APISteps {
 
     @When("upload new target image:$image to target")
     public void uploadTargetImage(String image) {
-        Profile profile = context.get("profileDraft", Profile.class);
+        Profile profile = context.get("profile", Profile.class);
 
         if (profile.getUploadedImage() != null && !profile.getUploadedImage().isEmpty()) {
-            if (!draftService.deleteImage(profile.getId()).isSuccess()) {
+            if (!service.deleteImage(profile.getId()).isSuccess()) {
                 log.error("Unable delete current target image");
             }
         }
@@ -404,25 +323,13 @@ public class APIProfileSteps extends APISteps {
         URL url = getClass().getClassLoader().getResource(image);
         if (url != null) {
             File file = new File(url.getFile());
-            OperationResult<FileMetaData> result = draftService.uploadImage(profile, file);
+            OperationResult<FileMetaData> result = service.uploadImage(profile, file);
             profile.setUploadedImage(result.getEntity().getFileId());
 
-            context.put("profileDraft", profile);
+            context.put("profile", profile);
             context.put("fileMetaData", result.getEntity());
         } else {
             throw new AssertionError("File: " + image + " not found");
-        }
-    }
-
-    @When("delete all profile drafts")
-    public void deleteAllPrifileDrafts() {
-        OperationResult<List<Profile>> operationResult = draftService.list();
-
-        if (operationResult.isSuccess()) {
-            operationResult.getEntity()
-                    .stream()
-                    .filter(profile -> Objects.equals(profile.getJsonType(), ProfileJsonType.Draft))
-                    .forEach(service::remove);
         }
     }
 
@@ -439,52 +346,52 @@ public class APIProfileSteps extends APISteps {
     @When("upload audio file to profile")
     public void uploadAudioFile() {
         List<File> files = context.get("g4files", List.class);
-        Profile draft = context.get("profileDraft", Profile.class);
+        Profile profile = context.get("profile", Profile.class);
 
         File audioFile = files.stream()
                 .filter(file -> file.getName().contains(".wav"))
                 .findFirst().orElse(null);
         assertNotNull(audioFile);
 
-        OperationResult<VoiceFile> result = draftService.uploadAudioFile(draft, audioFile);
+        OperationResult<VoiceFile> result = service.uploadAudioFile(profile, audioFile);
 
         context.put("voiceFile", result.getEntity());
-        context.put("profileDraft", draft);
+        context.put("profile", profile);
     }
 
     @Then("uploaded audio file is processed")
     public void uploadedAudioFileIsProcesse() {
         VoiceFile voiceFile = context.get("voiceFile", VoiceFile.class);
-        Profile draft = context.get("profileDraft", Profile.class);
+        Profile profile = context.get("profile", Profile.class);
 
         Integer WAITING_TIME = 5 * 60;
         Integer POLLING_INTERVAL = 10;
         Date deadline = DateHelper.getDateWithShift(WAITING_TIME);
 
         CBEntityList entities = new CBEntityList();
-        entities.setEntities(draftService.getVoiceEvents(draft).getEntity());
+        entities.setEntities(service.getVoiceEvents(profile).getEntity());
 
         while (entities.getEntity(voiceFile.getVoiceEventId()) == null && !isTimeout(deadline)) {
             DateHelper.waitTime(POLLING_INTERVAL);
-            entities.setEntities(draftService.getVoiceEvents(draft).getEntity());
+            entities.setEntities(service.getVoiceEvents(profile).getEntity());
         }
         assertNotNull("Unable process uploaded audio voice", entities.getEntity(voiceFile.getVoiceEventId()));
 
         context.put("voiceEvents", entities.getEntities());
     }
 
-    @When("get voice events from draft profile")
+    @When("get voice events from profile")
     public void createVoiceID() {
-        Profile draft = context.get("profileDraft", Profile.class);
+        Profile profile = context.get("profile", Profile.class);
 
-        OperationResult<List<SearchRecord>> result = draftService.getVoiceEvents(draft);
+        OperationResult<List<SearchRecord>> result = service.getVoiceEvents(profile);
         context.put("voiceEvents", result.getEntity());
     }
 
-    @When("create voiceID for draft profile")
-    public void createVoiceIDForDraftProfile() {
+    @When("create voiceID for profile")
+    public void createVoiceIDForProfile() {
         List<SearchRecord> voiceEvents = context.get("voiceEvents", List.class);
-        Profile draft = context.get("profileDraft", Profile.class);
+        Profile profile = context.get("profile", Profile.class);
 
         SearchRecord voiceEvent = voiceEvents.stream()
                 .filter(cbEntity -> cbEntity.getAttributes() != null)
@@ -502,9 +409,9 @@ public class APIProfileSteps extends APISteps {
         Voice voice = new Voice();
         voice.getRecords().add(record);
 
-        OperationResult<Voice> result = draftService.createVoiceModel(draft, voice);
+        OperationResult<Voice> result = service.createVoiceModel(profile, voice);
         context.put("voice", result.getEntity());
-        context.put("profileDraft", draft);
+        context.put("profile", profile);
     }
 
     @Then("profile contain created voiceID")

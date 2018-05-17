@@ -1,5 +1,6 @@
 package ae.pegasus.framework.services;
 
+import ae.pegasus.framework.errors.OperationResultError;
 import ae.pegasus.framework.http.G4Response;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.http.requests.HttpRequest;
@@ -10,6 +11,7 @@ import ae.pegasus.framework.model.entities.Entities;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,29 +24,16 @@ public class ProfileService implements EntityService<Profile> {
     private static final ProfileRequest request = new ProfileRequest();
     private static final Logger log = Logger.getLogger(ProfileService.class);
 
-    /* TODO
-        GET /profiles getProfiles
-        GET /profiles/{profileId}/activity getActivity
-        GET /profiles/{profileId}/audit getProfileAudit
-        POST /profiles/namesAndGroups getTargetNamesAndGroups
-        POST /profiles/profilesByGroups getProfilesInGroups
-        GET /profiles/{profileId}/aggregations getTargetAggregations
-        GET /profiles/{profileId}/audit getProfileAudit
-        GET /profiles/{profileId}/communication/eventstream getCommunicationStream
-        GET /profiles/{profileId}/eventLocations getTargetEventLocations
-        GET /profiles/{profileId}/geotagged/eventstream getGeoTaggedEventStream
-        POST /profiles/{profileId}/historicalData queryHistoricalData
-        GET /profiles/{profileId}/mentions getTargetMentions
-        GET /profiles/{profileId}/network getProfileNetwork
-        GET /profiles/{profileId}/readable isReadable
-        GET /profiles/{profileId}/threatScore threatScore
-        GET /profiles/{profileId}/voice getVoiceModel
-        GET /profiles/{profileId}/voice/events getVoiceEvents
-     */
-
     @Override
-    public OperationResult<?> add(Profile entity) {
-        return null;
+    public OperationResult<Profile> add(Profile entity) {
+        log.info("Creating new Profile: " + toJsonString(entity));
+        G4Response response = g4HttpClient.sendRequest(request.create(entity));
+
+        OperationResult<Profile> operationResult = new OperationResult<>(response, Profile.class, "data");
+        if (operationResult.isSuccess()) {
+            Entities.getProfiles().addOrUpdateEntity(operationResult.getEntity());
+        }
+        return operationResult;
     }
 
     @Override
@@ -153,5 +142,75 @@ public class ProfileService implements EntityService<Profile> {
     public Profile addToFile(Profile profile, FinderFile file) {
         profile.getFiles().add(new Profile.FinderFile(file.getId(), file.getName()));
         return profile;
+    }
+
+    public OperationResult<FileMetaData> uploadImage(Profile profile, File file) {
+        log.info("Uploading image to profile id: " + profile.getId() + ", name: " + profile.getName());
+        G4Response response = g4HttpClient.sendRequest(request.imageUpload(profile.getId(), file));
+
+        OperationResult<FileMetaData> result = new OperationResult<>(response, FileMetaData.class, "data");
+        if (result.isSuccess()) {
+            return result;
+        } else {
+            throw new OperationResultError(result);
+        }
+    }
+
+    public OperationResult deleteImage(String profileID) {
+        G4Response response = g4HttpClient.sendRequest(request.deleteImage(profileID));
+        return new OperationResult(response);
+    }
+
+    public OperationResult<List<SearchRecord>> getVoiceEvents(Profile profile) {
+        log.info("Get voice events for profileId: " + profile.getId() + " name:" + profile.getName());
+        G4Response response = g4HttpClient.sendRequest(request.voiceEvents(profile.getId()));
+        log.info(response.getCode() + " " + response.getMessage());
+
+        OperationResult<SearchRecord[]> result = new OperationResult<>(response, SearchRecord[].class, "data");
+        if (result.isSuccess()) {
+            return new OperationResult<>(response, Arrays.asList(result.getEntity()));
+        } else {
+            throw new OperationResultError(result);
+        }
+    }
+
+    public OperationResult<Voice> getVoiceModel(String profileId) {
+        log.info("Get voice print for profileId: " + profileId);
+        G4Response response = g4HttpClient.sendRequest(request.voice(profileId));
+
+        OperationResult<Voice> result = new OperationResult<>(response, Voice.class, "data");
+        if (result.isSuccess()) {
+            return result;
+        } else {
+            throw new OperationResultError(result);
+        }
+    }
+
+    public OperationResult<Voice> createVoiceModel(Profile profile, Voice voice) {
+        log.info("Create VoiceID for profile id:" + profile.getId() + " name: " + profile.getName() + ", payload:" + toJsonString(voice));
+        G4Response response = g4HttpClient.sendRequest(request.createVoice(profile.getId(), voice));
+
+        OperationResult<Voice> result = new OperationResult<>(response, Voice.class, "data");
+        if (result.isSuccess()) {
+            profile.setVoiceModelId(result.getEntity().getId());
+            return result;
+        } else {
+            throw new OperationResultError(result);
+        }
+    }
+
+    public OperationResult<VoiceFile> uploadAudioFile(Profile profile, File file) {
+        log.info("Create voice print for profile id:" + profile.getId() + ", name:" + profile.getName());
+        log.info("Uploading file:" + file.getAbsolutePath());
+        G4Response response = g4HttpClient.sendRequest(request.uploadAudioFile(profile.getId(), file));
+        log.info(response.getCode() + " " + response.getMessage());
+
+        OperationResult<VoiceFile> result = new OperationResult<>(response, VoiceFile.class, "data");
+        if (result.isSuccess()) {
+            profile.getVoiceFiles().add(result.getEntity());
+            return result;
+        } else {
+            throw new OperationResultError(result);
+        }
     }
 }

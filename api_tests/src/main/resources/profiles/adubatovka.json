@@ -61,13 +61,13 @@
   "threatLikelihood": 20,
   "threatImpact": 20,
   "criminalRecord": "CLEAN",
-  "classification": "OUO",
+  "reqPermissions":[{"actionPermission":null,"classification":"TS","dataSources":null,"orgUnit":null}],
   "rfis": [],
   "voiceModelId": null,
   "voiceFiles": [],
   "uploadedImage": null,
   "target": true,
-  "jsonType": "Draft",
+  "jsonType": "Profile",
   "images": [],
   "type": "Individual"
 }
