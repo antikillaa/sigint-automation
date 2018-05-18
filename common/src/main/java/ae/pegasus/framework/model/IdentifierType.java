@@ -30,7 +30,8 @@ public enum IdentifierType {
     PAYMENT_CARD_NUMBER("Payment card number"),
     BANK_ACCOUNT_NUMBER("Bank account number"),
     FREQUENT_FLYER_NUMBER("Frequent flyer number/ membership card"),
-    VOIP_ID("VoIP ID");
+    VOIP_ID("VoIP ID"),
+    GPLUS_ID("");
 
 
     private final String descriptions;
