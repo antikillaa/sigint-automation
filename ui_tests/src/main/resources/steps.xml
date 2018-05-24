@@ -7,6 +7,6 @@
     <bean id="recordsSteps" class="ae.pegasus.framework.steps.UIRecordsSteps" />
     <bean id="reportsSteps" class="ae.pegasus.framework.steps.UIReportsSteps" />
     <bean id="uiSteps" class="ae.pegasus.framework.steps.UISteps" />
-    <bean id="testSteps" class="GlobalSteps">
+    <bean id="testSteps" class="ae.pegasus.framework.steps.GlobalSteps">
     </bean>
 </beans>
