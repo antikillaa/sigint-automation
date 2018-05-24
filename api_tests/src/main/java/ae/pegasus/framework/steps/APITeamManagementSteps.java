@@ -134,13 +134,12 @@ public class APITeamManagementSteps extends APISteps {
     }
 
 
-    @When("I delete all empty teams")
+    @When("I delete all qe empty teams")
     public void deleteAllEmptyTeams() {
         List<Team> teams = context.get("teamList", List.class);
         teams.stream()
                 .filter(team -> team.getDescription() != null && !team.getDescription().isEmpty()
-                        && !Pattern.compile("[^A-Za-z]").matcher(team.getFullName()).find()
-                        && !Pattern.compile("[^A-Za-z]").matcher(team.getDescription()).find())
+                        && Pattern.compile("qe_").matcher(team.getFullName()).find())
                 .forEach(team -> teamService.remove(team));
     }
 }

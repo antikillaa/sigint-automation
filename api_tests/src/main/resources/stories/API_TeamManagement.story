@@ -123,7 +123,6 @@ And Team is correct
 
 
 Scenario: API.Cleanup Teams
-Meta: @skip
 When I send get list of teams
 Then Request is successful
-When I delete all empty teams
+When I delete all qe empty teams

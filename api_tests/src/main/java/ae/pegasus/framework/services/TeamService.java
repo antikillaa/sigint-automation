@@ -73,6 +73,8 @@ public class TeamService implements EntityService<Team> {
         if (operationResult.isSuccess()) {
             Entities.getTeams().removeEntity(entity);
             Entities.getOrganizations().removeEntity(entity);
+        } else {
+            log.warn(operationResult.getCode() + " " + operationResult.getMessage());
         }
         return operationResult;
     }
