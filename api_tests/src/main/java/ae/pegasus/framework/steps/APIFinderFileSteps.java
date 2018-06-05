@@ -3,6 +3,8 @@ package ae.pegasus.framework.steps;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
+import ae.pegasus.framework.model.FinderCase;
+import ae.pegasus.framework.services.FinderCaseService;
 import ae.pegasus.framework.services.FinderFileService;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -23,11 +25,16 @@ import static org.junit.Assert.assertEquals;
 @SuppressWarnings("unchecked")
 public class APIFinderFileSteps extends APISteps {
 
-    private static FinderFileService service = new FinderFileService();
+    private static FinderFileService serviceFile = new FinderFileService();
+    private static FinderCaseService serviceCase = new FinderCaseService();
     private static Logger log = Logger.getLogger(APIFinderFileSteps.class);
 
     static FinderFile getRandomFinderFile() {
         return objectInitializer.randomEntity(FinderFile.class);
+    }
+
+    static FinderCase getRandomFinderCase() {
+        return objectInitializer.randomEntity(FinderCase.class);
     }
 
 
@@ -36,7 +43,17 @@ public class APIFinderFileSteps extends APISteps {
         FinderFile finderFile = getRandomFinderFile();
 
         context.put("finderFile", finderFile);
-        service.add(finderFile);
+        serviceFile.add(finderFile);
+    }
+
+    @When("I send create finder case request")
+    public void sendCreateCaseRequest() {
+        FinderCase finderCase = getRandomFinderCase();
+        FinderFile finderFile = Entities.getFinderFiles().getLatest();
+        finderCase.setParentFileId(finderFile.getId());
+
+        context.put("finderCase", finderCase);
+        serviceCase.add(finderCase);
     }
 
 
@@ -48,6 +65,24 @@ public class APIFinderFileSteps extends APISteps {
         filesShouldBeEqual(contextFile, createdFile);
     }
 
+    @Then("Created finder case is correct")
+    public void finderCaseCorrect() {
+        FinderCase contextCase = context.get("finderCase", FinderCase.class);
+        FinderCase createdCase = Entities.getFinderCases().getLatest();
+
+        casesShouldBeEqual(contextCase, createdCase);
+    }
+
+    private void casesShouldBeEqual(FinderCase expected, FinderCase created) {
+        assertEquals(expected.getType(), created.getType());
+        assertEquals(expected.getBaseType(), created.getBaseType());
+        assertEquals(toJsonString(expected.getReqPermissions()), toJsonString(created.getReqPermissions()));
+        assertEquals(toJsonString(expected.getParentChain()), toJsonString(created.getParentChain()));
+        assertEquals(expected.getAggregatedTypeCounts(), created.getAggregatedTypeCounts());
+        assertEquals(expected.getName(), created.getName());
+        assertEquals(expected.getDescription(), created.getDescription());
+        assertEquals(expected.getDescription(), created.getDescription());
+    }
 
     private void filesShouldBeEqual(FinderFile expected, FinderFile created) {
         assertEquals(expected.getType(), created.getType());
@@ -65,7 +100,7 @@ public class APIFinderFileSteps extends APISteps {
     public void deleteFinderFileRequest() {
         FinderFile finderFile = Entities.getFinderFiles().getLatest();
         context.put("finderFile", finderFile);
-        service.remove(finderFile);
+        serviceFile.remove(finderFile);
     }
 
 
@@ -78,7 +113,7 @@ public class APIFinderFileSteps extends APISteps {
         List<FinderFile> finderFiles = new ArrayList<>();
         OperationResult<List<FinderFile>> operationResult;
         do {
-            operationResult = service.getFilesRoot(filter);
+            operationResult = serviceFile.getFilesRoot(filter);
             if (operationResult.isSuccess()) {
                 finderFiles.addAll(operationResult.getEntity());
                 filter.setPage(filter.getPage() + 1);
@@ -123,14 +158,14 @@ public class APIFinderFileSteps extends APISteps {
 
         context.put("parentFile", finderFile);
         context.put("childFile", childFile);
-        service.add(childFile);
+        serviceFile.add(childFile);
     }
 
 
     @When("I send get finder file details request")
     public void getFinderFileRequest() {
         FinderFile createdFinderFile = Entities.getFinderFiles().getLatest();
-        OperationResult<FinderFile> operationResult = service.view(createdFinderFile.getId());
+        OperationResult<FinderFile> operationResult = serviceFile.view(createdFinderFile.getId());
         context.put("finderFile", operationResult.getEntity());
     }
 
@@ -149,7 +184,7 @@ public class APIFinderFileSteps extends APISteps {
     @When("I send get content of parent finder file")
     public void getNestedFinderFileDetails() {
         FinderFile nestedFile = Entities.getFinderFiles().getLatest();
-        OperationResult<ProfileAndTargetGroup[]> operationResult = service.getContent(nestedFile.getParentFileId());
+        OperationResult<ProfileAndTargetGroup[]> operationResult = serviceFile.getContent(nestedFile.getParentFileId());
         context.put("finderFileContent", operationResult.getEntity());
     }
 
@@ -181,7 +216,7 @@ public class APIFinderFileSteps extends APISteps {
                 .filter(file -> file.getName().contains("QE auto")
                         && file.getPayload() != null
                         && !file.getPayload().getHasContents())
-                .forEach(service::remove);
+                .forEach(serviceFile::remove);
     }
 
     @When("I delete all empty files")
@@ -189,7 +224,7 @@ public class APIFinderFileSteps extends APISteps {
         List<FinderFile> files = context.get("finderFileList", List.class);
         files.stream()
                 .filter(file -> !file.getHasContents())
-                .forEach(service::remove);
+                .forEach(serviceFile::remove);
     }
 
     @When("I search finder file members by query:$name")
@@ -197,7 +232,7 @@ public class APIFinderFileSteps extends APISteps {
         FinderFileSearchFilter filter = new FinderFileSearchFilter();
         filter.setQuery(name).setSortField("name").setPageSize(100);
 
-        OperationResult<List<ProfileAndTargetGroup>> operationResult = service.searchFileMembers(filter);
+        OperationResult<List<ProfileAndTargetGroup>> operationResult = serviceFile.searchFileMembers(filter);
         context.put("operationResult", operationResult);
     }
 
@@ -206,7 +241,7 @@ public class APIFinderFileSteps extends APISteps {
         FinderFileSearchFilter filter = new FinderFileSearchFilter();
         filter.setQuery(query).setSortField("name").setPageSize(100);
 
-        OperationResult<List<ProfileAndTargetGroup>> operationResult = service.cbFinderSearch(filter);
+        OperationResult<List<ProfileAndTargetGroup>> operationResult = serviceFile.cbFinderSearch(filter);
         context.put("operationResult", operationResult);
     }
 
@@ -217,13 +252,13 @@ public class APIFinderFileSteps extends APISteps {
 
         switch (type) {
             case "profile":
-                List<Profile> profiles = service.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.Profile);
+                List<Profile> profiles = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.Profile);
                 Profile profile = getRandomItemFromList(profiles);
                 context.put("profile", profile);
                 Entities.getProfiles().addOrUpdateEntity(profile);
                 break;
             case "file":
-                List<FinderFile> files = service.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.File);
+                List<FinderFile> files = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.File);
                 FinderFile file = getRandomItemFromList(files);
                 context.put("finderFile", file);
                 Entities.getFinderFiles().addOrUpdateEntity(file);
@@ -240,11 +275,11 @@ public class APIFinderFileSteps extends APISteps {
 
         switch (type) {
             case "profiles":
-                List<Profile> profiles = service.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.Profile);
+                List<Profile> profiles = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.Profile);
                 context.put("profileList", profiles);
                 break;
             case "files":
-                List<FinderFile> files = service.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.File);
+                List<FinderFile> files = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.File);
                 context.put("finderFileList", files);
                 break;
             default:
@@ -284,7 +319,7 @@ public class APIFinderFileSteps extends APISteps {
                 randomFinderFile.getReqPermissions().get(0).getClassification());
 
         context.put("finderFile", createdFinderFile);
-        service.update(createdFinderFile);
+        serviceFile.update(createdFinderFile);
     }
 
 
