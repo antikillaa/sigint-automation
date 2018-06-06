@@ -18,13 +18,48 @@ OU. Required. [Hardcoded value for the scope of this story]
 
 Lifecycle:
 Before:
-Given I sign in as user with permissions FILE_CREATE, FILE_VIEW, CASE_CREATE, CASE_VIEW
+Given I sign in as user with permissions FILE_CREATE, FILE_VIEW
 When I send create finder file request
 Then Request is successful
 Then Created finder file is correct
 
-Scenario: User can create a case
-Meta: @wip2
+Scenario: User could view case
+Given I sign in as user with permissions FILE_VIEW, CASE_CREATE
 When I send create finder case request
+Then Request is successful
+When View created finder case
+Then Request is unsuccessful
+
+Given I sign in as user with permissions FILE_VIEW, CASE_CREATE, CASE_VIEW
+When I send create finder case request
+Then Request is successful
+When View created finder case
+Then Request is successful
+
+Scenario: User can create/delete a case
+Given I sign in as user with permissions FILE_VIEW
+When I send create finder case request
+Then Request is unsuccessful
+
+Given I sign in as user with permissions FILE_VIEW, CASE_CREATE, CASE_VIEW, CASE_DELETE
+When I send create finder case request
+Then Request is successful
+
+Then Created finder case is correct
+When I send delete finder case request
+Then Request is successful
+
+Scenario: User can edit a case
+Meta: @wip2
+Given I sign in as user with permissions FILE_VIEW, CASE_CREATE, CASE_VIEW
+When I send create finder case request
+Then Request is successful
+When I send edit finder case request
+Then Request is unsuccessful
+
+Given I sign in as user with permissions FILE_VIEW, CASE_CREATE, CASE_VIEW, CASE_UPDATE
+When I send create finder case request
+Then Request is successful
+When I send edit finder case request
 Then Request is successful
 Then Created finder case is correct

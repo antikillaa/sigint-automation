@@ -4,7 +4,7 @@ import ae.pegasus.framework.http.HttpMethod;
 import ae.pegasus.framework.model.FinderCase;
 import org.apache.log4j.Logger;
 
-public class FinderCaseRequest extends HttpRequest  {
+public class FinderCaseRequest extends HttpRequest {
 
     private static final String URI = "/api/file-system/cases";
     private static final Logger log = Logger.getLogger(FinderCaseRequest.class);

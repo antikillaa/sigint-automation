@@ -3,7 +3,6 @@ package ae.pegasus.framework.steps;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
-import ae.pegasus.framework.model.FinderCase;
 import ae.pegasus.framework.services.FinderCaseService;
 import ae.pegasus.framework.services.FinderFileService;
 import org.apache.log4j.Logger;
@@ -56,6 +55,35 @@ public class APIFinderFileSteps extends APISteps {
         serviceCase.add(finderCase);
     }
 
+    @When("I send delete finder case request")
+    public void deleteFinderCaseRequest() {
+        FinderCase finderCase = Entities.getFinderCases().getLatest();
+
+        context.put("finderCase", finderCase);
+        serviceCase.remove(finderCase);
+    }
+
+    @When("View created finder case")
+    public void viewCreatedFinderCase() {
+        FinderCase finderCase = Entities.getFinderCases().getLatest();
+
+        context.put("finderCase", finderCase);
+        serviceCase.view(finderCase.getId());
+    }
+
+    @When("I send edit finder case request")
+    public void editFinderCaseRequest() {
+        FinderCase finderCase = Entities.getFinderCases().getLatest();
+        FinderCase editedCase = getRandomFinderCase();
+
+        editedCase.setName(getRandomFinderCase().getName());
+        editedCase.setDescription(getRandomFinderCase().getName());
+        editedCase.getReqPermissions().get(0).setClassification(
+                editedCase.getReqPermissions().get(0).getClassification());
+
+        context.put("finderCase", finderCase);
+        serviceCase.update(finderCase);
+    }
 
     @Then("Created finder file is correct")
     public void finderFileCorrect() {
