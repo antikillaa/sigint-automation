@@ -64,27 +64,33 @@ public class DockerDataGenerator implements IIngestionDataGenerator {
 
   private void generateDataInContainer(String recordsCount) {
     assertNotNull("Can't init container config", dockerAdapter.getContainerConfig(recordsCount));
+    String containerId = null;
     try {
       log.info("Pulling image...");
       docker.pull(dockerAdapter.getImageName());
+
       log.info("Creating container...");
       final ContainerCreation creation = docker.createContainer(dockerAdapter.getContainerConfig(recordsCount));
-      final String id = creation.id();
+      containerId = creation.id();
       // Start container, wait for execution and delete after that
-      docker.startContainer(id);
-      docker.waitContainer(id);
+      docker.startContainer(containerId);
+      docker.waitContainer(containerId);
 
       final String logs;
-      try (LogStream stream = docker.logs(id, DockerClient.LogsParam.stdout(), DockerClient.LogsParam.stderr())) {
+      try (LogStream stream = docker.logs(containerId, DockerClient.LogsParam.stdout(), DockerClient.LogsParam.stderr())) {
         logs = stream.readFully();
       }
       log.info("Output:\n" + logs);
 
-      docker.removeContainer(id);
-      docker.close();
-
     } catch (DockerException | InterruptedException e) {
       log.error(e.getMessage());
+    } finally {
+      try {
+        docker.removeContainer(containerId);
+      } catch (DockerException | InterruptedException | NullPointerException e) {
+        log.error(e.getMessage());
+      }
+      docker.close();
     }
   }
 
