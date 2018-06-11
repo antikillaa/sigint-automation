@@ -68,20 +68,19 @@ Then Created finder case is correct
 Scenario: User can't create a case without name
 Given I sign in as user with permissions FILE_VIEW, CASE_CREATE
 When I send create finder case without name request
-Then Finder case is not created
 Then Request is unsuccessful
 
 Scenario: User can't create a case without classification
 Given I sign in as user with permissions FILE_VIEW, CASE_CREATE
 When I send create finder case without classification request
-Then Finder case is not created
 Then Request is unsuccessful
 
 Scenario: User can create a case without description
 Given I sign in as user with permissions FILE_VIEW, CASE_CREATE
 When I send create finder case without description request
-Then Created finder case is correct
 Then Request is successful
+Then Created finder case is correct
+
 
 Scenario: User can't create case in case
 Given I sign in as user with permissions FILE_VIEW, CASE_CREATE, CASE_VIEW

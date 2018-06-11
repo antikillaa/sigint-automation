@@ -124,11 +124,13 @@ public class APIFinderFileSteps extends APISteps {
 
     @When("I send create finder case in finder case request")
     public void createFinderCaseInCase() {
-        FinderCase finderCase = Entities.getFinderCases().getLatest();
-        finderCase.setParentFileId(finderCase.getId());
+        FinderCase finderCaseFirst = Entities.getFinderCases().getLatest();
+        FinderCase finderCaseSecond = getRandomFinderCase();
 
-        context.put("finderCase", finderCase);
-        serviceCase.add(finderCase);
+        finderCaseSecond.setParentFileId(finderCaseFirst.getId());
+
+        context.put("finderCase", finderCaseSecond);
+        serviceCase.add(finderCaseSecond);
     }
 
     @Then("Created finder file is correct")
@@ -147,11 +149,6 @@ public class APIFinderFileSteps extends APISteps {
         casesShouldBeEqual(contextCase, createdCase);
     }
 
-    @Then("Finder case is not created")
-    public void finderCaseNotCreated() {
-        FinderCase createdCase = Entities.getFinderCases().getLatest();
-        Assert.assertNull(createdCase);
-    }
 
     private void casesShouldBeEqual(FinderCase expected, FinderCase created) {
         assertEquals(expected.getType(), created.getType());
