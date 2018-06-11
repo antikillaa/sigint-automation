@@ -1,5 +1,4 @@
 package ae.pegasus.framework.model;
-
 import ae.pegasus.framework.data_for_entity.annotations.DataIgnore;
 import ae.pegasus.framework.data_for_entity.annotations.DataProvider;
 import ae.pegasus.framework.data_for_entity.annotations.WithCollectionSize;
@@ -42,6 +41,8 @@ public class FinderFile extends AbstractEntity {
     private FinderFile payload;
     @DataIgnore
     private List<String> files = new ArrayList<>();
+    @DataIgnore
+    private Integer version;
 
     public ProfileJsonType getType() {
         return type;
@@ -119,10 +120,6 @@ public class FinderFile extends AbstractEntity {
         return parentFileId;
     }
 
-    public void setParentFileId(String parentFileId) {
-        this.parentFileId = parentFileId;
-    }
-
     public Boolean getDeleted() {
         return deleted;
     }
@@ -161,6 +158,18 @@ public class FinderFile extends AbstractEntity {
 
     public void setFiles(List<String> files) {
         this.files = files;
+    }
+
+    public void setParentFileId(String parentFileId) {
+        this.parentFileId = parentFileId;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public static class ParentChain extends AbstractEntity {
