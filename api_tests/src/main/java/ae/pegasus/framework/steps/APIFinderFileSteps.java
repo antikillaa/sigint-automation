@@ -20,6 +20,7 @@ import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
 import static ae.pegasus.framework.utils.StepHelper.compareByCriteria;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 @SuppressWarnings("unchecked")
 public class APIFinderFileSteps extends APISteps {
@@ -85,6 +86,51 @@ public class APIFinderFileSteps extends APISteps {
         serviceCase.update(finderCase);
     }
 
+    @When("I send create finder case without name request")
+    public void createFinderCaseWithoutName() {
+        FinderCase finderCase = getRandomFinderCase();
+        FinderFile finderFile = Entities.getFinderFiles().getLatest();
+
+        finderCase.setParentFileId(finderFile.getId());
+        finderCase.setName(null);
+
+        context.put("finderCase", finderCase);
+        serviceCase.add(finderCase);
+    }
+
+    @When("I send create finder case without description request")
+    public void createFinderCaseWithoutDescription() {
+        FinderCase finderCase = getRandomFinderCase();
+        FinderFile finderFile = Entities.getFinderFiles().getLatest();
+
+        finderCase.setParentFileId(finderFile.getId());
+        finderCase.setDescription(null);
+
+        context.put("finderCase", finderCase);
+        serviceCase.add(finderCase);
+    }
+
+    @When("I send create finder case without classification request")
+    public void createFinderCaseWithoutClassification() {
+        FinderCase finderCase = getRandomFinderCase();
+        FinderFile finderFile = Entities.getFinderFiles().getLatest();
+
+        finderCase.setParentFileId(finderFile.getId());
+        finderCase.getReqPermissions().get(0).setClassification(null);
+
+        context.put("finderCase", finderCase);
+        serviceCase.add(finderCase);
+    }
+
+    @When("I send create finder case in finder case request")
+    public void createFinderCaseInCase() {
+        FinderCase finderCase = Entities.getFinderCases().getLatest();
+        finderCase.setParentFileId(finderCase.getId());
+
+        context.put("finderCase", finderCase);
+        serviceCase.add(finderCase);
+    }
+
     @Then("Created finder file is correct")
     public void finderFileCorrect() {
         FinderFile contextFile = context.get("finderFile", FinderFile.class);
@@ -101,6 +147,12 @@ public class APIFinderFileSteps extends APISteps {
         casesShouldBeEqual(contextCase, createdCase);
     }
 
+    @Then("Finder case is not created")
+    public void finderCaseNotCreated() {
+        FinderCase createdCase = Entities.getFinderCases().getLatest();
+        Assert.assertNull(createdCase);
+    }
+
     private void casesShouldBeEqual(FinderCase expected, FinderCase created) {
         assertEquals(expected.getType(), created.getType());
         assertEquals(expected.getBaseType(), created.getBaseType());
@@ -110,6 +162,17 @@ public class APIFinderFileSteps extends APISteps {
         assertEquals(expected.getName(), created.getName());
         assertEquals(expected.getDescription(), created.getDescription());
         assertEquals(expected.getDescription(), created.getDescription());
+    }
+
+    private void casesShouldBeNotEqual(FinderCase expected, FinderCase created) {
+        assertNotEquals(expected.getType(), created.getType());
+        assertNotEquals(expected.getBaseType(), created.getBaseType());
+        assertNotEquals(toJsonString(expected.getReqPermissions()), toJsonString(created.getReqPermissions()));
+        assertNotEquals(toJsonString(expected.getParentChain()), toJsonString(created.getParentChain()));
+        assertNotEquals(expected.getAggregatedTypeCounts(), created.getAggregatedTypeCounts());
+        assertNotEquals(expected.getName(), created.getName());
+        assertNotEquals(expected.getDescription(), created.getDescription());
+        assertNotEquals(expected.getDescription(), created.getDescription());
     }
 
     private void filesShouldBeEqual(FinderFile expected, FinderFile created) {
