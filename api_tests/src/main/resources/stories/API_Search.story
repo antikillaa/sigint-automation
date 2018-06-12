@@ -130,7 +130,7 @@ And CB search results match the recordStatus filters
 
 Examples:
 | source | objectType | recordStatus | pageNumber | pageSize |
-| SIGINT | event | unassigned | 0 | 300 |
+| SIGINT | event | unassigned | 0 | 100 |
 
 
 Scenario: Search. [SIGINT] Workflow filters. Record status: Unprocessed
@@ -142,7 +142,7 @@ And CB search results match the recordStatus filters
 
 Examples:
 | source | objectType | recordStatus | pageNumber | pageSize |
-| SIGINT | event | unprocessed | 0 | 300 |
+| SIGINT | event | unprocessed | 0 | 100 |
 
 
 Scenario: Search. [SIGINT] Workflow filters. Record status: Reported
@@ -154,7 +154,7 @@ And CB search results match the recordStatus filters
 
 Examples:
 | source | objectType | recordStatus | pageNumber | pageSize |
-| SIGINT | event | reported | 0 | 300 |
+| SIGINT | event | reported | 0 | 100 |
 
 
 Scenario: Search. [SIGINT] Workflow filters. Record status: Unimportant
@@ -166,7 +166,7 @@ And CB search results match the recordStatus filters
 
 Examples:
 | source | objectType | recordStatus | pageNumber | pageSize |
-| SIGINT | event | unimportant | 0 | 300 |
+| SIGINT | event | unimportant | 0 | 100 |
 
 
 Scenario: Search. [SIGINT] Data Source filters.
@@ -177,14 +177,14 @@ And CB search results contains only sourceType from query
 
 Examples:
 | eventFeed | objectType | query  | pageNumber | pageSize |
-| SIGINT | event | dataSource:"E" | 0 | 300 |
-| SIGINT | event | dataSource:"F" | 0 | 300 |
-| SIGINT | event | dataSource:"H" | 0 | 300 |
-| SIGINT | event | dataSource:"S" | 0 | 300 |
-| SIGINT | event | dataSource:"T" | 0 | 300 |
-| SIGINT | entity | dataSource:"H" | 0 | 300 |
-| SIGINT | entity | dataSource:"E" | 0 | 300 |
-| SIGINT | entity | dataSource:"PHONEBOOK" | 0 | 300 |
+| SIGINT | event | dataSource:"E" | 0 | 100 |
+| SIGINT | event | dataSource:"F" | 0 | 100 |
+| SIGINT | event | dataSource:"H" | 0 | 100 |
+| SIGINT | event | dataSource:"S" | 0 | 100 |
+| SIGINT | event | dataSource:"T" | 0 | 100 |
+| SIGINT | entity | dataSource:"H" | 0 | 100 |
+| SIGINT | entity | dataSource:"E" | 0 | 100 |
+| SIGINT | entity | dataSource:"PHONEBOOK" | 0 | 100 |
 
 
 Scenario: Search. [SIGINT] Data Subsource filters
@@ -195,18 +195,18 @@ And CB search results contains only subSource from query
 
 Examples:
 | eventFeed | objectType | query  | pageNumber | pageSize |
-| SIGINT | event | subSource:"CDR" | 0 | 300 |
-| SIGINT | entity | subSource:"CDR" | 0 | 300 |
-| SIGINT | event | subSource:"CELL" | 0 | 300 |
-| SIGINT | entity | subSource:"CELL" | 0 | 300 |
-| SIGINT | event | subSource:"Fax" | 0 | 300 |
-| SIGINT | entity | subSource:"Fax" | 0 | 300 |
-| SIGINT | event | subSource:"SMS" | 0 | 300 |
-| SIGINT | entity | subSource:"SMS" | 0 | 300 |
-| SIGINT | event | subSource:"VLR" | 0 | 300 |
-| SIGINT | entity | subSource:"VLR" | 0 | 300 |
-| SIGINT | event | subSource:"Voice" | 0 | 300 |
-| SIGINT | entity | subSource:"Voice" | 0 | 300 |
+| SIGINT | event | subSource:"CDR" | 0 | 100 |
+| SIGINT | entity | subSource:"CDR" | 0 | 100 |
+| SIGINT | event | subSource:"CELL" | 0 | 100 |
+| SIGINT | entity | subSource:"CELL" | 0 | 100 |
+| SIGINT | event | subSource:"Fax" | 0 | 100 |
+| SIGINT | entity | subSource:"Fax" | 0 | 100 |
+| SIGINT | event | subSource:"SMS" | 0 | 100 |
+| SIGINT | entity | subSource:"SMS" | 0 | 100 |
+| SIGINT | event | subSource:"VLR" | 0 | 100 |
+| SIGINT | entity | subSource:"VLR" | 0 | 100 |
+| SIGINT | event | subSource:"Voice" | 0 | 100 |
+| SIGINT | entity | subSource:"Voice" | 0 | 100 |
 
 
 Scenario: Search. [SIGINT] Record Type filters
@@ -217,19 +217,19 @@ And CB search results contains only recordType from query
 
 Examples:
 | eventFeed | objectType | query  | pageNumber | pageSize |
-| SIGINT | event | type:"CALL" | 0 | 300 |
-| SIGINT | event | type:"LOCATION" | 0 | 300 |
-| SIGINT | event | type:"EMAIL" | 0 | 300 |
-| SIGINT | event | type:"FAX" | 0 | 300 |
-| SIGINT | event | type:"VLR" | 0 | 300 |
-| SIGINT | event | type:"MMS_ROAMING" | 0 | 300 |
-| SIGINT | event | type:"SMS" | 0 | 300 |
-| SIGINT | event | type:"MMS" | 0 | 300 |
-| SIGINT | event | type:"VSMS" | 0 | 300 |
-| SIGINT | event | type:"SIP_VIDEO" | 0 | 300 |
-| SIGINT | entity | type:"EMAIL_ACCOUNT" | 0 | 300 |
-| SIGINT | entity | type:"PHONE" | 0 | 300 |
-| SIGINT | entity | type:"TELECOM_SUBSCRIBER" | 0 | 300 |
+| SIGINT | event | type:"CALL" | 0 | 100 |
+| SIGINT | event | type:"LOCATION" | 0 | 100 |
+| SIGINT | event | type:"EMAIL" | 0 | 100 |
+| SIGINT | event | type:"FAX" | 0 | 100 |
+| SIGINT | event | type:"VLR" | 0 | 100 |
+| SIGINT | event | type:"MMS_ROAMING" | 0 | 100 |
+| SIGINT | event | type:"SMS" | 0 | 100 |
+| SIGINT | event | type:"MMS" | 0 | 100 |
+| SIGINT | event | type:"VSMS" | 0 | 100 |
+| SIGINT | event | type:"SIP_VIDEO" | 0 | 100 |
+| SIGINT | entity | type:"EMAIL_ACCOUNT" | 0 | 100 |
+| SIGINT | entity | type:"PHONE" | 0 | 100 |
+| SIGINT | entity | type:"TELECOM_SUBSCRIBER" | 0 | 100 |
 
 
 Scenario: Search. [SIGINT] EventTime filter
@@ -240,7 +240,7 @@ And CB search results contains only eventTime from query
 
 Examples:
 | source | objectType | eventTime | pageNumber | pageSize |
-| SIGINT | event | LAST_MONTH | 0 | 300 |
+| SIGINT | event | LAST_MONTH | 0 | 100 |
 
 
 Scenario: POST /api/search/count

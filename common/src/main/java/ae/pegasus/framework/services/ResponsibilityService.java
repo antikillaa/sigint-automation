@@ -1,19 +1,22 @@
 package ae.pegasus.framework.services;
 
+import ae.pegasus.framework.data_for_entity.RandomEntities;
+import ae.pegasus.framework.errors.OperationResultError;
+import ae.pegasus.framework.http.G4Response;
 import ae.pegasus.framework.http.OperationResult;
+import ae.pegasus.framework.http.requests.ResponsibilityRequest;
+import ae.pegasus.framework.model.AuthResponseResult;
 import ae.pegasus.framework.model.Responsibility;
 import ae.pegasus.framework.model.SearchFilter;
 import ae.pegasus.framework.model.entities.Entities;
-import ae.pegasus.framework.errors.OperationResultError;
-import ae.pegasus.framework.http.G4Response;
-import ae.pegasus.framework.http.requests.ResponsibilityRequest;
-import ae.pegasus.framework.model.AuthResponseResult;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 
 public class ResponsibilityService implements EntityService<Responsibility> {
 
@@ -87,12 +90,23 @@ public class ResponsibilityService implements EntityService<Responsibility> {
         return operationResult;
     }
 
+    public Responsibility createWithPermissions(String... permissions) {
+        Responsibility responsibility = new RandomEntities().randomEntity(Responsibility.class);
+        responsibility.setPermissions(Arrays.asList(permissions));
+
+        OperationResult<Responsibility> operationResult = add(responsibility);
+        if (operationResult.isSuccess()) {
+            return operationResult.getEntity();
+        } else {
+            throw new AssertionError("Unable create Responsibility: " + toJsonString(responsibility));
+        }
+    }
+
     public List<OperationResult> removeAll() {
         List<OperationResult> operationResults = new ArrayList<>();
 
-        Long count = new ArrayList<>(Entities.getResponsibilities().getEntities()).stream()
-                .peek(entity -> operationResults.add(remove(entity)))
-                .count();
+        new ArrayList<>(Entities.getResponsibilities().getEntities())
+                .forEach(entity -> operationResults.add(remove(entity)));
 
         return operationResults;
     }

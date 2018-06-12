@@ -14,13 +14,13 @@ BE: All file endpoints will only return files that the user is authorized to see
 
 Scenario: API.To view or check existence of a file, a user must have FILE_VIEW permission
 Given I sign in as user with permissions UM_USER
-When I send get list of finder file request
+When I send get root list of CBFinder request
 Then Request is unsuccessful
 
 Given Set new permissions: FILE_VIEW to current user and relogin
-When I send get list of finder file request
+When I send get root list of CBFinder request
 Then Request is successful
-Then Finder files list size > 0
+Then CB Finder entities list size > 0
 
 
 Scenario: API.To create a file, a user must have FILE_CREATE permissions
@@ -53,7 +53,7 @@ Given I sign in as user with permissions FILE_VIEW, FILE_UPDATE, FILE_CREATE
 When I send CB Finder search with query:<query>
 Then Request is successful
 When Get files from CBFinder search results
-Then Finder files list size > 0
+Then CB Finder entities list size > 0
 When Get random file from from CBFinder search results
 And I send delete finder file request
 Then Request is unsuccessful
@@ -62,7 +62,7 @@ Given Set new permissions: FILE_VIEW, FILE_DELETE to current user and relogin
 When I send CB Finder search with query:<query>
 Then Request is successful
 When Get files from CBFinder search results
-Then Finder files list size > 0
+Then CB Finder entities list size > 0
 When I delete all empty QE auto files
 Then Request is successful
 
@@ -128,5 +128,5 @@ Then Request is successful
 Scenario: Delete all empty files
 Meta: @skip
 Given I sign in as admin user
-When I send get list of finder file request
+When I send get root list of CBFinder request
 When I delete all empty files

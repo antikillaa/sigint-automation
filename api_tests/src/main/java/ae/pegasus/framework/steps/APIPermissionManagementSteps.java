@@ -11,13 +11,15 @@ import ae.pegasus.framework.services.PermissionService;
 import ae.pegasus.framework.services.ResponsibilityService;
 import ae.pegasus.framework.services.TitleService;
 import ae.pegasus.framework.utils.RandomGenerator;
+import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.junit.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.junit.Assert.*;
 
 public class APIPermissionManagementSteps extends APISteps {
 
@@ -34,7 +36,7 @@ public class APIPermissionManagementSteps extends APISteps {
     @Then("Permission list size more than $size")
     public void permissionListSizeShouldBeMoreThan(String size) {
         List<Permission> permissions = context.get("permissionList", List.class);
-        Assert.assertTrue(permissions.size() > Integer.valueOf(size));
+        assertTrue(permissions.size() > Integer.valueOf(size));
     }
 
     @When("I send get list of responsibilities request")
@@ -46,7 +48,7 @@ public class APIPermissionManagementSteps extends APISteps {
     @Then("Responsibilities list size more than $size")
     public void responsibilityListSizeShouldBeMoreThan(String size) {
         List<Responsibility> responsibilities = context.get("responsibilityList", List.class);
-        Assert.assertTrue(responsibilities.size() > Integer.valueOf(size));
+        assertTrue(responsibilities.size() > Integer.valueOf(size));
     }
 
     @When("I send get list of titles request")
@@ -58,7 +60,7 @@ public class APIPermissionManagementSteps extends APISteps {
     @Then("Titles list size more than $size")
     public void titleListSizeShouldBeMoreThan(String size) {
         List<Title> titles = context.get("titleList", List.class);
-        Assert.assertTrue(titles.size() > Integer.valueOf(size));
+        assertTrue(titles.size() > Integer.valueOf(size));
     }
 
     @When("I send create a new responsibility request")
@@ -99,13 +101,13 @@ public class APIPermissionManagementSteps extends APISteps {
     }
 
     @Then("Responsibility is correct")
-    public void createdResponsibilityShoudBeCorrect(){
+    public void createdResponsibilityShoudBeCorrect() {
         Responsibility responsibility = context.get("responsibility", Responsibility.class);
         Responsibility createdResponsibility = Entities.getResponsibilities().getLatest();
 
-        Assert.assertEquals(createdResponsibility.getDisplayName(), responsibility.getDisplayName());
-        Assert.assertFalse(createdResponsibility.getIsDeleted());
-        Assert.assertEquals(createdResponsibility.getDescription(), responsibility.getDescription());
+        assertEquals(createdResponsibility.getDisplayName(), responsibility.getDisplayName());
+        assertFalse(createdResponsibility.getIsDeleted());
+        assertEquals(createdResponsibility.getDescription(), responsibility.getDescription());
         Verify.shouldBe(Conditions.equals(createdResponsibility.getPermissions(), responsibility.getPermissions()));
     }
 
@@ -126,9 +128,9 @@ public class APIPermissionManagementSteps extends APISteps {
                 .anyMatch((r -> r.getDisplayName().equals(responsibility.getDisplayName())));
 
         if (criteria.equals("in")) {
-            Assert.assertTrue(matched);
+            assertTrue(matched);
         } else {
-            Assert.assertFalse(matched);
+            assertFalse(matched);
         }
     }
 
@@ -190,9 +192,9 @@ public class APIPermissionManagementSteps extends APISteps {
         Title title = context.get("title", Title.class);
         Title createdTitle = Entities.getTitles().getLatest();
 
-        Assert.assertEquals(title.getDescription(), createdTitle.getDescription());
-        Assert.assertEquals(title.getDisplayName(), createdTitle.getDisplayName());
-        Assert.assertFalse(createdTitle.getIsDeleted());
+        assertEquals(title.getDescription(), createdTitle.getDescription());
+        assertEquals(title.getDisplayName(), createdTitle.getDisplayName());
+        assertFalse(createdTitle.getIsDeleted());
         Verify.shouldBe(Conditions.equals(title.getResponsibilities(), createdTitle.getResponsibilities()));
     }
 
@@ -221,9 +223,9 @@ public class APIPermissionManagementSteps extends APISteps {
                 .anyMatch((r -> r.getId().equals(title.getId())));
 
         if (criteria.equals("in")) {
-            Assert.assertTrue(matched);
+            assertTrue(matched);
         } else {
-            Assert.assertFalse(matched);
+            assertFalse(matched);
         }
     }
 
@@ -238,4 +240,18 @@ public class APIPermissionManagementSteps extends APISteps {
         titleService.update(updatedTitle);
     }
 
+    @AfterStory
+    public void cleanUp() {
+        responsibilityService.removeAll();
+        OperationResult<List<Responsibility>> listResponsibility = responsibilityService.list();
+        listResponsibility.getEntity().stream()
+                .filter(responsibility -> responsibility.getDisplayName().contains("qe_"))
+                .forEach(responsibilityService::remove);
+
+        titleService.removeAll();
+        OperationResult<List<Title>> listTitle = titleService.list();
+        listTitle.getEntity().stream()
+                .filter(title -> title.getDisplayName().contains("qe_"))
+                .forEach(titleService::remove);
+    }
 }

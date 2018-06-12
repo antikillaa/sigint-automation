@@ -26,8 +26,9 @@ public class OrganizationFilter extends SearchFilter<Organization> {
         return orgTypes;
     }
 
-    public void setOrgTypes(List<String> orgTypes) {
+    public OrganizationFilter setOrgTypes(List<String> orgTypes) {
         this.orgTypes = orgTypes;
+        return this;
     }
 
     public String getName() {

@@ -1,10 +1,15 @@
 package ae.pegasus.framework.app_context;
 
+import ae.pegasus.framework.controllers.AuthService;
 import ae.pegasus.framework.json.JsonConverter;
+import ae.pegasus.framework.model.DataSource;
 import ae.pegasus.framework.model.Dictionary;
 import ae.pegasus.framework.model.LoggedUser;
+import ae.pegasus.framework.model.Permission;
 import ae.pegasus.framework.services.DictionaryService;
+import ae.pegasus.framework.services.PermissionService;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -15,6 +20,8 @@ public class AppContext {
     private LoggedUser loggedUser;
     private Dictionary dictionary;
     private Map<String, String> languages;
+    private List<DataSource> dataSources;
+    private List<Permission> permissions;
 
     private AppContext() {
     }
@@ -53,6 +60,20 @@ public class AppContext {
             dictionary = DictionaryService.loadDictionary();
         }
         return dictionary;
+    }
+
+    public List<DataSource> getDataSources() {
+        if (dataSources == null) {
+            dataSources = new AuthService().dataSources().getEntity();
+        }
+        return dataSources;
+    }
+
+    public List<Permission> getPermissions() {
+        if (permissions == null) {
+            permissions = PermissionService.getPermissions();
+        }
+        return permissions;
     }
 }
 

@@ -1,12 +1,12 @@
 package ae.pegasus.framework.http.requests;
 
-import static ae.pegasus.framework.utils.StringUtils.capitalizeFirstLetter;
-
 import ae.pegasus.framework.http.HttpMethod;
+
+import static ae.pegasus.framework.utils.StringUtils.capitalizeFirstLetter;
 
 public class AuthRequest extends HttpRequest {
 
-    private final static String URI = "/api/auth/tokens";
+    private final static String URI = "/api/auth";
 
     public AuthRequest() {
         super(URI);
@@ -14,7 +14,7 @@ public class AuthRequest extends HttpRequest {
 
     public AuthRequest singOut() {
         this
-                .setURI(URI + "/me")
+                .setURI(URI + "/tokens/me")
                 .setHttpMethod(HttpMethod.DELETE);
         return this;
     }
@@ -23,9 +23,23 @@ public class AuthRequest extends HttpRequest {
         AuthRequest.User user = new AuthRequest.User(username, password);
 
         this
-                .setURI(URI)
+                .setURI(URI + "/tokens")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(user);
+        return this;
+    }
+
+    public AuthRequest dataSources() {
+        this
+                .setURI(URI + "/datasources")
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
+    public AuthRequest classifications() {
+        this
+                .setURI(URI + "/classifications")
+                .setHttpMethod(HttpMethod.GET);
         return this;
     }
 

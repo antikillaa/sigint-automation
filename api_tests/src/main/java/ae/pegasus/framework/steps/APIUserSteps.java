@@ -10,7 +10,6 @@ import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.TeamService;
 import ae.pegasus.framework.services.UserService;
 import org.apache.log4j.Logger;
-import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
@@ -30,16 +29,6 @@ public class APIUserSteps extends APISteps {
 
     private String generatePassword() {
         return new UserPasswordProvider().generate(PASSWORD_LENGTH);
-    }
-
-    @AfterStory
-    public void deleteDefaultTeam() {
-        if (UserService.getDefaultTeamId() != null) {
-            log.info("Trying to remove default team...");
-            Team team = teamService.view(UserService.getDefaultTeamId()).getEntity();
-            teamService.remove(team);
-            UserService.setDefaultTeamId(null);
-        }
     }
 
     @Then("Created user is correct")

@@ -8,16 +8,18 @@ import ae.pegasus.framework.model.RequestResult;
 import ae.pegasus.framework.model.Token;
 import ae.pegasus.framework.model.User;
 import ae.pegasus.framework.model.entities.Entities;
-import org.apache.log4j.Logger;
-import org.jbehave.core.annotations.AfterStories;
-import org.jbehave.core.annotations.Given;
-import org.junit.Assert;
 import ae.pegasus.framework.services.ResponsibilityService;
 import ae.pegasus.framework.services.TitleService;
 import ae.pegasus.framework.services.UserService;
 import ae.pegasus.framework.utils.StringUtils;
+import org.apache.log4j.Logger;
+import org.jbehave.core.annotations.AfterStories;
+import org.jbehave.core.annotations.Given;
+import org.junit.Assert;
 
 import java.util.List;
+
+import static org.junit.Assert.assertTrue;
 
 public class APILogin {
 
@@ -26,7 +28,6 @@ public class APILogin {
     private static AppContext context = AppContext.get();
     private static Logger log = Logger.getLogger(APILogin.class);
     private static final String ADMIN_ROLE = "admin";
-    private static boolean cleaningIsRequired;
 
     public static User getUserByRole(String role) {
         User searchedUser = null;
@@ -91,64 +92,66 @@ public class APILogin {
 
     @Given("I sign in as user with permissions $permissions")
     public void signInWithPermissions(String permString) {
-        String[] permissions = StringUtils.trimSpaces(permString.split(","));
-        signInAsUser(getUserByRole(ADMIN_ROLE));
+        signInAsUser(ADMIN_ROLE);
 
-        User user;
-        List<User> users = userService.getUsersWithPermissions(permissions);
-        if (users.size() == 0) {
-            user = userService.createUserWithPermissions(permissions);
-            cleaningIsRequired = true;
-            userService.addUser(user, permissions);
-        } else {
-            user = users.stream().findAny().orElse(null);
-        }
+        String[] permissions = StringUtils.splitToArray(permString);
+        User user = userService.getOrCreateUserWithPermissions(permissions);
         Assert.assertNotNull(user);
+
         signInAsUser(user);
     }
 
     @Given("Set new permissions: $permissions to current user and relogin")
     public void setNewPermissionToCurrentUserAndRelogin(String permString) {
-        String[] permissions = StringUtils.trimSpaces(permString.split(","));
-        User user = AppContext.get().getLoggedUser().getUser();
+        String[] permissions = StringUtils.splitToArray(permString);
 
-        signInAsUser(getUserByRole(ADMIN_ROLE));
-        cleaningIsRequired = true;
-        userService.setPermissions(user, permissions);
-        signInAsUser(user);
+        User currentUser = AppContext.get().getLoggedUser().getUser();
+        signInAsUser(ADMIN_ROLE);
+        userService.setPermissions(currentUser, permissions);
+        signInAsUser(currentUser);
+    }
+
+    @Given("I sign in as user with classifications: $value")
+    public void singinAsUserWithClassification(String value) {
+        String[] classifications = StringUtils.splitToArray(value);
+
+        User user = User.newBuilder()
+                .randomUser()
+                .withClassification(classifications)
+                .withAllPermission()
+                .withAllSources()
+                .build();
+
+        User createdUser = userService.createUserWithPermissions(user);
+        signInAsUser(createdUser);
     }
 
     @AfterStories
     public void afterStoryTearDown() {
-        if (cleaningIsRequired) {
-            log.info("TearDown for temp users, titles & responsibilities");
+        log.info("TearDown for temp users, titles & responsibilities");
+        assertTrue("Unable login as admin user!", signInAsUser(ADMIN_ROLE).isSuccess());
 
-            Assert.assertTrue("Unable login as admin user!", signInAsUser(ADMIN_ROLE).isSuccess());
+        List<OperationResult> operationResults;
 
-            List<OperationResult> operationResults;
-
-            operationResults = new UserService().removeAll();
-            for (OperationResult result : operationResults) {
-                if (!result.isSuccess()) {
-                    log.error("Unable to delete User. Code:" + result.getCode() + ", Response:" + result.getMessage());
-                }
+        operationResults = new UserService().removeAll();
+        for (OperationResult result : operationResults) {
+            if (!result.isSuccess()) {
+                log.error("Unable to delete User. Code:" + result.getCode() + ", Response:" + result.getMessage());
             }
+        }
 
-            operationResults = new TitleService().removeAll();
-            for (OperationResult result : operationResults) {
-                if (!result.isSuccess()) {
-                    log.error("Unable to delete Title. Code:" + result.getCode() + ", Response:" + result.getMessage());
-                }
+        operationResults = new TitleService().removeAll();
+        for (OperationResult result : operationResults) {
+            if (!result.isSuccess()) {
+                log.error("Unable to delete Title. Code:" + result.getCode() + ", Response:" + result.getMessage());
             }
+        }
 
-            operationResults = new ResponsibilityService().removeAll();
-            for (OperationResult result : operationResults) {
-                if (!result.isSuccess()) {
-                    log.error("Unable to delete Responsibility. Code:" + result.getCode() + ", Response:" + result.getMessage());
-                }
+        operationResults = new ResponsibilityService().removeAll();
+        for (OperationResult result : operationResults) {
+            if (!result.isSuccess()) {
+                log.error("Unable to delete Responsibility. Code:" + result.getCode() + ", Response:" + result.getMessage());
             }
-
-            cleaningIsRequired = false;
         }
     }
 }
