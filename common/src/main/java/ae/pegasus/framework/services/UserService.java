@@ -1,6 +1,5 @@
 package ae.pegasus.framework.services;
 
-import ae.pegasus.framework.data_for_entity.RandomEntities;
 import ae.pegasus.framework.data_for_entity.data_providers.user_password.UserPasswordProvider;
 import ae.pegasus.framework.error_reporter.ErrorReporter;
 import ae.pegasus.framework.http.G4Response;
@@ -17,6 +16,7 @@ import java.util.*;
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class UserService implements EntityService<User> {
 
@@ -24,8 +24,7 @@ public class UserService implements EntityService<User> {
     private static final UserRequest request = new UserRequest();
     private static final ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
     private static String defaultTeamId;
-    private static RandomEntities randomEntities = new RandomEntities();
-    private static Map<String, List<User>> userMap = new HashMap<>();
+    private static Map<String, List<User>> permissionUserMap = new HashMap<>();
 
     private static TitleService titleService = new TitleService();
     private static ResponsibilityService responsibilityService = new ResponsibilityService();
@@ -33,6 +32,9 @@ public class UserService implements EntityService<User> {
     private static final int PASSWORD_LENGTH = 10;
 
     public static String getDefaultTeamId() {
+        if (defaultTeamId == null) {
+            defaultTeamId = new OrganizationService().getOrCreateByName("QE auto team").getId();
+        }
         return defaultTeamId;
     }
 
@@ -40,15 +42,9 @@ public class UserService implements EntityService<User> {
         UserService.defaultTeamId = defaultTeamId;
     }
 
-    /**
-     * Add new G4 User.
-     *
-     * @param entity New user
-     * @return Response status code
-     */
     @Override
     public OperationResult<User> add(User entity) {
-        log.info("Creating new user");
+        log.info("Creating new user: " + toJsonString(entity));
 
         String adminPassword = appContext.getLoggedUser().getPassword();
         entity.setAdminPassword(adminPassword);
@@ -84,7 +80,7 @@ public class UserService implements EntityService<User> {
         if (operationResult.isSuccess()) {
             Entities.getUsers().removeEntity(entity);
             Entities.getOrganizations().removeEntity(entity);
-            userMap.values()
+            permissionUserMap.values()
                     .forEach(users -> users
                             .removeIf(user -> user.getName().equals(entity.getName())));
         }
@@ -124,6 +120,7 @@ public class UserService implements EntityService<User> {
             User user = operationResult.getEntity();
             if (entity.getNewPassword() != null) {
                 user.setPassword(entity.getNewPassword());
+                user.setNewPassword(null);
             }
             Entities.getUsers().addOrUpdateEntity(user);
             Entities.getOrganizations().addOrUpdateEntity(user);
@@ -197,6 +194,7 @@ public class UserService implements EntityService<User> {
 
         if (operationResult.isSuccess()) {
             user.setPassword(user.getNewPassword());
+            user.setNewPassword(null);
             Entities.getUsers().addOrUpdateEntity(user);
             Entities.getOrganizations().addOrUpdateEntity(user);
         }
@@ -225,73 +223,54 @@ public class UserService implements EntityService<User> {
     }
 
     public User createUserWithPermissions(String... permissions) {
-        log.info("Creating new user with required permissions:" + Arrays.toString(permissions));
-        Responsibility responsibility = randomEntities.randomEntity(Responsibility.class);
-        responsibility.setPermissions(Arrays.asList(permissions));
-        OperationResult<Responsibility> responsibilityOperationResult = responsibilityService.add(responsibility);
-        if (!responsibilityOperationResult.isSuccess()) {
-            throw new AssertionError("Unable create Responsibility: " + toJsonString(responsibility));
-        }
+        User user = User.newBuilder()
+                .randomUser()
+                .withPermission(permissions)
+                .withAllClassification()
+                .withAllSources()
+                .build();
 
-        Title title = randomEntities.randomEntity(Title.class);
-        title.setResponsibilities(Collections.singletonList(responsibilityOperationResult.getEntity().getId()));
-        OperationResult<Title> titleOperationResult = titleService.add(title);
-        if (!titleOperationResult.isSuccess()) {
-            throw new AssertionError("Unable create Title: " + toJsonString(title));
-        }
-        title = titleOperationResult.getEntity();
+        return createUserWithPermissions(user);
+    }
 
-        User newUser = randomEntities.randomEntity(User.class);
-        newUser.getDefaultPermission().setTitles(Collections.singletonList(title.getId()));
+    public User createUserWithPermissions(User user) {
+        // create permissions
+        List<String> permissions = user.getDefaultPermission().getActions();
+        Responsibility responsibility = responsibilityService.createWithPermissions(permissions.toArray(new String[0]));
+        Title title = titleService.createWithResponsibility(responsibility);
 
-        String teamID = getRandomItemFromList(appContext.getLoggedUser().getUser().getParentTeamIds());
-        newUser.setParentTeamIds(Collections.singletonList(teamID));
+        // update orgUnits
+        user = addOrgUnitWithTitles(user, getDefaultTeamId(), Collections.singletonList(title.getId()));
 
-        Map<String, List<String>> parentTeams = new HashMap<>();
-        parentTeams.put(teamID, Collections.singletonList("MEMBER"));
-        newUser.setParentTeams(parentTeams);
+        // create user
+        OperationResult<User> userOperationResult = add(user);
+        assertTrue("Unable create User: " + toJsonString(user), userOperationResult.isSuccess());
+        user = userOperationResult.getEntity();
 
-        TeamTitle teamTitle = new TeamTitle();
-        teamTitle.setOrgUnitId(teamID);
-        teamTitle.setTitles(Collections.singletonList(title.getId()));
-        newUser.getDefaultPermission().setTeamTitles(Collections.singletonList(teamTitle));
-
-        OperationResult<User> userOperationResult = add(newUser);
-        if (!userOperationResult.isSuccess()) {
-            throw new AssertionError("Unable create User: " + toJsonString(newUser));
-        }
-
-        User user = userOperationResult.getEntity();
+        // update password
         user.setNewPassword(new UserPasswordProvider().generate(PASSWORD_LENGTH));
         OperationResult<AuthResponseResult> firstPasswordChangeResult = changeTempPassword(user);
         if (!firstPasswordChangeResult.isSuccess()) {
             log.error(firstPasswordChangeResult.getMessage());
-            throw new AssertionError("Unable change password for new User: " + toJsonString(newUser));
+            throw new AssertionError("Unable change password for new User: " + toJsonString(user));
         }
 
         return user;
     }
 
     public void setPermissions(User user, String... permissions) {
-        log.info("User: " + user.getName() + "\nNew permissions:" + Arrays.toString(permissions));
-
-        // create new responsibility
-        Responsibility responsibility = randomEntities.randomEntity(Responsibility.class);
-        responsibility.setPermissions(Arrays.asList(permissions));
-        OperationResult<Responsibility> responsibilityOperationResult = responsibilityService.add(responsibility);
-        if (!responsibilityOperationResult.isSuccess()) {
-            throw new AssertionError("Unable create Responsibility: " + toJsonString(responsibility));
-        }
+        Responsibility responsibility = responsibilityService.createWithPermissions(permissions);
 
         // get user title
         List<TeamTitle> teamTitles = user.getDefaultPermission().getTeamTitles();
         assertFalse("Current user without TeamTitles!", teamTitles.isEmpty());
 
-        // update user title with new responsibilities
         TeamTitle teamTitle = getRandomItemFromList(teamTitles);
         String titleID = getRandomItemFromList(teamTitle.getTitles());
         Title title = titleService.view(titleID).getEntity();
-        title.setResponsibilities(Collections.singletonList(responsibilityOperationResult.getEntity().getId()));
+
+        // update user title with new responsibilities
+        title.setResponsibilities(Collections.singletonList(responsibility.getId()));
         OperationResult<Title> titleOperationResult = titleService.update(title);
         if (!titleOperationResult.isSuccess())
             throw new AssertionError("Unable update Title: " + toJsonString(title));
@@ -313,33 +292,58 @@ public class UserService implements EntityService<User> {
             ErrorReporter.raiseError("List of permissions wasn't loaded");
         }
 
-        existingPermissions.forEach(permission -> userMap.put(permission.getName(), new ArrayList<>()));
+        existingPermissions.forEach(permission -> permissionUserMap.put(permission.getName(), new ArrayList<>()));
     }
 
     public List<User> getUsersWithPermissions(String... permissions) {
         log.debug("Finding users with permissions: " + Arrays.toString(permissions));
-        if (userMap.isEmpty()) {
+        if (permissionUserMap.isEmpty()) {
             initializeUserMap();
         }
         List<User> users = new ArrayList<>();
         for (String permission : permissions) {
-            if (users.size() == 0) {
-                users.addAll(userMap.get(permission));
-            } else {
-                users.retainAll(userMap.get(permission));
+            try {
                 if (users.size() == 0) {
-                    log.debug("User with permissions: " + Arrays.toString(permissions) + "not found!");
-                    return users;
+                    users.addAll(permissionUserMap.get(permission));
+                } else {
+                    users.retainAll(permissionUserMap.get(permission));
+                    if (users.size() == 0) {
+                        log.debug("User with permissions: " + Arrays.toString(permissions) + "not found!");
+                        return users;
+                    }
                 }
+            } catch (NullPointerException e) {
+                throw new AssertionError("Permission: " + permission + "not found!");
             }
         }
-        log.trace("With permissions: " + Arrays.toString(permissions) + " users found: " + users.size());
+        log.debug("With permissions: " + Arrays.toString(permissions) + " users found: " + users.size());
         return users;
     }
 
-    public void addUser(User user, String... permissions) {
-        for (String permission : permissions) {
-            userMap.get(permission).add(user);
+    public User getOrCreateUserWithPermissions(String... permissions) {
+        List<User> users = getUsersWithPermissions(permissions);
+
+        User user;
+        if (users.size() == 0) {
+            user = createUserWithPermissions(permissions);
+            for (String permission : permissions) {
+                permissionUserMap.get(permission).add(user);
+            }
+        } else {
+            user = getRandomItemFromList(users);
         }
+        return user;
+    }
+
+    public User addOrgUnitWithTitles(User user, String orgUnitId, List<String> titles) {
+        user.getParentTeamIds().add(orgUnitId);
+        user.getParentTeams().put(orgUnitId, Collections.singletonList("MEMBER"));
+
+        TeamTitle teamTitle = new TeamTitle();
+        teamTitle.setOrgUnitId(orgUnitId);
+        teamTitle.setTitles(titles);
+        user.getDefaultPermission().getTeamTitles().add(teamTitle);
+
+        return user;
     }
 }

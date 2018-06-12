@@ -1,9 +1,6 @@
 package ae.pegasus.framework.model;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public enum Classification {
 
@@ -18,7 +15,6 @@ public enum Classification {
     private final String name;
     private final String parentName;
     private final String displayName;
-    private final String description = null;
 
     Classification(String name, String parentName, String displayName) {
         this.name = name;
@@ -38,15 +34,22 @@ public enum Classification {
         return displayName;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     private static final List<Classification> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();
     private static Random RANDOM = new Random();
 
     public static Classification random() {
         return VALUES.get(RANDOM.nextInt(SIZE));
+    }
+
+    public boolean hasAccess(Classification classification) {
+        Set<String> allowed = new HashSet<>();
+        Classification c = Classification.this;
+        do {
+            allowed.add(c.name);
+            c = (c.getParentName() == null) ? null : Classification.valueOf(c.parentName);
+        } while (c != null);
+
+        return allowed.contains(classification.name);
     }
 }

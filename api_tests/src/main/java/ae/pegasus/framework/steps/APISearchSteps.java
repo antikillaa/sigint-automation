@@ -414,7 +414,7 @@ public class APISearchSteps extends APISteps {
     @When("I send CB search count request - query:$query, objectType:$objectType, sources:$source")
     public void cbSearchResultCount(String query, String objectType, String sources) {
         List<DataSourceCategory> sourceCategories = new ArrayList<>();
-        Arrays.stream(StringUtils.trimSpaces(sources.split(",")))
+        Arrays.stream(StringUtils.splitToArray(sources))
                 .forEach(s -> sourceCategories.add(DataSourceCategory.valueOf(s)));
         CBSearchFilter filter = new CBSearchFilter(sourceCategories, objectType, query);
 

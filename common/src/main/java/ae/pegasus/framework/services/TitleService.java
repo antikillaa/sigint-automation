@@ -1,6 +1,8 @@
 package ae.pegasus.framework.services;
 
+import ae.pegasus.framework.data_for_entity.RandomEntities;
 import ae.pegasus.framework.http.requests.TitleRequest;
+import ae.pegasus.framework.model.Responsibility;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.errors.OperationResultError;
 import ae.pegasus.framework.http.G4Response;
@@ -13,7 +15,10 @@ import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 
 public class TitleService implements EntityService<Title> {
 
@@ -85,6 +90,18 @@ public class TitleService implements EntityService<Title> {
             Entities.getTitles().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
+    }
+
+    public Title createWithResponsibility(Responsibility responsibility) {
+        Title title = new RandomEntities().randomEntity(Title.class);
+        title.setResponsibilities(Collections.singletonList(responsibility.getId()));
+
+        OperationResult<Title> operationResult = add(title);
+        if (operationResult.isSuccess()) {
+            return operationResult.getEntity();
+        } else {
+            throw new AssertionError("Unable create Title: " + toJsonString(title));
+        }
     }
 
     public List<OperationResult> removeAll() {

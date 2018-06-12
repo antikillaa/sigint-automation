@@ -5,6 +5,7 @@ import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.FinderCaseService;
 import ae.pegasus.framework.services.FinderFileService;
+import ae.pegasus.framework.utils.StringUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -14,13 +15,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
 import static ae.pegasus.framework.utils.StepHelper.compareByCriteria;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 @SuppressWarnings("unchecked")
 public class APIFinderFileSteps extends APISteps {
@@ -192,7 +192,7 @@ public class APIFinderFileSteps extends APISteps {
     }
 
 
-    @When("I send get list of finder file request")
+    @When("I send get root list of CBFinder request")
     public void getListOfFinderFileRequest() {
         FinderFileSearchFilter filter = new FinderFileSearchFilter();
         filter.setSortField("name");
@@ -208,14 +208,14 @@ public class APIFinderFileSteps extends APISteps {
             } else break;
         } while (operationResult.getEntity().size() == filter.getPageSize());
 
-        context.put("finderFileList", finderFiles);
+        context.put("cbFinderList", finderFiles);
     }
 
 
     @Then("Created finder file $criteria list")
     public void finderFilesContainNewFinderFile(String criteria) {
         FinderFile finderFile = Entities.getFinderFiles().getLatest();
-        List<FinderFile> finderFiles = context.get("finderFileList", List.class);
+        List<FinderFile> finderFiles = context.get("cbFinderList", List.class);
 
         FinderFile foundFiles = finderFiles.stream()
                 .filter(file -> Objects.equals(file.getId(), finderFile.getId()))
@@ -223,7 +223,7 @@ public class APIFinderFileSteps extends APISteps {
 
         switch (criteria.toLowerCase()) {
             case "in":
-                Assert.assertNotNull(
+                assertNotNull(
                         "Finder file not founded in response. File:" + toJsonString(finderFile),
                         foundFiles);
                 break;
@@ -282,7 +282,7 @@ public class APIFinderFileSteps extends APISteps {
         FinderFile finderFile = Entities.getFinderFiles().getLatest();
         ProfileAndTargetGroup[] profileAndFiles = context.get("finderFileContent", ProfileAndTargetGroup[].class);
 
-        Assert.assertTrue(
+        assertTrue(
                 Arrays.stream(profileAndFiles)
                         .anyMatch(p -> p.getId().equals(finderFile.getId())));
     }
@@ -292,14 +292,14 @@ public class APIFinderFileSteps extends APISteps {
         Profile profile = Entities.getProfiles().getLatest();
         ProfileAndTargetGroup[] profileAndGroups = context.get("finderFileContent", ProfileAndTargetGroup[].class);
 
-        Assert.assertTrue(
+        assertTrue(
                 Arrays.stream(profileAndGroups)
                         .anyMatch(p -> p.getId().equals(profile.getId())));
     }
 
     @When("I delete all empty QE auto files")
     public void deleteAllEmptyQEFiles() {
-        List<FinderFile> files = context.get("finderFileList", List.class);
+        List<FinderFile> files = context.get("cbFinderList", List.class);
         files.stream()
                 .filter(file -> file.getName().contains("QE auto")
                         && file.getPayload() != null
@@ -309,7 +309,7 @@ public class APIFinderFileSteps extends APISteps {
 
     @When("I delete all empty files")
     public void deleteAllEmptyFiles() {
-        List<FinderFile> files = context.get("finderFileList", List.class);
+        List<FinderFile> files = context.get("cbFinderList", List.class);
         files.stream()
                 .filter(file -> !file.getHasContents())
                 .forEach(serviceFile::remove);
@@ -368,7 +368,7 @@ public class APIFinderFileSteps extends APISteps {
                 break;
             case "files":
                 List<FinderFile> files = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.File);
-                context.put("finderFileList", files);
+                context.put("cbFinderList", files);
                 break;
             default:
                 throw new AssertionError("Unknown step parameter:" + type);
@@ -386,9 +386,9 @@ public class APIFinderFileSteps extends APISteps {
     }
 
 
-    @Then("Finder files list size $criteria $size")
-    public void targetGroupListMoreThan(String criteria, String size) {
-        List<FinderFile> files = context.get("finderFileList", List.class);
+    @Then("CB Finder entities list $criteria $size")
+    public void cbFinderListMoreThan(String criteria, String size) {
+        List<FinderFile> files = context.get("cbFinderList", List.class);
 
         int expectedCount = Integer.valueOf(size);
         boolean condition = compareByCriteria(criteria, files.size(), expectedCount);
@@ -410,6 +410,24 @@ public class APIFinderFileSteps extends APISteps {
         serviceFile.update(createdFinderFile);
     }
 
+    @Then("CBFinder return items only for classification level: $classifications")
+    public void cbFinderReturnItemsOnlyForClassifications(String classificationsString) {
+        List<Classification> classifications = Arrays.stream(StringUtils.splitToArray(classificationsString))
+                .map(Classification::valueOf)
+                .collect(Collectors.toList());
+        List<FinderFile> finderFiles = context.get("cbFinderList", List.class);
+
+        for (Classification c : classifications) {
+            for (FinderFile finderFile : finderFiles) {
+                ReqPermission notAllowed = finderFile.getReqPermissions().stream()
+                        .filter(reqPermission -> !c.hasAccess(Classification.valueOf(reqPermission.getClassification())))
+                        .findAny().orElse(null);
+
+                assertNull("CB Finder return: " + toJsonString(finderFile) + "\nFor classification: " + c,
+                        notAllowed);
+            }
+        }
+    }
 
 //    @Then("Viewed target group is correct")
 //    public void viewedTargetGroupIsCorrect() {

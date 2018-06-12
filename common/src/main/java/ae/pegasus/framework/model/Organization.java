@@ -5,7 +5,6 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -13,7 +12,6 @@ import java.util.List;
 public class Organization extends G4Entity {
 
     @DataIgnore
-    @Deprecated
     private String parentTeamId;
     @DataIgnore
     private List<String> parentTeamIds = new ArrayList<>();
@@ -22,11 +20,6 @@ public class Organization extends G4Entity {
     private String fullName;
     @DataIgnore
     private UserPermission defaultPermission = new UserPermission();
-
-    Organization() {
-        setParentTeamId("00");
-        setParentTeamIds(Arrays.asList("00"));
-    }
 
     public String getParentTeamId() {
         return parentTeamId;

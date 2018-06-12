@@ -288,7 +288,12 @@ public class APIProfileSteps extends APISteps {
             }
         } else {
             log.info("Target " + target.getName() + " already exist in system");
-            context.put("profile", service.view(getRandomItemFromList(filteredProfiles).getId()).getEntity());
+            OperationResult<Profile> result = service.view(getRandomItemFromList(filteredProfiles).getId());
+            if (!result.isSuccess()) {
+                throw new AssertionError(result.getCode() + " " + result.getMessage());
+            } else {
+                context.put("profile", result.getEntity());
+            }
         }
     }
 

@@ -10,6 +10,7 @@ public class Team extends Organization {
     private String description;
 
     public Team() {
+        setParentTeamId("00");
         setOrganizationType(OrganizationType.TEAM);
     }
 

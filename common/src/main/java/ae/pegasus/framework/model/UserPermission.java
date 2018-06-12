@@ -3,7 +3,6 @@ package ae.pegasus.framework.model;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -48,10 +47,8 @@ public class UserPermission {
 
     public class PermissionRecord {
 
-        private List<String> clearances = Arrays.asList("TS-OS", "TS-CIO", "TS-SCI");
-        private List<String> dataSources = Arrays.asList("PR", "INSTAGRAM", "E", "ETISALAT_SUBSCRIBER", "F", "H",
-                "ODD_JOBS", "O", "DU", "UDB", "S", "DARK_WEB", "T", "DARK_WEB_REPORTS", "ZELZAL", "EID", "IM", "SITA",
-                "YOUTUBE", "GPLUS", "KARMA", "TUMBLR", "NEWS", "FORUM", "PHONEBOOK", "TWITTER");
+        private List<String> clearances = new ArrayList<>();
+        private List<String> dataSources = new ArrayList<>();
         private List<String> organizations = new ArrayList<>();
 
         public List<String> getClearances() {
