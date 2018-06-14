@@ -1,7 +1,7 @@
 package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.controllers.APILogin;
-import ae.pegasus.framework.data_for_entity.data_providers.user_password.UserPasswordProvider;
+import ae.pegasus.framework.data_for_entity.data_providers.user.UserPasswordProvider;
 import ae.pegasus.framework.model.User;
 import ae.pegasus.framework.model.entities.Entities;
 import org.jbehave.core.annotations.Given;

@@ -1,6 +1,6 @@
 package ae.pegasus.framework.services;
 
-import ae.pegasus.framework.data_for_entity.data_providers.user_password.UserPasswordProvider;
+import ae.pegasus.framework.data_for_entity.data_providers.user.UserPasswordProvider;
 import ae.pegasus.framework.error_reporter.ErrorReporter;
 import ae.pegasus.framework.http.G4Response;
 import ae.pegasus.framework.http.OperationResult;
@@ -25,15 +25,16 @@ public class UserService implements EntityService<User> {
     private static final ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
     private static String defaultTeamId;
     private static Map<String, List<User>> permissionUserMap = new HashMap<>();
+    private static OrganizationService organizationService = new OrganizationService();
 
     private static TitleService titleService = new TitleService();
     private static ResponsibilityService responsibilityService = new ResponsibilityService();
 
     private static final int PASSWORD_LENGTH = 10;
 
-    public static String getDefaultTeamId() {
+    public static String getOrCreateDefaultTeamId() {
         if (defaultTeamId == null) {
-            defaultTeamId = new OrganizationService().getOrCreateByName("QE auto team").getId();
+            defaultTeamId = organizationService.getOrCreateTeamByName("QE auto team").getId();
         }
         return defaultTeamId;
     }
@@ -240,7 +241,7 @@ public class UserService implements EntityService<User> {
         Title title = titleService.createWithResponsibility(responsibility);
 
         // update orgUnits
-        user = addOrgUnitWithTitles(user, getDefaultTeamId(), Collections.singletonList(title.getId()));
+        user = addOrgUnitWithTitles(user, getOrCreateDefaultTeamId(), Collections.singletonList(title.getId()));
 
         // create user
         OperationResult<User> userOperationResult = add(user);
