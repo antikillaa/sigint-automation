@@ -1,20 +1,17 @@
 package ae.pegasus.framework.steps;
 
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-
 import ae.pegasus.framework.app_context.RunContext;
-import ae.pegasus.framework.controllers.PageControllerFactory;
 import ae.pegasus.framework.app_context.properties.G4Properties;
 import ae.pegasus.framework.blocks.context.factories.RecordsControllerFactory;
 import ae.pegasus.framework.blocks.context.factories.ReportsControllerFactory;
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.WebDriverRunner;
+import ae.pegasus.framework.controllers.PageControllerFactory;
 import ae.pegasus.framework.controllers.reports.form_page.ReportFormFactoryController;
-import java.io.IOException;
-import java.net.URL;
 import ae.pegasus.framework.model.Record;
 import ae.pegasus.framework.model.Report;
 import ae.pegasus.framework.model.User;
+import ae.pegasus.framework.pages.Navigator;
+import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.WebDriverRunner;
 import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.BeforeScenario;
 import org.jbehave.core.annotations.BeforeStory;
@@ -23,7 +20,11 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import ae.pegasus.framework.pages.Navigator;
+
+import java.io.IOException;
+import java.net.URL;
+
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class UISteps {
 

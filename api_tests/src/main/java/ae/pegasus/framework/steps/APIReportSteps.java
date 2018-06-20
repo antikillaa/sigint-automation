@@ -1,45 +1,41 @@
 package ae.pegasus.framework.steps;
 
+import ae.pegasus.framework.app_context.AppContext;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.Report;
-import ae.pegasus.framework.model.ReportOwner;
-import ae.pegasus.framework.model.ReportStatus;
-import ae.pegasus.framework.model.User;
-import ae.pegasus.framework.services.ReportCategoryService;
+import ae.pegasus.framework.model.Result;
 import ae.pegasus.framework.services.ReportService;
-import ae.pegasus.framework.services.UserService;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
-
-import java.util.Date;
+import org.jbehave.core.annotations.When;
 
 public class APIReportSteps extends APISteps {
 
-    private static final Logger log = Logger.getLogger(APIReportSteps.class);
-    private ReportService reportService = new ReportService();
-    private ReportCategoryService reportCategoryService = new ReportCategoryService();
+    public static ReportService serviceReport = new ReportService();
 
-    private static Report generateReport() {
-        Report report = new Report();
-        report.setSubject("subject:" + RandomStringUtils.randomAlphabetic(4));
-        report.setStatus(ReportStatus.DRAFT);
-        initOwner(report);
-        report.setCreatedAt(new Date());
-        return report;
+    private static Logger log = Logger.getLogger(APIFinderFileSteps.class);
+
+    static Report getRandomReport() {
+        return objectInitializer.randomEntity(Report.class);
     }
 
-    private static void initOwner(Report report) {
-        UserService userService = new UserService();
-        OperationResult<User> operationResult = userService.me();
-        User user = operationResult.getEntity();
-        User reportUser = new User();
-        reportUser.setId(user.getId());
+    @When("I send create a report request")
+    public void sendReportRequest() {
+        Report report = getRandomReport();
+        serviceReport.initReport(null, report);
+        Result reportNo = context.get("reportNo", Result.class);
+        report.setReportNo(reportNo.getResult());
 
-        ReportOwner owner = new ReportOwner();
-        owner
-                .setRole(userService.getReportRole(user))
-                .setUser(reportUser);
-        report.setAuthorId(user.getId());
-        report.setOwner(owner);
+        context.put("report", report);
+
+        AppContext.get().getLoggedUser().getUser();
+        serviceReport.add(report);
+    }
+
+    @When("I send send generate report number request")
+    public void sendGenerateReportNumberRequest() {
+        Result reportNo = new Result();
+        OperationResult<Result> operationResult = serviceReport.generateNumber();
+        reportNo.setResult(operationResult.getEntity().getResult());
+        context.put("reportNo", reportNo);
     }
 }

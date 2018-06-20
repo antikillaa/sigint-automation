@@ -1,327 +1,302 @@
+
 package ae.pegasus.framework.model;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+        "attachments",
+        "wfId",
+        "objectType",
+        "state",
+        "classification",
+        "layoutType",
+        "reportType",
+        "reportNo",
+        "createdByName",
+        "events",
+        "reportSources",
+        "orgUnits",
+        "subject",
+        "description",
+        "considerations",
+        "recommendations",
+        "notes",
+        "categories",
+        "layoutMetadata",
+        "directCaseFiles",
+        "links"
+})
 public class Report extends G4Entity {
 
-    private String name;
-    private Boolean deleted;
-    private Boolean staffIdHidden;
-    private ReportStatus status;
-    //private Classification classification;
-    private String authorId;
-    private String authorName;
-    private String ownerName;
-    private ReportOwner owner;
-    //private ReportModificationMetadata authorModification;
-    //private ReportModificationMetadata analystModification;
-    //private ReportModificationMetadata approverModification;
-    private long sequenceNumber;
-    private String requestNumber;
-    @JsonProperty("reportNumber")
-    private String reportID;
-    private String metadataString;
+    @JsonProperty("attachments")
+    private List<Object> attachments = new ArrayList<Object>();
+    @JsonProperty("wfId")
+    private String wfId;
+    @JsonProperty("objectType")
+    private String objectType;
+    @JsonProperty("state")
+    private ReportState state;
+    @JsonProperty("classification")
+    private String classification;
+    @JsonProperty("layoutType")
+    private String layoutType;
+    @JsonProperty("reportType")
+    private String reportType;
+    @JsonProperty("reportNo")
+    private String reportNo;
+    @JsonProperty("createdByName")
+    private String createdByName;
+    @JsonProperty("events")
+    private List<Event> events = new ArrayList<Event>();
+    @JsonProperty("reportSources")
+    private List<ReportSource> reportSources = new ArrayList<ReportSource>();
+    @JsonProperty("orgUnits")
+    private List<OrgUnit> orgUnits = new ArrayList<OrgUnit>();
+    @JsonProperty("subject")
     private String subject;
-    private String body;
-    private String bodyRich;
-    private String comments;
-    private String commentsRich;
+    @JsonProperty("description")
+    private String description;
+    @JsonProperty("considerations")
+    private String considerations;
+    @JsonProperty("recommendations")
+    private String recommendations;
+    @JsonProperty("notes")
     private String notes;
-    private String notesRich;
-    private String analystComments;
-    private String analystCommentsRich;
-    private String analystRecommendations;
-    private String analystRecommendationsRich;
-    private String analystNotes;
-    private String analystNotesRich;
-    private String approverComments;
-    private String approverCommentsRich;
-    private List<ReportCategory> categories = new ArrayList<>();
-    private List<String> recordIds = new ArrayList<>();
-    private List<Record> reportRecords = new ArrayList<>();
-    private List<String> reportTeamIds = new ArrayList<>();
-    private Boolean statusChanged;
-    private String sourceType;
-    private String recordType;
+    @JsonProperty("categories")
+    private List<Category> categories = new ArrayList<Category>();
+    @JsonProperty("layoutMetadata")
+    private String layoutMetadata;
+    @JsonProperty("directCaseFiles")
+    private List<DirectCaseFile> directCaseFiles = new ArrayList<DirectCaseFile>();
+    @JsonProperty("links")
+    private List<Object> links = new ArrayList<Object>();
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public String getName() {
-        return name;
+    @JsonProperty("attachments")
+    public List<Object> getAttachments() {
+        return attachments;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @JsonProperty("attachments")
+    public void setAttachments(List<Object> attachments) {
+        this.attachments = attachments;
     }
 
-    public Boolean getDeleted() {
-        return deleted;
+    @JsonProperty("wfId")
+    public String getWfId() {
+        return wfId;
     }
 
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
+    @JsonProperty("wfId")
+    public void setWfId(String wfId) {
+        this.wfId = wfId;
     }
 
-    public Boolean getStaffIdHidden() {
-        return staffIdHidden;
+    @JsonProperty("objectType")
+    public String getObjectType() {
+        return objectType;
     }
 
-    public void setStaffIdHidden(Boolean staffIdHidden) {
-        this.staffIdHidden = staffIdHidden;
+    @JsonProperty("objectType")
+    public void setObjectType(String objectType) {
+        this.objectType = objectType;
     }
 
-    public String getAuthorName() {
-        return authorName;
+    @JsonProperty("state")
+    public ReportState getState() {
+        return state;
     }
 
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
+    @JsonProperty("state")
+    public void setState(ReportState state) {
+        this.state = state;
     }
 
-    public long getSequenceNumber() {
-        return sequenceNumber;
+    @JsonProperty("classification")
+    public String getClassification() {
+        return classification;
     }
 
-    public void setSequenceNumber(long sequenceNumber) {
-        this.sequenceNumber = sequenceNumber;
+    @JsonProperty("classification")
+    public void setClassification(String classification) {
+        this.classification = classification;
     }
 
-    public String getMetadataString() {
-        return metadataString;
+    @JsonProperty("layoutType")
+    public String getLayoutType() {
+        return layoutType;
     }
 
-    public void setMetadataString(String metadataString) {
-        this.metadataString = metadataString;
+    @JsonProperty("layoutType")
+    public void setLayoutType(String layoutType) {
+        this.layoutType = layoutType;
     }
 
-    public String getBody() {
-        return body;
+    @JsonProperty("reportType")
+    public String getReportType() {
+        return reportType;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    @JsonProperty("reportType")
+    public void setReportType(String reportType) {
+        this.reportType = reportType;
     }
 
-    public String getBodyRich() {
-        return bodyRich;
+    @JsonProperty("reportNo")
+    public String getReportNo() {
+        return reportNo;
     }
 
-    public void setBodyRich(String bodyRich) {
-        this.bodyRich = bodyRich;
+    @JsonProperty("reportNo")
+    public void setReportNo(String reportNo) {
+        this.reportNo = reportNo;
     }
 
-    public String getCommentsRich() {
-        return commentsRich;
+    @JsonProperty("createdByName")
+    public String getCreatedByName() {
+        return createdByName;
     }
 
-    public void setCommentsRich(String commentsRich) {
-        this.commentsRich = commentsRich;
+    @JsonProperty("createdByName")
+    public void setCreatedByName(String createdByName) {
+        this.createdByName = createdByName;
     }
 
-    public String getNotes() {
-        return notes;
+    @JsonProperty("events")
+    public List<Event> getEvents() {
+        return events;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    @JsonProperty("events")
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 
-    public String getNotesRich() {
-        return notesRich;
+    @JsonProperty("reportSources")
+    public List<ReportSource> getReportSources() {
+        return reportSources;
     }
 
-    public void setNotesRich(String notesRich) {
-        this.notesRich = notesRich;
+    @JsonProperty("reportSources")
+    public void setReportSources(List<ReportSource> reportSources) {
+        this.reportSources = reportSources;
     }
 
-    public String getAnalystComments() {
-        return analystComments;
+    @JsonProperty("orgUnits")
+    public List<OrgUnit> getOrgUnits() {
+        return orgUnits;
     }
 
-    public void setAnalystComments(String analystComments) {
-        this.analystComments = analystComments;
+    @JsonProperty("orgUnits")
+    public void setOrgUnits(List<OrgUnit> orgUnits) {
+        this.orgUnits = orgUnits;
     }
 
-    public String getAnalystCommentsRich() {
-        return analystCommentsRich;
-    }
-
-    public void setAnalystCommentsRich(String analystCommentsRich) {
-        this.analystCommentsRich = analystCommentsRich;
-    }
-
-    public String getAnalystRecommendations() {
-        return analystRecommendations;
-    }
-
-    public void setAnalystRecommendations(String analystRecommendations) {
-        this.analystRecommendations = analystRecommendations;
-    }
-
-    public String getAnalystRecommendationsRich() {
-        return analystRecommendationsRich;
-    }
-
-    public void setAnalystRecommendationsRich(String analystRecommendationsRich) {
-        this.analystRecommendationsRich = analystRecommendationsRich;
-    }
-
-    public String getAnalystNotes() {
-        return analystNotes;
-    }
-
-    public void setAnalystNotes(String analystNotes) {
-        this.analystNotes = analystNotes;
-    }
-
-    public String getAnalystNotesRich() {
-        return analystNotesRich;
-    }
-
-    public void setAnalystNotesRich(String analystNotesRich) {
-        this.analystNotesRich = analystNotesRich;
-    }
-
-    public String getApproverComments() {
-        return approverComments;
-    }
-
-    public void setApproverComments(String approverComments) {
-        this.approverComments = approverComments;
-    }
-
-    public String getApproverCommentsRich() {
-        return approverCommentsRich;
-    }
-
-    public void setApproverCommentsRich(String approverCommentsRich) {
-        this.approverCommentsRich = approverCommentsRich;
-    }
-
-    public List<Record> getReportRecords() {
-        return reportRecords;
-    }
-
-    public void setReportRecords(List<Record> reportRecords) {
-        this.reportRecords = reportRecords;
-    }
-
-    public List<String> getReportTeamIds() {
-        return reportTeamIds;
-    }
-
-    public void setReportTeamIds(List<String> reportTeamIds) {
-        this.reportTeamIds = reportTeamIds;
-    }
-
-    public Boolean getStatusChanged() {
-        return statusChanged;
-    }
-
-    public void setStatusChanged(Boolean statusChanged) {
-        this.statusChanged = statusChanged;
-    }
-
-    public String getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(String authorId) {
-        this.authorId = authorId;
-    }
-
-    public String getRequestNumber() {
-        return requestNumber;
-    }
-
-    public void setRequestNumber(String requestNumber) {
-        this.requestNumber = requestNumber;
-    }
-
-    public String getComments() {
-        return comments;
-    }
-
-    public void setComments(String comments) {
-        this.comments = comments;
-    }
-
-    public List<String> getRecordIds() {
-        return recordIds;
-    }
-
-    public void setRecordIds(List<String> recordIds) {
-        this.recordIds = recordIds;
-    }
-
-    public List<ReportCategory> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<ReportCategory> categories) {
-        this.categories = categories;
-    }
-
-    public ReportStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ReportStatus status) {
-        this.status = status;
-    }
-
-    public String getRecordType() {
-        return recordType;
-    }
-
-    public void setRecordType(String recordType) {
-        this.recordType = recordType;
-    }
-
-    public String getSourceType() {
-        return sourceType;
-    }
-
-    public void setSourceType(String sourceType) {
-        this.sourceType = sourceType;
-    }
-
+    @JsonProperty("subject")
     public String getSubject() {
         return subject;
     }
 
+    @JsonProperty("subject")
     public void setSubject(String subject) {
         this.subject = subject;
     }
 
-    public String getReportID() {
-        return reportID;
+    @JsonProperty("description")
+    public String getDescription() {
+        return description;
     }
 
-    public void setReportID(String reportID) {
-        this.reportID = reportID;
+    @JsonProperty("description")
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getOwnerName() {
-        return ownerName;
+    @JsonProperty("considerations")
+    public String getConsiderations() {
+        return considerations;
     }
 
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
+    @JsonProperty("considerations")
+    public void setConsiderations(String considerations) {
+        this.considerations = considerations;
     }
 
-    public ReportOwner getOwner() {
-        return owner;
+    @JsonProperty("recommendations")
+    public String getRecommendations() {
+        return recommendations;
     }
 
-    public void setOwner(ReportOwner owner) {
-        this.owner = owner;
+    @JsonProperty("recommendations")
+    public void setRecommendations(String recommendations) {
+        this.recommendations = recommendations;
     }
 
-    
+    @JsonProperty("notes")
+    public String getNotes() {
+        return notes;
+    }
+
+    @JsonProperty("notes")
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    @JsonProperty("categories")
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    @JsonProperty("categories")
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    @JsonProperty("layoutMetadata")
+    public String getLayoutMetadata() {
+        return layoutMetadata;
+    }
+
+    @JsonProperty("layoutMetadata")
+    public void setLayoutMetadata(String layoutMetadata) {
+        this.layoutMetadata = layoutMetadata;
+    }
+
+    @JsonProperty("directCaseFiles")
+    public List<DirectCaseFile> getDirectCaseFiles() {
+        return directCaseFiles;
+    }
+
+    @JsonProperty("directCaseFiles")
+    public void setDirectCaseFiles(List<DirectCaseFile> directCaseFiles) {
+        this.directCaseFiles = directCaseFiles;
+    }
+
+    @JsonProperty("links")
+    public List<Object> getLinks() {
+        return links;
+    }
+
+    @JsonProperty("links")
+    public void setLinks(List<Object> links) {
+        this.links = links;
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
+
 }

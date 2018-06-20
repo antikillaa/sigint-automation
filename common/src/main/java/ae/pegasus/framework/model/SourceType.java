@@ -10,6 +10,7 @@ public class SourceType extends AbstractEntity {
     private String eventFeed;
     private String dataSource;
     private String subSource;
+    private String subSourceId;
 
     public SourceType() {
         // dummy constructor for jackson serialization
@@ -26,20 +27,22 @@ public class SourceType extends AbstractEntity {
         return "SourceType{" + eventFeed +
                 ", " + dataSource +
                 ", " + subSource +
+                ", " + subSourceId +
                 '}';
     }
 
     @Override
-    public boolean equals(Object that){
-        if(this == that) return true;
+    public boolean equals(Object that) {
+        if (this == that) return true;
 
-        if(!(that instanceof SourceType)) return false;
+        if (!(that instanceof SourceType)) return false;
 
         SourceType thatSourceType = (SourceType) that;
         return
                 this.eventFeed.equals(thatSourceType.eventFeed)
-                && this.dataSource.equals(thatSourceType.dataSource)
-                && this.subSource.equals(thatSourceType.subSource);
+                        && this.dataSource.equals(thatSourceType.dataSource)
+                        && this.subSource.equals(thatSourceType.subSource)
+                        && this.subSourceId.equals(thatSourceType.subSourceId);
     }
 
     public String getSubSource() {
@@ -64,5 +67,13 @@ public class SourceType extends AbstractEntity {
 
     public void setEventFeed(String eventFeed) {
         this.eventFeed = eventFeed;
+    }
+
+    public String getSubSourceId() {
+        return subSourceId;
+    }
+
+    public void setSubSourceId(String subSourceId) {
+        this.subSourceId = subSourceId;
     }
 }
