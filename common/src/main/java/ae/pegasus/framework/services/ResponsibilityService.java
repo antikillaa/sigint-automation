@@ -90,9 +90,9 @@ public class ResponsibilityService implements EntityService<Responsibility> {
         return operationResult;
     }
 
-    public Responsibility createWithPermissions(String... permissions) {
+    public Responsibility createWithPermissions(List<String> permissions) {
         Responsibility responsibility = new RandomEntities().randomEntity(Responsibility.class);
-        responsibility.setPermissions(Arrays.asList(permissions));
+        responsibility.setPermissions(permissions);
 
         OperationResult<Responsibility> operationResult = add(responsibility);
         if (operationResult.isSuccess()) {

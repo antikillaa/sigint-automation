@@ -231,17 +231,18 @@ public class UserService implements EntityService<User> {
                 .withAllSources()
                 .build();
 
-        return createUserWithPermissions(user);
+        return createUserWithPermissions(user, null);
     }
 
     public User createUserWithPermissions(User user) {
-        // create permissions
-        List<String> permissions = user.getDefaultPermission().getActions();
-        Responsibility responsibility = responsibilityService.createWithPermissions(permissions.toArray(new String[0]));
-        Title title = titleService.createWithResponsibility(responsibility);
+        return createUserWithPermissions(user, null);
+    }
 
+    public User createUserWithPermissions(User user, String orgUnitID) {
         // update orgUnits
-        user = addOrgUnitWithTitles(user, getOrCreateDefaultTeamId(), Collections.singletonList(title.getId()));
+        user = (orgUnitID == null || orgUnitID.isEmpty()) ?
+                addOrgUnit(user, getOrCreateDefaultTeamId()) :
+                addOrgUnit(user, orgUnitID);
 
         // create user
         OperationResult<User> userOperationResult = add(user);
@@ -259,7 +260,7 @@ public class UserService implements EntityService<User> {
         return user;
     }
 
-    public void setPermissions(User user, String... permissions) {
+    public void setPermissions(User user, List<String> permissions) {
         Responsibility responsibility = responsibilityService.createWithPermissions(permissions);
 
         // get user title
@@ -336,15 +337,23 @@ public class UserService implements EntityService<User> {
         return user;
     }
 
-    public User addOrgUnitWithTitles(User user, String orgUnitId, List<String> titles) {
+    public User addOrgUnitWithTitles(User user, String orgUnitId, List<String> titleIDs) {
         user.getParentTeamIds().add(orgUnitId);
         user.getParentTeams().put(orgUnitId, Collections.singletonList("MEMBER"));
 
         TeamTitle teamTitle = new TeamTitle();
         teamTitle.setOrgUnitId(orgUnitId);
-        teamTitle.setTitles(titles);
+        teamTitle.setTitles(titleIDs);
         user.getDefaultPermission().getTeamTitles().add(teamTitle);
 
         return user;
+    }
+
+    public User addOrgUnit(User user, String orgUnitId) {
+        List<String> permissions = user.getDefaultPermission().getActions();
+        Responsibility responsibility = responsibilityService.createWithPermissions(permissions);
+        Title title = titleService.createWithResponsibility(responsibility);
+
+        return addOrgUnitWithTitles(user, orgUnitId, Collections.singletonList(title.getId()));
     }
 }

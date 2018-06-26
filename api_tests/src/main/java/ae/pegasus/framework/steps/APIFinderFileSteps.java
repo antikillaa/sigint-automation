@@ -1,5 +1,6 @@
 package ae.pegasus.framework.steps;
 
+import ae.pegasus.framework.app_context.AppContext;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
@@ -386,7 +387,7 @@ public class APIFinderFileSteps extends APISteps {
     }
 
 
-    @Then("CB Finder entities list $criteria $size")
+    @Then("CB Finder entities list size $criteria $size")
     public void cbFinderListMoreThan(String criteria, String size) {
         List<FinderFile> files = context.get("cbFinderList", List.class);
 
@@ -410,9 +411,10 @@ public class APIFinderFileSteps extends APISteps {
         serviceFile.update(createdFinderFile);
     }
 
-    @Then("CBFinder return items only for classification level: $classifications")
+    @Then("CBFinder return items only for classifications: $classifications")
     public void cbFinderReturnItemsOnlyForClassifications(String classificationsString) {
-        List<Classification> classifications = Arrays.stream(StringUtils.splitToArray(classificationsString))
+        List<Classification> classifications = StringUtils.splitToList(classificationsString)
+                .stream()
                 .map(Classification::valueOf)
                 .collect(Collectors.toList());
         List<FinderFile> finderFiles = context.get("cbFinderList", List.class);
@@ -428,6 +430,25 @@ public class APIFinderFileSteps extends APISteps {
             }
         }
     }
+
+    @Then("CBFinder should return items regarding current user orgUnits")
+    public void cbFinderReturnItemsOnlyForOrgUnits() {
+        List<String> orgUnitIDs = appContext.getLoggedUser().getUser().getEffectivePermission().getRecord().getOrganizations();
+        List<FinderFile> finderFiles = context.get("cbFinderList", List.class);
+
+        for (FinderFile finderFile : finderFiles) {
+            ReqPermission notAllowed = finderFile.getReqPermissions().stream()
+                    .filter(reqPermission ->
+                            reqPermission.getOrgUnit() != null
+                                    && !orgUnitIDs.contains(reqPermission.getOrgUnit()))
+                    .findAny().orElse(null);
+
+            assertNull("CB Finder return: " + toJsonString(finderFile)
+                            + "\nFor user: " + toJsonString(AppContext.get().getLoggedUser().getUser()),
+                    notAllowed);
+        }
+    }
+
 
 //    @Then("Viewed target group is correct")
 //    public void viewedTargetGroupIsCorrect() {

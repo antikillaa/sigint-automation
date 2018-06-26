@@ -31,7 +31,8 @@ public enum IdentifierType {
     BANK_ACCOUNT_NUMBER("Bank account number"),
     FREQUENT_FLYER_NUMBER("Frequent flyer number/ membership card"),
     VOIP_ID("VoIP ID"),
-    GPLUS_ID("");
+    GPLUS_ID("GPLUS ID"),
+    INSTAGRAM_HANDLE("INSTAGRAM HANDLE");
 
 
     private final String descriptions;
