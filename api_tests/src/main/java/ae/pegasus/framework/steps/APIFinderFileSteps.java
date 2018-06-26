@@ -421,19 +421,23 @@ public class APIFinderFileSteps extends APISteps {
 
     @Then("CBFinder should return items regarding current user orgUnits")
     public void cbFinderReturnItemsOnlyForOrgUnits() {
-        List<String> orgUnitIDs = appContext.getLoggedUser().getUser().getEffectivePermission().getRecord().getOrganizations();
+        List<String> userOrgUnits = appContext.getLoggedUser().getUser().getEffectivePermission().getRecord().getOrganizations();
         List<FinderFile> finderFiles = context.get("cbFinderList", List.class);
 
         for (FinderFile finderFile : finderFiles) {
-            ReqPermission notAllowed = finderFile.getReqPermissions().stream()
-                    .filter(reqPermission ->
-                            reqPermission.getOrgUnit() != null
-                                    && !orgUnitIDs.contains(reqPermission.getOrgUnit()))
-                    .findAny().orElse(null);
+            // collect entity orgUnits
+            List<String> entityOrgUnits = new ArrayList<>();
+            finderFile.getReqPermissions().stream()
+                    .filter(reqPermission -> reqPermission.getOrgUnit() != null)
+                    .forEach(reqPermission -> entityOrgUnits.add(reqPermission.getOrgUnit()));
 
-            assertNull("CB Finder return: " + toJsonString(finderFile)
-                            + "\nFor user: " + toJsonString(AppContext.get().getLoggedUser().getUser()),
-                    notAllowed);
+            // compare
+            entityOrgUnits.retainAll(userOrgUnits);
+
+            // assert
+            assertFalse("CB Finder return: " + toJsonString(finderFile) +
+                            "\nFor user: " + toJsonString(AppContext.get().getLoggedUser().getUser()),
+                    entityOrgUnits.isEmpty());
         }
     }
 
