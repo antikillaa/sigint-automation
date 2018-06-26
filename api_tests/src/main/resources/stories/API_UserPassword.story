@@ -3,6 +3,7 @@ Parent story: CB-2407
 
 Meta:
 @story userPassword
+@skip
 
 Lifecycle:
 Before:
