@@ -147,19 +147,7 @@ public class APIFinderFileSteps extends APISteps {
         FinderCase contextCase = context.get("finderCase", FinderCase.class);
         FinderCase createdCase = Entities.getFinderCases().getLatest();
 
-        casesShouldBeEqual(contextCase, createdCase);
-    }
-
-
-    private void casesShouldBeEqual(FinderCase expected, FinderCase created) {
-        assertEquals(expected.getType(), created.getType());
-        assertEquals(expected.getBaseType(), created.getBaseType());
-        assertEquals(toJsonString(expected.getReqPermissions()), toJsonString(created.getReqPermissions()));
-        assertEquals(toJsonString(expected.getParentChain()), toJsonString(created.getParentChain()));
-        assertEquals(expected.getAggregatedTypeCounts(), created.getAggregatedTypeCounts());
-        assertEquals(expected.getName(), created.getName());
-        assertEquals(expected.getDescription(), created.getDescription());
-        assertEquals(expected.getDescription(), created.getDescription());
+        filesShouldBeEqual(contextCase, createdCase);
     }
 
     private void casesShouldBeNotEqual(FinderCase expected, FinderCase created) {
