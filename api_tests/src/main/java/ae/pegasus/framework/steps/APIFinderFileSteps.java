@@ -430,6 +430,8 @@ public class APIFinderFileSteps extends APISteps {
             finderFile.getReqPermissions().stream()
                     .filter(reqPermission -> reqPermission.getOrgUnit() != null)
                     .forEach(reqPermission -> entityOrgUnits.add(reqPermission.getOrgUnit()));
+            // if no orgUnits in entity skip it
+            if (entityOrgUnits.isEmpty()) break;
 
             // compare
             entityOrgUnits.retainAll(userOrgUnits);
