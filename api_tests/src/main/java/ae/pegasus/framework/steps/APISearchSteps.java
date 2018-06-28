@@ -128,10 +128,13 @@ public class APISearchSteps extends APISteps {
     @Then("CB search result list size $criteria $size")
     public void CBSearchListSizeShouldBe(String criteria, String size) {
         List<SearchRecord> entities = context.get("searchResults", List.class);
+        String query = context.get("searchQuery", String.class);
 
         int expectedCount = Integer.valueOf(size);
         boolean condition = compareByCriteria(criteria, entities.size(), expectedCount);
-        assertTrue("Expected search results count " + criteria + " " + size + ", but was: " + entities.size(), condition);
+        assertTrue("Search by query:" + query +
+                        "\nExpected search results count " + criteria + " " + size + ", but was: " + entities.size(),
+                condition);
     }
 
     @Then("All events have default designation")
@@ -420,19 +423,20 @@ public class APISearchSteps extends APISteps {
 
         OperationResult<SearchResult[]> result = service.count(filter);
 
-        context.put("SearchResult", result.getEntity());
+        context.put("searchResult", result.getEntity());
         context.put("searchQuery", query);
     }
 
     @Then("TotalCount's in search results $criteria $size")
     public void SearchResultTolalCountShouldBe(String criteria, String size) {
-        SearchResult[] searchResult = context.get("SearchResult", SearchResult[].class);
+        SearchResult[] searchResult = context.get("searchResult", SearchResult[].class);
 
         int expectedCount = Integer.valueOf(size);
-        List<SearchResult> collect = Arrays.stream(searchResult)
+        List<SearchResult> wrongResults = Arrays.stream(searchResult)
                 .filter(result -> !compareByCriteria(criteria, result.getTotalCount(), expectedCount))
                 .collect(Collectors.toList());
 
-        assertTrue("Expected search results count " + criteria + " " + size + ", but was: " + toJsonString(collect), collect.isEmpty());
+        assertTrue("Expected search results count " + criteria + " " + size + ", but was: " + toJsonString(wrongResults),
+                wrongResults.isEmpty());
     }
 }

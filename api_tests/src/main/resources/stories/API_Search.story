@@ -177,12 +177,14 @@ And CB search results contains only sourceType from query
 
 Examples:
 | eventFeed | objectType | query  | pageNumber | pageSize |
+| SIGINT | event | dataSource:"DU"| 0 | 100 |
 | SIGINT | event | dataSource:"E" | 0 | 100 |
 | SIGINT | event | dataSource:"F" | 0 | 100 |
+| SIGINT | event | dataSource:"O"| 0 | 100 |
 | SIGINT | event | dataSource:"H" | 0 | 100 |
 | SIGINT | event | dataSource:"S" | 0 | 100 |
 | SIGINT | event | dataSource:"T" | 0 | 100 |
-| SIGINT | entity | dataSource:"H" | 0 | 100 |
+| SIGINT | entity | dataSource:"DU" | 0 | 100 |
 | SIGINT | entity | dataSource:"E" | 0 | 100 |
 | SIGINT | entity | dataSource:"PHONEBOOK" | 0 | 100 |
 
@@ -196,17 +198,14 @@ And CB search results contains only subSource from query
 Examples:
 | eventFeed | objectType | query  | pageNumber | pageSize |
 | SIGINT | event | subSource:"CDR" | 0 | 100 |
-| SIGINT | entity | subSource:"CDR" | 0 | 100 |
 | SIGINT | event | subSource:"CELL" | 0 | 100 |
-| SIGINT | entity | subSource:"CELL" | 0 | 100 |
-| SIGINT | event | subSource:"Fax" | 0 | 100 |
-| SIGINT | entity | subSource:"Fax" | 0 | 100 |
-| SIGINT | event | subSource:"SMS" | 0 | 100 |
-| SIGINT | entity | subSource:"SMS" | 0 | 100 |
+| SIGINT | event | subSource:"FAX" | 0 | 100 |
+| SIGINT | event | subSource:"SMS" | 0 | 100 ||
 | SIGINT | event | subSource:"VLR" | 0 | 100 |
-| SIGINT | entity | subSource:"VLR" | 0 | 100 |
 | SIGINT | event | subSource:"Voice" | 0 | 100 |
-| SIGINT | entity | subSource:"Voice" | 0 | 100 |
+| SIGINT | event | subSource:"MMS" | 0 | 100 |
+| SIGINT | event | subSource:"NLD" | 0 | 100 |
+| SIGINT | entity | subSource:"Subscriber" | 0 | 100 |
 
 
 Scenario: Search. [SIGINT] Record Type filters
@@ -227,8 +226,7 @@ Examples:
 | SIGINT | event | type:"MMS" | 0 | 100 |
 | SIGINT | event | type:"VSMS" | 0 | 100 |
 | SIGINT | event | type:"SIP_VIDEO" | 0 | 100 |
-| SIGINT | entity | type:"EMAIL_ACCOUNT" | 0 | 100 |
-| SIGINT | entity | type:"PHONE" | 0 | 100 |
+| SIGINT | event | type:"NLD" | 0 | 100 |
 | SIGINT | entity | type:"TELECOM_SUBSCRIBER" | 0 | 100 |
 
 
@@ -246,10 +244,9 @@ Examples:
 Scenario: POST /api/search/count
 When I send CB search count request - query:<query>, objectType:<objectType>, sources:<source>
 Then Request is successful
-And CB search result list size > 0
 And TotalCount's in search results <criteria> <size>
 
 Examples:
-| source                            | objectType| query | criteria  | size  |
-| SIGINT, OSINT, GOVINT             | event     |       | >         | 0     |
-| SIGINT, OSINT, GOVINT, PROFILER   | entity    |       | >         | 0     |
+| source                                    | objectType | query | criteria | size |
+| SIGINT, OSINT, GOVINT                     | event      |       | >        | 0    |
+| SIGINT, INFORMATION_MANAGEMENT, OSINT, GOVINT, GOVINT2, PROFILER | entity |   | > | 0 |
