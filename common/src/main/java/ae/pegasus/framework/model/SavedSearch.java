@@ -1,5 +1,6 @@
 package ae.pegasus.framework.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,9 +10,9 @@ public class SavedSearch extends AbstractEntity {
     private String description;
     private String queryString;
     private Boolean active;
-    private List<FinderFile> containers;
-    private List<String> assignmentTeamIds;
-    private List<String> sourceTypeIds;
+    private List<FinderFile> containers = new ArrayList<>();
+    private List<String> assignmentTeamIds = new ArrayList<>();
+    private List<String> sourceTypeIds = new ArrayList<>();
     private String repeatRange;
     private Date startDate;
     private Integer assignmentPriority;
@@ -21,14 +22,14 @@ public class SavedSearch extends AbstractEntity {
     private String objectType;
     private String type;
     private Date createdAt;
-    private List<String> objectTypeIds;
+    private List<String> objectTypeIds = new ArrayList<>();
     private Integer numberOfResults;
     private SavedSearchMetadata metadata;
     private Date endDate;
     private Boolean historical;
     private Integer lastExecutionResultsFound;
-    private List<String> reqPermissions;
-
+    private List<String> reqPermissions = new ArrayList<>();
+    private String orgUnit;
 
     public List<String> getAssignmentTeamIds() {
         return assignmentTeamIds;
@@ -212,5 +213,13 @@ public class SavedSearch extends AbstractEntity {
 
     public void setReqPermissions(List<String> reqPermissions) {
         this.reqPermissions = reqPermissions;
+    }
+
+    public String getOrgUnit() {
+        return orgUnit;
+    }
+
+    public void setOrgUnit(String orgUnit) {
+        this.orgUnit = orgUnit;
     }
 }
