@@ -32,7 +32,9 @@ public enum IdentifierType {
     FREQUENT_FLYER_NUMBER("Frequent flyer number/ membership card"),
     VOIP_ID("VoIP ID"),
     GPLUS_ID("GPLUS ID"),
-    INSTAGRAM_HANDLE("INSTAGRAM HANDLE");
+    INSTAGRAM_HANDLE("INSTAGRAM HANDLE"),
+    TUMBLR_HANDLE("TUMBLR HANDLE"),
+    UID_NUMBER("UID NUMBER");
 
 
     private final String descriptions;
