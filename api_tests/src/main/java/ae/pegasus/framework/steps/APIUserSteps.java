@@ -4,6 +4,7 @@ import ae.pegasus.framework.data_for_entity.data_providers.user.UserPasswordProv
 import ae.pegasus.framework.error_reporter.ErrorReporter;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.json.JsonConverter;
+import ae.pegasus.framework.model.TeamTitle;
 import ae.pegasus.framework.model.User;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.UserService;
@@ -14,6 +15,8 @@ import org.junit.Assert;
 
 import java.util.Date;
 import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
 
 @SuppressWarnings("unchecked")
 public class APIUserSteps extends APISteps {
@@ -84,6 +87,13 @@ public class APIUserSteps extends APISteps {
     @When("I send create a new user")
     public void createNewUser() {
         User user = getRandomUser();
+
+        TeamTitle teamTitle = appContext.getLoggedUser().getUser().getDefaultPermission()
+                .getTeamTitles().stream()
+                .findAny().orElse(null);
+        assertNotNull(teamTitle);
+
+        user = service.addOrgUnitWithTitles(user, teamTitle.getOrgUnitId(), teamTitle.getTitles());
 
         context.put("user", user);
         service.add(user);

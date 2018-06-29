@@ -15,6 +15,7 @@ import java.util.List;
 
 import static ae.pegasus.framework.json.JsonConverter.jsonToObject;
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
+import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
 
 @SuppressWarnings("unchecked")
 public class APIOrganizationSteps extends APISteps {
@@ -40,7 +41,10 @@ public class APIOrganizationSteps extends APISteps {
         } else if (criteria.toLowerCase().equals("orgids")) {
             value = value.equals("random") ? organization.getId() : value;
         } else if (criteria.toLowerCase().equals("parentorgid")) {
-            value = value.equals("random") ? organization.getParentTeamId() : value;
+            String parentTemId = organization.getParentTeamId() != null ?
+                    organization.getParentTeamId() :
+                    getRandomItemFromList(organization.getParentTeamIds());
+            value = value.equals("random") ? parentTemId : value;
         } else {
             throw new AssertionError("Unknown filter field for organization search: " + criteria);
         }
