@@ -228,15 +228,22 @@ public class APIProfileSteps extends APISteps {
         List<IdentifierSummary> identifiers = profile.getIdentifiersSummary();
         List<IdentifierSummary> updatedIdentifiers = service.getIdentifierAggregations(profile.getId()).getEntity();
 
-        final Integer[] hitCount = {0};
-        identifiers.stream()
-                .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
-                .forEach(identifier -> hitCount[0] -= identifier.getTargetHitsCount());
-        updatedIdentifiers.stream()
-                .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
-                .forEach(identifier -> hitCount[0] += identifier.getTargetHitsCount());
+        log.info("IdentifierAggregations: " + toJsonString(updatedIdentifiers));
 
-        assertTrue(hitCount[0].equals(1));
+        final int[] hitCount = {0};
+        List<IdentifierSummary> previousIdentifiers = identifiers.stream()
+                .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
+                .collect(Collectors.toList());
+        log.info("oldIdentifiers: " + toJsonString(previousIdentifiers));
+        previousIdentifiers.forEach(identifier -> hitCount[0] -= identifier.getTargetHitsCount());
+
+        List<IdentifierSummary> newIdentifiers = updatedIdentifiers.stream()
+                .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
+                .collect(Collectors.toList());
+        log.info("newIdentifiers: " + toJsonString(previousIdentifiers));
+        newIdentifiers.forEach(identifier -> hitCount[0] += identifier.getTargetHitsCount());
+
+        assertEquals(1, hitCount[0]);
     }
 
     @Given("Find or create test target from json:$target_file")
