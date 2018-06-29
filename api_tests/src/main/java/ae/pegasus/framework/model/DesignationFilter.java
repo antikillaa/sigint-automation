@@ -81,14 +81,18 @@ public class DesignationFilter extends SearchFilter<Designation> {
    * @return filter entity for designations
    */
   public DesignationFilter filterBy(String criteria, String value) {
-    if (criteria.toLowerCase().equals("name")) {
-      this.setActiveFilter(this.new NameFilter(value));
-    } else if (criteria.toLowerCase().equals("updatedafter")) {
-      this.setActiveFilter(this.new UpdateAfterFilter(new Date(Long.valueOf(value))));
-    } else if (criteria.toLowerCase().equals("empty")) {
-      this.setActiveFilter(this.new EmptyFilter());
-    } else {
-      throw new AssertionError("Unknown isAppliedToEntity type");
+    switch (criteria.toLowerCase()) {
+      case "name":
+        this.setActiveFilter(this.new NameFilter(value));
+        break;
+      case "updatedafter":
+        this.setActiveFilter(this.new UpdateAfterFilter(new Date(Long.valueOf(value))));
+        break;
+      case "empty":
+        this.setActiveFilter(this.new EmptyFilter());
+        break;
+      default:
+        throw new AssertionError("Unknown isAppliedToEntity type");
     }
     return this;
   }

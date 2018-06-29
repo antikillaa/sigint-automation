@@ -68,12 +68,15 @@ public class TargetGroupFilter extends SearchFilter<TargetGroup> {
      * @return filter entity for targetGroups
      */
     public TargetGroupFilter filterBy(String criteria, String value) {
-        if (criteria.toLowerCase().equals("includedeleted")) {
-            this.setActiveFilter(this.new DeletedFilter(Boolean.valueOf(value)));
-        } else if (criteria.toLowerCase().equals("empty")) {
-            this.setActiveFilter(this.new EmptyFilter());
-        } else {
-            throw new AssertionError("Unknown isAppliedToEntity type");
+        switch (criteria.toLowerCase()) {
+            case "includedeleted":
+                this.setActiveFilter(this.new DeletedFilter(Boolean.valueOf(value)));
+                break;
+            case "empty":
+                this.setActiveFilter(this.new EmptyFilter());
+                break;
+            default:
+                throw new AssertionError("Unknown isAppliedToEntity type");
         }
         return this;
     }

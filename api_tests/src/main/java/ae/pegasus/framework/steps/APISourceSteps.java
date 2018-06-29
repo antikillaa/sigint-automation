@@ -62,12 +62,15 @@ public class APISourceSteps extends APISteps {
                 break;
             }
         }
-        if (criteria.toLowerCase().equals("in")) {
-            Verify.shouldBe(Conditions.isTrue.element(contains));
-        } else if (criteria.toLowerCase().equals("not in")) {
-            Verify.shouldNotBe(Conditions.isTrue.element(contains));
-        } else {
-            throw new AssertionError("Incorrect argument passed to step");
+        switch (criteria.toLowerCase()) {
+            case "in":
+                Verify.shouldBe(Conditions.isTrue.element(contains));
+                break;
+            case "not in":
+                Verify.shouldNotBe(Conditions.isTrue.element(contains));
+                break;
+            default:
+                throw new AssertionError("Incorrect argument passed to step");
         }
     }
 

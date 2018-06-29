@@ -201,22 +201,30 @@ public class OrganizationFilter extends SearchFilter<Organization> {
      * @return filter entity for Organizations
      */
     public OrganizationFilter filterBy(String criteria, String value) {
-        if (criteria.toLowerCase().equals("name")) {
-            this.setActiveFilter(this.new NameFilter(value));
-        } else if (criteria.toLowerCase().equals("orgtypes")) {
-            this.setActiveFilter(this.new OrgTypesFilter(splitToList(value)));
-        } else if (criteria.toLowerCase().equals("datasources")) {
-            this.setActiveFilter(this.new DataSourcesFilter(splitToList(value)));
-        } else if (criteria.toLowerCase().equals("titles")) {
-            this.setActiveFilter(this.new TitleFilter(splitToList(value)));
-        } else if (criteria.toLowerCase().equals("clearances")) {
-            this.setActiveFilter(this.new ClearanceFilter(splitToList(value)));
-        } else if (criteria.toLowerCase().equals("orgids")) {
-            this.setActiveFilter(this.new OrgIdsFilter(splitToList(value)));
-        } else if (criteria.toLowerCase().equals("parentorgid")) {
-            this.setActiveFilter(this.new ParentOrgIdFilter(value));
-        } else {
-            throw new AssertionError("Unknown filter field for organization search: " + criteria);
+        switch (criteria.toLowerCase()) {
+            case "name":
+                this.setActiveFilter(this.new NameFilter(value));
+                break;
+            case "orgtypes":
+                this.setActiveFilter(this.new OrgTypesFilter(splitToList(value)));
+                break;
+            case "datasources":
+                this.setActiveFilter(this.new DataSourcesFilter(splitToList(value)));
+                break;
+            case "titles":
+                this.setActiveFilter(this.new TitleFilter(splitToList(value)));
+                break;
+            case "clearances":
+                this.setActiveFilter(this.new ClearanceFilter(splitToList(value)));
+                break;
+            case "orgids":
+                this.setActiveFilter(this.new OrgIdsFilter(splitToList(value)));
+                break;
+            case "parentorgid":
+                this.setActiveFilter(this.new ParentOrgIdFilter(value));
+                break;
+            default:
+                throw new AssertionError("Unknown filter field for organization search: " + criteria);
         }
         return this;
     }
