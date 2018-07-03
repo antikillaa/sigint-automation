@@ -1,5 +1,5 @@
 Meta:
-@story teamManagement
+@story teamManagement @stage
 
 Lifecycle:
 Before:

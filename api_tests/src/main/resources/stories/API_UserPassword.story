@@ -2,7 +2,7 @@ Test user password strength validation.
 Parent story: CB-2407
 
 Meta:
-@story userPassword
+@story userPassword @notstage
 
 Lifecycle:
 Before:

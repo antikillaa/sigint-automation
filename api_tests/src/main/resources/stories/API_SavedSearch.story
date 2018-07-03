@@ -1,5 +1,5 @@
 Meta:
-@story savedSearch
+@story savedSearch @stage
 
 Lifecycle:
 Before:

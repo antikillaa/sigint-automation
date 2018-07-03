@@ -21,11 +21,11 @@
         <poi.version>3.17</poi.version>
         <!--Stories related-->
         <stories>**/*Launcher.java</stories>
-        <metaFilters>-TEEL *</metaFilters>
+        <metaFilters>+stage -deprecated -skip -wip -nightly -notstage</metaFilters>
         <reportBuildStatus>false</reportBuildStatus>
         <!--Framework set-up-->
         <remoteRun>true</remoteRun>
-        <sigintURL></sigintURL>
+        <sigintURL>http://cb-test2.pegasus.ae</sigintURL>
         <webBrowser>chrome</webBrowser>
         <seleniumHub>10.2.1.99</seleniumHub>
         <report>true</report>

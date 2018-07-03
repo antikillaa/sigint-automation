@@ -1,5 +1,5 @@
 Meta:
-@story designations
+@story designations @stage
 
 Lifecycle:
 Before:

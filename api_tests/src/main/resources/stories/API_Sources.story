@@ -1,5 +1,5 @@
 Meta:
-@story source
+@story source @stage
 
 Scenario: API.Create, Read, Update, Delete source
 Given I sign in as admin user

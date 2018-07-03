@@ -4,7 +4,7 @@ PROFILER - Fuzzy, Wildcard
 entity - add Wildcard, Fuzzy scenarios
 
 Meta:
-@story search
+@story search @stage
 
 Lifecycle:
 Before:

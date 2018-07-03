@@ -1,5 +1,5 @@
 Meta:
-@story tag
+@story tag @stage
 
 
 Lifecycle:
