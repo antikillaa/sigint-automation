@@ -14,7 +14,12 @@ public enum WhiteListType {
     TWITTER_HANDLE,
     YOUTUBE_CHANNEL_ID,
     INSTAGRAM_ID,
-    DARK_WEB_AUTHOR_ID;
+    DARK_WEB_AUTHOR_ID,
+
+    TUMBLR_ID,
+    GPLUS_ID,
+    TUMBLR_HANDLE,
+    INSTAGRAM_HANDLE;
 
     private static final List<WhiteListType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();
