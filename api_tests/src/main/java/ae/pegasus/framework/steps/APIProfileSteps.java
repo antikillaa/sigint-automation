@@ -83,6 +83,8 @@ public class APIProfileSteps extends APISteps {
     @When("I send get profile details request")
     public void getProfileDetails() {
         Profile profile = Entities.getProfiles().getLatest();
+        if (profile == null) profile = context.get("profile", Profile.class);
+
         OperationResult<Profile> result = service.view(profile.getId());
 
         if (result.isSuccess()) {
@@ -228,15 +230,16 @@ public class APIProfileSteps extends APISteps {
         List<IdentifierSummary> identifiers = profile.getIdentifiersSummary();
         List<IdentifierSummary> updatedIdentifiers = service.getIdentifierAggregations(profile.getId()).getEntity();
 
-        final Integer[] hitCount = {0};
+        final int[] hitCount = {0};
         identifiers.stream()
                 .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
                 .forEach(identifier -> hitCount[0] -= identifier.getTargetHitsCount());
+
         updatedIdentifiers.stream()
                 .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
                 .forEach(identifier -> hitCount[0] += identifier.getTargetHitsCount());
 
-        assertTrue(hitCount[0].equals(1));
+        assertEquals(1, hitCount[0]);
     }
 
     @Given("Find or create test target from json:$target_file")

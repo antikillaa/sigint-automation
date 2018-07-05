@@ -8,7 +8,7 @@ public class IdentifierSummary extends AbstractEntity {
     private String name; //"474123449782275"
     private Object properties; //{}
     private List<String> sources; //["T"]
-    private Integer targetHitsCount;
+    private int targetHitsCount;
     private Integer targetMentionsCount;
     private IdentifierType type; //"IMSI"
     private ValidationStatus validationStatus; //null
@@ -46,11 +46,11 @@ public class IdentifierSummary extends AbstractEntity {
         this.sources = sources;
     }
 
-    public Integer getTargetHitsCount() {
+    public int getTargetHitsCount() {
         return targetHitsCount;
     }
 
-    public void setTargetHitsCount(Integer targetHitsCount) {
+    public void setTargetHitsCount(int targetHitsCount) {
         this.targetHitsCount = targetHitsCount;
     }
 
