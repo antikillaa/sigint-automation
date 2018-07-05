@@ -83,7 +83,6 @@ Then Request is successful
 
 
 Scenario: Add hit(s) for existing targets
-Meta: @wip
 Given I clean up ingestion directory
 !-- find first profiler
 When I search finder file members by query:<target>
