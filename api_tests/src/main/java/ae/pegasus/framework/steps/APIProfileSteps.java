@@ -83,6 +83,8 @@ public class APIProfileSteps extends APISteps {
     @When("I send get profile details request")
     public void getProfileDetails() {
         Profile profile = Entities.getProfiles().getLatest();
+        if (profile == null) profile = context.get("profile", Profile.class);
+
         OperationResult<Profile> result = service.view(profile.getId());
 
         if (result.isSuccess()) {
@@ -228,20 +230,14 @@ public class APIProfileSteps extends APISteps {
         List<IdentifierSummary> identifiers = profile.getIdentifiersSummary();
         List<IdentifierSummary> updatedIdentifiers = service.getIdentifierAggregations(profile.getId()).getEntity();
 
-        log.info("IdentifierAggregations: " + toJsonString(updatedIdentifiers));
-
         final int[] hitCount = {0};
-        List<IdentifierSummary> previousIdentifiers = identifiers.stream()
+        identifiers.stream()
                 .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
-                .collect(Collectors.toList());
-        log.info("oldIdentifiers: " + toJsonString(previousIdentifiers));
-        previousIdentifiers.forEach(identifier -> hitCount[0] -= identifier.getTargetHitsCount());
+                .forEach(identifier -> hitCount[0] -= identifier.getTargetHitsCount());
 
-        List<IdentifierSummary> newIdentifiers = updatedIdentifiers.stream()
+        updatedIdentifiers.stream()
                 .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
-                .collect(Collectors.toList());
-        log.info("newIdentifiers: " + toJsonString(previousIdentifiers));
-        newIdentifiers.forEach(identifier -> hitCount[0] += identifier.getTargetHitsCount());
+                .forEach(identifier -> hitCount[0] += identifier.getTargetHitsCount());
 
         assertEquals(1, hitCount[0]);
     }
