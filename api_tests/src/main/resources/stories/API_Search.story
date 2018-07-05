@@ -103,7 +103,6 @@ Examples:
 | eventFeed | objectType | query | pageNumber | pageSize |
 | SIGINT | event | knoeledge~1 | 0 | 20 |
 | SIGINT | event | knowledge~2  | 0 | 20 |
-| SIGINT | event | knwldg~3 | 0 | 20 |
 | SIGINT | event | nowledge~  | 0 | 20 |
 
 
@@ -117,7 +116,6 @@ Examples:
 | eventFeed | objectType | query | pageNumber | pageSize |
 | OSINT | event | knoeledge~1 | 0 | 20 |
 | OSINT | event | knowledge~2  | 0 | 20 |
-| OSINT | event | knwldg~3 | 0 | 20 |
 | OSINT | event | nowledge~  | 0 | 20 |
 
 
