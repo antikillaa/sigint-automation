@@ -14,6 +14,7 @@ public enum IdentifierType {
     NEWS_AUTHOR_ID("News author id"),
     DARK_WEB_AUTHOR_ID("Dark web author id"),
     DARK_WEB_FORUM_ID("Dark web forum id"),
+    DARK_WEB_FORUM_NAME("DARK WEB FORUM NAME"),
     DARK_WEB_ROOM_ID("Dark web room id"),
     DARK_WEB_REPORTS_AUTHOR_ID("Dark web reports author id"),
     DARK_WEB_REPORTS_PUBLISHER_ID("Dark web reports publisher id"),
@@ -33,6 +34,7 @@ public enum IdentifierType {
     VOIP_ID("VoIP ID"),
     GPLUS_ID("GPLUS ID"),
     INSTAGRAM_HANDLE("INSTAGRAM HANDLE"),
+    TUMBLR_ID("TUMBLR ID"),
     TUMBLR_HANDLE("TUMBLR HANDLE"),
     UID_NUMBER("UID NUMBER");
 
