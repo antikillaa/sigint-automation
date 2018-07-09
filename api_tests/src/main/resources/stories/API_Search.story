@@ -224,7 +224,6 @@ Examples:
 | SIGINT | event | type:"MMS" | 0 | 100 |
 | SIGINT | event | type:"VSMS" | 0 | 100 |
 | SIGINT | event | type:"SIP_VIDEO" | 0 | 100 |
-| SIGINT | event | type:"NLD" | 0 | 100 |
 | SIGINT | entity | type:"TELECOM_SUBSCRIBER" | 0 | 100 |
 
 
@@ -240,6 +239,7 @@ Examples:
 
 
 Scenario: POST /api/search/count
+Meta: @skip
 When I send CB search count request - query:<query>, objectType:<objectType>, sources:<source>
 Then Request is successful
 And TotalCount's in search results <criteria> <size>

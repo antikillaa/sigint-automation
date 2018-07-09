@@ -94,6 +94,7 @@ Then Request is successful
 
 
 Scenario: API.Get contents of file
+Meta: @notstage
 Given I sign in as admin user
 When I send create finder file request
 Then Request is successful
