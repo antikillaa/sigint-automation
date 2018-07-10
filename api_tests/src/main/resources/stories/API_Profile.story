@@ -7,6 +7,15 @@ Given I sign in as admin user
 
 Scenario: Find in system or create test target from json
 Given Find or create test target from json:<target>
+
+Examples:
+| target | image |
+| profiles/Darkwing_Duck.json | profiles/Darkwing_Duck.jpg |
+| profiles/Launchpad_McQuack.json | profiles/Launchpad_McQuack.jpg |
+
+
+Scenario: Upload image to profiles
+Given Find or create test target from json:<target>
 When upload new target image:<image> to target
 Then Request is successful
 When I send get profile details request
