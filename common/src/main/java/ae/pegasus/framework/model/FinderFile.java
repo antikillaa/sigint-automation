@@ -13,9 +13,9 @@ import java.util.List;
 public class FinderFile extends AbstractEntity {
 
     @DataIgnore
-    private ProfileJsonType type = ProfileJsonType.File;
+    private ProfileType type = ProfileType.File;
     @DataIgnore
-    private ProfileJsonType baseType = ProfileJsonType.File;
+    private ProfileType baseType = ProfileType.File;
     @WithCollectionSize(1)
     private ArrayList<ReqPermission> reqPermissions = new ArrayList<>();
     @DataProvider(ProfileAndTargetGroupNameProvider.class)
@@ -43,20 +43,24 @@ public class FinderFile extends AbstractEntity {
     private List<String> files = new ArrayList<>();
     @DataIgnore
     private Integer version;
+    @DataIgnore
+    private List<String> fileIds = new ArrayList<>();
+    @DataIgnore
+    private String error;
 
-    public ProfileJsonType getType() {
+    public ProfileType getType() {
         return type;
     }
 
-    public void setType(ProfileJsonType type) {
+    public void setType(ProfileType type) {
         this.type = type;
     }
 
-    public ProfileJsonType getBaseType() {
+    public ProfileType getBaseType() {
         return baseType;
     }
 
-    public void setBaseType(ProfileJsonType baseType) {
+    public void setBaseType(ProfileType baseType) {
         this.baseType = baseType;
     }
 
@@ -170,6 +174,22 @@ public class FinderFile extends AbstractEntity {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public List<String> getFileIds() {
+        return fileIds;
+    }
+
+    public void setFileIds(List<String> fileIds) {
+        this.fileIds = fileIds;
     }
 
     public static class ParentChain extends AbstractEntity {

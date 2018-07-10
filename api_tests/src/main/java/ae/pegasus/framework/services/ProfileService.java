@@ -40,7 +40,7 @@ public class ProfileService implements EntityService<Profile> {
     public OperationResult remove(Profile entity) {
         log.info("Deleting profile id: " + entity.getId());
 
-        HttpRequest request = Objects.equals(entity.getJsonType(), ProfileJsonType.Draft) ?
+        HttpRequest request = Objects.equals(entity.getJsonType(), ProfileType.Draft) ?
                 new ProfileDraftRequest().delete(entity.getId()) :
                 new ProfileRequest().delete(entity.getId());
         G4Response response = g4HttpClient.sendRequest(request);

@@ -88,12 +88,12 @@ public class FinderFileService implements EntityService<FinderFile> {
         return operationResult;
     }
 
-    public OperationResult<ProfileAndTargetGroup[]> getContent(String fileID) {
+    public OperationResult<FinderFile[]> getContent(String fileID) {
         log.info("Get content of finder file id: " + fileID);
 
         G4Response response = g4HttpClient.sendRequest(request.getContent(fileID));
 
-        return new OperationResult<>(response, ProfileAndTargetGroup[].class, "data");
+        return new OperationResult<>(response, FinderFile[].class, "data");
     }
 
     public OperationResult<List<ProfileAndTargetGroup>> searchFileMembers(SearchFilter filter) {
@@ -108,7 +108,7 @@ public class FinderFileService implements EntityService<FinderFile> {
                 new OperationResult<>(response);
     }
 
-    public List extractEntitiesByTypeFromResponse(OperationResult<List<ProfileAndTargetGroup>> result, ProfileJsonType type) {
+    public List extractEntitiesByTypeFromResponse(OperationResult<List<ProfileAndTargetGroup>> result, ProfileType type) {
         List<Object> list = jsonToObjectsList(result.getMessage(), Object[].class, "data");
         switch (type) {
             case Profile:
@@ -128,12 +128,12 @@ public class FinderFileService implements EntityService<FinderFile> {
         }
     }
 
-    public OperationResult<List<ProfileAndTargetGroup>> cbFinderSearch(SearchFilter filter) {
+    public OperationResult<List<FinderFile>> cbFinderSearch(SearchFilter filter) {
         log.info("CB Finder search with filter:" + toJsonString(filter));
         G4Response response = g4HttpClient.sendRequest(request.cbFinderSearch(filter));
 
-        OperationResult<ProfileAndTargetGroup[]> operationResult =
-                new OperationResult<>(response, ProfileAndTargetGroup[].class, "data");
+        OperationResult<FinderFile[]> operationResult =
+                new OperationResult<>(response, FinderFile[].class, "data");
 
         return operationResult.isSuccess() ?
                 new OperationResult<>(response, Arrays.asList(operationResult.getEntity())) :

@@ -74,7 +74,7 @@ public class Profile extends ProfileAndTargetGroup {
     private Integer threatLikelihood = 20;
 
     public Profile() {
-        setJsonType(ProfileJsonType.Profile);
+        setJsonType(ProfileType.Profile);
     }
 
     public String getType() {

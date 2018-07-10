@@ -8,15 +8,17 @@ import ae.pegasus.framework.services.FinderCaseService;
 import ae.pegasus.framework.services.FinderFileService;
 import ae.pegasus.framework.utils.StringUtils;
 import org.apache.log4j.Logger;
+import org.jbehave.core.annotations.AfterStory;
+import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
@@ -261,7 +263,7 @@ public class APIFinderFileSteps extends APISteps {
     @When("I send get content of parent finder file")
     public void getNestedFinderFileDetails() {
         FinderFile nestedFile = Entities.getFinderFiles().getLatest();
-        OperationResult<ProfileAndTargetGroup[]> operationResult = serviceFile.getContent(nestedFile.getParentFileId());
+        OperationResult<FinderFile[]> operationResult = serviceFile.getContent(nestedFile.getParentFileId());
         context.put("finderFileContent", operationResult.getEntity());
     }
 
@@ -269,21 +271,17 @@ public class APIFinderFileSteps extends APISteps {
     @Then("Finder file content contains created nested file")
     public void finderFileContentShouldHaveNestedFile() {
         FinderFile finderFile = Entities.getFinderFiles().getLatest();
-        ProfileAndTargetGroup[] profileAndFiles = context.get("finderFileContent", ProfileAndTargetGroup[].class);
+        FinderFile[] finderFiles = context.get("finderFileContent", FinderFile[].class);
 
-        assertTrue(
-                Arrays.stream(profileAndFiles)
-                        .anyMatch(p -> p.getId().equals(finderFile.getId())));
+        assertTrue(Stream.of(finderFiles).anyMatch(entity -> entity.getId().equals(finderFile.getId())));
     }
 
     @Then("Finder file content contains created profile")
     public void finderFileContentShouldHaveProfile() {
         Profile profile = Entities.getProfiles().getLatest();
-        ProfileAndTargetGroup[] profileAndGroups = context.get("finderFileContent", ProfileAndTargetGroup[].class);
+        FinderFile[] finderFiles = context.get("finderFileContent", FinderFile[].class);
 
-        assertTrue(
-                Arrays.stream(profileAndGroups)
-                        .anyMatch(p -> p.getId().equals(profile.getId())));
+        assertTrue(Stream.of(finderFiles).anyMatch(entity -> entity.getId().equals(profile.getId())));
     }
 
     @When("I delete all empty QE auto files")
@@ -318,7 +316,7 @@ public class APIFinderFileSteps extends APISteps {
         FinderFileSearchFilter filter = new FinderFileSearchFilter();
         filter.setQuery(query).setSortField("name").setPageSize(100);
 
-        OperationResult<List<ProfileAndTargetGroup>> operationResult = serviceFile.cbFinderSearch(filter);
+        OperationResult<List<FinderFile>> operationResult = serviceFile.cbFinderSearch(filter);
         context.put("operationResult", operationResult);
     }
 
@@ -329,13 +327,13 @@ public class APIFinderFileSteps extends APISteps {
 
         switch (type) {
             case "profile":
-                List<Profile> profiles = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.Profile);
+                List<Profile> profiles = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileType.Profile);
                 Profile profile = getRandomItemFromList(profiles);
                 context.put("profile", profile);
                 Entities.getProfiles().addOrUpdateEntity(profile);
                 break;
             case "file":
-                List<FinderFile> files = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.File);
+                List<FinderFile> files = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileType.File);
                 FinderFile file = getRandomItemFromList(files);
                 context.put("finderFile", file);
                 Entities.getFinderFiles().addOrUpdateEntity(file);
@@ -352,11 +350,11 @@ public class APIFinderFileSteps extends APISteps {
 
         switch (type) {
             case "profiles":
-                List<Profile> profiles = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.Profile);
+                List<Profile> profiles = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileType.Profile);
                 context.put("profileList", profiles);
                 break;
             case "files":
-                List<FinderFile> files = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.File);
+                List<FinderFile> files = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileType.File);
                 context.put("cbFinderList", files);
                 break;
             default:
@@ -441,6 +439,47 @@ public class APIFinderFileSteps extends APISteps {
                             "\nFor user: " + toJsonString(AppContext.get().getLoggedUser().getUser()),
                     entityOrgUnits.isEmpty());
         }
+    }
+
+    @AfterStory
+    public void cleanUpFiles() {
+        Entities.getFinderCases().getEntities()
+                .stream()
+                .filter(finderCase -> finderCase.getName().contains("QE auto"))
+                .forEach(serviceCase::remove);
+
+        Entities.getFinderFiles().getEntities()
+                .stream()
+                .filter(finderFile -> finderFile.getName().contains("QE auto"))
+                .forEach(serviceFile::remove);
+    }
+
+    @Given("Clean up files and cases")
+    public void cleanUpCbFinder() {
+        FinderFileSearchFilter filter = new FinderFileSearchFilter();
+        filter.setQuery("qe auto").setSortField("name").setPageSize(100);
+        OperationResult<List<FinderFile>> operationResult = serviceFile.cbFinderSearch(filter);
+
+        List<FinderFile> qe_auto = Stream.concat(
+                operationResult.getEntity().stream()
+                        .filter(finderFile -> finderFile.getHasContents() != null && finderFile.getHasContents())
+                        .flatMap(finderFile -> Stream.of(serviceFile.getContent(finderFile.getId()).getEntity())),
+                operationResult.getEntity().stream()
+        ).collect(Collectors.toList());
+
+        qe_auto.stream()
+                .filter(finderFile -> finderFile.getPayload() != null && finderFile.getPayload().getError() != null)
+                .forEach(finderFile ->
+                        log.warn(finderFile.getType() + " id:" + finderFile.getId() +
+                                " error: " + finderFile.getPayload().getError()));
+
+        qe_auto.stream()
+                .filter(finderFile -> finderFile.getType().equals(ProfileType.Case))
+                .forEach(serviceFile::remove);
+
+        qe_auto.stream()
+                .filter(finderFile -> finderFile.getType().equals(ProfileType.File))
+                .forEach(serviceFile::remove);
     }
 
 

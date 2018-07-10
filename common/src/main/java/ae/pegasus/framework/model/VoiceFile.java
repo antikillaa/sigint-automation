@@ -5,14 +5,14 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class VoiceFile extends AbstractEntity {
 
-    private ProfileJsonType jsonType = ProfileJsonType.VoiceFile;
+    private ProfileType jsonType = ProfileType.VoiceFile;
     private String voiceEventId;
 
-    public ProfileJsonType getJsonType() {
+    public ProfileType getJsonType() {
         return jsonType;
     }
 
-    public void setJsonType(ProfileJsonType jsonType) {
+    public void setJsonType(ProfileType jsonType) {
         this.jsonType = jsonType;
     }
 

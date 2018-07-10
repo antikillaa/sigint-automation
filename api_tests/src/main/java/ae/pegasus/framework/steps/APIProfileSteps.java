@@ -261,7 +261,7 @@ public class APIProfileSteps extends APISteps {
 
         // get only profiles
         OperationResult<List<ProfileAndTargetGroup>> operationResult = fileService.searchFileMembers(filter);
-        List<Profile> profiles = fileService.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.Profile);
+        List<Profile> profiles = fileService.extractEntitiesByTypeFromResponse(operationResult, ProfileType.Profile);
 
         // filter them by exact name
         Profile finalTarget = target;

@@ -116,7 +116,7 @@ abstract class ProfileMergeAttributeVerification {
         protected void verifyAttribute(Profile profile1, Profile profile2, Profile mergedProfile) {
             log.info("Verification: JsonType of merged profile");
 
-            assertTrue(mergedProfile.getJsonType().equals(ProfileJsonType.Draft));
+            assertTrue(mergedProfile.getJsonType().equals(ProfileType.Draft));
         }
     }
 
