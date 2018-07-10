@@ -230,15 +230,20 @@ public class APIProfileSteps extends APISteps {
         List<IdentifierSummary> identifiers = profile.getIdentifiersSummary();
         List<IdentifierSummary> updatedIdentifiers = service.getIdentifierAggregations(profile.getId()).getEntity();
 
+        List<IdentifierSummary> prevIdentifierSummary = identifiers.stream()
+                .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
+                .collect(Collectors.toList());
+
+        List<IdentifierSummary> newIdentifierSummary = updatedIdentifiers.stream()
+                .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
+                .collect(Collectors.toList());
+
+        log.info("Previous:" + toJsonString(prevIdentifierSummary));
+        log.info("New:" + toJsonString(newIdentifierSummary));
+
         final int[] hitCount = {0};
-        identifiers.stream()
-                .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
-                .forEach(identifier -> hitCount[0] -= identifier.getTargetHitsCount());
-
-        updatedIdentifiers.stream()
-                .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
-                .forEach(identifier -> hitCount[0] += identifier.getTargetHitsCount());
-
+        prevIdentifierSummary.forEach(identifier -> hitCount[0] -= identifier.getTargetHitsCount());
+        newIdentifierSummary.forEach(identifier -> hitCount[0] += identifier.getTargetHitsCount());
         assertEquals(1, hitCount[0]);
     }
 
