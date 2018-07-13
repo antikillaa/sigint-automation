@@ -10,6 +10,10 @@ Lifecycle:
 Before:
 Given I sign in as admin user
 
+Scenario: test excel
+Meta: @skip
+When Excel Driven Search (/Data/Search.xlsx)
+
 Scenario: SIGINT. The maximum number of search results for a single query is limited to 1000 records
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful

@@ -1,9 +1,11 @@
 package ae.pegasus.framework.steps;
 
+import ae.pegasus.framework.http.G4Response;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.http.OperationsResults;
 import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.*;
+import ae.pegasus.framework.services.ExcelSearchService;
 import ae.pegasus.framework.services.SearchService;
 import ae.pegasus.framework.utils.StringUtils;
 import org.jbehave.core.annotations.Then;
@@ -74,7 +76,38 @@ public class APISearchSteps extends APISteps {
         context.put("searchQuery", query);
         context.put("cbSearchFilter", filter);
     }
+    @When("Excel Driven Search ($excelpath)")
 
+    public void ExcelDrivenSearch(String excelpath) {
+        CBSearchExcel searchex = new CBSearchExcel(excelpath);
+        for (Integer key : searchex.exceldata.keySet()) {
+            String apierror = "";
+            try {
+                CBSearchFilter filter = new CBSearchFilter(searchex.exceldata.get(key).get(0), searchex.exceldata.get(key).get(1),
+                        searchex.exceldata.get(key).get(2),
+                        searchex.exceldata.get(key).get(3),searchex.exceldata.get(key).get(4));
+                        // response = Exservice.search(filter);
+                OperationResult<List<SearchEntity>> operationResult = service.search(filter);
+                searchex.getRequiredResult(key ,operationResult.getCode() , Integer.parseInt(operationResult.getMessage().toString().split(",")[0].split(":")[1]),apierror);
+
+            }
+            catch (AssertionError e) {
+                apierror = e.toString();
+                e.printStackTrace();
+                searchex.getRequiredResult(key ,-1 ,
+                                        -1, apierror);
+
+            }
+            catch (Exception e) {
+                apierror = e.toString();
+                e.printStackTrace();
+                searchex.getRequiredResult(key ,-1 ,
+                                            -1, apierror);
+            }
+            finally{searchex.writeOutputExcel();}
+        }
+
+    }
     private void searchIngestedRecords(String objectType, String criteria, String size, String additionalQuery) {
         int expectedCount = Integer.valueOf(size);
 
@@ -438,5 +471,6 @@ public class APISearchSteps extends APISteps {
 
         assertTrue("Expected search results count " + criteria + " " + size + ", but was: " + toJsonString(wrongResults),
                 wrongResults.isEmpty());
+
     }
 }

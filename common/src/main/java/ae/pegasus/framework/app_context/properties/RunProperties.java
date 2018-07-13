@@ -3,6 +3,7 @@ package ae.pegasus.framework.app_context.properties;
 import java.io.InputStream;
 
 public class RunProperties extends ApplicationProperty {
+    public static String url;
     
     @Override
     InputStream loadPropertyFile() {
@@ -37,4 +38,8 @@ public class RunProperties extends ApplicationProperty {
     }
     
     public String getEmailSender() {return getProperty().getProperty("emailSender");}
+    public void seturl(String givenurl) {
+        url = givenurl;
+    }
+
 }

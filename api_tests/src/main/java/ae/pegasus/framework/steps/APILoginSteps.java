@@ -1,5 +1,6 @@
 package ae.pegasus.framework.steps;
 
+import ae.pegasus.framework.Searchexe;
 import ae.pegasus.framework.controllers.APILogin;
 import ae.pegasus.framework.data_for_entity.data_providers.user.UserPasswordProvider;
 import ae.pegasus.framework.model.User;
@@ -18,6 +19,10 @@ public class APILoginSteps extends APISteps {
         checkResultSuccess();
     }
 
+    public void signInGlobal() {
+        login.signInAsUser(Searchexe.username ,Searchexe.password );
+        checkResultSuccess();
+    }
     @When("I sent sign in request as $role user with correct credentials")
     public void signInasCorrectUser(String role) {
         login.signInAsUser(role);

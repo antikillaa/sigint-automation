@@ -69,6 +69,25 @@ public class APILogin {
         return operationResult;
     }
 
+    public OperationResult<Token> signInAsUser(String UserName , String Password) {
+        log.info("Signing in as user: " + UserName);
+
+        OperationResult<Token> operationResult = signService.signIn(UserName, Password);
+        if (operationResult.isSuccess()) {
+            Token token = operationResult.getEntity();
+            //  context.setLoggedUser(new LoggedUser(UserName , Password));
+            G4HttpClient.setCookie(Token.tokenCookieProperty, token.getValue());
+
+            //update user
+            OperationResult<User> meResult = new UserService().me();
+            User me = meResult.getEntity();
+            me.setPassword(Password);
+
+            context.setLoggedUser(new LoggedUser(me));
+        }
+        return operationResult;
+    }
+
     /**
      * Sign out as user
      *
