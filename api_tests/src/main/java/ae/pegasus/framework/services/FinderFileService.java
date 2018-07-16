@@ -112,7 +112,6 @@ public class FinderFileService implements EntityService<FinderFile> {
         List<Object> list = jsonToObjectsList(result.getMessage(), Object[].class, "data");
         switch (type) {
             case Profile:
-            case Draft:
                 return list.stream()
                         .filter(o -> ((LinkedHashMap) o).get("type").equals("Profile"))
                         .map(o -> jsonToObject(toJsonString(o), Profile.class))

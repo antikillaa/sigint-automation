@@ -14,10 +14,12 @@ public class ProfileMergeVerification extends ProfileMergeAttributeVerification 
                 .setNext(new ProfileMergeMergedIDsVerification())
                 .setNext(new ProfileMergeActiveVerification())
                 .setNext(new ProfileMergeTypeVerification())
-                .setNext(new ProfileMergeTargetGroupVerification())
+                .setNext(new ProfileMergeAssignedTeamsVerification())
                 .setNext(new ProfileMergeActiveUntilVerification())
                 .setNext(new ProfileMergeEntityCountVerification())
                 .setNext(new ProfileMergeEntitiesVerification())
-                .setNext(new ProfileMergeConsolidatedAttributesValidation());
+                .setNext(new ProfileMergeConsolidatedAttributesValidation())
+                .setNext(new ProfileMergeDescriptionVerification())
+                .setNext(new ProfileMergeDescriptionVerification());
     }
 }

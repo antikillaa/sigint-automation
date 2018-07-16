@@ -36,7 +36,6 @@ public class TargetGroup extends ProfileAndTargetGroup {
     private ArrayList<ParentChain> parentChain = new ArrayList<>();
 
     public TargetGroup () {
-        setJsonType(ProfileType.TargetGroup);
     }
 
     @Override

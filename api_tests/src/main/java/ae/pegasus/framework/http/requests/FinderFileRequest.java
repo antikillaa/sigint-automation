@@ -92,7 +92,10 @@ public class FinderFileRequest extends HttpRequest {
                     "hasContents=true" +
                     "&page=" + filter.getPage() +
                     "&pageSize=" + filter.getPageSize() +
-                    (filter.getQuery().isEmpty() ? "" : "&query=" + URLEncoder.encode(filter.getQuery(), "UTF-8")) +
+                    "&parentChain=true" +
+                    (filter.getQuery().isEmpty() ? "" :
+                            "&query=" + URLEncoder.encode(filter.getQuery(), "UTF-8"))
+                            .replaceAll("\\+", "%20") +
                     "&sortKey=" + filter.getSortField() +
                     "&sortOrder=" + (filter.isSortDirection() ? "ASC" : "DESC");
         } catch (UnsupportedEncodingException e) {

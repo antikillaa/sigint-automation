@@ -226,14 +226,13 @@ public class APIProfileSteps extends APISteps {
 
     @Then("identifierAggregations hit counts for:$identifierType of profile:$name should incremented")
     public void identifierAggregationsCountsShouldIncremented(String identifierType, String name) {
-        Profile profile = service.getByName(name);
-        List<IdentifierSummary> identifiers = profile.getIdentifiersSummary();
+        List<IdentifierSummary> identifiers = context.get("identifierSummaryList", List.class);
+        Profile profile = context.get("profile", Profile.class);
         List<IdentifierSummary> updatedIdentifiers = service.getIdentifierAggregations(profile.getId()).getEntity();
 
         List<IdentifierSummary> prevIdentifierSummary = identifiers.stream()
                 .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
                 .collect(Collectors.toList());
-
         List<IdentifierSummary> newIdentifierSummary = updatedIdentifiers.stream()
                 .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
                 .collect(Collectors.toList());

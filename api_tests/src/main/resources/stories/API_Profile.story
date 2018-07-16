@@ -58,7 +58,6 @@ When I send delete finder file request
 Then Request is successful
 
 Scenario: API.Merge two profiles into one
-Meta: @skip
 When I send create finder file request
 Then Request is successful
 When I send create profile request
@@ -68,17 +67,7 @@ Then Request is successful
 
 When I send merge two profile into one request
 Then Request is successful
-
-When I send get profile draft details request
-Then Request is successful
-And Merged profile draft is correct
-
-When I send publish profile draft request
-Then Request is successful
-
-When I send get profile details request
-Then Request is successful
-And Profile is correct
+And Merged profile is correct
 
 When I send get first merged profile details request
 Then Request is unsuccessful
