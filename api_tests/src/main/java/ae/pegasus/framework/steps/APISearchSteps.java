@@ -1,11 +1,9 @@
 package ae.pegasus.framework.steps;
 
-import ae.pegasus.framework.http.G4Response;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.http.OperationsResults;
 import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.*;
-import ae.pegasus.framework.services.ExcelSearchService;
 import ae.pegasus.framework.services.SearchService;
 import ae.pegasus.framework.utils.StringUtils;
 import org.jbehave.core.annotations.Then;
