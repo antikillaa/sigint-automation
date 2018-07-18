@@ -6,7 +6,7 @@ import ae.pegasus.framework.steps.APISearchSteps;
 
 public class Searchexe {
 
-    public static String url = "http://cb-test2.pegasus.ae";
+    public static String url = null;
     public static String username = "admin@pegasus.ae";
     public static String password = "123456";
     public static String excelpath = "/Data/Pair_wise_testing.xlsx";
@@ -25,15 +25,17 @@ public class Searchexe {
 
         RunProperties prop = new RunProperties();
 
+
+
         /*Properties table=new Properties();
         table=  prop.setProp();
         table.setProperty("sigintURL" ,url );
         prop.savepropertyfile(table);
         System.out.println(prop.getApplicationURL());*/
         prop.seturl(url);
-
+       // prop.setProperty("sigintURL" , url);
             APILoginSteps login = new APILoginSteps();
-            login.signInGlobal("admin");
+            login.signInGlobal();
             APISearchSteps Search = new APISearchSteps();
             Search.ExcelDrivenSearch(excelpath);
 

@@ -1,15 +1,17 @@
 package ae.pegasus.framework.utils;
 
+
+
+import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
+
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 
 public class ExcelOpr {
 
@@ -27,7 +29,9 @@ public class ExcelOpr {
         this.path = path;
 
         try {
+            
             excel = new FileInputStream(path);
+            ZipSecureFile.setMinInflateRatio(0);
             workbook = new XSSFWorkbook(excel);
             sheet = workbook.getSheetAt(deafultsheet);
             excel.close();
