@@ -337,10 +337,10 @@ public class UserService implements EntityService<User> {
         return user;
     }
 
-    public User addOrgUnitWithTitles(User user, String orgUnitId, List<String> titleIDs) {
+    public User addOrgUnitWithTitles(User user, String orgUnitId, List<String> titleIDs, UserPermission defaultPermission) {
         user.getParentTeamIds().add(orgUnitId);
         user.getParentTeams().put(orgUnitId, Collections.singletonList("MEMBER"));
-
+        user.setDefaultPermission(defaultPermission);
         TeamTitle teamTitle = new TeamTitle();
         teamTitle.setOrgUnitId(orgUnitId);
         teamTitle.setTitles(titleIDs);
@@ -354,6 +354,6 @@ public class UserService implements EntityService<User> {
         Responsibility responsibility = responsibilityService.createWithPermissions(permissions);
         Title title = titleService.createWithResponsibility(responsibility);
 
-        return addOrgUnitWithTitles(user, orgUnitId, Collections.singletonList(title.getId()));
+        return addOrgUnitWithTitles(user, orgUnitId, Collections.singletonList(title.getId()), user.getDefaultPermission());
     }
 }

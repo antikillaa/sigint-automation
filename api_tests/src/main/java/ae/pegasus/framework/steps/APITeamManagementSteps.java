@@ -26,7 +26,9 @@ public class APITeamManagementSteps extends APISteps {
     @When("I send create a new team")
     public void createNewTeam() {
         Team team = generateRandomTeam();
+        team.setDefaultPermission(appContext.getLoggedUser().getUser().getDefaultPermission());
         context.put("team", team);
+
 
         teamService.add(team);
     }
@@ -83,6 +85,7 @@ public class APITeamManagementSteps extends APISteps {
 
         Team updatedTeam = generateRandomTeam();
         updatedTeam.setId(team.getId());
+        updatedTeam.setDefaultPermission(appContext.getLoggedUser().getUser().getDefaultPermission());
         context.put("team", updatedTeam);
 
         teamService.update(updatedTeam);
@@ -101,6 +104,7 @@ public class APITeamManagementSteps extends APISteps {
         Team parentTeam = Entities.getTeams().getLatest();
         Team nestedTeam = new RandomEntities().randomEntity(Team.class);
         nestedTeam.setParentTeamId(parentTeam.getId());
+        nestedTeam.setDefaultPermission(appContext.getLoggedUser().getUser().getDefaultPermission());
 
         context.put("team", nestedTeam);
 

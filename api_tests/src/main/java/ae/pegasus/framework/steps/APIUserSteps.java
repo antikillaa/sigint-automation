@@ -93,7 +93,7 @@ public class APIUserSteps extends APISteps {
                 .findAny().orElse(null);
         assertNotNull(teamTitle);
 
-        user = service.addOrgUnitWithTitles(user, teamTitle.getOrgUnitId(), teamTitle.getTitles());
+        user = service.addOrgUnitWithTitles(user, teamTitle.getOrgUnitId(), teamTitle.getTitles(),appContext.getLoggedUser().getUser().getDefaultPermission());
 
         context.put("user", user);
         service.add(user);
