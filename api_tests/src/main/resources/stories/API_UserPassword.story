@@ -1,8 +1,9 @@
 Test user password strength validation.
 Parent story: CB-2407
 
-Meta:
-@story userPassword @notstage
+Meta: @skip
+@story
+@notstage
 
 Lifecycle:
 Before:
@@ -15,6 +16,7 @@ When I send delete user request
 Then Request is successful
 
 Scenario: API.Check short password
+
 When I change user password to 123456
 Then I got response code 400
 And Message contains "MIN_LENGTH"
