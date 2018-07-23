@@ -252,3 +252,23 @@ Examples:
 | source                                    | objectType | query | criteria | size |
 | SIGINT, OSINT, GOVINT                     | event      |       | >        | 0    |
 | SIGINT, INFORMATION_MANAGEMENT, OSINT, GOVINT, GOVINT2, PROFILER | entity |   | > | 0 |
+
+
+Scenario: Search. Source Type filters
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event | EventVO | | 0 | 100 |
+| SIGINT | entity | EntityVO | | 0 | 100 |
+| OSINT | event | EventVO | | 0 | 100 |
+| OSINT | entity | EntityVO | | 0 | 100 |
+| GOVINT | event | EventVO | | 0 | 100 |
+| GOVINT | entity | EntityVO | | 0 | 100 |
+| GOVINT2 | event | EventVO | | 0 | 100 |
+| GOVINT2 | entity | EntityVO | | 0 | 100 |
+| INFORMATION_MANAGEMENT | entity | EntityVO | | 0 | 100 |
+| PROFILER | entity | TargetVO | | 0 | 100 |
