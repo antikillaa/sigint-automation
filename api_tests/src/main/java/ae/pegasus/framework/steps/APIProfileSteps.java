@@ -358,7 +358,7 @@ public class APIProfileSteps extends APISteps {
     @When("upload audio file to profile")
     public void uploadAudioFile() {
         List<File> files = context.get("g4files", List.class);
-        Profile profile = context.get("profile", Profile.class);
+        Profile profile = Entities.getProfiles().getLatest();
 
         File audioFile = files.stream()
                 .filter(file -> file.getName().contains(".wav"))
@@ -412,10 +412,16 @@ public class APIProfileSteps extends APISteps {
         log.info(toJsonString(voiceEvent));
 
         // create VoiceID from random channel of random voice event in this target
+        List<String> channelId;
+        try {
+            channelId = (ArrayList<String>) voiceEvent.getAttributes().get("CHANNEL_ID");
+        } catch (NullPointerException e) {
+            throw new AssertionError("attribute CHANNEL_ID not found:\n" + toJsonString(voiceEvent));
+        }
+        assertFalse("CHANNEL_ID field is empty!\n" + toJsonString(voiceEvent), channelId.isEmpty());
+
         VoiceRecord record = new VoiceRecord();
         record.setId(voiceEvent.getId());
-        List<String> channelId = (ArrayList<String>) voiceEvent.getAttributes().get("CHANNEL_ID");
-        assertFalse("CHANNEL_ID field is empty!\n" + toJsonString(voiceEvent), channelId.isEmpty());
         record.setChannel(Integer.valueOf(getRandomItemFromList(channelId)));
 
         Voice voice = new Voice();
