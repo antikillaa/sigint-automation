@@ -443,12 +443,12 @@ public class APIFinderFileSteps extends APISteps {
 
     @AfterStory
     public void cleanUpFiles() {
-        Entities.getFinderCases().getEntities()
+        new ArrayList<>(Entities.getFinderCases().getEntities())
                 .stream()
                 .filter(finderCase -> finderCase.getName().contains("QE auto"))
                 .forEach(serviceCase::remove);
 
-        Entities.getFinderFiles().getEntities()
+        new ArrayList<>(Entities.getFinderFiles().getEntities())
                 .stream()
                 .filter(finderFile -> finderFile.getName().contains("QE auto"))
                 .forEach(serviceFile::remove);
