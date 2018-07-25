@@ -1,13 +1,16 @@
 package ae.pegasus.framework.model;
 
+import ae.pegasus.framework.data_for_entity.annotations.DataIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Team extends Organization {
 
     private String description;
+    @DataIgnore
+    private String abbreviation;
 
     public Team() {
         setParentTeamId("00");
@@ -20,5 +23,13 @@ public class Team extends Organization {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getAbbreviation() {
+        return abbreviation;
+    }
+
+    public void setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
     }
 }

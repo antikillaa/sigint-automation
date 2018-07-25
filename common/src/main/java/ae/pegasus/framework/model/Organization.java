@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class Organization extends G4Entity {
 
     @DataIgnore
@@ -19,7 +19,7 @@ public class Organization extends G4Entity {
     private OrganizationType organizationType;
     private String fullName;
     @DataIgnore
-    private UserPermission defaultPermission = new UserPermission();
+    private UserPermission defaultPermission;
 
     public String getParentTeamId() {
         return parentTeamId;

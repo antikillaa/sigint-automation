@@ -55,6 +55,7 @@ public class User extends Organization {
 
     public User() {
         setOrganizationType(OrganizationType.USER);
+        setDefaultPermission(new UserPermission());
     }
 
     public String toString() {

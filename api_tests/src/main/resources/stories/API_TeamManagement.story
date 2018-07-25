@@ -1,5 +1,6 @@
 Meta:
-@story teamManagement @stage
+@story teamManagement
+@stage
 
 Lifecycle:
 Before:
@@ -66,6 +67,7 @@ And Team is correct
 
 
 Scenario: User is able to search/filter teams
+Meta: @skip
 When I send create a new team
 Then Request is successful
 
