@@ -47,6 +47,7 @@ public class FinderFile extends AbstractEntity {
     private List<String> fileIds = new ArrayList<>();
     @DataIgnore
     private String error;
+    private Boolean active;
 
     public ProfileType getType() {
         return type;
@@ -190,6 +191,14 @@ public class FinderFile extends AbstractEntity {
 
     public void setFileIds(List<String> fileIds) {
         this.fileIds = fileIds;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public static class ParentChain extends AbstractEntity {

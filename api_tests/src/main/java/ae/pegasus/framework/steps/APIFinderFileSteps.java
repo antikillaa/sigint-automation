@@ -8,10 +8,7 @@ import ae.pegasus.framework.services.FinderCaseService;
 import ae.pegasus.framework.services.FinderFileService;
 import ae.pegasus.framework.utils.StringUtils;
 import org.apache.log4j.Logger;
-import org.jbehave.core.annotations.AfterStory;
-import org.jbehave.core.annotations.Given;
-import org.jbehave.core.annotations.Then;
-import org.jbehave.core.annotations.When;
+import org.jbehave.core.annotations.*;
 import org.junit.Assert;
 
 import java.util.ArrayList;
@@ -441,7 +438,7 @@ public class APIFinderFileSteps extends APISteps {
         }
     }
 
-    @AfterStory
+    @AfterStories
     public void cleanUpFiles() {
         new ArrayList<>(Entities.getFinderCases().getEntities())
                 .stream()
