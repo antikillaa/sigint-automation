@@ -350,6 +350,8 @@ public class APIProfileSteps extends APISteps {
         Profile profile = context.get("profile", Profile.class);
         FileMetaData fileMetaData = context.get("fileMetaData", FileMetaData.class);
 
+        assertNotNull("Profile uploadedImage is null!", profile.getUploadedImage());
+
         Pattern pattern = Pattern.compile("(/api/upload-platform/files/).*(/content)");
         assertTrue(pattern.matcher(profile.getUploadedImage()).find());
         assertTrue(pattern.matcher(fileMetaData.getFileId()).find());
