@@ -108,8 +108,7 @@ public class APILogin {
     public void signInWithPermissions(String permString) {
         signInAsUser(ADMIN_ROLE);
 
-        String[] permissions = StringUtils.splitToArray(permString);
-        User user = userService.getOrCreateUserWithPermissions(permissions);
+        User user = userService.getOrCreateUserWithPermissions(permString);
         Assert.assertNotNull(user);
 
         signInAsUser(user);
