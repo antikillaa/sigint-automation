@@ -1,22 +1,24 @@
 package ae.pegasus.framework.model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class SavedSearchMetadata {
 
     private String query;
     private String type;
-    private SearchFilters filters;
+    private Object filters;
     private List<AdvancedSearch> advancedSearch;
 
-    public SearchFilters getFilters() {
+    public Object getFilters() {
         return filters;
     }
 
-    public void setFilters(SearchFilters filters) {
+    public void setFilters(Object filters) {
         this.filters = filters;
     }
 
