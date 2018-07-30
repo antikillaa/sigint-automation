@@ -47,6 +47,7 @@ public class FinderFile extends AbstractEntity {
     private List<String> fileIds = new ArrayList<>();
     @DataIgnore
     private String error;
+    @DataIgnore
     private Boolean active;
 
     public ProfileType getType() {
