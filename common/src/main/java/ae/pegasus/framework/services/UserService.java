@@ -293,11 +293,11 @@ public class UserService implements EntityService<User> {
     }
 
     public User getOrCreateUserWithPermissions(String permString) {
-        log.info("Finding users with permissions: " + permString);
+        log.info("Get Or Create User With Permissions: " + permString);
 
         User user;
         List<User> users = permissionsUsersMap.get(permString);
-        if (users == null) {
+        if (users == null || users.isEmpty()) {
             log.info("Users with permissions: " + permString + " not found!\n" + "Create new user with permissions");
             user = createUserWithPermissions(permString);
             permissionsUsersMap.put(permString, Stream.of(user).collect(Collectors.toList()));
