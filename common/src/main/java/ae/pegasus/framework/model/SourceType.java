@@ -5,7 +5,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
-public class SourceType extends AbstractEntity {
+public class SourceType {
 
     private String eventFeed;
     private String dataSource;

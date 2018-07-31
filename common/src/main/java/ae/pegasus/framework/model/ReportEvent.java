@@ -15,32 +15,20 @@ import java.util.Map;
         "body",
         "metadata"
 })
-public class Event {
+public class ReportEvent extends AbstractEntity {
 
-    @JsonProperty("id")
-    private String id;
     @JsonProperty("order")
     private Integer order;
     @JsonProperty("type")
     private String type;
     @JsonProperty("source")
-    private Source source;
+    private SourceType source;
     @JsonProperty("body")
     private String body;
     @JsonProperty("metadata")
     private Metadata metadata;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    @JsonProperty("id")
-    public String getId() {
-        return id;
-    }
-
-    @JsonProperty("id")
-    public void setId(String id) {
-        this.id = id;
-    }
 
     @JsonProperty("order")
     public Integer getOrder() {
@@ -63,12 +51,12 @@ public class Event {
     }
 
     @JsonProperty("source")
-    public Source getSource() {
+    public SourceType getSourceType() {
         return source;
     }
 
     @JsonProperty("source")
-    public void setSource(Source source) {
+    public void setSourceType(SourceType source) {
         this.source = source;
     }
 

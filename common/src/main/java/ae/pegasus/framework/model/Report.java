@@ -53,7 +53,7 @@ public class Report extends G4Entity {
     @JsonProperty("createdByName")
     private String createdByName;
     @JsonProperty("events")
-    private List<Event> events = new ArrayList<Event>();
+    private List<ReportEvent> events = new ArrayList<ReportEvent>();
     @JsonProperty("reportSources")
     private List<ReportSource> reportSources = new ArrayList<ReportSource>();
     @JsonProperty("orgUnits")
@@ -170,12 +170,12 @@ public class Report extends G4Entity {
     }
 
     @JsonProperty("events")
-    public List<Event> getEvents() {
+    public List<ReportEvent> getReportEvents() {
         return events;
     }
 
     @JsonProperty("events")
-    public void setEvents(List<Event> events) {
+    public void setReportEvents(List<ReportEvent> events) {
         this.events = events;
     }
 

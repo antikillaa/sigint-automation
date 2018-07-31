@@ -149,6 +149,13 @@ public class APIFinderFileSteps extends APISteps {
         casesShouldBeEqual(contextCase, createdCase);
     }
 
+    @When("I delete all empty cases")
+    public void deleteAllEmptyCases() {
+        List<FinderCase> cases = context.get("cbFinderList", List.class);
+        cases.stream()
+                .filter(finderCase -> !finderCase.getHasContents())
+                .forEach(serviceCase::remove);
+    }
 
     private void casesShouldBeEqual(FinderCase expected, FinderCase created) {
         assertEquals(expected.getType(), created.getType());
