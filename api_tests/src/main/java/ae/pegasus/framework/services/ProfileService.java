@@ -157,7 +157,6 @@ public class ProfileService implements EntityService<Profile> {
     public OperationResult<List<SearchRecord>> getVoiceEvents(Profile profile) {
         log.info("Get voice events for profileId: " + profile.getId() + " name:" + profile.getName());
         G4Response response = g4HttpClient.sendRequest(request.voiceEvents(profile.getId()));
-        log.info(response.getCode() + " " + response.getMessage());
 
         OperationResult<SearchRecord[]> result = new OperationResult<>(response, SearchRecord[].class, "data");
         if (result.isSuccess()) {
