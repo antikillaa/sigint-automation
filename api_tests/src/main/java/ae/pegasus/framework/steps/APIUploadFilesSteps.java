@@ -285,4 +285,23 @@ public class APIUploadFilesSteps extends APISteps {
         assertEquals("totalMentionsHit value is not correct", matrix.getTotalRecordsMention(), totalMentionsHit);
     }
 
+    @When("I download audioFile of call event from search results")
+    public void downloadFileContent() {
+        List<SearchRecord> searchResults = context.get("searchResults", List.class);
+
+        SearchRecord call = searchResults.stream()
+                .filter(searchRecord -> searchRecord.getAttributes() != null
+                        && !((List<String>) searchRecord.getAttributes().get("UPLOAD_M4A_FILE_ID")).isEmpty())
+                .findAny().orElse(null);
+
+        String upload_m4A_file_id;
+        if (call != null) {
+            upload_m4A_file_id = ((List<String>) call.getAttributes().get("UPLOAD_M4A_FILE_ID")).get(0);
+            File content = service.getContent(upload_m4A_file_id, "./target/audio.m4a");
+            context.put("audioFile", content);
+        } else {
+            throw new AssertionError("Call with UPLOAD_M4A_FILE_ID not found");
+        }
+    }
+
 }

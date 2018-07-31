@@ -216,7 +216,7 @@ public class APIProfileSteps extends APISteps {
     }
 
     @When("send get profile identifierAggregations request")
-    public void getProfileidentifierAggregations() {
+    public void getProfileIdentifierAggregations() {
         Profile profile = context.get("profile", Profile.class);
 
         OperationResult<List<IdentifierSummary>> result = service.getIdentifierAggregations(profile.getId());
@@ -359,13 +359,8 @@ public class APIProfileSteps extends APISteps {
 
     @When("upload audio file to profile")
     public void uploadAudioFile() {
-        List<File> files = context.get("g4files", List.class);
+        File audioFile = context.get("audioFile", File.class);
         Profile profile = Entities.getProfiles().getLatest();
-
-        File audioFile = files.stream()
-                .filter(file -> file.getName().contains(".wav"))
-                .findFirst().orElse(null);
-        assertNotNull(audioFile);
 
         OperationResult<VoiceFile> result = service.uploadAudioFile(profile, audioFile);
 
@@ -391,27 +386,13 @@ public class APIProfileSteps extends APISteps {
         }
         assertNotNull("Unable process uploaded audio voice", entities.getEntity(voiceFile.getVoiceEventId()));
 
-        context.put("voiceEvents", entities.getEntities());
-    }
-
-    @When("get voice events from profile")
-    public void createVoiceID() {
-        Profile profile = context.get("profile", Profile.class);
-
-        OperationResult<List<SearchRecord>> result = service.getVoiceEvents(profile);
-        context.put("voiceEvents", result.getEntity());
+        context.put("voiceEvent", entities.getEntity(voiceFile.getVoiceEventId()));
     }
 
     @When("create voiceID for profile")
     public void createVoiceIDForProfile() {
-        List<SearchRecord> voiceEvents = context.get("voiceEvents", List.class);
+        SearchRecord voiceEvent = context.get("voiceEvent", SearchRecord.class);
         Profile profile = context.get("profile", Profile.class);
-
-        SearchRecord voiceEvent = voiceEvents.stream()
-                .filter(cbEntity -> cbEntity.getAttributes() != null)
-                .findAny().orElse(null);
-        assertNotNull("Unable find voiceEvent with filled attributes", voiceEvent);
-        log.info(toJsonString(voiceEvent));
 
         // create VoiceID from random channel of random voice event in this target
         List<String> channelId;
@@ -420,7 +401,8 @@ public class APIProfileSteps extends APISteps {
         } catch (NullPointerException e) {
             throw new AssertionError("attribute CHANNEL_ID not found:\n" + toJsonString(voiceEvent));
         }
-        assertFalse("CHANNEL_ID field is empty!\n" + toJsonString(voiceEvent), channelId.isEmpty());
+        assertFalse("CHANNEL_ID field is empty!\n" + toJsonString(voiceEvent),
+                channelId == null || channelId.isEmpty());
 
         VoiceRecord record = new VoiceRecord();
         record.setId(voiceEvent.getId());

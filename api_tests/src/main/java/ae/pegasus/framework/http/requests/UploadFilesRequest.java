@@ -115,4 +115,12 @@ public class UploadFilesRequest extends HttpRequest {
 
         return this;
     }
+
+    public UploadFilesRequest getContent(String fileId) {
+        this
+                .setURI(URI + "/" + fileId + "/content")
+                .setHttpMethod(HttpMethod.GET)
+                .setMediaType(MediaType.APPLICATION_OCTET_STREAM);
+        return this;
+    }
 }

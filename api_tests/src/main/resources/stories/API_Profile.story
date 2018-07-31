@@ -1,5 +1,6 @@
 Meta:
-@story profile @stage
+@story profile
+@stage
 
 Lifecycle:
 Before:
@@ -133,11 +134,13 @@ Then Request is successful
 When I send create profile request
 Then Request is successful
 
-Given S - Voice files with 1 records are generated
+When I send CB search request - query:type:"CALL" AND HAS_VPRINT:"true", eventFeed:SIGINT, objectType:event, pageNumber:0, pageSize:1
+Then CB search result list size > 0
+When I download audioFile of call event from search results
 
 When upload audio file to profile
 Then uploaded audio file is processed
-When get voice events from profile
 When create voiceID for profile
+Then Request is successful
 When I send get profile details request
 Then profile contain created voiceID
