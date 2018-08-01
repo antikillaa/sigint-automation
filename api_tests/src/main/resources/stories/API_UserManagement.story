@@ -1,5 +1,5 @@
 Meta:
-@story userManagement @stage
+@story userManagement
 
 Scenario: API.Create, Read, Update, Delete role
 Meta:

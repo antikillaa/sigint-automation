@@ -1,6 +1,6 @@
 Meta:
 @story cbFinderCase
-@stage
+
 
 Narrative:
 CB-11288 Cases CRUD

@@ -1,5 +1,5 @@
 Meta:
-@story whitelist @stage
+@story whitelist
 
 Lifecycle:
 Before:

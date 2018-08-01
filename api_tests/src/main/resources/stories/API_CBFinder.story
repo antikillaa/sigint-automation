@@ -1,4 +1,4 @@
-Meta: @story cbFinder @stage
+Meta: @story cbFinder
 
 Narrative:
 As a user

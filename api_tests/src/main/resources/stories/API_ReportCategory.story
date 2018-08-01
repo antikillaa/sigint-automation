@@ -1,5 +1,5 @@
 Meta:
-@story reportCategory @stage
+@story reportCategory
 
 
 Scenario: API.Create, Update, Delete report category

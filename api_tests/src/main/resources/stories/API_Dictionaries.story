@@ -1,5 +1,5 @@
 Meta:
-@story dictionaries @stage
+@story dictionaries
 
 
 Scenario: API.Dictionary. Get list of sources

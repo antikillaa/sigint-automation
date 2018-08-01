@@ -1,5 +1,5 @@
 Meta:
-@story designation-mappings @stage
+@story designation-mappings
 
 Lifecycle:
 Before:

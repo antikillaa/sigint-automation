@@ -1,5 +1,5 @@
 Meta:
-@story login @stage
+@story login
 
 Scenario: On Login request with correct credentials token should be sent
 When I sent sign in request as admin user with correct credentials

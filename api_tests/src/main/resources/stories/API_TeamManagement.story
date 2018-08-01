@@ -1,6 +1,6 @@
 Meta:
 @story teamManagement
-@stage
+
 
 Lifecycle:
 Before:

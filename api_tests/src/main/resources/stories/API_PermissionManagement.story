@@ -1,5 +1,5 @@
 Meta:
-@story permissionManagement @stage
+@story permissionManagement
 
 
 Lifecycle:

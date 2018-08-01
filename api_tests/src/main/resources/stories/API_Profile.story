@@ -1,6 +1,6 @@
 Meta:
 @story profile
-@stage
+
 
 Lifecycle:
 Before:

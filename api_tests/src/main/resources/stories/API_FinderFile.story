@@ -1,5 +1,5 @@
 Meta:
-@story finderFile @stage
+@story finderFile
 
 Narrative:
 CB-12319 File Permissions integration
