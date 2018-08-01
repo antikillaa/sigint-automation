@@ -128,7 +128,6 @@ Then Request is successful
 
 
 Scenario: VoicePrint from manual audio
-Meta: @notstage
 When I send create finder file request
 Then Request is successful
 When I send create profile request
