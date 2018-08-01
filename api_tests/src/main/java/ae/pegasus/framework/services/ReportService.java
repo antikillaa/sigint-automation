@@ -5,12 +5,17 @@ import ae.pegasus.framework.http.G4Response;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.http.requests.GenerateReportNumberRequest;
 import ae.pegasus.framework.http.requests.ReportRequest;
+import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+
+import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
 
 public class ReportService implements EntityService<Report> {
 
@@ -24,7 +29,7 @@ public class ReportService implements EntityService<Report> {
 
         G4Response response = g4HttpClient.sendRequest(reportRequest.add(entity));
 
-        OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "data");
+        OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
         if (operationResult.isSuccess()) {
             Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
         } else {
@@ -35,7 +40,17 @@ public class ReportService implements EntityService<Report> {
 
     @Override
     public OperationResult remove(Report entity) {
-        throw new NotImplementedException("");
+        log.info("Sending delete new report request...");
+
+        G4Response response = g4HttpClient.sendRequest(reportRequest.remove(entity));
+
+        OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
     }
 
     @Override
@@ -58,13 +73,6 @@ public class ReportService implements EntityService<Report> {
         throw new NotImplementedException("");
     }
 
-    public void initReport(List<SearchEntity> events, Report report) {
-        report.setObjectType("OperatorReport");
-        report.setState(ReportState.DRAFT);
-        report.setLayoutType("CARD_GROUP");
-        report.setReportType("GENERAL");
-    }
-
     public OperationResult<Result> generateNumber() {
         log.info("Sending create new report number request...");
 
@@ -76,5 +84,73 @@ public class ReportService implements EntityService<Report> {
         } else {
             throw new OperationResultError(operationResult);
         }
+    }
+
+    public void buildReport(Report report, Result reportNo, List<SearchRecord> entities) {
+        fillReportStaticData(report);
+        report.setReportNo(reportNo.getResult());
+        fillReportEvents(entities, report);
+        fillReportOrgUnit(report);
+        fillReportFinderFile(report);
+    }
+
+    private void fillReportStaticData(Report report) {
+        report.setObjectType("OperatorReport");
+        report.setLayoutType("CARD_GROUP");
+        report.setReportType("GENERAL");
+        report.setClassification("TS");
+        report.setState("Initial Draft");
+    }
+
+    private void fillReportEvents(List<SearchRecord> entities, Report report) {
+        SearchRecord event = getRandomItemFromList(entities);
+        ReportEvent reportEvent = new ReportEvent();
+        reportEvent.setId(event.getId());
+        reportEvent.setOrder(0);
+        reportEvent.setType(event.getType());
+        reportEvent.setBody(JsonConverter.toJsonString(event));
+
+        SourceType source = new SourceType();
+        source.setEventFeed(String.valueOf(event.getEventFeed()));
+        source.setDataSource(event.getSourceType());
+        source.setSubSource(event.getRecordType());
+        source.setSubSourceId(String.valueOf(event.getAttributes().get("interceptorId")));
+        reportEvent.setSourceType(source);
+        report.setReportEvents(Collections.singletonList(reportEvent));
+    }
+
+    private void fillReportOrgUnit(Report report) {
+        User user = appContext.get().getLoggedUser().getUser();
+        report.setCreatedByName(user.getName());
+
+        String teamID = UserService.getDefaultTeamId();
+        OrganizationFilter filter = new OrganizationFilter();
+        OperationResult<List<Organization>> operationResult = new OrganizationService().search(filter);
+        List<Organization> orgUnits = operationResult.getEntity();
+        Organization organization = orgUnits.stream()
+                .filter(a -> Objects.equals(a.getId(), teamID))
+                .findAny().orElse(null);
+        if (organization == null) {
+            /* TODO */
+        }
+        OrgUnit orgUnit = new OrgUnit();
+        orgUnit.setOrgUnitId("00-" + teamID);
+        orgUnit.setOrgUnitName(organization.getFullName());
+        report.setOrgUnits(Collections.singletonList(orgUnit));
+    }
+
+    private void fillReportFinderFile(Report report) {
+        FinderFile finderFile = Entities.getFinderFiles().getLatest();
+        DirectCaseFile directCaseFile = new DirectCaseFile();
+        directCaseFile.setLinkId(finderFile.getId());
+        directCaseFile.setLinkNo(finderFile.getId());
+        directCaseFile.setLinkName(finderFile.getName());
+        directCaseFile.setLinkType("FILE");
+        directCaseFile.setRelationType("RELATED");
+        Attributes attributes = new Attributes();
+        attributes.setType("File");
+        attributes.setIcon("far fa-folder");
+        directCaseFile.setAttributes(attributes);
+        report.setDirectCaseFiles(Collections.singletonList(directCaseFile));
     }
 }

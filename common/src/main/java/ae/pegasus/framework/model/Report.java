@@ -1,14 +1,17 @@
 
 package ae.pegasus.framework.model;
 
-import com.fasterxml.jackson.annotation.*;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.annotate.JsonPropertyOrder;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@JsonIgnoreProperties(ignoreUnknown = true)
+
 @JsonPropertyOrder({
         "attachments",
         "wfId",
@@ -41,7 +44,7 @@ public class Report extends G4Entity {
     @JsonProperty("objectType")
     private String objectType;
     @JsonProperty("state")
-    private ReportState state;
+    private String state;
     @JsonProperty("classification")
     private String classification;
     @JsonProperty("layoutType")
@@ -76,8 +79,6 @@ public class Report extends G4Entity {
     private List<DirectCaseFile> directCaseFiles = new ArrayList<DirectCaseFile>();
     @JsonProperty("links")
     private List<Object> links = new ArrayList<Object>();
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("attachments")
     public List<Object> getAttachments() {
@@ -109,15 +110,6 @@ public class Report extends G4Entity {
         this.objectType = objectType;
     }
 
-    @JsonProperty("state")
-    public ReportState getState() {
-        return state;
-    }
-
-    @JsonProperty("state")
-    public void setState(ReportState state) {
-        this.state = state;
-    }
 
     @JsonProperty("classification")
     public String getClassification() {
@@ -289,14 +281,11 @@ public class Report extends G4Entity {
         this.links = links;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
+    public String getState() {
+        return state;
     }
 
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
+    public void setState(String state) {
+        this.state = state;
     }
-
 }
