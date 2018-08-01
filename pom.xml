@@ -21,7 +21,7 @@
         <poi.version>3.17</poi.version>
         <!--Stories related-->
         <stories>**/*Launcher.java</stories>
-        <metaFilters>+stage -deprecated -skip -wip -nightly -notstage</metaFilters>
+        <metaFilters>-deprecated -skip -wip -nightly -notstage</metaFilters>
         <reportBuildStatus>false</reportBuildStatus>
         <!--Framework set-up-->
         <remoteRun>true</remoteRun>
