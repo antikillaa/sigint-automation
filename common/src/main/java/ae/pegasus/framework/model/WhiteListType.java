@@ -15,6 +15,7 @@ public enum WhiteListType {
     YOUTUBE_CHANNEL_ID,
     INSTAGRAM_ID,
     DARK_WEB_AUTHOR_ID,
+    DARK_WEB_FORUM_ID,
 
     TUMBLR_ID,
     GPLUS_ID,
