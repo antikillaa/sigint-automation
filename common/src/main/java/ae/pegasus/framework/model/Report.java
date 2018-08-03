@@ -79,6 +79,22 @@ public class Report extends G4Entity {
     private List<DirectCaseFile> directCaseFiles = new ArrayList<DirectCaseFile>();
     @JsonProperty("links")
     private List<Object> links = new ArrayList<Object>();
+    @JsonProperty("stateId")
+    private String stateId;
+    @JsonProperty("stateType")
+    private String stateType;
+    @JsonProperty("allOwners")
+    private List<AllOwner> allOwners = null;
+    @JsonProperty("currentOwners")
+    private List<CurrentOwner> currentOwners = null;
+    @JsonProperty("requiredPermissions")
+    private List<RequiredPermission> requiredPermissions = null;
+    @JsonProperty("modelSources")
+    private List<ModelSource> modelSources = null;
+    @JsonProperty("createdById")
+    private String createdById;
+    @JsonProperty("version")
+    private Integer version;
 
     @JsonProperty("attachments")
     public List<Object> getAttachments() {
@@ -287,5 +303,77 @@ public class Report extends G4Entity {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public List<ReportEvent> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<ReportEvent> events) {
+        this.events = events;
+    }
+
+    public String getStateId() {
+        return stateId;
+    }
+
+    public void setStateId(String stateId) {
+        this.stateId = stateId;
+    }
+
+    public String getStateType() {
+        return stateType;
+    }
+
+    public void setStateType(String stateType) {
+        this.stateType = stateType;
+    }
+
+    public List<AllOwner> getAllOwners() {
+        return allOwners;
+    }
+
+    public void setAllOwners(List<AllOwner> allOwners) {
+        this.allOwners = allOwners;
+    }
+
+    public List<CurrentOwner> getCurrentOwners() {
+        return currentOwners;
+    }
+
+    public void setCurrentOwners(List<CurrentOwner> currentOwners) {
+        this.currentOwners = currentOwners;
+    }
+
+    public List<RequiredPermission> getRequiredPermissions() {
+        return requiredPermissions;
+    }
+
+    public void setRequiredPermissions(List<RequiredPermission> requiredPermissions) {
+        this.requiredPermissions = requiredPermissions;
+    }
+
+    public List<ModelSource> getModelSources() {
+        return modelSources;
+    }
+
+    public void setModelSources(List<ModelSource> modelSources) {
+        this.modelSources = modelSources;
+    }
+
+    public String getCreatedById() {
+        return createdById;
+    }
+
+    public void setCreatedById(String createdById) {
+        this.createdById = createdById;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 }

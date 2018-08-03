@@ -9,6 +9,7 @@ import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 
 import java.util.Collections;
@@ -100,6 +101,8 @@ public class ReportService implements EntityService<Report> {
         report.setReportType("GENERAL");
         report.setClassification("TS");
         report.setState("Initial Draft");
+        report.setDescription("qe_" + RandomStringUtils.randomAlphabetic(5));
+        report.setSubject("qe_" + RandomStringUtils.randomAlphabetic(5));
     }
 
     private void fillReportEvents(List<SearchRecord> entities, Report report) {

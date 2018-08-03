@@ -26,7 +26,7 @@ public class APIReportSteps extends APISteps {
 
     @When("I send create a report request")
     public void sendReportRequest() {
-        Report report = getRandomReport();
+        Report report = new Report();
         Result reportNo = context.get("reportNo", Result.class);
         List<SearchRecord> entities = context.get("searchResults", List.class);
         serviceReport.buildReport(report, reportNo, entities);
@@ -44,7 +44,8 @@ public class APIReportSteps extends APISteps {
 
     @When("I send delete a report request")
     public void sendDeleteReportRequest() {
-        //        serviceReport.remove(lastReport);
+        Report lastReport = Entities.getReports().getLatest();
+        serviceReport.remove(lastReport);
     }
 
     @Then("Report is created")

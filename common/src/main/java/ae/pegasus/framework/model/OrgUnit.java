@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+
 @JsonPropertyOrder({
         "orgUnitId",
         "orgUnitName"
@@ -36,5 +37,4 @@ public class OrgUnit {
     public void setOrgUnitName(String orgUnitName) {
         this.orgUnitName = orgUnitName;
     }
-
 }
