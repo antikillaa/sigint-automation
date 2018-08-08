@@ -6,7 +6,7 @@ import ae.pegasus.framework.model.ReportPayload;
 
 public class ReportRequest extends HttpRequest {
 
-    private final static String URI = "/api/reports/workflows/3/perform-action/";
+    private final static String URI = "/api/reports/workflows/3/";
 
     public ReportRequest() {
         super(URI);
@@ -16,7 +16,7 @@ public class ReportRequest extends HttpRequest {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "1/")
+                .setURI(URI + "perform-action/1/")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;
@@ -26,14 +26,16 @@ public class ReportRequest extends HttpRequest {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "3/")
+                .setURI(URI + "perform-action/3/")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;
     }
 
-    public ReportRequest view() {
-        //TODO
+    public ReportRequest view(String id) {
+        this
+                .setURI(URI + "model/" + id + "?userAction=true")
+                .setHttpMethod(HttpMethod.GET);
         return this;
     }
 

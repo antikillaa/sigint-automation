@@ -12,11 +12,13 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
+import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemsFromList;
 
 public class ReportService implements EntityService<Report> {
 
@@ -71,7 +73,15 @@ public class ReportService implements EntityService<Report> {
 
     @Override
     public OperationResult<Report> view(String id) {
-        throw new NotImplementedException("");
+        log.info("View finder case id:" + id);
+        G4Response response = g4HttpClient.sendRequest(reportRequest.view(id));
+
+        OperationResult<Report> operationResult = new OperationResult<>(response, Report.class);
+        if (operationResult.isSuccess()) {
+            return operationResult;
+        } else {
+            throw new OperationResultError(operationResult);
+        }
     }
 
     public OperationResult<Result> generateNumber() {
@@ -105,23 +115,6 @@ public class ReportService implements EntityService<Report> {
         report.setSubject("qe_" + RandomStringUtils.randomAlphabetic(5));
     }
 
-    private void fillReportEvents(List<SearchRecord> entities, Report report) {
-        SearchRecord event = getRandomItemFromList(entities);
-        ReportEvent reportEvent = new ReportEvent();
-        reportEvent.setId(event.getId());
-        reportEvent.setOrder(0);
-        reportEvent.setType(event.getType());
-        reportEvent.setBody(JsonConverter.toJsonString(event));
-
-        SourceType source = new SourceType();
-        source.setEventFeed(String.valueOf(event.getEventFeed()));
-        source.setDataSource(event.getSourceType());
-        source.setSubSource(event.getRecordType());
-        source.setSubSourceId(String.valueOf(event.getAttributes().get("interceptorId")));
-        reportEvent.setSourceType(source);
-        report.setReportEvents(Collections.singletonList(reportEvent));
-    }
-
     private void fillReportOrgUnit(Report report) {
         User user = appContext.get().getLoggedUser().getUser();
         report.setCreatedByName(user.getName());
@@ -140,6 +133,45 @@ public class ReportService implements EntityService<Report> {
         orgUnit.setOrgUnitId("00-" + teamID);
         orgUnit.setOrgUnitName(organization.getFullName());
         report.setOrgUnits(Collections.singletonList(orgUnit));
+    }
+
+    private void fillReportEvent(List<SearchRecord> entities, Report report) {
+        SearchRecord event = getRandomItemFromList(entities);
+        ReportEvent reportEvent = new ReportEvent();
+        reportEvent.setId(event.getId());
+        reportEvent.setOrder(0);
+        reportEvent.setType(event.getType());
+        reportEvent.setBody(JsonConverter.toJsonString(event));
+
+        SourceType source = new SourceType();
+        source.setEventFeed(String.valueOf(event.getEventFeed()));
+        source.setDataSource(event.getSourceType());
+        source.setSubSource(event.getRecordType());
+        source.setSubSourceId(String.valueOf(event.getAttributes().get("interceptorId")));
+        reportEvent.setSourceType(source);
+        report.setReportEvents(Collections.singletonList(reportEvent));
+    }
+
+    private void fillReportEvents(List<SearchRecord> entities, Report report) {
+        List<SearchRecord> event = getRandomItemsFromList(entities, 100);
+        List<ReportEvent> reportEvents = new ArrayList<>();
+        for (int i = 0; i < event.size(); i++) {
+            ReportEvent reportEvent = new ReportEvent();
+            reportEvent.setOrder(i);
+            reportEvent.setId(event.get(i).getId());
+            reportEvent.setType(event.get(i).getType());
+            reportEvent.setBody(JsonConverter.toJsonString(event.get(i)));
+
+            SourceType source = new SourceType();
+            source.setEventFeed(String.valueOf(event.get(i).getEventFeed()));
+            source.setDataSource(event.get(i).getSourceType());
+            source.setSubSource(event.get(i).getRecordType());
+            source.setSubSourceId(String.valueOf(event.get(i).getAttributes().get("interceptorId")));
+
+            reportEvent.setSourceType(source);
+            reportEvents.add(reportEvent);
+        }
+        report.setReportEvents(reportEvents);
     }
 
     private void fillReportFinderFile(Report report) {

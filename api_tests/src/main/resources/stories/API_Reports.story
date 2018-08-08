@@ -27,9 +27,13 @@ When I send create a report request
 Then Request is successful
 And Report is created
 
+When I send view a report request
+Then Request is successful
+
+
 When I send delete a report request
 Then Request is successful
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
-| SIGINT | event | EventVO |      | 0 | 10 |
+| SIGINT | event | EventVO |      | 0 | 100 |

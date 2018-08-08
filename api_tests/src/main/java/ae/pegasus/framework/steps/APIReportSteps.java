@@ -48,6 +48,13 @@ public class APIReportSteps extends APISteps {
         serviceReport.remove(lastReport);
     }
 
+    @When("I send view a report request")
+    public void sendViewReportRequest() {
+        Report lastReport = Entities.getReports().getLatest();
+        String id = lastReport.getId();
+        serviceReport.view(id);
+    }
+
     @Then("Report is created")
     public void reportIsCreated() {
         Report lastreport = Entities.getReports().getLatest();
