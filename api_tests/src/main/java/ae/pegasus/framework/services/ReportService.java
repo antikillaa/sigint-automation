@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
 import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemsFromList;
@@ -153,7 +154,8 @@ public class ReportService implements EntityService<Report> {
     }
 
     private void fillReportEvents(List<SearchRecord> entities, Report report) {
-        List<SearchRecord> event = getRandomItemsFromList(entities, 100);
+        int randomNum = ThreadLocalRandom.current().nextInt(50, 150 + 1);
+        List<SearchRecord> event = getRandomItemsFromList(entities, randomNum);
         List<ReportEvent> reportEvents = new ArrayList<>();
 
         for (int i = 0; i < event.size(); i++) {

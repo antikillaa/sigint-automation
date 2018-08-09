@@ -5,6 +5,7 @@ Lifecycle:
 Before:
 
 Scenario: Create a report
+Meta: @wip
 Given I sign in as user with permissions FILE_VIEW, FILE_UPDATE, FILE_CREATE
 When I send create finder file request
 Then Request is successful
@@ -33,4 +34,4 @@ Then Request is successful
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
-| SIGINT | event | EventVO |      | 0 | 100 |
+| SIGINT | event | EventVO |      | 0 | 150 |
