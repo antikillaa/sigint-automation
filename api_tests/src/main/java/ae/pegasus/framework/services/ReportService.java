@@ -155,6 +155,7 @@ public class ReportService implements EntityService<Report> {
     private void fillReportEvents(List<SearchRecord> entities, Report report) {
         List<SearchRecord> event = getRandomItemsFromList(entities, 100);
         List<ReportEvent> reportEvents = new ArrayList<>();
+
         for (int i = 0; i < event.size(); i++) {
             ReportEvent reportEvent = new ReportEvent();
             reportEvent.setOrder(i);
