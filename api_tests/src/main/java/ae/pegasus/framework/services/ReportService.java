@@ -12,10 +12,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
@@ -82,6 +79,33 @@ public class ReportService implements EntityService<Report> {
             return operationResult;
         } else {
             throw new OperationResultError(operationResult);
+        }
+    }
+
+    public OperationResult submit(Report entity) {
+        log.info("Sending delete new report request...");
+
+        G4Response response = g4HttpClient.sendRequest(reportRequest.submit(entity));
+
+        OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
+    public OperationResult<List<CurrentOwner>> possibleOwners(Report entity) {
+        log.info("Sending possible owners request...");
+
+        G4Response response = g4HttpClient.sendRequest(reportRequest.possibleOwners(entity));
+
+        OperationResult<CurrentOwner[]> operationResult = new OperationResult<>(response, CurrentOwner[].class);
+        if (operationResult.isSuccess()) {
+            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
+        } else {
+            return new OperationResult<>(response);
         }
     }
 
@@ -190,5 +214,19 @@ public class ReportService implements EntityService<Report> {
         attributes.setIcon("far fa-folder");
         directCaseFile.setAttributes(attributes);
         report.setDirectCaseFiles(Collections.singletonList(directCaseFile));
+    }
+
+    public void setNextOwners(List<CurrentOwner> operationResult) {
+
+        List<NextOwners> nextOwners = new ArrayList<>();
+
+        for (int i = 0; i < operationResult.size(); i++) {
+            NextOwners nextOwner = new NextOwners();
+            nextOwner.setOwnerId(operationResult.get(i).getOwnerId());
+            nextOwner.setOwnerName(operationResult.get(i).getOwnerId());
+            nextOwner.setType(operationResult.get(i).getType());
+            nextOwners.add(nextOwner);
+        }
+//        operationResult.add(nextOwners);
     }
 }

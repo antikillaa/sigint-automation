@@ -55,6 +55,14 @@ public class APIReportSteps extends APISteps {
         serviceReport.view(id);
     }
 
+    @When("I send submit a report request")
+    public void sendSubmitReportRequest() {
+    }
+
+    @When("I send get owners a report request")
+    public void sendGetOwnersReportRequest() {
+    }
+
     @Then("Report is created")
     public void reportIsCreated() {
         Report lastreport = Entities.getReports().getLatest();

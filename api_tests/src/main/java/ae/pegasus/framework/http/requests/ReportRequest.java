@@ -39,4 +39,22 @@ public class ReportRequest extends HttpRequest {
         return this;
     }
 
+    public ReportRequest submit(Report report) {
+        ReportPayload reportPayload = new ReportPayload();
+        reportPayload.setData(report);
+        this
+                .setURI(URI + "perform-action/2")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(reportPayload);
+        return this;
+    }
+
+    public ReportRequest possibleOwners(Report report) {
+        this
+                .setURI(URI + "possible-owners/2")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(report);
+        return this;
+    }
+
 }
