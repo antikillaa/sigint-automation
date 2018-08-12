@@ -209,19 +209,19 @@ public class ExcelOpr {
         HashMap<String, ArrayList<String>> data = new HashMap<String, ArrayList<String>>();
         try {
             ArrayList<Integer> Rows = getallrowsbasedoncolvalue("Run Test", "Y");
-            // sheet = workbook.getSheetAt(1);
             int colCount = sheet.getRow(0).getPhysicalNumberOfCells();
-
             ArrayList<String> value = new ArrayList<String>();
             HashMap excelRowData = new HashMap();
             XSSFRow currentrow = null;
-
             for (int j = 1; j < colCount; j++) {
                 value.clear();
                 for (Integer row : Rows) {
                     currentrow = sheet.getRow(row);
                     if (currentrow.getCell(j) != null)
-                        value.add(currentrow.getCell(j).toString());
+                       // value.add(currentrow.getCell(j).toString());
+                    value.add(new DataFormatter().formatCellValue(currentrow.getCell(j)));
+
+
                     else
                         value.add("");
                 }
@@ -430,4 +430,6 @@ public class ExcelOpr {
             e.printStackTrace();
         }
     }
+
+
 }

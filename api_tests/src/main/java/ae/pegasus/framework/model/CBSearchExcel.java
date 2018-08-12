@@ -13,6 +13,7 @@ public class CBSearchExcel {
    // public ArrayList<String> output = new ArrayList<String>();
     public  HashMap<Integer, ArrayList<String>> outputdata = new HashMap<Integer, ArrayList<String>>();
     private ExcelOpr op;
+    public ArrayList<Integer> rows =new ArrayList<Integer>();
 
     public CBSearchExcel(String excelpath ) {
 
@@ -21,9 +22,10 @@ public class CBSearchExcel {
         op = new ExcelOpr(workingDir);
         exceldata = op.getExcelData();
         rowdata = op.Rowdata();
+        rows = op.getallrowsbasedoncolvalue("Run Test", "Y");
 
     }
-    public void getRequiredResult( int key ,int reposonsecode , int totalcount, String error)
+    public void getRequiredResult( int key ,int reposonsecode , int totalcount, String error,int row)
     {
 
         ArrayList copy = new ArrayList(exceldata.get(key));
@@ -38,7 +40,7 @@ public class CBSearchExcel {
        else
              copy.add(String.valueOf("FAIL"));
         outputdata.put(key, copy);
-        System.out.println(" the op is " + outputdata.get(key));
+       // System.out.println(" the op is " + outputdata.get(key));
 
     }
     public void writeOutputExcel(  )
