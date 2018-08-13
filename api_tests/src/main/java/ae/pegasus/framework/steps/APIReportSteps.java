@@ -1,15 +1,14 @@
 package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.model.Report;
-import ae.pegasus.framework.model.Result;
-import ae.pegasus.framework.model.SearchRecord;
+import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.ReportService;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -57,10 +56,20 @@ public class APIReportSteps extends APISteps {
 
     @When("I send submit a report request")
     public void sendSubmitReportRequest() {
+        Report lastreport = Entities.getReports().getLatest();
+        List<CurrentOwner> currentOwner = context.get("currentOwner", List.class);
+        List<NextOwners> allOwners = new ArrayList<>();
+        serviceReport.setNextOwners(currentOwner, allOwners);
+        lastreport.setNextOwners(allOwners);
+        context.put("reportInWorkflow", Report.class);
+        serviceReport.submit(lastreport);
     }
 
     @When("I send get owners a report request")
     public void sendGetOwnersReportRequest() {
+        Report lastreport = Entities.getReports().getLatest();
+        OperationResult<List<CurrentOwner>> currentOwner = serviceReport.possibleOwners(lastreport);
+        context.put("currentOwner", currentOwner.getEntity());
     }
 
     @Then("Report is created")
@@ -70,6 +79,12 @@ public class APIReportSteps extends APISteps {
         assertEquals(lastreport.getClassification(), createdReport.getClassification());
         assertEquals(lastreport.getReportNo(), createdReport.getReportNo());
         assertEquals(lastreport.getDescription(), createdReport.getDescription());
+    }
+
+    @Then("Report is submitted")
+    public void reportIsSubmitted() {
+        Report lastreport = Entities.getReports().getLatest();
+        assertEquals(lastreport.getState(), "Awaiting Review");
     }
 
 }

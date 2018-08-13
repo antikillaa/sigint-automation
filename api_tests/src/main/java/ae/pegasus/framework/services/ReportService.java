@@ -216,17 +216,13 @@ public class ReportService implements EntityService<Report> {
         report.setDirectCaseFiles(Collections.singletonList(directCaseFile));
     }
 
-    public void setNextOwners(List<CurrentOwner> operationResult) {
-
-        List<NextOwners> nextOwners = new ArrayList<>();
-
-        for (int i = 0; i < operationResult.size(); i++) {
+    public void setNextOwners(List<CurrentOwner> currentOwner, List<NextOwners> allOwners) {
+        for (int i = 0; i < currentOwner.size(); i++) {
             NextOwners nextOwner = new NextOwners();
-            nextOwner.setOwnerId(operationResult.get(i).getOwnerId());
-            nextOwner.setOwnerName(operationResult.get(i).getOwnerId());
-            nextOwner.setType(operationResult.get(i).getType());
-            nextOwners.add(nextOwner);
+            nextOwner.setOwnerId(currentOwner.get(i).getOwnerId());
+            nextOwner.setOwnerName(currentOwner.get(i).getOwnerName());
+            nextOwner.setType(currentOwner.get(i).getType());
+            allOwners.add(nextOwner);
         }
-//        operationResult.add(nextOwners);
     }
 }

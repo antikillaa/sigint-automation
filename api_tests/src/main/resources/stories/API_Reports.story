@@ -97,7 +97,7 @@ Examples:
 
 Scenario: Submit a report
 Meta:
-@wip
+
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -120,6 +120,7 @@ Then Request is successful
 
 When I send submit a report request
 Then Request is successful
+Then Report is submitted
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
