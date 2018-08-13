@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static ae.pegasus.framework.ingestion.IngestionService.INJECTIONS_FILE;
 import static ae.pegasus.framework.json.JsonConverter.jsonToObject;
@@ -251,8 +252,8 @@ public class APIProfileSteps extends APISteps {
         Profile target = jsonToObject(readTxtFile(targetFile), Profile.class);
 
         // set requirement permissions
-        Profile randomProfile = objectInitializer.randomEntity(Profile.class);
-        target.setReqPermissions(randomProfile.getReqPermissions());
+        ReqPermission reqPermission = objectInitializer.randomEntity(ReqPermission.class);
+        target.setReqPermissions(new ArrayList<>(Stream.of(reqPermission).collect(Collectors.toList())));
 
         // find target in system
         log.info("Try find target:" + target.getName() + " in system...");
