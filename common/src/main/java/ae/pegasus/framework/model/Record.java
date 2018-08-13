@@ -9,7 +9,6 @@ import ae.pegasus.framework.data_for_entity.data_providers.record.RecordTypeProv
 import ae.pegasus.framework.data_for_entity.data_types.FieldDataType;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import ae.pegasus.framework.utils.G4Date;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,7 +55,7 @@ public class Record extends G4Entity {
     private String imsi;
     private String originalId;
     @DataIgnore
-    private G4Date dateAndTime;
+    private Date dateAndTime;
     @WithFieldDataType(FieldDataType.DATE)
     private Date time;
     
@@ -146,11 +145,11 @@ public class Record extends G4Entity {
         this.originalId = originalId;
     }
 
-    public G4Date getDateAndTime() {
+    public Date getDateAndTime() {
         return dateAndTime;
     }
 
-    public void setDateAndTime(G4Date dateAndTime) {
+    public void setDateAndTime(Date dateAndTime) {
         this.dateAndTime = dateAndTime;
     }
 

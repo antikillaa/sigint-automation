@@ -6,13 +6,13 @@ import ae.pegasus.framework.controllers.TableController;
 import ae.pegasus.framework.errors.NotFoundException;
 import ae.pegasus.framework.model.Record;
 import ae.pegasus.framework.model.UIRecord;
-import org.apache.log4j.Logger;
 import ae.pegasus.framework.pages.SigintPage;
-import ae.pegasus.framework.utils.G4Date;
 import ae.pegasus.framework.utils.StringUtils;
+import org.apache.log4j.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public abstract class RecordsTableController extends TableController {
 
@@ -55,7 +55,7 @@ public abstract class RecordsTableController extends TableController {
         RecordRow row = (RecordRow) recordRow;
         Record newRecord = new UIRecord();
         try {
-            G4Date date = new G4Date(new SimpleDateFormat("d MMM, HH:mm yyyy").parse(row.getDate().replace("GMT", "") + "2016"));
+            Date date = new SimpleDateFormat("d MMM, HH:mm yyyy").parse(row.getDate().replace("GMT", "") + "2016");
             newRecord.setDateAndTime(date);
         } catch (ParseException e) {
             log.error(e.getMessage(), e);
