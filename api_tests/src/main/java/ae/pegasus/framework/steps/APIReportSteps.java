@@ -4,6 +4,7 @@ import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.ReportService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -83,6 +84,13 @@ public class APIReportSteps extends APISteps {
         serviceReport.approve(report);
     }
 
+    @When("I send return to author a report request")
+    public void sendReturnAuthorReportRequest() {
+        Report report = Entities.getReports().getLatest();
+        report.setComment("qe_" + RandomStringUtils.randomAlphabetic(5));
+        serviceReport.returnAuthor(report);
+    }
+
     @Then("Report is created")
     public void reportIsCreated() {
         Report lastreport = Entities.getReports().getLatest();
@@ -111,6 +119,13 @@ public class APIReportSteps extends APISteps {
         Report lastreport = Entities.getReports().getLatest();
         assertEquals(lastreport.getState(), "Approved");
         assertEquals(lastreport.getStateId(), "5");
+    }
+
+    @Then("Report is returned to author")
+    public void reportIsReturned() {
+        Report lastreport = Entities.getReports().getLatest();
+        assertEquals(lastreport.getState(), "Returned for Revision");
+        assertEquals(lastreport.getStateId(), "4");
     }
 
 }

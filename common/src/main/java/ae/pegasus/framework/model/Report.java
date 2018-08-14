@@ -97,6 +97,8 @@ public class Report extends G4Entity {
     private Integer version;
     @JsonProperty("nextOwners")
     private List<NextOwners> nextOwners = null;
+    @JsonProperty("comment")
+    private String comment;
 
     @JsonProperty("attachments")
     public List<Object> getAttachments() {
@@ -385,5 +387,13 @@ public class Report extends G4Entity {
 
     public void setNextOwners(List<NextOwners> nextOwners) {
         this.nextOwners = nextOwners;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

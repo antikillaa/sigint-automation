@@ -124,6 +124,20 @@ public class ReportService implements EntityService<Report> {
         return operationResult;
     }
 
+    public OperationResult returnAuthor(Report entity) {
+        log.info("Sending approve a report request...");
+
+        G4Response response = g4HttpClient.sendRequest(reportRequest.returnAuthor(entity));
+
+        OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
     public OperationResult<List<CurrentOwner>> possibleOwners(Report entity) {
         log.info("Sending possible owners request...");
 
