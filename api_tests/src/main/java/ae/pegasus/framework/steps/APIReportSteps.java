@@ -91,6 +91,13 @@ public class APIReportSteps extends APISteps {
         serviceReport.returnAuthor(report);
     }
 
+    @When("I send reject a report request")
+    public void sendRejectReportRequest() {
+        Report report = Entities.getReports().getLatest();
+        report.setComment("qe_" + RandomStringUtils.randomAlphabetic(5));
+        serviceReport.rejectReport(report);
+    }
+
     @Then("Report is created")
     public void reportIsCreated() {
         Report lastreport = Entities.getReports().getLatest();
@@ -128,4 +135,10 @@ public class APIReportSteps extends APISteps {
         assertEquals(lastreport.getStateId(), "4");
     }
 
+    @Then("Report is rejected")
+    public void reportIsRejected() {
+        Report lastreport = Entities.getReports().getLatest();
+        assertEquals(lastreport.getState(), "Rejected");
+        assertEquals(lastreport.getStateId(), "7");
+    }
 }
