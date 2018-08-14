@@ -106,7 +106,7 @@ public class APIReportSteps extends APISteps {
         assertEquals(lastreport.getStateId(), "3");
     }
 
-    @Then("Report approved")
+    @Then("Report is approved")
     public void reportIsApproved() {
         Report lastreport = Entities.getReports().getLatest();
         assertEquals(lastreport.getState(), "Approved");
