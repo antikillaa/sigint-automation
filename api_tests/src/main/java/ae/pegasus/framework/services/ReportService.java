@@ -110,10 +110,10 @@ public class ReportService implements EntityService<Report> {
         return operationResult;
     }
 
-    public OperationResult approve(Report entity) {
+    public OperationResult approveReport(Report entity) {
         log.info("Sending approve a report request...");
 
-        G4Response response = g4HttpClient.sendRequest(reportRequest.approve(entity));
+        G4Response response = g4HttpClient.sendRequest(reportRequest.approveReport(entity));
 
         OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
         if (operationResult.isSuccess()) {
@@ -142,6 +142,34 @@ public class ReportService implements EntityService<Report> {
         log.info("Sending reject a report request...");
 
         G4Response response = g4HttpClient.sendRequest(reportRequest.rejectReport(entity));
+
+        OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
+    public OperationResult cancelReportNotOwned(Report entity) {
+        log.info("Sending reject a report request...");
+
+        G4Response response = g4HttpClient.sendRequest(reportRequest.cancelReportNotOwned(entity));
+
+        OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
+    public OperationResult cancelReportOwned(Report entity) {
+        log.info("Sending reject a report request...");
+
+        G4Response response = g4HttpClient.sendRequest(reportRequest.cancelReportOwned(entity));
 
         OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
         if (operationResult.isSuccess()) {

@@ -240,8 +240,7 @@ Examples:
 | SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Reject a report
-Meta:
-@wip
+
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -273,6 +272,86 @@ Then Report is took ownership
 When I send reject a report request
 Then Request is successful
 Then Report is rejected
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event | EventVO |      | 0 | 150 |
+| SIGINT | entity| EntityVO|      | 0 | 150 |
+
+Scenario: Cancel a report with owner
+
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
+And CB search result list size < 1001
+And pageSize size in response < 1001
+
+When I send send generate report number request
+Then Request is successful
+
+When I send create a report request
+Then Request is successful
+And Report is created
+
+When I send view a report request
+Then Request is successful
+
+When I send get owners a report request
+Then Request is successful
+
+When I send submit a report request
+Then Request is successful
+Then Report is submitted
+
+When I send take ownership a report request
+Then Request is successful
+Then Report is took ownership
+
+When I send cancel a report request with owner
+Then Request is successful
+Then Report is canceled
+
+When I send view a report request
+Then Request is successful
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event | EventVO |      | 0 | 150 |
+| SIGINT | entity| EntityVO|      | 0 | 150 |
+
+Scenario: Cancel a report without owner
+
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
+And CB search result list size < 1001
+And pageSize size in response < 1001
+
+When I send send generate report number request
+Then Request is successful
+
+When I send create a report request
+Then Request is successful
+And Report is created
+
+When I send view a report request
+Then Request is successful
+
+When I send get owners a report request
+Then Request is successful
+
+When I send submit a report request
+Then Request is successful
+Then Report is submitted
+
+When I send cancel a report request without owner
+Then Request is successful
+Then Report is canceled
+
+When I send view a report request
+Then Request is successful
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |

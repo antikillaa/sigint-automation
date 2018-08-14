@@ -67,7 +67,7 @@ public class ReportRequest extends HttpRequest {
         return this;
     }
 
-    public ReportRequest approve(Report report) {
+    public ReportRequest approveReport(Report report) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
@@ -92,6 +92,26 @@ public class ReportRequest extends HttpRequest {
         reportPayload.setData(report);
         this
                 .setURI(URI + "perform-action/9")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(reportPayload);
+        return this;
+    }
+
+    public ReportRequest cancelReportOwned(Report report) {
+        ReportPayload reportPayload = new ReportPayload();
+        reportPayload.setData(report);
+        this
+                .setURI(URI + "perform-action/7")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(reportPayload);
+        return this;
+    }
+
+    public ReportRequest cancelReportNotOwned(Report report) {
+        ReportPayload reportPayload = new ReportPayload();
+        reportPayload.setData(report);
+        this
+                .setURI(URI + "perform-action/4")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;

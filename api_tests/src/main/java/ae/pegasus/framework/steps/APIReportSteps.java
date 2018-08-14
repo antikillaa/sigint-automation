@@ -81,7 +81,7 @@ public class APIReportSteps extends APISteps {
     @When("I send approve a report request")
     public void sendApproveReportRequest() {
         Report report = Entities.getReports().getLatest();
-        serviceReport.approve(report);
+        serviceReport.approveReport(report);
     }
 
     @When("I send return to author a report request")
@@ -98,6 +98,18 @@ public class APIReportSteps extends APISteps {
         serviceReport.rejectReport(report);
     }
 
+    @When("I send cancel a report request with owner")
+    public void sendCancelReportRequestWithOwner() {
+        Report report = Entities.getReports().getLatest();
+        serviceReport.cancelReportOwned(report);
+    }
+
+    @When("I send cancel a report request without owner")
+    public void sendCancelReportRequestWithoutOwner() {
+        Report report = Entities.getReports().getLatest();
+        serviceReport.cancelReportNotOwned(report);
+    }
+
     @Then("Report is created")
     public void reportIsCreated() {
         Report lastreport = Entities.getReports().getLatest();
@@ -105,6 +117,9 @@ public class APIReportSteps extends APISteps {
         assertEquals(lastreport.getClassification(), createdReport.getClassification());
         assertEquals(lastreport.getReportNo(), createdReport.getReportNo());
         assertEquals(lastreport.getDescription(), createdReport.getDescription());
+        assertEquals(lastreport.getState(), "Initial Draft");
+        assertEquals(lastreport.getStateId(), "1");
+        assertEquals(lastreport.getStateType(), "INITIAL");
     }
 
     @Then("Report is submitted")
@@ -112,6 +127,7 @@ public class APIReportSteps extends APISteps {
         Report lastreport = Entities.getReports().getLatest();
         assertEquals(lastreport.getState(), "Awaiting Review");
         assertEquals(lastreport.getStateId(), "2");
+        assertEquals(lastreport.getStateType(), "INITIAL");
     }
 
     @Then("Report is took ownership")
@@ -119,6 +135,7 @@ public class APIReportSteps extends APISteps {
         Report lastreport = Entities.getReports().getLatest();
         assertEquals(lastreport.getState(), "Under Review");
         assertEquals(lastreport.getStateId(), "3");
+        assertEquals(lastreport.getStateType(), "IN_PROGRESS");
     }
 
     @Then("Report is approved")
@@ -126,6 +143,7 @@ public class APIReportSteps extends APISteps {
         Report lastreport = Entities.getReports().getLatest();
         assertEquals(lastreport.getState(), "Approved");
         assertEquals(lastreport.getStateId(), "5");
+        assertEquals(lastreport.getStateType(), "FINAL");
     }
 
     @Then("Report is returned to author")
@@ -133,6 +151,7 @@ public class APIReportSteps extends APISteps {
         Report lastreport = Entities.getReports().getLatest();
         assertEquals(lastreport.getState(), "Returned for Revision");
         assertEquals(lastreport.getStateId(), "4");
+        assertEquals(lastreport.getStateType(), "IN_PROGRESS");
     }
 
     @Then("Report is rejected")
@@ -140,5 +159,14 @@ public class APIReportSteps extends APISteps {
         Report lastreport = Entities.getReports().getLatest();
         assertEquals(lastreport.getState(), "Rejected");
         assertEquals(lastreport.getStateId(), "7");
+        assertEquals(lastreport.getStateType(), "FINAL");
+    }
+
+    @Then("Report is canceled")
+    public void reportIsCanceled() {
+        Report lastreport = Entities.getReports().getLatest();
+        assertEquals(lastreport.getState(), "Cancelled");
+        assertEquals(lastreport.getStateId(), "6");
+        assertEquals(lastreport.getStateType(), "FINAL");
     }
 }
