@@ -61,7 +61,6 @@ public class APIReportSteps extends APISteps {
         List<NextOwners> allOwners = new ArrayList<>();
         serviceReport.setNextOwners(currentOwner, allOwners);
         lastreport.setNextOwners(allOwners);
-        context.put("reportInWorkflow", Report.class);
         serviceReport.submit(lastreport);
     }
 
@@ -70,6 +69,12 @@ public class APIReportSteps extends APISteps {
         Report lastreport = Entities.getReports().getLatest();
         OperationResult<List<CurrentOwner>> currentOwner = serviceReport.possibleOwners(lastreport);
         context.put("currentOwner", currentOwner.getEntity());
+    }
+
+    @When("I send take ownership a report request")
+    public void sendTakeOwnershipReportRequest() {
+        Report report = Entities.getReports().getLatest();
+        serviceReport.takeOwnership(report);
     }
 
     @Then("Report is created")
@@ -85,6 +90,14 @@ public class APIReportSteps extends APISteps {
     public void reportIsSubmitted() {
         Report lastreport = Entities.getReports().getLatest();
         assertEquals(lastreport.getState(), "Awaiting Review");
+        assertEquals(lastreport.getStateId(), "2");
+    }
+
+    @Then("Report is took ownership")
+    public void reportIsTookOwnerShip() {
+        Report lastreport = Entities.getReports().getLatest();
+        assertEquals(lastreport.getState(), "Under Review");
+        assertEquals(lastreport.getStateId(), "3");
     }
 
 }

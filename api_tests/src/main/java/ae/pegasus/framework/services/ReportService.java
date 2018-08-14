@@ -41,7 +41,7 @@ public class ReportService implements EntityService<Report> {
 
     @Override
     public OperationResult remove(Report entity) {
-        log.info("Sending delete new report request...");
+        log.info("Sending delete a report request...");
 
         G4Response response = g4HttpClient.sendRequest(reportRequest.remove(entity));
 
@@ -71,7 +71,7 @@ public class ReportService implements EntityService<Report> {
 
     @Override
     public OperationResult<Report> view(String id) {
-        log.info("View finder case id:" + id);
+        log.info("View report by id:" + id);
         G4Response response = g4HttpClient.sendRequest(reportRequest.view(id));
 
         OperationResult<Report> operationResult = new OperationResult<>(response, Report.class);
@@ -83,9 +83,23 @@ public class ReportService implements EntityService<Report> {
     }
 
     public OperationResult submit(Report entity) {
-        log.info("Sending delete new report request...");
+        log.info("Sending submit a new report request...");
 
         G4Response response = g4HttpClient.sendRequest(reportRequest.submit(entity));
+
+        OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
+    public OperationResult takeOwnership(Report entity) {
+        log.info("Sending take ownership a report request...");
+
+        G4Response response = g4HttpClient.sendRequest(reportRequest.takeOwnership(entity));
 
         OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
         if (operationResult.isSuccess()) {
