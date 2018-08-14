@@ -77,6 +77,12 @@ public class APIReportSteps extends APISteps {
         serviceReport.takeOwnership(report);
     }
 
+    @When("I send approve a report request")
+    public void sendApproveReportRequest() {
+        Report report = Entities.getReports().getLatest();
+        serviceReport.approve(report);
+    }
+
     @Then("Report is created")
     public void reportIsCreated() {
         Report lastreport = Entities.getReports().getLatest();
@@ -98,6 +104,13 @@ public class APIReportSteps extends APISteps {
         Report lastreport = Entities.getReports().getLatest();
         assertEquals(lastreport.getState(), "Under Review");
         assertEquals(lastreport.getStateId(), "3");
+    }
+
+    @Then("Report approved")
+    public void reportIsApproved() {
+        Report lastreport = Entities.getReports().getLatest();
+        assertEquals(lastreport.getState(), "Approved");
+        assertEquals(lastreport.getStateId(), "5");
     }
 
 }

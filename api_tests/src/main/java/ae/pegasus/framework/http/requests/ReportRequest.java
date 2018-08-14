@@ -67,4 +67,14 @@ public class ReportRequest extends HttpRequest {
         return this;
     }
 
+    public ReportRequest approve(Report report) {
+        ReportPayload reportPayload = new ReportPayload();
+        reportPayload.setData(report);
+        this
+                .setURI(URI + "perform-action/6")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(reportPayload);
+        return this;
+    }
+
 }
