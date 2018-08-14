@@ -3,7 +3,6 @@ package ae.pegasus.framework.services;
 import ae.pegasus.framework.errors.OperationResultError;
 import ae.pegasus.framework.http.G4Response;
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.http.requests.GenerateReportNumberRequest;
 import ae.pegasus.framework.http.requests.ReportRequest;
 import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.*;
@@ -22,7 +21,6 @@ public class ReportService implements EntityService<Report> {
 
     private static Logger log = Logger.getLogger(ReportService.class);
     private static ReportRequest reportRequest = new ReportRequest();
-    private static GenerateReportNumberRequest genereteReportNumberRequest = new GenerateReportNumberRequest();
 
     @Override
     public OperationResult<Report> add(Report entity) {
@@ -196,7 +194,7 @@ public class ReportService implements EntityService<Report> {
     public OperationResult<Result> generateNumber() {
         log.info("Sending create new report number request...");
 
-        G4Response response = g4HttpClient.sendRequest(genereteReportNumberRequest.generateNumber());
+        G4Response response = g4HttpClient.sendRequest(reportRequest.generateNumber());
 
         OperationResult<Result> operationResult = new OperationResult<>(response, Result.class);
         if (operationResult.isSuccess()) {

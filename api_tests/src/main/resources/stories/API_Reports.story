@@ -9,6 +9,8 @@ Then Request is successful
 Given I sign in as admin user
 
 Scenario: Create a report
+Meta:
+@wip
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -96,7 +98,6 @@ Examples:
 | SIGINT | event | type:"VSMS" | 0 | 100 |
 
 Scenario: Submit a report
-
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -127,7 +128,6 @@ Examples:
 | SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Take ownership a report
-
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -162,7 +162,6 @@ Examples:
 | SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Approve a report
-
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -201,7 +200,6 @@ Examples:
 | SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Return to author a report
-
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -240,7 +238,6 @@ Examples:
 | SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Reject a report
-
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -279,7 +276,6 @@ Examples:
 | SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Cancel a report with owner
-
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -321,7 +317,6 @@ Examples:
 | SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Cancel a report without owner
-
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0

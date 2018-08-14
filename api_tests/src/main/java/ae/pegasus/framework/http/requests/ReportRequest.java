@@ -12,6 +12,14 @@ public class ReportRequest extends HttpRequest {
         super(URI);
     }
 
+    public ReportRequest generateNumber() {
+        this
+                .setURI(URI + "generate-number/")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(null);
+        return this;
+    }
+
     public ReportRequest add(Report report) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
