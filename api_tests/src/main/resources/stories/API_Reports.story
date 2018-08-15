@@ -3,10 +3,9 @@ Meta:
 
 Lifecycle:
 Before:
-Given I sign in as user with permissions FILE_VIEW, FILE_UPDATE, FILE_CREATE
+Given I sign in as admin user
 When I send create finder file request
 Then Request is successful
-Given I sign in as admin user
 
 Scenario: Create a report
 
@@ -14,7 +13,7 @@ When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType
 Then Request is successful
 And CB search result list size > 0
 
-When I send send generate report number request
+When I send generate report number request
 Then Request is successful
 
 When I send create a report request
@@ -37,7 +36,7 @@ When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType
 Then Request is successful
 And CB search result list size > 0
 
-When I send send generate report number request
+When I send generate report number request
 Then Request is successful
 
 When I send create a report request
@@ -66,7 +65,7 @@ When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType
 Then Request is successful
 And CB search result list size > 0
 
-When I send send generate report number request
+When I send generate report number request
 Then Request is successful
 
 When I send create a report request
@@ -96,7 +95,7 @@ When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType
 Then Request is successful
 And CB search result list size > 0
 
-When I send send generate report number request
+When I send generate report number request
 Then Request is successful
 
 When I send create a report request
@@ -123,7 +122,7 @@ When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType
 Then Request is successful
 And CB search result list size > 0
 
-When I send send generate report number request
+When I send generate report number request
 Then Request is successful
 
 When I send create a report request
@@ -154,7 +153,7 @@ When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType
 Then Request is successful
 And CB search result list size > 0
 
-When I send send generate report number request
+When I send generate report number request
 Then Request is successful
 
 When I send create a report request
@@ -189,7 +188,7 @@ When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType
 Then Request is successful
 And CB search result list size > 0
 
-When I send send generate report number request
+When I send generate report number request
 Then Request is successful
 
 When I send create a report request
@@ -224,7 +223,7 @@ When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType
 Then Request is successful
 And CB search result list size > 0
 
-When I send send generate report number request
+When I send generate report number request
 Then Request is successful
 
 When I send create a report request
@@ -259,7 +258,7 @@ When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType
 Then Request is successful
 And CB search result list size > 0
 
-When I send send generate report number request
+When I send generate report number request
 Then Request is successful
 
 When I send create a report request
@@ -297,7 +296,7 @@ When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType
 Then Request is successful
 And CB search result list size > 0
 
-When I send send generate report number request
+When I send generate report number request
 Then Request is successful
 
 When I send create a report request
@@ -325,3 +324,51 @@ Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | SIGINT | event | EventVO |      | 0 | 150 |
 | SIGINT | entity| EntityVO|      | 0 | 150 |
+
+Scenario: Update a report
+Meta:
+@wip
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+
+When I send generate report number request
+Then Request is successful
+
+When I send create a report request
+Then Request is successful
+And Report is created
+
+When I send edit a report request
+Then Request is successful
+
+When I send get owners a report request
+Then Request is successful
+
+When I send submit a report request
+Then Request is successful
+Then Report is submitted
+
+When I send edit a report request
+Then Request is successful
+
+When I send get owners a report request
+Then Request is successful
+
+When I send submit a report request
+Then Request is successful
+Then Report is submitted
+
+When I send take ownership a report request
+Then Request is successful
+Then Report is took ownership
+
+When I send edit a report request
+Then Request is successful
+
+When I send delete a report request
+Then Request is successful
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event | EventVO |      | 0 | 10 |

@@ -20,6 +20,16 @@ public class ReportRequest extends HttpRequest {
         return this;
     }
 
+    public ReportRequest update(Report report) {
+        ReportPayload reportPayload = new ReportPayload();
+        reportPayload.setData(report);
+        this
+                .setURI(URI + "perform-action/1/")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(reportPayload);
+        return this;
+    }
+
     public ReportRequest add(Report report) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
