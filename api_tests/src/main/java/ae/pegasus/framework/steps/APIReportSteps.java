@@ -34,7 +34,7 @@ public class APIReportSteps extends APISteps {
         serviceReport.add(report);
     }
 
-    @When("I send send generate report number request")
+    @When("I send generate report number request")
     public void sendGenerateReportNumberRequest() {
         Result reportNo = new Result();
         OperationResult<Result> operationResult = serviceReport.generateNumber();
@@ -110,6 +110,15 @@ public class APIReportSteps extends APISteps {
         serviceReport.cancelReportNotOwned(report);
     }
 
+    @When("I send edit a report request")
+    public void sendEditReportRequest() {
+        Report report = Entities.getReports().getLatest();
+        report.setSubject("qe_" + RandomStringUtils.randomAlphabetic(10));
+        report.setDescription("qe_" + RandomStringUtils.randomAlphabetic(10));
+        context.put("report", Report.class);
+        serviceReport.update(report);
+    }
+
     @Then("Report is created")
     public void reportIsCreated() {
         Report lastreport = Entities.getReports().getLatest();
@@ -168,5 +177,18 @@ public class APIReportSteps extends APISteps {
         assertEquals(lastreport.getState(), "Cancelled");
         assertEquals(lastreport.getStateId(), "6");
         assertEquals(lastreport.getStateType(), "FINAL");
+    }
+
+    @Then("Report is updated")
+    public void reportIsUpdated() {
+        Report updatedReport = Entities.getReports().getLatest();
+        Report contextReport = context.get("report", Report.class);
+        reportCheck(updatedReport, contextReport);
+    }
+
+    private void reportCheck(Report updatedReport, Report contextReport) {
+        assertEquals(updatedReport.getSubject(), contextReport.getSubject());
+        assertEquals(updatedReport.getDescription(), contextReport.getDescription());
+
     }
 }
