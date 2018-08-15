@@ -133,18 +133,24 @@ public class APIWhitelistSteps extends APISteps {
     public void searchWhitelists(String criteria, String value) {
         Whitelist whitelist = context.get("whitelist", Whitelist.class);
 
-        if (criteria.toLowerCase().equals("identifier")) {
-            value = value.equals("random") ? whitelist.getIdentifier() : value;
-        } else if (criteria.toLowerCase().equals("description")) {
-            value = value.equals("random") ? whitelist.getDescription() : value;
-        } else if (criteria.toLowerCase().equals("type")) {
-            value = value.equals("random") ? String.valueOf(whitelist.getType()) : value;
-        } else if (criteria.toLowerCase().equals("updatedafter")) {
-            value = value.equals("random") ? String.valueOf(whitelist.getCreatedAt().getTime() - 60000) : value;
-        } else if (criteria.toLowerCase().equals("empty")) {
-            log.debug("Search without filter..");
-        } else {
-            throw new AssertionError("Unknown filter type");
+        switch (criteria.toLowerCase()) {
+            case "identifier":
+                value = value.equals("random") ? whitelist.getIdentifier() : value;
+                break;
+            case "description":
+                value = value.equals("random") ? whitelist.getDescription() : value;
+                break;
+            case "type":
+                value = value.equals("random") ? String.valueOf(whitelist.getType()) : value;
+                break;
+            case "updatedafter":
+                value = value.equals("random") ? String.valueOf(whitelist.getCreatedAt().getTime() - 60000) : value;
+                break;
+            case "empty":
+                log.debug("Search without filter..");
+                break;
+            default:
+                throw new AssertionError("Unknown filter type");
         }
 
         WhitelistFilter filter = new WhitelistFilter().filterBy(criteria, value);

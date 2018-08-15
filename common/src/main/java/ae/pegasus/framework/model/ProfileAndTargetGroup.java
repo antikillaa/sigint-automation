@@ -14,17 +14,17 @@ import java.util.ArrayList;
 public class ProfileAndTargetGroup extends AbstractEntity {
 
     @DataIgnore
-    private ProfileJsonType jsonType;
+    private ProfileType jsonType;
     @DataProvider(ProfileAndTargetGroupNameProvider.class)
     private String name;
     @WithCollectionSize(1)
     private ArrayList<ReqPermission> reqPermissions = new ArrayList<>();
 
-    public ProfileJsonType getJsonType() {
+    public ProfileType getJsonType() {
         return jsonType;
     }
 
-    public void setJsonType(ProfileJsonType jsonType) {
+    public void setJsonType(ProfileType jsonType) {
         this.jsonType = jsonType;
     }
 

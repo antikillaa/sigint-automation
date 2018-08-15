@@ -48,12 +48,15 @@ public class APITagSteps extends APISteps {
     public void searchTags(String criteria, String value) {
         Tag tag = context.get("tag", Tag.class);
 
-        if (criteria.toLowerCase().equals("name")) {
-            value = value.equals("random") ? tag.getName() : value;
-        } else if (criteria.toLowerCase().equals("empty")) {
-            log.debug("Search without filter..");
-        } else {
-            throw new AssertionError("Unknown filter type");
+        switch (criteria.toLowerCase()) {
+            case "name":
+                value = value.equals("random") ? tag.getName() : value;
+                break;
+            case "empty":
+                log.debug("Search without filter..");
+                break;
+            default:
+                throw new AssertionError("Unknown filter type");
         }
 
         TagFilter filter = new TagFilter().filterBy(criteria, value);

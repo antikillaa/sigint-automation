@@ -11,7 +11,6 @@ import ae.pegasus.framework.services.PermissionService;
 import ae.pegasus.framework.services.ResponsibilityService;
 import ae.pegasus.framework.services.TitleService;
 import ae.pegasus.framework.utils.RandomGenerator;
-import org.jbehave.core.annotations.AfterStory;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
@@ -238,20 +237,5 @@ public class APIPermissionManagementSteps extends APISteps {
         context.put("title", updatedTitle);
 
         titleService.update(updatedTitle);
-    }
-
-    @AfterStory
-    public void cleanUp() {
-        responsibilityService.removeAll();
-        OperationResult<List<Responsibility>> listResponsibility = responsibilityService.list();
-        listResponsibility.getEntity().stream()
-                .filter(responsibility -> responsibility.getDisplayName().contains("qe_"))
-                .forEach(responsibilityService::remove);
-
-        titleService.removeAll();
-        OperationResult<List<Title>> listTitle = titleService.list();
-        listTitle.getEntity().stream()
-                .filter(title -> title.getDisplayName().contains("qe_"))
-                .forEach(titleService::remove);
     }
 }

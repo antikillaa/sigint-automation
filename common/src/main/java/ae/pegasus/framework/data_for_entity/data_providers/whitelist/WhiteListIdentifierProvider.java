@@ -30,6 +30,11 @@ public class WhiteListIdentifierProvider extends DependencyDataProvider {
             case TWITTER_ID:
             case INSTAGRAM_ID:
             case DARK_WEB_AUTHOR_ID:
+
+            case GPLUS_ID:
+            case TUMBLR_ID:
+            case TUMBLR_HANDLE:
+            case INSTAGRAM_HANDLE:
                 identifier = RandomGenerator.generateID();
                 break;
             default:

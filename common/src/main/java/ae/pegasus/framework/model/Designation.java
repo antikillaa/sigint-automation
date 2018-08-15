@@ -1,6 +1,7 @@
 package ae.pegasus.framework.model;
 
 import ae.pegasus.framework.data_for_entity.annotations.DataIgnore;
+import ae.pegasus.framework.data_for_entity.annotations.WithDataSize;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -8,23 +9,24 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Designation extends BaseEntity {
 
-  private String name;
-  @DataIgnore
-  private Long version;
+    @WithDataSize(15)
+    private String name;
+    @DataIgnore
+    private Long version;
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public Long getVersion() {
-    return version;
-  }
+    public Long getVersion() {
+        return version;
+    }
 
-  public void setVersion(Long version) {
-    this.version = version;
-  }
+    public void setVersion(Long version) {
+        this.version = version;
+    }
 }

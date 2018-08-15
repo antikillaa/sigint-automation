@@ -117,14 +117,18 @@ public class APIDesignationsSteps extends APISteps {
   public void searchDesignations(String criteria, String value) {
     Designation designation = context.get("designation", Designation.class);
 
-    if (criteria.toLowerCase().equals("name")) {
-      value = value.equals("random") ? designation.getName() : value;
-    } else if (criteria.toLowerCase().equals("updatedafter")) {
-      value = value.equals("random") ? String.valueOf(designation.getCreatedAt().getTime() - 60000) : value;
-    } else if (criteria.toLowerCase().equals("empty")) {
-      log.debug("Search without filter..");
-    } else {
-      throw new AssertionError("Unknown filter type");
+    switch (criteria.toLowerCase()) {
+      case "name":
+        value = value.equals("random") ? designation.getName() : value;
+        break;
+      case "updatedafter":
+        value = value.equals("random") ? String.valueOf(designation.getCreatedAt().getTime() - 60000) : value;
+        break;
+      case "empty":
+        log.debug("Search without filter..");
+        break;
+      default:
+        throw new AssertionError("Unknown filter type");
     }
 
     DesignationFilter filter = new DesignationFilter().filterBy(criteria, value);

@@ -1,4 +1,6 @@
 Meta:
+@story cbFinderCase
+
 
 Narrative:
 CB-11288 Cases CRUD
@@ -15,7 +17,7 @@ OU. Required. [Hardcoded value for the scope of this story]
 4. User can delete an empty case.
 5. A case can belong to only one file
 6. A case must be the leaf node in a file hierarchy in the sense that a case cannot contain files or other cases.
-Meta: @story cbFinderCase
+
 Lifecycle:
 Before:
 Given I sign in as user with permissions FILE_CREATE, FILE_VIEW

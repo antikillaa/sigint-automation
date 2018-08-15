@@ -1,6 +1,6 @@
 package ae.pegasus.framework.services;
 
-import ae.pegasus.framework.data_for_entity.data_providers.user_password.UserPasswordProvider;
+import ae.pegasus.framework.data_for_entity.data_providers.user.UserPasswordProvider;
 import ae.pegasus.framework.error_reporter.ErrorReporter;
 import ae.pegasus.framework.http.G4Response;
 import ae.pegasus.framework.http.OperationResult;
@@ -8,10 +8,13 @@ import ae.pegasus.framework.http.requests.ChangePasswordRequest;
 import ae.pegasus.framework.http.requests.UserRequest;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
+import ae.pegasus.framework.utils.StringUtils;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
@@ -24,16 +27,17 @@ public class UserService implements EntityService<User> {
     private static final UserRequest request = new UserRequest();
     private static final ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
     private static String defaultTeamId;
-    private static Map<String, List<User>> permissionUserMap = new HashMap<>();
+    private static Map<String, List<User>> permissionsUsersMap = new HashMap<>();
+    private static OrganizationService organizationService = new OrganizationService();
 
     private static TitleService titleService = new TitleService();
     private static ResponsibilityService responsibilityService = new ResponsibilityService();
 
     private static final int PASSWORD_LENGTH = 10;
 
-    public static String getDefaultTeamId() {
+    public static String getOrCreateDefaultTeamId() {
         if (defaultTeamId == null) {
-            defaultTeamId = new OrganizationService().getOrCreateByName("QE auto team").getId();
+            defaultTeamId = organizationService.getOrCreateTeamByName("QE auto team").getId();
         }
         return defaultTeamId;
     }
@@ -80,9 +84,10 @@ public class UserService implements EntityService<User> {
         if (operationResult.isSuccess()) {
             Entities.getUsers().removeEntity(entity);
             Entities.getOrganizations().removeEntity(entity);
-            permissionUserMap.values()
+
+            permissionsUsersMap.values()
                     .forEach(users -> users
-                            .removeIf(user -> user.getName().equals(entity.getName())));
+                            .removeIf(user -> Objects.equals(user.getName(), entity.getName())));
         }
         return operationResult;
     }
@@ -222,25 +227,26 @@ public class UserService implements EntityService<User> {
         }
     }
 
-    public User createUserWithPermissions(String... permissions) {
+    public User createUserWithPermissions(String permString) {
         User user = User.newBuilder()
                 .randomUser()
-                .withPermission(permissions)
+                .withPermission(StringUtils.splitToArray(permString))
                 .withAllClassification()
                 .withAllSources()
                 .build();
 
-        return createUserWithPermissions(user);
+        return createUserWithPermissions(user, null);
     }
 
     public User createUserWithPermissions(User user) {
-        // create permissions
-        List<String> permissions = user.getDefaultPermission().getActions();
-        Responsibility responsibility = responsibilityService.createWithPermissions(permissions.toArray(new String[0]));
-        Title title = titleService.createWithResponsibility(responsibility);
+        return createUserWithPermissions(user, null);
+    }
 
+    public User createUserWithPermissions(User user, String orgUnitID) {
         // update orgUnits
-        user = addOrgUnitWithTitles(user, getDefaultTeamId(), Collections.singletonList(title.getId()));
+        user = (orgUnitID == null || orgUnitID.isEmpty()) ?
+                addOrgUnit(user, getOrCreateDefaultTeamId()) :
+                addOrgUnit(user, orgUnitID);
 
         // create user
         OperationResult<User> userOperationResult = add(user);
@@ -258,7 +264,7 @@ public class UserService implements EntityService<User> {
         return user;
     }
 
-    public void setPermissions(User user, String... permissions) {
+    public void setPermissions(User user, List<String> permissions) {
         Responsibility responsibility = responsibilityService.createWithPermissions(permissions);
 
         // get user title
@@ -286,64 +292,39 @@ public class UserService implements EntityService<User> {
         return operationResults;
     }
 
-    private void initializeUserMap() {
-        List<Permission> existingPermissions = PermissionService.getPermissions();
-        if (existingPermissions.size() == 0) {
-            ErrorReporter.raiseError("List of permissions wasn't loaded");
-        }
-
-        existingPermissions.forEach(permission -> permissionUserMap.put(permission.getName(), new ArrayList<>()));
-    }
-
-    public List<User> getUsersWithPermissions(String... permissions) {
-        log.debug("Finding users with permissions: " + Arrays.toString(permissions));
-        if (permissionUserMap.isEmpty()) {
-            initializeUserMap();
-        }
-        List<User> users = new ArrayList<>();
-        for (String permission : permissions) {
-            try {
-                if (users.size() == 0) {
-                    users.addAll(permissionUserMap.get(permission));
-                } else {
-                    users.retainAll(permissionUserMap.get(permission));
-                    if (users.size() == 0) {
-                        log.debug("User with permissions: " + Arrays.toString(permissions) + "not found!");
-                        return users;
-                    }
-                }
-            } catch (NullPointerException e) {
-                throw new AssertionError("Permission: " + permission + "not found!");
-            }
-        }
-        log.debug("With permissions: " + Arrays.toString(permissions) + " users found: " + users.size());
-        return users;
-    }
-
-    public User getOrCreateUserWithPermissions(String... permissions) {
-        List<User> users = getUsersWithPermissions(permissions);
+    public User getOrCreateUserWithPermissions(String permString) {
+        log.info("Get Or Create User With Permissions: " + permString);
 
         User user;
-        if (users.size() == 0) {
-            user = createUserWithPermissions(permissions);
-            for (String permission : permissions) {
-                permissionUserMap.get(permission).add(user);
-            }
+        List<User> users = permissionsUsersMap.get(permString);
+        if (users == null || users.isEmpty()) {
+            log.info("Users with permissions: " + permString + " not found!\n" + "Create new user with permissions");
+            user = createUserWithPermissions(permString);
+            permissionsUsersMap.put(permString, Stream.of(user).collect(Collectors.toList()));
         } else {
+            log.info("With permissions: " + permString + " users found: " + users.size());
             user = getRandomItemFromList(users);
         }
         return user;
     }
 
-    public User addOrgUnitWithTitles(User user, String orgUnitId, List<String> titles) {
+    public User addOrgUnitWithTitles(User user, String orgUnitId, List<String> titleIDs) {
         user.getParentTeamIds().add(orgUnitId);
         user.getParentTeams().put(orgUnitId, Collections.singletonList("MEMBER"));
 
         TeamTitle teamTitle = new TeamTitle();
         teamTitle.setOrgUnitId(orgUnitId);
-        teamTitle.setTitles(titles);
+        teamTitle.setTitles(titleIDs);
         user.getDefaultPermission().getTeamTitles().add(teamTitle);
 
         return user;
+    }
+
+    public User addOrgUnit(User user, String orgUnitId) {
+        List<String> permissions = user.getDefaultPermission().getActions();
+        Responsibility responsibility = responsibilityService.createWithPermissions(permissions);
+        Title title = titleService.createWithResponsibility(responsibility);
+
+        return addOrgUnitWithTitles(user, orgUnitId, Collections.singletonList(title.getId()));
     }
 }

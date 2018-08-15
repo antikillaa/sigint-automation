@@ -2,7 +2,7 @@ package ae.pegasus.framework.model;
 
 import ae.pegasus.framework.data_for_entity.annotations.DataProvider;
 import ae.pegasus.framework.data_for_entity.annotations.WithCollectionSize;
-import ae.pegasus.framework.data_for_entity.data_providers.user_permissions.UserPermissionProvider;
+import ae.pegasus.framework.data_for_entity.data_providers.user.UserPermissionProvider;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;

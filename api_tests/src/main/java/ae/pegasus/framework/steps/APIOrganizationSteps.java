@@ -15,6 +15,7 @@ import java.util.List;
 
 import static ae.pegasus.framework.json.JsonConverter.jsonToObject;
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
+import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
 
 @SuppressWarnings("unchecked")
 public class APIOrganizationSteps extends APISteps {
@@ -27,22 +28,33 @@ public class APIOrganizationSteps extends APISteps {
     public void searchUsersAndTeamsByCriteria(String criteria, String value) {
         Organization organization = Entities.getOrganizations().getLatest();
 
-        if (criteria.toLowerCase().equals("name")) {
-            value = value.equals("random") ? organization.getFullName() : value;
-        } else if (criteria.toLowerCase().equals("orgtypes")) {
-            value = value.equals("random") ? organization.getOrganizationType().name() : value;
-        } else if (criteria.toLowerCase().equals("datasources")) {
-            value = value.equals("random") ? organization.getDefaultPermission().getRecord().getDataSources().toString() : value;
-        } else if (criteria.toLowerCase().equals("clearances")) {
-            value = value.equals("random") ? organization.getDefaultPermission().getRecord().getClearances().toString() : value;
-        } else if (criteria.toLowerCase().equals("titles")) {
-            value = value.equals("random") ? organization.getDefaultPermission().getTitles().toString() : value;
-        } else if (criteria.toLowerCase().equals("orgids")) {
-            value = value.equals("random") ? organization.getId() : value;
-        } else if (criteria.toLowerCase().equals("parentorgid")) {
-            value = value.equals("random") ? organization.getParentTeamId() : value;
-        } else {
-            throw new AssertionError("Unknown filter field for organization search: " + criteria);
+        switch (criteria.toLowerCase()) {
+            case "name":
+                value = value.equals("random") ? organization.getFullName() : value;
+                break;
+            case "orgtypes":
+                value = value.equals("random") ? organization.getOrganizationType().name() : value;
+                break;
+            case "datasources":
+                value = value.equals("random") ? organization.getDefaultPermission().getRecord().getDataSources().toString() : value;
+                break;
+            case "clearances":
+                value = value.equals("random") ? organization.getDefaultPermission().getRecord().getClearances().toString() : value;
+                break;
+            case "titles":
+                value = value.equals("random") ? organization.getDefaultPermission().getTitles().toString() : value;
+                break;
+            case "orgids":
+                value = value.equals("random") ? organization.getId() : value;
+                break;
+            case "parentorgid":
+                String parentTemId = organization.getParentTeamId() != null ?
+                        organization.getParentTeamId() :
+                        getRandomItemFromList(organization.getParentTeamIds());
+                value = value.equals("random") ? parentTemId : value;
+                break;
+            default:
+                throw new AssertionError("Unknown filter field for organization search: " + criteria);
         }
 
         OrganizationFilter filter = new OrganizationFilter().filterBy(criteria, value);

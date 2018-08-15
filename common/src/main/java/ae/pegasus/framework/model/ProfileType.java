@@ -2,6 +2,7 @@ package ae.pegasus.framework.model;
 
 public enum ProfileType {
 
-    Individual
+    Profile, Identifier, IdentifierSummary, VoiceFile,
+    File, EnrichedFile, FileMember, Case, EnrichedCase, RFA
 
 }

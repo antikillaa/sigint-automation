@@ -11,6 +11,8 @@ import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.Process;
 import org.apache.log4j.Logger;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -102,5 +104,13 @@ public class UploadFilesService {
         G4Response response = g4HttpClient.sendRequest(uploadFilesRequest.count(filter));
 
         return new OperationResult<>(response, Integer.class);
+    }
+
+    public File getContent(String fileId, String pathname)  {
+        try {
+            return g4HttpClient.downloadFile(uploadFilesRequest.getContent(fileId), pathname);
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
     }
 }

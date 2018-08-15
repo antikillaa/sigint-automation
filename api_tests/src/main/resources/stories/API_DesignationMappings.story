@@ -61,6 +61,7 @@ And Imported 5 designation-mappings, modified 5
 And I delete designation-mappings
 
 Scenario: Import non .csv file for designation-mapping records
+Meta: @notstage
 Given S - Fax files with 1 records are generated
 And I pick random file from ingestion files list
 When I send import designation-mappings request

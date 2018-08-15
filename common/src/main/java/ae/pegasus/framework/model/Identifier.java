@@ -17,7 +17,7 @@ import java.util.List;
 public class Identifier extends AbstractEntity {
 
     @DataIgnore
-    private ProfileJsonType jsonType = ProfileJsonType.Identifier;
+    private ProfileType jsonType = ProfileType.Identifier;
     private String name;
     @DataIgnore
     private Object properties;
@@ -35,11 +35,11 @@ public class Identifier extends AbstractEntity {
     @DataIgnore
     private List<String> targets;
 
-    public ProfileJsonType getJsonType() {
+    public ProfileType getJsonType() {
         return jsonType;
     }
 
-    public void setJsonType(ProfileJsonType jsonType) {
+    public void setJsonType(ProfileType jsonType) {
         this.jsonType = jsonType;
     }
 

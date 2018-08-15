@@ -117,18 +117,24 @@ public class WhitelistFilter extends SearchFilter<Whitelist> {
    * @return filter entity for whitelists
    */
   public WhitelistFilter filterBy(String criteria, String value) {
-    if (criteria.toLowerCase().equals("identifier")) {
-      this.setActiveFilter(this.new IdentifierFilter(value));
-    } else if (criteria.toLowerCase().equals("description")) {
-      this.setActiveFilter(this.new DescriptionFilter(value));
-    } else if (criteria.toLowerCase().equals("type")) {
-      this.setActiveFilter(this.new TypeFilter(value));
-    } else if (criteria.toLowerCase().equals("updatedafter")) {
-      this.setActiveFilter(this.new UpdateAfterFilter(new Date(Long.valueOf(value))));
-    } else if (criteria.toLowerCase().equals("empty")) {
-      this.setActiveFilter(this.new EmptyFilter());
-    } else {
-      throw new AssertionError("Unknown isAppliedToEntity type");
+    switch (criteria.toLowerCase()) {
+      case "identifier":
+        this.setActiveFilter(this.new IdentifierFilter(value));
+        break;
+      case "description":
+        this.setActiveFilter(this.new DescriptionFilter(value));
+        break;
+      case "type":
+        this.setActiveFilter(this.new TypeFilter(value));
+        break;
+      case "updatedafter":
+        this.setActiveFilter(this.new UpdateAfterFilter(new Date(Long.valueOf(value))));
+        break;
+      case "empty":
+        this.setActiveFilter(this.new EmptyFilter());
+        break;
+      default:
+        throw new AssertionError("Unknown isAppliedToEntity type");
     }
     return this;
   }

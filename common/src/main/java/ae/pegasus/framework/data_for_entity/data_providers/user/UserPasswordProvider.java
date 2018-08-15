@@ -1,4 +1,4 @@
-package ae.pegasus.framework.data_for_entity.data_providers.user_password;
+package ae.pegasus.framework.data_for_entity.data_providers.user;
 
 import ae.pegasus.framework.data_for_entity.data_providers.EntityDataProvider;
 import org.apache.commons.lang3.RandomStringUtils;

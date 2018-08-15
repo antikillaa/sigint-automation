@@ -58,14 +58,17 @@ public class TagFilter extends SearchFilter<Tag> {
      * @return filter entity for tags
      */
     public TagFilter filterBy(String criteria, String value) {
-        if (criteria.toLowerCase().equals("name")) {
-            this.name = value;
-            this.sortField = "name";
-            this.setActiveFilter(this.new NameFilter(value));
-        } else if (criteria.toLowerCase().equals("empty")) {
-            this.setActiveFilter(this.new EmptyFilter());
-        } else {
-            throw new AssertionError("Unknown isAppliedToEntity type");
+        switch (criteria.toLowerCase()) {
+            case "name":
+                this.name = value;
+                this.sortField = "name";
+                this.setActiveFilter(this.new NameFilter(value));
+                break;
+            case "empty":
+                this.setActiveFilter(this.new EmptyFilter());
+                break;
+            default:
+                throw new AssertionError("Unknown isAppliedToEntity type");
         }
         return this;
     }

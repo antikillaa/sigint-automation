@@ -3,8 +3,6 @@ package ae.pegasus.framework.services;
 import ae.pegasus.framework.errors.OperationResultError;
 import ae.pegasus.framework.http.G4Response;
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.http.requests.HttpRequest;
-import ae.pegasus.framework.http.requests.ProfileDraftRequest;
 import ae.pegasus.framework.http.requests.ProfileRequest;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
@@ -15,7 +13,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 
@@ -40,10 +37,7 @@ public class ProfileService implements EntityService<Profile> {
     public OperationResult remove(Profile entity) {
         log.info("Deleting profile id: " + entity.getId());
 
-        HttpRequest request = Objects.equals(entity.getJsonType(), ProfileJsonType.Draft) ?
-                new ProfileDraftRequest().delete(entity.getId()) :
-                new ProfileRequest().delete(entity.getId());
-        G4Response response = g4HttpClient.sendRequest(request);
+        G4Response response = g4HttpClient.sendRequest(request.delete(entity.getId()));
 
         OperationResult operationResult = new OperationResult<>(response, RequestResult.class);
         if (operationResult.isSuccess()) {
@@ -81,7 +75,6 @@ public class ProfileService implements EntityService<Profile> {
 
     public OperationResult<Profile> merge(Profile firstProfile, Profile secondProfile) {
         log.info("Merge two profile into one");
-        log.info("Create merged profile draft");
 
         G4Response response = g4HttpClient.sendRequest(request.merge(firstProfile.getId(), secondProfile.getId()));
 
@@ -164,7 +157,6 @@ public class ProfileService implements EntityService<Profile> {
     public OperationResult<List<SearchRecord>> getVoiceEvents(Profile profile) {
         log.info("Get voice events for profileId: " + profile.getId() + " name:" + profile.getName());
         G4Response response = g4HttpClient.sendRequest(request.voiceEvents(profile.getId()));
-        log.info(response.getCode() + " " + response.getMessage());
 
         OperationResult<SearchRecord[]> result = new OperationResult<>(response, SearchRecord[].class, "data");
         if (result.isSuccess()) {

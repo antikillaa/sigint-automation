@@ -98,11 +98,7 @@ Given I sign in as admin user
 When I send create finder file request
 Then Request is successful
 
-When I send create profile draft request
-Then Request is successful
-And Profile draft is correct
-When I add profile draft to finder file
-When I send publish profile draft request
+When I send create profile request
 Then Request is successful
 
 When I send create new child finder file request
@@ -120,13 +116,5 @@ When I send delete profile request
 Then Request is successful
 When I send delete finder file request
 Then Request is successful
-
 When I send delete finder file request
 Then Request is successful
-
-
-Scenario: Delete all empty files
-Meta: @skip
-Given I sign in as admin user
-When I send get root list of CBFinder request
-When I delete all empty files

@@ -1,11 +1,21 @@
 Meta:
 @story profile
 
+
 Lifecycle:
 Before:
 Given I sign in as admin user
 
 Scenario: Find in system or create test target from json
+Given Find or create test target from json:<target>
+
+Examples:
+| target | image |
+| profiles/Darkwing_Duck.json | profiles/Darkwing_Duck.jpg |
+| profiles/Launchpad_McQuack.json | profiles/Launchpad_McQuack.jpg |
+
+
+Scenario: Upload image to profiles
 Given Find or create test target from json:<target>
 When upload new target image:<image> to target
 Then Request is successful
@@ -49,7 +59,6 @@ When I send delete finder file request
 Then Request is successful
 
 Scenario: API.Merge two profiles into one
-Meta: @skip
 When I send create finder file request
 Then Request is successful
 When I send create profile request
@@ -59,17 +68,7 @@ Then Request is successful
 
 When I send merge two profile into one request
 Then Request is successful
-
-When I send get profile draft details request
-Then Request is successful
-And Merged profile draft is correct
-
-When I send publish profile draft request
-Then Request is successful
-
-When I send get profile details request
-Then Request is successful
-And Profile is correct
+And Merged profile is correct
 
 When I send get first merged profile details request
 Then Request is unsuccessful
@@ -134,11 +133,13 @@ Then Request is successful
 When I send create profile request
 Then Request is successful
 
-Given S - Voice files with 1 records are generated
+When I send CB search request - query:type:"CALL" AND HAS_VPRINT:"true", eventFeed:SIGINT, objectType:event, pageNumber:0, pageSize:1
+Then CB search result list size > 0
+When I download audioFile of call event from search results
 
 When upload audio file to profile
 Then uploaded audio file is processed
-When get voice events from profile
 When create voiceID for profile
+Then Request is successful
 When I send get profile details request
 Then profile contain created voiceID

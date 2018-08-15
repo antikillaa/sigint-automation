@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static ae.pegasus.framework.ingestion.IngestionService.INJECTIONS_FILE;
 import static ae.pegasus.framework.json.JsonConverter.jsonToObject;
@@ -83,6 +84,8 @@ public class APIProfileSteps extends APISteps {
     @When("I send get profile details request")
     public void getProfileDetails() {
         Profile profile = Entities.getProfiles().getLatest();
+        if (profile == null) profile = context.get("profile", Profile.class);
+
         OperationResult<Profile> result = service.view(profile.getId());
 
         if (result.isSuccess()) {
@@ -214,7 +217,7 @@ public class APIProfileSteps extends APISteps {
     }
 
     @When("send get profile identifierAggregations request")
-    public void getProfileidentifierAggregations() {
+    public void getProfileIdentifierAggregations() {
         Profile profile = context.get("profile", Profile.class);
 
         OperationResult<List<IdentifierSummary>> result = service.getIdentifierAggregations(profile.getId());
@@ -224,19 +227,24 @@ public class APIProfileSteps extends APISteps {
 
     @Then("identifierAggregations hit counts for:$identifierType of profile:$name should incremented")
     public void identifierAggregationsCountsShouldIncremented(String identifierType, String name) {
-        Profile profile = service.getByName(name);
-        List<IdentifierSummary> identifiers = profile.getIdentifiersSummary();
+        List<IdentifierSummary> identifiers = context.get("identifierSummaryList", List.class);
+        Profile profile = context.get("profile", Profile.class);
         List<IdentifierSummary> updatedIdentifiers = service.getIdentifierAggregations(profile.getId()).getEntity();
 
-        final Integer[] hitCount = {0};
-        identifiers.stream()
+        List<IdentifierSummary> prevIdentifierSummary = identifiers.stream()
                 .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
-                .forEach(identifier -> hitCount[0] -= identifier.getTargetHitsCount());
-        updatedIdentifiers.stream()
+                .collect(Collectors.toList());
+        List<IdentifierSummary> newIdentifierSummary = updatedIdentifiers.stream()
                 .filter(identifierSummary -> identifierSummary.getType() == IdentifierType.valueOf(identifierType))
-                .forEach(identifier -> hitCount[0] += identifier.getTargetHitsCount());
+                .collect(Collectors.toList());
 
-        assertTrue(hitCount[0].equals(1));
+        log.info("Previous:" + toJsonString(prevIdentifierSummary));
+        log.info("New:" + toJsonString(newIdentifierSummary));
+
+        final int[] hitCount = {0};
+        prevIdentifierSummary.forEach(identifier -> hitCount[0] -= identifier.getTargetHitsCount());
+        newIdentifierSummary.forEach(identifier -> hitCount[0] += identifier.getTargetHitsCount());
+        assertEquals(1, hitCount[0]);
     }
 
     @Given("Find or create test target from json:$target_file")
@@ -244,8 +252,8 @@ public class APIProfileSteps extends APISteps {
         Profile target = jsonToObject(readTxtFile(targetFile), Profile.class);
 
         // set requirement permissions
-        Profile randomProfile = objectInitializer.randomEntity(Profile.class);
-        target.setReqPermissions(randomProfile.getReqPermissions());
+        ReqPermission reqPermission = objectInitializer.randomEntity(ReqPermission.class);
+        target.setReqPermissions(new ArrayList<>(Stream.of(reqPermission).collect(Collectors.toList())));
 
         // find target in system
         log.info("Try find target:" + target.getName() + " in system...");
@@ -258,7 +266,7 @@ public class APIProfileSteps extends APISteps {
 
         // get only profiles
         OperationResult<List<ProfileAndTargetGroup>> operationResult = fileService.searchFileMembers(filter);
-        List<Profile> profiles = fileService.extractEntitiesByTypeFromResponse(operationResult, ProfileJsonType.Profile);
+        List<Profile> profiles = fileService.extractEntitiesByTypeFromResponse(operationResult, ProfileType.Profile);
 
         // filter them by exact name
         Profile finalTarget = target;
@@ -343,6 +351,8 @@ public class APIProfileSteps extends APISteps {
         Profile profile = context.get("profile", Profile.class);
         FileMetaData fileMetaData = context.get("fileMetaData", FileMetaData.class);
 
+        assertNotNull("Profile uploadedImage is null!", profile.getUploadedImage());
+
         Pattern pattern = Pattern.compile("(/api/upload-platform/files/).*(/content)");
         assertTrue(pattern.matcher(profile.getUploadedImage()).find());
         assertTrue(pattern.matcher(fileMetaData.getFileId()).find());
@@ -350,13 +360,8 @@ public class APIProfileSteps extends APISteps {
 
     @When("upload audio file to profile")
     public void uploadAudioFile() {
-        List<File> files = context.get("g4files", List.class);
-        Profile profile = context.get("profile", Profile.class);
-
-        File audioFile = files.stream()
-                .filter(file -> file.getName().contains(".wav"))
-                .findFirst().orElse(null);
-        assertNotNull(audioFile);
+        File audioFile = context.get("audioFile", File.class);
+        Profile profile = Entities.getProfiles().getLatest();
 
         OperationResult<VoiceFile> result = service.uploadAudioFile(profile, audioFile);
 
@@ -382,33 +387,26 @@ public class APIProfileSteps extends APISteps {
         }
         assertNotNull("Unable process uploaded audio voice", entities.getEntity(voiceFile.getVoiceEventId()));
 
-        context.put("voiceEvents", entities.getEntities());
-    }
-
-    @When("get voice events from profile")
-    public void createVoiceID() {
-        Profile profile = context.get("profile", Profile.class);
-
-        OperationResult<List<SearchRecord>> result = service.getVoiceEvents(profile);
-        context.put("voiceEvents", result.getEntity());
+        context.put("voiceEvent", entities.getEntity(voiceFile.getVoiceEventId()));
     }
 
     @When("create voiceID for profile")
     public void createVoiceIDForProfile() {
-        List<SearchRecord> voiceEvents = context.get("voiceEvents", List.class);
+        SearchRecord voiceEvent = context.get("voiceEvent", SearchRecord.class);
         Profile profile = context.get("profile", Profile.class);
 
-        SearchRecord voiceEvent = voiceEvents.stream()
-                .filter(cbEntity -> cbEntity.getAttributes() != null)
-                .findAny().orElse(null);
-        assertNotNull("Unable find voiceEvent with filled attributes", voiceEvent);
-        log.info(toJsonString(voiceEvent));
-
         // create VoiceID from random channel of random voice event in this target
+        List<String> channelId;
+        try {
+            channelId = (ArrayList<String>) voiceEvent.getAttributes().get("CHANNEL_ID");
+        } catch (NullPointerException e) {
+            throw new AssertionError("attribute CHANNEL_ID not found:\n" + toJsonString(voiceEvent));
+        }
+        assertFalse("CHANNEL_ID field is empty!\n" + toJsonString(voiceEvent),
+                channelId == null || channelId.isEmpty());
+
         VoiceRecord record = new VoiceRecord();
         record.setId(voiceEvent.getId());
-        List<String> channelId = (ArrayList<String>) voiceEvent.getAttributes().get("CHANNEL_ID");
-        assertFalse("CHANNEL_ID field is empty!\n" + toJsonString(voiceEvent), channelId.isEmpty());
         record.setChannel(Integer.valueOf(getRandomItemFromList(channelId)));
 
         Voice voice = new Voice();

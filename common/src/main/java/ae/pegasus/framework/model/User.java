@@ -6,7 +6,8 @@ import ae.pegasus.framework.data_for_entity.annotations.DataIgnore;
 import ae.pegasus.framework.data_for_entity.annotations.DataProvider;
 import ae.pegasus.framework.data_for_entity.annotations.WithDataSize;
 import ae.pegasus.framework.data_for_entity.data_providers.EmailProvider;
-import ae.pegasus.framework.data_for_entity.data_providers.user_password.UserPasswordProvider;
+import ae.pegasus.framework.data_for_entity.data_providers.user.UserPasswordProvider;
+import ae.pegasus.framework.services.UserService;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.*;
@@ -45,76 +46,17 @@ public class User extends Organization {
     @DataIgnore
     private Boolean locked = false;
     @DataIgnore
+    private List<String> roles = new ArrayList<>();
+
+    @DataIgnore
     private UserPermission effectivePermission = new UserPermission();
     @DataIgnore
     private Map<String, List<String>> parentTeams = new HashMap<>();
 
     public User() {
         setOrganizationType(OrganizationType.USER);
+        setDefaultPermission(new UserPermission());
     }
-
-    public static Builder newBuilder() {
-        return new User().new Builder();
-    }
-
-    public class Builder {
-
-        private Builder() {
-            // private constructor
-        }
-
-        public Builder randomUser() {
-            return new RandomEntities().randomEntity(User.class).new Builder();
-        }
-
-        public Builder withPermission(String... permissions) {
-            User.this.getDefaultPermission()
-                    .setActions(Stream.of(permissions).collect(Collectors.toList()));
-            return this;
-        }
-
-        public Builder withAllPermission() {
-            List<String> permissions = new ArrayList<>();
-            AppContext.get().getPermissions().forEach(permission -> permissions.add(permission.getName()));
-            User.this.getDefaultPermission()
-                    .setActions(permissions);
-            return this;
-        }
-
-        public Builder withClassification(String... classifications) {
-            User.this.getDefaultPermission().getRecord()
-                    .setClearances(Stream.of(classifications).collect(Collectors.toList()));
-            return this;
-        }
-
-        public Builder withAllClassification() {
-            User.this.getDefaultPermission().getRecord()
-                    .setClearances(Stream.of("TS-OS", "TS-CIO", "TS-SCI").collect(Collectors.toList()));
-            return this;
-        }
-
-        public Builder withSources(String... sources) {
-            User.this.getDefaultPermission().getRecord()
-                    .setDataSources(Stream.of(sources).collect(Collectors.toList()));
-            return this;
-        }
-
-        public Builder withAllSources() {
-            List<String> dataSources = new ArrayList<>();
-            AppContext.get().getDataSources().forEach(source -> dataSources.add(source.getName()));
-
-            User.this.getDefaultPermission().getRecord()
-                    .setDataSources(dataSources);
-            return this;
-        }
-
-        public User build() {
-            return User.this;
-        }
-    }
-
-    @DataIgnore
-    private List<String> roles = new ArrayList<>();
 
     public String toString() {
         return String.format("name:%s, password:%s", name, password);
@@ -238,5 +180,72 @@ public class User extends Organization {
 
     public void setLocked(Boolean locked) {
         this.locked = locked;
+    }
+
+
+    public static Builder newBuilder() {
+        return new User().new Builder();
+    }
+
+    public class Builder {
+
+        private Builder() {
+            // private constructor
+        }
+
+        public Builder randomUser() {
+            User user = new RandomEntities().randomEntity(User.class);
+
+            String defaultTeamId = UserService.getOrCreateDefaultTeamId();
+            user.getParentTeamIds().add(defaultTeamId);
+            user.getParentTeams().put(defaultTeamId, Collections.singletonList("MEMBER"));
+
+            return user.new Builder();
+        }
+
+        public Builder withPermission(String... permissions) {
+            User.this.getDefaultPermission()
+                    .setActions(Stream.of(permissions).collect(Collectors.toList()));
+            return this;
+        }
+
+        public Builder withAllPermission() {
+            List<String> permissions = new ArrayList<>();
+            AppContext.get().getPermissions().forEach(permission -> permissions.add(permission.getName()));
+            User.this.getDefaultPermission()
+                    .setActions(permissions);
+            return this;
+        }
+
+        public Builder withClassification(String... classifications) {
+            User.this.getDefaultPermission().getRecord()
+                    .setClearances(Stream.of(classifications).collect(Collectors.toList()));
+            return this;
+        }
+
+        public Builder withAllClassification() {
+            User.this.getDefaultPermission().getRecord()
+                    .setClearances(Stream.of("TS-OS", "TS-CIO", "TS-SCI").collect(Collectors.toList()));
+            return this;
+        }
+
+        public Builder withSources(String... sources) {
+            User.this.getDefaultPermission().getRecord()
+                    .setDataSources(Stream.of(sources).collect(Collectors.toList()));
+            return this;
+        }
+
+        public Builder withAllSources() {
+            List<String> dataSources = new ArrayList<>();
+            AppContext.get().getDataSources().forEach(source -> dataSources.add(source.getName()));
+
+            User.this.getDefaultPermission().getRecord()
+                    .setDataSources(dataSources);
+            return this;
+        }
+
+        public User build() {
+            return User.this;
+        }
     }
 }

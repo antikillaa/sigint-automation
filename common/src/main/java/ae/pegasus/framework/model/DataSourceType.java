@@ -7,6 +7,7 @@ import java.util.Random;
 
 public enum DataSourceType {
 
+    DU,
     E,
     F,
     S,

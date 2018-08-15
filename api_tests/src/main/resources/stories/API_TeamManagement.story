@@ -1,6 +1,7 @@
 Meta:
 @story teamManagement
 
+
 Lifecycle:
 Before:
 Given I sign in as user with permissions UM_ADMIN
@@ -66,6 +67,7 @@ And Team is correct
 
 
 Scenario: User is able to search/filter teams
+Meta: @skip
 When I send create a new team
 Then Request is successful
 

@@ -1,13 +1,12 @@
 package ae.pegasus.framework.steps;
 
-import ae.pegasus.framework.data_for_entity.data_providers.user_password.UserPasswordProvider;
+import ae.pegasus.framework.data_for_entity.data_providers.user.UserPasswordProvider;
 import ae.pegasus.framework.error_reporter.ErrorReporter;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.json.JsonConverter;
-import ae.pegasus.framework.model.Team;
+import ae.pegasus.framework.model.TeamTitle;
 import ae.pegasus.framework.model.User;
 import ae.pegasus.framework.model.entities.Entities;
-import ae.pegasus.framework.services.TeamService;
 import ae.pegasus.framework.services.UserService;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
@@ -17,12 +16,13 @@ import org.junit.Assert;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.Assert.assertNotNull;
+
 @SuppressWarnings("unchecked")
 public class APIUserSteps extends APISteps {
 
     private Logger log = Logger.getLogger(APIUserSteps.class);
     private UserService service = new UserService();
-    private TeamService teamService = new TeamService();
 
     private static final int PASSWORD_LENGTH = 10;
     private static final int LOGIN_DELAY = 5000;
@@ -46,7 +46,7 @@ public class APIUserSteps extends APISteps {
     }
 
     static User getRandomUser() {
-        return objectInitializer.randomEntity(User.class);
+        return User.newBuilder().randomUser().build();
     }
 
     @When("I send delete user request")
@@ -88,13 +88,12 @@ public class APIUserSteps extends APISteps {
     public void createNewUser() {
         User user = getRandomUser();
 
-        if (UserService.getDefaultTeamId() == null) {
-            log.info("Create default team");
-            Team team = objectInitializer.randomEntity(Team.class);
-            String teamId = teamService.add(team).getEntity().getId();
-            UserService.setDefaultTeamId(teamId);
-        }
-        user.setParentTeamId(UserService.getDefaultTeamId());
+        TeamTitle teamTitle = appContext.getLoggedUser().getUser().getDefaultPermission()
+                .getTeamTitles().stream()
+                .findAny().orElse(null);
+        assertNotNull(teamTitle);
+
+        user = service.addOrgUnitWithTitles(user, teamTitle.getOrgUnitId(), teamTitle.getTitles());
 
         context.put("user", user);
         service.add(user);

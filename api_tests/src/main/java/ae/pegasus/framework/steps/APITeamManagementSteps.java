@@ -1,7 +1,6 @@
 package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.data_for_entity.RandomEntities;
-import ae.pegasus.framework.errors.NullReturnException;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.Team;
 import ae.pegasus.framework.model.entities.Entities;
@@ -126,7 +125,7 @@ public class APITeamManagementSteps extends APISteps {
     }
 
     @When("I send delete parent team request")
-    public void deleteParentTeam() throws NullReturnException {
+    public void deleteParentTeam() {
         String parentTeamId = Entities.getTeams().getLatest().getParentTeamId();
         Team parentTeam = Entities.getTeams().getEntity(parentTeamId);
 

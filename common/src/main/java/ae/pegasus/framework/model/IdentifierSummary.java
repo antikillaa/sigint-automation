@@ -4,21 +4,21 @@ import java.util.List;
 
 public class IdentifierSummary extends AbstractEntity {
 
-    private ProfileJsonType jsonType = ProfileJsonType.IdentifierSummary;
+    private ProfileType jsonType = ProfileType.IdentifierSummary;
     private String name; //"474123449782275"
     private Object properties; //{}
     private List<String> sources; //["T"]
-    private Integer targetHitsCount;
+    private int targetHitsCount;
     private Integer targetMentionsCount;
     private IdentifierType type; //"IMSI"
     private ValidationStatus validationStatus; //null
     private String value; //"474123449782275"
 
-    public ProfileJsonType getJsonType() {
+    public ProfileType getJsonType() {
         return jsonType;
     }
 
-    public void setJsonType(ProfileJsonType jsonType) {
+    public void setJsonType(ProfileType jsonType) {
         this.jsonType = jsonType;
     }
 
@@ -46,11 +46,11 @@ public class IdentifierSummary extends AbstractEntity {
         this.sources = sources;
     }
 
-    public Integer getTargetHitsCount() {
+    public int getTargetHitsCount() {
         return targetHitsCount;
     }
 
-    public void setTargetHitsCount(Integer targetHitsCount) {
+    public void setTargetHitsCount(int targetHitsCount) {
         this.targetHitsCount = targetHitsCount;
     }
 

@@ -3,14 +3,9 @@ package ae.pegasus.framework.controllers;
 import ae.pegasus.framework.app_context.AppContext;
 import ae.pegasus.framework.http.G4HttpClient;
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.model.LoggedUser;
-import ae.pegasus.framework.model.RequestResult;
-import ae.pegasus.framework.model.Token;
-import ae.pegasus.framework.model.User;
+import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
-import ae.pegasus.framework.services.ResponsibilityService;
-import ae.pegasus.framework.services.TitleService;
-import ae.pegasus.framework.services.UserService;
+import ae.pegasus.framework.services.*;
 import ae.pegasus.framework.utils.StringUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStories;
@@ -74,6 +69,25 @@ public class APILogin {
         return operationResult;
     }
 
+    public OperationResult<Token> signInAsUser(String UserName , String Password) {
+        log.info("Signing in as user: " + UserName);
+
+        OperationResult<Token> operationResult = signService.signIn(UserName, Password);
+        if (operationResult.isSuccess()) {
+            Token token = operationResult.getEntity();
+            //  context.setLoggedUser(new LoggedUser(UserName , Password));
+            G4HttpClient.setCookie(Token.tokenCookieProperty, token.getValue());
+
+            //update user
+            OperationResult<User> meResult = new UserService().me();
+            User me = meResult.getEntity();
+            me.setPassword(Password);
+
+            context.setLoggedUser(new LoggedUser(me));
+        }
+        return operationResult;
+    }
+
     /**
      * Sign out as user
      *
@@ -94,8 +108,7 @@ public class APILogin {
     public void signInWithPermissions(String permString) {
         signInAsUser(ADMIN_ROLE);
 
-        String[] permissions = StringUtils.splitToArray(permString);
-        User user = userService.getOrCreateUserWithPermissions(permissions);
+        User user = userService.getOrCreateUserWithPermissions(permString);
         Assert.assertNotNull(user);
 
         signInAsUser(user);
@@ -103,7 +116,7 @@ public class APILogin {
 
     @Given("Set new permissions: $permissions to current user and relogin")
     public void setNewPermissionToCurrentUserAndRelogin(String permString) {
-        String[] permissions = StringUtils.splitToArray(permString);
+        List<String> permissions = StringUtils.splitToList(permString);
 
         User currentUser = AppContext.get().getLoggedUser().getUser();
         signInAsUser(ADMIN_ROLE);
@@ -125,6 +138,29 @@ public class APILogin {
         User createdUser = userService.createUserWithPermissions(user);
         signInAsUser(createdUser);
     }
+
+
+    @Given("I sign in as user with orgUnits: $orgUnitsString")
+    public void signInAsUserWithOrgUnits(String orgUnitsString) {
+        String[] orgUnits = StringUtils.splitToArray(orgUnitsString);
+
+        User user = User.newBuilder()
+                .randomUser()
+                .withAllClassification()
+                .withAllPermission()
+                .withAllSources()
+                .build();
+
+        OrganizationService organizationService = new OrganizationService();
+        for (String orgUnit : orgUnits) {
+            Team team = organizationService.getOrCreateTeamByName(orgUnit);
+            userService.addOrgUnit(user, team.getId());
+        }
+
+        User createdUser = userService.createUserWithPermissions(user);
+        signInAsUser(createdUser);
+    }
+
 
     @AfterStories
     public void afterStoryTearDown() {

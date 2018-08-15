@@ -59,7 +59,7 @@ public class OrganizationService implements EntityService<Organization> {
         throw new NotImplementedException("");
     }
 
-    public Team getOrCreateByName(String orgName) {
+    public Team getOrCreateTeamByName(String orgName) {
         OrganizationFilter filter = new OrganizationFilter()
                 .setOrgTypes(Collections.singletonList("TEAM"))
                 .filterBy("name", orgName);
