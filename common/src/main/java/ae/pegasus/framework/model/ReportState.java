@@ -1,5 +1,5 @@
 package ae.pegasus.framework.model;
 
-public enum ReportStatus {
+public enum ReportState {
     DRAFT, UNASSIGNED, RETURNED, PUBLISHED
 }
