@@ -8,7 +8,6 @@ When I send create finder file request
 Then Request is successful
 
 Scenario: Create a report
-
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -30,6 +29,29 @@ Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | SIGINT | event | EventVO |      | 0 | 150 |
 | SIGINT | entity| EntityVO|      | 0 | 150 |
+
+Scenario: Delete a report
+
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+
+When I send generate report number request
+Then Request is successful
+
+When I send create a report request
+Then Request is successful
+And Report is created
+
+When I send delete a report request
+Then Request is successful
+
+When I send view a report request
+Then Request is unsuccessful
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event | EventVO |      | 0 | 10 |
 
 Scenario: Create a report. [SIGINT] Data Source filters.
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
@@ -326,8 +348,7 @@ Examples:
 | SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Update a report
-Meta:
-@wip
+
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0

@@ -81,10 +81,9 @@ public class ReportService implements EntityService<Report> {
 
         OperationResult<Report> operationResult = new OperationResult<>(response, Report.class);
         if (operationResult.isSuccess()) {
-            return operationResult;
-        } else {
-            throw new OperationResultError(operationResult);
+            Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
         }
+        return operationResult;
     }
 
     public OperationResult submit(Report entity) {
