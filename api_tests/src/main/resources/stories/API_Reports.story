@@ -9,14 +9,10 @@ Then Request is successful
 Given I sign in as admin user
 
 Scenario: Create a report
-Meta:
-@wip
+
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
-And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
-And CB search result list size < 1001
-And pageSize size in response < 1001
 
 When I send send generate report number request
 Then Request is successful
@@ -40,7 +36,6 @@ Scenario: Create a report. [SIGINT] Data Source filters.
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
-And CB search results contains only sourceType from query
 
 When I send send generate report number request
 Then Request is successful
@@ -70,7 +65,6 @@ Scenario: Create a report. [SIGINT] Record Type filters.
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
-And CB search results contains only recordType from query
 
 When I send send generate report number request
 Then Request is successful
@@ -101,9 +95,6 @@ Scenario: Submit a report
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
-And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
-And CB search result list size < 1001
-And pageSize size in response < 1001
 
 When I send send generate report number request
 Then Request is successful
@@ -131,9 +122,6 @@ Scenario: Take ownership a report
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
-And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
-And CB search result list size < 1001
-And pageSize size in response < 1001
 
 When I send send generate report number request
 Then Request is successful
@@ -165,9 +153,6 @@ Scenario: Approve a report
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
-And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
-And CB search result list size < 1001
-And pageSize size in response < 1001
 
 When I send send generate report number request
 Then Request is successful
@@ -203,9 +188,6 @@ Scenario: Return to author a report
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
-And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
-And CB search result list size < 1001
-And pageSize size in response < 1001
 
 When I send send generate report number request
 Then Request is successful
@@ -241,9 +223,6 @@ Scenario: Reject a report
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
-And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
-And CB search result list size < 1001
-And pageSize size in response < 1001
 
 When I send send generate report number request
 Then Request is successful
@@ -279,9 +258,6 @@ Scenario: Cancel a report with owner
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
-And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
-And CB search result list size < 1001
-And pageSize size in response < 1001
 
 When I send send generate report number request
 Then Request is successful
@@ -320,9 +296,6 @@ Scenario: Cancel a report without owner
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
-And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
-And CB search result list size < 1001
-And pageSize size in response < 1001
 
 When I send send generate report number request
 Then Request is successful

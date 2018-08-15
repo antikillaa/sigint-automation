@@ -172,8 +172,6 @@ public class ReportService implements EntityService<Report> {
         OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
         if (operationResult.isSuccess()) {
             Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
-        } else {
-            throw new OperationResultError(operationResult);
         }
         return operationResult;
     }
@@ -226,7 +224,7 @@ public class ReportService implements EntityService<Report> {
         User user = appContext.get().getLoggedUser().getUser();
         report.setCreatedByName(user.getName());
 
-        String teamID = UserService.getDefaultTeamId();
+        String teamID = UserService.getOrCreateDefaultTeamId();
         OrganizationFilter filter = new OrganizationFilter();
         OperationResult<List<Organization>> operationResult = new OrganizationService().search(filter);
         List<Organization> orgUnits = operationResult.getEntity();

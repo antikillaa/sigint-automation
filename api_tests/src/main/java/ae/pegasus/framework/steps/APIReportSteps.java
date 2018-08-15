@@ -28,7 +28,7 @@ public class APIReportSteps extends APISteps {
     public void sendReportRequest() {
         Report report = new Report();
         Result reportNo = context.get("reportNo", Result.class);
-        List<SearchRecord> entities = context.get("searchResults", List.class);
+        List<SearchRecord> entities = context.get("searchEntities", List.class);
         serviceReport.buildReport(report, reportNo, entities);
         context.put("report", report);
         serviceReport.add(report);
