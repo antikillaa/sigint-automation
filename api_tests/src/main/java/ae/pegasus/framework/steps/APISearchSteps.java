@@ -4,10 +4,13 @@ import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.http.OperationsResults;
 import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.*;
+import ae.pegasus.framework.services.SQMService;
 import ae.pegasus.framework.services.SearchService;
+import ae.pegasus.framework.utils.DateHelper;
 import ae.pegasus.framework.utils.StringUtils;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import org.jbehave.core.model.ExamplesTable;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -15,22 +18,20 @@ import java.util.stream.Collectors;
 
 import static ae.pegasus.framework.error_reporter.ErrorReporter.raiseError;
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
-import static ae.pegasus.framework.utils.DateHelper.inRange;
-import static ae.pegasus.framework.utils.DateHelper.stringToTimeRange;
+import static ae.pegasus.framework.utils.DateHelper.*;
 import static ae.pegasus.framework.utils.SearchQueryBuilder.recordStatusToQuery;
 import static ae.pegasus.framework.utils.SearchQueryBuilder.timeRangeToQuery;
 import static ae.pegasus.framework.utils.StepHelper.compareByCriteria;
 import static ae.pegasus.framework.utils.StringUtils.extractStringsInQuotes;
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertTrue;
 import static org.apache.commons.lang3.StringUtils.getLevenshteinDistance;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 @SuppressWarnings("unchecked")
 public class APISearchSteps extends APISteps {
 
     private static SearchService service = new SearchService();
+    private static SQMService sqmService = new SQMService();
+
     private static final String processIdQuery = "pid:";
 
     /**
@@ -70,12 +71,12 @@ public class APISearchSteps extends APISteps {
         OperationResult<List<SearchEntity>> operationResult = service.search(filter);
         List<SearchEntity> searchResults = operationResult.getEntity();
 
-        context.put("searchResults", searchResults);
+        context.put("searchEntities", searchResults);
         context.put("searchQuery", query);
         context.put("cbSearchFilter", filter);
     }
-    @When("Excel Driven Search ($excelpath)")
 
+    @When("Excel Driven Search ($excelpath)")
     public void ExcelDrivenSearch(String excelpath) {
         CBSearchExcel searchex = new CBSearchExcel(excelpath);
         OperationResult<List<SearchEntity>> operationResult = null;
@@ -88,7 +89,7 @@ public class APISearchSteps extends APISteps {
                         searchex.exceldata.get(key).get(3),searchex.exceldata.get(key).get(4));
                 operationResult = service.search(filter);
                 List<SearchEntity> searchResults = operationResult.getEntity();
-                context.put("searchResults", searchResults);
+                context.put("searchEntities", searchResults);
                 context.put("cbSearchFilter", filter);
 
                     cbSearchResultsContainsOnlySourceTypeAndObjectTypeRecords(searchex.exceldata.get(key).get(0), "EventVO");
@@ -113,7 +114,7 @@ public class APISearchSteps extends APISteps {
                 operationResult = service.search(filter);
 
                 List<SearchEntity> searchResults = operationResult.getEntity();
-                context.put("searchResults", searchResults);
+                context.put("searchEntities", searchResults);
                 context.put("cbSearchFilter", filter);
 
                 cbSearchResultsContainsOnlySourceTypeAndObjectTypeRecords(searchex.rowdata.get("Source Type").get(i), searchex.rowdata.get("EventOREntity").get(i));
@@ -146,6 +147,7 @@ public class APISearchSteps extends APISteps {
         }
         searchex.writeOutputExcel();
     }
+
     private void searchIngestedRecords(String objectType, String criteria, String size, String additionalQuery) {
         int expectedCount = Integer.valueOf(size);
 
@@ -174,7 +176,7 @@ public class APISearchSteps extends APISteps {
             actualCount = searchResults.size();
 
             if (compareByCriteria(criteria, actualCount, expectedCount)) {
-                context.put("searchResults", searchResults);
+                context.put("searchEntities", searchResults);
                 context.put("searchQuery", searchQuery);
                 return;
             }
@@ -198,7 +200,7 @@ public class APISearchSteps extends APISteps {
 
     @Then("CB search result list size $criteria $size")
     public void CBSearchListSizeShouldBe(String criteria, String size) {
-        List<SearchRecord> entities = context.get("searchResults", List.class);
+        List<SearchRecord> entities = context.get("searchEntities", List.class);
         String query = context.get("searchQuery", String.class);
 
         int expectedCount = Integer.valueOf(size);
@@ -236,7 +238,7 @@ public class APISearchSteps extends APISteps {
                     "0",
                     "100"
             );
-            List<SearchRecord> entities = context.get("searchResults", List.class);
+            List<SearchRecord> entities = context.get("searchEntities", List.class);
             if (entities.isEmpty()) {
                 // skip not designated records
                 continue;
@@ -283,7 +285,7 @@ public class APISearchSteps extends APISteps {
         if (criteria.equalsIgnoreCase("contains")) {
             searchable = true;
         }
-        List<SearchEntity> entities = context.get("searchResults", List.class);
+        List<SearchEntity> entities = context.get("searchEntities", List.class);
         String query = context.get("searchQuery", String.class);
 
 
@@ -358,13 +360,13 @@ public class APISearchSteps extends APISteps {
         OperationResult<List<SearchEntity>> operationResult = service.search(filter);
         List<SearchEntity> searchResults = operationResult.getEntity();
 
-        context.put("searchResults", searchResults);
+        context.put("searchEntities", searchResults);
         context.put("recordStatusFilter", recordStatus);
     }
 
     @Then("CB search results match the recordStatus filters")
     public void matchSearchResultsWithFilters() {
-        List<SearchRecord> entities = context.get("searchResults", List.class);
+        List<SearchRecord> entities = context.get("searchEntities", List.class);
         String[] recordStatuses = context.get("recordStatusFilter", String.class).split("\\s+");
 
         for (SearchRecord entity : entities) {
@@ -398,7 +400,7 @@ public class APISearchSteps extends APISteps {
 
     @Then("CB search results contains only eventFeed:$eventFeed and type:$resultType records")
     public void cbSearchResultsContainsOnlySourceTypeAndObjectTypeRecords(String eventFeed, String resultType) {
-        List<SearchEntity> entities = context.get("searchResults", List.class);
+        List<SearchEntity> entities = context.get("searchEntities", List.class);
         CBSearchFilter filter = context.get("cbSearchFilter", CBSearchFilter.class);
 
         SearchEntity entity = entities.stream()
@@ -419,7 +421,7 @@ public class APISearchSteps extends APISteps {
         String query = context.get("searchQuery", String.class);
         String dataSourceType = extractStringsInQuotes(query).get(0);
 
-        List<SearchRecord> entities = context.get("searchResults", List.class);
+        List<SearchRecord> entities = context.get("searchEntities", List.class);
 
         SearchRecord wrongEntity = entities.stream()
                 .filter(cbEntity -> !cbEntity.getSources().contains(dataSourceType))
@@ -433,7 +435,7 @@ public class APISearchSteps extends APISteps {
         String query = context.get("searchQuery", String.class);
         String subSource = extractStringsInQuotes(query).get(0);
 
-        List<SearchRecord> entities = context.get("searchResults", List.class);
+        List<SearchRecord> entities = context.get("searchEntities", List.class);
 
         SearchRecord wrongEntity = entities.stream()
                 .filter(cbEntity -> !cbEntity.getSubSourceType().contains(subSource))
@@ -447,7 +449,7 @@ public class APISearchSteps extends APISteps {
         String query = context.get("searchQuery", String.class);
         String recordType = extractStringsInQuotes(query).get(0);
 
-        List<SearchRecord> entities = context.get("searchResults", List.class);
+        List<SearchRecord> entities = context.get("searchEntities", List.class);
 
         SearchRecord wrongEntity = entities.stream()
                 .filter(cbEntity -> !cbEntity.getRecordType().contains(recordType))
@@ -467,14 +469,14 @@ public class APISearchSteps extends APISteps {
         OperationResult<List<SearchEntity>> operationResult = service.search(filter);
         List<SearchEntity> searchResults = operationResult.getEntity();
 
-        context.put("searchResults", searchResults);
+        context.put("searchEntities", searchResults);
         context.put("timeRange", timeRange);
         context.put("query", query);
     }
 
     @Then("CB search results contains only eventTime from query")
     public void cbSearchResultsContainsOnlyEventTimeFromQuery() {
-        List<SearchRecord> entities = context.get("searchResults", List.class);
+        List<SearchRecord> entities = context.get("searchEntities", List.class);
         TimeRange timeRange = context.get("timeRange", TimeRange.class);
         String query = context.get("query", String.class);
 
@@ -494,21 +496,75 @@ public class APISearchSteps extends APISteps {
 
         OperationResult<SearchResult[]> result = service.count(filter);
 
-        context.put("searchResult", result.getEntity());
+        context.put("searchResults", result.getEntity());
         context.put("searchQuery", query);
     }
 
     @Then("TotalCount's in search results $criteria $size")
     public void SearchResultTolalCountShouldBe(String criteria, String size) {
-        SearchResult[] searchResult = context.get("searchResult", SearchResult[].class);
+        SearchResult[] searchResults = context.get("searchResults", SearchResult[].class);
 
         int expectedCount = Integer.valueOf(size);
-        List<SearchResult> wrongResults = Arrays.stream(searchResult)
+        List<SearchResult> wrongResults = Arrays.stream(searchResults)
                 .filter(result -> !compareByCriteria(criteria, result.getTotalCount(), expectedCount))
                 .collect(Collectors.toList());
 
         assertTrue("Expected search results count " + criteria + " " + size + ", but was: " + toJsonString(wrongResults),
                 wrongResults.isEmpty());
+    }
 
+    @When("I send SQM search request - query:$query, sourceTypes:$sourceTypes, objectType:$objectType, pageNumber:$pageNumber, pageSize:$pageSize")
+    public void SQMSearch(String query, String sourceTypes, String objectType, String pageNumber, String pageSize) {
+        SearchQueueRequest request = new SearchQueueRequest();
+        request.setSourceType(StringUtils.splitToList(sourceTypes));
+        request.setQuery(query);
+        request.setObjectType(StringUtils.splitToList(objectType));
+        request.getPage().setPageNumber(Integer.valueOf(pageNumber));
+        request.getPage().setPageSize(Integer.valueOf(pageSize));
+
+        OperationResult<String> searchResults = sqmService.search(request);
+
+        context.put("searchQueueId", searchResults.getEntity());
+        context.put("searchQuery", query);
+    }
+
+    @When("SQM search completed")
+    public void SQMSearchCompleted() {
+        String searchQueueId = context.get("searchQueueId", String.class);
+
+        Integer WAITING_TIME = 3 * 60;
+        Integer POLLING_INTERVAL = 3;
+        Date deadline = DateHelper.getDateWithShift(WAITING_TIME);
+
+        SearchQueue searchQueue = sqmService.view(searchQueueId).getEntity();
+
+        while (searchQueue.getStatus() != SearchStatus.COMPLETED && !isTimeout(deadline)) {
+            DateHelper.waitTime(POLLING_INTERVAL);
+            searchQueue = sqmService.view(searchQueueId).getEntity();
+        }
+        assertTrue("Search queue id:" + searchQueueId + " not complete in time " + WAITING_TIME + "s",
+                searchQueue.getStatus() == SearchStatus.COMPLETED);
+
+        context.put("searchQueue", searchQueue);
+    }
+
+    @When("I get search queue results: $examplesTable")
+    public void getSearchQueueResults(ExamplesTable examplesTable) {
+        SearchQueue searchQueue = context.get("searchQueue", SearchQueue.class);
+
+        List<SearchResult<SearchEntity>> searchResults = new ArrayList<>();
+        for (Map<String, String> row : examplesTable.getRows()) {
+            String eventFeed = row.get("eventFeed");
+            String objectType = row.get("objectType");
+            String pageNumber = row.get("pageNumber");
+            String pageSize = row.get("pageSize");
+
+            SearchResult<SearchEntity> searchResult = sqmService.result(searchQueue.getUuid(),
+                    DataSourceCategory.valueOf(eventFeed), SearchObjectType.valueOf(objectType),
+                    Integer.valueOf(pageNumber), Integer.valueOf(pageSize)).getEntity();
+            searchResults.add(searchResult);
+        }
+
+        context.put("searchResults", searchResults.toArray(new SearchResult[0]));
     }
 }
