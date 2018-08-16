@@ -39,8 +39,22 @@ public class CBSearchExcel {
 
        else
              copy.add(String.valueOf("FAIL"));
+
         outputdata.put(key, copy);
        // System.out.println(" the op is " + outputdata.get(key));
+
+    }
+
+    public void getRequiredResult( int key ,int reposonsecode , int totalcount, String error,int row, Boolean entity)
+    {
+
+        ArrayList copy = new ArrayList(exceldata.get(key));
+        copy.add(String.valueOf(reposonsecode));
+        copy.add(String.valueOf(totalcount));
+        copy.add(String.valueOf(error));
+        copy.add(String.valueOf("FAIL"));
+        outputdata.put(key, copy);
+        // System.out.println(" the op is " + outputdata.get(key));
 
     }
     public void writeOutputExcel(  )
