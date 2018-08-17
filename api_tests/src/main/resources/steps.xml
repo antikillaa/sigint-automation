@@ -57,4 +57,6 @@
     </bean>
     <bean id="finderFileSteps" class="ae.pegasus.framework.steps.APIFinderFileSteps">
     </bean>
+    <bean id="RequestForInformationSteps" class="ae.pegasus.framework.steps.APIRequestForInformationSteps">
+    </bean>
 </beans>

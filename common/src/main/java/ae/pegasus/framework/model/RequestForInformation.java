@@ -1,0 +1,212 @@
+package ae.pegasus.framework.model;
+
+import com.fasterxml.jackson.annotation.*;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+
+@JsonPropertyOrder({
+        "priority",
+        "type",
+        "timeToResponse",
+        "nextOwners",
+        "orgUnits",
+        "manualNo",
+        "objectType",
+        "identifiers",
+        "internalRequestNo",
+        "classification",
+        "directFile",
+        "subject",
+        "required",
+        "links"
+})
+
+public class RequestForInformation extends G4Entity {
+
+    @JsonProperty("priority")
+    private String priority;
+    @JsonProperty("type")
+    private String type;
+    @JsonProperty("timeToResponse")
+    private Integer timeToResponse;
+    @JsonProperty("nextOwners")
+    private List<Object> nextOwners = null;
+    @JsonProperty("orgUnits")
+    private List<OrgUnit> orgUnits = null;
+    @JsonProperty("manualNo")
+    private String manualNo;
+    @JsonProperty("objectType")
+    private String objectType;
+    @JsonProperty("identifiers")
+    private List<Object> identifiers = null;
+    @JsonProperty("internalRequestNo")
+    private String internalRequestNo;
+    @JsonProperty("classification")
+    private String classification;
+    @JsonProperty("directFile")
+    private DirectCaseFile directFile;
+    @JsonProperty("subject")
+    private String subject;
+    @JsonProperty("required")
+    private String required;
+    @JsonProperty("links")
+    private List<Object> links = null;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+
+    @JsonProperty("priority")
+    public String getPriority() {
+        return priority;
+    }
+
+    @JsonProperty("priority")
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    @JsonProperty("type")
+    public String getType() {
+        return type;
+    }
+
+    @JsonProperty("type")
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @JsonProperty("timeToResponse")
+    public Integer getTimeToResponse() {
+        return timeToResponse;
+    }
+
+    @JsonProperty("timeToResponse")
+    public void setTimeToResponse(Integer timeToResponse) {
+        this.timeToResponse = timeToResponse;
+    }
+
+    @JsonProperty("nextOwners")
+    public List<Object> getNextOwners() {
+        return nextOwners;
+    }
+
+    @JsonProperty("nextOwners")
+    public void setNextOwners(List<Object> nextOwners) {
+        this.nextOwners = nextOwners;
+    }
+
+    @JsonProperty("orgUnits")
+    public List<OrgUnit> getOrgUnits() {
+        return orgUnits;
+    }
+
+    @JsonProperty("orgUnits")
+    public void setOrgUnits(List<OrgUnit> orgUnits) {
+        this.orgUnits = orgUnits;
+    }
+
+    @JsonProperty("manualNo")
+    public String getManualNo() {
+        return manualNo;
+    }
+
+    @JsonProperty("manualNo")
+    public void setManualNo(String manualNo) {
+        this.manualNo = manualNo;
+    }
+
+    @JsonProperty("objectType")
+    public String getObjectType() {
+        return objectType;
+    }
+
+    @JsonProperty("objectType")
+    public void setObjectType(String objectType) {
+        this.objectType = objectType;
+    }
+
+    @JsonProperty("identifiers")
+    public List<Object> getIdentifiers() {
+        return identifiers;
+    }
+
+    @JsonProperty("identifiers")
+    public void setIdentifiers(List<Object> identifiers) {
+        this.identifiers = identifiers;
+    }
+
+    @JsonProperty("internalRequestNo")
+    public String getInternalRequestNo() {
+        return internalRequestNo;
+    }
+
+    @JsonProperty("internalRequestNo")
+    public void setInternalRequestNo(String internalRequestNo) {
+        this.internalRequestNo = internalRequestNo;
+    }
+
+    @JsonProperty("classification")
+    public String getClassification() {
+        return classification;
+    }
+
+    @JsonProperty("classification")
+    public void setClassification(String classification) {
+        this.classification = classification;
+    }
+
+    @JsonProperty("directFile")
+    public DirectCaseFile getDirectFile() {
+        return directFile;
+    }
+
+    @JsonProperty("directFile")
+    public void setDirectFile(DirectCaseFile directFile) {
+        this.directFile = directFile;
+    }
+
+    @JsonProperty("subject")
+    public String getSubject() {
+        return subject;
+    }
+
+    @JsonProperty("subject")
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    @JsonProperty("required")
+    public String getRequired() {
+        return required;
+    }
+
+    @JsonProperty("required")
+    public void setRequired(String required) {
+        this.required = required;
+    }
+
+    @JsonProperty("links")
+    public List<Object> getLinks() {
+        return links;
+    }
+
+    @JsonProperty("links")
+    public void setLinks(List<Object> links) {
+        this.links = links;
+    }
+
+    @JsonAnyGetter
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    @JsonAnySetter
+    public void setAdditionalProperty(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
+}
