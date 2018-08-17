@@ -64,6 +64,20 @@ public class RequestForInformationService implements EntityService<RequestForInf
         return operationResult;
     }
 
+    public OperationResult<?> approve(RequestForInformation entity) {
+        log.info("Sending submit RFI request... :" + JsonConverter.toJsonString(entity));
+
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.approve(entity));
+
+        OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForInformations().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
     @Override
     public OperationResult<List<RequestForInformation>> search(SearchFilter filter) {
         return null;
@@ -161,13 +175,23 @@ public class RequestForInformationService implements EntityService<RequestForInf
         requestForInformation.setDirectFile(directCase);
     }
 
-    public void setNextOwners(List<CurrentOwner> currentOwner, List<NextOwners> allOwners) {
+    public void setNextOwnersMember(List<CurrentOwner> currentOwner, List<NextOwners> allOwners) {
         for (int i = 0; i < currentOwner.size(); i++) {
             NextOwners nextOwner = new NextOwners();
             nextOwner.setOwnerId(currentOwner.get(i).getOwnerId());
             nextOwner.setOwnerName(currentOwner.get(i).getOwnerName());
             nextOwner.setType(currentOwner.get(i).getType());
             allOwners.add(nextOwner);
+        }
+    }
+
+    public void setNextOwnersTeam(List<OrgUnit> currentOrgUnits, List<NextOwners> nextOwners) {
+        for (int i = 0; i < currentOrgUnits.size(); i++) {
+            NextOwners nextOwner = new NextOwners();
+            nextOwner.setOwnerId(currentOrgUnits.get(i).getOrgUnitId());
+            nextOwner.setOwnerName(currentOrgUnits.get(i).getOrgUnitName());
+            nextOwner.setType("TEAM");
+            nextOwners.add(nextOwner);
         }
     }
 }

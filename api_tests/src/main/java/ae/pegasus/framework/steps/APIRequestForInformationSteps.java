@@ -1,10 +1,7 @@
 package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.model.CurrentOwner;
-import ae.pegasus.framework.model.NextOwners;
-import ae.pegasus.framework.model.RequestForInformation;
-import ae.pegasus.framework.model.Result;
+import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.RequestForInformationService;
 import org.jbehave.core.annotations.Then;
@@ -62,9 +59,19 @@ public class APIRequestForInformationSteps extends APISteps {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
         List<CurrentOwner> currentOwner = context.get("currentOwner", List.class);
         List<NextOwners> allOwners = new ArrayList<>();
-        serviceRequestForInformation.setNextOwners(currentOwner, allOwners);
+        serviceRequestForInformation.setNextOwnersMember(currentOwner, allOwners);
         lastRFI.setNextOwners(allOwners);
         serviceRequestForInformation.submit(lastRFI);
+    }
+
+    @When("I Approve a RFI request")
+    public void sendApproveRFIRequest() {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        List<OrgUnit> currentOrgUnits = lastRFI.getOrgUnits();
+        List<NextOwners> nextOwners = new ArrayList<>();
+        serviceRequestForInformation.setNextOwnersTeam(currentOrgUnits, nextOwners);
+        lastRFI.setNextOwners(nextOwners);
+        serviceRequestForInformation.approve(lastRFI);
     }
 
     @Then("RFI is created")
@@ -82,6 +89,15 @@ public class APIRequestForInformationSteps extends APISteps {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
         assertEquals(lastRFI.getState(), "Awaiting Approval");
         assertEquals(lastRFI.getStateId(), "2");
+        assertEquals(lastRFI.getStateType(), "INITIAL");
+        assertEquals(lastRFI.getWfId(), "2");
+    }
+
+    @Then("RFI is approved")
+    public void rfiIsApproved() {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        assertEquals(lastRFI.getState(), "Awaiting Assignment");
+        assertEquals(lastRFI.getStateId(), "3");
         assertEquals(lastRFI.getStateType(), "INITIAL");
         assertEquals(lastRFI.getWfId(), "2");
     }

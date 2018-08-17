@@ -57,6 +57,16 @@ public class RequestForInformationRequest extends HttpRequest {
         return this;
     }
 
+    public RequestForInformationRequest approve(RequestForInformation requestForInformation) {
+        RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
+        requestForInformationPayload.setData(requestForInformation);
+        this
+                .setURI(URI + "2/perform-action/5/")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForInformationPayload);
+        return this;
+    }
+
     public RequestForInformationRequest possibleOwners(RequestForInformation requestForInformation) {
         this
                 .setURI(URI + "2/possible-owners/2")
