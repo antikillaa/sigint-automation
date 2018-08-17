@@ -7,8 +7,7 @@ Given I sign in as admin user
 When I send create finder file request
 Then Request is successful
 
-Scenario: Create a RFI
-
+Scenario: Create/Delete a RFI
 When I send generate RFI number request
 Then Request is successful
 
@@ -24,3 +23,21 @@ Then Request is successful
 
 When I send view a RFI request
 Then Request is unsuccessful
+
+Scenario: Submit a RFI
+When I send generate RFI number request
+Then Request is successful
+
+When I send create a RFI request
+Then Request is successful
+And RFI is created
+
+When I send view a RFI request
+Then Request is successful
+
+When I send get owners a RFI request
+Then Request is successful
+
+When I send submit a RFI request
+Then Request is successful
+Then RFI is submitted

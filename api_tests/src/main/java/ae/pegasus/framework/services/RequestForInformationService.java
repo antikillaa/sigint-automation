@@ -10,6 +10,7 @@ import ae.pegasus.framework.model.entities.Entities;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -39,6 +40,20 @@ public class RequestForInformationService implements EntityService<RequestForInf
         log.info("Sending delete a RFI request... :" + JsonConverter.toJsonString(entity));
 
         G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.remove(entity));
+
+        OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForInformations().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
+    public OperationResult<?> submit(RequestForInformation entity) {
+        log.info("Sending submit RFI request... :" + JsonConverter.toJsonString(entity));
+
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.submit(entity));
 
         OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
         if (operationResult.isSuccess()) {
@@ -89,6 +104,19 @@ public class RequestForInformationService implements EntityService<RequestForInf
         }
     }
 
+    public OperationResult<List<CurrentOwner>> possibleOwners(RequestForInformation entity) {
+        log.info("Sending possible owners request...");
+
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.possibleOwners(entity));
+
+        OperationResult<CurrentOwner[]> operationResult = new OperationResult<>(response, CurrentOwner[].class);
+        if (operationResult.isSuccess()) {
+            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
+        } else {
+            return new OperationResult<>(response);
+        }
+    }
+
     public void buildRFI(RequestForInformation requestForInformation, Result rfiNo) {
         fillRFIStaticData(requestForInformation);
         requestForInformation.setInternalRequestNo(rfiNo.getResult());
@@ -131,5 +159,15 @@ public class RequestForInformationService implements EntityService<RequestForInf
         directCase.setLinkName(finderFile.getName());
         directCase.setLinkType("FILE");
         requestForInformation.setDirectFile(directCase);
+    }
+
+    public void setNextOwners(List<CurrentOwner> currentOwner, List<NextOwners> allOwners) {
+        for (int i = 0; i < currentOwner.size(); i++) {
+            NextOwners nextOwner = new NextOwners();
+            nextOwner.setOwnerId(currentOwner.get(i).getOwnerId());
+            nextOwner.setOwnerName(currentOwner.get(i).getOwnerName());
+            nextOwner.setType(currentOwner.get(i).getType());
+            allOwners.add(nextOwner);
+        }
     }
 }

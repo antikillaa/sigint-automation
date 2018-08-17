@@ -36,7 +36,7 @@ public class RequestForInformation extends G4Entity {
     @JsonProperty("timeToResponse")
     private Integer timeToResponse;
     @JsonProperty("nextOwners")
-    private List<Object> nextOwners = null;
+    private List<NextOwners> nextOwners = null;
     @JsonProperty("orgUnits")
     private List<OrgUnit> orgUnits = null;
     @JsonProperty("manualNo")
@@ -113,12 +113,12 @@ public class RequestForInformation extends G4Entity {
     }
 
     @JsonProperty("nextOwners")
-    public List<Object> getNextOwners() {
+    public List<NextOwners> getNextOwners() {
         return nextOwners;
     }
 
     @JsonProperty("nextOwners")
-    public void setNextOwners(List<Object> nextOwners) {
+    public void setNextOwners(List<NextOwners> nextOwners) {
         this.nextOwners = nextOwners;
     }
 
