@@ -16,7 +16,6 @@ public class APIRequestForInformationSteps extends APISteps {
 
     public static RequestForInformationService serviceRequestForInformation = new RequestForInformationService();
 
-
     @When("I send generate RFI number request")
     public void sendGenerateRFINumberRequest() {
         Result rfiNo = new Result();

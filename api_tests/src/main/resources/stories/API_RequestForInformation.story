@@ -43,8 +43,7 @@ Then Request is successful
 Then RFI is submitted
 
 Scenario: Approve a RFI
-Meta:
-@wip
+
 When I send generate RFI number request
 Then Request is successful
 
