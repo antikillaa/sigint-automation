@@ -6,7 +6,7 @@ import ae.pegasus.framework.model.RequestForInformationPayload;
 
 public class RequestForInformationRequest extends HttpRequest {
 
-    private final static String URI = "/api/reports/workflows/2/";
+    private final static String URI = "/api/reports/workflows/";
 
     public RequestForInformationRequest() {
         super(URI);
@@ -14,7 +14,7 @@ public class RequestForInformationRequest extends HttpRequest {
 
     public RequestForInformationRequest generateNumber() {
         this
-                .setURI(URI + "generate-number/")
+                .setURI(URI + "2/generate-number/")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(null);
         return this;
@@ -24,7 +24,7 @@ public class RequestForInformationRequest extends HttpRequest {
         RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
         requestForInformationPayload.setData(requestForInformation);
         this
-                .setURI(URI + "perform-action/1/")
+                .setURI(URI + "2/perform-action/1/")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformationPayload);
         return this;
@@ -32,9 +32,18 @@ public class RequestForInformationRequest extends HttpRequest {
 
     public RequestForInformationRequest view(String id) {
         this
-                .setURI(URI + "model/" + id + "?userAction=true")
+                .setURI(URI + "2/model/" + id + "?userAction=true")
                 .setHttpMethod(HttpMethod.GET);
         return this;
     }
 
+    public RequestForInformationRequest remove(RequestForInformation requestForInformation) {
+        RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
+        requestForInformationPayload.setData(requestForInformation);
+        this
+                .setURI(URI + "1/perform-action/3")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForInformationPayload);
+        return this;
+    }
 }

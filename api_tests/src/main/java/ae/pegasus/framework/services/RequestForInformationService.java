@@ -36,7 +36,17 @@ public class RequestForInformationService implements EntityService<RequestForInf
 
     @Override
     public OperationResult remove(RequestForInformation entity) {
-        return null;
+        log.info("Sending delete a RFI request... :" + JsonConverter.toJsonString(entity));
+
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.remove(entity));
+
+        OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForInformations().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
     }
 
     @Override

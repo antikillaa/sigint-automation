@@ -65,6 +65,20 @@ public class RequestForInformation extends G4Entity {
     private List<CurrentOwner> currentOwners = null;
     @JsonProperty("modelSources")
     private List<ModelSource> modelSources = null;
+    @JsonProperty("createdByName")
+    private String createdByName;
+    @JsonProperty("createdById")
+    private String createdById;
+    @JsonProperty("version")
+    private Integer version;
+    @JsonProperty("wfId")
+    private String wfId;
+    @JsonProperty("stateId")
+    private String stateId;
+    @JsonProperty("stateType")
+    private String stateType;
+    @JsonProperty("state")
+    private String state;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -247,6 +261,62 @@ public class RequestForInformation extends G4Entity {
 
     public void setAdditionalProperties(Map<String, Object> additionalProperties) {
         this.additionalProperties = additionalProperties;
+    }
+
+    public String getCreatedByName() {
+        return createdByName;
+    }
+
+    public void setCreatedByName(String createdByName) {
+        this.createdByName = createdByName;
+    }
+
+    public String getCreatedById() {
+        return createdById;
+    }
+
+    public void setCreatedById(String createdById) {
+        this.createdById = createdById;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public String getWfId() {
+        return wfId;
+    }
+
+    public void setWfId(String wfId) {
+        this.wfId = wfId;
+    }
+
+    public String getStateId() {
+        return stateId;
+    }
+
+    public void setStateId(String stateId) {
+        this.stateId = stateId;
+    }
+
+    public String getStateType() {
+        return stateType;
+    }
+
+    public void setStateType(String stateType) {
+        this.stateType = stateType;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     @JsonAnySetter

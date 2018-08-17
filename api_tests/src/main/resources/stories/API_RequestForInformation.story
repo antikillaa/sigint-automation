@@ -19,3 +19,9 @@ And RFI is created
 
 When I send view a RFI request
 Then Request is successful
+
+When I send delete a RFI request
+Then Request is successful
+
+When I send view a RFI request
+Then Request is unsuccessful

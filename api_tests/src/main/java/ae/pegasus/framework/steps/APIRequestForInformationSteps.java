@@ -39,6 +39,12 @@ public class APIRequestForInformationSteps extends APISteps {
         requestForInformationService.view(id);
     }
 
+    @When("I send delete a RFI request")
+    public void sendDeleteRFIRequest() {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        requestForInformationService.remove(lastRFI);
+    }
+
     @Then("RFI is created")
     public void rfiIsCreated() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
