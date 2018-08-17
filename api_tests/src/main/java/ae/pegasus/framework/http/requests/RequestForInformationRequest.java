@@ -29,4 +29,12 @@ public class RequestForInformationRequest extends HttpRequest {
                 .setPayload(requestForInformationPayload);
         return this;
     }
+
+    public RequestForInformationRequest view(String id) {
+        this
+                .setURI(URI + "model/" + id + "?userAction=true")
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
 }

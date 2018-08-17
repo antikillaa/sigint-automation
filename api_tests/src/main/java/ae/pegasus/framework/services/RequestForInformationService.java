@@ -56,7 +56,14 @@ public class RequestForInformationService implements EntityService<RequestForInf
 
     @Override
     public OperationResult<RequestForInformation> view(String id) {
-        return null;
+        log.info("View RFI by id:" + id);
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.view(id));
+
+        OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class);
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForInformations().addOrUpdateEntity(operationResult.getEntity());
+        }
+        return operationResult;
     }
 
     public OperationResult<Result> generateNumber() {

@@ -57,6 +57,14 @@ public class RequestForInformation extends G4Entity {
     private String required;
     @JsonProperty("links")
     private List<Object> links = null;
+    @JsonProperty("allOwners")
+    private List<AllOwner> allOwners = null;
+    @JsonProperty("requiredPermissions")
+    private List<RequiredPermission> requiredPermissions = null;
+    @JsonProperty("currentOwners")
+    private List<CurrentOwner> currentOwners = null;
+    @JsonProperty("modelSources")
+    private List<ModelSource> modelSources = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -203,6 +211,42 @@ public class RequestForInformation extends G4Entity {
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
+    }
+
+    public List<AllOwner> getAllOwners() {
+        return allOwners;
+    }
+
+    public void setAllOwners(List<AllOwner> allOwners) {
+        this.allOwners = allOwners;
+    }
+
+    public List<RequiredPermission> getRequiredPermissions() {
+        return requiredPermissions;
+    }
+
+    public void setRequiredPermissions(List<RequiredPermission> requiredPermissions) {
+        this.requiredPermissions = requiredPermissions;
+    }
+
+    public List<CurrentOwner> getCurrentOwners() {
+        return currentOwners;
+    }
+
+    public void setCurrentOwners(List<CurrentOwner> currentOwners) {
+        this.currentOwners = currentOwners;
+    }
+
+    public List<ModelSource> getModelSources() {
+        return modelSources;
+    }
+
+    public void setModelSources(List<ModelSource> modelSources) {
+        this.modelSources = modelSources;
+    }
+
+    public void setAdditionalProperties(Map<String, Object> additionalProperties) {
+        this.additionalProperties = additionalProperties;
     }
 
     @JsonAnySetter
