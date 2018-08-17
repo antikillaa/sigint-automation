@@ -8,8 +8,7 @@ When I send create finder file request
 Then Request is successful
 
 Scenario: Create a RFI
-Meta:
-@wip
+
 When I send generate RFI number request
 Then Request is successful
 
