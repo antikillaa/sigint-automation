@@ -4,6 +4,7 @@ import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.RequestForInformationService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
@@ -63,7 +64,7 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.submit(lastRFI);
     }
 
-    @When("I Approve a RFI request")
+    @When("I send Approve a RFI request")
     public void sendApproveRFIRequest() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
         List<OrgUnit> currentOrgUnits = lastRFI.getOrgUnits();
@@ -71,6 +72,13 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.setNextOwnersTeam(currentOrgUnits, nextOwners);
         lastRFI.setNextOwners(nextOwners);
         serviceRequestForInformation.approve(lastRFI);
+    }
+
+    @When("I send cancel a RFI request")
+    public void sendCancelRFIRequest() {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        lastRFI.setComment("qe_" + RandomStringUtils.randomAlphabetic(5));
+        serviceRequestForInformation.cancel(lastRFI);
     }
 
     @Then("RFI is created")
@@ -98,6 +106,15 @@ public class APIRequestForInformationSteps extends APISteps {
         assertEquals(lastRFI.getState(), "Awaiting Assignment");
         assertEquals(lastRFI.getStateId(), "3");
         assertEquals(lastRFI.getStateType(), "INITIAL");
+        assertEquals(lastRFI.getWfId(), "2");
+    }
+
+    @Then("RFI is cancelled")
+    public void rfiIsCAncelled() {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        assertEquals(lastRFI.getState(), "Cancelled");
+        assertEquals(lastRFI.getStateId(), "7");
+        assertEquals(lastRFI.getStateType(), "FINAL");
         assertEquals(lastRFI.getWfId(), "2");
     }
 }

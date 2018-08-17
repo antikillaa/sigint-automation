@@ -61,13 +61,32 @@ When I send submit a RFI request
 Then Request is successful
 Then RFI is submitted
 
-When I Approve a RFI request
+When I send Approve a RFI request
 Then Request is successful
 Then RFI is approved
 
-
-
 Scenario: Cancel a RFI
+
+When I send generate RFI number request
+Then Request is successful
+
+When I send create a RFI request
+Then Request is successful
+And RFI is created
+
+When I send view a RFI request
+Then Request is successful
+
+When I send get owners a RFI request
+Then Request is successful
+
+When I send submit a RFI request
+Then Request is successful
+Then RFI is submitted
+
+When I send cancel a RFI request
+Then Request is successful
+Then RFI is cancelled
 
 Scenario: Reject a RFI
 
