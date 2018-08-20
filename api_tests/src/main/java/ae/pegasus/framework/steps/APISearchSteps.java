@@ -506,11 +506,15 @@ public class APISearchSteps extends APISteps {
 
         int expectedCount = Integer.valueOf(size);
         List<SearchResult> wrongResults = Arrays.stream(searchResults)
-                .filter(result -> !compareByCriteria(criteria, result.getTotalCount(), expectedCount))
+                .filter(result -> !compareByCriteria(criteria, result.getData().size(), expectedCount))
                 .collect(Collectors.toList());
 
-        assertTrue("Expected search results count " + criteria + " " + size + ", but was: " + toJsonString(wrongResults),
-                wrongResults.isEmpty());
+        if (!wrongResults.isEmpty()) {
+            wrongResults.forEach(searchResult -> log.error("Expected search results count " + criteria + " " + size +
+                            ", but was: " + toJsonString(searchResult.getTotalCount())));
+            throw new AssertionError("Expected search results count " + criteria + " " + size +
+                    ", but was: " + toJsonString(wrongResults.get(0).getData().size()));
+        }
     }
 
     @When("I send SQM search request - query:$query, sourceTypes:$sourceTypes, objectType:$objectType, pageNumber:$pageNumber, pageSize:$pageSize")

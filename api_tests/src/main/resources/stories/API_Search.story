@@ -14,60 +14,6 @@ Scenario: test excel
 Meta: @skip
 When Excel Driven Search (/Data/Search.xlsx)
 
-Scenario: SIGINT. The maximum number of search results for a single query is limited to 1000 records
-When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
-Then Request is successful
-And CB search result list size > 0
-And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
-And CB search result list size < 1001
-And pageSize size in response < 1001
-
-Examples:
-| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
-| SIGINT | event | EventVO |      | 0 | 1100 |
-| SIGINT | entity | EntityVO |     | 0 | 1100 |
-
-
-Scenario: OSINT. The maximum number of search results for a single query is limited to 1000 records
-When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
-Then Request is successful
-And CB search result list size > 0
-And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
-And CB search result list size < 1001
-And pageSize size in response < 1001
-
-Examples:
-| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
-| OSINT  | event | EventVO |      | 0 | 1100 |
-| OSINT  | entity | EntityVO |     | 0 | 1100 |
-
-
-Scenario: GOVINT. The maximum number of search results for a single query is limited to 1000 records
-When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
-Then Request is successful
-And CB search result list size > 0
-And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
-And CB search result list size < 1001
-And pageSize size in response < 1001
-
-Examples:
-| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
-| GOVINT | event | EventVO |      | 0 | 1100 |
-| GOVINT | entity | EntityVO |     | 0 | 1100 |
-
-
-Scenario: PROFILER. The maximum number of search results for a single query is limited to 1000 records
-When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
-Then Request is successful
-And CB search result list size > 0
-And CB search results contains only eventFeed:<eventFeed> and type:<resultType> records
-And CB search result list size < 1001
-And pageSize size in response < 1001
-
-Examples:
-| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
-| PROFILER | entity | TargetVO |   | 0 | 1100 |
-
 
 Scenario: SIGINT. Wild Card Search
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
