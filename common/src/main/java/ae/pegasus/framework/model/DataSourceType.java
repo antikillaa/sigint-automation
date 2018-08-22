@@ -14,6 +14,8 @@ public enum DataSourceType {
     T,
     O,
     PHONEBOOK,
+    J1,
+    J2,
     //SUBSCRIBER,
     //SY,
     DARK_WEB,

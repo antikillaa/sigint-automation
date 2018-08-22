@@ -25,7 +25,7 @@ public class SearchFilters {
     private List<String> designations;
     private AdvancedSearch advancedSearch;
     private List<String> publisherName;
-    private List<String> dataSource; // ["TWITTER"]
+    private List<DataSourceType> dataSource; // ["TWITTER"]
     private List<String> subSourceId;
     private List<String> subSource; // ["SMS"]
     private List<String> type; // ["TWEET"]
@@ -68,11 +68,11 @@ public class SearchFilters {
     private Location location;
     private String tumblrUsername;
 
-    public List<String> getDataSource() {
+    public List<DataSourceType> getDataSource() {
         return dataSource;
     }
 
-    public void setDataSource(List<String> dataSource) {
+    public void setDataSource(List<DataSourceType> dataSource) {
         this.dataSource = dataSource;
     }
 

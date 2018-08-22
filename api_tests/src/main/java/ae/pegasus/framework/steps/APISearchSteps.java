@@ -8,6 +8,7 @@ import ae.pegasus.framework.services.SQMService;
 import ae.pegasus.framework.services.SearchService;
 import ae.pegasus.framework.utils.DateHelper;
 import ae.pegasus.framework.utils.StringUtils;
+import ae.pegasus.framework.verification.SearchFiltersVerification;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.jbehave.core.model.ExamplesTable;
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static ae.pegasus.framework.error_reporter.ErrorReporter.raiseError;
+import static ae.pegasus.framework.json.JsonConverter.jsonToObject;
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 import static ae.pegasus.framework.utils.DateHelper.*;
 import static ae.pegasus.framework.utils.SearchQueryBuilder.recordStatusToQuery;
@@ -98,7 +100,7 @@ public class APISearchSteps extends APISteps {
 
             }*/
 
-        for (int i =0; i<searchex.rows.size(); i++ ){
+        for (int i = 0; i < searchex.rows.size(); i++) {
             String apierror = "";
             Boolean EventEntity = true;
             try {
@@ -109,7 +111,7 @@ public class APISearchSteps extends APISteps {
 
                 CBSearchFilter filter = new CBSearchFilter(searchex.rowdata.get("Source Type").get(i), searchex.rowdata.get("objectType").get(i),
                         searchex.rowdata.get("query").get(i),
-                        searchex.rowdata.get("pageSize").get(i),searchex.rowdata.get("pageNumber").get(i));
+                        searchex.rowdata.get("pageSize").get(i), searchex.rowdata.get("pageNumber").get(i));
 
                 operationResult = service.search(filter);
 
@@ -119,29 +121,26 @@ public class APISearchSteps extends APISteps {
 
                 cbSearchResultsContainsOnlySourceTypeAndObjectTypeRecords(searchex.rowdata.get("Source Type").get(i), searchex.rowdata.get("EventOREntity").get(i));
 
-                searchex.getRequiredResult(searchex.rows.get(i) ,operationResult.getCode() , Integer.parseInt(operationResult.getMessage().toString().split(",")[0].split(":")[1]),apierror,i);
+                searchex.getRequiredResult(searchex.rows.get(i), operationResult.getCode(), Integer.parseInt(operationResult.getMessage().toString().split(",")[0].split(":")[1]), apierror, i);
 
-            }
-            catch (AssertionError e) {
+            } catch (AssertionError e) {
                 apierror = e.getMessage();
                 if (apierror.contains("eventreturn") || apierror.contains("entityreturn")) {
-                    apierror = "the data should contian only" +searchex.rowdata.get("EventOREntity").get(i) +"but thats not the case";
+                    apierror = "the data should contian only" + searchex.rowdata.get("EventOREntity").get(i) + "but thats not the case";
                     EventEntity = false;
                     e.printStackTrace();
-                    searchex.getRequiredResult(searchex.rows.get(i),operationResult.getCode() , Integer.parseInt(operationResult.getMessage().toString().split(",")[0].split(":")[1]), apierror,i,EventEntity);
-                }
-                else {
+                    searchex.getRequiredResult(searchex.rows.get(i), operationResult.getCode(), Integer.parseInt(operationResult.getMessage().toString().split(",")[0].split(":")[1]), apierror, i, EventEntity);
+                } else {
                     e.printStackTrace();
                     searchex.getRequiredResult(searchex.rows.get(i), operationResult.getCode(),
                             Integer.parseInt(operationResult.getMessage().toString().split(",")[0].split(":")[1]), apierror, i);
 
                 }
-            }
-            catch (Exception e) {
-                apierror  = e.getMessage();
+            } catch (Exception e) {
+                apierror = e.getMessage();
                 e.printStackTrace();
-                searchex.getRequiredResult(searchex.rows.get(i) ,-1 ,
-                        -1, apierror,i);
+                searchex.getRequiredResult(searchex.rows.get(i), -1,
+                        -1, apierror, i);
             }
 
         }
@@ -310,7 +309,7 @@ public class APISearchSteps extends APISteps {
     public void pageSizeInResponseShouldBe(String criteria, String size) {
 
         OperationResult result = OperationsResults.getResult();
-        SearchResult searchResult = JsonConverter.jsonToObject(result.getMessage(), SearchResult.class);
+        SearchResult searchResult = jsonToObject(result.getMessage(), SearchResult.class);
         Integer pageSize = searchResult.getPageSize();
 
         int expectedCount = Integer.valueOf(size);
@@ -511,7 +510,7 @@ public class APISearchSteps extends APISteps {
 
         if (!wrongResults.isEmpty()) {
             wrongResults.forEach(searchResult -> log.error("Expected search results count " + criteria + " " + size +
-                            ", but was: " + toJsonString(searchResult.getTotalCount())));
+                    ", but was: " + toJsonString(searchResult.getTotalCount())));
             throw new AssertionError("Expected search results count " + criteria + " " + size +
                     ", but was: " + toJsonString(wrongResults.get(0).getData().size()));
         }
@@ -521,6 +520,22 @@ public class APISearchSteps extends APISteps {
     public void SQMSearch(String query, String sourceTypes, String objectType, String pageNumber, String pageSize) {
         SearchQueueRequest request = new SearchQueueRequest();
         request.setSourceType(StringUtils.splitToList(sourceTypes));
+        request.setQuery(query);
+        request.setObjectType(StringUtils.splitToList(objectType));
+        request.getPage().setPageNumber(Integer.valueOf(pageNumber));
+        request.getPage().setPageSize(Integer.valueOf(pageSize));
+
+        OperationResult<String> searchResults = sqmService.search(request);
+
+        context.put("searchQueueId", searchResults.getEntity());
+        context.put("searchQuery", query);
+    }
+
+    @When("I send basic SQM search request - query:$query, metadata:$metadata, sourceTypes:$sourceTypes, objectType:$objectType, pageNumber:$pageNumber, pageSize:$pageSize")
+    public void basicSQMSearch(String query, String metadata, String sourceTypes, String objectType, String pageNumber, String pageSize) {
+        SearchQueueRequest request = new SearchQueueRequest();
+        request.setSourceType(StringUtils.splitToList(sourceTypes));
+        request.setMetadata(metadata);
         request.setQuery(query);
         request.setObjectType(StringUtils.splitToList(objectType));
         request.getPage().setPageNumber(Integer.valueOf(pageNumber));
@@ -570,5 +585,16 @@ public class APISearchSteps extends APISteps {
         }
 
         context.put("searchResults", searchResults.toArray(new SearchResult[0]));
+    }
+
+    @Then("CB search results matched to filters")
+    public void searchResultsMatchedToFilters() {
+        SearchQueue searchQueue = context.get("searchQueue", SearchQueue.class);
+        SearchResult<SearchEntity>[] searchResults = context.get("searchResults", SearchResult[].class);
+
+        SearchFilters searchFilters = jsonToObject(searchQueue.getMetadata(), SearchFilters.class, "filters");
+
+        SearchFiltersVerification searchFiltersVerification = new SearchFiltersVerification();
+        searchFiltersVerification.verify(searchFilters, searchResults);
     }
 }
