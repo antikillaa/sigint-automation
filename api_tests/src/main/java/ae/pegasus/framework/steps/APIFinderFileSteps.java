@@ -332,13 +332,13 @@ public class APIFinderFileSteps extends APISteps {
 
         switch (type) {
             case "profile":
-                List<Profile> profiles = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileType.Profile);
+                List<Profile> profiles = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfilerJsonType.Profile);
                 Profile profile = getRandomItemFromList(profiles);
                 context.put("profile", profile);
                 Entities.getProfiles().addOrUpdateEntity(profile);
                 break;
             case "file":
-                List<FinderFile> files = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileType.File);
+                List<FinderFile> files = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfilerJsonType.File);
                 FinderFile file = getRandomItemFromList(files);
                 context.put("finderFile", file);
                 Entities.getFinderFiles().addOrUpdateEntity(file);
@@ -355,11 +355,11 @@ public class APIFinderFileSteps extends APISteps {
 
         switch (type) {
             case "profiles":
-                List<Profile> profiles = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileType.Profile);
+                List<Profile> profiles = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfilerJsonType.Profile);
                 context.put("profileList", profiles);
                 break;
             case "files":
-                List<FinderFile> files = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfileType.File);
+                List<FinderFile> files = serviceFile.extractEntitiesByTypeFromResponse(operationResult, ProfilerJsonType.File);
                 context.put("cbFinderList", files);
                 break;
             default:
@@ -459,17 +459,26 @@ public class APIFinderFileSteps extends APISteps {
                 .forEach(serviceFile::remove);
     }
 
-    @Given("Clean up files and cases")
+    @When("Clean up files and cases")
     public void cleanUpCbFinder() {
         FinderFileSearchFilter filter = new FinderFileSearchFilter();
         filter.setQuery("qe auto").setSortField("name").setPageSize(100);
-        OperationResult<List<FinderFile>> operationResult = serviceFile.cbFinderSearch(filter);
+
+        List<FinderFile> finderFiles = new ArrayList<>();
+        OperationResult<List<FinderFile>> operationResult;
+        do {
+            operationResult = serviceFile.cbFinderSearch(filter);
+            if (operationResult.isSuccess()) {
+                finderFiles.addAll(operationResult.getEntity());
+                filter.setPage(filter.getPage() + 1);
+            } else break;
+        } while (operationResult.getEntity().size() == filter.getPageSize());
 
         List<FinderFile> qe_auto = Stream.concat(
-                operationResult.getEntity().stream()
+                finderFiles.stream()
                         .filter(finderFile -> finderFile.getHasContents() != null && finderFile.getHasContents())
                         .flatMap(finderFile -> Stream.of(serviceFile.getContent(finderFile.getId()).getEntity())),
-                operationResult.getEntity().stream()
+                finderFiles.stream()
         ).collect(Collectors.toList());
 
         qe_auto.stream()
@@ -479,11 +488,49 @@ public class APIFinderFileSteps extends APISteps {
                                 " error: " + finderFile.getPayload().getError()));
 
         qe_auto.stream()
-                .filter(finderFile -> finderFile.getType().equals(ProfileType.Case))
+                .filter(finderFile -> finderFile.getType().equals(ProfilerJsonType.Case))
                 .forEach(serviceFile::remove);
 
         qe_auto.stream()
-                .filter(finderFile -> finderFile.getType().equals(ProfileType.File))
+                .filter(finderFile -> finderFile.getType().equals(ProfilerJsonType.File))
+                .forEach(serviceFile::remove);
+    }
+
+
+    @When("Clean up files and cases")
+    public void moveToGarbage() {
+        FinderFileSearchFilter filter = new FinderFileSearchFilter();
+        filter.setQuery("qe auto").setSortField("name").setPageSize(100);
+
+        List<FinderFile> finderFiles = new ArrayList<>();
+        OperationResult<List<FinderFile>> operationResult;
+        do {
+            operationResult = serviceFile.cbFinderSearch(filter);
+            if (operationResult.isSuccess()) {
+                finderFiles.addAll(operationResult.getEntity());
+                filter.setPage(filter.getPage() + 1);
+            } else break;
+        } while (operationResult.getEntity().size() == filter.getPageSize());
+
+        List<FinderFile> qe_auto = Stream.concat(
+                finderFiles.stream()
+                        .filter(finderFile -> finderFile.getHasContents() != null && finderFile.getHasContents())
+                        .flatMap(finderFile -> Stream.of(serviceFile.getContent(finderFile.getId()).getEntity())),
+                finderFiles.stream()
+        ).collect(Collectors.toList());
+
+        qe_auto.stream()
+                .filter(finderFile -> finderFile.getPayload() != null && finderFile.getPayload().getError() != null)
+                .forEach(finderFile ->
+                        log.warn(finderFile.getType() + " id:" + finderFile.getId() +
+                                " error: " + finderFile.getPayload().getError()));
+
+        qe_auto.stream()
+                .filter(finderFile -> finderFile.getType().equals(ProfilerJsonType.Case))
+                .forEach(serviceFile::remove);
+
+        qe_auto.stream()
+                .filter(finderFile -> finderFile.getType().equals(ProfilerJsonType.File))
                 .forEach(serviceFile::remove);
     }
 

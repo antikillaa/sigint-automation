@@ -1,21 +1,24 @@
 package ae.pegasus.framework.model;
+
 import ae.pegasus.framework.data_for_entity.annotations.DataIgnore;
 import ae.pegasus.framework.data_for_entity.annotations.DataProvider;
 import ae.pegasus.framework.data_for_entity.annotations.WithCollectionSize;
 import ae.pegasus.framework.data_for_entity.data_providers.profiler.ProfileAndTargetGroupNameProvider;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class FinderFile extends AbstractEntity {
 
     @DataIgnore
-    private ProfileType type = ProfileType.File;
+    private ProfilerJsonType type = ProfilerJsonType.File;
     @DataIgnore
-    private ProfileType baseType = ProfileType.File;
+    private ProfilerJsonType baseType = ProfilerJsonType.File;
     @WithCollectionSize(1)
     private ArrayList<ReqPermission> reqPermissions = new ArrayList<>();
     @DataProvider(ProfileAndTargetGroupNameProvider.class)
@@ -47,22 +50,20 @@ public class FinderFile extends AbstractEntity {
     private List<String> fileIds = new ArrayList<>();
     @DataIgnore
     private String error;
-    @DataIgnore
-    private Boolean active;
 
-    public ProfileType getType() {
+    public ProfilerJsonType getType() {
         return type;
     }
 
-    public void setType(ProfileType type) {
+    public void setType(ProfilerJsonType type) {
         this.type = type;
     }
 
-    public ProfileType getBaseType() {
+    public ProfilerJsonType getBaseType() {
         return baseType;
     }
 
-    public void setBaseType(ProfileType baseType) {
+    public void setBaseType(ProfilerJsonType baseType) {
         this.baseType = baseType;
     }
 
@@ -192,14 +193,6 @@ public class FinderFile extends AbstractEntity {
 
     public void setFileIds(List<String> fileIds) {
         this.fileIds = fileIds;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
     }
 
     public static class ParentChain extends AbstractEntity {

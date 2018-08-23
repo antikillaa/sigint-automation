@@ -93,6 +93,7 @@ When I send create finder case in finder case request
 Then Request is unsuccessful
 
 Scenario: Delete all empty cases
+Meta: @skip
 Given I sign in as admin user
 When I send get root list of CBFinder request
 When I delete all empty cases

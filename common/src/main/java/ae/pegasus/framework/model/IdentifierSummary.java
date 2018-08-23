@@ -4,7 +4,7 @@ import java.util.List;
 
 public class IdentifierSummary extends AbstractEntity {
 
-    private ProfileType jsonType = ProfileType.IdentifierSummary;
+    private ProfilerJsonType jsonType = ProfilerJsonType.IdentifierSummary;
     private String name; //"474123449782275"
     private Object properties; //{}
     private List<String> sources; //["T"]
@@ -14,11 +14,11 @@ public class IdentifierSummary extends AbstractEntity {
     private ValidationStatus validationStatus; //null
     private String value; //"474123449782275"
 
-    public ProfileType getJsonType() {
+    public ProfilerJsonType getJsonType() {
         return jsonType;
     }
 
-    public void setJsonType(ProfileType jsonType) {
+    public void setJsonType(ProfilerJsonType jsonType) {
         this.jsonType = jsonType;
     }
 

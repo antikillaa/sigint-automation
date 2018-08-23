@@ -89,8 +89,7 @@ public class FinderFileRequest extends HttpRequest {
         String params;
         try {
             params = "/search?" +
-                    "hasContents=true" +
-                    "&page=" + filter.getPage() +
+                    "page=" + filter.getPage() +
                     "&pageSize=" + filter.getPageSize() +
                     "&parentChain=true" +
                     (filter.getQuery().isEmpty() ? "" :

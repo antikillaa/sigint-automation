@@ -6,7 +6,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 public class FinderCase extends FinderFile {
 
     public FinderCase() {
-        setType(ProfileType.Case);
-        setBaseType(ProfileType.Case);
+        setType(ProfilerJsonType.Case);
+        setBaseType(ProfilerJsonType.Case);
     }
 }

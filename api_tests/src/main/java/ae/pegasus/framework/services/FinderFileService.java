@@ -108,7 +108,7 @@ public class FinderFileService implements EntityService<FinderFile> {
                 new OperationResult<>(response);
     }
 
-    public List extractEntitiesByTypeFromResponse(OperationResult<List<ProfileAndTargetGroup>> result, ProfileType type) {
+    public List extractEntitiesByTypeFromResponse(OperationResult<List<ProfileAndTargetGroup>> result, ProfilerJsonType type) {
         List<Object> list = jsonToObjectsList(result.getMessage(), Object[].class, "data");
         switch (type) {
             case Profile:
