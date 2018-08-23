@@ -3,6 +3,8 @@ package ae.pegasus.framework.model;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import java.util.Objects;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
 public class SourceType {
@@ -39,10 +41,10 @@ public class SourceType {
 
         SourceType thatSourceType = (SourceType) that;
         return
-                this.eventFeed.equals(thatSourceType.eventFeed)
-                        && this.dataSource.equals(thatSourceType.dataSource)
-                        && this.subSource.equals(thatSourceType.subSource)
-                        && this.subSourceId.equals(thatSourceType.subSourceId);
+                Objects.equals(this.eventFeed, thatSourceType.eventFeed)
+                        && Objects.equals(this.dataSource, thatSourceType.dataSource)
+                        && Objects.equals(this.subSource, thatSourceType.subSource)
+                        && Objects.equals(this.subSourceId, thatSourceType.subSourceId);
     }
 
     public String getSubSource() {
