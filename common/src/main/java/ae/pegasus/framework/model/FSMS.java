@@ -8,8 +8,8 @@ import ae.pegasus.framework.data_for_entity.data_providers.TargetNumberProvider;
 import ae.pegasus.framework.data_for_entity.data_providers.country_info.CountryCode;
 import ae.pegasus.framework.data_for_entity.data_providers.data_target.SMSTextProvider;
 import ae.pegasus.framework.data_for_entity.data_types.FieldDataType;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
 

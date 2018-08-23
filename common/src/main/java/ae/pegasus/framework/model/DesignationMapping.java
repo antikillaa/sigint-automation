@@ -5,8 +5,8 @@ import ae.pegasus.framework.data_for_entity.annotations.DataProvider;
 import ae.pegasus.framework.data_for_entity.annotations.WithDataDependencies;
 import ae.pegasus.framework.data_for_entity.data_providers.whitelist.WhiteListIdentifierProvider;
 import ae.pegasus.framework.data_for_entity.data_providers.whitelist.WhiteListTypeProvider;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.List;
 

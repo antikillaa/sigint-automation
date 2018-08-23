@@ -1,7 +1,7 @@
 package ae.pegasus.framework.zapi.model;
 
 import ae.pegasus.framework.zapi.deserializer.CyclesDeserialize;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.ArrayList;
 import java.util.List;

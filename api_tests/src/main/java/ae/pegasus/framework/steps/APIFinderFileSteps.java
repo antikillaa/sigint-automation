@@ -497,7 +497,7 @@ public class APIFinderFileSteps extends APISteps {
     }
 
 
-    @When("Clean up files and cases")
+    @When("Move QE files to garbage file")
     public void moveToGarbage() {
         FinderFileSearchFilter filter = new FinderFileSearchFilter();
         filter.setQuery("qe auto").setSortField("name").setPageSize(100);

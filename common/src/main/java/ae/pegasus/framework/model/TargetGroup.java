@@ -2,8 +2,8 @@ package ae.pegasus.framework.model;
 
 
 import ae.pegasus.framework.data_for_entity.annotations.DataIgnore;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,6 @@
 package ae.pegasus.framework.model;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Token {
 

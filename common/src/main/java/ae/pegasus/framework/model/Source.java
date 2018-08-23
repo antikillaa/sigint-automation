@@ -9,8 +9,8 @@ import ae.pegasus.framework.data_for_entity.data_providers.country_info.CountryP
 import ae.pegasus.framework.data_for_entity.data_providers.record.RecordTypeProvider;
 import ae.pegasus.framework.data_for_entity.data_providers.source.SourceNameProvider;
 import ae.pegasus.framework.data_for_entity.data_providers.source.SourceTypeProvider;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)

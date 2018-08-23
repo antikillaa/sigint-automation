@@ -8,7 +8,7 @@ import ae.pegasus.framework.data_for_entity.data_providers.profiler.DataSourceTy
 import ae.pegasus.framework.data_for_entity.data_providers.profiler.IdentifierTypeProvider;
 import ae.pegasus.framework.data_for_entity.data_providers.profiler.IdentifierValueProvider;
 import ae.pegasus.framework.data_for_entity.data_providers.profiler.ValidationStatusProvider;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.ArrayList;
 import java.util.List;

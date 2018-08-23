@@ -1,14 +1,11 @@
 package ae.pegasus.framework.zapi.deserializer;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonDeserializer;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+
 import ae.pegasus.framework.zapi.model.Cycle;
 import ae.pegasus.framework.zapi.model.CyclesList;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.*;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -22,12 +19,12 @@ public class CyclesDeserialize extends JsonDeserializer<CyclesList> {
         CyclesList cycles = new CyclesList();
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         ObjectMapper mapper = new ObjectMapper();
-        Iterator<Map.Entry<String, JsonNode>> iter = node.getFields();
+        Iterator<Map.Entry<String, JsonNode>> iter = node.fields();
         Cycle cycle;
         while (iter.hasNext()) {
             try {
                 Map.Entry<String, JsonNode> foundNode = iter.next();
-                cycle = mapper.readValue(foundNode.getValue(), Cycle.class);
+                cycle = mapper.readValue(foundNode.getValue().asText(), Cycle.class);
                 cycle.setId(foundNode.getKey());
                 cycles.addtoCycle(cycle);
             } catch (JsonMappingException e) {

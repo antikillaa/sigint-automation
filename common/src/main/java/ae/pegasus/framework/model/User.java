@@ -8,7 +8,7 @@ import ae.pegasus.framework.data_for_entity.annotations.WithDataSize;
 import ae.pegasus.framework.data_for_entity.data_providers.EmailProvider;
 import ae.pegasus.framework.data_for_entity.data_providers.user.UserPasswordProvider;
 import ae.pegasus.framework.services.UserService;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.*;
 import java.util.stream.Collectors;

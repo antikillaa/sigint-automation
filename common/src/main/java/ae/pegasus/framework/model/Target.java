@@ -7,11 +7,14 @@ import ae.pegasus.framework.data_for_entity.data_providers.PhonesProvider;
 import ae.pegasus.framework.data_for_entity.data_providers.custom.LanguageCodesProvider;
 import ae.pegasus.framework.json.serialization.TargetDeserializer;
 import ae.pegasus.framework.json.serialization.TargetJsonSerializer;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)

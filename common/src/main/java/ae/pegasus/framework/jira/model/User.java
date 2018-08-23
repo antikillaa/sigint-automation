@@ -1,6 +1,6 @@
 package ae.pegasus.framework.jira.model;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Created by dm on 4/5/16.
