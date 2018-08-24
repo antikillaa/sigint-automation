@@ -111,3 +111,18 @@ And CB search results matched to filters
 Examples:
 | sourceTypes | objectType | query | metadata | pageNumber | pageSize |
 | SIGINT | event | dataSource:"J2" AND type:"CALL" AND eventTime:["2010-08-21T21:00:00.000Z".."2018-08-22T20:59:00.000Z"] | {"filters":{"eventFeed":"SIGINT","dataSource":["J2"],"objectType":"event","type":["CALL"],"eventTime":{"from":"2010-08-21T21:00:00.000Z","to":"2018-08-22T20:59:00.000Z"}}} | 0 | 20 |
+
+
+Scenario: FININT search
+Meta: @dev
+When I send basic SQM search request - query:<query>, metadata:<metadata>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When SQM search completed
+When I get search queue results:
+| eventFeed | objectType | pageNumber | pageSize |
+| FININT | event | 0 | 20 |
+Then TotalCount's in search results > 0
+And CB search results matched to filters
+
+Examples:
+| sourceTypes | objectType | query | metadata | pageNumber | pageSize |
+| FININT | event | eventTime:["2010-05-26T15:52:00.000Z".."2019-08-24T15:52:00.000Z"]| {"query":"","filters":{"eventFeed":"FININT","objectType":"event","eventTime":{"from":"2010-05-26T15:52:00.000Z","to":"2019-08-24T15:52:00.000Z"}}}| 0 | 20 |
