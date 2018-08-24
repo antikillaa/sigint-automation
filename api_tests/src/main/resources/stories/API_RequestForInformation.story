@@ -65,8 +65,6 @@ Then Request is successful
 Then RFI is approved
 
 Scenario: Cancel a RFI
-Meta:
-@wip
 When I send generate RFI number request
 Then Request is successful
 
