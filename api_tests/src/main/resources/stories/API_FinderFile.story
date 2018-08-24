@@ -50,20 +50,11 @@ Then Created finder file is correct
 
 Scenario: API.To delete a file, a user must have FILE_DELETE permissions
 Given I sign in as user with permissions FILE_VIEW, FILE_UPDATE, FILE_CREATE
-When I send CB Finder search with query:<query>
-Then Request is successful
-When Get files from CBFinder search results
-Then CB Finder entities list size > 0
-When Get random file from from CBFinder search results
-And I send delete finder file request
+When I send delete finder file request
 Then Request is unsuccessful
 
 Given Set new permissions: FILE_VIEW, FILE_DELETE to current user and relogin
-When I send CB Finder search with query:<query>
-Then Request is successful
-When Get files from CBFinder search results
-Then CB Finder entities list size > 0
-When I delete all empty QE auto files
+When I send delete finder file request
 Then Request is successful
 
 Examples:
