@@ -28,7 +28,7 @@ public class SavedSearch extends AbstractEntity {
     private Date endDate;
     private Boolean historical;
     private Integer lastExecutionResultsFound;
-    private List<String> reqPermissions = new ArrayList<>();
+    private List<ReqPermission> reqPermissions = new ArrayList<>();
     private String orgUnit;
 
     public List<String> getAssignmentTeamIds() {
@@ -207,11 +207,11 @@ public class SavedSearch extends AbstractEntity {
         this.type = type;
     }
 
-    public List<String> getReqPermissions() {
+    public List<ReqPermission> getReqPermissions() {
         return reqPermissions;
     }
 
-    public void setReqPermissions(List<String> reqPermissions) {
+    public void setReqPermissions(List<ReqPermission> reqPermissions) {
         this.reqPermissions = reqPermissions;
     }
 
