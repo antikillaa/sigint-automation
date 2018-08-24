@@ -5,7 +5,6 @@ import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.ReportService;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
@@ -17,12 +16,6 @@ import static org.junit.Assert.assertEquals;
 public class APIReportSteps extends APISteps {
 
     public static ReportService serviceReport = new ReportService();
-
-    private static Logger log = Logger.getLogger(APIFinderFileSteps.class);
-
-    static Report getRandomReport() {
-        return objectInitializer.randomEntity(Report.class);
-    }
 
     @When("I send create a report request")
     public void sendReportRequest() {

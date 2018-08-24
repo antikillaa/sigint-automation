@@ -8,7 +8,10 @@ import ae.pegasus.framework.services.FinderCaseService;
 import ae.pegasus.framework.services.FinderFileService;
 import ae.pegasus.framework.utils.StringUtils;
 import org.apache.log4j.Logger;
-import org.jbehave.core.annotations.*;
+import org.jbehave.core.annotations.AfterStories;
+import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 
 import java.util.ArrayList;
@@ -178,15 +181,6 @@ public class APIFinderFileSteps extends APISteps {
         assertEquals(expected.getDescription(), created.getDescription());
         assertEquals(expected.getDescription(), created.getDescription());
     }
-
-
-    @When("I send delete finder file request")
-    public void deleteFinderFileRequest() {
-        FinderFile finderFile = Entities.getFinderFiles().getLatest();
-        context.put("finderFile", finderFile);
-        serviceFile.remove(finderFile);
-    }
-
 
     @When("I send get root list of CBFinder request")
     public void getListOfFinderFileRequest() {
