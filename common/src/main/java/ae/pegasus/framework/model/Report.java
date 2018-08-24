@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 @JsonPropertyOrder({
@@ -38,7 +38,7 @@ import java.util.List;
 public class Report extends G4Entity {
 
     @JsonProperty("attachments")
-    private List<Object> attachments = new ArrayList<Object>();
+    private List<Object> attachments = new ArrayList<>();
     @JsonProperty("wfId")
     private String wfId;
     @JsonProperty("objectType")
@@ -56,11 +56,11 @@ public class Report extends G4Entity {
     @JsonProperty("createdByName")
     private String createdByName;
     @JsonProperty("events")
-    private List<ReportEvent> events = new ArrayList<ReportEvent>();
+    private List<ReportEvent> events = new ArrayList<>();
     @JsonProperty("reportSources")
-    private List<ReportSource> reportSources = new ArrayList<ReportSource>();
+    private List<ReportSource> reportSources = new ArrayList<>();
     @JsonProperty("orgUnits")
-    private List<OrgUnit> orgUnits = new ArrayList<OrgUnit>();
+    private List<OrgUnit> orgUnits = new ArrayList<>();
     @JsonProperty("subject")
     private String subject;
     @JsonProperty("description")
@@ -72,11 +72,11 @@ public class Report extends G4Entity {
     @JsonProperty("notes")
     private String notes;
     @JsonProperty("categories")
-    private List<Category> categories = new ArrayList<Category>();
+    private List<Category> categories = new ArrayList<>();
     @JsonProperty("layoutMetadata")
     private String layoutMetadata;
     @JsonProperty("directCaseFiles")
-    private List<DirectCaseFile> directCaseFiles = new ArrayList<DirectCaseFile>();
+    private List<DirectCaseFile> directCaseFiles = new ArrayList<>();
     @JsonProperty("links")
     private List<Object> links = new ArrayList<Object>();
     @JsonProperty("stateId")
