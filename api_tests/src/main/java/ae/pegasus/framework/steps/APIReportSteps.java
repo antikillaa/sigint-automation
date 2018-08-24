@@ -94,12 +94,14 @@ public class APIReportSteps extends APISteps {
     @When("I send cancel a report request with owner")
     public void sendCancelReportRequestWithOwner() {
         Report report = Entities.getReports().getLatest();
+        report.setComment("qe_auto_" + RandomStringUtils.randomAlphabetic(5));
         serviceReport.cancelReportOwned(report);
     }
 
     @When("I send cancel a report request without owner")
     public void sendCancelReportRequestWithoutOwner() {
         Report report = Entities.getReports().getLatest();
+        report.setComment("qe_auto_" + RandomStringUtils.randomAlphabetic(5));
         serviceReport.cancelReportNotOwned(report);
     }
 
