@@ -1,7 +1,6 @@
 package ae.pegasus.framework.model;
 
 import com.fasterxml.jackson.annotation.*;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.util.HashMap;
 import java.util.List;
