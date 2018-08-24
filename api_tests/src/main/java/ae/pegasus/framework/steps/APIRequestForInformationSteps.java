@@ -4,7 +4,6 @@ import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.RequestForInformationService;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
@@ -47,11 +46,21 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.remove(lastRFI);
     }
 
-    @When("I send get owners a RFI request")
-    public void sendGetOwnersRFIRequest() {
+    @When("I send get owner members a RFI request")
+    public void sendGetOwnersMembersRFIRequest() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
-        OperationResult<List<CurrentOwner>> currentOwner = serviceRequestForInformation.possibleOwners(lastRFI);
-        context.put("currentOwner", currentOwner.getEntity());
+        OperationResult<List<CurrentOwner>> currentOwnerMembers = serviceRequestForInformation.possibleOwnersMembers(lastRFI);
+        context.put("currentOwner", currentOwnerMembers.getEntity());
+    }
+
+    @When("I send get owner teams a RFI request")
+    public void sendGetOwnersTeamsRFIRequest() {
+        RequestForInformation requestForInformation = new RequestForInformation();
+        Result rfitNo = context.get("rfiNo", Result.class);
+        serviceRequestForInformation.buildRFI(requestForInformation, rfitNo);
+        OperationResult<List<CurrentOwner>> currentOwnersTeams = serviceRequestForInformation.possibleOwnersTeams(requestForInformation);
+        context.put("currentOwner", currentOwnersTeams.getEntity());
+        context.put("requestForInformation", requestForInformation);
     }
 
     @When("I send submit a RFI request")
@@ -77,8 +86,18 @@ public class APIRequestForInformationSteps extends APISteps {
     @When("I send cancel a RFI request")
     public void sendCancelRFIRequest() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
-        lastRFI.setComment("qe_" + RandomStringUtils.randomAlphabetic(5));
         serviceRequestForInformation.cancel(lastRFI);
+
+    }
+
+    @When("I send send a RFI request")
+    public void sendSendRFIRequest() {
+        RequestForInformation RFI = context.get("requestForInformation", RequestForInformation.class);
+        List<OrgUnit> currentOrgUnits = RFI.getOrgUnits();
+        List<NextOwners> nextOwners = new ArrayList<>();
+        serviceRequestForInformation.setNextOwnersTeam(currentOrgUnits, nextOwners);
+        RFI.setNextOwners(nextOwners);
+        serviceRequestForInformation.send(RFI);
     }
 
     @Then("RFI is created")

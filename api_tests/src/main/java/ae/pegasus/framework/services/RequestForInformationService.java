@@ -119,6 +119,20 @@ public class RequestForInformationService implements EntityService<RequestForInf
         return operationResult;
     }
 
+    public OperationResult<?> send(RequestForInformation entity) {
+        log.info("Sending submit RFI request... :" + JsonConverter.toJsonString(entity));
+
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.send(entity));
+
+        OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForInformations().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
     public OperationResult<Result> generateNumber() {
         log.info("Sending generate a RFI number request...");
 
@@ -132,10 +146,23 @@ public class RequestForInformationService implements EntityService<RequestForInf
         }
     }
 
-    public OperationResult<List<CurrentOwner>> possibleOwners(RequestForInformation entity) {
+    public OperationResult<List<CurrentOwner>> possibleOwnersMembers(RequestForInformation entity) {
         log.info("Sending possible owners request...");
 
-        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.possibleOwners(entity));
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.possibleOwnersMembers(entity));
+
+        OperationResult<CurrentOwner[]> operationResult = new OperationResult<>(response, CurrentOwner[].class);
+        if (operationResult.isSuccess()) {
+            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
+        } else {
+            return new OperationResult<>(response);
+        }
+    }
+
+    public OperationResult<List<CurrentOwner>> possibleOwnersTeams(RequestForInformation entity) {
+        log.info("Sending possible owners request...");
+
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.possibleOwnersTeams(entity));
 
         OperationResult<CurrentOwner[]> operationResult = new OperationResult<>(response, CurrentOwner[].class);
         if (operationResult.isSuccess()) {
@@ -208,4 +235,5 @@ public class RequestForInformationService implements EntityService<RequestForInf
             nextOwners.add(nextOwner);
         }
     }
+
 }

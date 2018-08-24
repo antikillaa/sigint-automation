@@ -77,9 +77,27 @@ public class RequestForInformationRequest extends HttpRequest {
         return this;
     }
 
-    public RequestForInformationRequest possibleOwners(RequestForInformation requestForInformation) {
+    public RequestForInformationRequest send(RequestForInformation requestForInformation) {
+        RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
+        requestForInformationPayload.setData(requestForInformation);
+        this
+                .setURI(URI + "2/perform-action/3")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForInformationPayload);
+        return this;
+    }
+
+    public RequestForInformationRequest possibleOwnersMembers(RequestForInformation requestForInformation) {
         this
                 .setURI(URI + "2/possible-owners/2")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForInformation);
+        return this;
+    }
+
+    public RequestForInformationRequest possibleOwnersTeams(RequestForInformation requestForInformation) {
+        this
+                .setURI(URI + "2/possible-owners/3")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformation);
         return this;
