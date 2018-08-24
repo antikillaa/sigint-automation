@@ -42,7 +42,7 @@ When I send submit a RFI request
 Then Request is successful
 Then RFI is submitted
 
-Scenario: Approve a RFI
+Scenario: Approve a RFI via submit button
 When I send generate RFI number request
 Then Request is successful
 
@@ -98,6 +98,27 @@ Then Request is successful
 
 When I send view a RFI request
 Then Request is successful
+
+Scenario: Complete a RFI via send button
+When I send generate RFI number request
+Then Request is successful
+
+When I send get owner teams a RFI request
+Then Request is successful
+
+When I send send a RFI request
+Then Request is successful
+
+When I send view a RFI request
+Then Request is successful
+
+When I send take ownership a RFI request
+Then Request is successful
+Then RFI is ownershipped
+
+When I send complete took ownership a RFI request
+Then Request is successful
+Then RFI is completed
 
 
 Scenario: Reject a RFI

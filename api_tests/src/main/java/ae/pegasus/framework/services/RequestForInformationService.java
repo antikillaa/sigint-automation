@@ -64,6 +64,20 @@ public class RequestForInformationService implements EntityService<RequestForInf
         return operationResult;
     }
 
+    public OperationResult<?> submitTookOwnership(RequestForInformation entity) {
+        log.info("Sending submit took ownership RFI request... :" + JsonConverter.toJsonString(entity));
+
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.submitTookOwnership(entity));
+
+        OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForInformations().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
     public OperationResult<?> approve(RequestForInformation entity) {
         log.info("Sending submit RFI request... :" + JsonConverter.toJsonString(entity));
 
@@ -123,6 +137,20 @@ public class RequestForInformationService implements EntityService<RequestForInf
         log.info("Sending submit RFI request... :" + JsonConverter.toJsonString(entity));
 
         G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.send(entity));
+
+        OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForInformations().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
+    public OperationResult<?> takeOwnership(RequestForInformation entity) {
+        log.info("Sending take ownership RFI request... :" + JsonConverter.toJsonString(entity));
+
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.takeOwnership(entity));
 
         OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
         if (operationResult.isSuccess()) {

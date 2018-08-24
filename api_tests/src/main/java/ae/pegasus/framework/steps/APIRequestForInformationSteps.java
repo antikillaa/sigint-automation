@@ -71,7 +71,15 @@ public class APIRequestForInformationSteps extends APISteps {
         List<NextOwners> allOwners = new ArrayList<>();
         serviceRequestForInformation.setNextOwnersMember(currentOwner, allOwners);
         lastRFI.setNextOwners(allOwners);
+        lastRFI.setComment("QE_auto " + RandomStringUtils.randomAlphabetic(5));
         serviceRequestForInformation.submit(lastRFI);
+    }
+
+    @When("I send complete took ownership a RFI request")
+    public void sendSubmitTookOwnershipRFIRequest() {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        lastRFI.setComment("QE_auto " + RandomStringUtils.randomAlphabetic(5));
+        serviceRequestForInformation.submitTookOwnership(lastRFI);
     }
 
     @When("I send Approve a RFI request")
@@ -100,6 +108,13 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.setNextOwnersTeam(currentOrgUnits, nextOwners);
         RFI.setNextOwners(nextOwners);
         serviceRequestForInformation.send(RFI);
+    }
+
+    @When("I send take ownership a RFI request")
+    public void sendTakeOwnershipRFIRequest() {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        lastRFI.setComment("QE_auto " + RandomStringUtils.randomAlphabetic(5));
+        serviceRequestForInformation.takeOwnership(lastRFI);
     }
 
     @Then("RFI is created")
@@ -131,10 +146,28 @@ public class APIRequestForInformationSteps extends APISteps {
     }
 
     @Then("RFI is cancelled")
-    public void rfiIsCAncelled() {
+    public void rfiIsCancelled() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
         assertEquals(lastRFI.getState(), "Cancelled");
         assertEquals(lastRFI.getStateId(), "7");
+        assertEquals(lastRFI.getStateType(), "FINAL");
+        assertEquals(lastRFI.getWfId(), "2");
+    }
+
+    @Then("RFI is ownershipped")
+    public void rfiIsOwnershipped() {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        assertEquals(lastRFI.getState(), "Under Assignment");
+        assertEquals(lastRFI.getStateId(), "4");
+        assertEquals(lastRFI.getStateType(), "IN_PROGRESS");
+        assertEquals(lastRFI.getWfId(), "2");
+    }
+
+    @Then("RFI is completed")
+    public void rfiIsComplited() {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        assertEquals(lastRFI.getState(), "Completed");
+        assertEquals(lastRFI.getStateId(), "5");
         assertEquals(lastRFI.getStateType(), "FINAL");
         assertEquals(lastRFI.getWfId(), "2");
     }
