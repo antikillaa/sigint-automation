@@ -121,6 +121,25 @@ Then Request is successful
 Then RFI is completed
 
 
-Scenario: Reject a RFI
+Scenario: Unassign a RFI
+When I send generate RFI number request
+Then Request is successful
+
+When I send get owner teams a RFI request
+Then Request is successful
+
+When I send send a RFI request
+Then Request is successful
+
+When I send view a RFI request
+Then Request is successful
+
+When I send take ownership a RFI request
+Then Request is successful
+Then RFI is ownershipped
+
+When I send unassign a RFI request
+Then Request is successful
+Then RFI is unassigned
 
 Scenario: Edit a RFI

@@ -116,6 +116,13 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.takeOwnership(lastRFI);
     }
 
+    @When("I send unassign a RFI request")
+    public void sendUnassignRFIRequest() {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        lastRFI.setComment("QE_auto " + RandomStringUtils.randomAlphabetic(5));
+        serviceRequestForInformation.unassign(lastRFI);
+    }
+
     @Then("RFI is created")
     public void rfiIsCreated() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
@@ -168,6 +175,15 @@ public class APIRequestForInformationSteps extends APISteps {
         assertEquals(lastRFI.getState(), "Completed");
         assertEquals(lastRFI.getStateId(), "5");
         assertEquals(lastRFI.getStateType(), "FINAL");
+        assertEquals(lastRFI.getWfId(), "2");
+    }
+
+    @Then("RFI is unassigned")
+    public void rfiIsUnassigned() {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        assertEquals(lastRFI.getState(), "Awaiting Assignment");
+        assertEquals(lastRFI.getStateId(), "3");
+        assertEquals(lastRFI.getStateType(), "INITIAL");
         assertEquals(lastRFI.getWfId(), "2");
     }
 }

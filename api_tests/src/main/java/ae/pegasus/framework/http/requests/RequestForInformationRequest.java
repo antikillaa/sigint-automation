@@ -123,4 +123,13 @@ public class RequestForInformationRequest extends HttpRequest {
         return this;
     }
 
+    public RequestForInformationRequest unassign(RequestForInformation requestForInformation) {
+        RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
+        requestForInformationPayload.setData(requestForInformation);
+        this
+                .setURI(URI + "2/perform-action/14")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForInformationPayload);
+        return this;
+    }
 }

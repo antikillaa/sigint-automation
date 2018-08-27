@@ -200,6 +200,20 @@ public class RequestForInformationService implements EntityService<RequestForInf
         }
     }
 
+    public OperationResult<?> unassign(RequestForInformation entity) {
+        log.info("Sending unassign RFI request... :" + JsonConverter.toJsonString(entity));
+
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.unassign(entity));
+
+        OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForInformations().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
     public void buildRFI(RequestForInformation requestForInformation, Result rfiNo) {
         fillRFIStaticData(requestForInformation);
         requestForInformation.setInternalRequestNo(rfiNo.getResult());
