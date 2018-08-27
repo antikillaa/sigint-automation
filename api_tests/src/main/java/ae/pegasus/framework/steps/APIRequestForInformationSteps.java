@@ -123,9 +123,23 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.unassign(lastRFI);
     }
 
+    @When("I send edit a RFI request")
+    public void sendEditRFIRequest() {
+        RequestForInformation createdRFI = Entities.getRequestForInformations().getLatest();
+        createdRFI.setSubject("QE_auto " + RandomStringUtils.randomAlphabetic(5));
+        createdRFI.setRequired("QE_auto " + RandomStringUtils.randomAlphabetic(5));
+        context.put("requestForInformation", createdRFI);
+        serviceRequestForInformation.add(createdRFI);
+        checkRFI(createdRFI);
+    }
+
     @Then("RFI is created")
     public void rfiIsCreated() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        checkRFI(lastRFI);
+    }
+
+    private void checkRFI(RequestForInformation lastRFI) {
         RequestForInformation createdRFI = context.get("requestForInformation", RequestForInformation.class);
         assertEquals(lastRFI.getClassification(), createdRFI.getClassification());
         assertEquals(lastRFI.getManualNo(), createdRFI.getManualNo());
