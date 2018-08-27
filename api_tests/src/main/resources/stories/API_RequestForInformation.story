@@ -13,7 +13,7 @@ Then Request is successful
 
 When I send create a RFI request
 Then Request is successful
-And RFI is created
+And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
@@ -30,7 +30,7 @@ Then Request is successful
 
 When I send create a RFI request
 Then Request is successful
-And RFI is created
+And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
@@ -48,7 +48,7 @@ Then Request is successful
 
 When I send create a RFI request
 Then Request is successful
-And RFI is created
+And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
@@ -70,7 +70,7 @@ Then Request is successful
 
 When I send create a RFI request
 Then Request is successful
-And RFI is created
+And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
@@ -143,19 +143,18 @@ Then Request is successful
 Then RFI is unassigned
 
 Scenario: Edit a RFI
-Meta:
-@wip
+
 When I send generate RFI number request
 Then Request is successful
 
 When I send create a RFI request
 Then Request is successful
-And RFI is created
+And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
 
 When I send edit a RFI request
 Then Request is successful
-And RFI is created
+And RFI is correct
 
