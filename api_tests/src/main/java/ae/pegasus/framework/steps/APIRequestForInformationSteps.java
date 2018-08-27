@@ -97,7 +97,6 @@ public class APIRequestForInformationSteps extends APISteps {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
         lastRFI.setComment("QE_auto " + RandomStringUtils.randomAlphabetic(5));
         serviceRequestForInformation.cancel(lastRFI);
-
     }
 
     @When("I send send a RFI request")
