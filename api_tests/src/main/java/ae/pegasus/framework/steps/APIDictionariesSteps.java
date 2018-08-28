@@ -45,8 +45,7 @@ public class APIDictionariesSteps extends APISteps {
                 new SourceType("SIGINT", "T", "T"),
                 new SourceType("SIGINT", "F", "SMS"),
                 new SourceType("SIGINT", "S", "SMS"),
-                new SourceType("SIGINT", "S", "CDR"),
-                new SourceType("SIGINT", "S", "VLR")
+                new SourceType("SIGINT", "H", null)
         );
 
         assertThat(sources, containsInAnyOrder(expectedSources.toArray()));
