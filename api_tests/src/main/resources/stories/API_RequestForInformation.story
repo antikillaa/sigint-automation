@@ -24,7 +24,7 @@ Then Request is successful
 When I send view a RFI request
 Then Request is unsuccessful
 
-Scenario: Submit a RFI
+Scenario: Submit for Approval a RFI
 When I send generate RFI number request
 Then Request is successful
 
@@ -143,7 +143,6 @@ Then Request is successful
 Then RFI is unassigned
 
 Scenario: Edit a RFI
-
 When I send generate RFI number request
 Then Request is successful
 

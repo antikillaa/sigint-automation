@@ -133,6 +133,10 @@ public class APIRequestForInformationSteps extends APISteps {
         checkRFI(createdRFI);
     }
 
+    @When("I send Endorse and send for approval request")
+    public void sendEndorseAndSendForApprovalRequest() {
+    }
+
     @Then("RFI is correct")
     public void rfiIsCreated() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();

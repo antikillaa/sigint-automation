@@ -161,6 +161,20 @@ public class RequestForInformationService implements EntityService<RequestForInf
         return operationResult;
     }
 
+    public OperationResult<?> endorseAndSendForApprovalRequest(RequestForInformation entity) {
+        log.info("Sending endorse and send for approval request... :" + JsonConverter.toJsonString(entity));
+
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.endorseAndSendForApprovalRequest(entity));
+
+        OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForInformations().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
     public OperationResult<Result> generateNumber() {
         log.info("Sending generate a RFI number request...");
 
@@ -266,6 +280,15 @@ public class RequestForInformationService implements EntityService<RequestForInf
             nextOwner.setType(currentOwner.get(i).getType());
             allOwners.add(nextOwner);
         }
+    }
+
+    public void setRandomNextOwner(List<CurrentOwner> currentOwner, List<NextOwners> allOwners) {
+        CurrentOwner currentOwner1 = currentOwner.stream().findAny().orElse(null);
+        NextOwners nextOwner = new NextOwners();
+        nextOwner.setOwnerId(currentOwner1.getOwnerId());
+        nextOwner.setOwnerName(currentOwner1.getOwnerName());
+        nextOwner.setType(currentOwner1.getType());
+        allOwners.add(nextOwner);
     }
 
     public void setNextOwnersTeam(List<OrgUnit> currentOrgUnits, List<NextOwners> nextOwners) {
