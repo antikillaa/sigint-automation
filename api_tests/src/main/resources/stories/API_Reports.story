@@ -82,6 +82,8 @@ Examples:
 | SIGINT | entity | dataSource:"DU" | 0 | 100 |
 | SIGINT | entity | dataSource:"E" | 0 | 100 |
 | SIGINT | entity | dataSource:"PHONEBOOK" | 0 | 100 |
+| SIGINT | event | dataSource:"J1"| 0 | 100 |
+| SIGINT | event | dataSource:"J2" | 0 | 100 |
 
 Scenario: Create a report. [SIGINT] Data Subsource filters
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
