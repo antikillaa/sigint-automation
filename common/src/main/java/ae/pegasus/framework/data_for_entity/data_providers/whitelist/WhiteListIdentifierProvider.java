@@ -4,7 +4,7 @@ import ae.pegasus.framework.data_for_entity.data_providers.DependencyData;
 import ae.pegasus.framework.data_for_entity.data_providers.DependencyDataProvider;
 import ae.pegasus.framework.model.WhiteListType;
 import ae.pegasus.framework.utils.RandomGenerator;
-
+import org.apache.commons.lang3.RandomStringUtils;
 
 
 public class WhiteListIdentifierProvider extends DependencyDataProvider {
@@ -38,7 +38,7 @@ public class WhiteListIdentifierProvider extends DependencyDataProvider {
                 identifier = RandomGenerator.generateID();
                 break;
             default:
-                identifier = "default_value";
+                identifier = "qe_" + RandomStringUtils.randomAlphabetic(8);
                 break;
 
         }
