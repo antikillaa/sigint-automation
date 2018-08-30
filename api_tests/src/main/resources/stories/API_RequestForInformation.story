@@ -95,6 +95,7 @@ Then Request is successful
 
 When I send send a RFI request
 Then Request is successful
+Then RFI is sent
 
 When I send view a RFI request
 Then Request is successful

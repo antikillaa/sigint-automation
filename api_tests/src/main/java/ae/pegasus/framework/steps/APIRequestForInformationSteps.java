@@ -204,4 +204,13 @@ public class APIRequestForInformationSteps extends APISteps {
         assertEquals(lastRFI.getStateType(), "INITIAL");
         assertEquals(lastRFI.getWfId(), "2");
     }
+
+    @Then("RFI is sent")
+    public void rfiIsSent() {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        assertEquals(lastRFI.getState(), "Awaiting Assignment");
+        assertEquals(lastRFI.getStateId(), "3");
+        assertEquals(lastRFI.getStateType(), "INITIAL");
+        assertEquals(lastRFI.getWfId(), "2");
+    }
 }
