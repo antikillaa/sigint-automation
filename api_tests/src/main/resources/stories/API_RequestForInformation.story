@@ -121,7 +121,6 @@ When I send complete took ownership a RFI request
 Then Request is successful
 Then RFI is completed
 
-
 Scenario: Unassign a RFI
 When I send generate RFI number request
 Then Request is successful

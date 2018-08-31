@@ -143,30 +143,10 @@ public class APIRequestForInformationSteps extends APISteps {
         checkRFI(lastRFI);
     }
 
-    private void checkRFI(RequestForInformation lastRFI) {
-        RequestForInformation createdRFI = context.get("requestForInformation", RequestForInformation.class);
-        assertEquals(lastRFI.getClassification(), createdRFI.getClassification());
-        assertEquals(lastRFI.getManualNo(), createdRFI.getManualNo());
-        assertEquals(lastRFI.getRequired(), createdRFI.getRequired());
-        assertEquals(lastRFI.getObjectType(), "RFI");
-    }
-
     @Then("RFI is submitted")
     public void rfiIsSubmitted() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
-        assertEquals(lastRFI.getState(), "Awaiting Approval");
-        assertEquals(lastRFI.getStateId(), "2");
-        assertEquals(lastRFI.getStateType(), "INITIAL");
-        assertEquals(lastRFI.getWfId(), "2");
-    }
-
-    @Then("RFI is approved")
-    public void rfiIsApproved() {
-        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
-        assertEquals(lastRFI.getState(), "Awaiting Assignment");
-        assertEquals(lastRFI.getStateId(), "3");
-        assertEquals(lastRFI.getStateType(), "INITIAL");
-        assertEquals(lastRFI.getWfId(), "2");
+        checkAwaitingApproval(lastRFI);
     }
 
     @Then("RFI is cancelled")
@@ -199,18 +179,41 @@ public class APIRequestForInformationSteps extends APISteps {
     @Then("RFI is unassigned")
     public void rfiIsUnassigned() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        checkAwaitingAssignment(lastRFI);
+    }
+
+    @Then("RFI is sent")
+    public void rfiIsSent() {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        checkAwaitingAssignment(lastRFI);
+    }
+
+    @Then("RFI is approved")
+    public void rfiIsApproved() {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        checkAwaitingAssignment(lastRFI);
+    }
+
+    private void checkAwaitingAssignment(RequestForInformation lastRFI) {
         assertEquals(lastRFI.getState(), "Awaiting Assignment");
         assertEquals(lastRFI.getStateId(), "3");
         assertEquals(lastRFI.getStateType(), "INITIAL");
         assertEquals(lastRFI.getWfId(), "2");
     }
 
-    @Then("RFI is sent")
-    public void rfiIsSent() {
-        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
-        assertEquals(lastRFI.getState(), "Awaiting Assignment");
-        assertEquals(lastRFI.getStateId(), "3");
+
+    private void checkAwaitingApproval(RequestForInformation lastRFI) {
+        assertEquals(lastRFI.getState(), "Awaiting Approval");
+        assertEquals(lastRFI.getStateId(), "2");
         assertEquals(lastRFI.getStateType(), "INITIAL");
         assertEquals(lastRFI.getWfId(), "2");
+    }
+
+    private void checkRFI(RequestForInformation lastRFI) {
+        RequestForInformation createdRFI = context.get("requestForInformation", RequestForInformation.class);
+        assertEquals(lastRFI.getClassification(), createdRFI.getClassification());
+        assertEquals(lastRFI.getManualNo(), createdRFI.getManualNo());
+        assertEquals(lastRFI.getRequired(), createdRFI.getRequired());
+        assertEquals(lastRFI.getObjectType(), "RFI");
     }
 }
