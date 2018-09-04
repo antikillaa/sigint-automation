@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemsFromList;
 
@@ -85,18 +86,23 @@ public class RequestForApproveService implements EntityService<RequestForApprove
     }
 
     private void fillRFILink(RequestForApprove requestForApprove, List<SearchRecord> entities) {
-        int randomNum = ThreadLocalRandom.current().nextInt(50, 150 + 1);
-        List<SearchRecord> event = getRandomItemsFromList(entities, randomNum);
-        List<Link> links = new ArrayList<>();
+        int randomNum = ThreadLocalRandom.current().nextInt(1400, 1500 + 1);
+        List<SearchRecord> event = getRandomItemsFromList(entities, 1500);
+        List<SearchRecord> eventwithvoice = event.stream()
+                .filter(w ->
+                        w.getAttributes()
+                                .equals("IS_VOICE_HIDDEN") &&
+                                w.getAttributes().containsValue("true"))
+                .collect(Collectors.toList());
 
-        for (int i = 0; i < event.size(); i++) {
+        List<Link> links = new ArrayList<>();
+        for (int i = 0; i < eventwithvoice.size(); i++) {
             Link link = new Link();
             link.setLinkType("ARTIFACT");
             link.setLinkId(event.get(i).getId());
             setRFAEvent(event, links, i, link);
         }
         requestForApprove.setLinks(links);
-
     }
 
     private void setRFAEvent(List<SearchRecord> event, List<Link> links, int i, Link link) {
