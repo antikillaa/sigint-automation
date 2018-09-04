@@ -21,7 +21,7 @@ public class Link {
     @JsonProperty("linkType")
     private String linkType;
     @JsonProperty("attributes")
-    private List<ReportEvent> attributes = new ArrayList<>();
+    private List<RFAEvent> attributes = new ArrayList<>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -45,11 +45,11 @@ public class Link {
         this.linkType = linkType;
     }
 
-    public List<ReportEvent> getAttributes() {
+    public List<RFAEvent> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(List<ReportEvent> attributes) {
+    public void setAttributes(List<RFAEvent> attributes) {
         this.attributes = attributes;
     }
 

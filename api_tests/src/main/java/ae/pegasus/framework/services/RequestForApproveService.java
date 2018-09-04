@@ -10,9 +10,13 @@ import ae.pegasus.framework.model.entities.Entities;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
+
+import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemsFromList;
 
 public class RequestForApproveService implements EntityService<RequestForApprove> {
 
@@ -77,6 +81,44 @@ public class RequestForApproveService implements EntityService<RequestForApprove
         requestForApprove.setInternalRequestNo(rfiNo.getResult());
         fillRFIOrgUnit(requestForApprove);
         fillRFIFinderFile(requestForApprove);
+        fillRFILink(requestForApprove, entities);
+    }
+
+    private void fillRFILink(RequestForApprove requestForApprove, List<SearchRecord> entities) {
+        int randomNum = ThreadLocalRandom.current().nextInt(50, 150 + 1);
+        List<SearchRecord> event = getRandomItemsFromList(entities, randomNum);
+        List<Link> links = new ArrayList<>();
+
+        for (int i = 0; i < event.size(); i++) {
+            Link link = new Link();
+            link.setLinkType("ARTIFACT");
+            link.setLinkId(event.get(i).getId());
+            setRFAEvent(event, links, i, link);
+        }
+        requestForApprove.setLinks(links);
+
+    }
+
+    private void setRFAEvent(List<SearchRecord> event, List<Link> links, int i, Link link) {
+        RFAEvent rfaEvent = new RFAEvent();
+        rfaEvent.setObjectType("event");
+        rfaEvent.setType(event.get(i).getType());
+        rfaEvent.setId(event.get(i).getId());
+        rfaEvent.setSources(event.get(i).getSourceType());
+        rfaEvent.setEventFeed(event.get(i).getType());
+        rfaEvent.setSourceType(event.get(i).getSourceType());
+        rfaEvent.setRecordType(event.get(i).getRecordType());
+        rfaEvent.setModifiedOn((event.get(i).getModifiedOn()));
+        rfaEvent.setEventTime(event.get(i).getEventTime());
+        rfaEvent.setEndTime(event.get(i).getEndTime());
+        rfaEvent.setAttributes(event.get(i).getAttributes());
+
+        Assignments assignments = new Assignments();
+        assignments.setDesignationIds("Undesignated");
+        rfaEvent.setAssignments(assignments);
+
+        link.setAttributes(Collections.singletonList(rfaEvent));
+        links.add(link);
     }
 
     private void fillRFIOrgUnit(RequestForApprove requestForApprove) {
