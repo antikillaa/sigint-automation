@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class RequestForInformationService implements EntityService<RequestForInformation> {
-    private static Logger log = Logger.getLogger(ReportService.class);
+    private static Logger log = Logger.getLogger(RequestForInformationService.class);
     private static RequestForInformationRequest requestForInformationRequest = new RequestForInformationRequest();
 
 
