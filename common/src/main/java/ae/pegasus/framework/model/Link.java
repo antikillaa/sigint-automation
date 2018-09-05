@@ -22,6 +22,8 @@ public class Link {
     private String linkType;
     @JsonProperty("attributes")
     private List<RFAEvent> attributes = new ArrayList<>();
+    @JsonProperty("entities")
+    private CBEntities entities;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -55,6 +57,14 @@ public class Link {
 
     public void setAdditionalProperties(Map<String, Object> additionalProperties) {
         this.additionalProperties = additionalProperties;
+    }
+
+    public CBEntities getEntities() {
+        return entities;
+    }
+
+    public void setEntities(CBEntities entities) {
+        this.entities = entities;
     }
 
     @JsonAnyGetter

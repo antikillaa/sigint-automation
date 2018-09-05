@@ -25,7 +25,7 @@ public class RequestForApproveRequest extends HttpRequest {
         this
                 .setURI(URI + "4/perform-action/1/")
                 .setHttpMethod(HttpMethod.POST)
-                .setPayload(requestForApprove);
+                .setPayload(requestForApprovePayload);
         return this;
     }
 }

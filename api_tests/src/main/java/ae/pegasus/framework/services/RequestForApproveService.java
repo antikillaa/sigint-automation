@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemsFromList;
@@ -86,45 +85,48 @@ public class RequestForApproveService implements EntityService<RequestForApprove
     }
 
     private void fillRFILink(RequestForApprove requestForApprove, List<SearchRecord> entities) {
-        int randomNum = ThreadLocalRandom.current().nextInt(1400, 1500 + 1);
-        List<SearchRecord> event = getRandomItemsFromList(entities, 1500);
+        List<SearchRecord> event = getRandomItemsFromList(entities, 1);
+
         List<SearchRecord> eventwithvoice = event.stream()
                 .filter(w ->
                         w.getAttributes()
-                                .equals("IS_VOICE_HIDDEN") &&
-                                w.getAttributes().containsValue("true"))
+                                .containsKey("IS_VOICE_HIDDEN"))
                 .collect(Collectors.toList());
 
         List<Link> links = new ArrayList<>();
-        for (int i = 0; i < eventwithvoice.size(); i++) {
+        for (SearchRecord record : eventwithvoice) {
             Link link = new Link();
             link.setLinkType("ARTIFACT");
-            link.setLinkId(event.get(i).getId());
-            setRFAEvent(event, links, i, link);
+            link.setLinkId(record.getId());
+            setRFAEvent(record, links, link);
         }
         requestForApprove.setLinks(links);
     }
 
-    private void setRFAEvent(List<SearchRecord> event, List<Link> links, int i, Link link) {
+    private void setRFAEvent(SearchRecord record, List<Link> links, Link link) {
         RFAEvent rfaEvent = new RFAEvent();
+        setRFAEvent(record, rfaEvent);
+        link.setAttributes(Collections.singletonList(rfaEvent));
+        link.setEntities(record.getEntities());
+        links.add(link);
+    }
+
+    private void setRFAEvent(SearchRecord record, RFAEvent rfaEvent) {
         rfaEvent.setObjectType("event");
-        rfaEvent.setType(event.get(i).getType());
-        rfaEvent.setId(event.get(i).getId());
-        rfaEvent.setSources(event.get(i).getSourceType());
-        rfaEvent.setEventFeed(event.get(i).getType());
-        rfaEvent.setSourceType(event.get(i).getSourceType());
-        rfaEvent.setRecordType(event.get(i).getRecordType());
-        rfaEvent.setModifiedOn((event.get(i).getModifiedOn()));
-        rfaEvent.setEventTime(event.get(i).getEventTime());
-        rfaEvent.setEndTime(event.get(i).getEndTime());
-        rfaEvent.setAttributes(event.get(i).getAttributes());
+        rfaEvent.setType(record.getType());
+        rfaEvent.setId(record.getId());
+        rfaEvent.setSources(record.getSourceType());
+        rfaEvent.setSourceType(record.getSourceType());
+        rfaEvent.setRecordType(record.getRecordType());
+        rfaEvent.setEventFeed(record.getType());
+        rfaEvent.setModifiedOn((record.getModifiedOn()));
+        rfaEvent.setEventTime(record.getEventTime());
+        rfaEvent.setEndTime(record.getEndTime());
+        rfaEvent.setAttributes(record.getAttributes());
 
         Assignments assignments = new Assignments();
         assignments.setDesignationIds("Undesignated");
         rfaEvent.setAssignments(assignments);
-
-        link.setAttributes(Collections.singletonList(rfaEvent));
-        links.add(link);
     }
 
     private void fillRFIOrgUnit(RequestForApprove requestForApprove) {
@@ -159,8 +161,7 @@ public class RequestForApproveService implements EntityService<RequestForApprove
 
     private void fillRFIStaticData(RequestForApprove requestForApprove) {
         requestForApprove.setObjectType("RFA");
-        requestForApprove.setObjectType("event");
-        requestForApprove.setClassification("OUO");
+        requestForApprove.setClassification("TS");
         requestForApprove.setDescription("qe_" + RandomStringUtils.randomAlphabetic(5));
         requestForApprove.setSubject("qe_" + RandomStringUtils.randomAlphabetic(5));
     }
