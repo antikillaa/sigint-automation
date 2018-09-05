@@ -85,13 +85,13 @@ public class RequestForApproveService implements EntityService<RequestForApprove
     }
 
     private void fillRFILink(RequestForApprove requestForApprove, List<SearchRecord> entities) {
-        List<SearchRecord> event = getRandomItemsFromList(entities, 1);
-
-        List<SearchRecord> eventwithvoice = event.stream()
+        List<SearchRecord> eventswithvoice = entities.stream()
                 .filter(w ->
                         w.getAttributes()
                                 .containsKey("IS_VOICE_HIDDEN"))
                 .collect(Collectors.toList());
+
+        List<SearchRecord> eventwithvoice = getRandomItemsFromList(eventswithvoice, 1);
 
         List<Link> links = new ArrayList<>();
         for (SearchRecord record : eventwithvoice) {
@@ -104,29 +104,9 @@ public class RequestForApproveService implements EntityService<RequestForApprove
     }
 
     private void setRFAEvent(SearchRecord record, List<Link> links, Link link) {
-        RFAEvent rfaEvent = new RFAEvent();
-        setRFAEvent(record, rfaEvent);
-        link.setAttributes(Collections.singletonList(rfaEvent));
+        link.setAttributes(record.getAttributes());
         link.setEntities(record.getEntities());
         links.add(link);
-    }
-
-    private void setRFAEvent(SearchRecord record, RFAEvent rfaEvent) {
-        rfaEvent.setObjectType("event");
-        rfaEvent.setType(record.getType());
-        rfaEvent.setId(record.getId());
-        rfaEvent.setSources(record.getSourceType());
-        rfaEvent.setSourceType(record.getSourceType());
-        rfaEvent.setRecordType(record.getRecordType());
-        rfaEvent.setEventFeed(record.getType());
-        rfaEvent.setModifiedOn((record.getModifiedOn()));
-        rfaEvent.setEventTime(record.getEventTime());
-        rfaEvent.setEndTime(record.getEndTime());
-        rfaEvent.setAttributes(record.getAttributes());
-
-        Assignments assignments = new Assignments();
-        assignments.setDesignationIds("Undesignated");
-        rfaEvent.setAssignments(assignments);
     }
 
     private void fillRFIOrgUnit(RequestForApprove requestForApprove) {

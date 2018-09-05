@@ -3,9 +3,8 @@ package ae.pegasus.framework.model;
 
 import com.fasterxml.jackson.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -21,7 +20,7 @@ public class Link {
     @JsonProperty("linkType")
     private String linkType;
     @JsonProperty("attributes")
-    private List<RFAEvent> attributes = new ArrayList<>();
+    private Map<String, Object> attributes = new LinkedHashMap<>();
     @JsonProperty("entities")
     private CBEntities entities;
     @JsonIgnore
@@ -47,11 +46,11 @@ public class Link {
         this.linkType = linkType;
     }
 
-    public List<RFAEvent> getAttributes() {
+    public Map<String, Object> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(List<RFAEvent> attributes) {
+    public void setAttributes(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 
