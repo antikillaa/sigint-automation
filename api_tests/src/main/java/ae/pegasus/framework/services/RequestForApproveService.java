@@ -40,7 +40,17 @@ public class RequestForApproveService implements EntityService<RequestForApprove
 
     @Override
     public OperationResult remove(RequestForApprove entity) {
-        return null;
+        log.info("Sending delete new RFA request... :" + JsonConverter.toJsonString(entity));
+
+        G4Response response = g4HttpClient.sendRequest(requestForApproveRequest.remove(entity));
+
+        OperationResult<RequestForApprove> operationResult = new OperationResult<>(response, RequestForApprove.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForApproves().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
     }
 
     @Override
@@ -60,7 +70,14 @@ public class RequestForApproveService implements EntityService<RequestForApprove
 
     @Override
     public OperationResult<RequestForApprove> view(String id) {
-        return null;
+        log.info("View RFA by id:" + id);
+        G4Response response = g4HttpClient.sendRequest(requestForApproveRequest.view(id));
+
+        OperationResult<RequestForApprove> operationResult = new OperationResult<>(response, RequestForApprove.class);
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForApproves().addOrUpdateEntity(operationResult.getEntity());
+        }
+        return operationResult;
     }
 
     public OperationResult<Result> generateNumber() {

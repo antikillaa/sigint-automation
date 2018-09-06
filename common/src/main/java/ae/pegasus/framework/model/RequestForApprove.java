@@ -35,6 +35,16 @@ public class RequestForApprove extends G4Entity {
     private String description;
     @JsonProperty("links")
     private List<Link> links = null;
+    @JsonProperty("wfId")
+    private String wfId;
+    @JsonProperty("stateId")
+    private String stateId;
+    @JsonProperty("stateType")
+    private String stateType;
+    @JsonProperty("state")
+    private String state;
+    @JsonProperty("comment")
+    private String comment;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -116,6 +126,46 @@ public class RequestForApprove extends G4Entity {
     @JsonProperty("links")
     public void setLinks(List<Link> links) {
         this.links = links;
+    }
+
+    public String getWfId() {
+        return wfId;
+    }
+
+    public void setWfId(String wfId) {
+        this.wfId = wfId;
+    }
+
+    public String getStateId() {
+        return stateId;
+    }
+
+    public void setStateId(String stateId) {
+        this.stateId = stateId;
+    }
+
+    public String getStateType() {
+        return stateType;
+    }
+
+    public void setStateType(String stateType) {
+        this.stateType = stateType;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     @JsonAnyGetter

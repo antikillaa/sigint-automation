@@ -28,4 +28,21 @@ public class RequestForApproveRequest extends HttpRequest {
                 .setPayload(requestForApprovePayload);
         return this;
     }
+
+    public RequestForApproveRequest view(String id) {
+        this
+                .setURI(URI + "4/model/" + id + "?userAction=true")
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
+    public RequestForApproveRequest remove(RequestForApprove requestForApprove) {
+        RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
+        requestForApprovePayload.setData(requestForApprove);
+        this
+                .setURI(URI + "4/perform-action/3/")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForApprovePayload);
+        return this;
+    }
 }

@@ -7,9 +7,7 @@ Given I sign in as user with permissions RFI_EXPORT, DESIGNATIONS_READ, RFI_VIEW
 When I send create finder file request
 Then Request is successful
 
-Scenario: Create a RFA
-Meta:
-@wip
+Scenario: Create/Delete a RFA
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -19,6 +17,17 @@ Then Request is successful
 
 When I send create a RFA request
 Then Request is successful
+Then RFA is created
+
+When I send view a RFA request
+Then Request is successful
+
+When I send delete a RFA request
+Then Request is successful
+Then RFA is deleted
+
+When I send view a RFA request
+Then Request is unsuccessful
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
