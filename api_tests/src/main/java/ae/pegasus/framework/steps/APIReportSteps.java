@@ -114,6 +114,15 @@ public class APIReportSteps extends APISteps {
         serviceReport.update(report);
     }
 
+    @When("I send add a comment to report request")
+    public void sendAddACommentRequest() {
+        Report report = Entities.getReports().getLatest();
+        String comment = "qe_" + RandomStringUtils.randomAlphabetic(10);
+        context.put("reportComment", comment);
+        report.setComment(comment);
+        serviceReport.addComment(report);
+    }
+
     @Then("Report is created")
     public void reportIsCreated() {
         Report lastreport = Entities.getReports().getLatest();
@@ -179,6 +188,13 @@ public class APIReportSteps extends APISteps {
         Report updatedReport = Entities.getReports().getLatest();
         Report contextReport = context.get("report", Report.class);
         reportCheck(updatedReport, contextReport);
+    }
+
+    @Then("Comment is added")
+    public void reportCommentIsAdded() {
+        Report actualComment = Entities.getReports().getLatest();
+        String expectComment = context.get("reportComment", String.class);
+        assertEquals(actualComment.getComment(), expectComment);
     }
 
     private void reportCheck(Report updatedReport, Report contextReport) {

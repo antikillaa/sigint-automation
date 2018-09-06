@@ -15,7 +15,8 @@ import java.util.Map;
         "type",
         "source",
         "body",
-        "metadata"
+        "metadata",
+        "attachments"
 })
 public class ReportEvent extends AbstractEntity {
 
@@ -29,6 +30,8 @@ public class ReportEvent extends AbstractEntity {
     private String body;
     @JsonProperty("metadata")
     private Metadata metadata;
+    @JsonProperty("metadata")
+    private Attachment attachments;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -80,6 +83,14 @@ public class ReportEvent extends AbstractEntity {
     @JsonProperty("metadata")
     public void setMetadata(Metadata metadata) {
         this.metadata = metadata;
+    }
+
+    public Attachment getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(Attachment attachments) {
+        this.attachments = attachments;
     }
 
     @JsonAnyGetter

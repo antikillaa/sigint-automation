@@ -13,7 +13,7 @@ Then Request is successful
 
 When I send create a RFI request
 Then Request is successful
-And RFI is created
+And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
@@ -24,13 +24,13 @@ Then Request is successful
 When I send view a RFI request
 Then Request is unsuccessful
 
-Scenario: Submit a RFI
+Scenario: Submit for Approval a RFI
 When I send generate RFI number request
 Then Request is successful
 
 When I send create a RFI request
 Then Request is successful
-And RFI is created
+And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
@@ -42,13 +42,13 @@ When I send submit a RFI request
 Then Request is successful
 Then RFI is submitted
 
-Scenario: Approve a RFI
+Scenario: Approve a RFI via submit button
 When I send generate RFI number request
 Then Request is successful
 
 When I send create a RFI request
 Then Request is successful
-And RFI is created
+And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
@@ -70,7 +70,7 @@ Then Request is successful
 
 When I send create a RFI request
 Then Request is successful
-And RFI is created
+And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
@@ -95,11 +95,65 @@ Then Request is successful
 
 When I send send a RFI request
 Then Request is successful
+Then RFI is sent
 
 When I send view a RFI request
 Then Request is successful
 
+Scenario: Complete a RFI via send button
+When I send generate RFI number request
+Then Request is successful
 
-Scenario: Reject a RFI
+When I send get owner teams a RFI request
+Then Request is successful
+
+When I send send a RFI request
+Then Request is successful
+
+When I send view a RFI request
+Then Request is successful
+
+When I send take ownership a RFI request
+Then Request is successful
+Then RFI is ownershipped
+
+When I send complete took ownership a RFI request
+Then Request is successful
+Then RFI is completed
+
+Scenario: Unassign a RFI
+When I send generate RFI number request
+Then Request is successful
+
+When I send get owner teams a RFI request
+Then Request is successful
+
+When I send send a RFI request
+Then Request is successful
+
+When I send view a RFI request
+Then Request is successful
+
+When I send take ownership a RFI request
+Then Request is successful
+Then RFI is ownershipped
+
+When I send unassign a RFI request
+Then Request is successful
+Then RFI is unassigned
 
 Scenario: Edit a RFI
+When I send generate RFI number request
+Then Request is successful
+
+When I send create a RFI request
+Then Request is successful
+And RFI is correct
+
+When I send view a RFI request
+Then Request is successful
+
+When I send edit a RFI request
+Then Request is successful
+And RFI is correct
+

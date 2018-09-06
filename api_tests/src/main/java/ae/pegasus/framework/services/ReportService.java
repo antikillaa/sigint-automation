@@ -63,15 +63,7 @@ public class ReportService implements EntityService<Report> {
 
     @Override
     public OperationResult<Report> update(Report entity) {
-        log.info("Sending update a report request...");
-
-        G4Response response = g4HttpClient.sendRequest(reportRequest.update(entity));
-
-        OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
-        if (operationResult.isSuccess()) {
-            Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
-        }
-        return operationResult;
+        return add(entity);
     }
 
     @Override
@@ -86,7 +78,7 @@ public class ReportService implements EntityService<Report> {
         return operationResult;
     }
 
-    public OperationResult submit(Report entity) {
+    public OperationResult<Report> submit(Report entity) {
         log.info("Sending submit a new report request...");
 
         G4Response response = g4HttpClient.sendRequest(reportRequest.submit(entity));
@@ -100,7 +92,7 @@ public class ReportService implements EntityService<Report> {
         return operationResult;
     }
 
-    public OperationResult takeOwnership(Report entity) {
+    public OperationResult<Report> takeOwnership(Report entity) {
         log.info("Sending take ownership a report request...");
 
         G4Response response = g4HttpClient.sendRequest(reportRequest.takeOwnership(entity));
@@ -114,7 +106,7 @@ public class ReportService implements EntityService<Report> {
         return operationResult;
     }
 
-    public OperationResult approveReport(Report entity) {
+    public OperationResult<Report> approveReport(Report entity) {
         log.info("Sending approve a report request...");
 
         G4Response response = g4HttpClient.sendRequest(reportRequest.approveReport(entity));
@@ -128,7 +120,7 @@ public class ReportService implements EntityService<Report> {
         return operationResult;
     }
 
-    public OperationResult returnAuthor(Report entity) {
+    public OperationResult<Report> returnAuthor(Report entity) {
         log.info("Sending return to author report request...");
 
         G4Response response = g4HttpClient.sendRequest(reportRequest.returnAuthor(entity));
@@ -142,7 +134,7 @@ public class ReportService implements EntityService<Report> {
         return operationResult;
     }
 
-    public OperationResult rejectReport(Report entity) {
+    public OperationResult<Report> rejectReport(Report entity) {
         log.info("Sending reject a report request...");
 
         G4Response response = g4HttpClient.sendRequest(reportRequest.rejectReport(entity));
@@ -156,7 +148,7 @@ public class ReportService implements EntityService<Report> {
         return operationResult;
     }
 
-    public OperationResult cancelReportNotOwned(Report entity) {
+    public OperationResult<Report> cancelReportNotOwned(Report entity) {
         log.info("Sending reject a report request...");
 
         G4Response response = g4HttpClient.sendRequest(reportRequest.cancelReportNotOwned(entity));
@@ -170,10 +162,22 @@ public class ReportService implements EntityService<Report> {
         return operationResult;
     }
 
-    public OperationResult cancelReportOwned(Report entity) {
+    public OperationResult<Report> cancelReportOwned(Report entity) {
         log.info("Sending reject a report request...");
 
         G4Response response = g4HttpClient.sendRequest(reportRequest.cancelReportOwned(entity));
+
+        OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
+        }
+        return operationResult;
+    }
+
+    public OperationResult<Report> addComment(Report entity) {
+        log.info("Sending add a comment to report request...");
+
+        G4Response response = g4HttpClient.sendRequest(reportRequest.addComment(entity));
 
         OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
         if (operationResult.isSuccess()) {
@@ -249,6 +253,7 @@ public class ReportService implements EntityService<Report> {
     private void fillReportEvents(List<SearchRecord> entities, Report report) {
         int randomNum = ThreadLocalRandom.current().nextInt(50, 150 + 1);
         List<SearchRecord> event = getRandomItemsFromList(entities, randomNum);
+
         List<ReportEvent> reportEvents = new ArrayList<>();
 
         for (int i = 0; i < event.size(); i++) {
@@ -286,11 +291,11 @@ public class ReportService implements EntityService<Report> {
     }
 
     public void setNextOwners(List<CurrentOwner> currentOwner, List<NextOwners> allOwners) {
-        for (int i = 0; i < currentOwner.size(); i++) {
+        for (CurrentOwner owner : currentOwner) {
             NextOwners nextOwner = new NextOwners();
-            nextOwner.setOwnerId(currentOwner.get(i).getOwnerId());
-            nextOwner.setOwnerName(currentOwner.get(i).getOwnerName());
-            nextOwner.setType(currentOwner.get(i).getType());
+            nextOwner.setOwnerId(owner.getOwnerId());
+            nextOwner.setOwnerName(owner.getOwnerName());
+            nextOwner.setType(owner.getType());
             allOwners.add(nextOwner);
         }
     }
