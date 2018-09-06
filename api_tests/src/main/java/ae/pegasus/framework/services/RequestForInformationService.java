@@ -121,8 +121,7 @@ public class RequestForInformationService implements EntityService<RequestForInf
 
     @Override
     public OperationResult<RequestForInformation> update(RequestForInformation entity) {
-        add(entity);
-        return null;
+        return add(entity);
     }
 
     @Override

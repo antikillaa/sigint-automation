@@ -63,8 +63,7 @@ public class ReportService implements EntityService<Report> {
 
     @Override
     public OperationResult<Report> update(Report entity) {
-        add(entity);
-        return null;
+        return add(entity);
     }
 
     @Override
