@@ -129,7 +129,7 @@ public class APIRequestForInformationSteps extends APISteps {
         createdRFI.setSubject("QE_auto " + RandomStringUtils.randomAlphabetic(5));
         createdRFI.setRequired("QE_auto " + RandomStringUtils.randomAlphabetic(5));
         context.put("requestForInformation", createdRFI);
-        serviceRequestForInformation.add(createdRFI);
+        serviceRequestForInformation.update(createdRFI);
         checkRFI(createdRFI);
     }
 
