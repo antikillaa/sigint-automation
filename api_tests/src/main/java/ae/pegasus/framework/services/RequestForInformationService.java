@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
 
 public class RequestForInformationService implements EntityService<RequestForInformation> {
     private static Logger log = Logger.getLogger(ReportService.class);
@@ -288,7 +288,7 @@ public class RequestForInformationService implements EntityService<RequestForInf
     public void setRandomNextOwner(List<CurrentOwner> currentOwner, List<NextOwners> allOwners) {
 
         CurrentOwner currentOwner1 = currentOwner.stream().findAny().orElse(null);
-        assertNull("Current owner:" + currentOwner + " return:" + toJsonString(currentOwner1), currentOwner1);
+        assertNotNull("Current owner:" + currentOwner1 + " return:" + toJsonString(currentOwner), currentOwner);
 
         NextOwners nextOwner = new NextOwners();
         nextOwner.setOwnerId(currentOwner1.getOwnerId());
