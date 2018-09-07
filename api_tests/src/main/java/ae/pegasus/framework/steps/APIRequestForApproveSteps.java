@@ -33,11 +33,7 @@ public class APIRequestForApproveSteps extends APISteps {
         List<SearchRecord> entities = context.get("searchEntities", List.class);
         serviceRequestForApprove.buildRFA(requestForApprove, rfaNo, entities);
         context.put("requestForApprove", requestForApprove);
-        try {
-            Thread.sleep(60000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        sleep(50000);
         serviceRequestForApprove.add(requestForApprove);
     }
 
