@@ -45,4 +45,32 @@ public class RequestForApproveRequest extends HttpRequest {
                 .setPayload(requestForApprovePayload);
         return this;
     }
+
+    public RequestForApproveRequest possibleOwnersTeams(RequestForApprove requestForApprove) {
+        this
+                .setURI(URI + "4/possible-owners/2/")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForApprove);
+        return this;
+    }
+
+    public RequestForApproveRequest sendForApprove(RequestForApprove requestForApprove) {
+        RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
+        requestForApprovePayload.setData(requestForApprove);
+        this
+                .setURI(URI + "4/perform-action/2/")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForApprovePayload);
+        return this;
+    }
+
+    public RequestForApproveRequest cancel(RequestForApprove requestForApprove) {
+        RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
+        requestForApprovePayload.setData(requestForApprove);
+        this
+                .setURI(URI + "4/perform-action/4/")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForApprovePayload);
+        return this;
+    }
 }

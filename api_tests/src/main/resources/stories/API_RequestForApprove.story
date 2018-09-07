@@ -32,3 +32,45 @@ Then Request is unsuccessful
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
+
+Scenario: Send for approval a RFA
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+
+When I send generate RFA number request
+Then Request is successful
+
+When I send get owner teams a RFA request
+Then Request is successful
+
+When I send Send for approval a RFA request
+Then Request is successful
+Then RFA is created
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
+
+Scenario: Cancel sent for approval a RFA
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+
+When I send generate RFA number request
+Then Request is successful
+
+When I send get owner teams a RFA request
+Then Request is successful
+
+When I send Send for approval a RFA request
+Then Request is successful
+Then RFA is created
+
+When I send cancel a RFA request
+Then Request is successful
+Then RFA is cancelled
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |

@@ -93,7 +93,7 @@ Then Request is successful
 When I send get owner teams a RFI request
 Then Request is successful
 
-When I send send a RFI request
+When I send Send for approval a RFA request
 Then Request is successful
 
 When I send view a RFI request
