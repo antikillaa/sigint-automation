@@ -47,6 +47,8 @@ public class RequestForApprove extends G4Entity {
     private String comment;
     @JsonProperty("nextOwners")
     private List<NextOwners> nextOwners = null;
+    @JsonProperty("allOwners")
+    private List<AllOwner> allOwners = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -172,6 +174,14 @@ public class RequestForApprove extends G4Entity {
 
     public List<NextOwners> getNextOwners() {
         return nextOwners;
+    }
+
+    public List<AllOwner> getAllOwners() {
+        return allOwners;
+    }
+
+    public void setAllOwners(List<AllOwner> allOwners) {
+        this.allOwners = allOwners;
     }
 
     public void setNextOwners(List<NextOwners> nextOwners) {

@@ -90,6 +90,33 @@ public class APIRequestForApproveSteps extends APISteps {
         serviceRequestForApprove.update(lastRFA);
     }
 
+    @When("I send take ownership a RFA request")
+    public void sendTakeOwnershipRFARequest() {
+        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
+        serviceRequestForApprove.takeOwnership(lastRFA);
+    }
+
+    @When("I send remove ownership a RFA request")
+    public void sendRemoveOwnershipRFARequest() {
+        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
+        lastRFA.setComment("Auto QE " + RandomStringUtils.random(5));
+        serviceRequestForApprove.removeOwnership(lastRFA);
+    }
+
+    @When("I send reject a RFA request")
+    public void sendRejectRFARequest() {
+        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
+        lastRFA.setComment("Auto QE " + RandomStringUtils.random(5));
+        serviceRequestForApprove.reject(lastRFA);
+    }
+
+    @When("I send approve a RFA request")
+    public void sendApproveRFARequest() {
+        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
+        lastRFA.setComment("Auto QE " + RandomStringUtils.random(5));
+        serviceRequestForApprove.approve(lastRFA);
+    }
+
 
     @Then("RFA is created")
     public void rfaIsCreated() {
@@ -131,6 +158,41 @@ public class APIRequestForApproveSteps extends APISteps {
         checkRFA(lastRFA);
         assertEquals(lastRFA.getState(), "Cancelled");
         assertEquals(lastRFA.getStateId(), "6");
+        assertEquals(lastRFA.getStateType(), "FINAL");
+        assertEquals(lastRFA.getWfId(), "4");
+    }
+
+    @Then("RFA is ownershipped")
+    public void rfaIsOwnershipped() {
+        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
+        checkRFA(lastRFA);
+        assertEquals(lastRFA.getState(), "Under Approval");
+        assertEquals(lastRFA.getStateId(), "3");
+        assertEquals(lastRFA.getStateType(), "IN_PROGRESS");
+        assertEquals(lastRFA.getWfId(), "4");
+    }
+
+    @Then("RFA is rejected")
+    public void rfaIsRejected() {
+        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
+        checkRFA(lastRFA);
+        assertEquals(lastRFA.getState(), "Rejected");
+        assertEquals(lastRFA.getStateId(), "5");
+        assertEquals(lastRFA.getStateType(), "FINAL");
+        assertEquals(lastRFA.getWfId(), "4");
+    }
+
+    @Then("RFA is unownershipped")
+    public void rfaIsUnownershipped() {
+        rfaIsSentForApproval();
+    }
+
+    @Then("RFA is approved")
+    public void rfaIsApproved() {
+        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
+        checkRFA(lastRFA);
+        assertEquals(lastRFA.getState(), "Approved");
+        assertEquals(lastRFA.getStateId(), "4");
         assertEquals(lastRFA.getStateType(), "FINAL");
         assertEquals(lastRFA.getWfId(), "4");
     }

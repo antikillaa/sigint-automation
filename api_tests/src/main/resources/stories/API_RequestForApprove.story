@@ -105,13 +105,114 @@ Examples:
 | SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
 
 Scenario: Take ownership a RFA
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
 
-Scenario: Cancel awaiting a assignment RFA
+When I send generate RFA number request
+Then Request is successful
 
-Scenario: Edit a assigned RFA
+When I send get owner teams a RFA request
+Then Request is successful
 
-Scenario: Cancel a assigned RFA
+When I send Send for approval a RFA request
+Then Request is successful
+Then RFA is created
 
-Scenario: Unassign a assigned RFA
+Given I sign in as admin user
 
-Scenario: Complite a assigned RFA
+When I send take ownership a RFA request
+Then Request is successful
+Then RFA is ownershipped
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
+
+Scenario: Remove Ownership a assigned RFA
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+
+When I send generate RFA number request
+Then Request is successful
+
+When I send get owner teams a RFA request
+Then Request is successful
+
+When I send Send for approval a RFA request
+Then Request is successful
+Then RFA is created
+
+Given I sign in as admin user
+
+When I send take ownership a RFA request
+Then Request is successful
+Then RFA is ownershipped
+
+When I send remove ownership a RFA request
+Then Request is successful
+Then RFA is unownershipped
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
+
+
+Scenario: Reject a assigned RFA
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+
+When I send generate RFA number request
+Then Request is successful
+
+When I send get owner teams a RFA request
+Then Request is successful
+
+When I send Send for approval a RFA request
+Then Request is successful
+Then RFA is created
+
+Given I sign in as admin user
+
+When I send take ownership a RFA request
+Then Request is successful
+Then RFA is ownershipped
+
+When I send reject a RFA request
+Then Request is successful
+Then RFA is rejected
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
+
+Scenario: Approve a assigned RFA
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+
+When I send generate RFA number request
+Then Request is successful
+
+When I send get owner teams a RFA request
+Then Request is successful
+
+When I send Send for approval a RFA request
+Then Request is successful
+Then RFA is created
+
+Given I sign in as admin user
+
+When I send take ownership a RFA request
+Then Request is successful
+Then RFA is ownershipped
+
+When I send approve a RFA request
+Then Request is successful
+Then RFA is approved
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |

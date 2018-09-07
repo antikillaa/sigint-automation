@@ -73,4 +73,44 @@ public class RequestForApproveRequest extends HttpRequest {
                 .setPayload(requestForApprovePayload);
         return this;
     }
+
+    public RequestForApproveRequest takeOwnership(RequestForApprove requestForApprove) {
+        RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
+        requestForApprovePayload.setData(requestForApprove);
+        this
+                .setURI(URI + "4/perform-action/5/")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForApprovePayload);
+        return this;
+    }
+
+    public RequestForApproveRequest removeOwnership(RequestForApprove requestForApprove) {
+        RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
+        requestForApprovePayload.setData(requestForApprove);
+        this
+                .setURI(URI + "4/perform-action/9/")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForApprovePayload);
+        return this;
+    }
+
+    public RequestForApproveRequest reject(RequestForApprove requestForApprove) {
+        RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
+        requestForApprovePayload.setData(requestForApprove);
+        this
+                .setURI(URI + "4/perform-action/7/")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForApprovePayload);
+        return this;
+    }
+
+    public RequestForApproveRequest approve(RequestForApprove requestForApprove) {
+        RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
+        requestForApprovePayload.setData(requestForApprove);
+        this
+                .setURI(URI + "4/perform-action/6/")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForApprovePayload);
+        return this;
+    }
 }

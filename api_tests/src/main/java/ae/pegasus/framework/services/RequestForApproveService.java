@@ -105,7 +105,7 @@ public class RequestForApproveService implements EntityService<RequestForApprove
     }
 
     public OperationResult<RequestForApprove> sendForApprove(RequestForApprove entity) {
-        log.info("Sending send for approval request...");
+        log.info("Sending send for approval a RFA request...");
 
         G4Response response = g4HttpClient.sendRequest(requestForApproveRequest.sendForApprove(entity));
 
@@ -119,9 +119,65 @@ public class RequestForApproveService implements EntityService<RequestForApprove
     }
 
     public OperationResult<RequestForApprove> cancel(RequestForApprove entity) {
-        log.info("Sending cancel request...");
+        log.info("Sending cancel a RFA request...");
 
         G4Response response = g4HttpClient.sendRequest(requestForApproveRequest.cancel(entity));
+
+        OperationResult<RequestForApprove> operationResult = new OperationResult<>(response, RequestForApprove.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForApproves().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
+    public OperationResult<RequestForApprove> takeOwnership(RequestForApprove entity) {
+        log.info("Sending send take ownership a RFA request...");
+
+        G4Response response = g4HttpClient.sendRequest(requestForApproveRequest.takeOwnership(entity));
+
+        OperationResult<RequestForApprove> operationResult = new OperationResult<>(response, RequestForApprove.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForApproves().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
+    public OperationResult<RequestForApprove> removeOwnership(RequestForApprove entity) {
+        log.info("Sending send remove ownership a RFA request...");
+
+        G4Response response = g4HttpClient.sendRequest(requestForApproveRequest.removeOwnership(entity));
+
+        OperationResult<RequestForApprove> operationResult = new OperationResult<>(response, RequestForApprove.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForApproves().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
+    public OperationResult<RequestForApprove> reject(RequestForApprove entity) {
+        log.info("Sending send reject a RFA request...");
+
+        G4Response response = g4HttpClient.sendRequest(requestForApproveRequest.reject(entity));
+
+        OperationResult<RequestForApprove> operationResult = new OperationResult<>(response, RequestForApprove.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForApproves().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
+    public OperationResult<RequestForApprove> approve(RequestForApprove entity) {
+        log.info("Sending send approve a RFA request...");
+
+        G4Response response = g4HttpClient.sendRequest(requestForApproveRequest.approve(entity));
 
         OperationResult<RequestForApprove> operationResult = new OperationResult<>(response, RequestForApprove.class, "result");
         if (operationResult.isSuccess()) {
