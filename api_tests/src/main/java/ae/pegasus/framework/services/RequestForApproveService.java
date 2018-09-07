@@ -21,7 +21,7 @@ public class RequestForApproveService implements EntityService<RequestForApprove
     private static RequestForApproveRequest requestForApproveRequest = new RequestForApproveRequest();
 
     @Override
-    public OperationResult<?> add(RequestForApprove entity) {
+    public OperationResult<RequestForApprove> add(RequestForApprove entity) {
         log.info("Sending create new RFI request... :" + JsonConverter.toJsonString(entity));
 
         G4Response response = g4HttpClient.sendRequest(requestForApproveRequest.add(entity));
@@ -62,7 +62,8 @@ public class RequestForApproveService implements EntityService<RequestForApprove
 
     @Override
     public OperationResult<RequestForApprove> update(RequestForApprove entity) {
-        return null;
+        log.info("Sending update RFA request...");
+        return add(entity);
     }
 
     @Override

@@ -33,7 +33,7 @@ public class APIRequestForApproveSteps extends APISteps {
         List<SearchRecord> entities = context.get("searchEntities", List.class);
         serviceRequestForApprove.buildRFA(requestForApprove, rfaNo, entities);
         context.put("requestForApprove", requestForApprove);
-        sleep(50000);
+        sleep(60000);
         serviceRequestForApprove.add(requestForApprove);
     }
 
@@ -80,6 +80,16 @@ public class APIRequestForApproveSteps extends APISteps {
         serviceRequestForApprove.cancel(lastRFA);
     }
 
+    @When("I send update a RFA request")
+    public void sendUpdateRFARequest() {
+        RequestForApprove requestForApprove = new RequestForApprove();
+        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
+        lastRFA.setDescription("QE Auto" + RandomStringUtils.randomAlphabetic(5));
+        lastRFA.setSubject("QE Auto" + RandomStringUtils.randomAlphabetic(5));
+        context.put("requestForApprove", requestForApprove);
+        serviceRequestForApprove.update(lastRFA);
+    }
+
 
     @Then("RFA is created")
     public void rfaIsCreated() {
@@ -99,7 +109,6 @@ public class APIRequestForApproveSteps extends APISteps {
     @Then("RFA is deleted")
     public void rfaIsDeleted() {
         RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
-        checkRFA(lastRFA);
         assertEquals(lastRFA.getState(), "Deleted");
         assertEquals(lastRFA.getStateId(), "0");
         assertEquals(lastRFA.getStateType(), "DELETED");
