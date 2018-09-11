@@ -188,15 +188,16 @@ public class RequestForApproveService implements EntityService<RequestForApprove
         return operationResult;
     }
 
-    public OperationResult<RequestForApprove> getAudioContent(String id) {
-        log.info("Get audio content" + id);
+    public OperationResult<Result> getAudioContent(String id) {
+        log.info("Get audio content " + id);
         G4Response response = g4HttpClient.sendRequest(requestForApproveRequest.getAudioContent(id));
 
-        OperationResult<RequestForApprove> operationResult = new OperationResult<>(response, RequestForApprove.class);
+        OperationResult<Result> operationResult = new OperationResult<>(response, Result.class);
         if (operationResult.isSuccess()) {
-            Entities.getRequestForApproves().addOrUpdateEntity(operationResult.getEntity());
+            return operationResult;
+        } else {
+            throw new OperationResultError(operationResult);
         }
-        return operationResult;
     }
 
     public void buildRFA(RequestForApprove requestForApprove, Result rfaNo, List<SearchRecord> entities) {

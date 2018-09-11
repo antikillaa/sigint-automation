@@ -116,7 +116,7 @@ public class RequestForApproveRequest extends HttpRequest {
 
     public RequestForApproveRequest getAudioContent(String id) {
         this
-                .setURI("api/upload-sigint/files/" + id + "/content")
+                .setURI("/api/upload-sigint/files/" + id + "/content")
                 .setHttpMethod(HttpMethod.GET);
         return this;
     }

@@ -128,11 +128,13 @@ public class APIRequestForApproveSteps extends APISteps {
 
     @When("I send search for accessed audio request")
     public void sendGotAccessAudioRequest() {
-        SearchService serviceSearch = new SearchService();
         RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
+
         String id = lastRFA.getLinks().get(0).getLinkId();
         CBSearchFilter filter = context.get("cbSearchFilter", CBSearchFilter.class);
         filter.setQuery("id:" + id);
+
+        SearchService serviceSearch = new SearchService();
         OperationResult<List<SearchEntity>> operationResult = serviceSearch.search(filter);
         List<SearchEntity> searchEntities = operationResult.getEntity();
         assertNotNull(searchEntities);
@@ -154,8 +156,18 @@ public class APIRequestForApproveSteps extends APISteps {
     public void audioIsAvailable() {
         List<SearchEntity> searchEntities = context.get("searchEntities", List.class);
         SearchRecord searchRecord = (SearchRecord) searchEntities.get(0);
-        String file_id = searchRecord.getAttributes().get("UPLOAD_M4A_FILE_ID").toString();
-        assertNotNull(file_id);
+        ArrayList<String> ids = (ArrayList<String>) searchRecord.getAttributes().get("UPLOAD_M4A_FILE_ID");
+        String id = ids.get(0);
+        assertNotNull(id);
+    }
+
+    @Then("User able access to audio")
+    public void userAccessToAudio() {
+        List<SearchEntity> searchEntities = context.get("searchEntities", List.class);
+        SearchRecord searchRecord = (SearchRecord) searchEntities.get(0);
+        ArrayList<String> ids = (ArrayList<String>) searchRecord.getAttributes().get("UPLOAD_M4A_FILE_ID");
+        String id = ids.get(0);
+        serviceRequestForApprove.getAudioContent(id);
     }
 
     @Then("RFA is created")

@@ -219,6 +219,8 @@ Examples:
 | SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
 
 Scenario: User able get access to audio after approve RFA
+Meta:
+@wip
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -249,6 +251,7 @@ Then Request is successful
 When I send search for accessed audio request
 Then Request is successful
 Then Audio content is available
+Then User able access to audio
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
