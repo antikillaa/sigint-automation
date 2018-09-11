@@ -1,10 +1,12 @@
 package ae.pegasus.framework.steps;
 
 
+import ae.pegasus.framework.controllers.APILogin;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.RequestForApproveService;
+import ae.pegasus.framework.services.SearchService;
 import org.apache.commons.lang.RandomStringUtils;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class APIRequestForApproveSteps extends APISteps {
 
@@ -24,6 +27,12 @@ public class APIRequestForApproveSteps extends APISteps {
         OperationResult<Result> operationResult = serviceRequestForApprove.generateNumber();
         rfaNo.setResult(operationResult.getEntity().getResult());
         context.put("rfaNo", rfaNo);
+    }
+
+    @When("I save logged user")
+    public void saveLoggedUser() {
+        LoggedUser loggedUser = appContext.getLoggedUser();
+        context.put("loggedUser", loggedUser);
     }
 
     @When("I send create a RFA request")
@@ -117,6 +126,37 @@ public class APIRequestForApproveSteps extends APISteps {
         serviceRequestForApprove.approve(lastRFA);
     }
 
+    @When("I send search for accessed audio request")
+    public void sendGotAccessAudioRequest() {
+        SearchService serviceSearch = new SearchService();
+        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
+        String id = lastRFA.getLinks().get(0).getLinkId();
+        CBSearchFilter filter = context.get("cbSearchFilter", CBSearchFilter.class);
+        filter.setQuery("id:" + id);
+        OperationResult<List<SearchEntity>> operationResult = serviceSearch.search(filter);
+        List<SearchEntity> searchEntities = operationResult.getEntity();
+        assertNotNull(searchEntities);
+        context.put("searchEntities", searchEntities);
+
+    }
+
+    @When("I as login first user")
+    public void loginAsFirstUser() {
+        User loggedUser = context.get("loggedUser", LoggedUser.class).getUser();
+        String email = loggedUser.getName();
+        String password = loggedUser.getPassword();
+        APILogin login = new APILogin();
+        login.signInAsUser(email, password);
+        checkResultSuccess();
+    }
+
+    @Then("Audio content is available")
+    public void audioIsAvailable() {
+        List<SearchEntity> searchEntities = context.get("searchEntities", List.class);
+        SearchRecord searchRecord = (SearchRecord) searchEntities.get(0);
+        String file_id = searchRecord.getAttributes().get("UPLOAD_M4A_FILE_ID").toString();
+        assertNotNull(file_id);
+    }
 
     @Then("RFA is created")
     public void rfaIsCreated() {

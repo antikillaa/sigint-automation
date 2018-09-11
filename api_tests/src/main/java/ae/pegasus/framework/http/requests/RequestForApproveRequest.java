@@ -113,4 +113,11 @@ public class RequestForApproveRequest extends HttpRequest {
                 .setPayload(requestForApprovePayload);
         return this;
     }
+
+    public RequestForApproveRequest getAudioContent(String id) {
+        this
+                .setURI("api/upload-sigint/files/" + id + "/content")
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
 }

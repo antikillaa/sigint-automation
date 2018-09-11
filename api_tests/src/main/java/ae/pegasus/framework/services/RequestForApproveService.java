@@ -188,6 +188,17 @@ public class RequestForApproveService implements EntityService<RequestForApprove
         return operationResult;
     }
 
+    public OperationResult<RequestForApprove> getAudioContent(String id) {
+        log.info("Get audio content" + id);
+        G4Response response = g4HttpClient.sendRequest(requestForApproveRequest.getAudioContent(id));
+
+        OperationResult<RequestForApprove> operationResult = new OperationResult<>(response, RequestForApprove.class);
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForApproves().addOrUpdateEntity(operationResult.getEntity());
+        }
+        return operationResult;
+    }
+
     public void buildRFA(RequestForApprove requestForApprove, Result rfaNo, List<SearchRecord> entities) {
         fillRFIStaticData(requestForApprove);
         requestForApprove.setInternalRequestNo(rfaNo.getResult());
@@ -203,7 +214,7 @@ public class RequestForApproveService implements EntityService<RequestForApprove
                                 .containsKey("IS_VOICE_HIDDEN"))
                 .collect(Collectors.toList());
 
-        List<SearchRecord> eventwithvoice = getRandomItemsFromList(eventswithvoice, 1);
+        List<SearchRecord> eventwithvoice = getRandomItemsFromList(eventswithvoice, 3);
 
         List<Link> links = new ArrayList<>();
         for (SearchRecord record : eventwithvoice) {
