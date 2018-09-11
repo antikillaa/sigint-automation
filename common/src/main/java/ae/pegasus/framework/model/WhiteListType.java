@@ -24,7 +24,8 @@ public enum WhiteListType {
     VEHICLE_PLATE_NUMBER,
     PLATE_TEMPLATE_NAME,
     VOIP_ID,
-    DARK_WEB_FORUM_NAME;
+    DARK_WEB_FORUM_NAME,
+    BANK_ACCOUNT_NUMBER;
 
     private static final List<WhiteListType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();

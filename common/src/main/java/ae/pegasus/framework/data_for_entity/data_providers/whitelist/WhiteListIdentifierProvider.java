@@ -38,9 +38,8 @@ public class WhiteListIdentifierProvider extends DependencyDataProvider {
                 identifier = RandomGenerator.generateID();
                 break;
             default:
-                identifier = "qe_" + RandomStringUtils.randomAlphabetic(8);
+                identifier = "qe_" + RandomStringUtils.randomNumeric(8);
                 break;
-
         }
         return identifier;
     }
