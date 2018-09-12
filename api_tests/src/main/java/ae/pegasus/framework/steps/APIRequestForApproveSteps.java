@@ -130,9 +130,7 @@ public class APIRequestForApproveSteps extends APISteps {
     public void sendGotAccessAudioRequest() {
         RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
 
-        String id = lastRFA.getLinks().get(0).getLinkId();
-        CBSearchFilter filter = context.get("cbSearchFilter", CBSearchFilter.class);
-        filter.setQuery("id:" + id);
+        CBSearchFilter filter = getIdLink(lastRFA);
 
         SearchService serviceSearch = new SearchService();
         OperationResult<List<SearchEntity>> operationResult = serviceSearch.search(filter);
@@ -140,6 +138,13 @@ public class APIRequestForApproveSteps extends APISteps {
         assertNotNull(searchEntities);
         context.put("searchEntities", searchEntities);
 
+    }
+
+    public CBSearchFilter getIdLink(RequestForApprove lastRFA) {
+        String id = lastRFA.getLinks().get(0).getLinkId();
+        CBSearchFilter filter = context.get("cbSearchFilter", CBSearchFilter.class);
+        filter.setQuery("id:" + id);
+        return filter;
     }
 
     @When("I as login first user")
