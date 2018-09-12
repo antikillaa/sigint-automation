@@ -152,6 +152,7 @@ public class APIRequestForInformationSteps extends APISteps {
     @Then("RFI is cancelled")
     public void rfiIsCancelled() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        checkRFI(lastRFI);
         assertEquals(lastRFI.getState(), "Cancelled");
         assertEquals(lastRFI.getStateId(), "7");
         assertEquals(lastRFI.getStateType(), "FINAL");
@@ -161,6 +162,7 @@ public class APIRequestForInformationSteps extends APISteps {
     @Then("RFI is ownershipped")
     public void rfiIsOwnershipped() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        checkRFI(lastRFI);
         assertEquals(lastRFI.getState(), "Under Assignment");
         assertEquals(lastRFI.getStateId(), "4");
         assertEquals(lastRFI.getStateType(), "IN_PROGRESS");
@@ -170,6 +172,7 @@ public class APIRequestForInformationSteps extends APISteps {
     @Then("RFI is completed")
     public void rfiIsComplited() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        checkRFI(lastRFI);
         assertEquals(lastRFI.getState(), "Completed");
         assertEquals(lastRFI.getStateId(), "5");
         assertEquals(lastRFI.getStateType(), "FINAL");
@@ -179,18 +182,21 @@ public class APIRequestForInformationSteps extends APISteps {
     @Then("RFI is unassigned")
     public void rfiIsUnassigned() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        checkRFI(lastRFI);
         checkAwaitingAssignment(lastRFI);
     }
 
     @Then("RFI is sent")
     public void rfiIsSent() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        checkRFI(lastRFI);
         checkAwaitingAssignment(lastRFI);
     }
 
     @Then("RFI is approved")
     public void rfiIsApproved() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        checkRFI(lastRFI);
         checkAwaitingAssignment(lastRFI);
     }
 

@@ -86,6 +86,23 @@ When I send cancel a RFI request
 Then Request is successful
 Then RFI is cancelled
 
+Scenario: Take ownership a RFI
+When I send generate RFI number request
+Then Request is successful
+
+When I send get owner teams a RFI request
+Then Request is successful
+
+When I send send a RFI request
+Then Request is successful
+
+When I send view a RFI request
+Then Request is successful
+
+When I send take ownership a RFI request
+Then Request is successful
+Then RFI is ownershipped
+
 Scenario: Send a RFI
 When I send generate RFI number request
 Then Request is successful
