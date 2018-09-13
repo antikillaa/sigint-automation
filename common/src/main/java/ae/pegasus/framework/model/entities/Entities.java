@@ -15,6 +15,7 @@ public class Entities {
     private static RecordList records;
     private static ReportList reports;
     private static RequestForInformationList requestForInformations;
+    private static RequestForApproveList requestForApproves;
     private static SourceList sources;
     private static ReportCategoriesList reportCategories;
     private static ProfileList profiles;
@@ -188,5 +189,12 @@ public class Entities {
             requestForInformations = new RequestForInformationList();
         }
         return requestForInformations;
+    }
+
+    public static RequestForApproveList getRequestForApproves() {
+        if (requestForApproves == null) {
+            requestForApproves = new RequestForApproveList();
+        }
+        return requestForApproves;
     }
 }

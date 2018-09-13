@@ -17,6 +17,12 @@ public class OrgUnit {
     private String orgUnitId;
     @JsonProperty("orgUnitName")
     private String orgUnitName;
+    @JsonProperty("key")
+    private String key;
+    @JsonProperty("value")
+    private String value;
+    @JsonProperty("label")
+    private String label;
 
     @JsonProperty("orgUnitId")
     public String getOrgUnitId() {
@@ -36,5 +42,29 @@ public class OrgUnit {
     @JsonProperty("orgUnitName")
     public void setOrgUnitName(String orgUnitName) {
         this.orgUnitName = orgUnitName;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

@@ -65,4 +65,13 @@ public abstract class APISteps {
         log.info("Waiting for " + delay + " seconds...");
         DateHelper.waitTime(delay);
     }
+
+    public void sleep(int i) {
+        //FIXME
+        try {
+            Thread.sleep(i);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

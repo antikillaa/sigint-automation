@@ -15,7 +15,7 @@ public class CBSearchFilter {
     private List<DataSourceCategory> sourceType = new ArrayList<>();
     private SearchObjectType objectType = SearchObjectType.event;
     private String query = "";
-    private Page page;
+    private Page page = new Page();
 
     public CBSearchFilter() {
     }
@@ -27,7 +27,6 @@ public class CBSearchFilter {
 
         // pagination
         if (pageNumber != null && !Objects.equals(pageNumber.toLowerCase(), "null")) {
-            this.page = new Page();
             setPageNumber(Integer.valueOf(pageNumber));
             setPageSize((pageSize == null || Objects.equals(pageSize.toLowerCase(), "null")) ?
                     null : Integer.valueOf(pageSize));
