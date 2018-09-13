@@ -148,8 +148,7 @@ public class APIRequestForApproveSteps extends APISteps {
         }
         String id = ids.toString()
                 .replace(",", "|")
-                .replace("[", "")
-                .replace("]", "");
+                .replaceAll("[\\[\\]]", "");
         CBSearchFilter filter = context.get("cbSearchFilter", CBSearchFilter.class);
         filter.setQuery("id:(" + id + ")");
         return filter;
@@ -182,8 +181,7 @@ public class APIRequestForApproveSteps extends APISteps {
             SearchRecord searchRecord = (SearchRecord) searchEntity;
             String id = searchRecord.getAttributes().get("UPLOAD_M4A_FILE_ID")
                     .toString()
-                    .replace("[", "")
-                    .replace("]", "");
+                    .replaceAll("[\\[\\]]", "");
             serviceRequestForApprove.getAudioContent(id);
         }
     }
