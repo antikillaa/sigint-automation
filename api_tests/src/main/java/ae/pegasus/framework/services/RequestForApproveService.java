@@ -241,9 +241,7 @@ public class RequestForApproveService implements EntityService<RequestForApprove
         Organization organization = orgUnits.stream()
                 .filter(a -> Objects.equals(a.getId(), teamID))
                 .findAny().orElse(null);
-        if (organization == null) {
             assertNotNull(organization);
-        }
         OrgUnit orgUnit = new OrgUnit();
         orgUnit.setOrgUnitId("00-" + teamID);
         orgUnit.setOrgUnitName(organization.getFullName());
