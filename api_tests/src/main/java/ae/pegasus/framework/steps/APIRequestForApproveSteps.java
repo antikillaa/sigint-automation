@@ -169,10 +169,12 @@ public class APIRequestForApproveSteps extends APISteps {
     @Then("Audio content is available")
     public void audioIsAvailable() {
         List<SearchEntity> searchEntities = context.get("searchEntities", List.class);
-        SearchRecord searchRecord = (SearchRecord) searchEntities.get(0);
-        ArrayList<String> ids = (ArrayList<String>) searchRecord.getAttributes().get("UPLOAD_M4A_FILE_ID");
-        String id = ids.get(0);
-        assertNotNull(id);
+        for (SearchEntity searchEntity : searchEntities) {
+            SearchRecord searchRecord = (SearchRecord) searchEntity;
+            ArrayList<String> ids = (ArrayList<String>) searchRecord.getAttributes().get("UPLOAD_M4A_FILE_ID");
+            //String id = ids.get(0);
+            assertNotNull(ids);
+        }
     }
 
     @Then("User able access to audio")

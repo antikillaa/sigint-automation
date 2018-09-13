@@ -211,9 +211,8 @@ public class RequestForApproveService implements EntityService<RequestForApprove
 
     private void fillRFILink(RequestForApprove requestForApprove, List<SearchRecord> entities) {
         List<SearchRecord> eventswithvoice = entities.stream()
-                .filter(w ->
-                        w.getAttributes()
-                                .containsKey("IS_VOICE_HIDDEN"))
+                .filter(w -> w.getAttributes()
+                        .containsKey("IS_VOICE_HIDDEN"))
                 .collect(Collectors.toList());
 
         List<SearchRecord> eventwithvoice = getRandomItemsFromList(eventswithvoice, 3);
