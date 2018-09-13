@@ -143,8 +143,7 @@ public class APIRequestForApproveSteps extends APISteps {
     private CBSearchFilter getIdLink(RequestForApprove lastRFA) {
         List<String> ids = new ArrayList<>();
         for (Link requestForApprove : lastRFA.getLinks()) {
-            String id = requestForApprove.getLinkId();
-            String request = id;
+            String request = requestForApprove.getLinkId();
             ids.add(request);
         }
         String id = ids.toString()
@@ -172,7 +171,6 @@ public class APIRequestForApproveSteps extends APISteps {
         for (SearchEntity searchEntity : searchEntities) {
             SearchRecord searchRecord = (SearchRecord) searchEntity;
             ArrayList<String> ids = (ArrayList<String>) searchRecord.getAttributes().get("UPLOAD_M4A_FILE_ID");
-            //String id = ids.get(0);
             assertNotNull(ids);
         }
     }
@@ -180,10 +178,14 @@ public class APIRequestForApproveSteps extends APISteps {
     @Then("User able access to audio")
     public void userAccessToAudio() {
         List<SearchEntity> searchEntities = context.get("searchEntities", List.class);
-        SearchRecord searchRecord = (SearchRecord) searchEntities.get(0);
-        ArrayList<String> ids = (ArrayList<String>) searchRecord.getAttributes().get("UPLOAD_M4A_FILE_ID");
-        String id = ids.get(0);
-        serviceRequestForApprove.getAudioContent(id);
+        for (SearchEntity searchEntity : searchEntities) {
+            SearchRecord searchRecord = (SearchRecord) searchEntity;
+            String id = searchRecord.getAttributes().get("UPLOAD_M4A_FILE_ID")
+                    .toString()
+                    .replace("[", "")
+                    .replace("]", "");
+            serviceRequestForApprove.getAudioContent(id);
+        }
     }
 
     @Then("RFA is created")
