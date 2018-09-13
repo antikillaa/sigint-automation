@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemsFromList;
+import static org.junit.Assert.assertNotNull;
 
 public class RequestForApproveService implements EntityService<RequestForApprove> {
 
@@ -242,7 +243,7 @@ public class RequestForApproveService implements EntityService<RequestForApprove
                 .filter(a -> Objects.equals(a.getId(), teamID))
                 .findAny().orElse(null);
         if (organization == null) {
-            /* TODO */
+            assertNotNull(organization);
         }
         OrgUnit orgUnit = new OrgUnit();
         orgUnit.setOrgUnitId("00-" + teamID);
@@ -271,10 +272,10 @@ public class RequestForApproveService implements EntityService<RequestForApprove
     }
 
     public void setNextOwnersTeam(List<OrgUnit> currentOrgUnits, List<NextOwners> nextOwners) {
-        for (int i = 0; i < currentOrgUnits.size(); i++) {
+        for (OrgUnit orgUnit : currentOrgUnits) {
             NextOwners nextOwner = new NextOwners();
-            nextOwner.setOwnerId(currentOrgUnits.get(i).getOrgUnitId());
-            nextOwner.setOwnerName(currentOrgUnits.get(i).getOrgUnitName());
+            nextOwner.setOwnerId(orgUnit.getOrgUnitId());
+            nextOwner.setOwnerName(orgUnit.getOrgUnitName());
             nextOwner.setType("TEAM");
             nextOwners.add(nextOwner);
         }

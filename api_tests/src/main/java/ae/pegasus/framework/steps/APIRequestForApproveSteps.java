@@ -42,7 +42,7 @@ public class APIRequestForApproveSteps extends APISteps {
         List<SearchRecord> entities = context.get("searchEntities", List.class);
         serviceRequestForApprove.buildRFA(requestForApprove, rfaNo, entities);
         context.put("requestForApprove", requestForApprove);
-        sleep(60000);
+        sleep(60000); //FIXME
         serviceRequestForApprove.add(requestForApprove);
     }
 
@@ -64,7 +64,7 @@ public class APIRequestForApproveSteps extends APISteps {
         List<NextOwners> nextOwners = new ArrayList<>();
         serviceRequestForApprove.setNextOwnersTeam(currentOrgUnits, nextOwners);
         RFA.setNextOwners(nextOwners);
-        sleep(60000);
+        sleep(60000); //FIXME
         serviceRequestForApprove.sendForApprove(RFA);
     }
 
@@ -85,7 +85,7 @@ public class APIRequestForApproveSteps extends APISteps {
     public void sendCancelRFARequest() {
         RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
         lastRFA.setComment("Auto QE " + RandomStringUtils.random(5));
-        sleep(50000);
+        sleep(50000); //FIXME
         serviceRequestForApprove.cancel(lastRFA);
     }
 
@@ -140,10 +140,19 @@ public class APIRequestForApproveSteps extends APISteps {
 
     }
 
-    public CBSearchFilter getIdLink(RequestForApprove lastRFA) {
-        String id = lastRFA.getLinks().get(0).getLinkId();
+    private CBSearchFilter getIdLink(RequestForApprove lastRFA) {
+        List<String> ids = new ArrayList<>();
+        for (Link requestForApprove : lastRFA.getLinks()) {
+            String id = requestForApprove.getLinkId();
+            String request = id;
+            ids.add(request);
+        }
+        String id = ids.toString()
+                .replace(",", "|")
+                .replace("[", "")
+                .replace("]", "");
         CBSearchFilter filter = context.get("cbSearchFilter", CBSearchFilter.class);
-        filter.setQuery("id:" + id);
+        filter.setQuery("id:(" + id + ")");
         return filter;
     }
 
