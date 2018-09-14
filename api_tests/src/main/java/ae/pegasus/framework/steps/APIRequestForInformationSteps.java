@@ -25,11 +25,11 @@ public class APIRequestForInformationSteps extends APISteps {
         context.put("rfiNo", rfiNo);
     }
 
-    @When("I send create a RFI request")
-    public void sendCreateRFIRequest() {
+    @When("I send create a $type RFI request")
+    public void sendCreateRFIRequest(String type) {
         RequestForInformation requestForInformation = new RequestForInformation();
         Result rfitNo = context.get("rfiNo", Result.class);
-        serviceRequestForInformation.buildRFI(requestForInformation, rfitNo);
+        serviceRequestForInformation.buildRFI(requestForInformation, rfitNo, type);
         context.put("requestForInformation", requestForInformation);
         serviceRequestForInformation.add(requestForInformation);
     }
@@ -54,11 +54,11 @@ public class APIRequestForInformationSteps extends APISteps {
         context.put("currentOwner", currentOwnerMembers.getEntity());
     }
 
-    @When("I send get owner teams a RFI request")
-    public void sendGetOwnersTeamsRFIRequest() {
+    @When("I send get owner teams a $type RFI request")
+    public void sendGetOwnersTeamsRFIRequest(String type) {
         RequestForInformation requestForInformation = new RequestForInformation();
         Result rfitNo = context.get("rfiNo", Result.class);
-        serviceRequestForInformation.buildRFI(requestForInformation, rfitNo);
+        serviceRequestForInformation.buildRFI(requestForInformation, rfitNo, type);
         OperationResult<List<CurrentOwner>> currentOwnersTeams = serviceRequestForInformation.possibleOwnersTeams(requestForInformation);
         context.put("currentOwner", currentOwnersTeams.getEntity());
         context.put("requestForInformation", requestForInformation);

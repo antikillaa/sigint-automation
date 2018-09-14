@@ -231,17 +231,23 @@ public class RequestForInformationService implements EntityService<RequestForInf
         return operationResult;
     }
 
-    public void buildRFI(RequestForInformation requestForInformation, Result rfiNo) {
-        fillRFIStaticData(requestForInformation);
+    public void buildRFI(RequestForInformation requestForInformation, Result rfiNo, String type) {
+        fillRFIStaticData(requestForInformation, type);
         requestForInformation.setInternalRequestNo(rfiNo.getResult());
         fillRFIOrgUnit(requestForInformation);
         fillRFIFinderFile(requestForInformation);
     }
 
-    private void fillRFIStaticData(RequestForInformation requestForInformation) {
+    private void fillRFIStaticData(RequestForInformation requestForInformation, String type) {
         requestForInformation.setObjectType("RFI");
         requestForInformation.setPriority("IMPORTANT");
-        requestForInformation.setType("INTERNAL");
+        if (type == "EXTERNAL") {
+            requestForInformation.setType("EXTERNAL");
+            requestForInformation.setRequestingParty("qe_" + RandomStringUtils.randomAlphabetic(5));
+            requestForInformation.setExternalRequestNo("qe_" + RandomStringUtils.randomAlphabetic(5));
+        } else {
+            requestForInformation.setType("INTERNAL");
+        }
         requestForInformation.setClassification("OUO");
         requestForInformation.setTimeToResponse(3);
         requestForInformation.setRequired("qe_" + RandomStringUtils.randomAlphabetic(5));
@@ -256,9 +262,7 @@ public class RequestForInformationService implements EntityService<RequestForInf
         Organization organization = orgUnits.stream()
                 .filter(a -> Objects.equals(a.getId(), teamID))
                 .findAny().orElse(null);
-        if (organization == null) {
-            /* TODO */
-        }
+        assertNotNull(organization);
         OrgUnit orgUnit = new OrgUnit();
         orgUnit.setOrgUnitId("00-" + teamID);
         orgUnit.setOrgUnitName(organization.getFullName());

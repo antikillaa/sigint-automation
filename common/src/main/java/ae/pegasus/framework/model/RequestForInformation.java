@@ -81,6 +81,10 @@ public class RequestForInformation extends G4Entity {
     private String state;
     @JsonProperty("comment")
     private String comment;
+    @JsonProperty("requestingParty")
+    private String requestingParty;
+    @JsonProperty("externalRequestNo")
+    private String externalRequestNo;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -327,6 +331,22 @@ public class RequestForInformation extends G4Entity {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getRequestingParty() {
+        return requestingParty;
+    }
+
+    public void setRequestingParty(String requestingParty) {
+        this.requestingParty = requestingParty;
+    }
+
+    public String getExternalRequestNo() {
+        return externalRequestNo;
+    }
+
+    public void setExternalRequestNo(String externalRequestNo) {
+        this.externalRequestNo = externalRequestNo;
     }
 
     @JsonAnySetter
