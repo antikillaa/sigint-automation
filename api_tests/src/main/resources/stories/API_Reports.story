@@ -159,7 +159,6 @@ Examples:
 | eventFeed | objectType | query  | pageNumber | pageSize |
 | SIGINT | event | type:"CALL" | 0 | 100 |
 | SIGINT | event | type:"LOCATION" | 0 | 100 |
-| SIGINT | event | type:"EMAIL" | 0 | 100 |
 | SIGINT | event | type:"FAX" | 0 | 100 |
 | SIGINT | event | type:"VLR" | 0 | 100 |
 | SIGINT | event | type:"MMS_ROAMING" | 0 | 100 |
