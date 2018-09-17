@@ -1,5 +1,5 @@
 Meta:
-@story profile
+@story profiler
 
 
 Lifecycle:
@@ -12,7 +12,6 @@ Given Find or create test target from json:<target>
 Examples:
 | target | image |
 | profiles/Darkwing_Duck.json | profiles/Darkwing_Duck.jpg |
-| profiles/Launchpad_McQuack.json | profiles/Launchpad_McQuack.jpg |
 
 
 Scenario: Upload image to profiles
@@ -25,7 +24,6 @@ Then Profile contain uploaded image
 Examples:
 | target | image |
 | profiles/Darkwing_Duck.json | profiles/Darkwing_Duck.jpg |
-| profiles/Launchpad_McQuack.json | profiles/Launchpad_McQuack.jpg |
 
 
 Scenario: API.Create profile
