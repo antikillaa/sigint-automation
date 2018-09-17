@@ -16,8 +16,7 @@ public enum DataSourceType {
     PHONEBOOK,
     J1,
     J2,
-    //SUBSCRIBER,
-    //SY,
+    CentralBank,
     DARK_WEB,
     DARK_WEB_REPORTS,
     INSTAGRAM,
@@ -30,9 +29,6 @@ public enum DataSourceType {
     KARMA,
     ODD_JOBS,
     ZELZAL,
-    //TARGET,
-    //TARGET_GROUP,
-    //FLASHPOINT,
     H;
 
     private static final List<DataSourceType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
