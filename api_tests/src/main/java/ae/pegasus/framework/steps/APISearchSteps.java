@@ -516,23 +516,13 @@ public class APISearchSteps extends APISteps {
         }
     }
 
-    @When("I send SQM search request - query:$query, sourceTypes:$sourceTypes, objectType:$objectType, pageNumber:$pageNumber, pageSize:$pageSize")
-    public void SQMSearch(String query, String sourceTypes, String objectType, String pageNumber, String pageSize) {
-        SearchQueueRequest request = new SearchQueueRequest();
-        request.setSourceType(StringUtils.splitToList(sourceTypes));
-        request.setQuery(query);
-        request.setObjectType(StringUtils.splitToList(objectType));
-        request.getPage().setPageNumber(Integer.valueOf(pageNumber));
-        request.getPage().setPageSize(Integer.valueOf(pageSize));
-
-        OperationResult<String> searchResults = sqmService.search(request);
-
-        context.put("searchQueueId", searchResults.getEntity());
-        context.put("searchQuery", query);
+    @When("I send SQM search request - query:$query, sourceTypes:$sourceTypes, objectType:$objectType, pageNumber:$pageNumber, pageSize:$pageSize, sortKey:$sortKey")
+    public void SQMSearch(String query, String sourceTypes, String objectType, String pageNumber, String pageSize, String sortKey) {
+        basicSQMSearch(query, "", sourceTypes, objectType, pageNumber, pageSize, sortKey);
     }
 
-    @When("I send basic SQM search request - query:$query, metadata:$metadata, sourceTypes:$sourceTypes, objectType:$objectType, pageNumber:$pageNumber, pageSize:$pageSize")
-    public void basicSQMSearch(String query, String metadata, String sourceTypes, String objectType, String pageNumber, String pageSize) {
+    @When("I send basic SQM search request - query:$query, metadata:$metadata, sourceTypes:$sourceTypes, objectType:$objectType, pageNumber:$pageNumber, pageSize:$pageSize, sortKey:$sortKey")
+    public void basicSQMSearch(String query, String metadata, String sourceTypes, String objectType, String pageNumber, String pageSize, String sortKey) {
         SearchQueueRequest request = new SearchQueueRequest();
         request.setSourceType(StringUtils.splitToList(sourceTypes));
         request.setMetadata(metadata);
@@ -540,6 +530,11 @@ public class APISearchSteps extends APISteps {
         request.setObjectType(StringUtils.splitToList(objectType));
         request.getPage().setPageNumber(Integer.valueOf(pageNumber));
         request.getPage().setPageSize(Integer.valueOf(pageSize));
+
+        if (Objects.equals(sortKey, "eventTime")) {
+            SearchQueueRequest.Sort sort = request.new Sort("eventTime", SortDirection.DESC);
+            request.getSort().add(sort);
+        }
 
         OperationResult<String> searchResults = sqmService.search(request);
 

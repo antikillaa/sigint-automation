@@ -1,11 +1,14 @@
 package ae.pegasus.framework.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SearchQueueRequest extends AbstractEntity {
 
     private String uuid;
@@ -20,6 +23,7 @@ public class SearchQueueRequest extends AbstractEntity {
     private List<String> objectType = new ArrayList<>();
     private String query;
     private String metadata;
+    private List<Sort> sort = new ArrayList<>();
 
     public List<String> getSourceType ()
     {
@@ -111,6 +115,42 @@ public class SearchQueueRequest extends AbstractEntity {
 
     public void setHighlight(Highlight highlight) {
         this.highlight = highlight;
+    }
+
+    public List<Sort> getSort() {
+        return sort;
+    }
+
+    public void setSort(List<Sort> sort) {
+        this.sort = sort;
+    }
+
+
+    public class Sort {
+
+        private String key;
+        private SortDirection direction;
+
+        public Sort(String key, SortDirection direction) {
+            this.key = key;
+            this.direction = direction;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public SortDirection getDirection() {
+            return direction;
+        }
+
+        public void setDirection(SortDirection direction) {
+            this.direction = direction;
+        }
     }
 }
 			

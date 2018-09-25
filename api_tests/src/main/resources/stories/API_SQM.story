@@ -12,7 +12,7 @@ Before:
 Given I sign in as admin user
 
 Scenario: SQM basic events search
-When I send SQM search request - query:<query>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send SQM search request - query:<query>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
 When SQM search completed
 When I get search queue results:
 | eventFeed | objectType | pageNumber | pageSize |
@@ -23,12 +23,13 @@ When I get search queue results:
 Then TotalCount's in search results > 0
 
 Examples:
-| sourceTypes | objectType | query  | pageNumber | pageSize |
-| SIGINT, OSINT, GOVINT, GOVINT2 | event | | 0 | 20 |
+| sourceTypes | objectType | query  | pageNumber | pageSize | sortKey |
+| SIGINT, OSINT, GOVINT, GOVINT2 | event | eventTime:[$NOW-90d..$NOW] | 0 | 20 | eventTime |
+| SIGINT, OSINT, GOVINT, GOVINT2 | event | eventTime:[$NOW-90d..$NOW] | 0 | 20 | relevance |
 
 
 Scenario: SQM basic entities search
-When I send SQM search request - query:<query>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send SQM search request - query:<query>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
 When SQM search completed
 When I get search queue results:
 | eventFeed | objectType | pageNumber | pageSize |
@@ -42,12 +43,11 @@ Then TotalCount's in search results > 0
 
 Examples:
 | sourceTypes | objectType | query  | pageNumber | pageSize |
-| SIGINT, OSINT, GOVINT, GOVINT2, PROFILER, INFORMATION_MANAGEMENT | entity | | 0 | 20 |
+| SIGINT, OSINT, GOVINT, GOVINT2, PROFILER, INFORMATION_MANAGEMENT | entity | | 0 | 20 | relevance |
 
 
 Scenario: Event. The maximum number of search results for a single query is limited to 1000 records.
-Meta: @nightly
-When I send SQM search request - query:<query>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send SQM search request - query:<query>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
 When SQM search completed
 When I get search queue results:
 | eventFeed | objectType | pageNumber | pageSize |
@@ -60,12 +60,11 @@ And TotalCount's in search results < 1001
 
 Examples:
 | sourceTypes | objectType | query  | pageNumber | pageSize |
-| SIGINT, OSINT, GOVINT, GOVINT2 | event | | 0 | 1100 |
+| SIGINT, OSINT, GOVINT, GOVINT2 | event | eventTime:[$NOW-90d..$NOW] | 0 | 1100 | eventTime |
 
 
 Scenario: Entity. The maximum number of search results for a single query is limited to 1000 records
-Meta: @nightly
-When I send SQM search request - query:<query>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send SQM search request - query:<query>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
 When SQM search completed
 When I get search queue results:
 | eventFeed | objectType | pageNumber | pageSize |
@@ -80,12 +79,12 @@ And TotalCount's in search results < 1001
 
 Examples:
 | sourceTypes | objectType | query  | pageNumber | pageSize |
-| SIGINT, OSINT, GOVINT, GOVINT2, PROFILER, INFORMATION_MANAGEMENT | entity | | 0 | 1100 |
+| SIGINT, OSINT, GOVINT, GOVINT2, PROFILER, INFORMATION_MANAGEMENT | entity | eventTime:[$NOW-90d..$NOW] | 0 | 1100 | eventTime |
 
 
 Scenario: J2 SMS search
 Meta: @dev
-When I send basic SQM search request - query:<query>, metadata:<metadata>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send basic SQM search request - query:<query>, metadata:<metadata>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
 When SQM search completed
 When I get search queue results:
 | eventFeed | objectType | pageNumber | pageSize |
@@ -95,12 +94,12 @@ And CB search results matched to filters
 
 Examples:
 | sourceTypes | objectType | query | metadata | pageNumber | pageSize |
-| SIGINT | event | dataSource:"J2" AND type:("SMS" OR "MMS" OR "VSMS" OR "SIP_VIDEO") AND eventTime:["2010-08-21T21:00:00.000Z".."2018-08-22T20:59:00.000Z"] | {"filters":{"eventFeed":"SIGINT","dataSource":["J2"],"objectType":"event","type":["TEXTING"],"eventTime":{"from":"2010-08-20T21:00:00.000Z","to":"2018-08-21T20:59:00.000Z"}}} | 0 | 20 |
+| SIGINT | event | dataSource:"J2" AND type:("SMS" OR "MMS" OR "VSMS" OR "SIP_VIDEO") AND eventTime:[$NOW-90d..$NOW] | {"filters":{"eventFeed":"SIGINT","dataSource":["J2"],"objectType":"event","type":["TEXTING"],"event","eventTime":{"from":"$NOW-90d","to":"$NOW"}}} | 0 | 20 | eventTime |
 
 
 Scenario: J2 CALL search
 Meta: @dev
-When I send basic SQM search request - query:<query>, metadata:<metadata>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send basic SQM search request - query:<query>, metadata:<metadata>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
 When SQM search completed
 When I get search queue results:
 | eventFeed | objectType | pageNumber | pageSize |
@@ -110,12 +109,12 @@ And CB search results matched to filters
 
 Examples:
 | sourceTypes | objectType | query | metadata | pageNumber | pageSize |
-| SIGINT | event | dataSource:"J2" AND type:"CALL" AND eventTime:["2010-08-21T21:00:00.000Z".."2018-08-22T20:59:00.000Z"] | {"filters":{"eventFeed":"SIGINT","dataSource":["J2"],"objectType":"event","type":["CALL"],"eventTime":{"from":"2010-08-21T21:00:00.000Z","to":"2018-08-22T20:59:00.000Z"}}} | 0 | 20 |
+| SIGINT | event | dataSource:"J2" AND type:"CALL" AND eventTime:[$NOW-90d..$NOW] | {"filters":{"eventFeed":"SIGINT","dataSource":["J2"],"objectType":"event","type":["CALL"],"eventTime":{"from":"$NOW-90d","to":"$NOW"}}} | 0 | 20 | eventTime |
 
 
 Scenario: FININT search
 Meta: @dev
-When I send basic SQM search request - query:<query>, metadata:<metadata>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+When I send basic SQM search request - query:<query>, metadata:<metadata>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
 When SQM search completed
 When I get search queue results:
 | eventFeed | objectType | pageNumber | pageSize |
@@ -125,4 +124,4 @@ And CB search results matched to filters
 
 Examples:
 | sourceTypes | objectType | query | metadata | pageNumber | pageSize |
-| FININT | event | eventTime:["2010-05-26T15:52:00.000Z".."2019-08-24T15:52:00.000Z"]| {"query":"","filters":{"eventFeed":"FININT","objectType":"event","eventTime":{"from":"2010-05-26T15:52:00.000Z","to":"2019-08-24T15:52:00.000Z"}}}| 0 | 20 |
+| FININT | event | eventTime:[$NOW-90d..$NOW]| {"query":"","filters":{"eventFeed":"FININT","objectType":"event","eventTime":{"from":"$NOW-90d","to":"$NOW"}}}| 0 | 20 | eventTime |
