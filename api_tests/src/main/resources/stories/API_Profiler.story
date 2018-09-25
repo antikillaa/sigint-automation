@@ -69,9 +69,9 @@ Then Request is successful
 And Merged profile is correct
 
 When I send get first merged profile details request
-Then Request is unsuccessful
+Then Request is successful
 When I send get second merged profile details request
-Then Request is unsuccessful
+Then Request is successful
 
 When I send delete profile request
 Then Request is successful
