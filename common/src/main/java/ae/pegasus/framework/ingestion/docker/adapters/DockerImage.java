@@ -45,7 +45,7 @@ class DockerImage {
   }
 
   static DockerImage dataGeneratorImage() {
-    final String IMAGE = "docker-registry.pegasus.ae/data-generator:1.03";
+    final String IMAGE = "docker-registry.pegasus.ae/pg/data-generator:1.03";
     final String DATA_PATH = "/src/test_data";
 
     return new DockerImage(IMAGE, DATA_PATH);
