@@ -13,6 +13,7 @@ import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.jbehave.core.model.ExamplesTable;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -82,46 +83,56 @@ public class APISearchSteps extends APISteps {
     public void ExcelDrivenSearch(String excelpath) {
         CBSearchExcel searchex = new CBSearchExcel(excelpath);
         OperationResult<List<SearchEntity>> operationResult = null;
-        /*for (Integer key : searchex.exceldata.keySet()) {
-            String apierror = "";
-            Boolean EventEntity = true;
-            try {
-                CBSearchFilter filter = new CBSearchFilter(searchex.exceldata.get(key).get(0), searchex.exceldata.get(key).get(1),
-                        searchex.exceldata.get(key).get(2),
-                        searchex.exceldata.get(key).get(3),searchex.exceldata.get(key).get(4));
-                operationResult = service.search(filter);
-                List<SearchEntity> searchResults = operationResult.getEntity();
-                context.put("searchEntities", searchResults);
-                context.put("cbSearchFilter", filter);
-
-                    cbSearchResultsContainsOnlySourceTypeAndObjectTypeRecords(searchex.exceldata.get(key).get(0), "EventVO");
-
-                    searchex.getRequiredResult(key ,operationResult.getCode() , Integer.parseInt(operationResult.getMessage().toString().split(",")[0].split(":")[1]),apierror);
-
-            }*/
+        String date = "n/a";
+        SearchResult<SearchEntity> searchResult = null;
+        String query = "";
 
         for (int i = 0; i < searchex.rows.size(); i++) {
             String apierror = "";
             Boolean EventEntity = true;
             try {
 
-               /* CBSearchFilter filter1 = new CBSearchFilter(searchex.exceldata.get(1).get(0), searchex.exceldata.get(1).get(1),
-                        searchex.exceldata.get(1).get(2),
-                        searchex.exceldata.get(1).get(3),searchex.exceldata.get(1).get(4));*/
+                if(searchex.rowdata.get("objectType").get(i).equals("event"))
+                    query = searchex.rowdata.get("query").get(i) + " " + searchex.rowdata.get("eventTime").get(i);
+
+                basicSQMSearch(query ,"" ,searchex.rowdata.get("Source Type").get(i),
+                        searchex.rowdata.get("objectType").get(i),searchex.rowdata.get("pageNumber").get(i), searchex.rowdata.get("pageSize").get(i),"eventTime");
+
+                SQMSearchCompleted();
+                SearchQueue searchQueue = context.get("searchQueue", SearchQueue.class);
+
+                String eventFeed  =  searchex.rowdata.get("Source Type").get(i);
+                String objectType =  searchex.rowdata.get("objectType").get(i);
+                String pageNumber =  searchex.rowdata.get("pageNumber").get(i);
+                String pageSize   =  searchex.rowdata.get("pageSize").get(i);
+
+                 searchResult = sqmService.result(searchQueue.getUuid(),
+                        DataSourceCategory.valueOf(eventFeed), SearchObjectType.valueOf(objectType),
+                        Integer.valueOf(pageNumber), Integer.valueOf(pageSize)).getEntity();
+
+
+
 
                 CBSearchFilter filter = new CBSearchFilter(searchex.rowdata.get("Source Type").get(i), searchex.rowdata.get("objectType").get(i),
                         searchex.rowdata.get("query").get(i),
                         searchex.rowdata.get("pageSize").get(i), searchex.rowdata.get("pageNumber").get(i));
 
+
                 operationResult = service.search(filter);
 
-                List<SearchEntity> searchResults = operationResult.getEntity();
+                /*List<SearchEntity> searchResults = operationResult.getEntity();
                 context.put("searchEntities", searchResults);
-                context.put("cbSearchFilter", filter);
+                context.put("cbSearchFilter", filter);*/
 
-                cbSearchResultsContainsOnlySourceTypeAndObjectTypeRecords(searchex.rowdata.get("Source Type").get(i), searchex.rowdata.get("EventOREntity").get(i));
+              //  cbSearchResultsContainsOnlySourceTypeAndObjectTypeRecords(searchex.rowdata.get("Source Type").get(i), searchex.rowdata.get("EventOREntity").get(i));
 
-                searchex.getRequiredResult(searchex.rows.get(i), operationResult.getCode(), Integer.parseInt(operationResult.getMessage().toString().split(",")[0].split(":")[1]), apierror, i);
+                if(objectType.toString().equals("entity") || searchResult.getTotalCount() == 0)
+                    date = "n/a";
+                else
+                    date =  ((SearchRecord) searchResult.getData().get(0)).getEventTime().toString();
+
+                searchex.getRequiredResult(searchex.rows.get(i), operationResult.getCode(),searchResult.getTotalCount(),
+                        apierror, i,date);
 
             } catch (AssertionError e) {
                 apierror = e.getMessage();
@@ -129,24 +140,28 @@ public class APISearchSteps extends APISteps {
                     apierror = "the data should contian only" + searchex.rowdata.get("EventOREntity").get(i) + "but thats not the case";
                     EventEntity = false;
                     e.printStackTrace();
-                    searchex.getRequiredResult(searchex.rows.get(i), operationResult.getCode(), Integer.parseInt(operationResult.getMessage().toString().split(",")[0].split(":")[1]), apierror, i, EventEntity);
+                    searchex.getRequiredResult(searchex.rows.get(i), operationResult.getCode(), searchResult.getTotalCount(), apierror, i, EventEntity);
                 } else {
                     e.printStackTrace();
                     searchex.getRequiredResult(searchex.rows.get(i), operationResult.getCode(),
-                            Integer.parseInt(operationResult.getMessage().toString().split(",")[0].split(":")[1]), apierror, i);
+                            Integer.parseInt(operationResult.getMessage().toString().split(",")[0].split(":")[1]), apierror, i,date);
 
                 }
             } catch (Exception e) {
                 apierror = e.getMessage();
                 e.printStackTrace();
                 searchex.getRequiredResult(searchex.rows.get(i), -1,
-                        -1, apierror, i);
+                        -1, apierror, i,date);
             }
 
         }
         searchex.writeOutputExcel();
+        try {
+            searchex.CopySheet();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
     private void searchIngestedRecords(String objectType, String criteria, String size, String additionalQuery) {
         int expectedCount = Integer.valueOf(size);
 

@@ -13,7 +13,7 @@ htmlEmail.html
 *.NC
 
 # generated files
-data
+
 ingestionData
 importData
 importTargetsData

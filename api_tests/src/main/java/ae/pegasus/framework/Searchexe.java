@@ -23,17 +23,8 @@ public class Searchexe {
                 excelpath = args[3];
         }
 
-        RunProperties prop = new RunProperties();
-
-
-
-        /*Properties table=new Properties();
-        table=  prop.setProp();
-        table.setProperty("sigintURL" ,url );
-        prop.savepropertyfile(table);
-        System.out.println(prop.getApplicationURL());*/
-        prop.seturl(url);
-       // prop.setProperty("sigintURL" , url);
+            RunProperties prop = new RunProperties();
+            prop.seturl(url);
             APILoginSteps login = new APILoginSteps();
             login.signInGlobal();
             APISearchSteps Search = new APISearchSteps();

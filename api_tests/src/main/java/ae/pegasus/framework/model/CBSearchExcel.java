@@ -2,6 +2,9 @@ package ae.pegasus.framework.model;
 
 import ae.pegasus.framework.utils.ExcelOpr;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,7 +18,11 @@ public class CBSearchExcel {
     private ExcelOpr op;
     public ArrayList<Integer> rows =new ArrayList<Integer>();
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    String date = LocalDateTime.now().format(formatter).toString();
+
     public CBSearchExcel(String excelpath ) {
+
 
         workingDir = System.getProperty("user.dir") + excelpath;
         System.out.printf(workingDir);
@@ -25,13 +32,15 @@ public class CBSearchExcel {
         rows = op.getallrowsbasedoncolvalue("Run Test", "Y");
 
     }
-    public void getRequiredResult( int key ,int reposonsecode , int totalcount, String error,int row)
+    public void getRequiredResult(int key , int reposonsecode , double totalcount, String error, int row, String eventime)
     {
 
         ArrayList copy = new ArrayList(exceldata.get(key));
         copy.add(String.valueOf(reposonsecode));
         copy.add(String.valueOf(totalcount));
         copy.add(String.valueOf(error));
+        copy .add(date);
+        copy.add(eventime.toString());
         String a  = "==";
         if (reposonsecode == Integer.parseInt(copy.get(5).toString()) &&
             compareByCriteria(copy.get(7).toString(),Integer.parseInt(copy.get(6).toString()),totalcount))
@@ -45,13 +54,36 @@ public class CBSearchExcel {
 
     }
 
-    public void getRequiredResult( int key ,int reposonsecode , int totalcount, String error,int row, Boolean entity)
+
+    public void getRequiredResult(int key , int reposonsecode , double totalcount, String error, int row)
     {
 
         ArrayList copy = new ArrayList(exceldata.get(key));
         copy.add(String.valueOf(reposonsecode));
         copy.add(String.valueOf(totalcount));
         copy.add(String.valueOf(error));
+        copy .add(date);
+        String a  = "==";
+        if (reposonsecode == Integer.parseInt(copy.get(5).toString()) &&
+                compareByCriteria(copy.get(7).toString(),Integer.parseInt(copy.get(6).toString()),totalcount))
+            copy.add(String.valueOf("PASS"));
+
+        else
+            copy.add(String.valueOf("FAIL"));
+
+        outputdata.put(key, copy);
+        // System.out.println(" the op is " + outputdata.get(key));
+
+    }
+
+    public void getRequiredResult( int key ,int reposonsecode , double totalcount, String error,int row, Boolean entity)
+    {
+
+        ArrayList copy = new ArrayList(exceldata.get(key));
+        copy.add(String.valueOf(reposonsecode));
+        copy.add(String.valueOf(totalcount));
+        copy.add(String.valueOf(error));
+        copy .add(LocalDateTime.now().format(formatter).toString());
         copy.add(String.valueOf("FAIL"));
         outputdata.put(key, copy);
         // System.out.println(" the op is " + outputdata.get(key));
@@ -61,10 +93,18 @@ public class CBSearchExcel {
     {
         op.clearSheetdata("Output");
         op.setCellData("Output", outputdata);
+
        // op.setCellData1("Output", outputdata);
 
     }
-    public static boolean compareByCriteria(String criteria, int actualValue, int expectedValue) {
+
+    public void CopySheet( ) throws IOException {
+        op.copyFileUsingApacheCommonsIO(workingDir ,System.getProperty("user.dir") );
+
+    }
+
+
+    public static boolean compareByCriteria(String criteria, int actualValue, double expectedValue) {
 
         boolean condition;
 

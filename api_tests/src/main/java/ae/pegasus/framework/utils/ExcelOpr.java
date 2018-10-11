@@ -2,13 +2,20 @@ package ae.pegasus.framework.utils;
 
 
 
+import org.apache.commons.io.FileUtils;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -349,7 +356,6 @@ public class ExcelOpr {
                     style.setBorderTop(BorderStyle.THIN);
                     style.setBorderRight(BorderStyle.THIN);
                     style.setBorderLeft(BorderStyle.THIN);
-
                     cell.setCellStyle(style);
                 }
                 if (data.get(key).get(i).equals("PASS")) {
@@ -360,10 +366,9 @@ public class ExcelOpr {
                     style.setBorderTop(BorderStyle.THIN);
                     style.setBorderRight(BorderStyle.THIN);
                     style.setBorderLeft(BorderStyle.THIN);
-
                     cell.setCellStyle(style);
                 }
-                cell.setCellValue(data.get(key).get(i));
+                cell.setCellValue(data.get(key).get(i).toString());
                // cell.setCellStyle(style);
 
             }
@@ -431,5 +436,17 @@ public class ExcelOpr {
         }
     }
 
+    public  void copyFileUsingApacheCommonsIO(String source, String path) throws IOException {
+        String dest = path + "/output/";
+
+        File sourceFile = new File(source);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        String formatDateTime = LocalDateTime.now().format(formatter);
+
+        File targetFile = new File(dest +formatDateTime+".xlsx");
+        FileUtils.copyFile(sourceFile, targetFile);
+    }
 
 }
