@@ -1,5 +1,6 @@
 Meta:
 @story rfa
+@nightly
 
 Lifecycle:
 Before:
