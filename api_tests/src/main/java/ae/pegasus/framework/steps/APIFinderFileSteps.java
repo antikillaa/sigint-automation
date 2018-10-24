@@ -157,20 +157,9 @@ public class APIFinderFileSteps extends APISteps {
                 .forEach(serviceCase::remove);
     }
 
-    private void casesShouldBeNotEqual(FinderCase expected, FinderCase created) {
-        assertNotEquals(expected.getType(), created.getType());
-        assertNotEquals(expected.getBaseType(), created.getBaseType());
-        assertNotEquals(toJsonString(expected.getReqPermissions()), toJsonString(created.getReqPermissions()));
-        assertNotEquals(toJsonString(expected.getParentChain()), toJsonString(created.getParentChain()));
-        assertNotEquals(expected.getAggregatedTypeCounts(), created.getAggregatedTypeCounts());
-        assertNotEquals(expected.getName(), created.getName());
-        assertNotEquals(expected.getDescription(), created.getDescription());
-        assertNotEquals(expected.getDescription(), created.getDescription());
-    }
-
     private void filesShouldBeEqual(FinderFile expected, FinderFile created) {
         assertEquals(expected.getType(), created.getType());
-        assertEquals(expected.getBaseType(), created.getBaseType());
+        //assertEquals(expected.getBaseType(), created.getBaseType());
         assertEquals(toJsonString(expected.getReqPermissions()), toJsonString(created.getReqPermissions()));
         assertEquals(toJsonString(expected.getParentChain()), toJsonString(created.getParentChain()));
         assertEquals(expected.getAggregatedTypeCounts(), created.getAggregatedTypeCounts());
