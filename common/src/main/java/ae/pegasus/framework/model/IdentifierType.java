@@ -36,8 +36,8 @@ public enum IdentifierType {
     INSTAGRAM_HANDLE("INSTAGRAM HANDLE"),
     TUMBLR_ID("TUMBLR ID"),
     TUMBLR_HANDLE("TUMBLR HANDLE"),
-    UID_NUMBER("UID NUMBER");
-
+    UID_NUMBER("UID NUMBER"),
+    VEHICLE_PLATE_TEXT("VEHICLE_PLATE_TEXT");
 
     private final String descriptions;
 
