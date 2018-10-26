@@ -29,6 +29,7 @@ public enum DataSourceType {
     KARMA,
     ODD_JOBS,
     ZELZAL,
+    MCC,
     H;
 
     private static final List<DataSourceType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
