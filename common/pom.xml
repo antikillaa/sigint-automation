@@ -11,6 +11,21 @@
     <artifactId>common</artifactId>
     <version>1.0.0</version>
 
+    <dependencies>
+        <!--Randomizer and other math stuff-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>${math3.version}</version>
+        </dependency>
+        <!--Phone Codes-->
+        <dependency>
+            <groupId>com.googlecode.libphonenumber</groupId>
+            <artifactId>libphonenumber</artifactId>
+            <version>${phone.codes.version}</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>

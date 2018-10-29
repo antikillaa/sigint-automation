@@ -15,23 +15,33 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
+        <framework.version>1.3.6</framework.version>
         <jbehave.core.version>4.3.4</jbehave.core.version>
         <jersey.version>2.25</jersey.version>
         <log4j.version>1.2.17</log4j.version>
         <poi.version>3.17</poi.version>
+        <selenide.version>4.11.1</selenide.version>
+        <webdrivermanager.version>2.2.1</webdrivermanager.version>
+        <math3.version>3.6.1</math3.version>
+        <phone.codes.version>8.9.13</phone.codes.version>
+        <tika.version>1.18</tika.version>
         <!--Stories related-->
         <stories>**/*Launcher.java</stories>
         <metaFilters>-deprecated -skip -wip -nightly -notstage</metaFilters>
         <reportBuildStatus>false</reportBuildStatus>
         <!--Framework set-up-->
-        <remoteRun>true</remoteRun>
-        <sigintURL>http://cb-test2.pegasus.ae</sigintURL>
+        <remoteRun>false</remoteRun>
         <webBrowser>chrome</webBrowser>
-        <seleniumHub>10.2.1.99</seleniumHub>
+        <appURL>http://cb-test2.pegasus.ae</appURL>
+        <seleniumHub>0.0.0.0</seleniumHub>
+        <searchIndex.updatePeriod.ms>15000</searchIndex.updatePeriod.ms>
         <report>true</report>
         <email>true</email>
         <stand>test</stand>
         <emailSender>gmail</emailSender>
+        <!--<timeZoneId>GMT+4</timeZoneId>-->
+        <timeout.long.ms>180000</timeout.long.ms>
+        <suppressKnownIssues>true</suppressKnownIssues>
     </properties>
 
     <profiles>
@@ -59,13 +69,14 @@
         <dependency>
             <groupId>ae.pegasus.qatools</groupId>
             <artifactId>jbehave-framework</artifactId>
-            <version>1.3.2</version>
+            <version>${framework.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.supercsv</groupId>
             <artifactId>super-csv</artifactId>
             <version>2.4.0</version>
         </dependency>
+        <!--Excel support-->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
@@ -75,11 +86,6 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>${poi.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.codeborne</groupId>
-            <artifactId>selenide</artifactId>
-            <version>4.3</version>
         </dependency>
         <dependency>
             <groupId>com.spotify</groupId>

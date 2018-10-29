@@ -24,12 +24,12 @@ public class RunProperties extends ApplicationProperty {
     }
     
     public String getActiveStand() { return getProperty().getProperty("stand");}
-    
+
     public String getApplicationURL() {
         if (url != null)
             return url;
         else
-        return getProperty().getProperty("sigintURL");
+        return getProperty().getProperty("appURL");
     }
     
     public String getSeleniumHub() {
@@ -44,6 +44,18 @@ public class RunProperties extends ApplicationProperty {
 
     public void seturl(String givenurl) {
         url = givenurl;
+    }
+
+    public boolean isSuppressKnownIssues() {
+        return Boolean.parseBoolean(getProperty().getProperty("suppressKnownIssues"));
+    }
+
+    public int getLongTimeoutInMS() {return Integer.parseInt(getProperty().getProperty("timeout.long.ms", "60000"));}
+
+    public int getSearchIndexPeriodInMS() {return Integer.parseInt(getProperty().getProperty("searchIndex.updatePeriod.ms", "5000"));}
+
+    public String getTimeZoneId() {
+        return getProperty().getProperty("timeZoneId");
     }
 
 }

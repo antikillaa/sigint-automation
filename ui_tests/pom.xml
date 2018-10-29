@@ -16,10 +16,34 @@
             <artifactId>common</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <!--Selenium tool-->
         <dependency>
-            <groupId>ae.pegasus.qatools</groupId>
-            <artifactId>verification-engine</artifactId>
-            <version>1.0.0</version>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>${selenide.version}</version>
+        </dependency>
+        <!--Webdriver provider-->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>${webdrivermanager.version}</version>
+        </dependency>
+        <!--Language detection-->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>${tika.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-langdetect</artifactId>
+            <version>${tika.version}</version>
+        </dependency>
+        <!--Other stuff-->
+        <dependency>
+            <groupId>com.spotify</groupId>
+            <artifactId>docker-client</artifactId>
+            <version>8.4.0</version>
         </dependency>
     </dependencies>
 
