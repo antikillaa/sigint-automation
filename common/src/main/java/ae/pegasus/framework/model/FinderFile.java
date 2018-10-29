@@ -33,7 +33,7 @@ public class FinderFile extends AbstractEntity {
     @DataIgnore
     private String creator;
     @DataIgnore
-    private ArrayList<ParentChain> parentChain = new ArrayList<>();
+    private ArrayList<ParentChain> parentChain;
     @DataIgnore
     private String parentFileId;
     @DataIgnore
