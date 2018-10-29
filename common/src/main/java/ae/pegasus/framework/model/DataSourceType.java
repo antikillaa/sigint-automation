@@ -7,30 +7,20 @@ import java.util.Random;
 
 public enum DataSourceType {
 
-    DU,
-    E,
-    F,
-    S,
-    T,
-    O,
-    PHONEBOOK,
-    J1,
-    J2,
+    // SIGINT
+    DU, E, F, S, T, O, PHONEBOOK, J1, J2, H,
+    // FININT
     CentralBank,
-    DARK_WEB,
-    DARK_WEB_REPORTS,
-    INSTAGRAM,
-    NEWS,
-    TWITTER,
-    YOUTUBE,
-    SITA,
-    UDB,
-    FORUM,
-    KARMA,
-    ODD_JOBS,
-    ZELZAL,
+    // EID
+    EID,
+    // GOVINT
+    SITA, UDB,
+    // OSINT
+    DARK_WEB, DARK_WEB_REPORTS, INSTAGRAM, NEWS, TWITTER, YOUTUBE,
+    // TRAFFIC
     MCC,
-    H;
+    // CIO
+    FORUM, KARMA, ODD_JOBS, ZELZAL;
 
     private static final List<DataSourceType> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();
