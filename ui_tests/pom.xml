@@ -39,12 +39,6 @@
             <artifactId>tika-langdetect</artifactId>
             <version>${tika.version}</version>
         </dependency>
-        <!--Other stuff-->
-        <dependency>
-            <groupId>com.spotify</groupId>
-            <artifactId>docker-client</artifactId>
-            <version>8.4.0</version>
-        </dependency>
     </dependencies>
 
     <build>

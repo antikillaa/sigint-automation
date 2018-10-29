@@ -15,14 +15,6 @@ public class RunProperties extends ApplicationProperty {
         return Boolean.parseBoolean(getProperty().getProperty("remoteRun"));
     }
     
-    public boolean shouldReport() {
-        return Boolean.parseBoolean(getProperty().getProperty("report"));
-    }
-    
-    public boolean shouldEmail() {
-        return Boolean.parseBoolean(getProperty().getProperty("email"));
-    }
-    
     public String getActiveStand() { return getProperty().getProperty("stand");}
 
     public String getApplicationURL() {

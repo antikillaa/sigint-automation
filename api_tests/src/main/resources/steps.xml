@@ -9,8 +9,6 @@
     </bean>
     <bean id="apiLoginController" class="ae.pegasus.framework.controllers.APILogin">
     </bean>
-    <bean id="testSteps" class="ae.pegasus.framework.steps.GlobalSteps">
-    </bean>
     <bean id="targetGroupSteps" class="ae.pegasus.framework.steps.APITargetGroupSteps">
     </bean>
     <bean id="userRoleSteps" class="ae.pegasus.framework.steps.APIRoleSteps">
