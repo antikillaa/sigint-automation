@@ -16,6 +16,11 @@
             <artifactId>common</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>ae.pegasus.qatools</groupId>
+            <artifactId>api-tests</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <!--Selenium tool-->
         <dependency>
             <groupId>com.codeborne</groupId>
