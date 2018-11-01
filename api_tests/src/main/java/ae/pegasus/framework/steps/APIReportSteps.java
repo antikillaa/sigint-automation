@@ -123,6 +123,14 @@ public class APIReportSteps extends APISteps {
         serviceReport.addComment(report);
     }
 
+    @When("I send export with sources:$sources and without creator:$creator a report request")
+    public void sendExportReportRequest(Boolean sources, Boolean creator) {
+        Report lastReport = Entities.getReports().getLatest();
+        String id = lastReport.getId();
+        String reportFileName = "Operator Report #" + lastReport.getReportNo() + ".zip";
+        serviceReport.export(id, reportFileName, sources, creator);
+    }
+
     @Then("Report is created")
     public void reportIsCreated() {
         Report lastreport = Entities.getReports().getLatest();
