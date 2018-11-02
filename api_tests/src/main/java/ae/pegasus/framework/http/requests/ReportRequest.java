@@ -57,7 +57,7 @@ public class ReportRequest extends HttpRequest {
         return this;
     }
 
-    public ReportRequest export(String id, boolean sources, Boolean creator) {
+    public ReportRequest export(String id, Boolean sources, Boolean creator) {
         this
                 .setURI("/api/reports/workflows/export/3/"
                         + id + ".zip?showCreator="
