@@ -12,10 +12,7 @@
     <artifactId>api-tests</artifactId>
 
     <properties>
-        <!-- plugins -->
-        <maven.assembly.plugin.version>2.4</maven.assembly.plugin.version>
         <picocli.version>3.0.2</picocli.version>
-
     </properties>
 
     <dependencies>
@@ -52,7 +49,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <version>${maven.compiler.plugin.version}</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -61,6 +58,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven.assembly.plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

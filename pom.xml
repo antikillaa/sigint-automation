@@ -15,7 +15,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <framework.version>1.3.8</framework.version>
+        <framework.version>1.3.9</framework.version>
         <jbehave.core.version>4.3.5</jbehave.core.version>
         <jersey.version>2.25</jersey.version>
         <log4j.version>1.2.17</log4j.version>
@@ -42,6 +42,9 @@
         <!--<timeZoneId>GMT+4</timeZoneId>-->
         <timeout.long.ms>180000</timeout.long.ms>
         <suppressKnownIssues>true</suppressKnownIssues>
+        <!-- plugins -->
+        <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
+        <maven.assembly.plugin.version>3.1.0</maven.assembly.plugin.version>
     </properties>
 
     <profiles>
