@@ -6,7 +6,6 @@ Before:
 Given I sign in as admin user
 
 Scenario: Sort savedSearch by name
-Meta: @wip
 When I send get savedSearches request: page:<page>, pageSize:<pageSize>, sortKey:<sortKey>, sortOrder:<sortOrder>
 Then Request is successful
 And SavedSearch result list size > 0

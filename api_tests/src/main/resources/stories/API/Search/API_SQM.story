@@ -83,7 +83,6 @@ Examples:
 
 
 Scenario: J2 SMS/CALL search
-Meta: @wip
 When I send basic SQM search request - query:<query>, metadata:<metadata>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
 When SQM search completed
 When I get search queue results:
@@ -99,7 +98,7 @@ Examples:
 
 
 Scenario: FININT search
-Meta: @wip
+Meta: @dev
 When I send basic SQM search request - query:<query>, metadata:<metadata>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
 When SQM search completed
 When I get search queue results:
