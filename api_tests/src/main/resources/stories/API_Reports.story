@@ -72,37 +72,30 @@ Then Request is successful
 
 Examples:
 | eventFeed | objectType | query  | pageNumber | pageSize |
-| SIGINT | event | dataSource:"DU"| 0 | 100 |
-| SIGINT | event | dataSource:"E" | 0 | 100 |
-| SIGINT | event | dataSource:"F" | 0 | 100 |
-| SIGINT | event | dataSource:"H" | 0 | 100 |
-| SIGINT | event | dataSource:"S" | 0 | 100 |
-| SIGINT | event | dataSource:"T" | 0 | 100 |
-| SIGINT | entity | dataSource:"DU" | 0 | 100 |
-| SIGINT | entity | dataSource:"E" | 0 | 100 |
-| SIGINT | event | dataSource:"O"| 0 | 100 |
-
-Scenario: Create a report. [SIGINT] J1, J2 sources.
-When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
-Then Request is successful
-And CB search result list size > 0
-
-When I send generate report number request
-Then Request is successful
-
-When I send create a report request
-Then Request is successful
-And Report is created
-
-When I send view a report request
-Then Request is successful
-
-When I send delete a report request
-Then Request is successful
-
-Examples:
 | SIGINT | event | dataSource:"J1"| 0 | 100 |
 | SIGINT | event | dataSource:"J2" | 0 | 100 |
+| SIGINT | event | dataSource:"O"| 0 | 100 |
+| SIGINT | event | dataSource:"S" | 0 | 100 |
+| SIGINT | event | dataSource:"T" | 0 | 100 |
+| SIGINT | event | dataSource:"F" | 0 | 100 |
+| SIGINT | event | dataSource:"PHONEBOOK" | 0 | 100 |
+| SIGINT | event | dataSource:"E" | 0 | 100 |
+| SIGINT | event | dataSource:"DU" | 0 | 100 |
+| SIGINT | event | dataSource:"EID" | 0 | 100 |
+| FININT | event | dataSource:"CentralBank" | 0 | 100 |
+| TRAFFIC | event | dataSource:"MCC"| 0 | 100 |
+| OSINT | entity | dataSource:"TWITTER" | 0 | 100 |
+| OSINT | entity | dataSource:"NEWS" | 0 | 100 |
+| OSINT | entity | dataSource:"INSTAGRAM" | 0 | 100 |
+| OSINT | entity | dataSource:"YOUTUBE" | 0 | 100 |
+| OSINT | entity | dataSource:"DARK_WEB" | 0 | 100 |
+| OSINT | entity | dataSource:"DARK_WEB_REPORTS" | 0 | 100 |
+| OSINT | entity | dataSource:"GPLUS" | 0 | 100 |
+| OSINT | entity | dataSource:"TUMBLR" | 0 | 100 |
+| GOVINT | entity | dataSource:"SITA" | 0 | 100 |
+| GOVINT | entity | dataSource:"UDB" | 0 | 100 |
+| CIO | entity | dataSource:"ZELZAL" | 0 | 100 |
+| CIO | entity | dataSource:"KARMA" | 0 | 100 |
 
 Scenario: Create a report. [SIGINT] Data Subsource filters
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
