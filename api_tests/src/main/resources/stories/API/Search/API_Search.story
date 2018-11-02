@@ -178,6 +178,7 @@ Examples:
 
 
 Scenario: Search. [SIGINT] EventTime filter
+Meta: @wip
 When I send CB search request - eventTime:<eventTime>, source:<source>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0

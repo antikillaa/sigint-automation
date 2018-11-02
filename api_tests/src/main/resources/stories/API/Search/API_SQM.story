@@ -82,8 +82,8 @@ Examples:
 | SIGINT, OSINT, GOVINT, GOVINT2, PROFILER, INFORMATION_MANAGEMENT | entity | eventTime:[$NOW-90d..$NOW] | 0 | 1100 | eventTime |
 
 
-Scenario: J2 SMS search
-Meta: @dev
+Scenario: J2 SMS/CALL search
+Meta: @wip
 When I send basic SQM search request - query:<query>, metadata:<metadata>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
 When SQM search completed
 When I get search queue results:
@@ -94,26 +94,12 @@ And CB search results matched to filters
 
 Examples:
 | sourceTypes | objectType | query | metadata | pageNumber | pageSize |
-| SIGINT | event | dataSource:"J2" AND type:("SMS" OR "MMS" OR "VSMS" OR "SIP_VIDEO") AND eventTime:[$NOW-90d..$NOW] | {"filters":{"eventFeed":"SIGINT","dataSource":["J2"],"objectType":"event","type":["TEXTING"],"event","eventTime":{"from":"$NOW-90d","to":"$NOW"}}} | 0 | 20 | eventTime |
-
-
-Scenario: J2 CALL search
-Meta: @dev
-When I send basic SQM search request - query:<query>, metadata:<metadata>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
-When SQM search completed
-When I get search queue results:
-| eventFeed | objectType | pageNumber | pageSize |
-| SIGINT | event | 0 | 20 |
-Then TotalCount's in search results > 0
-And CB search results matched to filters
-
-Examples:
-| sourceTypes | objectType | query | metadata | pageNumber | pageSize |
-| SIGINT | event | dataSource:"J2" AND type:"CALL" AND eventTime:[$NOW-90d..$NOW] | {"filters":{"eventFeed":"SIGINT","dataSource":["J2"],"objectType":"event","type":["CALL"],"eventTime":{"from":"$NOW-90d","to":"$NOW"}}} | 0 | 20 | eventTime |
+| SIGINT | event | dataSource:"J2" AND type:("SMS" OR "MMS" OR "VSMS" OR "SIP_VIDEO") AND eventTime:[$NOW-90d..$NOW] | {"filters":{"eventFeed":"SIGINT","dataSource":["J2"],"objectType":"event","type":["TEXTING"]}} | 0 | 20 | eventTime |
+| SIGINT | event | dataSource:"J2" AND type:"CALL" AND eventTime:[$NOW-90d..$NOW] | {"filters":{"eventFeed":"SIGINT","dataSource":["J2"],"objectType":"event","type":["CALL"]}} | 0 | 20 | eventTime |
 
 
 Scenario: FININT search
-Meta: @dev
+Meta: @wip
 When I send basic SQM search request - query:<query>, metadata:<metadata>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
 When SQM search completed
 When I get search queue results:
@@ -124,4 +110,4 @@ And CB search results matched to filters
 
 Examples:
 | sourceTypes | objectType | query | metadata | pageNumber | pageSize |
-| FININT | event | eventTime:[$NOW-90d..$NOW]| {"query":"","filters":{"eventFeed":"FININT","objectType":"event","eventTime":{"from":"$NOW-90d","to":"$NOW"}}}| 0 | 20 | eventTime |
+| FININT | event | eventTime:[$NOW-90d..$NOW]| {"query":"","filters":{"eventFeed":"FININT","objectType":"event"}}| 0 | 20 | eventTime |
