@@ -1,5 +1,6 @@
 
 
+
 Lifecycle:
 Before:
 Scope: SCENARIO
@@ -168,6 +169,8 @@ When I set Considerations (|<ReportConsidInit>|) in operator report
 When I set Recommendations (|<ReportRecommInit>|) in operator report
 When I set Notes (|<ReportNotesInit>|) in operator report
 When I save currently opened operator report as draft
+When I route the operator report
+
 Then I close the operator report
 
 Given I navigate to CB Finder
@@ -208,6 +211,7 @@ When I route the operator report
 Then I should see that currently opened operator report has status (Awaiting Review)
 
 When I Take Ownership of the operator report which is currently opened
+
 Then I should see that currently opened operator report has status (Under Review)
 Then I should see Reject button in operator report
 Then I should see Return to Author button in operator report
@@ -273,6 +277,7 @@ data/Report.table
 
 
 Scenario: Report reject workflow
+Meta:@reports
 Given I navigate to Search
 When I enter search criteria (<GOVINTEventBookRef>) on the Search page
 Given I open Search Filter on the Search page
@@ -337,6 +342,7 @@ data/Report.table
 
 
 Scenario: Report cancel workflow
+Meta:@reports
 Given I navigate to Search
 When I enter search criteria (<GOVINTEventBookRef>) on the Search page
 Given I open Search Filter on the Search page
