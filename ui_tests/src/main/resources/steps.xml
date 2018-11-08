@@ -57,6 +57,8 @@
     <bean id="searchFilterPrioritySteps" class="ae.pegasus.framework.steps.special.search_filter.UISearchFilterPrioritySteps" />
     <bean id="searchFilterRecordStatusSteps" class="ae.pegasus.framework.steps.special.search_filter.UISearchFilterRecordStatusSteps" />
     <bean id="searchFilterEventTimeSteps" class="ae.pegasus.framework.steps.special.search_filter.UISearchFilterEventTimeSteps" />
+    <bean id="searchFilterTabSelectionSteps" class="ae.pegasus.framework.steps.special.search_filter.UISearchFilterTabSelectionSteps" />
+
     <!--Search results steps-->
     <bean id="searchResultsBasicSteps" class="ae.pegasus.framework.steps.special.search_result.UIBasicSearchResultsSteps" />
     <bean id="verifyResultsNumberSteps" class="ae.pegasus.framework.steps.special.search_result.verify_view.UIVerifyResultsNumberSteps" />

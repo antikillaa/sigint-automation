@@ -36,7 +36,7 @@ public class ModalDialogPage extends BaseModalDialogPage {
     }
 
     private ElementsCollection getDialogButtons() {
-        return getDialogContainer().$$x(".//ux-dialog-footer//button");
+        return getDialogContainer().$$x("//ux-dialog-footer//button");
     }
 
     public void clickButton(ModalDialogButton button) {
@@ -77,5 +77,20 @@ public class ModalDialogPage extends BaseModalDialogPage {
             System.out.println("Dialog doesn't appear within " + waitForDialogInMS + "ms");
             //Do nothing since element can be absent
         }
+    }
+
+    public final void waitForModalDialog() {
+        waitForModalDialog(0);
+    }
+
+    public void waitForModalDialog(long delayForLoadingAppearInMS) {
+        try {
+            getDialogContainer().waitUntil(visible, 100 + delayForLoadingAppearInMS, 10);
+            System.out.println("Page's loading appears");
+        } catch (UIAssertionError e) {
+            System.out.println("Page's loading does not appear");
+            //Do nothing since element can be absent
+        }
+       // getPageLoading().shouldBe(hidden);
     }
 }

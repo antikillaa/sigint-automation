@@ -53,9 +53,16 @@ public abstract class BasePage {
         }
     }
 
+
+
     public final void waitForPageLoading() {
         waitForPageLoading(0);
     }
+
+
+
+
+
 
     public void waitForPageLoading(long delayForLoadingAppearInMS) {
         try {

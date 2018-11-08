@@ -39,21 +39,22 @@ public class SearchFilterPage extends BaseSpecialPage {
         throw new IllegalArgumentException("Search Filter Setting Tab with name '" + filterTab.getTabName() + "' was not found");
     }
 
-    private void selectTab(FilterTab filterTab) {
+    public void selectTab(FilterTab filterTab) {
         getTab(filterTab).click();
     }
 
     private ElementsCollection getSettings() {
         return getSpecialPageBase().$$x(".//search-filter");
     }
-
     private SelenideElement getSetting(FilterSetting filterSetting) {
         selectTab(filterSetting.getFilterTab());
         String settingNameXPath = PageUtils.bindXPaths(COMMON_SETTING_NAME_XPATH, CHECK_BOX_SETTING_NAME_XPATH);
         for (SelenideElement setting : getSettings()) {
-            if (setting.$x(settingNameXPath).getText().trim().equalsIgnoreCase(filterSetting.getSettingName())) {
-                scrollWindowTo(setting);
-                return setting;
+            if (!(setting.getText().equals(""))) {
+                if (setting.$x(settingNameXPath).getText().trim().equalsIgnoreCase(filterSetting.getSettingName())) {
+                    scrollWindowTo(setting);
+                    return setting;
+                }
             }
         }
         throw new IllegalArgumentException("Search Filter Setting with name '" + filterSetting.getSettingName() + "' was not found");
@@ -73,6 +74,7 @@ public class SearchFilterPage extends BaseSpecialPage {
             default:
                 throw new NotImplementedException();
         }
+
     }
 
     public void setSingleValueSetting(FilterSetting filterSetting, String value) {

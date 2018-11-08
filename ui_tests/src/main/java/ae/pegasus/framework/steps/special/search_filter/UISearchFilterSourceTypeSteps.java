@@ -37,6 +37,16 @@ public class UISearchFilterSourceTypeSteps {
         setSourceType(FilterSourceType.EID);
     }
 
+    @Given("I set Source Type to FININT on the Search Filter page")
+    public void iSetSourceTypeToFININT() {
+        setSourceType(FilterSourceType.FININT);
+    }
+
+    @Given("I set Source Type to Traffic on the Search Filter page")
+    public void iSetSourceTypeToTraffic() {
+        setSourceType(FilterSourceType.TRAFFIC);
+    }
+
     @Given("I set Source Type to GOVINT on the Search Filter page")
     public void iSetSourceTypeToGOVINT() {
         setSourceType(FilterSourceType.GOVINT);

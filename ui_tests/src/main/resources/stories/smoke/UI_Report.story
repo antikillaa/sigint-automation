@@ -1,5 +1,5 @@
 
-
+Meta:@reports
 
 Lifecycle:
 Before:
@@ -139,6 +139,8 @@ Then I should see File Name/Case Name(s) (|<FileName>|) in operator report
 Given I Expand the CB Finder view
 Given load story aux-after-stories/auxDeleteReport.story with example table:
 data/Report.table
+Given load story aux-after-stories/auxDeleteReport.story with example table:
+data/Report.table
 
 
 Examples:
@@ -147,7 +149,6 @@ data/Report.table
 
 
 Scenario: Report approval workflow
-Meta:@reports
 Given I navigate to Search
 When I enter search criteria (<GOVINTEventBookRef>) on the Search page
 Given I open Search Filter on the Search page
@@ -277,7 +278,6 @@ data/Report.table
 
 
 Scenario: Report reject workflow
-Meta:@reports
 Given I navigate to Search
 When I enter search criteria (<GOVINTEventBookRef>) on the Search page
 Given I open Search Filter on the Search page
@@ -342,7 +342,6 @@ data/Report.table
 
 
 Scenario: Report cancel workflow
-Meta:@reports
 Given I navigate to Search
 When I enter search criteria (<GOVINTEventBookRef>) on the Search page
 Given I open Search Filter on the Search page
@@ -367,6 +366,36 @@ When I Submit For Review the operator report which is currently opened
 When I Cancel the operator report which is currently opened
 Then I should see that currently opened operator report has status (Cancelled)
 When I enter routing (canceled for test) for the operator report
+
+Examples:
+data/Report.table
+
+
+Scenario: Report test
+Meta:@reportstest
+Given I navigate to Search
+When I enter search criteria (<GOVINTEventBookRef>) on the Search page
+Given I open Search Filter on the Search page
+Given load story ../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given I Apply Search using Search Filter on the Search page
+Given I setup Search Authorization
+When I open Card View
+
+When I select all GOVINT event cards having identifiers: |<GOVINTEventName>|<GOVINTEventCarrier>|
+When I create new report for selected items
+Given I save Report number for the operator report in the context
+When I set Classification (<ReportClassifInit>) in operator report
+When I set Created For (<ReportCreatedForInit>) in operator report
+When I set File Name/Case Name (|<FileNameDefault>|) in operator report
+When I set Organization Units (|<ReportOrgUnitInit>|) in operator report
+When I set Subject (<ReportSubject>) in operator report
+When I set Description (|<ReportDescrInit>|) in operator report
+When I set Considerations (|<ReportConsidInit>|) in operator report
+When I set Recommendations (|<ReportRecommInit>|) in operator report
+When I set Notes (|<ReportNotesInit>|) in operator report
+When I save currently opened operator report as draft
+
+Then I close the operator report
 
 Examples:
 data/Report.table

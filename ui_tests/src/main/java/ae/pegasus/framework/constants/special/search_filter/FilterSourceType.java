@@ -7,6 +7,8 @@ public enum FilterSourceType {
     SIGINT("SIGINT"),
     EID("EID"),
     GOVINT("GOVINT"),
+    FININT("FININT"),
+    TRAFFIC("Traffic"),
     OSINT("OSINT"),
     CIO("CIO");
 

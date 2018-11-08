@@ -7,6 +7,7 @@ Scope: SCENARIO
 Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login.table
 
+
 After:
 Scope: STORY
 Outcome: ANY
@@ -24,7 +25,7 @@ Given load story aux-after-stories/auxDeleteFile.story with example table:
 data/BasicProfile.data
 
 Scenario: Create and delete a profile
-Meta:@profile
+Meta:@fix
 Given I navigate to CB Finder
 Given I start creation of new file in the CB Finder
 Given I set Name (<FileName>) for new file in the CB Finder

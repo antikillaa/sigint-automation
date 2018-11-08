@@ -39,7 +39,8 @@ public class UILauncher extends G4Embeddable {
         List<String> paths = new StoryFinder()
                 .findPaths(codeLocationFromClass(this.getClass()),
                         "**/UI*.story",
-                        "**/excluded*.story");
+                        "**/excluded*.story"
+                );
         return paths;
     }
 }
