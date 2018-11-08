@@ -47,6 +47,7 @@ Examples:
 
 
 Scenario: Event. The maximum number of search results for a single query is limited to 1000 records.
+Meta: @nightly
 When I send SQM search request - query:<query>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
 When SQM search completed
 When I get search queue results:
@@ -64,6 +65,7 @@ Examples:
 
 
 Scenario: Entity. The maximum number of search results for a single query is limited to 1000 records
+Meta: @nightly
 When I send SQM search request - query:<query>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
 When SQM search completed
 When I get search queue results:
@@ -79,7 +81,7 @@ And TotalCount's in search results < 1001
 
 Examples:
 | sourceTypes | objectType | query  | pageNumber | pageSize |
-| SIGINT, OSINT, GOVINT, GOVINT2, PROFILER, INFORMATION_MANAGEMENT | entity | eventTime:[$NOW-90d..$NOW] | 0 | 1100 | eventTime |
+| SIGINT, OSINT, GOVINT, GOVINT2, PROFILER, INFORMATION_MANAGEMENT | entity | | 0 | 1100 | eventTime |
 
 
 Scenario: J2 SMS/CALL search
@@ -98,7 +100,6 @@ Examples:
 
 
 Scenario: FININT search
-Meta: @dev
 When I send basic SQM search request - query:<query>, metadata:<metadata>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
 When SQM search completed
 When I get search queue results:
