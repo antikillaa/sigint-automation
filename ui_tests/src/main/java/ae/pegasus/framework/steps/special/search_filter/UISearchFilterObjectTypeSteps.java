@@ -12,6 +12,10 @@ public class UISearchFilterObjectTypeSteps {
         Pages.searchFilterPage().setSingleValueSetting(OBJECT_TYPE, objectType.getObjectName());
     }
 
+    private void setObjectType(String objectType) {
+        Pages.searchFilterPage().setSingleValueSetting(OBJECT_TYPE, objectType );
+    }
+
     @Given("I set Object Type to All on the Search Filter page")
     public void iSetObjectTypeToAll() {
         setObjectType(FilterObjectType.ALL);
@@ -25,5 +29,11 @@ public class UISearchFilterObjectTypeSteps {
     @Given("I set Object Type to Event on the Search Filter page")
     public void iSetObjectTypeToEvent() {
         setObjectType(FilterObjectType.EVENT);
+    }
+
+
+    @Given("I set Object Type to ($objectType) on the Search Filter page")
+    public void iSetObjectType(String objectType) {
+        setObjectType(objectType);
     }
 }
