@@ -32,7 +32,7 @@
         <!--Framework set-up-->
         <remoteRun>false</remoteRun>
         <webBrowser>chrome</webBrowser>
-        <appURL>http://cb-test2.pegasus.ae</appURL>
+        <appURL>http://cb-duck.pegasus.ae</appURL>
         <seleniumHub>0.0.0.0</seleniumHub>
         <searchIndex.updatePeriod.ms>15000</searchIndex.updatePeriod.ms>
         <report>true</report>
