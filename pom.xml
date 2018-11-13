@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>ae.pegasus.qatools</groupId>
-    <artifactId>jbehave</artifactId>
+    <artifactId>cb-automation</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
     <modules>
@@ -15,7 +15,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <framework.version>1.3.9</framework.version>
+        <framework.version>1.4.1</framework.version>
         <jbehave.core.version>4.3.5</jbehave.core.version>
         <jersey.version>2.25</jersey.version>
         <log4j.version>1.2.17</log4j.version>
@@ -24,7 +24,7 @@
         <webdrivermanager.version>2.2.1</webdrivermanager.version>
         <math3.version>3.6.1</math3.version>
         <phone.codes.version>8.9.13</phone.codes.version>
-        <tika.version>1.18</tika.version>
+        <tika.version>1.19.1</tika.version>
         <!--Stories related-->
         <stories>**/*Launcher.java</stories>
         <metaFilters>-deprecated -skip -wip -nightly -notstage</metaFilters>
@@ -58,12 +58,6 @@
             <id>ui</id>
             <modules>
                 <module>ui_tests</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>email-engine</id>
-            <modules>
-                <module>emailing</module>
             </modules>
         </profile>
     </profiles>
