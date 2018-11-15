@@ -1,5 +1,4 @@
 Meta:
-@wip
 @component signIn
 @smoke test
 @all menu items

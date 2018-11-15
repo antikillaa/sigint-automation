@@ -1,5 +1,4 @@
 Meta:
-@wip
 @component smoke-test
 @stage
 @search
