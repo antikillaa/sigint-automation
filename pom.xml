@@ -28,17 +28,12 @@
         <!--Stories related-->
         <stories>**/*Launcher.java</stories>
         <metaFilters>-deprecated -skip -wip -nightly -notstage</metaFilters>
-        <reportBuildStatus>false</reportBuildStatus>
         <!--Framework set-up-->
         <remoteRun>false</remoteRun>
         <webBrowser>chrome</webBrowser>
         <appURL>http://cb-test2.pegasus.ae</appURL>
         <seleniumHub>0.0.0.0</seleniumHub>
         <searchIndex.updatePeriod.ms>15000</searchIndex.updatePeriod.ms>
-        <report>true</report>
-        <email>true</email>
-        <stand>test</stand>
-        <emailSender>gmail</emailSender>
         <!--<timeZoneId>GMT+4</timeZoneId>-->
         <timeout.long.ms>180000</timeout.long.ms>
         <suppressKnownIssues>true</suppressKnownIssues>
