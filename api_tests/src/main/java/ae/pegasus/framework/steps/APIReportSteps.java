@@ -274,7 +274,7 @@ public class APIReportSteps extends APISteps {
     private void createDir(String dirName) {
         File dir = new File(dirName);
         if (!dir.exists()) {
-            System.out.println("creating directory: " + dir.getName());
+            log.info("creating directory: " + dir.getName());
             boolean result = false;
 
             try {
