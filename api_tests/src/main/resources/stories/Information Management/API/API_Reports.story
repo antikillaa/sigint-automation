@@ -459,7 +459,6 @@ When I send export with sources:<sources> and without creator:<creator> a report
 Then Request is successful
 Then Check content of archive
 Then Delete exported reports
-Then Delete created directory
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize | sources | creator |

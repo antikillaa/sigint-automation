@@ -135,15 +135,18 @@ public class APIReportSteps extends APISteps {
         Report lastReport = Entities.getReports().getLatest();
         String reportName = "Operator Report #" + lastReport.getReportNo();
         context.put("reportName", reportName);
-        serviceReport.export(lastReport.getId(), sources, creator);
+        OperationResult<File> operationResult = serviceReport.export(lastReport.getId(), sources, creator);
+        context.put("file", operationResult.getEntity());
     }
 
     @Then("Check content of archive")
     public void checkArchive() throws IOException {
         String reportName = context.get("reportName", String.class);
-        String dirName = context.get("dirName", String.class);
         String reportNameInArchive = reportName + "/" + reportName + ".pdf";
-        ZipFile zipFile = new ZipFile(dirName + "/" + reportName + ".zip");
+        File file = context.get("file", File.class);
+        ZipFile zipFile = new ZipFile(file.getName());
+
+        Assert.assertTrue("Zip file has no elements!", zipFile.entries().hasMoreElements());
         for (Enumeration e = zipFile.entries(); e.hasMoreElements(); ) {
             ZipEntry entry = (ZipEntry) e.nextElement();
             if (!entry.isDirectory()) {
@@ -160,8 +163,7 @@ public class APIReportSteps extends APISteps {
     @Then("Delete exported reports")
     public void deleteExportedReport() {
         String reportName = context.get("reportName", String.class);
-        String dirName = context.get("dirName", String.class);
-        File file = new File(dirName + "/" + reportName + ".zip");
+        File file = new File( reportName + ".zip");
         if (file.delete()) {
             log.info(reportName + " report export is deleted");
         } else log.error(reportName + " report export file doesn't exists");
