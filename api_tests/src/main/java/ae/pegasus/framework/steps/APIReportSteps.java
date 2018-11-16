@@ -169,8 +169,8 @@ public class APIReportSteps extends APISteps {
         String dirName = context.get("dirName", String.class);
         File file = new File(dirName + "/" + reportName + ".zip");
         if (file.delete()) {
-            System.out.println(reportName + " report export is deleted");
-        } else System.out.println(reportName + " report export doesn't exists");
+            log.info(reportName + " report export is deleted");
+        } else log.error(reportName + " report export file doesn't exists");
     }
 
     @Then("Delete created directory")
@@ -179,15 +179,15 @@ public class APIReportSteps extends APISteps {
         File dir = new File(dirName);
 
         if (dir.isDirectory() == false) {
-            System.out.println("Not a directory. Do nothing");
+            log.info("Not a directory. Do nothing");
             return;
         }
         File[] listFiles = dir.listFiles();
         for (File file : listFiles) {
-            System.out.println("Deleting " + file.getName());
+            log.info("Deleting " + file.getName());
             file.delete();
         }
-        System.out.println("Deleting Directory. Success = " + dir.delete());
+        log.info("Deleting Directory. Success = " + dir.delete());
     }
 
 
@@ -285,7 +285,7 @@ public class APIReportSteps extends APISteps {
 
             }
             if (result) {
-                System.out.println("DIR created");
+                log.info("DIR created");
             }
         }
     }
