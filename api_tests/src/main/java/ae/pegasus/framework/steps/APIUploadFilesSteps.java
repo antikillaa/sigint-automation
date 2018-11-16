@@ -297,8 +297,8 @@ public class APIUploadFilesSteps extends APISteps {
         String upload_m4A_file_id;
         if (call != null) {
             upload_m4A_file_id = ((List<String>) call.getAttributes().get("UPLOAD_M4A_FILE_ID")).get(0);
-            File content = service.getContent(upload_m4A_file_id, "./target/audio.m4a");
-            context.put("audioFile", content);
+            OperationResult<File> operationResult = service.getContent(upload_m4A_file_id);
+            context.put("audioFile", operationResult.getEntity());
         } else {
             throw new AssertionError("Call with UPLOAD_M4A_FILE_ID not found");
         }
