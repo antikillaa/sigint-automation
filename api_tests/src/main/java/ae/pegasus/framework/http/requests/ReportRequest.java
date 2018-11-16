@@ -57,6 +57,16 @@ public class ReportRequest extends HttpRequest {
         return this;
     }
 
+    public ReportRequest export(String id, Boolean sources, Boolean creator) {
+        this
+                .setURI("/api/reports/workflows/export/3/"
+                        + id + ".zip?showCreator="
+                        + creator + "&showSources="
+                        + sources)
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
     public ReportRequest submit(Report report) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);

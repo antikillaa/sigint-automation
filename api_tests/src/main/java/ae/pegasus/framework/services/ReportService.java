@@ -11,6 +11,8 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -76,6 +78,22 @@ public class ReportService implements EntityService<Report> {
             Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
+    }
+
+    public File export(String id, String reportFileName, Boolean sources, Boolean creator) {
+        log.info("Export report by id: " + id);
+        File file = null;
+        try {
+            file = g4HttpClient.downloadFile(reportRequest.export(id, sources, creator), "reportExport/" + reportFileName);
+            if (file.length() == 0) {
+                throw new AssertionError("Report archive is empty");
+            }
+        } catch (IOException e) {
+            log.error(e);
+            throw new AssertionError("Report download error");
+        }
+
+        return file;
     }
 
     public OperationResult<Report> submit(Report entity) {

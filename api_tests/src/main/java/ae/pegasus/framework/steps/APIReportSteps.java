@@ -4,12 +4,19 @@ import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.ReportService;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import org.junit.Assert;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import static org.junit.Assert.assertEquals;
 
@@ -123,6 +130,67 @@ public class APIReportSteps extends APISteps {
         serviceReport.addComment(report);
     }
 
+    @When("I send export with sources:$sources and without creator:$creator a report request")
+    public void sendExportReportRequest(Boolean sources, Boolean creator) {
+        String dirName = "reportExport";
+        context.put("dirName", dirName);
+        createDir(dirName);
+        Report lastReport = Entities.getReports().getLatest();
+        String id = lastReport.getId();
+        String reportFileName = "Operator Report #" + lastReport.getReportNo() + ".zip";
+        String reportName = "Operator Report #" + lastReport.getReportNo();
+        context.put("reportName", reportName);
+        serviceReport.export(id, reportFileName, sources, creator);
+    }
+
+
+    @Then("Check content of archive")
+    public void checkArchive() throws IOException {
+        String reportName = context.get("reportName", String.class);
+        String dirName = context.get("dirName", String.class);
+        String reportNameInArchive = reportName + "/" + reportName + ".pdf";
+        ZipFile zipFile = new ZipFile(dirName + "/" + reportName + ".zip");
+        for (Enumeration e = zipFile.entries(); e.hasMoreElements(); ) {
+            ZipEntry entry = (ZipEntry) e.nextElement();
+            if (!entry.isDirectory()) {
+                if (FilenameUtils.getExtension(entry.getName()).equals("pdf")) {
+                    Assert.assertEquals(reportNameInArchive, entry.getName());
+                }
+            }
+            if (entry.isDirectory()) {
+                Assert.assertEquals(FilenameUtils.getName(entry.getName()), "attachments");
+            }
+        }
+    }
+
+    @Then("Delete exported reports")
+    public void deleteExportedReport() {
+        String reportName = context.get("reportName", String.class);
+        String dirName = context.get("dirName", String.class);
+        File file = new File(dirName + "/" + reportName + ".zip");
+        if (file.delete()) {
+            log.info(reportName + " report export is deleted");
+        } else log.error(reportName + " report export file doesn't exists");
+    }
+
+    @Then("Delete created directory")
+    public void deleteDirectory() {
+        String dirName = context.get("dirName", String.class);
+        File dir = new File(dirName);
+
+        if (dir.isDirectory() == false) {
+            log.info("Not a directory. Do nothing");
+            return;
+        }
+        File[] listFiles = dir.listFiles();
+        for (File file : listFiles) {
+            log.info("Deleting " + file.getName());
+            file.delete();
+        }
+        log.info("Deleting Directory. Success = " + dir.delete());
+    }
+
+
     @Then("Report is created")
     public void reportIsCreated() {
         Report lastreport = Entities.getReports().getLatest();
@@ -201,5 +269,22 @@ public class APIReportSteps extends APISteps {
         assertEquals(updatedReport.getSubject(), contextReport.getSubject());
         assertEquals(updatedReport.getDescription(), contextReport.getDescription());
 
+    }
+
+    private void createDir(String dirName) {
+        File dir = new File(dirName);
+        if (!dir.exists()) {
+            log.info("creating directory: " + dir.getName());
+            boolean result = false;
+            try {
+                dir.mkdir();
+                result = true;
+            } catch (SecurityException se) {
+                throw new AssertionError("Not Able create a directory");
+            }
+            if (result) {
+                log.info("DIR created");
+            }
+        }
     }
 }
