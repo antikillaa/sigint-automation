@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 
 public class APIReportSteps extends APISteps {
 
-    public static ReportService serviceReport = new ReportService();
+    private static ReportService serviceReport = new ReportService();
 
     @When("I send create a report request")
     public void sendReportRequest() {
@@ -132,17 +132,11 @@ public class APIReportSteps extends APISteps {
 
     @When("I send export with sources:$sources and without creator:$creator a report request")
     public void sendExportReportRequest(Boolean sources, Boolean creator) {
-        String dirName = "reportExport";
-        context.put("dirName", dirName);
-        createDir(dirName);
         Report lastReport = Entities.getReports().getLatest();
-        String id = lastReport.getId();
-        String reportFileName = "Operator Report #" + lastReport.getReportNo() + ".zip";
         String reportName = "Operator Report #" + lastReport.getReportNo();
         context.put("reportName", reportName);
-        serviceReport.export(id, reportFileName, sources, creator);
+        serviceReport.export(lastReport.getId(), sources, creator);
     }
-
 
     @Then("Check content of archive")
     public void checkArchive() throws IOException {
@@ -172,24 +166,6 @@ public class APIReportSteps extends APISteps {
             log.info(reportName + " report export is deleted");
         } else log.error(reportName + " report export file doesn't exists");
     }
-
-    @Then("Delete created directory")
-    public void deleteDirectory() {
-        String dirName = context.get("dirName", String.class);
-        File dir = new File(dirName);
-
-        if (dir.isDirectory() == false) {
-            log.info("Not a directory. Do nothing");
-            return;
-        }
-        File[] listFiles = dir.listFiles();
-        for (File file : listFiles) {
-            log.info("Deleting " + file.getName());
-            file.delete();
-        }
-        log.info("Deleting Directory. Success = " + dir.delete());
-    }
-
 
     @Then("Report is created")
     public void reportIsCreated() {
@@ -268,23 +244,5 @@ public class APIReportSteps extends APISteps {
     private void reportCheck(Report updatedReport, Report contextReport) {
         assertEquals(updatedReport.getSubject(), contextReport.getSubject());
         assertEquals(updatedReport.getDescription(), contextReport.getDescription());
-
-    }
-
-    private void createDir(String dirName) {
-        File dir = new File(dirName);
-        if (!dir.exists()) {
-            log.info("creating directory: " + dir.getName());
-            boolean result = false;
-            try {
-                dir.mkdir();
-                result = true;
-            } catch (SecurityException se) {
-                throw new AssertionError("Not Able create a directory");
-            }
-            if (result) {
-                log.info("DIR created");
-            }
-        }
     }
 }
