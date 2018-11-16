@@ -276,13 +276,11 @@ public class APIReportSteps extends APISteps {
         if (!dir.exists()) {
             log.info("creating directory: " + dir.getName());
             boolean result = false;
-
             try {
                 dir.mkdir();
                 result = true;
             } catch (SecurityException se) {
                 throw new AssertionError("Not Able create a directory");
-
             }
             if (result) {
                 log.info("DIR created");
