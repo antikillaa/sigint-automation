@@ -128,13 +128,12 @@ Then Request is successful
 
 
 Scenario: VoicePrint from manual audio
-Meta: @wip
 When I send create finder file request
 Then Request is successful
 When I send create profile request
 Then Request is successful
 
-When I send CB search request - query:type:"CALL" AND HAS_VPRINT:"true", eventFeed:SIGINT, objectType:event, pageNumber:0, pageSize:1
+When I send CB search request - query:type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND HAS_VPRINT:"true", eventFeed:SIGINT, objectType:event, pageNumber:0, pageSize:1
 Then CB search result list size > 0
 When I download audioFile of call event from search results
 

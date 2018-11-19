@@ -287,7 +287,7 @@ public class APIUploadFilesSteps extends APISteps {
 
     @When("I download audioFile of call event from search results")
     public void downloadFileContent() {
-        List<SearchRecord> searchResults = context.get("searchResults", List.class);
+        List<SearchRecord> searchResults = context.get("searchEntities", List.class);
 
         SearchRecord call = searchResults.stream()
                 .filter(searchRecord -> searchRecord.getAttributes() != null
