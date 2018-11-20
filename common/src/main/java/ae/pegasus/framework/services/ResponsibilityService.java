@@ -105,7 +105,8 @@ public class ResponsibilityService implements EntityService<Responsibility> {
     public List<OperationResult> removeAll() {
         List<OperationResult> operationResults = new ArrayList<>();
 
-        new ArrayList<>(Entities.getResponsibilities().getEntities())
+        new ArrayList<>(Entities.getResponsibilities().getEntities()).stream()
+                .filter(responsibility -> responsibility.getDisplayName().toLowerCase().startsWith("qe_"))
                 .forEach(entity -> operationResults.add(remove(entity)));
 
         return operationResults;

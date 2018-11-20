@@ -286,7 +286,7 @@ public class UserService implements EntityService<User> {
         List<OperationResult> operationResults = new ArrayList<>();
 
         new ArrayList<>(Entities.getUsers().getEntities()).stream()
-                .filter(user -> user.getCreatedBy() != null)
+                .filter(user -> user.getCreatedBy() != null && user.getName().toLowerCase().startsWith("qe_"))
                 .forEach(user -> operationResults.add(remove(user)));
 
         return operationResults;

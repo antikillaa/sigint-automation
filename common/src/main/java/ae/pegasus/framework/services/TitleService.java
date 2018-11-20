@@ -107,9 +107,9 @@ public class TitleService implements EntityService<Title> {
     public List<OperationResult> removeAll() {
         List<OperationResult> operationResults = new ArrayList<>();
 
-        Long count = new ArrayList<>(Entities.getTitles().getEntities()).stream()
-                .peek(entity -> operationResults.add(remove(entity)))
-                .count();
+        new ArrayList<>(Entities.getTitles().getEntities()).stream()
+                .filter(title -> title.getDisplayName().toLowerCase().startsWith("qe_"))
+                .forEach(entity -> operationResults.add(remove(entity)));
 
         return operationResults;
     }
