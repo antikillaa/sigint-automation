@@ -1,8 +1,4 @@
-Meta:
-@component smoke-test
-@stage
-@search
-
+Meta:@search
 
 Lifecycle:
 Before:
@@ -14,7 +10,6 @@ Outcome: ANY
 Given I Sign Out
 
 Scenario: All the data sources are working
-Meta: @search1
 Given I navigate to Search
 Then I should see Search page
 When I enter search criteria (*) on the Search page
