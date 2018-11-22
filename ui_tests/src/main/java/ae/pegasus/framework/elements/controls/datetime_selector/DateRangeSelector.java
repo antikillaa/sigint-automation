@@ -12,7 +12,7 @@ import java.util.Locale;
 
 import static ae.pegasus.framework.constants.controls.datetime_selector.DateRangeCalendar.FROM;
 import static ae.pegasus.framework.constants.controls.datetime_selector.DateRangeCalendar.TO;
-import static ae.pegasus.framework.constants.controls.datetime_selector.DateRangePeriod.CUSTOM;
+
 
 public class DateRangeSelector extends CommonDateSelector {
 
@@ -21,13 +21,28 @@ public class DateRangeSelector extends CommonDateSelector {
     }
 
     private SelenideElement getCalendarInput(DateRangeCalendar calendar) {
-        return getDatePickerBase().$x(".//div[contains(@class,'" + calendar.getPosition() + "')]//div[@class='daterangepicker_input']/input");
+        return getDatePickerBase().$x(".//div[contains(@class,'" + calendar.getPosition() + "')]");
     }
 
     private void setDateViaInput(SelenideElement input, LocalDateTime dateToSet) {
         PageUtils.clearAndType(input, dateToSet.format(DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm", Locale.ENGLISH)));
     }
 
+    private void setDateViaCalendarSelection(SelenideElement input, LocalDateTime dateToSet) {
+        input.$x(".//select[contains(@class ,'month')]").selectOption("December");
+        input.$x(".//select[contains(@class ,'year')]").selectOption("2010");
+        input.$x(".//td[@class='available'][contains(text(),'15')]").click();
+        //input.$x(".//td[contains(@class,'active')]").click();
+
+    }
+
+    private void setDateViaCalendarSelectionto(SelenideElement input, LocalDateTime dateToSet) {
+        input.$x(".//select[contains(@class ,'month')]").selectOption("December");
+        input.$x(".//select[contains(@class ,'year')]").selectOption("2019");
+        input.$x(".//td[@class='available'][contains(text(),'12')]").click();
+      //  input.$x(".//td[contains(@class,'active')]").click();
+
+    }
     private void selectDateRangePeriod(DateRangePeriod dateRangePeriod) {
         getDatePickerBase().$x(".//ul/li[@data-range-key='" + dateRangePeriod.getPeriodName() + "']").click();
     }
@@ -56,7 +71,7 @@ public class DateRangeSelector extends CommonDateSelector {
 
     public void setOneDate(DateRangeCalendar calendar, final LocalDateTime date) {
         expand();
-        selectDateRangePeriod(CUSTOM);
+        //selectDateRangePeriod(CUSTOM);
         setDateViaInput(getCalendarInput(calendar), prepareDate(calendar, date));
         applyDate();
         collapse();
@@ -64,9 +79,9 @@ public class DateRangeSelector extends CommonDateSelector {
 
     public void setRange(LocalDateTime dateFrom, final LocalDateTime dateTo) {
         expand();
-        selectDateRangePeriod(CUSTOM);
-        setDateViaInput(getCalendarInput(FROM), prepareDate(FROM, dateFrom));
-        setDateViaInput(getCalendarInput(TO), prepareDate(TO, dateTo));
+        //selectDateRangePeriod(CUSTOM);
+        setDateViaCalendarSelection(getCalendarInput(FROM), prepareDate(FROM, dateFrom));
+        setDateViaCalendarSelectionto(getCalendarInput(TO), prepareDate(TO, dateTo));
         applyDate();
         collapse();
     }

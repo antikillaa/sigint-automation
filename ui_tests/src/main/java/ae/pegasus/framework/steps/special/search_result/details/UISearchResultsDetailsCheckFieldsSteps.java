@@ -52,6 +52,7 @@ if (mainField.getFieldName().equalsIgnoreCase("Language") & expectedValue.equals
 */
 
                 expectedValue = expectedValue.replace("Voice", "Call");
+                expectedValue = expectedValue.replace("SMS", "Texting Event");
 
                 String actualValue = Pages.searchResultDetailsPage().getFieldValue(section, fieldToCheck);
                 actualValue = actualValue.replace("E-mail", "Email");
@@ -103,13 +104,13 @@ if (mainField.getFieldName().equalsIgnoreCase("Language") & expectedValue.equals
             for (CreatedRecordField recordField : record.getRecordFields()) {
                 switch (recordField) {
                     case FROM_NUMBER:
-                        checkStringValueField(FROM, PHONE_NUMBER, null, (String) record.getRecordFieldValue(recordField), recordField, true);
+                        checkStringValueField(FROM, FROM_PHONE_NUMBER, null, (String) record.getRecordFieldValue(recordField), recordField, true);
                         break;
                     case FROM_COUNTRY:
-                        checkStringValueField(FROM, COUNTRY, null, (String) record.getRecordFieldValue(recordField), recordField, false);
+                        checkStringValueField(FROM, FROM_COUNTRY, null, (String) record.getRecordFieldValue(recordField), recordField, false);
                         break;
                     case FROM_EMAIL:
-                        checkStringValueField(FROM, EMAIL, null, (String) record.getRecordFieldValue(recordField), recordField, false);
+                        checkStringValueField(FROM, FROM_EMAIL, null, (String) record.getRecordFieldValue(recordField), recordField, false);
                         break;
                     case IMSI:
                         checkStringValueField(FROM, IMSI, null, (String) record.getRecordFieldValue(recordField), recordField, false);
@@ -118,13 +119,13 @@ if (mainField.getFieldName().equalsIgnoreCase("Language") & expectedValue.equals
                         checkStringValueField(FROM, TMSI, null, (String) record.getRecordFieldValue(recordField), recordField, false);
                         break;
                     case TO_NUMBER:
-                        checkStringValueField(TO, PHONE_NUMBER, null, (String) record.getRecordFieldValue(recordField), recordField, true);
+                        checkStringValueField(TO, TO_PHONE_NUMBER, null, (String) record.getRecordFieldValue(recordField), recordField, true);
                         break;
                     case TO_COUNTRY:
-                        checkStringValueField(TO, COUNTRY, null, (String) record.getRecordFieldValue(recordField), recordField, false);
+                        checkStringValueField(TO, TO_COUNTRY, null, (String) record.getRecordFieldValue(recordField), recordField, false);
                         break;
                     case TO_EMAIL:
-                        checkStringValueField(TO, EMAIL, null, (String) record.getRecordFieldValue(recordField), recordField, false);
+                        checkStringValueField(TO, TO_EMAIL, null, (String) record.getRecordFieldValue(recordField), recordField, false);
                         break;
                     case SOURCE_TYPE:
                         checkStringValueField(RECORD_METADATA, SOURCE, null, (String) record.getRecordFieldValue(recordField), recordField, false);
@@ -153,7 +154,7 @@ if (mainField.getFieldName().equalsIgnoreCase("Language") & expectedValue.equals
                             patternOfDuration = "HH:" + patternOfDuration;
                         }
 
-                        checkStringValueField(NONE, DURATION, null,
+                        checkStringValueField(ATTRIBUTES, DURATION, null,
                                 TimeUtils.convertDurationToStringWithPattern(expectedDuration,
                                         patternOfDuration),
                                 recordField, false);

@@ -37,20 +37,29 @@ public class SearchResultDetailsPage extends BaseModalDialogPage {
         return getDialogBody().$x(".//div[@slot='content']");
     }
 
-    private SelenideElement getRecordDetailsBase() {
-        return getDialogBody().$x(".//div[contains(@class,'cb-detail__body-right')]");
+    private SelenideElement getRecordDetailsBase(String ref) {
+        return getDialogBody().$x(".//div[contains(@ref ,'"+ref+"')]");
+    }
+
+    private SelenideElement getRecordAssesmentBase() {
+        return getDialogBody().$x(".//div[contains(@ref ,'metadataSectionElement')]");
     }
 
     private SelenideElement getFieldsTable(SearchResultsDetailsSection section) {
         switch (section) {
-            case NONE:
-                return getRecordDetailsBase().$x(".//div[@slot='sidebar']/table[1]//tbody");
+            case FROM :
+                return getRecordDetailsBase(section.getref()).$$x(".//div[@class='table-container']").get(0);
+            case TO :
+                return getRecordDetailsBase(section.getref()).$$x(".//div[@class='table-container']").get(1);
             case RECORD_METADATA:
-                return getRecordDetailsBase().$x(".//cb-record-metadata-detail//tbody");
+                return getRecordDetailsBase(section.getref());
             case RECORD_ASSESSMENT:
-                return getRecordDetailsBase().$x(".//cb-record-assessment-detail//tbody");
+                return getRecordDetailsBase(section.getref());
+            case ATTRIBUTES:
+                return getRecordDetailsBase(section.getref());
+
             default:
-               for(SelenideElement sectionName : getRecordDetailsBase().$$x(".//div[@slot='sidebar']/h5")) {
+               for(SelenideElement sectionName : getRecordDetailsBase(section.getref()).$$x(".//div[@slot='sidebar']/h5")) {
                    if (sectionName.getText().trim().equalsIgnoreCase(section.getSectionName())) {
                         return sectionName.$x("./following-sibling::table//tbody");
                    }
@@ -60,9 +69,9 @@ public class SearchResultDetailsPage extends BaseModalDialogPage {
     }
 
     private String getFieldValueFromTable(SelenideElement fieldsTable, SearchResultsDetailsField field) {
-        for(SelenideElement fieldElement : fieldsTable.$$x(".//tr")) {
-            if (fieldElement.$x("./td[1]//label").getText().trim().equalsIgnoreCase(field.getFieldName())) {
-                return fieldElement.$x("./td[2]").getText().trim();
+        for(SelenideElement fieldElement : fieldsTable.$$x(".//div[@class='table-row']")) {
+            if (fieldElement.$x(".//div[@class ='table-row-label']//label").getText().trim().equalsIgnoreCase(field.getFieldName())) {
+                return fieldElement.$x(".//div[@class ='table-row-content']").getText().trim();
             }
         }
         throw new IllegalArgumentException("Field with name '" + field.getFieldName() + "' was not found");
@@ -82,11 +91,11 @@ public class SearchResultDetailsPage extends BaseModalDialogPage {
     }
 
     public String getSMSText() {
-        return getDialogBody().$x(".//cb-phone-view//div[@class='sms-detail__text']").getText();
+        return getDialogBody().$x(".//div[contains(@ref , 'contentSectionElement')]//span").getText();
     }
 
     public String getAttachmentDetails() {
-        return getDialogBody().$x("//div[@slot='content']//div[@class='para']").getText();
+        return getDialogBody().$x(".//div[contains(@ref , 'contentSectionElement')]//span").getText();
     }
 
     private SelenideElement getTranslationBase(SearchResultsTranslationType translationType) {

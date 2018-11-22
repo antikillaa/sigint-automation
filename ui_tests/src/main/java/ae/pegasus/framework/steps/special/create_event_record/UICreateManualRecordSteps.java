@@ -112,6 +112,11 @@ public class UICreateManualRecordSteps {
     public void iSaveCreatedRecord() {
         Pages.manualRecordPage().saveCreatedRecord();
         Pages.searchResultsPage().waitForPageLoading();
+        try {
+            Thread.sleep(8000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
 

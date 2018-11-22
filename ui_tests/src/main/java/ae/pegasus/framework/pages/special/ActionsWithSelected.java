@@ -5,6 +5,7 @@ import ae.pegasus.framework.pages.Pages;
 import ae.pegasus.framework.pages.basic_pages.api.BasePage;
 
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
 import static ae.pegasus.framework.constants.special.modal_dialog.ModalDialogButton.YES;
 
@@ -30,7 +31,10 @@ public class ActionsWithSelected extends BasePage {
     }
 
     private SelenideElement getButtonWithTitle(String title) {
-        return $x("//pg-btn[contains(@data-original-title,'" + title + "')]");
+      //  $$x("//pg-btn");
+        return $x("//pg-btn[contains(@pg-tooltip,'" + title + "')]");
+
+
     }
 
     public void addSelectedToReport() {

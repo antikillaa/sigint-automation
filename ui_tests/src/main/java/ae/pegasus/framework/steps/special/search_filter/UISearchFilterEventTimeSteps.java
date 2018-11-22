@@ -14,6 +14,11 @@ public class UISearchFilterEventTimeSteps {
 
     @Given("I set date ($dateFrom) as Earliest Event Time on the Search Filter page")
     public void iSetDateFrom(String dateFrom) {
+        Pages.searchFilterPage().setDateRange(EVENT_TIME, TimeUtils.convertToLocalDateTime(dateFrom),  TimeUtils.convertToLocalDateTime("10/12/2019"));
+    }
+
+    @Given("I set date ($dateFrom) as Earliest")
+    public void iSetDateE(String dateFrom) {
         Pages.searchFilterPage().setSingleDateInPeriod(EVENT_TIME, FROM, TimeUtils.convertToLocalDateTime(dateFrom));
     }
 

@@ -80,7 +80,12 @@ public class UIUpdateOperatorReportSteps {
     @When("I save currently opened operator report as draft")
     public void iSaveReportAsDraft() {
         Pages.updateOperatorReportPage().performAction(ReportAndRequestAction.SAVE_AS_DRAFT);
-        Pages.updateOperatorReportPage().waitForPageLoading();
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        // Pages.updateOperatorReportPage().waitForPageLoading();
        // Pages.searchResultDetailsPage().closeDialog();
     }
 

@@ -37,7 +37,7 @@ public abstract class BaseReportOrRequestPage extends BasePage {
     }
 
     protected SelenideElement getReportOrRequestHeader() {
-        return getReportOrRequestBase().$x(".//div[@class='cb-detail__header']");
+        return getReportOrRequestBase().$x(".//div[@class='im-document__header']");
     }
 
     protected SelenideElement getReportOrRequestStaticInformationBlock() {
