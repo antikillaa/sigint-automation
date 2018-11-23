@@ -1,7 +1,6 @@
 package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.app_context.AppContext;
-import ae.pegasus.framework.errors.OperationResultError;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
@@ -188,8 +187,6 @@ public class APIFinderFileSteps extends APISteps {
         OperationResult<List<FinderFile>> operationResult = serviceFile.getFilesRoot(filter);
         if (operationResult.isSuccess()) {
             finderFiles.addAll(operationResult.getEntity());
-        } else {
-            throw new OperationResultError(operationResult);
         }
 
         context.put("cbFinderList", finderFiles);
