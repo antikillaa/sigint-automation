@@ -16,7 +16,7 @@ public enum MainMenuChildItem {
 
     //RECORD ASSESSMENT
     MY_RECORDS("My Records", MainMenuRootItem.RECORD_ASSESSMENT),
-    TEAM_RECORDS("Team Records", MainMenuRootItem.RECORD_ASSESSMENT),
+    OrgUnit_RECORDS("OrgUnit Records", MainMenuRootItem.RECORD_ASSESSMENT),
     WORKLOADS("Workloads", MainMenuRootItem.RECORD_ASSESSMENT),
 
     //DASHBOARDS

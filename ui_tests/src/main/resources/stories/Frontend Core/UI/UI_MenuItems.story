@@ -1,5 +1,5 @@
 Meta:
-@component signIn
+@devsmoke
 @smoke test
 @all menu items
 @stage

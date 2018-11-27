@@ -17,9 +17,18 @@ public class TempStep extends BasePage {
         $x("//div[@class='pg-header']//ul[@class='pg-breadcrumb']//span").shouldHave(exactTextCaseSensitive(heading));
         System.out.println("this is the main o/p ****************************" + getPageTitle());
     }
-
+    @Then("I sleep for 5 second")
+    public void sleep() {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public boolean isPageDisplayed() {
         return false;
     }
+
+
 }

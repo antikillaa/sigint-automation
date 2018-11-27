@@ -1,6 +1,8 @@
 Meta:
 @API
 @story search
+@devsmoke
+
 
 Narrative:
 As a user
@@ -11,7 +13,6 @@ So that I can achieve a business goal
 Lifecycle:
 Before:
 Given I sign in as admin user
-
 Scenario: SQM basic events search
 When I send SQM search request - query:<query>, sourceTypes:<sourceTypes>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>, sortKey:<sortKey>
 When SQM search completed

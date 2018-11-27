@@ -1,24 +1,58 @@
-Meta:@search
+Meta:
+@stage
+@search
+
 
 Lifecycle:
 Before:
 Scope: SCENARIO
-Given load story ../aux-main-stories/auxSignIn.story with example table:
+Given load story ../../aux-main-stories/auxSignIn.story with example table:
 data/QE_login.table
-
+After:
 Scope: SCENARIO
 Outcome: ANY
 Given I Sign Out
 
-Scenario: Verfiy all data sources
-Given I navigate to Search
 
+
+
+Scenario: All the data sources are working in card view
+Meta:@devsmoke
+Given I navigate to Search
+Then I should see Search page
+When I enter search criteria (*) on the Search page
+When I start search on the Search page
+Given I setup Search Authorization
+
+When I open Card View
+Given load story ../../aux-search-stories/entities/auxCheckSearchResultsEntitiesNumbers.story
+
+Given I open Search Filter on the Search page
+Given load story ../../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given I Apply Search using Search Filter on the Search page
+
+When I open Card View
+Given load story ../../aux-search-stories/events/auxCheckSearchResultsEventsNumbers.story
+
+
+Examples:
+|SIGINT_events|EID_events|GOVINT_events|OSINT_events|CIO_events|FININT_events|TRAFFIC_events|Profiler_entities|Documents_entities|SIGINT_entities|EID_entities|GOVINT_entities|OSINT_entities|CIO_entities|
+|1         |1         |1          |1        |1         |1            |1             |1                |1                 |1            |1         |1            |1           |1       |
+
+
+
+Scenario: Verfiy  data source filters are working
+Meta:@devsmoke
+Given I navigate to Search
 Given I open Search Filter on the Search page
 Given I set Search Tab to General on the Search Filter page
 Given I set Source Type to Profiler on the Search Filter page
 Given I Apply Search using Search Filter on the Search page
 Given I setup Search Authorization
+
+When I open Card View
 Then I should see at least 1 search result(s) on the current view
+
 
 
 Given I open Search Filter on the Search page
@@ -30,6 +64,7 @@ Then I should see at least 1 search result(s) on the current view
 
 Given I open Search Filter on the Search page
 Given I set Source Type to SIGINT on the Search Filter page
+Given I set period range Last 90 days as Event Time Period on the Search Filter page
 Given I Apply Search using Search Filter on the Search page
 Given I setup Search Authorization
 Then I should see at least 1 search result(s) on the current view
@@ -132,7 +167,7 @@ Examples:
 |du||Call|
 |du||Domestic Movement|
 |du||International Roaming|
-|du||Subscribe|
+|du||Subscriber|
 |du||Texting event|
 |Etisalat||Call|
 |Etisalat||Domestic Movement|
@@ -163,7 +198,7 @@ Examples:
 Scenario: Verfiy all data sources for SIGINT Event
 Given I navigate to Search
 Given I open Search Filter on the Search page
-Given load story ../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given load story ../../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
 Given I set Source Type to SIGINT on the Search Filter page
 Given I set Data Source to (|<DataSource>|) on the Search Filter page
 Given I Apply Search using Search Filter on the Search page
@@ -212,7 +247,7 @@ Examples:
 Scenario: Verfiy all data sources for GOVINT Event
 Given I navigate to Search
 Given I open Search Filter on the Search page
-Given load story ../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given load story ../../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
 Given I set Source Type to GOVINT on the Search Filter page
 Given I set Data Source to (|<DataSource>|) on the Search Filter page
 Given I Apply Search using Search Filter on the Search page
@@ -298,6 +333,7 @@ Examples:
 |EID Investigation|
 
 Scenario: All the data sources are working
+
 Given I navigate to Search
 Then I should see Search page
 When I enter search criteria (*) on the Search page
@@ -375,4 +411,4 @@ Given load story ../../aux-search-stories/events/auxCheckSearchResulsEventsHoriz
 
 Examples:
 |SIGINT_events|EID_events|GOVINT_events|OSINT_events|CIO_events|Profiler_entities|Documents_entities|SIGINT_entities|EID_entities|GOVINT_entities|OSINT_entities|CIO_entities|
-|1000         |1         |400          |1000        |0          |1               |1                 |100            |100         |100            |100           |0       |
+|1            |1         |1            |1           |1         |1                |1                 |1              |1           |1              |1             |1           |

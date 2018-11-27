@@ -10,17 +10,11 @@ data/QE_login_analyst.table
 Scenario: User is able to create and edit a report
 
 
-Given I navigate to CB Finder
-Given I start creation of new file in the CB Finder
-Given I set Name (<FileName>) for new file in the CB Finder
-Given I set Classification (<FileCalssif>) for new file in the CB Finder
-Given I set Organization Units (|<FileOrgUnit>|) for new file in the CB Finder
-Given I save new file created in the CB Finder
 
 Given I navigate to Search
 When I enter search criteria (<GOVINTEventBookRef>) on the Search page
 Given I open Search Filter on the Search page
-Given load story ../../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given I set period range Last 90 days as Event Time Period on the Search Filter page
 Given I Apply Search using Search Filter on the Search page
 Given I setup Search Authorization
 When I open Card View
@@ -38,7 +32,6 @@ When I set Considerations (|<ReportConsidInit>|) in operator report
 When I set Recommendations (|<ReportRecommInit>|) in operator report
 When I set Notes (|<ReportNotesInit>|) in operator report
 When I save currently opened operator report as draft
-Then I close the operator report
 
 Given I navigate to CB Finder
 When I select file with Name (<FileName>) in the CB Finder
@@ -149,10 +142,11 @@ data/Report.table
 
 
 Scenario: Report approval workflow
+
 Given I navigate to Search
 When I enter search criteria (<GOVINTEventBookRef>) on the Search page
 Given I open Search Filter on the Search page
-Given load story ../../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given I set period range Last 90 days as Event Time Period on the Search Filter page
 Given I Apply Search using Search Filter on the Search page
 Given I setup Search Authorization
 When I open Card View
@@ -170,9 +164,6 @@ When I set Considerations (|<ReportConsidInit>|) in operator report
 When I set Recommendations (|<ReportRecommInit>|) in operator report
 When I set Notes (|<ReportNotesInit>|) in operator report
 When I save currently opened operator report as draft
-When I route the operator report
-
-Then I close the operator report
 
 Given I navigate to CB Finder
 When I select file with Name (<FileNameDefault>) in the CB Finder
@@ -278,13 +269,15 @@ data/Report.table
 
 
 Scenario: Report reject workflow
+
 Given I navigate to Search
 When I enter search criteria (<GOVINTEventBookRef>) on the Search page
 Given I open Search Filter on the Search page
-Given load story ../../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given I set period range Last 90 days as Event Time Period on the Search Filter page
 Given I Apply Search using Search Filter on the Search page
 Given I setup Search Authorization
 When I open Card View
+
 
 When I select all GOVINT event cards having identifiers: |<GOVINTEventName>|<GOVINTEventCarrier>|
 When I create new report for selected items
@@ -299,6 +292,7 @@ When I set Considerations (|<ReportConsidInit>|) in operator report
 When I set Recommendations (|<ReportRecommInit>|) in operator report
 When I set Notes (|<ReportNotesInit>|) in operator report
 When I Submit For Review the operator report which is currently opened
+When I enter routing (This is for auto report submit) for the operator report
 
 Given I Sign Out
 
@@ -342,6 +336,7 @@ data/Report.table
 
 
 Scenario: Report cancel workflow
+Meta:@shareports
 Given I navigate to Search
 When I enter search criteria (<GOVINTEventBookRef>) on the Search page
 Given I open Search Filter on the Search page
@@ -363,6 +358,7 @@ When I set Considerations (|<ReportConsidInit>|) in operator report
 When I set Recommendations (|<ReportRecommInit>|) in operator report
 When I set Notes (|<ReportNotesInit>|) in operator report
 When I Submit For Review the operator report which is currently opened
+When I enter routing (Submitting Report) for the operator report
 When I Cancel the operator report which is currently opened
 Then I should see that currently opened operator report has status (Cancelled)
 When I enter routing (canceled for test) for the operator report
@@ -372,11 +368,10 @@ data/Report.table
 
 
 Scenario: Report test
-Meta:@reportstest
 Given I navigate to Search
 When I enter search criteria (<GOVINTEventBookRef>) on the Search page
 Given I open Search Filter on the Search page
-Given load story ../../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given I set period range Last 90 days as Event Time Period on the Search Filter page
 Given I Apply Search using Search Filter on the Search page
 Given I setup Search Authorization
 When I open Card View

@@ -7,7 +7,8 @@ Outcome: ANY
 Given I Sign Out
 
 Scenario: Verify that a User can create a manual record with "Voice"-type
-Given load story ../aux-main-stories/auxSignIn.story with example table:
+Meta: @devsmoke
+Given load story ../../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_manager.table
 
 
@@ -115,12 +116,8 @@ Examples:
 |RecordSMS|{current_day}-2/{current_month}/{current_year}|
 
 Scenario: Verify that a User can create a manual record with "Fax"-type
-<<<<<<< HEAD:ui_tests/src/main/resources/stories/smoke/UI_CreateManualRecords.story
 
-Given load story ../aux-main-stories/auxSignIn.story with example table:
-=======
 Given load story ../../aux-main-stories/auxSignIn.story with example table:
->>>>>>> develop:ui_tests/src/main/resources/stories/Workflow/UI/UI_CreateManualRecords.story
 data/QE_login_operator.table
 
 Given I navigate to My Records

@@ -2,6 +2,7 @@ Meta:
 @stage
 @cbfinder
 
+
 Lifecycle:
 Before:
 Scope: SCENARIO
@@ -18,6 +19,7 @@ Outcome: ANY
 Given I Sign Out
 
 Scenario: Create a file
+Meta:@devsmoke
 Given I navigate to CB Finder
 Given I start creation of new file in the CB Finder
 Given I set Name (<FileName>) for new file in the CB Finder
@@ -54,6 +56,7 @@ Examples:
 data/CB_finder.table
 
 Scenario: Delete an empty file
+Meta:@devsmoke
 Given I navigate to CB Finder
 When I select file with Name (<FileName>) in the CB Finder
 When I delete file which is currently selected in the CB Finder

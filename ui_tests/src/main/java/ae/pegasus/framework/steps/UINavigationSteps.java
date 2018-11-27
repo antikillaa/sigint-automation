@@ -63,7 +63,7 @@ public class UINavigationSteps {
 
     @Given("I navigate to Team Records")
     public void navigateToTeamRecords() {
-        navigateTo(MainMenuChildItem.TEAM_RECORDS);
+        navigateTo(MainMenuChildItem.OrgUnit_RECORDS);
         Pages.teamRecordsPage().waitForPageLoading();
     }
 
