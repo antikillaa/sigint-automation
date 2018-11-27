@@ -42,7 +42,6 @@ Examples:
 
 
 Scenario: Verfiy  data source filters are working
-Meta:@devsmoke
 
 Given I navigate to Search
 Given I open Search Filter on the Search page
