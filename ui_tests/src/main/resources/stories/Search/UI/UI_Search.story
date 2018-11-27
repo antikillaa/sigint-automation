@@ -43,25 +43,8 @@ Examples:
 
 Scenario: Verfiy  data source filters are working
 Meta:@devsmoke
+
 Given I navigate to Search
-Given I open Search Filter on the Search page
-Given I set Search Tab to General on the Search Filter page
-Given I set Source Type to Profiler on the Search Filter page
-Given I Apply Search using Search Filter on the Search page
-Given I setup Search Authorization
-
-When I open Card View
-Then I should see at least 1 search result(s) on the current view
-
-
-
-Given I open Search Filter on the Search page
-Given I set Source Type to Documents on the Search Filter page
-Given I Apply Search using Search Filter on the Search page
-Given I setup Search Authorization
-Then I should see at least 1 search result(s) on the current view
-
-
 Given I open Search Filter on the Search page
 Given I set Source Type to SIGINT on the Search Filter page
 Given I set period range Last 90 days as Event Time Period on the Search Filter page
@@ -101,11 +84,7 @@ Given I Apply Search using Search Filter on the Search page
 Given I setup Search Authorization
 Then I should see at least 1 search result(s) on the current view
 
-Given I open Search Filter on the Search page
-Given I set Source Type to CIO on the Search Filter page
-Given I Apply Search using Search Filter on the Search page
-Given I setup Search Authorization
-Then I should see at least 1 search result(s) on the current view
+
 
 
 
