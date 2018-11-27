@@ -16,7 +16,6 @@ Examples:
 
 
 Scenario: Upload image to profiles
-Meta: @devsmoke
 Given Find or create test target from json:<target>
 When upload new target image:<image> to target
 Then Request is successful
@@ -29,7 +28,6 @@ Examples:
 
 
 Scenario: API.Create profile
-Meta: @devsmoke
 When I send create finder file request
 Then Request is successful
 When I send create profile request
@@ -46,7 +44,6 @@ Then Request is successful
 
 
 Scenario: API.Deleting of profile
-Meta: @devsmoke
 When I send create finder file request
 Then Request is successful
 When I send create profile request
@@ -115,7 +112,6 @@ Examples:
 
 
 Scenario: Get profile summary
-Meta: @devsmoke
 When I send create finder file request
 Then Request is successful
 When I send create profile request
