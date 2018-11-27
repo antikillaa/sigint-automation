@@ -8,7 +8,9 @@ import ae.pegasus.framework.services.FinderCaseService;
 import ae.pegasus.framework.services.FinderFileService;
 import ae.pegasus.framework.utils.StringUtils;
 import org.apache.log4j.Logger;
-import org.jbehave.core.annotations.*;
+import org.jbehave.core.annotations.AfterStories;
+import org.jbehave.core.annotations.Then;
+import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 
 import java.util.ArrayList;
@@ -182,14 +184,10 @@ public class APIFinderFileSteps extends APISteps {
         filter.setPageSize(100);
 
         List<FinderFile> finderFiles = new ArrayList<>();
-        OperationResult<List<FinderFile>> operationResult;
-        do {
-            operationResult = serviceFile.getFilesRoot(filter);
-            if (operationResult.isSuccess()) {
-                finderFiles.addAll(operationResult.getEntity());
-                filter.setPage(filter.getPage() + 1);
-            } else break;
-        } while (operationResult.getEntity().size() == filter.getPageSize());
+        OperationResult<List<FinderFile>> operationResult = serviceFile.getFilesRoot(filter);
+        if (operationResult.isSuccess()) {
+            finderFiles.addAll(operationResult.getEntity());
+        }
 
         context.put("cbFinderList", finderFiles);
     }

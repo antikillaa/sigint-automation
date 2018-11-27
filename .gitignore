@@ -13,8 +13,8 @@ htmlEmail.html
 *.NC
 
 # generated files
-
 ingestionData
 importData
 importTargetsData
 maven_dependencies
+/allure-results/

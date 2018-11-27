@@ -287,7 +287,7 @@ public class APIUploadFilesSteps extends APISteps {
 
     @When("I download audioFile of call event from search results")
     public void downloadFileContent() {
-        List<SearchRecord> searchResults = context.get("searchResults", List.class);
+        List<SearchRecord> searchResults = context.get("searchEntities", List.class);
 
         SearchRecord call = searchResults.stream()
                 .filter(searchRecord -> searchRecord.getAttributes() != null
@@ -297,8 +297,8 @@ public class APIUploadFilesSteps extends APISteps {
         String upload_m4A_file_id;
         if (call != null) {
             upload_m4A_file_id = ((List<String>) call.getAttributes().get("UPLOAD_M4A_FILE_ID")).get(0);
-            File content = service.getContent(upload_m4A_file_id, "./target/audio.m4a");
-            context.put("audioFile", content);
+            OperationResult<File> operationResult = service.getContent(upload_m4A_file_id);
+            context.put("audioFile", operationResult.getEntity());
         } else {
             throw new AssertionError("Call with UPLOAD_M4A_FILE_ID not found");
         }

@@ -11,6 +11,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -76,6 +77,18 @@ public class ReportService implements EntityService<Report> {
             Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
+    }
+
+    public OperationResult<File> export(String id, Boolean sources, Boolean creator) {
+        log.info("Export report by id: " + id);
+        G4Response response = g4HttpClient.sendRequest(reportRequest.export(id, sources, creator));
+
+        OperationResult<File> operationResult = new OperationResult<>(response, File.class);
+        if (operationResult.isSuccess()) {
+                return operationResult;
+        } else {
+            throw new OperationResultError(operationResult);
+        }
     }
 
     public OperationResult<Report> submit(Report entity) {

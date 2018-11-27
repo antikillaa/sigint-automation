@@ -2,14 +2,11 @@ package ae.pegasus.framework.support.reporter;
 
 import ae.pegasus.framework.assertion.Asserter;
 import ae.pegasus.framework.reporter.AllureReporter;
+import ae.pegasus.framework.utils.PageUtils;
 import com.codeborne.selenide.Screenshots;
 import com.google.common.io.Files;
-import ru.yandex.qatools.allure.annotations.Attachment;
-import ru.yandex.qatools.allure.events.MakeAttachmentEvent;
-import ru.yandex.qatools.allure.events.StepFailureEvent;
-import ru.yandex.qatools.allure.events.StepFinishedEvent;
-import ru.yandex.qatools.allure.events.TestCaseFailureEvent;
-import ae.pegasus.framework.utils.PageUtils;
+import io.qameta.allure.Attachment;
+import io.qameta.allure.model.Status;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,10 +40,12 @@ public class UIReporter extends AllureReporter {
     }
 
     private void softFailed(String step, Throwable cause) {
-        allure.fire(new StepFailureEvent().withThrowable(cause));
-        makeStepFailedAttachment();
-        allure.fire(new StepFinishedEvent());
-        if(!stepsFailedDueToSoftAsserts.contains(step)) {
+        super.getLifecycle().updateStep(stepResult -> {
+            stepResult.setStatus(Status.FAILED);
+        });
+        super.makeStepFailedAttachment();
+
+        if (!stepsFailedDueToSoftAsserts.contains(step)) {
             stepsFailedDueToSoftAsserts.add(step);
         }
         Asserter.getAsserter().resetErrorCount();
@@ -56,8 +55,10 @@ public class UIReporter extends AllureReporter {
     public void afterScenario() {
         if (!stepsFailedDueToSoftAsserts.isEmpty()) {
             String message = "Following steps are failed due to soft assertions:\n"
-            + String.join("\n", stepsFailedDueToSoftAsserts);
-            allure.fire(new TestCaseFailureEvent().withThrowable(new AssertionError(message)));
+                    + String.join("\n", stepsFailedDueToSoftAsserts);
+            super.getLifecycle().updateTestCase(testResult -> {
+                testResult.setStatus(Status.FAILED).setDescription(message);
+            });
             stepsFailedDueToSoftAsserts.clear();
         }
         super.afterScenario();
@@ -72,7 +73,7 @@ public class UIReporter extends AllureReporter {
     @Override
     protected void takeScreenshot() {
         try {
-            allure.fire(new MakeAttachmentEvent(screenshot(), "Page screenshot", "image/png"));
+            super.getLifecycle().addAttachment("Page screenshot", "image/png", ".png", screenshot());
         } catch (Exception e) {
             log.error("Unable to take screenshot", e);
         }

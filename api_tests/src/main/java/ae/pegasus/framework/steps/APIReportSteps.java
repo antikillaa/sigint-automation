@@ -4,18 +4,25 @@ import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.ReportService;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import org.junit.Assert;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import static org.junit.Assert.assertEquals;
 
 public class APIReportSteps extends APISteps {
 
-    public static ReportService serviceReport = new ReportService();
+    private static ReportService serviceReport = new ReportService();
 
     @When("I send create a report request")
     public void sendReportRequest() {
@@ -123,6 +130,45 @@ public class APIReportSteps extends APISteps {
         serviceReport.addComment(report);
     }
 
+    @When("I send export with sources:$sources and without creator:$creator a report request")
+    public void sendExportReportRequest(Boolean sources, Boolean creator) {
+        Report lastReport = Entities.getReports().getLatest();
+        String reportName = "Operator Report #" + lastReport.getReportNo();
+        context.put("reportName", reportName);
+        OperationResult<File> operationResult = serviceReport.export(lastReport.getId(), sources, creator);
+        context.put("file", operationResult.getEntity());
+    }
+
+    @Then("Check content of archive")
+    public void checkArchive() throws IOException {
+        String reportName = context.get("reportName", String.class);
+        String reportNameInArchive = reportName + "/" + reportName + ".pdf";
+        File file = context.get("file", File.class);
+        ZipFile zipFile = new ZipFile(file.getName());
+
+        Assert.assertTrue("Zip file has no elements!", zipFile.entries().hasMoreElements());
+        for (Enumeration e = zipFile.entries(); e.hasMoreElements(); ) {
+            ZipEntry entry = (ZipEntry) e.nextElement();
+            if (!entry.isDirectory()) {
+                if (FilenameUtils.getExtension(entry.getName()).equals("pdf")) {
+                    Assert.assertEquals(reportNameInArchive, entry.getName());
+                }
+            }
+            if (entry.isDirectory()) {
+                Assert.assertEquals(FilenameUtils.getName(entry.getName()), "attachments");
+            }
+        }
+    }
+
+    @Then("Delete exported reports")
+    public void deleteExportedReport() {
+        String reportName = context.get("reportName", String.class);
+        File file = new File( reportName + ".zip");
+        if (file.delete()) {
+            log.info(reportName + " report export is deleted");
+        } else log.error(reportName + " report export file doesn't exists");
+    }
+
     @Then("Report is created")
     public void reportIsCreated() {
         Report lastreport = Entities.getReports().getLatest();
@@ -200,6 +246,5 @@ public class APIReportSteps extends APISteps {
     private void reportCheck(Report updatedReport, Report contextReport) {
         assertEquals(updatedReport.getSubject(), contextReport.getSubject());
         assertEquals(updatedReport.getDescription(), contextReport.getDescription());
-
     }
 }
