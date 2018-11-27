@@ -1,5 +1,5 @@
 Meta:
-@devsmoke
+@devsmoke1
 @smoke test
 @all menu items
 @stage
@@ -53,7 +53,7 @@ Given I navigate to My Records
 Then I should see My Records page
 
 Scenario: Team Records menu item is working
-Given I navigate to Team Records
+Given I navigate to OrgUnit Records
 Given I setup Search Authorization
 Then I should see Team Records page
 
@@ -79,8 +79,8 @@ Then The page heading should be (Custom Dashboards)
 
 
 Scenario: Teams And Users menu item is working
-Given I navigate to Teams And Users
-Then The page heading should be (Teams And Users)
+Given I navigate to Org Units And Users
+Then The page heading should be (Org Units And Users)
 
 Scenario: Title Management menu item is working
 Given I navigate to Title Management
