@@ -1,5 +1,5 @@
 Meta:
-@devsmoke1
+@devsmoke
 @smoke test
 @all menu items
 @stage
