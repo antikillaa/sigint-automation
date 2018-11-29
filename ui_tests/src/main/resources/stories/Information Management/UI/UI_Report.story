@@ -272,7 +272,7 @@ data/Report.table
 
 
 Scenario: Report approval workflow
-Meta:@fix123
+Meta:@devsmoke
 Given I navigate to Search
 When I enter search criteria (<SIGINTEventIMSI>) on the Search page
 Given I open Search Filter on the Search page
