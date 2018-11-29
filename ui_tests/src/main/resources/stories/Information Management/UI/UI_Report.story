@@ -272,7 +272,7 @@ data/Report.table
 
 
 Scenario: Report approval workflow
-Meta:@devsmoke
+Meta:@fix123
 Given I navigate to Search
 When I enter search criteria (<SIGINTEventIMSI>) on the Search page
 Given I open Search Filter on the Search page
@@ -287,8 +287,9 @@ Given I save Report number for the operator report in the context
 When I set Classification (<ReportClassifInit>) in operator report
 When I set Created For (<ReportCreatedForInit>) in operator report
 When I set File Name/Case Name (|<FileNameDefault>|) in operator report
-When I set Organization Units (|<ReportOrgUnitInit>|) in operator report
 When I set Subject (<ReportSubject>) in operator report
+When I set Organization Units (|<ReportOrgUnitInit>|) in operator report
+
 When I set Description (|<ReportDescrInit>|) in operator report
 When I set Considerations (|<ReportConsidInit>|) in operator report
 When I set Recommendations (|<ReportRecommInit>|) in operator report
