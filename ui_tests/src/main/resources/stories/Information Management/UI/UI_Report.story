@@ -318,6 +318,10 @@ When I open report with Report number from the context in file which is currentl
 Given I Collapse the CB Finder view
 Then I should see that currently opened operator report has status (Awaiting Review)
 When I Take Ownership of the operator report which is currently opened
+Given I navigate to CB Finder
+Given I Expand the CB Finder view
+When I select file with Name (<FileNameDefault>) in the CB Finder
+When I open report with Report number from the context in file which is currently selected in the CB Finder
 Then I should see that currently opened operator report has status (Under Review)
 Then I should see Reject button in operator report
 Then I should see Return to Author button in operator report
