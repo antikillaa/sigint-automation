@@ -141,17 +141,17 @@ data/Report.table
 
 
 
-Scenario: Report approval workflow
+Scenario: Report approval and Unassign workflow
 
 Given I navigate to Search
-When I enter search criteria (<GOVINTEventBookRef>) on the Search page
+When I enter search criteria (<SIGINTEventIMSI>) on the Search page
 Given I open Search Filter on the Search page
 Given I set period range Last 90 days as Event Time Period on the Search Filter page
 Given I Apply Search using Search Filter on the Search page
 Given I setup Search Authorization
 When I open Card View
 
-When I select all GOVINT event cards having identifiers: |<GOVINTEventName>|<GOVINTEventCarrier>|
+When I select all SIGINT event cards having identifiers: |<SIGINTEventPhone>|
 When I create new report for selected items
 Given I save Report number for the operator report in the context
 When I set Classification (<ReportClassifInit>) in operator report
@@ -228,6 +228,8 @@ Given I Collapse the CB Finder view
 Then I should see that currently opened operator report has status (Returned for Revision)
 
 When I Submit For Review the operator report which is currently opened
+When I enter routing (<RoutingCommnets>) for the operator report
+When I route the operator report
 Then I should see that currently opened operator report has status (Awaiting Review)
 Then I should see Cancel button in operator report
 
@@ -266,6 +268,85 @@ Then I should see that currently opened operator report has status (Approved)
 
 Examples:
 data/Report.table
+
+
+
+Scenario: Report approval workflow
+Meta:@devsmoke
+Given I navigate to Search
+When I enter search criteria (<SIGINTEventIMSI>) on the Search page
+Given I open Search Filter on the Search page
+Given I set period range Last 90 days as Event Time Period on the Search Filter page
+Given I Apply Search using Search Filter on the Search page
+Given I setup Search Authorization
+When I open Card View
+
+When I select all SIGINT event cards having identifiers: |<SIGINTEventPhone>|
+When I create new report for selected items
+Given I save Report number for the operator report in the context
+When I set Classification (<ReportClassifInit>) in operator report
+When I set Created For (<ReportCreatedForInit>) in operator report
+When I set File Name/Case Name (|<FileNameDefault>|) in operator report
+When I set Organization Units (|<ReportOrgUnitInit>|) in operator report
+When I set Subject (<ReportSubject>) in operator report
+When I set Description (|<ReportDescrInit>|) in operator report
+When I set Considerations (|<ReportConsidInit>|) in operator report
+When I set Recommendations (|<ReportRecommInit>|) in operator report
+When I set Notes (|<ReportNotesInit>|) in operator report
+When I save currently opened operator report as draft
+
+Given I navigate to CB Finder
+When I select file with Name (<FileNameDefault>) in the CB Finder
+When I open report with Report number from the context in file which is currently selected in the CB Finder
+
+Given I Collapse the CB Finder view
+
+Then I should see Edit button in operator report
+When I Submit For Review the operator report which is currently opened
+When I enter routing (Submitting the report ) for the operator report
+When I route the operator report
+
+Given I Sign Out
+
+Given load story ../../aux-main-stories/auxSignIn.story with example table:
+data/QE_login_manager.table
+
+Given I navigate to CB Finder
+Given I Expand the CB Finder view
+When I select file with Name (<FileNameDefault>) in the CB Finder
+When I open report with Report number from the context in file which is currently selected in the CB Finder
+Given I Collapse the CB Finder view
+Then I should see that currently opened operator report has status (Awaiting Review)
+When I Take Ownership of the operator report which is currently opened
+Then I should see that currently opened operator report has status (Under Review)
+Then I should see Reject button in operator report
+Then I should see Return to Author button in operator report
+Then I should see Approve button in operator report
+Then I should see Unassign button in operator report
+Then I should see Edit button in operator report
+
+When I Approve the operator report which is currently opened
+When I enter routing (Submitting the report for approval ) for the operator report
+When I route the operator report
+Then I should see that currently opened operator report has status (Approved)
+
+Given I Sign Out
+Given load story ../../aux-main-stories/auxSignIn.story with example table:
+data/QE_login_analyst.table
+
+
+Given I navigate to CB Finder
+Given I Expand the CB Finder view
+When I select file with Name (<FileNameDefault>) in the CB Finder
+When I open report with Report number from the context in file which is currently selected in the CB Finder
+Given I Collapse the CB Finder view
+Then I should see that currently opened operator report has status (Approved)
+
+Examples:
+data/Report.table
+
+
+
 
 
 Scenario: Report reject workflow
