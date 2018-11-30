@@ -37,14 +37,14 @@ public class APIReportSteps extends APISteps {
         serviceReport.buildReport(report, reportNo, entities);
         context.put("report", report);
         String actionId = getRequestAdress(state);
-
-        serviceReport.add(report, actionId);
+        OperationResult<Report> operationResult = serviceReport.add(report, actionId);
+        Report reportResult = operationResult.getEntity();
+        context.put("reportID", report.getId());
     }
 
     @When("I get allowed actions")
     public void sendGetAllowedActions() {
         String imId = Entities.getReports().getLatest() == null ? "" : Entities.getReports().getLatest().getId();
-        ;
         OperationResult<List<PossibleActions>> operationResult = serviceReport.allowedactions(imId);
         List<PossibleActions> possibleActions = operationResult.getEntity();
         context.put("possibleActions", possibleActions);
@@ -66,8 +66,7 @@ public class APIReportSteps extends APISteps {
 
     @When("I send view a report request")
     public void sendViewReportRequest() {
-        Report lastReport = Entities.getReports().getLatest();
-        String id = lastReport.getId();
+        String id = context.get("reportID", String.class);
         serviceReport.view(id);
     }
 

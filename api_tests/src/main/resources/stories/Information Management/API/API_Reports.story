@@ -9,7 +9,6 @@ When I send create finder file request
 Then Request is successful
 
 Scenario: Create a report
-Meta:@wip
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -43,7 +42,10 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I get allowed actions
+Then Request is successful
+
+When I OPERATOR_REPORT_SAVE_AS_DRAFT send a report request
 Then Request is successful
 And Report is created
 
@@ -65,7 +67,7 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I OPERATOR_REPORT_SAVE_AS_DRAFT send a report request
 Then Request is successful
 And Report is created
 
@@ -110,7 +112,7 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I OPERATOR_REPORT_SAVE_AS_DRAFT send a report request
 Then Request is successful
 And Report is created
 
@@ -140,7 +142,7 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I OPERATOR_REPORT_SAVE_AS_DRAFT send a report request
 Then Request is successful
 And Report is created
 
@@ -164,6 +166,8 @@ Examples:
 | SIGINT | entity | type:"TELECOM_SUBSCRIBER" | 0 | 100 |
 
 Scenario: Submit a report
+Meta:@wip
+
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -171,7 +175,7 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I OPERATOR_REPORT_SAVE_AS_DRAFT send a report request
 Then Request is successful
 And Report is created
 
@@ -198,7 +202,7 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I OPERATOR_REPORT_SAVE_AS_DRAFT send a report request
 Then Request is successful
 And Report is created
 
@@ -232,7 +236,7 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I OPERATOR_REPORT_SAVE_AS_DRAFT send a report request
 Then Request is successful
 And Report is created
 
@@ -271,7 +275,7 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I OPERATOR_REPORT_SAVE_AS_DRAFT send a report request
 Then Request is successful
 And Report is created
 
@@ -311,7 +315,7 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I OPERATOR_REPORT_SAVE_AS_DRAFT send a report request
 Then Request is successful
 And Report is created
 
@@ -346,7 +350,7 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I OPERATOR_REPORT_SAVE_AS_DRAFT send a report request
 Then Request is successful
 And Report is created
 
@@ -384,7 +388,7 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I OPERATOR_REPORT_SAVE_AS_DRAFT send a report request
 Then Request is successful
 And Report is created
 
@@ -418,7 +422,7 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I OPERATOR_REPORT_SAVE_AS_DRAFT send a report request
 Then Request is successful
 And Report is created
 
@@ -464,7 +468,7 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I OPERATOR_REPORT_SAVE_AS_DRAFT send a report request
 Then Request is successful
 And Report is created
 
