@@ -6,6 +6,7 @@
 - Reporting test results
 - How to start tests execution
 - Re-run failed test cases
+- Issue and TMS links 
 
 **General Description**.
 
@@ -136,3 +137,16 @@ Jbehave doesn't have easy way to re-run failed test case by name or id. The best
 
         mvn clean install -Pui (to start ui tests) -Papi (to start api tests) -DappURL={g4_url} -DremoteRun={true/false} 
         -DseleniumHub={selenium_hub} -DmetaFilter=+wip
+        
+**Issue and TMS links**
+
+Allure report support Issue and TMS links.
+You can link your tests to some resources such as TMS (test management system) or bug tracker.
+
+    Scenario: scenario description
+    Meta:
+    @issue CB-0001
+    @test 12345
+    Given a system state
+    When I do something
+    Then system is in a different state
