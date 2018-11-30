@@ -2,6 +2,9 @@ package ae.pegasus.framework.model.entities;
 
 import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.*;
+import ae.pegasus.framework.model.information_managment.ReportCategory;
+import ae.pegasus.framework.model.information_managment.report.Report;
+import ae.pegasus.framework.model.information_managment.rfi.RequestForInformation;
 
 import java.io.InputStream;
 

@@ -7,6 +7,10 @@ import ae.pegasus.framework.http.requests.ReportRequest;
 import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
+import ae.pegasus.framework.model.information_managment.NextOwners;
+import ae.pegasus.framework.model.information_managment.PossibleActions;
+import ae.pegasus.framework.model.information_managment.report.Report;
+import ae.pegasus.framework.model.information_managment.report.ReportEvent;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
@@ -22,11 +26,10 @@ public class ReportService implements EntityService<Report> {
     private static Logger log = Logger.getLogger(ReportService.class);
     private static ReportRequest reportRequest = new ReportRequest();
 
-    @Override
-    public OperationResult<Report> add(Report entity) {
+    public OperationResult<Report> add(Report entity, String actionId) {
         log.info("Sending create new report request...");
 
-        G4Response response = g4HttpClient.sendRequest(reportRequest.add(entity));
+        G4Response response = g4HttpClient.sendRequest(reportRequest.add(entity, actionId));
 
         OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
         if (operationResult.isSuccess()) {
@@ -38,6 +41,11 @@ public class ReportService implements EntityService<Report> {
     }
 
     @Override
+    public OperationResult<?> add(Report entity) {
+        throw new NotImplementedException("");
+    }
+
+    @Override
     public OperationResult remove(Report entity) {
         log.info("Sending delete a report request...");
 
@@ -45,7 +53,7 @@ public class ReportService implements EntityService<Report> {
 
         OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
         if (operationResult.isSuccess()) {
-            Entities.getReports().addOrUpdateEntity(operationResult.getEntity());
+            Entities.getReports().removeEntity(operationResult.getEntity());
         } else {
             throw new OperationResultError(operationResult);
         }
@@ -64,7 +72,7 @@ public class ReportService implements EntityService<Report> {
 
     @Override
     public OperationResult<Report> update(Report entity) {
-        return add(entity);
+        return (OperationResult<Report>) add(entity);
     }
 
     @Override
@@ -212,6 +220,19 @@ public class ReportService implements EntityService<Report> {
         }
     }
 
+    public OperationResult<List<NextOwners>> possibleOwner(Report entity) {
+        log.info("Sending possible owners request...");
+
+        G4Response response = g4HttpClient.sendRequest(reportRequest.possibleOwner(entity));
+
+        OperationResult<NextOwners[]> operationResult = new OperationResult<>(response, NextOwners[].class);
+        if (operationResult.isSuccess()) {
+            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
+        } else {
+            return new OperationResult<>(response);
+        }
+    }
+
     public OperationResult<Result> generateNumber() {
         log.info("Sending create new report number request...");
 
@@ -222,6 +243,19 @@ public class ReportService implements EntityService<Report> {
             return operationResult;
         } else {
             throw new OperationResultError(operationResult);
+        }
+    }
+
+    public OperationResult<List<PossibleActions>> allowedactions(String id) {
+        log.info("Sending submit a new report request...");
+
+        G4Response response = g4HttpClient.sendRequest(reportRequest.allowedactions(id));
+
+        OperationResult<PossibleActions[]> operationResult = new OperationResult<>(response, PossibleActions[].class);
+        if (operationResult.isSuccess()) {
+            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
+        } else {
+            return new OperationResult<>(response);
         }
     }
 
@@ -303,7 +337,7 @@ public class ReportService implements EntityService<Report> {
         report.setDirectCaseFiles(Collections.singletonList(directCaseFile));
     }
 
-    public void setNextOwners(List<CurrentOwner> currentOwner, List<NextOwners> allOwners) {
+    public void setNextOwnersTeams(List<CurrentOwner> currentOwner, List<NextOwners> allOwners) {
         for (CurrentOwner owner : currentOwner) {
             NextOwners nextOwner = new NextOwners();
             nextOwner.setOwnerId(owner.getOwnerId());

@@ -5,6 +5,8 @@ import ae.pegasus.framework.controllers.APILogin;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
+import ae.pegasus.framework.model.information_managment.NextOwners;
+import ae.pegasus.framework.model.information_managment.rfa.RequestForApprove;
 import ae.pegasus.framework.services.RequestForApproveService;
 import ae.pegasus.framework.services.SearchService;
 import org.apache.commons.lang3.RandomStringUtils;

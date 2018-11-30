@@ -1,6 +1,10 @@
 
-package ae.pegasus.framework.model;
+package ae.pegasus.framework.model.information_managment.report;
 
+import ae.pegasus.framework.model.AbstractEntity;
+import ae.pegasus.framework.model.Attachment;
+import ae.pegasus.framework.model.Metadata;
+import ae.pegasus.framework.model.SourceType;
 import com.fasterxml.jackson.annotation.*;
 
 import java.util.HashMap;

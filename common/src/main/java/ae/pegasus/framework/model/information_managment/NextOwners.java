@@ -1,18 +1,15 @@
+package ae.pegasus.framework.model.information_managment;
 
-package ae.pegasus.framework.model;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-
 @JsonPropertyOrder({
-        "ownerId",
-        "ownerName",
+        "orgUnitId",
+        "orgUnitName",
         "type"
 })
-public class AllOwner {
+
+public class NextOwners {
 
     @JsonProperty("ownerId")
     private String ownerId;

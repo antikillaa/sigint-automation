@@ -1,5 +1,5 @@
 
-package ae.pegasus.framework.model;
+package ae.pegasus.framework.model.information_managment.report;
 
 import com.fasterxml.jackson.annotation.*;
 

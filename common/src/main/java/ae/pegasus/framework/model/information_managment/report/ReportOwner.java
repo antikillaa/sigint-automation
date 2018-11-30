@@ -1,5 +1,7 @@
-package ae.pegasus.framework.model;
+package ae.pegasus.framework.model.information_managment.report;
 
+import ae.pegasus.framework.model.G4Entity;
+import ae.pegasus.framework.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

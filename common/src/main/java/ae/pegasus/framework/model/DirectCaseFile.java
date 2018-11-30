@@ -30,6 +30,13 @@ public class DirectCaseFile {
     private String relationType;
     @JsonProperty("attributes")
     private Attributes attributes;
+
+    @JsonProperty("processed")
+    private Boolean processed;
+
+    @JsonProperty("bidirectional")
+    private Boolean bidirectional;
+
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -103,4 +110,19 @@ public class DirectCaseFile {
         this.additionalProperties.put(name, value);
     }
 
+    public Boolean getProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
+    }
+
+    public Boolean getBidirectional() {
+        return bidirectional;
+    }
+
+    public void setBidirectional(Boolean bidirectional) {
+        this.bidirectional = bidirectional;
+    }
 }

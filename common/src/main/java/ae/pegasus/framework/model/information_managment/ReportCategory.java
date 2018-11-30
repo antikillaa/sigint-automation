@@ -1,7 +1,8 @@
-package ae.pegasus.framework.model;
+package ae.pegasus.framework.model.information_managment;
 
 import ae.pegasus.framework.data_for_entity.annotations.DataIgnore;
 import ae.pegasus.framework.data_for_entity.annotations.WithCollectionSize;
+import ae.pegasus.framework.model.G4Entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

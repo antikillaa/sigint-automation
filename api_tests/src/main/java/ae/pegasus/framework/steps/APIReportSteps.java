@@ -1,8 +1,13 @@
 package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.model.*;
+import ae.pegasus.framework.model.CurrentOwner;
+import ae.pegasus.framework.model.Result;
+import ae.pegasus.framework.model.SearchRecord;
 import ae.pegasus.framework.model.entities.Entities;
+import ae.pegasus.framework.model.information_managment.NextOwners;
+import ae.pegasus.framework.model.information_managment.PossibleActions;
+import ae.pegasus.framework.model.information_managment.report.Report;
 import ae.pegasus.framework.services.ReportService;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -24,14 +29,25 @@ public class APIReportSteps extends APISteps {
 
     private static ReportService serviceReport = new ReportService();
 
-    @When("I send create a report request")
-    public void sendReportRequest() {
+    @When("I $state send a report request")
+    public void sendReportRequest(String state) {
         Report report = new Report();
         Result reportNo = context.get("reportNo", Result.class);
         List<SearchRecord> entities = context.get("searchEntities", List.class);
         serviceReport.buildReport(report, reportNo, entities);
         context.put("report", report);
-        serviceReport.add(report);
+        String actionId = getRequestAdress(state);
+
+        serviceReport.add(report, actionId);
+    }
+
+    @When("I get allowed actions")
+    public void sendGetAllowedActions() {
+        String imId = Entities.getReports().getLatest() == null ? "" : Entities.getReports().getLatest().getId();
+        ;
+        OperationResult<List<PossibleActions>> operationResult = serviceReport.allowedactions(imId);
+        List<PossibleActions> possibleActions = operationResult.getEntity();
+        context.put("possibleActions", possibleActions);
     }
 
     @When("I send generate report number request")
@@ -60,7 +76,7 @@ public class APIReportSteps extends APISteps {
         Report lastreport = Entities.getReports().getLatest();
         List<CurrentOwner> currentOwner = context.get("currentOwner", List.class);
         List<NextOwners> allOwners = new ArrayList<>();
-        serviceReport.setNextOwners(currentOwner, allOwners);
+        serviceReport.setNextOwnersTeams(currentOwner, allOwners);
         lastreport.setNextOwners(allOwners);
         serviceReport.submit(lastreport);
     }
@@ -72,9 +88,18 @@ public class APIReportSteps extends APISteps {
         context.put("currentOwner", currentOwner.getEntity());
     }
 
+    @When("I send get owner a report request")
+    public void sendGetOwnerReportRequest() {
+        Report lastreport = Entities.getReports().getLatest();
+        OperationResult<List<NextOwners>> nextOwner = serviceReport.possibleOwner(lastreport);
+        context.put("nextOwner", nextOwner.getEntity());
+    }
+
     @When("I send take ownership a report request")
     public void sendTakeOwnershipReportRequest() {
         Report report = Entities.getReports().getLatest();
+        List<NextOwners> nextOwners = context.get("nextOwner", List.class);
+        report.setNextOwners(nextOwners);
         serviceReport.takeOwnership(report);
     }
 
@@ -246,5 +271,14 @@ public class APIReportSteps extends APISteps {
     private void reportCheck(Report updatedReport, Report contextReport) {
         assertEquals(updatedReport.getSubject(), contextReport.getSubject());
         assertEquals(updatedReport.getDescription(), contextReport.getDescription());
+    }
+
+    private String getRequestAdress(String state) {
+        List<PossibleActions> possibleActions = context.get("possibleActions", List.class);
+        PossibleActions possibleAction = possibleActions.stream()
+                .filter(w -> state.equals(w.getActionPermission()))
+                .findAny()
+                .orElse(null);
+        return possibleAction.getId();
     }
 }

@@ -1,8 +1,8 @@
 package ae.pegasus.framework.http.requests;
 
 import ae.pegasus.framework.http.HttpMethod;
-import ae.pegasus.framework.model.RequestForApprove;
-import ae.pegasus.framework.model.RequestForApprovePayload;
+import ae.pegasus.framework.model.information_managment.rfa.RequestForApprove;
+import ae.pegasus.framework.model.information_managment.rfa.RequestForApprovePayload;
 
 public class RequestForApproveRequest extends HttpRequest {
     private final static String URI = "/api/reports/workflows/";
