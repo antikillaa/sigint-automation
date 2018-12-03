@@ -60,11 +60,15 @@ Examples:
 | SIGINT | event | EventVO |      | 0 | 10 |
 
 Scenario: Create a report. [SIGINT] Data Source filters.
+Meta:@wip
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
 
 When I send generate report number request
+Then Request is successful
+
+When I get allowed actions
 Then Request is successful
 
 When I OPERATOR_REPORT_SAVE_AS_DRAFT send a report request
@@ -166,7 +170,6 @@ Examples:
 | SIGINT | entity | type:"TELECOM_SUBSCRIBER" | 0 | 100 |
 
 Scenario: Submit a report
-Meta:@wip
 
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
