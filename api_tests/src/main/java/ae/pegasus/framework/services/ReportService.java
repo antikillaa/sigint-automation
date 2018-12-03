@@ -113,10 +113,10 @@ public class ReportService implements EntityService<Report> {
         return operationResult;
     }
 
-    public OperationResult<Report> takeOwnership(Report entity) {
+    public OperationResult<Report> takeOwnership(Report entity, String actionId) {
         log.info("Sending take ownership a report request...");
 
-        G4Response response = g4HttpClient.sendRequest(reportRequest.takeOwnership(entity));
+        G4Response response = g4HttpClient.sendRequest(reportRequest.takeOwnership(entity, actionId));
 
         OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
         if (operationResult.isSuccess()) {
@@ -127,10 +127,10 @@ public class ReportService implements EntityService<Report> {
         return operationResult;
     }
 
-    public OperationResult<Report> approveReport(Report entity) {
+    public OperationResult<Report> approveReport(Report entity, String actionId) {
         log.info("Sending approve a report request...");
 
-        G4Response response = g4HttpClient.sendRequest(reportRequest.approveReport(entity));
+        G4Response response = g4HttpClient.sendRequest(reportRequest.approveReport(entity, actionId));
 
         OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
         if (operationResult.isSuccess()) {
@@ -141,10 +141,10 @@ public class ReportService implements EntityService<Report> {
         return operationResult;
     }
 
-    public OperationResult<Report> returnAuthor(Report entity) {
+    public OperationResult<Report> returnAuthor(Report entity, String actionId) {
         log.info("Sending return to author report request...");
 
-        G4Response response = g4HttpClient.sendRequest(reportRequest.returnAuthor(entity));
+        G4Response response = g4HttpClient.sendRequest(reportRequest.returnAuthor(entity, actionId));
 
         OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
         if (operationResult.isSuccess()) {

@@ -93,31 +93,31 @@ public class ReportRequest extends HttpRequest {
         return this;
     }
 
-    public ReportRequest takeOwnership(Report report) {
+    public ReportRequest takeOwnership(Report report, String actionId) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "perform-action/2-3")
+                .setURI(URI + "perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;
     }
 
-    public ReportRequest approveReport(Report report) {
+    public ReportRequest approveReport(Report report, String actionId) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "perform-action/3-0")
+                .setURI(URI + "perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;
     }
 
-    public ReportRequest returnAuthor(Report report) {
+    public ReportRequest returnAuthor(Report report, String actionId) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "perform-action/3-4")
+                .setURI(URI + "perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;
