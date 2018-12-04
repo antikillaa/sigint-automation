@@ -123,21 +123,21 @@ public class ReportRequest extends HttpRequest {
         return this;
     }
 
-    public ReportRequest rejectReport(Report report) {
+    public ReportRequest rejectReport(Report report, String actionId) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "perform-action/9")
+                .setURI(URI + "perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;
     }
 
-    public ReportRequest cancelReportOwned(Report report) {
+    public ReportRequest cancelReportOwned(Report report, String actionId) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "perform-action/3-1")
+                .setURI(URI + "perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;

@@ -344,8 +344,6 @@ Examples:
 
 Scenario: Reject a report
 
-Meta:@wip
-
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -389,7 +387,8 @@ Then Report is rejected
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
-| SIGINT | event | EventVO |      | 0 | 1 |
+| SIGINT | event | EventVO |      | 0 | 150 |
+| SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Cancel a report with owner
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
@@ -417,7 +416,7 @@ When I send Take Ownership a report request
 Then Request is successful
 Then Report is took ownership
 
-When I send cancel a report request with owner
+When I send Cancel a report request
 Then Request is successful
 Then Report is canceled
 

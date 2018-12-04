@@ -92,6 +92,13 @@ public class APIReportSteps extends APISteps {
             case "Submit for Review":
                 submitForReview(state);
                 break;
+            case "Reject":
+                rejectReport(state);
+            case "Cancel":
+                cancelReportWithOwner(state);
+
+            default:
+                log.error("State is not found");
         }
 
     }
@@ -141,22 +148,22 @@ public class APIReportSteps extends APISteps {
         serviceReport.approveReport(report, actionId);
     }
 
-    @When("I send reject a report request")
-    public void sendRejectReportRequest() {
+    private void rejectReport(String state) {
         Report report = Entities.getReports().getLatest();
         report.setComment("qe_" + RandomStringUtils.randomAlphabetic(5));
-        serviceReport.rejectReport(report);
+        String actionId = getRequestAdress(state);
+        serviceReport.rejectReport(report, actionId);
     }
 
-    @When("I send cancel a report request with owner")
-    public void sendCancelReportRequestWithOwner() {
+    private void cancelReportWithOwner(String state) {
         Report report = Entities.getReports().getLatest();
         report.setComment("qe_auto_" + RandomStringUtils.randomAlphabetic(5));
-        serviceReport.cancelReportOwned(report);
+        String actionId = getRequestAdress(state);
+        serviceReport.cancelReportOwned(report, actionId);
     }
 
     @When("I send cancel a report request without owner")
-    public void sendCancelReportRequestWithoutOwner() {
+    public void cancelReportWithoutOwner() {
         Report report = Entities.getReports().getLatest();
         report.setComment("qe_auto_" + RandomStringUtils.randomAlphabetic(5));
         serviceReport.cancelReportNotOwned(report);

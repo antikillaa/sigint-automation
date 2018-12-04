@@ -155,10 +155,10 @@ public class ReportService implements EntityService<Report> {
         return operationResult;
     }
 
-    public OperationResult<Report> rejectReport(Report entity) {
+    public OperationResult<Report> rejectReport(Report entity, String actionId) {
         log.info("Sending reject a report request...");
 
-        G4Response response = g4HttpClient.sendRequest(reportRequest.rejectReport(entity));
+        G4Response response = g4HttpClient.sendRequest(reportRequest.rejectReport(entity, actionId));
 
         OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
         if (operationResult.isSuccess()) {
@@ -183,10 +183,10 @@ public class ReportService implements EntityService<Report> {
         return operationResult;
     }
 
-    public OperationResult<Report> cancelReportOwned(Report entity) {
+    public OperationResult<Report> cancelReportOwned(Report entity, String actionId) {
         log.info("Sending reject a report request...");
 
-        G4Response response = g4HttpClient.sendRequest(reportRequest.cancelReportOwned(entity));
+        G4Response response = g4HttpClient.sendRequest(reportRequest.cancelReportOwned(entity, actionId));
 
         OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
         if (operationResult.isSuccess()) {
