@@ -94,8 +94,10 @@ public class APIReportSteps extends APISteps {
                 break;
             case "Reject":
                 rejectReport(state);
+                break;
             case "Cancel":
                 cancelReportWithOwner(state);
+                break;
 
             default:
                 log.error("State is not found");
@@ -162,12 +164,6 @@ public class APIReportSteps extends APISteps {
         serviceReport.cancelReportOwned(report, actionId);
     }
 
-    @When("I send cancel a report request without owner")
-    public void cancelReportWithoutOwner() {
-        Report report = Entities.getReports().getLatest();
-        report.setComment("qe_auto_" + RandomStringUtils.randomAlphabetic(5));
-        serviceReport.cancelReportNotOwned(report);
-    }
 
     @When("I send edit a report request")
     public void sendEditReportRequest() {
