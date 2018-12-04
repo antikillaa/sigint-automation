@@ -573,5 +573,5 @@ Then Delete exported reports
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize | sources | creator |
-| INFORMATION_MANAGEMENT    | entity     | EntityVO   |        | 0      | 10      | true    | falce   |
-| INFORMATION_MANAGEMENT    | entity     | EntityVO   |        | 0      | 10      | falce    | falce   |
+| INFORMATION_MANAGEMENT    | entity     | EntityVO   |        | 0      | 10      | true    | false   |
+| INFORMATION_MANAGEMENT    | entity     | EntityVO   |        | 0      | 10      | false    | false   |
