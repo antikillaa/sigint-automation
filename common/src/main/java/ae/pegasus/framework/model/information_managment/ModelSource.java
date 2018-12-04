@@ -1,5 +1,5 @@
 
-package ae.pegasus.framework.model;
+package ae.pegasus.framework.model.information_managment;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,6 +20,8 @@ public class ModelSource {
     private String dataSource;
     @JsonProperty("subSource")
     private String subSource;
+    @JsonProperty("notEmpty")
+    private Boolean notEmpty;
 
     @JsonProperty("eventFeed")
     public String getEventFeed() {
@@ -49,5 +51,13 @@ public class ModelSource {
     @JsonProperty("subSource")
     public void setSubSource(String subSource) {
         this.subSource = subSource;
+    }
+
+    public Boolean getNotEmpty() {
+        return notEmpty;
+    }
+
+    public void setNotEmpty(Boolean notEmpty) {
+        this.notEmpty = notEmpty;
     }
 }

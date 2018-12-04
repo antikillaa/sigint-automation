@@ -1,8 +1,8 @@
 package ae.pegasus.framework.http.requests;
 
 import ae.pegasus.framework.http.HttpMethod;
-import ae.pegasus.framework.model.RequestForInformation;
-import ae.pegasus.framework.model.RequestForInformationPayload;
+import ae.pegasus.framework.model.information_managment.rfi.RequestForInformation;
+import ae.pegasus.framework.model.information_managment.rfi.RequestForInformationPayload;
 
 public class RequestForInformationRequest extends HttpRequest {
 

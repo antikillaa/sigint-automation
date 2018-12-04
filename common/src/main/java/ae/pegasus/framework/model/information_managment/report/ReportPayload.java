@@ -1,4 +1,5 @@
-package ae.pegasus.framework.model;
+
+package ae.pegasus.framework.model.information_managment.report;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,18 +9,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
         "data"
 })
-
-public class RequestForInformationPayload {
-    @JsonProperty("data")
-    private RequestForInformation data;
+public class ReportPayload {
 
     @JsonProperty("data")
-    public RequestForInformation getData() {
+    private Report data;
+
+    @JsonProperty("data")
+    public Report getData() {
         return data;
     }
 
     @JsonProperty("data")
-    public void setData(RequestForInformation data) {
+    public void setData(Report data) {
         this.data = data;
     }
 }

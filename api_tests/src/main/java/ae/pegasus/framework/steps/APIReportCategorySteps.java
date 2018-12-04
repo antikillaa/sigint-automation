@@ -1,8 +1,8 @@
 package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.model.ReportCategory;
 import ae.pegasus.framework.model.entities.Entities;
+import ae.pegasus.framework.model.information_managment.ReportCategory;
 import ae.pegasus.framework.services.ReportCategoryService;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.Then;

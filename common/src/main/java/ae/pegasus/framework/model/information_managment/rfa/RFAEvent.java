@@ -1,5 +1,9 @@
-package ae.pegasus.framework.model;
+package ae.pegasus.framework.model.information_managment.rfa;
 
+import ae.pegasus.framework.model.AbstractEntity;
+import ae.pegasus.framework.model.Assignments;
+import ae.pegasus.framework.model.Entities;
+import ae.pegasus.framework.model.Targets;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

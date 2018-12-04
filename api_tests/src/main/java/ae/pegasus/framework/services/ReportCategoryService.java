@@ -4,10 +4,10 @@ import ae.pegasus.framework.http.G4Response;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.http.requests.ReportCategoriesRequest;
 import ae.pegasus.framework.json.JsonConverter;
-import ae.pegasus.framework.model.ReportCategory;
 import ae.pegasus.framework.model.Result;
 import ae.pegasus.framework.model.SearchFilter;
 import ae.pegasus.framework.model.entities.Entities;
+import ae.pegasus.framework.model.information_managment.ReportCategory;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 

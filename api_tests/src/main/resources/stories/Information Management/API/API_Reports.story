@@ -16,7 +16,10 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 
@@ -39,7 +42,10 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 
@@ -61,7 +67,10 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 
@@ -106,7 +115,10 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 
@@ -136,7 +148,10 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 
@@ -167,7 +182,10 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 
@@ -177,14 +195,14 @@ Then Request is successful
 When I send get owners a report request
 Then Request is successful
 
-When I send submit a report request
+When I send Submit for Review a report request
 Then Request is successful
 Then Report is submitted
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
-| SIGINT | event | EventVO |      | 0 | 150 |
-| SIGINT | entity| EntityVO|      | 0 | 150 |
+| SIGINT | event | EventVO |      | 0 | 1 |
+| SIGINT | entity| EntityVO|      | 0 | 1 |
 
 Scenario: Take ownership a report
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
@@ -194,7 +212,10 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 
@@ -204,11 +225,17 @@ Then Request is successful
 When I send get owners a report request
 Then Request is successful
 
-When I send submit a report request
+When I send Submit for Review a report request
 Then Request is successful
 Then Report is submitted
 
-When I send take ownership a report request
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a report in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a report request
 Then Request is successful
 Then Report is took ownership
 
@@ -225,7 +252,10 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 
@@ -235,15 +265,24 @@ Then Request is successful
 When I send get owners a report request
 Then Request is successful
 
-When I send submit a report request
+When I send Submit for Review a report request
 Then Request is successful
 Then Report is submitted
 
-When I send take ownership a report request
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a report in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a report request
 Then Request is successful
 Then Report is took ownership
 
-When I send approve a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Approve a report request
 Then Request is successful
 Then Report is approved
 
@@ -260,7 +299,10 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 
@@ -270,22 +312,33 @@ Then Request is successful
 When I send get owners a report request
 Then Request is successful
 
-When I send submit a report request
+When I send Submit for Review a report request
 Then Request is successful
 Then Report is submitted
 
-When I send take ownership a report request
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a report in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a report request
 Then Request is successful
 Then Report is took ownership
 
-When I send return to author a report request
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a report in Return to Author request
+Then Request is successful
+
+When I send Return to Author a report request
 Then Request is successful
 Then Report is returned to author
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | SIGINT | event | EventVO |      | 0 | 150 |
-| SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Reject a report
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
@@ -295,7 +348,10 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 
@@ -305,15 +361,24 @@ Then Request is successful
 When I send get owners a report request
 Then Request is successful
 
-When I send submit a report request
+When I send Submit for Review a report request
 Then Request is successful
 Then Report is submitted
 
-When I send take ownership a report request
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a report in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a report request
 Then Request is successful
 Then Report is took ownership
 
-When I send reject a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Reject a report request
 Then Request is successful
 Then Report is rejected
 
@@ -323,6 +388,7 @@ Examples:
 | SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Cancel a report with owner
+Meta:@wip
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -330,7 +396,10 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 
@@ -340,15 +409,24 @@ Then Request is successful
 When I send get owners a report request
 Then Request is successful
 
-When I send submit a report request
+When I send Submit for Review a report request
 Then Request is successful
 Then Report is submitted
 
-When I send take ownership a report request
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a report in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a report request
 Then Request is successful
 Then Report is took ownership
 
-When I send cancel a report request with owner
+When I get allowed actions
+Then Request is successful
+
+When I send Cancel a report request
 Then Request is successful
 Then Report is canceled
 
@@ -368,7 +446,10 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 
@@ -378,11 +459,14 @@ Then Request is successful
 When I send get owners a report request
 Then Request is successful
 
-When I send submit a report request
+When I send Submit for Review a report request
 Then Request is successful
 Then Report is submitted
 
-When I send cancel a report request without owner
+When I get allowed actions
+Then Request is successful
+
+When I send Cancel a report request
 Then Request is successful
 Then Report is canceled
 
@@ -395,6 +479,8 @@ Examples:
 | SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Update a report
+Meta:@wip
+
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -402,35 +488,37 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 
-When I send edit a report request
+When I send view a report request
 Then Request is successful
 
 When I send get owners a report request
 Then Request is successful
 
-When I send submit a report request
+When I send Submit for Review a report request
 Then Request is successful
 Then Report is submitted
 
-When I send edit a report request
+When I get allowed actions
 Then Request is successful
 
-When I send get owners a report request
+When I send get owner a report in Take Ownership request
 Then Request is successful
 
-When I send submit a report request
-Then Request is successful
-Then Report is submitted
-
-When I send take ownership a report request
+When I send Take Ownership a report request
 Then Request is successful
 Then Report is took ownership
 
-When I send edit a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Edit a report request
 Then Request is successful
 
 When I send delete a report request
@@ -441,6 +529,7 @@ Examples:
 | SIGINT | event | EventVO |      | 0 | 10 |
 
 Scenario: Verify that user could export a report
+Meta:@skip
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -448,7 +537,10 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
-When I send create a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 

@@ -3,6 +3,7 @@ package ae.pegasus.framework.model;
 import ae.pegasus.framework.data_for_entity.annotations.DataIgnore;
 import ae.pegasus.framework.data_for_entity.annotations.WithFieldDataType;
 import ae.pegasus.framework.data_for_entity.data_types.FieldDataType;
+import ae.pegasus.framework.model.information_managment.ModifiedBy;
 
 import java.util.Date;
 
