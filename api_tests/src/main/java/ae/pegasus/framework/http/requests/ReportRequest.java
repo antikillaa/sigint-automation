@@ -3,6 +3,10 @@ package ae.pegasus.framework.http.requests;
 import ae.pegasus.framework.http.HttpMethod;
 import ae.pegasus.framework.model.Report;
 import ae.pegasus.framework.model.ReportPayload;
+import ae.pegasus.framework.model.ReportsExportModel;
+import ae.pegasus.framework.model.ReportsExportPayload;
+
+import javax.ws.rs.core.MediaType;
 
 public class ReportRequest extends HttpRequest {
 
@@ -57,13 +61,25 @@ public class ReportRequest extends HttpRequest {
         return this;
     }
 
-    public ReportRequest export(String id, Boolean sources, Boolean creator) {
+    public ReportRequest exportReport(String id, Boolean sources, Boolean creator) {
         this
                 .setURI("/api/reports/workflows/export/3/"
                         + id + ".zip?showCreator="
                         + creator + "&showSources="
                         + sources)
                 .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
+    public ReportRequest exportBundleReport(ReportsExportModel reportsExportModel) {
+        ReportsExportPayload reportsExportPayload = new ReportsExportPayload();
+        reportsExportPayload.setData(reportsExportModel);
+        this
+                .setURI("/api/reports/workflows/export/bundle")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(reportsExportPayload)
+                .setMediaType(MediaType.APPLICATION_JSON)
+                .setAccept(MediaType.WILDCARD);
         return this;
     }
 
