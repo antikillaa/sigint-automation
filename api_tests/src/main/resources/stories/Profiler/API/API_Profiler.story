@@ -28,6 +28,7 @@ Examples:
 
 
 Scenario: API.Create profile
+Meta:@devsmoke11
 When I send create finder file request
 Then Request is successful
 When I send create profile request
@@ -44,6 +45,7 @@ Then Request is successful
 
 
 Scenario: API.Deleting of profile
+Meta:@devsmoke11
 When I send create finder file request
 Then Request is successful
 When I send create profile request
