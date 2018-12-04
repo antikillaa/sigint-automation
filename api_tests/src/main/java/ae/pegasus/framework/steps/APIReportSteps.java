@@ -42,6 +42,10 @@ public class APIReportSteps extends APISteps {
         Result reportNo = new Result();
         OperationResult<Result> operationResult = serviceReport.generateNumber();
         reportNo.setResult(operationResult.getEntity().getResult());
+        Report reportClean = Entities.getReports().getLatest();
+        if (reportClean != null) {
+            Entities.getReports().removeEntity(reportClean);
+        }
         context.put("reportNo", reportNo);
     }
 
