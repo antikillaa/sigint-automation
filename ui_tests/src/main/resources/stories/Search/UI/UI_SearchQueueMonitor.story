@@ -27,7 +27,6 @@ Examples:
 data/SearchQueue.table
 
 Scenario: Multiple Search query is reflected and can be reruned in the search queue
-
 Given I navigate to Search
 When I enter search criteria (<searchCriteria1>) on the Search page
 Given I open Search Filter on the Search page
@@ -70,13 +69,13 @@ Then I should see search queue 2: Query (<searchQuery1>), Type (<searchType>), S
 
 
 When I perform Remove action for the search queue 1
+
 Then I should see search queue 1: Query (<searchQuery1>), Type (<searchType>), Status (<searchStatus1>), Created At (<searchCreatedAt>) with standard actions set
 
 Examples:
 data/SearchQueue.table
 
 Scenario: Failed query is reflected in the search queue
-
 Given I navigate to Search
 When I enter search criteria (<searchCriteriaFail>) on the Search page
 Given I open Search Filter on the Search page
@@ -117,7 +116,6 @@ Then I should see at least <SIGINTEntity2> of SIGINT entities on current view
 
 Examples:
 data/SearchQueue.table
-
 Scenario: User can delete a failed query from the search queue
 Given I navigate to Search
 When I enter search criteria (<searchCriteriaFail>) on the Search page

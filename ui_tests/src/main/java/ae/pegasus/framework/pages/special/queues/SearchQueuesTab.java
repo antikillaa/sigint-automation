@@ -50,7 +50,7 @@ public class SearchQueuesTab extends QueuesBasePage {
 
     private SelenideElement getAction(SelenideElement tableRow, SearchQueueAction button) {
         getColon(SearchQueuesColon.ACTIONS, tableRow).hover();
-        return tableRow.$x(".//pg-btn[@data-original-title='" + button.getActionName() + "']");
+        return tableRow.$x(".//pg-btn[@pg-tooltip='" + button.getActionName() + "']");
     }
 
     private ElementsCollection getActions(SelenideElement tableRow) {
