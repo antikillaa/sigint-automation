@@ -29,19 +29,6 @@ public class APIReportSteps extends APISteps {
 
     private static ReportService serviceReport = new ReportService();
 
-    @When("I $state send a report request")
-    public void sendReportRequest(String state) {
-        Report report = new Report();
-        Result reportNo = context.get("reportNo", Result.class);
-        List<SearchRecord> entities = context.get("searchEntities", List.class);
-        serviceReport.buildReport(report, reportNo, entities);
-        context.put("report", report);
-        String actionId = getRequestAdress(state);
-        OperationResult<Report> operationResult = serviceReport.add(report, actionId);
-        Report reportResult = operationResult.getEntity();
-        context.put("reportID", report.getId());
-    }
-
     @When("I get allowed actions")
     public void sendGetAllowedActions() {
         String imId = Entities.getReports().getLatest() == null ? "" : Entities.getReports().getLatest().getId();
@@ -70,8 +57,46 @@ public class APIReportSteps extends APISteps {
         serviceReport.view(id);
     }
 
-    @When("I send submit a report request")
-    public void sendSubmitReportRequest() {
+    @When("I send get owners a report request")
+    public void sendGetOwnersReportRequest() {
+        Report lastreport = Entities.getReports().getLatest();
+        OperationResult<List<CurrentOwner>> currentOwner = serviceReport.possibleOwners(lastreport);
+        context.put("currentOwner", currentOwner.getEntity());
+    }
+
+    @When("I send get owner a report in $state request")
+    public void sendGetOwnerReportRequest(String state) {
+        Report lastreport = Entities.getReports().getLatest();
+        String actionId = getRequestAdress(state);
+
+        OperationResult<List<NextOwners>> nextOwner = serviceReport.possibleOwner(lastreport, actionId);
+        context.put("nextOwner", nextOwner.getEntity());
+    }
+
+
+    @When("I send $state a report request")
+    public void sendMoveToStateRequest(String state) {
+        switch (state) {
+            case "Save as Draft":
+                saveAsDraft(state);
+                break;
+            case "Approve":
+                approveReport(state);
+                break;
+            case "Take Ownership":
+                takeOwnership(state);
+                break;
+            case "Return to Author":
+                returnToAuthor(state);
+                break;
+            case "Submit for Review":
+                submitForReview(state);
+                break;
+        }
+
+    }
+
+    private void submitForReview(String state) {
         Report lastreport = Entities.getReports().getLatest();
         List<CurrentOwner> currentOwner = context.get("currentOwner", List.class);
         List<NextOwners> allOwners = new ArrayList<>();
@@ -80,39 +105,40 @@ public class APIReportSteps extends APISteps {
         serviceReport.submit(lastreport);
     }
 
-    @When("I send get owners a report request")
-    public void sendGetOwnersReportRequest() {
-        Report lastreport = Entities.getReports().getLatest();
-        OperationResult<List<CurrentOwner>> currentOwner = serviceReport.possibleOwners(lastreport);
-        context.put("currentOwner", currentOwner.getEntity());
-    }
-
-    @When("I send get owner a report request")
-    public void sendGetOwnerReportRequest() {
-        Report lastreport = Entities.getReports().getLatest();
-        OperationResult<List<NextOwners>> nextOwner = serviceReport.possibleOwner(lastreport);
-        context.put("nextOwner", nextOwner.getEntity());
-    }
-
-    @When("I send take ownership a report request")
-    public void sendTakeOwnershipReportRequest() {
+    private void returnToAuthor(String state) {
         Report report = Entities.getReports().getLatest();
         List<NextOwners> nextOwners = context.get("nextOwner", List.class);
         report.setNextOwners(nextOwners);
-        serviceReport.takeOwnership(report);
-    }
-
-    @When("I send approve a report request")
-    public void sendApproveReportRequest() {
-        Report report = Entities.getReports().getLatest();
-        serviceReport.approveReport(report);
-    }
-
-    @When("I send return to author a report request")
-    public void sendReturnAuthorReportRequest() {
-        Report report = Entities.getReports().getLatest();
         report.setComment("qe_" + RandomStringUtils.randomAlphabetic(5));
-        serviceReport.returnAuthor(report);
+        String actionId = getRequestAdress(state);
+        serviceReport.returnAuthor(report, actionId);
+    }
+
+    private void saveAsDraft(String state) {
+        Report report = new Report();
+        Result reportNo = context.get("reportNo", Result.class);
+        List<SearchRecord> entities = context.get("searchEntities", List.class);
+        serviceReport.buildReport(report, reportNo, entities);
+        context.put("report", report);
+        String actionId = getRequestAdress(state);
+        OperationResult<Report> operationResult = serviceReport.add(report, actionId);
+        Report reportResult = operationResult.getEntity();
+        context.put("reportID", reportResult.getId());
+    }
+
+
+    private void takeOwnership(String state) {
+        Report report = Entities.getReports().getLatest();
+        List<NextOwners> nextOwners = context.get("nextOwner", List.class);
+        report.setNextOwners(nextOwners);
+        String actionId = getRequestAdress(state);
+        serviceReport.takeOwnership(report, actionId);
+    }
+
+    private void approveReport(String state) {
+        Report report = Entities.getReports().getLatest();
+        String actionId = getRequestAdress(state);
+        serviceReport.approveReport(report, actionId);
     }
 
     @When("I send reject a report request")
@@ -275,7 +301,7 @@ public class APIReportSteps extends APISteps {
     private String getRequestAdress(String state) {
         List<PossibleActions> possibleActions = context.get("possibleActions", List.class);
         PossibleActions possibleAction = possibleActions.stream()
-                .filter(w -> state.equals(w.getActionPermission()))
+                .filter(w -> state.equals(w.getActionName()))
                 .findAny()
                 .orElse(null);
         return possibleAction.getId();

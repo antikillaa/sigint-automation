@@ -229,7 +229,7 @@ When I send submit a report request
 Then Request is successful
 Then Report is submitted
 
-When I send get owner a report request
+When I send get owner a report in Take Ownership request
 Then Request is successful
 
 When I get allowed actions
@@ -242,6 +242,7 @@ Then Report is took ownership
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | SIGINT | event | EventVO |      | 0 | 150 |
+| SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Approve a report
 
@@ -269,7 +270,7 @@ When I send Submit for Review a report request
 Then Request is successful
 Then Report is submitted
 
-When I send get owner a report request
+When I send get owner a report in Take Ownership request
 Then Request is successful
 
 When I get allowed actions
@@ -289,8 +290,60 @@ Then Report is approved
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | SIGINT | event | EventVO |      | 0 | 150 |
+| SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Return to author a report
+
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+
+When I send generate report number request
+Then Request is successful
+
+When I get allowed actions
+Then Request is successful
+
+When I send Save as Draft a report request
+Then Request is successful
+And Report is created
+
+When I send view a report request
+Then Request is successful
+
+When I send get owners a report request
+Then Request is successful
+
+When I send Submit for Review a report request
+Then Request is successful
+Then Report is submitted
+
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a report in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a report request
+Then Request is successful
+Then Report is took ownership
+
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a report in Return to Author request
+Then Request is successful
+
+When I send Return to Author a report request
+Then Request is successful
+Then Report is returned to author
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event | EventVO |      | 0 | 150 |
+
+Scenario: Reject a report
+
 Meta:@wip
 
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
@@ -317,64 +370,26 @@ When I send Submit for Review a report request
 Then Request is successful
 Then Report is submitted
 
-When I send get owner a report request
+When I get allowed actions
 Then Request is successful
 
-When I get allowed actions
+When I send get owner a report in Take Ownership request
 Then Request is successful
 
 When I send Take Ownership a report request
 Then Request is successful
 Then Report is took ownership
 
-When I send get owner a report request
-Then Request is successful
-
 When I get allowed actions
 Then Request is successful
 
-When I send Return to Author a report request
-Then Request is successful
-Then Report is returned to author
-
-Examples:
-| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
-| SIGINT | event | EventVO |      | 0 | 1 |
-
-Scenario: Reject a report
-When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
-Then Request is successful
-And CB search result list size > 0
-
-When I send generate report number request
-Then Request is successful
-
-When I send Save as Draft a report request
-Then Request is successful
-And Report is created
-
-When I send view a report request
-Then Request is successful
-
-When I send get owners a report request
-Then Request is successful
-
-When I send Submit for Review a report request
-Then Request is successful
-Then Report is submitted
-
-When I send Take Ownership a report request
-Then Request is successful
-Then Report is took ownership
-
-When I send reject a report request
+When I send Reject a report request
 Then Request is successful
 Then Report is rejected
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
-| SIGINT | event | EventVO |      | 0 | 150 |
-| SIGINT | entity| EntityVO|      | 0 | 150 |
+| SIGINT | event | EventVO |      | 0 | 1 |
 
 Scenario: Cancel a report with owner
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>

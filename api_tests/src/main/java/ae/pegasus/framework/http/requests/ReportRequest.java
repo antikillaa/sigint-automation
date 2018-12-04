@@ -85,9 +85,9 @@ public class ReportRequest extends HttpRequest {
         return this;
     }
 
-    public ReportRequest possibleOwner(Report report) {
+    public ReportRequest possibleOwner(Report report, String actionId) {
         this
-                .setURI(URI + "possible-owners/2-3")
+                .setURI(URI + "possible-owners/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(report);
         return this;

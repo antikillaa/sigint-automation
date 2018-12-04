@@ -220,10 +220,10 @@ public class ReportService implements EntityService<Report> {
         }
     }
 
-    public OperationResult<List<NextOwners>> possibleOwner(Report entity) {
+    public OperationResult<List<NextOwners>> possibleOwner(Report entity, String actionId) {
         log.info("Sending possible owners request...");
 
-        G4Response response = g4HttpClient.sendRequest(reportRequest.possibleOwner(entity));
+        G4Response response = g4HttpClient.sendRequest(reportRequest.possibleOwner(entity, actionId));
 
         OperationResult<NextOwners[]> operationResult = new OperationResult<>(response, NextOwners[].class);
         if (operationResult.isSuccess()) {
