@@ -139,7 +139,47 @@ public class APIReportSteps extends APISteps {
         context.put("file", operationResult.getEntity());
     }
 
-    @Then("Check content of archive")
+    @When("I send export report bundle with sources:$sources and creator:$creator of reports request")
+    public void sendExportBundleOfReportsRequest(Boolean sources, Boolean creator) {
+        ReportsExportModel reportsExportModel = new ReportsExportModel();
+        fillConstantsOfExportBundle(sources, creator, reportsExportModel);
+
+        List<SearchRecord> entities = context.get("searchEntities", List.class);
+        serviceReport.setModels(entities, reportsExportModel);
+
+        OperationResult<File> operationResult = serviceReport.exportBundleReport(reportsExportModel);
+
+        context.put("file", operationResult.getEntity());
+    }
+
+    @Then("Check content of bundle of reports")
+    public void checkBundleArchive() throws IOException {
+        File file = context.get("file", File.class);
+        int reportsExpected = context.get("searchEntities", List.class).size();
+        int reportsActual = 0;
+        ZipFile zipFile = new ZipFile(file.getName());
+
+        Assert.assertTrue("Zip file has no elements!", zipFile.entries().hasMoreElements());
+        for (Enumeration e = zipFile.entries(); e.hasMoreElements(); ) {
+            ZipEntry entry = (ZipEntry) e.nextElement();
+            if (!entry.isDirectory()) {
+                if (FilenameUtils.getExtension(entry.getName()).equals("pdf")) {
+                    reportsActual++;
+                }
+            }
+        }
+        Assert.assertEquals(reportsExpected, reportsActual);
+    }
+
+    @Then("Check check that archive is not empty")
+    public void checkSizeArchive() throws IOException {
+        File file = context.get("file", File.class);
+        if (file.length() == 0) {
+            throw new AssertionError("Report archive is empty");
+        }
+    }
+
+    @Then("Check content of archive one report")
     public void checkArchive() throws IOException {
         String reportName = context.get("reportName", String.class);
         String reportNameInArchive = reportName + "/" + reportName + ".pdf";
@@ -162,11 +202,10 @@ public class APIReportSteps extends APISteps {
 
     @Then("Delete exported reports")
     public void deleteExportedReport() {
-        String reportName = context.get("reportName", String.class);
-        File file = new File( reportName + ".zip");
+        File file = context.get("file", File.class);
         if (file.delete()) {
-            log.info(reportName + " report export is deleted");
-        } else log.error(reportName + " report export file doesn't exists");
+            log.info(file + " report export is deleted");
+        } else log.error(file + " report export file doesn't exists");
     }
 
     @Then("Report is created")
@@ -246,5 +285,11 @@ public class APIReportSteps extends APISteps {
     private void reportCheck(Report updatedReport, Report contextReport) {
         assertEquals(updatedReport.getSubject(), contextReport.getSubject());
         assertEquals(updatedReport.getDescription(), contextReport.getDescription());
+    }
+
+    private void fillConstantsOfExportBundle(Boolean sources, Boolean creator, ReportsExportModel reportsExportModel) {
+        reportsExportModel.setShowSources(sources);
+        reportsExportModel.setShowCreator(creator);
+        reportsExportModel.setCategory("");
     }
 }

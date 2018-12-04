@@ -81,11 +81,23 @@ public class ReportService implements EntityService<Report> {
 
     public OperationResult<File> export(String id, Boolean sources, Boolean creator) {
         log.info("Export report by id: " + id);
-        G4Response response = g4HttpClient.sendRequest(reportRequest.export(id, sources, creator));
+        G4Response response = g4HttpClient.sendRequest(reportRequest.exportReport(id, sources, creator));
 
         OperationResult<File> operationResult = new OperationResult<>(response, File.class);
         if (operationResult.isSuccess()) {
                 return operationResult;
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+    }
+
+    public OperationResult<File> exportBundleReport(ReportsExportModel reportsExportModel) {
+        log.info("Export bundle of reports");
+        G4Response response = g4HttpClient.sendRequest(reportRequest.exportBundleReport(reportsExportModel));
+
+        OperationResult<File> operationResult = new OperationResult<>(response, File.class);
+        if (operationResult.isSuccess()) {
+            return operationResult;
         } else {
             throw new OperationResultError(operationResult);
         }
@@ -311,5 +323,18 @@ public class ReportService implements EntityService<Report> {
             nextOwner.setType(owner.getType());
             allOwners.add(nextOwner);
         }
+    }
+
+    public void setModels(List<SearchRecord> entities, ReportsExportModel reportsExportModel) {
+        List<ReportModels> reportModels = new ArrayList<>();
+
+        for (int i = 0; i < entities.size(); i++) {
+            ReportModels reportModel = new ReportModels();
+            Map<String, Object> attributes = entities.get(i).getAttributes();
+            reportModel.setId((String) attributes.get("id"));
+            reportModel.setWfId((String) attributes.get("wfId"));
+            reportModels.add(reportModel);
+        }
+        reportsExportModel.setModels(reportModels);
     }
 }
