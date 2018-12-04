@@ -481,9 +481,6 @@ Examples:
 | SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Update a report
-
-Meta:@wip
-
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -491,35 +488,37 @@ And CB search result list size > 0
 When I send generate report number request
 Then Request is successful
 
+When I get allowed actions
+Then Request is successful
+
 When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 
-When I send edit a report request
+When I send view a report request
 Then Request is successful
 
 When I send get owners a report request
 Then Request is successful
 
-When I send submit a report request
+When I send Submit for Review a report request
 Then Request is successful
 Then Report is submitted
 
-When I send edit a report request
+When I get allowed actions
 Then Request is successful
 
-When I send get owners a report request
+When I send get owner a report in Take Ownership request
 Then Request is successful
 
-When I send submit a report request
-Then Request is successful
-Then Report is submitted
-
-When I send take ownership a report request
+When I send Take Ownership a report request
 Then Request is successful
 Then Report is took ownership
 
-When I send edit a report request
+When I get allowed actions
+Then Request is successful
+
+When I send Edit a report request
 Then Request is successful
 
 When I send delete a report request
@@ -530,11 +529,15 @@ Examples:
 | SIGINT | event | EventVO |      | 0 | 10 |
 
 Scenario: Verify that user could export a report
+Meta:@skip
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
 
 When I send generate report number request
+Then Request is successful
+
+When I get allowed actions
 Then Request is successful
 
 When I send Save as Draft a report request

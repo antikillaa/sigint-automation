@@ -98,7 +98,9 @@ public class APIReportSteps extends APISteps {
             case "Cancel":
                 cancelReportWithOwner(state);
                 break;
-
+            case "Save":
+                editReport(state);
+                break;
             default:
                 log.error("State is not found");
         }
@@ -165,13 +167,13 @@ public class APIReportSteps extends APISteps {
     }
 
 
-    @When("I send edit a report request")
-    public void sendEditReportRequest() {
+    public void editReport(String state) {
         Report report = Entities.getReports().getLatest();
+        String actionId = getRequestAdress(state);
         report.setSubject("qe_" + RandomStringUtils.randomAlphabetic(10));
         report.setDescription("qe_" + RandomStringUtils.randomAlphabetic(10));
         context.put("report", Report.class);
-        serviceReport.update(report);
+        serviceReport.add(report, actionId);
     }
 
     @When("I send add a comment to report request")
