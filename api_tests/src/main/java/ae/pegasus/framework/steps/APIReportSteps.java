@@ -2,6 +2,7 @@ package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.CurrentOwner;
+import ae.pegasus.framework.model.ReportsExportModel;
 import ae.pegasus.framework.model.Result;
 import ae.pegasus.framework.model.SearchRecord;
 import ae.pegasus.framework.model.entities.Entities;
