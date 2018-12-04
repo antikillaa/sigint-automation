@@ -195,7 +195,7 @@ Then Request is successful
 When I send get owners a report request
 Then Request is successful
 
-When I send submit a report request
+When I send Submit for Review a report request
 Then Request is successful
 Then Report is submitted
 
@@ -225,7 +225,7 @@ Then Request is successful
 When I send get owners a report request
 Then Request is successful
 
-When I send submit a report request
+When I send Submit for Review a report request
 Then Request is successful
 Then Report is submitted
 
