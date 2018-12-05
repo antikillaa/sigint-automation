@@ -5,11 +5,11 @@ Lifecycle:
 Before:
 Scope: SCENARIO
 Given load story ../../aux-main-stories/auxSignIn.story with example table:
-data/QE_login_analyst.table
+data/QE_login_manager.table
 
 
 Scenario: Create and delete a profile smoke test
-Meta: @devsmoke
+Meta: @devsmoke1
 
 
 
@@ -61,4 +61,4 @@ data/BasicProfile.data
 
 Examples:
 |FileName   |TargetName				|ProfilerEntityClas|ProfilerEntityOU|TargetCategory|ProfilerEntityAP|ProfilerEntityTS|ProfilerEntityAU                              |ProfilerEntityTSI|ReportClassifInit|ReportCreatedForInit|ReportOrgUnitInit|ReportSubject   |ReportDescrInit  |ReportConsidInit |ReportRecommInit |ReportNotesInit   |EIDEntityUIDNumber|EIDEntityVISANumber|
-|Default	|Target for profile test|TOP SECRET-CIO    |QE_UIAuto_Team  |POI              |High            |Active          |{current_day}+1/{current_month}/{current_year}|Medium 30 |TOP SECRET|UI Test Team  |QE_UIAuto_Team |For test purpose|Testing description|Consideration for test|Testing recommendations|Initial test notes|3642367978578790690|ad3kNtL6cIfSVUQn58g7|
+|Default	|Target for profile test|TOP SECRET    |QE_UIAuto_Team  |POI              |High            |Active          |{current_day}+1/{current_month}/{current_year}|Medium 30 |TOP SECRET|UI Test Team  |QE_UIAuto_Team |For test purpose|Testing description|Consideration for test|Testing recommendations|Initial test notes|3642367978578790690|ad3kNtL6cIfSVUQn58g7|
