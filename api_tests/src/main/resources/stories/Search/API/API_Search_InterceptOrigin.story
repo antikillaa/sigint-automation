@@ -3,7 +3,7 @@ Meta:
 @story search
 
 Narrative:
-CB-19135 Track Intercept Origin for all SIGINT records
+CB-19135 Track Intercept Origin for all SIGINT records (events)
 
 Lifecycle:
 Before:
@@ -77,28 +77,6 @@ And CB search results contains interceptRef field
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | SIGINT | event | EventVO | dataSource:"J1" AND type:"RADIO_INTERCEPT" AND eventTime:[$NOW-7d..$NOW] | 0 | 20 |
-
-
-Scenario: Sigint. [Subscruber] interceptRef
-When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
-Then Request is successful
-And CB search results contains interceptRef field
-
-Examples:
-| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
-| SIGINT | entity | EntityVO | dataSource:"E" AND type:"TELECOM_SUBSCRIBER" | 0 | 20 |
-| SIGINT | entity | EntityVO | dataSource:"DU" AND type:"TELECOM_SUBSCRIBER" | 0 | 20 |
-
-
-Scenario: Sigint. Phonebook-[Subscruber]  interceptRef
-Meta: @skip
-When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
-Then Request is successful
-And CB search results contains interceptRef field
-
-Examples:
-| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
-| SIGINT | entity | EntityVO | dataSource:"PHONEBOOK" AND type:"TELECOM_SUBSCRIBER" | 0 | 20 |
 
 
 Scenario: Sigint. [VoIP] interceptRef
