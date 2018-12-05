@@ -5,7 +5,7 @@ Lifecycle:
 Before:
 Scope: SCENARIO
 Given load story ../../aux-main-stories/auxSignIn.story with example table:
-data/QE_login.table
+data/QE_login_analyst.table
 
 
 Scenario: Create and delete a profile smoke test

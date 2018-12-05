@@ -64,7 +64,7 @@ public class UINavigationSteps {
     @Given("I navigate to OrgUnit Records")
     public void navigateToTeamRecords() {
         navigateTo(MainMenuChildItem.OrgUnit_RECORDS);
-        Pages.teamRecordsPage().waitForPageLoading();
+        Pages.orgUnitRecords().waitForPageLoading();
     }
 
     @Given("I navigate to Workloads")

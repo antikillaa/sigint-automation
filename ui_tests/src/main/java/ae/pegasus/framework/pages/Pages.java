@@ -10,7 +10,7 @@ import ae.pegasus.framework.pages.profiler.CreateTargetPage;
 import ae.pegasus.framework.pages.profiler.ProfilerBasePage;
 import ae.pegasus.framework.pages.profiler.tabs.*;
 import ae.pegasus.framework.pages.record_assessment.MyRecordsPage;
-import ae.pegasus.framework.pages.record_assessment.TeamRecordsPage;
+import ae.pegasus.framework.pages.record_assessment.OrgUnitRecords;
 import ae.pegasus.framework.pages.search.*;
 import ae.pegasus.framework.pages.signin.SignInPage;
 import ae.pegasus.framework.pages.special.ActionsWithSelected;
@@ -196,8 +196,8 @@ public class Pages {
         return page(ManualRecordPage.class);
     }
 
-    public static TeamRecordsPage teamRecordsPage() {
-        return page(TeamRecordsPage.class);
+    public static OrgUnitRecords orgUnitRecords() {
+        return page(OrgUnitRecords.class);
     }
 
     public static ModalDialogPage modalDialogPage() {

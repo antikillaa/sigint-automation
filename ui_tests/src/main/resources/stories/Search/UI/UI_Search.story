@@ -7,7 +7,7 @@ Lifecycle:
 Before:
 Scope: SCENARIO
 Given load story ../../aux-main-stories/auxSignIn.story with example table:
-data/QE_login.table
+data/QE_login_analyst.table
 After:
 Scope: SCENARIO
 Outcome: ANY
@@ -42,7 +42,7 @@ Examples:
 
 
 Scenario: Verfiy  data source filters are working
-
+Meta:@devsmokexx
 Given I navigate to Search
 Given I open Search Filter on the Search page
 Given I set Source Type to SIGINT on the Search Filter page

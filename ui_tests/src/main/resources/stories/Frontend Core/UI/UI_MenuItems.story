@@ -52,10 +52,10 @@ Scenario: My Records menu item is working
 Given I navigate to My Records
 Then I should see My Records page
 
-Scenario: Team Records menu item is working
+Scenario: OrgUnit Records menu item is working
 Given I navigate to OrgUnit Records
 Given I setup Search Authorization
-Then I should see Team Records page
+Then I should see OrgUnit Records page
 
 Scenario: Workloads menu item is working
 Given I navigate to Workloads
