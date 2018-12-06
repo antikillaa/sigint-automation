@@ -7,6 +7,7 @@ import ae.pegasus.framework.http.requests.ReportRequest;
 import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
+import ae.pegasus.framework.model.information_managment.CurrentOwner;
 import ae.pegasus.framework.model.information_managment.NextOwners;
 import ae.pegasus.framework.model.information_managment.PossibleActions;
 import ae.pegasus.framework.model.information_managment.report.Report;
