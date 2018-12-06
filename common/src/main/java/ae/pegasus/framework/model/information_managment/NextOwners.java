@@ -17,6 +17,8 @@ public class NextOwners {
     private String ownerName;
     @JsonProperty("type")
     private String type;
+    @JsonProperty("ownerFullName")
+    private String ownerFullName;
 
     @JsonProperty("ownerId")
     public String getOwnerId() {
@@ -46,5 +48,15 @@ public class NextOwners {
     @JsonProperty("type")
     public void setType(String type) {
         this.type = type;
+    }
+
+    @JsonProperty("ownerFullName")
+    public String getOwnerFullName() {
+        return ownerFullName;
+    }
+
+    @JsonProperty("ownerFullName")
+    public void setOwnerFullName(String ownerFullName) {
+        this.ownerFullName = ownerFullName;
     }
 }

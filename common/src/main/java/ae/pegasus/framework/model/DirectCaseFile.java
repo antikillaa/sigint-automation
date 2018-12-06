@@ -37,6 +37,21 @@ public class DirectCaseFile {
     @JsonProperty("bidirectional")
     private Boolean bidirectional;
 
+    @JsonProperty("rfi")
+    private Boolean rfi;
+
+    @JsonProperty("profile")
+    private Boolean profile;
+
+    @JsonProperty("fileCase")
+    private Boolean fileCase;
+
+    @JsonProperty("file")
+    private Boolean file;
+
+    @JsonProperty("case")
+    private Boolean bCase;
+
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -124,5 +139,45 @@ public class DirectCaseFile {
 
     public void setBidirectional(Boolean bidirectional) {
         this.bidirectional = bidirectional;
+    }
+
+    public Boolean getRfi() {
+        return rfi;
+    }
+
+    public void setRfi(Boolean rfi) {
+        this.rfi = rfi;
+    }
+
+    public Boolean getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Boolean profile) {
+        this.profile = profile;
+    }
+
+    public Boolean getFileCase() {
+        return fileCase;
+    }
+
+    public void setFileCase(Boolean fileCase) {
+        this.fileCase = fileCase;
+    }
+
+    public Boolean getFile() {
+        return file;
+    }
+
+    public void setFile(Boolean file) {
+        this.file = file;
+    }
+
+    public Boolean getbCase() {
+        return bCase;
+    }
+
+    public void setbCase(Boolean bCase) {
+        this.bCase = bCase;
     }
 }
