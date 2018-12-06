@@ -6,6 +6,7 @@ import ae.pegasus.framework.model.OrgUnit;
 import ae.pegasus.framework.model.Result;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.model.information_managment.NextOwners;
+import ae.pegasus.framework.model.information_managment.PossibleActions;
 import ae.pegasus.framework.model.information_managment.rfi.RequestForInformation;
 import ae.pegasus.framework.services.RequestForInformationService;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -26,16 +27,48 @@ public class APIRequestForInformationSteps extends APISteps {
         Result rfiNo = new Result();
         OperationResult<Result> operationResult = serviceRequestForInformation.generateNumber();
         rfiNo.setResult(operationResult.getEntity().getResult());
+
+        RequestForInformation rfiClean = Entities.getRequestForInformations().getLatest();
+        if (rfiClean != null) {
+            Entities.getRequestForInformations().removeEntity(rfiClean);
+        }
+
         context.put("rfiNo", rfiNo);
     }
 
-    @When("I send create a $type RFI request")
-    public void sendCreateRFIRequest(String type) {
+    @When("I get allowed RFI actions")
+    public void sendGetAllowedRFIActions() {
+        String imId = Entities.getRequestForInformations().getLatest() == null ? "" : Entities.getRequestForInformations().getLatest().getId();
+        OperationResult<List<PossibleActions>> operationResult = serviceRequestForInformation.allowedactions(imId);
+        List<PossibleActions> possibleActions = operationResult.getEntity();
+        context.put("possibleActions", possibleActions);
+    }
+
+    @When("I send $state a $type RFI request")
+    public void sendCreateRFIRequest(String state, String type) {
+
+        switch (state) {
+            case "Save as Draft":
+                saveAsDraftRFI(state, type);
+                break;
+            case "Delete":
+                deleteRFI(state);
+                break;
+            case "Submit for Approval":
+                submitRFI(state);
+
+        }
+    }
+
+    private void saveAsDraftRFI(String state, String type) {
         RequestForInformation requestForInformation = new RequestForInformation();
         Result rfitNo = context.get("rfiNo", Result.class);
         serviceRequestForInformation.buildRFI(requestForInformation, rfitNo, type);
         context.put("requestForInformation", requestForInformation);
-        serviceRequestForInformation.add(requestForInformation);
+        String actionId = getRequestAdress(state);
+        OperationResult<RequestForInformation> operationResult = serviceRequestForInformation.add(requestForInformation, actionId);
+        RequestForInformation reportID = operationResult.getEntity();
+        context.put("reportID", reportID.getId());
     }
 
     @When("I send view a RFI request")
@@ -45,10 +78,10 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.view(id);
     }
 
-    @When("I send delete a RFI request")
-    public void sendDeleteRFIRequest() {
+    private void deleteRFI(String state) {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
-        serviceRequestForInformation.remove(lastRFI);
+        String actionId = getRequestAdress(state);
+        serviceRequestForInformation.remove(lastRFI, actionId);
     }
 
     @When("I send get owner members a RFI request")
@@ -68,15 +101,15 @@ public class APIRequestForInformationSteps extends APISteps {
         context.put("requestForInformation", requestForInformation);
     }
 
-    @When("I send submit a RFI request")
-    public void sendSubmitRFIRequest() {
+    public void submitRFI(String state) {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
         List<CurrentOwner> currentOwner = context.get("currentOwner", List.class);
         List<NextOwners> allOwners = new ArrayList<>();
         serviceRequestForInformation.setNextOwnersMember(currentOwner, allOwners);
         lastRFI.setNextOwners(allOwners);
+        String actionId = getRequestAdress(state);
         lastRFI.setComment("QE_auto " + RandomStringUtils.randomAlphabetic(5));
-        serviceRequestForInformation.submit(lastRFI);
+        serviceRequestForInformation.submit(lastRFI, actionId);
     }
 
     @When("I send complete took ownership a RFI request")
@@ -225,5 +258,14 @@ public class APIRequestForInformationSteps extends APISteps {
         assertEquals(lastRFI.getManualNo(), createdRFI.getManualNo());
         assertEquals(lastRFI.getRequired(), createdRFI.getRequired());
         assertEquals(lastRFI.getObjectType(), "RFI");
+    }
+
+    private String getRequestAdress(String state) {
+        List<PossibleActions> possibleActions = context.get("possibleActions", List.class);
+        PossibleActions possibleAction = possibleActions.stream()
+                .filter(w -> state.equals(w.getActionName()))
+                .findAny()
+                .orElse(null);
+        return possibleAction.getId();
     }
 }

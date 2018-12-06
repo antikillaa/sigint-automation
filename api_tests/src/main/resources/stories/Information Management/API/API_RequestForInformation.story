@@ -12,18 +12,21 @@ Scenario: Create/Delete a RFI
 When I send generate RFI number request
 Then Request is successful
 
-When I send create a <type> RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Save as Draft a <type> RFI request
 Then Request is successful
 And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
 
-When I send delete a RFI request
+When I get allowed RFI actions
 Then Request is successful
 
-When I send view a RFI request
-Then Request is unsuccessful
+When I send Delete a <type> RFI request
+Then Request is successful
 
 Examples:
 |type|
@@ -31,27 +34,33 @@ Examples:
 |INTERNAL|
 
 Scenario: Submit for Approval a RFI
+Meta:
 When I send generate RFI number request
 Then Request is successful
 
-When I send create a <type> RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Save as Draft a <type> RFI request
 Then Request is successful
 And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
 
+When I get allowed RFI actions
+Then Request is successful
+
 When I send get owner members a RFI request
 Then Request is successful
 
-When I send submit a RFI request
+When I send Submit for Approval a <type> RFI request
 Then Request is successful
 Then RFI is submitted
 
 Examples:
 |type|
 |EXTERNAL|
-|INTERNAL|
 
 Scenario: Approve a RFI via submit button
 When I send generate RFI number request

@@ -9,6 +9,7 @@ When I send create finder file request
 Then Request is successful
 
 Scenario: Create a report
+Meta:@wip
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -31,8 +32,8 @@ Then Request is successful
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
-| SIGINT | event | EventVO |      | 0 | 150 |
-| SIGINT | entity| EntityVO|      | 0 | 150 |
+| SIGINT | event | EventVO |      | 0 | 1 |
+| SIGINT | entity| EntityVO|      | 0 | 1 |
 
 Scenario: Delete a report
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
