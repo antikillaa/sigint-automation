@@ -9,7 +9,7 @@ data/QE_login_manager.table
 
 
 Scenario: Create and delete a profile smoke test
-Meta: @devsmoke1
+Meta: @devsmoke
 
 
 
