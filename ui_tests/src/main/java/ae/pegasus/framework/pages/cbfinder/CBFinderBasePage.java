@@ -55,7 +55,7 @@ public class CBFinderBasePage extends BasePage {
     }
 
     public void performAction(CreateAction action) {
-        getCBFinderSidePanel().$x(".//pg-col[2]//pg-dropdown").click();
+        getCBFinderSidePanel().$x(".//pg-col[1]//pg-dropdown").click();
         getActionFromDropDownSubMenu(getActionFromDropDownMenu("Create new"), action.getActionNameInSidePanel()).click();
     }
 
