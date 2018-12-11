@@ -62,8 +62,6 @@ public class APIRequestForInformationSteps extends APISteps {
 
     private void saveAsDraftRFI(String state, String type) {
         RequestForInformation requestForInformation = new RequestForInformation();
-
-        for (int i = 0; i < 21001; i++) {
             Result rfitNo = context.get("rfiNo", Result.class);
             serviceRequestForInformation.buildRFI(requestForInformation, rfitNo, type);
             context.put("requestForInformation", requestForInformation);
@@ -71,10 +69,8 @@ public class APIRequestForInformationSteps extends APISteps {
             OperationResult<RequestForInformation> operationResult = serviceRequestForInformation.add(requestForInformation, actionId);
             RequestForInformation reportID = operationResult.getEntity();
             context.put("reportID", reportID.getId());
-            System.out.print("RFI " + i);
         }
 
-    }
 
     @When("I send view a RFI request")
     public void sendViewRFIRequest() {

@@ -34,7 +34,6 @@ Examples:
 |INTERNAL|
 
 Scenario: Create/Delete a RFI
-Meta:@wip_rfi
 When I send generate RFI number request
 Then Request is successful
 
@@ -45,12 +44,24 @@ When I send Save as Draft a <type> RFI request
 Then Request is successful
 And RFI is correct
 
+When I send view a RFI request
+Then Request is successful
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Delete a <type> RFI request
+Then Request is successful
+
 Examples:
 |type|
 |EXTERNAL|
+|INTERNAL|
 
 
 Scenario: Submit for Approval a RFI
+Meta:@wip
+
 When I send generate RFI number request
 Then Request is successful
 
@@ -77,6 +88,7 @@ Then RFI is submitted
 Examples:
 |type|
 |EXTERNAL|
+|INTERNAL|
 
 Scenario: Approve a RFI via submit button
 When I send generate RFI number request
@@ -92,11 +104,11 @@ Then Request is successful
 When I send get owner members a RFI request
 Then Request is successful
 
-When I send submit a RFI request
+When I send Submit for Approval a <type> RFI request
 Then Request is successful
 Then RFI is submitted
 
-When I send Approve a RFI request
+When I send Approve a <type> RFI request
 Then Request is successful
 Then RFI is approved
 
