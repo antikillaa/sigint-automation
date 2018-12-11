@@ -33,8 +33,24 @@ Examples:
 |EXTERNAL|
 |INTERNAL|
 
+Scenario: Create/Delete a RFI
+Meta:@wip_rfi
+When I send generate RFI number request
+Then Request is successful
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Save as Draft a <type> RFI request
+Then Request is successful
+And RFI is correct
+
+Examples:
+|type|
+|EXTERNAL|
+
+
 Scenario: Submit for Approval a RFI
-Meta:
 When I send generate RFI number request
 Then Request is successful
 
