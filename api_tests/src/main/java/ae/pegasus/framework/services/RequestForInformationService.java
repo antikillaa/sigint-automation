@@ -305,13 +305,13 @@ public class RequestForInformationService implements EntityService<RequestForInf
     }
 
     public void setNextOwnersMember(List<CurrentOwner> currentOwner, List<NextOwners> allOwners) {
-        for (CurrentOwner owner : currentOwner) {
+        CurrentOwner currentOwner1 = currentOwner.stream().findAny().orElse(null);
             NextOwners nextOwner = new NextOwners();
-            nextOwner.setOwnerId(owner.getOwnerId());
-            nextOwner.setOwnerName(owner.getOwnerName());
-            nextOwner.setType(owner.getType());
+        nextOwner.setOwnerId(currentOwner1.getOwnerId());
+        nextOwner.setOwnerName(currentOwner1.getOwnerName());
+        nextOwner.setType(currentOwner1.getType());
+        nextOwner.setOwnerFullName(currentOwner1.getOwnerFullName());
             allOwners.add(nextOwner);
-        }
     }
 
     public void setRandomNextOwner(List<CurrentOwner> currentOwner, List<NextOwners> allOwners) {

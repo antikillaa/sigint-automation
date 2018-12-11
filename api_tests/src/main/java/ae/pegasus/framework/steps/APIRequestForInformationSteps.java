@@ -104,9 +104,10 @@ public class APIRequestForInformationSteps extends APISteps {
 
     public void submitRFI(String state) {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
-        List<CurrentOwner> currentOwner = context.get("currentOwner", List.class);
+        List<CurrentOwner> currentOwners = context.get("currentOwner", List.class);
         List<NextOwners> allOwners = new ArrayList<>();
-        serviceRequestForInformation.setNextOwnersMember(currentOwner, allOwners);
+
+        serviceRequestForInformation.setNextOwnersMember(currentOwners, allOwners);
         lastRFI.setNextOwners(allOwners);
         String actionId = getRequestAdress(state);
         lastRFI.setComment("QE_auto " + RandomStringUtils.randomAlphabetic(5));
@@ -235,7 +236,7 @@ public class APIRequestForInformationSteps extends APISteps {
     public void rfiIsApproved() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
         checkRFI(lastRFI);
-        checkAwaitingAssignment(lastRFI);
+        checkAwaitingApproval(lastRFI);
     }
 
     private void checkAwaitingAssignment(RequestForInformation lastRFI) {

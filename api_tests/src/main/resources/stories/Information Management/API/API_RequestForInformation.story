@@ -60,8 +60,6 @@ Examples:
 
 
 Scenario: Submit for Approval a RFI
-Meta:@wip
-
 When I send generate RFI number request
 Then Request is successful
 
@@ -94,7 +92,10 @@ Scenario: Approve a RFI via submit button
 When I send generate RFI number request
 Then Request is successful
 
-When I send create a <type> RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Save as Draft a <type> RFI request
 Then Request is successful
 And RFI is correct
 
@@ -118,6 +119,8 @@ Examples:
 |INTERNAL|
 
 Scenario: Cancel a RFI
+Meta:@wip
+
 When I send generate RFI number request
 Then Request is successful
 

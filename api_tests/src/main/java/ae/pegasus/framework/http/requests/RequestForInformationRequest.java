@@ -89,7 +89,7 @@ public class RequestForInformationRequest extends HttpRequest {
 
     public RequestForInformationRequest possibleOwnersMembers(RequestForInformation requestForInformation) {
         this
-                .setURI(URI + "2/possible-owners/2")
+                .setURI(URI + "2/possible-owners/1-3")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformation);
         return this;
