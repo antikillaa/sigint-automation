@@ -60,6 +60,8 @@ public class APIRequestForInformationSteps extends APISteps {
             case "Cancel":
                 cancelRFI(state);
                 break;
+            case "Take Ownership":
+                takeOwnershipRFI(state);
 
         }
     }
@@ -152,11 +154,11 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.send(RFI);
     }
 
-    @When("I send take ownership a RFI request")
-    public void sendTakeOwnershipRFIRequest() {
+    public void takeOwnershipRFI(String state) {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
         lastRFI.setComment("QE_auto " + RandomStringUtils.randomAlphabetic(5));
-        serviceRequestForInformation.takeOwnership(lastRFI);
+        String actionId = getRequestAdress(state);
+        serviceRequestForInformation.takeOwnership(lastRFI, actionId);
     }
 
     @When("I send unassign a RFI request")

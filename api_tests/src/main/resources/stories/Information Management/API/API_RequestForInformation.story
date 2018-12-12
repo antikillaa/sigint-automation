@@ -155,19 +155,24 @@ Examples:
 |INTERNAL|
 
 Scenario: Take ownership a RFI
+Meta:@wip
 When I send generate RFI number request
 Then Request is successful
 
-When I send get owner teams a <type> RFI request
+When I get allowed RFI actions
 Then Request is successful
 
-When I send send a RFI request
+When I send Save as Draft a <type> RFI request
 Then Request is successful
+And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
 
-When I send take ownership a RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Take Ownership a <type> RFI request
 Then Request is successful
 Then RFI is ownershipped
 
