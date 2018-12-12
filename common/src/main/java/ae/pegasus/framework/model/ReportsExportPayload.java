@@ -9,17 +9,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
         "data"
 })
 
-public class RequestForApprovePayload {
+public class ReportsExportPayload {
     @JsonProperty("data")
-    private RequestForInformation data;
+    private ReportsExportModel data;
 
-    @JsonProperty("data")
-    public RequestForInformation getData() {
+    public ReportsExportModel getData() {
         return data;
     }
 
-    @JsonProperty("data")
-    public void setData(RequestForInformation data) {
+    public void setData(ReportsExportModel data) {
         this.data = data;
     }
 }

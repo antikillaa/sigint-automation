@@ -1,6 +1,7 @@
 
 package ae.pegasus.framework.model;
 
+import ae.pegasus.framework.model.information_managment.report.ReportEvent;
 import com.fasterxml.jackson.annotation.*;
 
 import java.util.ArrayList;

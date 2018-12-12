@@ -1,8 +1,12 @@
 package ae.pegasus.framework.http.requests;
 
 import ae.pegasus.framework.http.HttpMethod;
-import ae.pegasus.framework.model.Report;
-import ae.pegasus.framework.model.ReportPayload;
+import ae.pegasus.framework.model.information_managment.report.Report;
+import ae.pegasus.framework.model.information_managment.report.ReportPayload;
+import ae.pegasus.framework.model.ReportsExportModel;
+import ae.pegasus.framework.model.ReportsExportPayload;
+
+import javax.ws.rs.core.MediaType;
 
 public class ReportRequest extends HttpRequest {
 
@@ -30,11 +34,11 @@ public class ReportRequest extends HttpRequest {
         return this;
     }
 
-    public ReportRequest add(Report report) {
+    public ReportRequest add(Report report, String actionId) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "perform-action/1/")
+                .setURI(URI + "perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;
@@ -44,7 +48,7 @@ public class ReportRequest extends HttpRequest {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "perform-action/3/")
+                .setURI(URI + "perform-action/1-0/")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;
@@ -57,7 +61,7 @@ public class ReportRequest extends HttpRequest {
         return this;
     }
 
-    public ReportRequest export(String id, Boolean sources, Boolean creator) {
+    public ReportRequest exportReport(String id, Boolean sources, Boolean creator) {
         this
                 .setURI("/api/reports/workflows/export/3/"
                         + id + ".zip?showCreator="
@@ -67,11 +71,23 @@ public class ReportRequest extends HttpRequest {
         return this;
     }
 
+    public ReportRequest exportBundleReport(ReportsExportModel reportsExportModel) {
+        ReportsExportPayload reportsExportPayload = new ReportsExportPayload();
+        reportsExportPayload.setData(reportsExportModel);
+        this
+                .setURI("/api/reports/workflows/export/bundle")
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(reportsExportPayload)
+                .setMediaType(MediaType.APPLICATION_JSON)
+                .setAccept(MediaType.WILDCARD);
+        return this;
+    }
+
     public ReportRequest submit(Report report) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "perform-action/2")
+                .setURI(URI + "perform-action/1-2")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;
@@ -79,57 +95,65 @@ public class ReportRequest extends HttpRequest {
 
     public ReportRequest possibleOwners(Report report) {
         this
-                .setURI(URI + "possible-owners/2")
+                .setURI(URI + "possible-owners/1-2")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(report);
         return this;
     }
 
-    public ReportRequest takeOwnership(Report report) {
+    public ReportRequest possibleOwner(Report report, String actionId) {
+        this
+                .setURI(URI + "possible-owners/" + actionId)
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(report);
+        return this;
+    }
+
+    public ReportRequest takeOwnership(Report report, String actionId) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "perform-action/5")
+                .setURI(URI + "perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;
     }
 
-    public ReportRequest approveReport(Report report) {
+    public ReportRequest approveReport(Report report, String actionId) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "perform-action/6")
+                .setURI(URI + "perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;
     }
 
-    public ReportRequest returnAuthor(Report report) {
+    public ReportRequest returnAuthor(Report report, String actionId) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "perform-action/8")
+                .setURI(URI + "perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;
     }
 
-    public ReportRequest rejectReport(Report report) {
+    public ReportRequest rejectReport(Report report, String actionId) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "perform-action/9")
+                .setURI(URI + "perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;
     }
 
-    public ReportRequest cancelReportOwned(Report report) {
+    public ReportRequest cancelReportOwned(Report report, String actionId) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "perform-action/7")
+                .setURI(URI + "perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;
@@ -152,6 +176,13 @@ public class ReportRequest extends HttpRequest {
                 .setURI(URI + "perform-action/8")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
+        return this;
+    }
+
+    public ReportRequest allowedactions(String id) {
+        this
+                .setURI(URI + "allowed-actions/" + id)
+                .setHttpMethod(HttpMethod.GET);
         return this;
     }
 

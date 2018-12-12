@@ -7,6 +7,9 @@ import ae.pegasus.framework.http.requests.RequestForApproveRequest;
 import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
+import ae.pegasus.framework.model.information_managment.CurrentOwner;
+import ae.pegasus.framework.model.information_managment.NextOwners;
+import ae.pegasus.framework.model.information_managment.rfa.RequestForApprove;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 

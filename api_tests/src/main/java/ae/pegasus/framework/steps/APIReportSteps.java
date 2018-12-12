@@ -1,8 +1,14 @@
 package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.model.*;
+import ae.pegasus.framework.model.ReportsExportModel;
+import ae.pegasus.framework.model.Result;
+import ae.pegasus.framework.model.SearchRecord;
 import ae.pegasus.framework.model.entities.Entities;
+import ae.pegasus.framework.model.information_managment.CurrentOwner;
+import ae.pegasus.framework.model.information_managment.NextOwners;
+import ae.pegasus.framework.model.information_managment.PossibleActions;
+import ae.pegasus.framework.model.information_managment.report.Report;
 import ae.pegasus.framework.services.ReportService;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -24,14 +30,12 @@ public class APIReportSteps extends APISteps {
 
     private static ReportService serviceReport = new ReportService();
 
-    @When("I send create a report request")
-    public void sendReportRequest() {
-        Report report = new Report();
-        Result reportNo = context.get("reportNo", Result.class);
-        List<SearchRecord> entities = context.get("searchEntities", List.class);
-        serviceReport.buildReport(report, reportNo, entities);
-        context.put("report", report);
-        serviceReport.add(report);
+    @When("I get allowed actions")
+    public void sendGetAllowedActions() {
+        String imId = Entities.getReports().getLatest() == null ? "" : Entities.getReports().getLatest().getId();
+        OperationResult<List<PossibleActions>> operationResult = serviceReport.allowedactions(imId);
+        List<PossibleActions> possibleActions = operationResult.getEntity();
+        context.put("possibleActions", possibleActions);
     }
 
     @When("I send generate report number request")
@@ -39,6 +43,10 @@ public class APIReportSteps extends APISteps {
         Result reportNo = new Result();
         OperationResult<Result> operationResult = serviceReport.generateNumber();
         reportNo.setResult(operationResult.getEntity().getResult());
+        Report reportClean = Entities.getReports().getLatest();
+        if (reportClean != null) {
+            Entities.getReports().removeEntity(reportClean);
+        }
         context.put("reportNo", reportNo);
     }
 
@@ -50,19 +58,8 @@ public class APIReportSteps extends APISteps {
 
     @When("I send view a report request")
     public void sendViewReportRequest() {
-        Report lastReport = Entities.getReports().getLatest();
-        String id = lastReport.getId();
+        String id = context.get("reportID", String.class);
         serviceReport.view(id);
-    }
-
-    @When("I send submit a report request")
-    public void sendSubmitReportRequest() {
-        Report lastreport = Entities.getReports().getLatest();
-        List<CurrentOwner> currentOwner = context.get("currentOwner", List.class);
-        List<NextOwners> allOwners = new ArrayList<>();
-        serviceReport.setNextOwners(currentOwner, allOwners);
-        lastreport.setNextOwners(allOwners);
-        serviceReport.submit(lastreport);
     }
 
     @When("I send get owners a report request")
@@ -72,53 +69,116 @@ public class APIReportSteps extends APISteps {
         context.put("currentOwner", currentOwner.getEntity());
     }
 
-    @When("I send take ownership a report request")
-    public void sendTakeOwnershipReportRequest() {
-        Report report = Entities.getReports().getLatest();
-        serviceReport.takeOwnership(report);
+    @When("I send get owner a report in $state request")
+    public void sendGetOwnerReportRequest(String state) {
+        Report lastreport = Entities.getReports().getLatest();
+        String actionId = getRequestAdress(state);
+
+        OperationResult<List<NextOwners>> nextOwner = serviceReport.possibleOwner(lastreport, actionId);
+        context.put("nextOwner", nextOwner.getEntity());
     }
 
-    @When("I send approve a report request")
-    public void sendApproveReportRequest() {
-        Report report = Entities.getReports().getLatest();
-        serviceReport.approveReport(report);
+
+    @When("I send $state a report request")
+    public void sendMoveToStateRequest(String state) {
+        switch (state) {
+            case "Save as Draft":
+                saveAsDraft(state);
+                break;
+            case "Approve":
+                approveReport(state);
+                break;
+            case "Take Ownership":
+                takeOwnership(state);
+                break;
+            case "Return to Author":
+                returnToAuthor(state);
+                break;
+            case "Submit for Review":
+                submitForReview(state);
+                break;
+            case "Reject":
+                rejectReport(state);
+                break;
+            case "Cancel":
+                cancelReportWithOwner(state);
+                break;
+            case "Save":
+                editReport(state);
+                break;
+            default:
+                log.error("State is not found");
+        }
+
     }
 
-    @When("I send return to author a report request")
-    public void sendReturnAuthorReportRequest() {
+    private void submitForReview(String state) {
+        Report lastreport = Entities.getReports().getLatest();
+        List<CurrentOwner> currentOwner = context.get("currentOwner", List.class);
+        List<NextOwners> allOwners = new ArrayList<>();
+        serviceReport.setNextOwnersTeams(currentOwner, allOwners);
+        lastreport.setNextOwners(allOwners);
+        serviceReport.submit(lastreport);
+    }
+
+    private void returnToAuthor(String state) {
+        Report report = Entities.getReports().getLatest();
+        List<NextOwners> nextOwners = context.get("nextOwner", List.class);
+        report.setNextOwners(nextOwners);
+        report.setComment("qe_" + RandomStringUtils.randomAlphabetic(5));
+        String actionId = getRequestAdress(state);
+        serviceReport.returnAuthor(report, actionId);
+    }
+
+    private void saveAsDraft(String state) {
+        Report report = new Report();
+        Result reportNo = context.get("reportNo", Result.class);
+        List<SearchRecord> entities = context.get("searchEntities", List.class);
+        serviceReport.buildReport(report, reportNo, entities);
+        context.put("report", report);
+        String actionId = getRequestAdress(state);
+        OperationResult<Report> operationResult = serviceReport.add(report, actionId);
+        Report reportResult = operationResult.getEntity();
+        context.put("reportID", reportResult.getId());
+    }
+
+
+    private void takeOwnership(String state) {
+        Report report = Entities.getReports().getLatest();
+        List<NextOwners> nextOwners = context.get("nextOwner", List.class);
+        report.setNextOwners(nextOwners);
+        String actionId = getRequestAdress(state);
+        serviceReport.takeOwnership(report, actionId);
+    }
+
+    private void approveReport(String state) {
+        Report report = Entities.getReports().getLatest();
+        String actionId = getRequestAdress(state);
+        serviceReport.approveReport(report, actionId);
+    }
+
+    private void rejectReport(String state) {
         Report report = Entities.getReports().getLatest();
         report.setComment("qe_" + RandomStringUtils.randomAlphabetic(5));
-        serviceReport.returnAuthor(report);
+        String actionId = getRequestAdress(state);
+        serviceReport.rejectReport(report, actionId);
     }
 
-    @When("I send reject a report request")
-    public void sendRejectReportRequest() {
-        Report report = Entities.getReports().getLatest();
-        report.setComment("qe_" + RandomStringUtils.randomAlphabetic(5));
-        serviceReport.rejectReport(report);
-    }
-
-    @When("I send cancel a report request with owner")
-    public void sendCancelReportRequestWithOwner() {
+    private void cancelReportWithOwner(String state) {
         Report report = Entities.getReports().getLatest();
         report.setComment("qe_auto_" + RandomStringUtils.randomAlphabetic(5));
-        serviceReport.cancelReportOwned(report);
+        String actionId = getRequestAdress(state);
+        serviceReport.cancelReportOwned(report, actionId);
     }
 
-    @When("I send cancel a report request without owner")
-    public void sendCancelReportRequestWithoutOwner() {
-        Report report = Entities.getReports().getLatest();
-        report.setComment("qe_auto_" + RandomStringUtils.randomAlphabetic(5));
-        serviceReport.cancelReportNotOwned(report);
-    }
 
-    @When("I send edit a report request")
-    public void sendEditReportRequest() {
+    public void editReport(String state) {
         Report report = Entities.getReports().getLatest();
+        String actionId = getRequestAdress(state);
         report.setSubject("qe_" + RandomStringUtils.randomAlphabetic(10));
         report.setDescription("qe_" + RandomStringUtils.randomAlphabetic(10));
         context.put("report", Report.class);
-        serviceReport.update(report);
+        serviceReport.add(report, actionId);
     }
 
     @When("I send add a comment to report request")
@@ -139,7 +199,47 @@ public class APIReportSteps extends APISteps {
         context.put("file", operationResult.getEntity());
     }
 
-    @Then("Check content of archive")
+    @When("I send export report bundle with sources:$sources and creator:$creator of reports request")
+    public void sendExportBundleOfReportsRequest(Boolean sources, Boolean creator) {
+        ReportsExportModel reportsExportModel = new ReportsExportModel();
+        fillConstantsOfExportBundle(sources, creator, reportsExportModel);
+
+        List<SearchRecord> entities = context.get("searchEntities", List.class);
+        serviceReport.setModels(entities, reportsExportModel);
+
+        OperationResult<File> operationResult = serviceReport.exportBundleReport(reportsExportModel);
+
+        context.put("file", operationResult.getEntity());
+    }
+
+    @Then("Check content of bundle of reports")
+    public void checkBundleArchive() throws IOException {
+        File file = context.get("file", File.class);
+        int reportsExpected = context.get("searchEntities", List.class).size();
+        int reportsActual = 0;
+        ZipFile zipFile = new ZipFile(file.getName());
+
+        Assert.assertTrue("Zip file has no elements!", zipFile.entries().hasMoreElements());
+        for (Enumeration e = zipFile.entries(); e.hasMoreElements(); ) {
+            ZipEntry entry = (ZipEntry) e.nextElement();
+            if (!entry.isDirectory()) {
+                if (FilenameUtils.getExtension(entry.getName()).equals("pdf")) {
+                    reportsActual++;
+                }
+            }
+        }
+        Assert.assertEquals(reportsExpected, reportsActual);
+    }
+
+    @Then("Check check that archive is not empty")
+    public void checkSizeArchive() throws IOException {
+        File file = context.get("file", File.class);
+        if (file.length() == 0) {
+            throw new AssertionError("Report archive is empty");
+        }
+    }
+
+    @Then("Check content of archive one report")
     public void checkArchive() throws IOException {
         String reportName = context.get("reportName", String.class);
         String reportNameInArchive = reportName + "/" + reportName + ".pdf";
@@ -162,11 +262,10 @@ public class APIReportSteps extends APISteps {
 
     @Then("Delete exported reports")
     public void deleteExportedReport() {
-        String reportName = context.get("reportName", String.class);
-        File file = new File( reportName + ".zip");
+        File file = context.get("file", File.class);
         if (file.delete()) {
-            log.info(reportName + " report export is deleted");
-        } else log.error(reportName + " report export file doesn't exists");
+            log.info(file + " report export is deleted");
+        } else log.error(file + " report export file doesn't exists");
     }
 
     @Then("Report is created")
@@ -246,5 +345,20 @@ public class APIReportSteps extends APISteps {
     private void reportCheck(Report updatedReport, Report contextReport) {
         assertEquals(updatedReport.getSubject(), contextReport.getSubject());
         assertEquals(updatedReport.getDescription(), contextReport.getDescription());
+    }
+
+    private String getRequestAdress(String state) {
+        List<PossibleActions> possibleActions = context.get("possibleActions", List.class);
+        PossibleActions possibleAction = possibleActions.stream()
+                .filter(w -> state.equals(w.getActionName()))
+                .findAny()
+                .orElse(null);
+        return possibleAction.getId();
+    }
+
+    private void fillConstantsOfExportBundle(Boolean sources, Boolean creator, ReportsExportModel reportsExportModel) {
+        reportsExportModel.setShowSources(sources);
+        reportsExportModel.setShowCreator(creator);
+        reportsExportModel.setCategory("");
     }
 }

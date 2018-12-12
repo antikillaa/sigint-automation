@@ -73,6 +73,7 @@ public class APISearchSteps extends APISteps {
 
         OperationResult<List<SearchEntity>> operationResult = service.search(filter);
         List<SearchEntity> searchResults = operationResult.getEntity();
+        log.info("search results: " + searchResults.size());
 
         context.put("searchEntities", searchResults);
         context.put("searchQuery", query);
@@ -561,8 +562,8 @@ public class APISearchSteps extends APISteps {
     public void SQMSearchCompleted() {
         String searchQueueId = context.get("searchQueueId", String.class);
 
-        Integer WAITING_TIME = 3 * 60;
-        Integer POLLING_INTERVAL = 3;
+        int WAITING_TIME = 3 * 60;
+        int POLLING_INTERVAL = 3;
         Date deadline = DateHelper.getDateWithShift(WAITING_TIME);
 
         SearchQueue searchQueue = sqmService.view(searchQueueId).getEntity();
@@ -571,8 +572,8 @@ public class APISearchSteps extends APISteps {
             DateHelper.waitTime(POLLING_INTERVAL);
             searchQueue = sqmService.view(searchQueueId).getEntity();
         }
-        assertTrue("Search queue id:" + searchQueueId + " not complete in time " + WAITING_TIME + "s",
-                searchQueue.getStatus() == SearchStatus.COMPLETED);
+        assertSame("Search queue id:" + searchQueueId + " not complete in time " + WAITING_TIME + "s",
+                searchQueue.getStatus(), SearchStatus.COMPLETED);
 
         context.put("searchQueue", searchQueue);
     }
@@ -606,5 +607,20 @@ public class APISearchSteps extends APISteps {
 
         SearchFiltersVerification searchFiltersVerification = new SearchFiltersVerification();
         searchFiltersVerification.verify(searchFilters, searchResults);
+    }
+
+    @Then("CB search results contains $field field")
+    public void searchResultsContainsInterceptRefField(String field) {
+        List<SearchRecord> entities = context.get("searchEntities", List.class);
+        String INTERCEPT_REF = "interceptRef";
+
+        for (SearchRecord searchRecord : entities) {
+            assertTrue("Search result without interceptRef:\n" + toJsonString(searchRecord),
+                    searchRecord.getAttributes().containsKey("interceptRef")
+            );
+            String value = (String) searchRecord.getAttributes().get(INTERCEPT_REF);
+            assertTrue(INTERCEPT_REF + " value is empty",
+                    !value.isEmpty());
+        }
     }
 }

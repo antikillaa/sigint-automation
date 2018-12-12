@@ -1,7 +1,7 @@
 package ae.pegasus.framework.http.requests;
 
 import ae.pegasus.framework.http.HttpMethod;
-import ae.pegasus.framework.model.ReportCategory;
+import ae.pegasus.framework.model.information_managment.ReportCategory;
 
 public class ReportCategoriesRequest extends HttpRequest {
 
