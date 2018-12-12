@@ -56,6 +56,10 @@ public class APIRequestForInformationSteps extends APISteps {
                 break;
             case "Submit for Approval":
                 submitRFI(state);
+                break;
+            case "Cancel":
+                cancelRFI(state);
+                break;
 
         }
     }
@@ -131,11 +135,11 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.approve(lastRFI);
     }
 
-    @When("I send cancel a RFI request")
-    public void sendCancelRFIRequest() {
+    private void cancelRFI(String state) {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
         lastRFI.setComment("QE_auto " + RandomStringUtils.randomAlphabetic(5));
-        serviceRequestForInformation.cancel(lastRFI);
+        String actionId = getRequestAdress(state);
+        serviceRequestForInformation.cancel(lastRFI, actionId);
     }
 
     @When("I send send a RFI request")

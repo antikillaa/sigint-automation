@@ -107,10 +107,10 @@ public class RequestForInformationService implements EntityService<RequestForInf
         return operationResult;
     }
 
-    public OperationResult<RequestForInformation> cancel(RequestForInformation entity) {
+    public OperationResult<RequestForInformation> cancel(RequestForInformation entity, String actionId) {
         log.info("Sending cancel RFI request... :" + JsonConverter.toJsonString(entity));
 
-        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.cancel(entity));
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.cancel(entity, actionId));
 
         OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
         if (operationResult.isSuccess()) {

@@ -109,6 +109,9 @@ When I send Submit for Approval a <type> RFI request
 Then Request is successful
 Then RFI is submitted
 
+When I get allowed RFI actions
+Then Request is successful
+
 When I send Approve a <type> RFI request
 Then Request is successful
 Then RFI is approved
@@ -119,12 +122,13 @@ Examples:
 |INTERNAL|
 
 Scenario: Cancel a RFI
-Meta:@wip
-
 When I send generate RFI number request
 Then Request is successful
 
-When I send create a <type> RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Save as Draft a <type> RFI request
 Then Request is successful
 And RFI is correct
 
@@ -134,11 +138,14 @@ Then Request is successful
 When I send get owner members a RFI request
 Then Request is successful
 
-When I send submit a RFI request
+When I send Submit for Approval a <type> RFI request
 Then Request is successful
 Then RFI is submitted
 
-When I send cancel a RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Cancel a <type> RFI request
 Then Request is successful
 Then RFI is cancelled
 

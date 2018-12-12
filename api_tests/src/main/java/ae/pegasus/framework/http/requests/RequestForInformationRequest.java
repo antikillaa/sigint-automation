@@ -57,11 +57,11 @@ public class RequestForInformationRequest extends HttpRequest {
         return this;
     }
 
-    public RequestForInformationRequest cancel(RequestForInformation requestForInformation) {
+    public RequestForInformationRequest cancel(RequestForInformation requestForInformation, String actionId) {
         RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
         requestForInformationPayload.setData(requestForInformation);
         this
-                .setURI(URI + "2/perform-action/8")
+                .setURI(URI + "2/perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformationPayload);
         return this;
