@@ -161,8 +161,6 @@ Examples:
 |INTERNAL|
 
 Scenario: Send a RFI
-Meta:@wip
-
 When I send generate RFI number request
 Then Request is successful
 
@@ -185,6 +183,7 @@ Then Request is successful
 Examples:
 |type|
 |EXTERNAL|
+|INTERNAL|
 
 Scenario: Submit for Approval a RFI
 When I send generate RFI number request
@@ -216,7 +215,7 @@ Examples:
 |INTERNAL|
 
 Scenario: Take ownership a RFI via send button
-Meta:@wwip
+Meta:@wip
 When I send generate RFI number request
 Then Request is successful
 
@@ -232,16 +231,6 @@ Then Request is successful
 When I send Send a <type> RFI request
 Then Request is successful
 Then RFI is sent
-
-When I send view a RFI request
-Then Request is successful
-
-When I get allowed RFI actions
-Then Request is successful
-
-When I send Approve a <type> RFI request
-Then Request is successful
-Then RFI is Awaiting Assignment
 
 When I get allowed RFI actions
 Then Request is successful
