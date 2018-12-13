@@ -2,7 +2,9 @@ package ae.pegasus.framework.pages.signin;
 
 import ae.pegasus.framework.assertion.Asserter;
 import ae.pegasus.framework.app_context.properties.G4Properties;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.logging.LogType;
 import ae.pegasus.framework.pages.Pages;
 import ae.pegasus.framework.pages.basic_pages.api.BasePage;
@@ -12,8 +14,6 @@ import java.util.logging.Level;
 import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.hidden;
 import static com.codeborne.selenide.Selenide.$x;
-import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class SignInPage extends BasePage {
 
@@ -62,12 +62,12 @@ public class SignInPage extends BasePage {
      */
     public SignInPage load() {
         System.out.println(url);
-        open(url);
+        Selenide.open(url);
         getPageLoading().waitUntil(hidden, G4Properties.getRunProperties().getLongTimeoutInMS());
-        String currentURL = getWebDriver().getCurrentUrl();
+        String currentURL = WebDriverRunner.getWebDriver().getCurrentUrl();
         Asserter.getAsserter().softAssertEquals(currentURL, url, "Current Login page url");
         if (G4Properties.getRunProperties().isSuppressKnownIssues()) {
-            getWebDriver().manage().logs().get(LogType.BROWSER).filter(Level.SEVERE);
+            WebDriverRunner.getWebDriver().manage().logs().get(LogType.BROWSER).filter(Level.SEVERE);
         }
         return this;
     }

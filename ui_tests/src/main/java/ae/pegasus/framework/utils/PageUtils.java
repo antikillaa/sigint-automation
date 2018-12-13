@@ -3,6 +3,7 @@ package ae.pegasus.framework.utils;
 import ae.pegasus.framework.app_context.properties.G4Properties;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
@@ -10,8 +11,6 @@ import org.openqa.selenium.logging.LogType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class PageUtils {
 
@@ -25,7 +24,7 @@ public class PageUtils {
         for (SelenideElement element : elementsCollection) {
             String textToAdd = element.getText().trim();
             if (removeTrailingComma && textToAdd.endsWith(",")) {
-                textToAdd = textToAdd.substring(0, textToAdd.length()-1);
+                textToAdd = textToAdd.substring(0, textToAdd.length() - 1);
             }
             result.add(textToAdd);
         }
@@ -34,17 +33,18 @@ public class PageUtils {
 
     public static String bindXPaths(String firstXPath, String secondXPath, String... additionalXPaths) {
         String resultXPath = firstXPath + " | " + secondXPath;
-        for(String xPath: additionalXPaths){
+        for (String xPath : additionalXPaths) {
             resultXPath += " | " + xPath;
         }
         return resultXPath;
     }
 
     public static boolean checkJsErrors(Logger log) {
-        List<LogEntry> listErrors = getWebDriver().manage().logs().get(LogType.BROWSER).filter(Level.SEVERE);
+        List<LogEntry> listErrors = WebDriverRunner.getWebDriver().manage().logs().get(LogType.BROWSER).filter(Level.SEVERE);
 
-        if(G4Properties.getRunProperties().isSuppressKnownIssues())
+        if (G4Properties.getRunProperties().isSuppressKnownIssues())
             listErrors = getErrorListAfterIgnoringResourceError(listErrors);
+
         boolean areErrorsPresent = !listErrors.isEmpty();
         if (areErrorsPresent) {
             log.error("Start output JSErrors");
@@ -56,15 +56,12 @@ public class PageUtils {
         return areErrorsPresent;
     }
 
-    public static List getErrorListAfterIgnoringResourceError(List<LogEntry> listErrors)
-    {
-        List<LogEntry> listOfErrors = new ArrayList(listErrors);
+    public static List<LogEntry> getErrorListAfterIgnoringResourceError(List<LogEntry> listErrors) {
+        List<LogEntry> listOfErrors = new ArrayList<>(listErrors);
 
-        for (LogEntry Error : listOfErrors)
-        {
-            if(Error.toString().contains("Failed to load resource: the server responded with a status of 404 (Not Found)")
-                    ||(Error.toString().contains("ERROR [route-href]")))
-            {
+        for (LogEntry Error : listOfErrors) {
+            if (Error.toString().contains("Failed to load resource: the server responded with a status of 404 (Not Found)")
+                    || (Error.toString().contains("ERROR [route-href]"))) {
                 listErrors.remove(Error);
             }
         }
