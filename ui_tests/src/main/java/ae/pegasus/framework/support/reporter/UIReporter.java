@@ -56,9 +56,13 @@ public class UIReporter extends AllureReporter {
         if (!stepsFailedDueToSoftAsserts.isEmpty()) {
             String message = "Following steps are failed due to soft assertions:\n"
                     + String.join("\n", stepsFailedDueToSoftAsserts);
-            super.getLifecycle().updateTestCase(testResult -> {
-                testResult.setStatus(Status.FAILED).setDescription(message);
+            super.getLifecycle()
+                    .updateTestCase(testResult -> {
+                        testResult
+                                .setStatus(Status.FAILED)
+                                .setDescription(message);
             });
+            super.updateScenarioStatus(Status.FAILED);
             stepsFailedDueToSoftAsserts.clear();
         }
         super.afterScenario();
