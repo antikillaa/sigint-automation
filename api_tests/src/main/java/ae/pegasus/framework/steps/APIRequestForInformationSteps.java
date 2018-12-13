@@ -62,15 +62,19 @@ public class APIRequestForInformationSteps extends APISteps {
                 break;
             case "Take Ownership":
                 takeOwnershipRFI(state);
+                break;
             case "Submit for Review":
                 submitRFI(state);
+                break;
             case "Send":
                 sendRFI(state);
+                break;
             case "Approve":
                 approveRFIRequest(state);
-
+                break;
             default:
                 log.error("State not found");
+                break;
         }
     }
 
