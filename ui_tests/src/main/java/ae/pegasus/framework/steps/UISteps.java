@@ -2,24 +2,27 @@ package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.app_context.properties.G4Properties;
 import ae.pegasus.framework.assertion.Asserter;
+import ae.pegasus.framework.context.Context;
 import ae.pegasus.framework.data_generators.TextLinesGenerator;
 import ae.pegasus.framework.utils.FileHelper;
+import ae.pegasus.framework.utils.PageUtils;
 import ae.pegasus.framework.utils.TimeUtils;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
-import ae.pegasus.framework.context.Context;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.*;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import ae.pegasus.framework.utils.PageUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Level;
 
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 
 public class UISteps {
 
@@ -28,24 +31,31 @@ public class UISteps {
 
     @BeforeStory
     public void initWebDriver() throws IOException {
-        Boolean remoteRun = G4Properties.getRunProperties().isRemoteRun();
+        boolean remoteRun = G4Properties.getRunProperties().isRemoteRun();
         String browser = G4Properties.getRunProperties().getWebBrowser();
-        String workingDir = System.getProperty("user.dir") + "/chromedriver.exe";
+
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        LoggingPreferences loggingPreferences = new LoggingPreferences();
+        loggingPreferences.enable(LogType.BROWSER, Level.ALL);
+        capabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
+        capabilities.setBrowserName(browser);
+
         if (remoteRun) {
             String seleniumHub = G4Properties.getRunProperties().getSeleniumHub();
-            DesiredCapabilities capabilities = new DesiredCapabilities();
-            capabilities.setBrowserName(browser);
             RemoteWebDriver webDriver = new RemoteWebDriver(new URL(String.format("http://%s:4444/wd/hub", seleniumHub)), capabilities);
-            webDriver.manage().window().setSize(new Dimension(1920,1080));
+            webDriver.manage().window().setSize(new Dimension(1920, 1080));
             WebDriverRunner.setWebDriver(webDriver);
         } else {
-            Configuration.browser = browser;
-            Configuration.startMaximized = true;
-            Configuration.openBrowserTimeoutMs = Long.parseLong(System.getProperty("selenide.openBrowserTimeout", "600000"));
             System.setProperty("chromeoptions.args", "--no-proxy-server");
-            //Stage
-           // System.setProperty("webdriver.chrome.driver", workingDir);
+            // Stage
+            // String workingDir = System.getProperty("user.dir") + "/chromedriver.exe";
+            // System.setProperty("webdriver.chrome.driver", workingDir);
         }
+
+        Configuration.browser = browser;
+        Configuration.startMaximized = true;
+        Configuration.openBrowserTimeoutMs = Long.parseLong(System.getProperty("selenide.openBrowserTimeout", "600000"));
+        Configuration.browserCapabilities = capabilities;
         Configuration.timeout = Long.parseLong(System.getProperties().getProperty("selenide.timeout", "40000"));
         Configuration.collectionsTimeout = Long.parseLong(System.getProperties().getProperty("selenide.collectionsTimeout", "40000"));
     }
@@ -57,8 +67,8 @@ public class UISteps {
         if (skipReloading) {
             skipReloading = false;
         } else {
-            if (getWebDriver() != null) {
-                WebDriver driver = getWebDriver();
+            if (WebDriverRunner.getWebDriver() != null) {
+                WebDriver driver = WebDriverRunner.getWebDriver();
                 driver.manage().deleteAllCookies();
                 driver.navigate().refresh();
                 driver.manage().deleteAllCookies();
@@ -85,6 +95,7 @@ public class UISteps {
 
     private static final String CHECK_JS_ERRORS_STEP_DEFINITION = "Check JS errors";
     public static final String CHECK_JS_ERRORS_STEP_FULL_DEFINITION = "Then " + CHECK_JS_ERRORS_STEP_DEFINITION;
+
     @Then(CHECK_JS_ERRORS_STEP_DEFINITION)
     public void checkJSErrors() {
         try {
@@ -96,8 +107,8 @@ public class UISteps {
 
     @AfterStory
     public void disposeDriver() {
-        if (getWebDriver() != null) {
-            getWebDriver().quit();
+        if (WebDriverRunner.getWebDriver() != null) {
+            WebDriverRunner.getWebDriver().quit();
         }
     }
 }
