@@ -62,7 +62,15 @@ public class APIRequestForInformationSteps extends APISteps {
                 break;
             case "Take Ownership":
                 takeOwnershipRFI(state);
+            case "Submit for Review":
+                submitRFI(state);
+            case "Send":
+                sendRFI(state);
+            case "Approve":
+                approveRFIRequest(state);
 
+            default:
+                log.error("State not found");
         }
     }
 
@@ -91,21 +99,20 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.remove(lastRFI, actionId);
     }
 
-    @When("I send get owner members a RFI request")
-    public void sendGetOwnersMembersRFIRequest() {
+    @When("I send get owner members for $state a RFI request")
+    public void sendGetOwnersMembersRFIRequest(String state) {
+        String actionId = getRequestAdress(state);
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
-        OperationResult<List<CurrentOwner>> currentOwnerMembers = serviceRequestForInformation.possibleOwnersMembers(lastRFI);
+        OperationResult<List<CurrentOwner>> currentOwnerMembers = serviceRequestForInformation.possibleOwnersMembers(lastRFI, actionId);
         context.put("currentOwner", currentOwnerMembers.getEntity());
     }
 
     @When("I send get owner teams a $type RFI request")
-    public void sendGetOwnersTeamsRFIRequest(String type) {
-        RequestForInformation requestForInformation = new RequestForInformation();
-        Result rfitNo = context.get("rfiNo", Result.class);
-        serviceRequestForInformation.buildRFI(requestForInformation, rfitNo, type);
-        OperationResult<List<CurrentOwner>> currentOwnersTeams = serviceRequestForInformation.possibleOwnersTeams(requestForInformation);
+    public void getOwnersTeamsRFI(String type) {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        OperationResult<List<CurrentOwner>> currentOwnersTeams = serviceRequestForInformation.possibleOwnersTeams(lastRFI);
         context.put("currentOwner", currentOwnersTeams.getEntity());
-        context.put("requestForInformation", requestForInformation);
+        context.put("requestForInformation", lastRFI);
     }
 
     public void submitRFI(String state) {
@@ -127,14 +134,14 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.submitTookOwnership(lastRFI);
     }
 
-    @When("I send Approve a RFI request")
-    public void sendApproveRFIRequest() {
+    public void approveRFIRequest(String state) {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
         List<OrgUnit> currentOrgUnits = lastRFI.getOrgUnits();
         List<NextOwners> nextOwners = new ArrayList<>();
+        String actionId = getRequestAdress(state);
         serviceRequestForInformation.setNextOwnersTeam(currentOrgUnits, nextOwners);
         lastRFI.setNextOwners(nextOwners);
-        serviceRequestForInformation.approve(lastRFI);
+        serviceRequestForInformation.approve(lastRFI, actionId);
     }
 
     private void cancelRFI(String state) {
@@ -144,14 +151,14 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.cancel(lastRFI, actionId);
     }
 
-    @When("I send send a RFI request")
-    public void sendSendRFIRequest() {
-        RequestForInformation RFI = context.get("requestForInformation", RequestForInformation.class);
+    private void sendRFI(String state) {
+        RequestForInformation RFI = Entities.getRequestForInformations().getLatest();
         List<OrgUnit> currentOrgUnits = RFI.getOrgUnits();
         List<NextOwners> nextOwners = new ArrayList<>();
+        String actionId = getRequestAdress(state);
         serviceRequestForInformation.setNextOwnersTeam(currentOrgUnits, nextOwners);
         RFI.setNextOwners(nextOwners);
-        serviceRequestForInformation.send(RFI);
+        serviceRequestForInformation.send(RFI, actionId);
     }
 
     public void takeOwnershipRFI(String state) {
@@ -221,6 +228,16 @@ public class APIRequestForInformationSteps extends APISteps {
         assertEquals(lastRFI.getState(), "Completed");
         assertEquals(lastRFI.getStateId(), "5");
         assertEquals(lastRFI.getStateType(), "FINAL");
+        assertEquals(lastRFI.getWfId(), "2");
+    }
+
+    @Then("RFI is Awaiting Assignment")
+    public void rfiIsAwaitingAssignment() {
+        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        checkRFI(lastRFI);
+        assertEquals(lastRFI.getState(), "Awaiting Assignment");
+        assertEquals(lastRFI.getStateId(), "3");
+        assertEquals(lastRFI.getStateType(), "INITIAL");
         assertEquals(lastRFI.getWfId(), "2");
     }
 

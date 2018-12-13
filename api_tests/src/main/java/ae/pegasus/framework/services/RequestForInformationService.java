@@ -93,10 +93,10 @@ public class RequestForInformationService implements EntityService<RequestForInf
         return operationResult;
     }
 
-    public OperationResult<RequestForInformation> approve(RequestForInformation entity) {
+    public OperationResult<RequestForInformation> approve(RequestForInformation entity, String actionId) {
         log.info("Sending submit RFI request... :" + JsonConverter.toJsonString(entity));
 
-        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.approve(entity));
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.approve(entity, actionId));
 
         OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
         if (operationResult.isSuccess()) {
@@ -148,10 +148,10 @@ public class RequestForInformationService implements EntityService<RequestForInf
         return operationResult;
     }
 
-    public OperationResult<RequestForInformation> send(RequestForInformation entity) {
+    public OperationResult<RequestForInformation> send(RequestForInformation entity, String actionId) {
         log.info("Sending submit RFI request... :" + JsonConverter.toJsonString(entity));
 
-        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.send(entity));
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.send(entity, actionId));
 
         OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
         if (operationResult.isSuccess()) {
@@ -203,10 +203,10 @@ public class RequestForInformationService implements EntityService<RequestForInf
         }
     }
 
-    public OperationResult<List<CurrentOwner>> possibleOwnersMembers(RequestForInformation entity) {
+    public OperationResult<List<CurrentOwner>> possibleOwnersMembers(RequestForInformation entity, String actionId) {
         log.info("Sending possible owners request...");
 
-        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.possibleOwnersMembers(entity));
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.possibleOwnersMembers(entity, actionId));
 
         OperationResult<CurrentOwner[]> operationResult = new OperationResult<>(response, CurrentOwner[].class);
         if (operationResult.isSuccess()) {

@@ -67,29 +67,29 @@ public class RequestForInformationRequest extends HttpRequest {
         return this;
     }
 
-    public RequestForInformationRequest approve(RequestForInformation requestForInformation) {
+    public RequestForInformationRequest approve(RequestForInformation requestForInformation, String actionId) {
         RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
         requestForInformationPayload.setData(requestForInformation);
         this
-                .setURI(URI + "2/perform-action/5/")
+                .setURI(URI + "2/perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformationPayload);
         return this;
     }
 
-    public RequestForInformationRequest send(RequestForInformation requestForInformation) {
+    public RequestForInformationRequest send(RequestForInformation requestForInformation, String actionId) {
         RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
         requestForInformationPayload.setData(requestForInformation);
         this
-                .setURI(URI + "2/perform-action/3")
+                .setURI(URI + "2/perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformationPayload);
         return this;
     }
 
-    public RequestForInformationRequest possibleOwnersMembers(RequestForInformation requestForInformation) {
+    public RequestForInformationRequest possibleOwnersMembers(RequestForInformation requestForInformation, String actionId) {
         this
-                .setURI(URI + "2/possible-owners/1-3")
+                .setURI(URI + "2/possible-owners/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformation);
         return this;

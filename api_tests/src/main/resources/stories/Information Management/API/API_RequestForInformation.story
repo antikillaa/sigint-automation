@@ -76,7 +76,7 @@ Then Request is successful
 When I get allowed RFI actions
 Then Request is successful
 
-When I send get owner members a RFI request
+When I send get owner members for Submit for Approval a RFI request
 Then Request is successful
 
 When I send Submit for Approval a <type> RFI request
@@ -102,7 +102,10 @@ And RFI is correct
 When I send view a RFI request
 Then Request is successful
 
-When I send get owner members a RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send get owner members for Submit for Approval a RFI request
 Then Request is successful
 
 When I send Submit for Approval a <type> RFI request
@@ -135,7 +138,10 @@ And RFI is correct
 When I send view a RFI request
 Then Request is successful
 
-When I send get owner members a RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send get owner members for Submit for Approval a RFI request
 Then Request is successful
 
 When I send Submit for Approval a <type> RFI request
@@ -154,8 +160,33 @@ Examples:
 |EXTERNAL|
 |INTERNAL|
 
-Scenario: Take ownership a RFI
+Scenario: Send a RFI
 Meta:@wip
+
+When I send generate RFI number request
+Then Request is successful
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Save as Draft a <type> RFI request
+Then Request is successful
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Send a <type> RFI request
+Then Request is successful
+Then RFI is sent
+
+When I send view a RFI request
+Then Request is successful
+
+Examples:
+|type|
+|EXTERNAL|
+
+Scenario: Submit for Approval a RFI
 When I send generate RFI number request
 Then Request is successful
 
@@ -172,59 +203,91 @@ Then Request is successful
 When I get allowed RFI actions
 Then Request is successful
 
-When I send Take Ownership a <type> RFI request
+When I send get owner members for Submit for Approval a RFI request
 Then Request is successful
-Then RFI is ownershipped
+
+When I send Submit for Approval a <type> RFI request
+Then Request is successful
+Then RFI is submitted
 
 Examples:
 |type|
 |EXTERNAL|
 |INTERNAL|
 
-Scenario: Send a RFI
+Scenario: Take ownership a RFI via send button
+Meta:@wwip
 When I send generate RFI number request
 Then Request is successful
 
-When I send get owner teams a <type> RFI request
+When I get allowed RFI actions
 Then Request is successful
 
-When I send send a RFI request
+When I send Save as Draft a <type> RFI request
+Then Request is successful
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Send a <type> RFI request
 Then Request is successful
 Then RFI is sent
 
 When I send view a RFI request
 Then Request is successful
 
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Approve a <type> RFI request
+Then Request is successful
+Then RFI is Awaiting Assignment
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Take ownership a <type> RFI request
+Then Request is successful
+Then RFI is ownershipped
+
 Examples:
 |type|
 |EXTERNAL|
-|INTERNAL|
 
 Scenario: Complete a RFI via send button
 When I send generate RFI number request
 Then Request is successful
 
-When I send get owner teams a <type> RFI request
+When I get allowed RFI actions
 Then Request is successful
 
-When I send send a RFI request
+When I send Save as Draft a <type> RFI request
 Then Request is successful
+And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
 
-When I send take ownership a RFI request
+When I get allowed RFI actions
 Then Request is successful
-Then RFI is ownershipped
 
-When I send complete took ownership a RFI request
+When I send get owner members for Submit for Approval a RFI request
+Then Request is successful
+
+When I send Submit for Approval a <type> RFI request
+Then Request is successful
+Then RFI is submitted
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Approve a <type> RFI request
 Then Request is successful
 Then RFI is completed
 
 Examples:
 |type|
 |EXTERNAL|
-|INTERNAL|
 
 Scenario: Unassign a RFI
 When I send generate RFI number request

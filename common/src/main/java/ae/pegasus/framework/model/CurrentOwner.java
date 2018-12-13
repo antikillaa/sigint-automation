@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.util.Map;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 @JsonPropertyOrder({
@@ -22,6 +24,8 @@ public class CurrentOwner {
     private String type;
     @JsonProperty("ownerFullName")
     private String ownerFullName;
+    @JsonProperty("attributes")
+    private Map<String, Object> attributes;
 
     @JsonProperty("ownerId")
     public String getOwnerId() {
@@ -59,5 +63,13 @@ public class CurrentOwner {
 
     public void setOwnerFullName(String ownerFullName) {
         this.ownerFullName = ownerFullName;
+    }
+
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, Object> attributes) {
+        this.attributes = attributes;
     }
 }
