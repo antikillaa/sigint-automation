@@ -10,7 +10,7 @@ Meta:
 Lifecycle:
 Before:
 Scope: SCENARIO
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login.table
 
 Scenario: Search menu item is working

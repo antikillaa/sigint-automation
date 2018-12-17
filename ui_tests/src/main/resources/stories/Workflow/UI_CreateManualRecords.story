@@ -11,7 +11,7 @@ Given I Sign Out
 
 Scenario: Verify that a User can create a manual record with "Voice"-type
 Meta: @devsmoke
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_manager.table
 
 
@@ -49,7 +49,7 @@ When I unassign selected items
 Given I navigate to Search
 When I use IMSI from manually created record identified as (<RecordID>) as search criteria on the Search page
 Given I open Search Filter on the Search page
-Given load story ../../aux-manual-records-stories/auxSetupSearchFilterForManualRecord.story
+Given load story ../aux-manual-records-stories/auxSetupSearchFilterForManualRecord.story
 Given I Apply Search using Search Filter on the Search page
 Given I setup Search Authorization
 
@@ -66,7 +66,7 @@ Examples:
 
 Scenario: Verify that a User can create a manual record with "SMS"-type
 
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_operator.table
 
 Given I navigate to My Records
@@ -103,7 +103,7 @@ When I unassign selected items
 Given I navigate to Search
 When I use IMSI from manually created record identified as (<RecordID>) as search criteria on the Search page
 Given I open Search Filter on the Search page
-Given load story ../../aux-manual-records-stories/auxSetupSearchFilterForManualRecord.story
+Given load story ../aux-manual-records-stories/auxSetupSearchFilterForManualRecord.story
 Given I Apply Search using Search Filter on the Search page
 Given I setup Search Authorization
 
@@ -120,7 +120,7 @@ Examples:
 
 Scenario: Verify that a User can create a manual record with "Fax"-type
 
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_operator.table
 
 Given I navigate to My Records
@@ -155,7 +155,7 @@ When I unassign selected items
 Given I navigate to Search
 When I use From Number from manually created record identified as (<RecordID>) as search criteria on the Search page
 Given I open Search Filter on the Search page
-Given load story ../../aux-manual-records-stories/auxSetupSearchFilterForManualRecord.story
+Given load story ../aux-manual-records-stories/auxSetupSearchFilterForManualRecord.story
 Given I Apply Search using Search Filter on the Search page
 Given I setup Search Authorization
 
@@ -170,7 +170,7 @@ Examples:
 |RecordFax|{current_day}-3/{current_month}/{current_year}|
 
 Scenario: Verify that a User can create a manual record with "Email"-type
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_operator.table
 
 Given I navigate to My Records
@@ -203,7 +203,7 @@ When I unassign selected items
 Given I navigate to Search
 When I use To E-mail from manually created record identified as (<RecordID>) as search criteria on the Search page
 Given I open Search Filter on the Search page
-Given load story ../../aux-manual-records-stories/auxSetupSearchFilterForManualRecord.story
+Given load story ../aux-manual-records-stories/auxSetupSearchFilterForManualRecord.story
 Given I Apply Search using Search Filter on the Search page
 Given I setup Search Authorization
 

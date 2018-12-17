@@ -8,7 +8,7 @@ Meta:
 Lifecycle:
 Before:
 Scope: SCENARIO
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_analyst.table
 After:
 Scope: SCENARIO
@@ -27,14 +27,14 @@ When I start search on the Search page
 Given I setup Search Authorization
 
 When I open Card View
-Given load story ../../aux-search-stories/entities/auxCheckSearchResultsEntitiesNumbers.story
+Given load story ../aux-search-stories/entities/auxCheckSearchResultsEntitiesNumbers.story
 
 Given I open Search Filter on the Search page
-Given load story ../../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given load story ../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
 Given I Apply Search using Search Filter on the Search page
 
 When I open Card View
-Given load story ../../aux-search-stories/events/auxCheckSearchResultsEventsNumbers.story
+Given load story ../aux-search-stories/events/auxCheckSearchResultsEventsNumbers.story
 
 
 Examples:
@@ -178,7 +178,7 @@ Examples:
 Scenario: Verfiy all data sources for SIGINT Event
 Given I navigate to Search
 Given I open Search Filter on the Search page
-Given load story ../../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given load story ../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
 Given I set Source Type to SIGINT on the Search Filter page
 Given I set Data Source to (|<DataSource>|) on the Search Filter page
 Given I Apply Search using Search Filter on the Search page
@@ -227,7 +227,7 @@ Examples:
 Scenario: Verfiy all data sources for GOVINT Event
 Given I navigate to Search
 Given I open Search Filter on the Search page
-Given load story ../../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given load story ../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
 Given I set Source Type to GOVINT on the Search Filter page
 Given I set Data Source to (|<DataSource>|) on the Search Filter page
 Given I Apply Search using Search Filter on the Search page
@@ -321,26 +321,26 @@ When I start search on the Search page
 Given I setup Search Authorization
 
 When I open Card View
-Given load story ../../aux-search-stories/entities/auxCheckSearchResultsEntitiesNumbers.story
+Given load story ../aux-search-stories/entities/auxCheckSearchResultsEntitiesNumbers.story
 
 When I open Grid View
-Given load story ../../aux-search-stories/entities/auxCheckSearchResultsEntitiesNumbers.story
+Given load story ../aux-search-stories/entities/auxCheckSearchResultsEntitiesNumbers.story
 
 When I open Map View
-Given load story ../../aux-search-stories/entities/auxCheckSearchResultsEntitiesNumbers.story
+Given load story ../aux-search-stories/entities/auxCheckSearchResultsEntitiesNumbers.story
 
 Given I open Search Filter on the Search page
-Given load story ../../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given load story ../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
 Given I Apply Search using Search Filter on the Search page
 
 When I open Card View
-Given load story ../../aux-search-stories/events/auxCheckSearchResultsEventsNumbers.story
+Given load story ../aux-search-stories/events/auxCheckSearchResultsEventsNumbers.story
 
 When I open Grid View
-Given load story ../../aux-search-stories/events/auxCheckSearchResultsEventsNumbers.story
+Given load story ../aux-search-stories/events/auxCheckSearchResultsEventsNumbers.story
 
 When I open Map View
-Given load story ../../aux-search-stories/events/auxCheckSearchResultsEventsNumbers.story
+Given load story ../aux-search-stories/events/auxCheckSearchResultsEventsNumbers.story
 
 
 Examples:
@@ -356,13 +356,13 @@ Given I setup Search Authorization
 
 When I open Card View
 
-Given load story ../../aux-search-stories/entities/auxCheckSearchResulsEntitiesVerticalScroll.story
+Given load story ../aux-search-stories/entities/auxCheckSearchResulsEntitiesVerticalScroll.story
 
 Given I open Search Filter on the Search page
-Given load story ../../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given load story ../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
 Given I Apply Search using Search Filter on the Search page
 
-Given load story ../../aux-search-stories/events/auxCheckSearchResulsEventsVerticalScroll.story
+Given load story ../aux-search-stories/events/auxCheckSearchResulsEventsVerticalScroll.story
 
 
 Examples:
@@ -379,15 +379,15 @@ Given I setup Search Authorization
 
 When I open Grid View
 
-Given load story ../../aux-search-stories/entities/auxCheckSearchResulsEntitiesVerticalScroll.story
-Given load story ../../aux-search-stories/entities/auxCheckSearchResulsEntitiesHorizontalScroll.story
+Given load story ../aux-search-stories/entities/auxCheckSearchResulsEntitiesVerticalScroll.story
+Given load story ../aux-search-stories/entities/auxCheckSearchResulsEntitiesHorizontalScroll.story
 
 Given I open Search Filter on the Search page
-Given load story ../../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given load story ../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
 Given I Apply Search using Search Filter on the Search page
 
-Given load story ../../aux-search-stories/events/auxCheckSearchResulsEventsVerticalScroll.story
-Given load story ../../aux-search-stories/events/auxCheckSearchResulsEventsHorizontalScroll.story
+Given load story ../aux-search-stories/events/auxCheckSearchResulsEventsVerticalScroll.story
+Given load story ../aux-search-stories/events/auxCheckSearchResulsEventsHorizontalScroll.story
 
 Examples:
 |SIGINT_events|EID_events|GOVINT_events|OSINT_events|CIO_events|Profiler_entities|Documents_entities|SIGINT_entities|EID_entities|GOVINT_entities|OSINT_entities|CIO_entities|

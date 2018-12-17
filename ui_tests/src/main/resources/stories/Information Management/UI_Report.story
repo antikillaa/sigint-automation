@@ -6,7 +6,7 @@ Meta:
 Lifecycle:
 Before:
 Scope: SCENARIO
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_analyst.table
 
 Scenario: User is able to create and edit a report
@@ -39,7 +39,7 @@ Given I navigate to CB Finder
 When I select file with Name (<FileName>) in the CB Finder
 When I open operator report with Subject (<ReportSubject>) in file/case which is currently selected in the CB Finder
 Given I Collapse the CB Finder view
-Given load story ../../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
+Given load story ../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
 |ExpectedClassification|ExpectedCreatedFor    |ExpectedSubject |ExpectedDescription|ExpectedConsiderations|ExpectedRecommendations|ExpectedNotes    |
 |<ReportClassifInit>   |<ReportCreatedForInit>|<ReportSubject>|<ReportDescrInit>  |<ReportConsidInit>    |<ReportRecommInit>     |<ReportNotesInit>|
 Then I should see Organization Units (|<ReportOrgUnitInit>|) in operator report
@@ -48,7 +48,7 @@ Then I should see File Name/Case Name(s) (|<FileName> |) in operator report
 When I start edit of operator report which is currently opened
 When I set Classification (<ReportClassifUpd>) in operator report
 When I save currently opened operator report as draft
-Given load story ../../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
+Given load story ../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
 |ExpectedClassification|ExpectedCreatedFor    |ExpectedSubject |ExpectedDescription|ExpectedConsiderations|ExpectedRecommendations|ExpectedNotes    |
 |<ReportClassifUpd>    |<ReportCreatedForInit>|<ReportSubject>|<ReportDescrInit>  |<ReportConsidInit>    |<ReportRecommInit>     |<ReportNotesInit>|
 Then I should see Organization Units (|<ReportOrgUnitInit>|) in operator report
@@ -57,7 +57,7 @@ Then I should see File Name/Case Name(s) (|<FileName> |) in operator report
 When I start edit of operator report which is currently opened
 When I set Created For (<ReportCreatedForUpd>) in operator report
 When I save currently opened operator report as draft
-Given load story ../../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
+Given load story ../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
 |ExpectedClassification|ExpectedCreatedFor   |ExpectedSubject |ExpectedDescription|ExpectedConsiderations|ExpectedRecommendations|ExpectedNotes    |
 |<ReportClassifUpd>    |<ReportCreatedForUpd>|<ReportSubject>|<ReportDescrInit>  |<ReportConsidInit>    |<ReportRecommInit>     |<ReportNotesInit>|
 Then I should see Organization Units (|<ReportOrgUnitInit>|) in operator report
@@ -66,7 +66,7 @@ Then I should see File Name/Case Name(s) (|<FileName> |) in operator report
 When I start edit of operator report which is currently opened
 When I set Organization Units (|<ReportOrgUnitUpd>|) in operator report
 When I save currently opened operator report as draft
-Given load story ../../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
+Given load story ../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
 |ExpectedClassification|ExpectedCreatedFor   |ExpectedSubject |ExpectedDescription|ExpectedConsiderations|ExpectedRecommendations|ExpectedNotes    |
 |<ReportClassifUpd>    |<ReportCreatedForUpd>|<ReportSubject>|<ReportDescrInit>  |<ReportConsidInit>    |<ReportRecommInit>     |<ReportNotesInit>|
 Then I should see Organization Units (|<ReportOrgUnitInit>|<ReportOrgUnitUpd>|) in operator report
@@ -75,7 +75,7 @@ Then I should see File Name/Case Name(s) (|<FileName> |) in operator report
 When I start edit of operator report which is currently opened
 When I set Subject (<ReportSubjUpd>) in operator report
 When I save currently opened operator report as draft
-Given load story ../../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
+Given load story ../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
 |ExpectedClassification|ExpectedCreatedFor   |ExpectedSubject|ExpectedDescription|ExpectedConsiderations|ExpectedRecommendations|ExpectedNotes    |
 |<ReportClassifUpd>    |<ReportCreatedForUpd>|<ReportSubjUpd>|<ReportDescrInit>  |<ReportConsidInit>    |<ReportRecommInit>     |<ReportNotesInit>|
 Then I should see Organization Units (|<ReportOrgUnitInit>|<ReportOrgUnitUpd>|) in operator report
@@ -84,7 +84,7 @@ Then I should see File Name/Case Name(s) (|<FileName> |) in operator report
 When I start edit of operator report which is currently opened
 When I set Description (|<ReportDescrUpd>|) in operator report
 When I save currently opened operator report as draft
-Given load story ../../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
+Given load story ../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
 |ExpectedClassification|ExpectedCreatedFor   |ExpectedSubject|ExpectedDescription|ExpectedConsiderations|ExpectedRecommendations|ExpectedNotes    |
 |<ReportClassifUpd>    |<ReportCreatedForUpd>|<ReportSubjUpd>|<ReportDescrUpd>   |<ReportConsidInit>    |<ReportRecommInit>     |<ReportNotesInit>|
 Then I should see Organization Units (|<ReportOrgUnitInit>|<ReportOrgUnitUpd>|) in operator report
@@ -93,7 +93,7 @@ Then I should see File Name/Case Name(s) (|<FileName> |) in operator report
 When I start edit of operator report which is currently opened
 When I set Considerations (|<ReportConsidUpd>|) in operator report
 When I save currently opened operator report as draft
-Given load story ../../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
+Given load story ../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
 |ExpectedClassification|ExpectedCreatedFor   |ExpectedSubject|ExpectedDescription|ExpectedConsiderations|ExpectedRecommendations|ExpectedNotes    |
 |<ReportClassifUpd>    |<ReportCreatedForUpd>|<ReportSubjUpd>|<ReportDescrUpd>   |<ReportConsidUpd>     |<ReportRecommInit>     |<ReportNotesInit>|
 Then I should see Organization Units (|<ReportOrgUnitInit>|<ReportOrgUnitUpd>|) in operator report
@@ -102,7 +102,7 @@ Then I should see File Name/Case Name(s) (|<FileName> |) in operator report
 When I start edit of operator report which is currently opened
 When I set Recommendations (|<ReportRecommUpd>|) in operator report
 When I save currently opened operator report as draft
-Given load story ../../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
+Given load story ../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
 |ExpectedClassification|ExpectedCreatedFor   |ExpectedSubject|ExpectedDescription|ExpectedConsiderations|ExpectedRecommendations|ExpectedNotes    |
 |<ReportClassifUpd>    |<ReportCreatedForUpd>|<ReportSubjUpd>|<ReportDescrUpd>   |<ReportConsidUpd>     |<ReportRecommUpd>      |<ReportNotesInit>|
 Then I should see Organization Units (|<ReportOrgUnitInit>|<ReportOrgUnitUpd>|) in operator report
@@ -111,7 +111,7 @@ Then I should see File Name/Case Name(s) (|<FileName> |) in operator report
 When I start edit of operator report which is currently opened
 When I set Notes (|<ReportNotesUpd>|) in operator report
 When I save currently opened operator report as draft
-Given load story ../../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
+Given load story ../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
 |ExpectedClassification|ExpectedCreatedFor   |ExpectedSubject|ExpectedDescription|ExpectedConsiderations|ExpectedRecommendations|ExpectedNotes   |
 |<ReportClassifUpd>    |<ReportCreatedForUpd>|<ReportSubjUpd>|<ReportDescrUpd>   |<ReportConsidUpd>     |<ReportRecommUpd>      |<ReportNotesUpd>|
 Then I should see Organization Units (|<ReportOrgUnitInit>|<ReportOrgUnitUpd>|) in operator report
@@ -126,15 +126,15 @@ When I set Considerations (|<ReportConsidInit>|) in operator report
 When I set Recommendations (|<ReportRecommInit>|) in operator report
 When I set Notes (|<ReportNotesInit>|) in operator report
 When I save currently opened operator report as draft
-Given load story ../../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
+Given load story ../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
 |ExpectedClassification|ExpectedCreatedFor    |ExpectedSubject |ExpectedDescription|ExpectedConsiderations|ExpectedRecommendations|ExpectedNotes    |
 |<ReportClassifInit>   |<ReportCreatedForInit>|<ReportSubject>|<ReportDescrInit>  |<ReportConsidInit>    |<ReportRecommInit>     |<ReportNotesInit>|
 Then I should see Organization Units (|<ReportOrgUnitInit>|<ReportOrgUnitUpd>|) in operator report
 Then I should see File Name/Case Name(s) (|<FileName>|) in operator report
 Given I Expand the CB Finder view
-Given load story ../../aux-after-stories/auxDeleteReport.story with example table:
+Given load story ../aux-after-stories/auxDeleteReport.story with example table:
 data/Report.table
-Given load story ../../aux-after-stories/auxDeleteReport.story with example table:
+Given load story ../aux-after-stories/auxDeleteReport.story with example table:
 data/Report.table
 
 
@@ -182,7 +182,7 @@ Then I should see Cancel button in operator report
 
 Given I Sign Out
 
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_manager.table
 
 Given I navigate to CB Finder
@@ -219,7 +219,7 @@ When I route the operator report
 Then I should see that currently opened operator report has status (Returned for Revision)
 
 Given I Sign Out
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_analyst.table
 
 Given I navigate to CB Finder
@@ -236,7 +236,7 @@ Then I should see that currently opened operator report has status (Awaiting Rev
 Then I should see Cancel button in operator report
 
 Given I Sign Out
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_manager.table
 
 Given I navigate to CB Finder
@@ -257,7 +257,7 @@ When I Approve the operator report which is currently opened
 Then I should see that currently opened operator report has status (Approved)
 
 Given I Sign Out
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_analyst.table
 
 
@@ -311,7 +311,7 @@ When I route the operator report
 
 Given I Sign Out
 
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_manager.table
 
 Given I navigate to CB Finder
@@ -338,7 +338,7 @@ When I route the operator report
 Then I should see that currently opened operator report has status (Approved)
 
 Given I Sign Out
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_analyst.table
 
 
@@ -384,7 +384,7 @@ When I enter routing (This is for auto report submit) for the operator report
 
 Given I Sign Out
 
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_manager.table
 
 Given I navigate to CB Finder
@@ -407,7 +407,7 @@ When I route the operator report
 Then I should see that currently opened operator report has status (Rejected)
 
 Given I Sign Out
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_analyst.table
 
 
@@ -428,7 +428,7 @@ Meta:@shareports
 Given I navigate to Search
 When I enter search criteria (<GOVINTEventBookRef>) on the Search page
 Given I open Search Filter on the Search page
-Given load story ../../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given load story ../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
 Given I Apply Search using Search Filter on the Search page
 Given I setup Search Authorization
 When I open Card View

@@ -5,7 +5,7 @@ Meta:
 
 Scenario: Verify that a manager can assign records to another user using ad-hoc assignment
 
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 |login         |password         |
 |<ManagerLogin>|<ManagerPassword>|
 
@@ -14,7 +14,7 @@ Given I navigate to Search
 Given I navigate to Search
 When I enter search criteria (<SIGINTEventIMSI>) on the Search page
 Given I open Search Filter on the Search page
-Given load story ../../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given load story ../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
 Given I Apply Search using Search Filter on the Search page
 Given I setup Search Authorization
 
@@ -24,7 +24,7 @@ When I assign selected items to (<AnalystLogin>)
 
 Given I Sign Out
 
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 |login         |password         |
 |<AnalystLogin>|<AnalystPassword>|
 
@@ -49,7 +49,7 @@ Examples:
 
 
 Scenario: Verify that a User can select records from team Record screen and take ownership on them
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 |login         |password         |
 |<ManagerLogin>|<ManagerPassword>|
 
