@@ -7,12 +7,15 @@ import ae.pegasus.framework.data_for_entity.annotations.DataProvider;
 import ae.pegasus.framework.data_for_entity.annotations.WithDataSize;
 import ae.pegasus.framework.data_for_entity.data_providers.EmailProvider;
 import ae.pegasus.framework.data_for_entity.data_providers.user.UserPasswordProvider;
+import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.services.UserService;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.junit.Assert.assertTrue;
 
 
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -193,7 +196,7 @@ public class User extends Organization {
             // private constructor
         }
 
-        public Builder randomUser() {
+        public Builder newUser() {
             User user = new RandomEntities().randomEntity(User.class);
 
             String defaultTeamId = UserService.getOrCreateDefaultTeamId();
@@ -210,10 +213,20 @@ public class User extends Organization {
         }
 
         public Builder withAllPermission() {
-            List<String> permissions = new ArrayList<>();
-            AppContext.get().getPermissions().forEach(permission -> permissions.add(permission.getName()));
+            List<String> userPermissions = new ArrayList<>();
+            AppContext.get().getPermissions().forEach(permission -> userPermissions.add(permission.getName()));
             User.this.getDefaultPermission()
-                    .setActions(permissions);
+                    .setActions(userPermissions);
+            return this;
+        }
+
+        public Builder exceptPermissions(String... permissions) {
+            boolean success = User.this.getDefaultPermission()
+                    .getActions()
+                    .removeAll(Stream.of(permissions).collect(Collectors.toList()));
+            assertTrue("Unable exclude permissions: " + Arrays.toString(permissions) +
+                            "\nfrom user: " + JsonConverter.toJsonString(User.this),
+                    success);
             return this;
         }
 

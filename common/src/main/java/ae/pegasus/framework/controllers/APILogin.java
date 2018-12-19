@@ -1,8 +1,10 @@
 package ae.pegasus.framework.controllers;
 
 import ae.pegasus.framework.app_context.AppContext;
+import ae.pegasus.framework.errors.OperationResultError;
 import ae.pegasus.framework.http.G4HttpClient;
 import ae.pegasus.framework.http.OperationResult;
+import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.services.*;
@@ -51,7 +53,7 @@ public class APILogin {
      * @param user User for sign in.
      */
     public OperationResult<Token> signInAsUser(User user) {
-        log.info("Signing in as user: " + user);
+        log.info("Signing in as user: " + user.getName() + ", password:" + user.getPassword());
 
         OperationResult<Token> operationResult = signService.signIn(user.getName(), user.getPassword());
         if (operationResult.isSuccess()) {
@@ -65,11 +67,14 @@ public class APILogin {
             me.setPassword(user.getPassword());
 
             context.setLoggedUser(new LoggedUser(me));
+        } else {
+            log.error("Unable signIn as user:" + JsonConverter.toJsonString(user));
+            throw new OperationResultError(operationResult);
         }
         return operationResult;
     }
 
-    public OperationResult<Token> signInAsUser(String UserName , String Password) {
+    public OperationResult<Token> signInAsUser(String UserName, String Password) {
         log.info("Signing in as user: " + UserName);
 
         OperationResult<Token> operationResult = signService.signIn(UserName, Password);
@@ -114,6 +119,26 @@ public class APILogin {
         signInAsUser(user);
     }
 
+    @Given("I sign in as user with all permissions except: $permissions")
+    public void signInAsUserWithAllPermissionsExcept(String permString) {
+        signInAsUser(ADMIN_ROLE);
+
+        User user = userService.getOrCreateUserWithAllPermissionsExcept(permString);
+        Assert.assertNotNull(user);
+
+        signInAsUser(user);
+    }
+
+    @Given("I sign in as user with all permissions")
+    public void signInAsUserWithAllPermissions() {
+        signInAsUser(ADMIN_ROLE);
+
+        User user = userService.getOrCreateUserWithAllPermissions();
+        Assert.assertNotNull(user);
+
+        signInAsUser(user);
+    }
+
     @Given("Set new permissions: $permissions to current user and relogin")
     public void setNewPermissionToCurrentUserAndRelogin(String permString) {
         List<String> permissions = StringUtils.splitToList(permString);
@@ -129,13 +154,13 @@ public class APILogin {
         String[] classifications = StringUtils.splitToArray(value);
 
         User user = User.newBuilder()
-                .randomUser()
+                .newUser()
                 .withClassification(classifications)
                 .withAllPermission()
                 .withAllSources()
                 .build();
 
-        User createdUser = userService.createUserWithPermissions(user);
+        User createdUser = userService.getOrCreateUserWithPermissions(user);
         signInAsUser(createdUser);
     }
 
@@ -145,7 +170,7 @@ public class APILogin {
         String[] orgUnits = StringUtils.splitToArray(orgUnitsString);
 
         User user = User.newBuilder()
-                .randomUser()
+                .newUser()
                 .withAllClassification()
                 .withAllPermission()
                 .withAllSources()
@@ -157,7 +182,7 @@ public class APILogin {
             userService.addOrgUnit(user, team.getId());
         }
 
-        User createdUser = userService.createUserWithPermissions(user);
+        User createdUser = userService.getOrCreateUserWithPermissions(user);
         signInAsUser(createdUser);
     }
 
