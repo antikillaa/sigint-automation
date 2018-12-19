@@ -1,6 +1,6 @@
 Meta:
 @API
-@component Information management
+@component Information Management
 @story reportCategory
 
 
