@@ -215,7 +215,6 @@ Examples:
 |INTERNAL|
 
 Scenario: Take ownership a RFI via send button
-Meta:@wip
 When I send generate RFI number request
 Then Request is successful
 
@@ -235,13 +234,17 @@ Then RFI is sent
 When I get allowed RFI actions
 Then Request is successful
 
-When I send Take ownership a <type> RFI request
+When I send get owner a RFI in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a <type> RFI request
 Then Request is successful
 Then RFI is ownershipped
 
 Examples:
 |type|
 |EXTERNAL|
+|INTERNAL|
 
 Scenario: Complete a RFI via send button
 When I send generate RFI number request
@@ -260,7 +263,7 @@ Then Request is successful
 When I get allowed RFI actions
 Then Request is successful
 
-When I send get owner members for Submit for Approval a RFI request
+When I send get owner a RFI in Submit for Approval request
 Then Request is successful
 
 When I send Submit for Approval a <type> RFI request

@@ -103,20 +103,22 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.remove(lastRFI, actionId);
     }
 
-    @When("I send get owner members for $state a RFI request")
-    public void sendGetOwnersMembersRFIRequest(String state) {
+    @When("I send get owner a RFI in $state request")
+    public void sendGetOwnerRFIRequest(String state) {
+        RequestForInformation lastreport = Entities.getRequestForInformations().getLatest();
         String actionId = getRequestAdress(state);
-        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
-        OperationResult<List<CurrentOwner>> currentOwnerMembers = serviceRequestForInformation.possibleOwnersMembers(lastRFI, actionId);
-        context.put("currentOwner", currentOwnerMembers.getEntity());
+
+        OperationResult<List<NextOwners>> nextOwner = serviceRequestForInformation.possibleOwner(lastreport, actionId);
+        context.put("nextOwner", nextOwner.getEntity());
     }
 
-    @When("I send get owner teams a $type RFI request")
-    public void getOwnersTeamsRFI(String type) {
-        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
-        OperationResult<List<CurrentOwner>> currentOwnersTeams = serviceRequestForInformation.possibleOwnersTeams(lastRFI);
-        context.put("currentOwner", currentOwnersTeams.getEntity());
-        context.put("requestForInformation", lastRFI);
+    @When("I send get owner a report in $state request")
+    public void sendGetOwnerReportRequest(String state) {
+        RequestForInformation lastreport = Entities.getRequestForInformations().getLatest();
+        String actionId = getRequestAdress(state);
+
+        OperationResult<List<NextOwners>> nextOwner = serviceRequestForInformation.possibleOwner(lastreport, actionId);
+        context.put("nextOwner", nextOwner.getEntity());
     }
 
     public void submitRFI(String state) {
@@ -166,10 +168,11 @@ public class APIRequestForInformationSteps extends APISteps {
     }
 
     public void takeOwnershipRFI(String state) {
-        RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
-        lastRFI.setComment("QE_auto " + RandomStringUtils.randomAlphabetic(5));
+        RequestForInformation report = Entities.getRequestForInformations().getLatest();
+        List<NextOwners> nextOwners = context.get("nextOwner", List.class);
+        report.setNextOwners(nextOwners);
         String actionId = getRequestAdress(state);
-        serviceRequestForInformation.takeOwnership(lastRFI, actionId);
+        serviceRequestForInformation.takeOwnership(report, actionId);
     }
 
     @When("I send unassign a RFI request")
