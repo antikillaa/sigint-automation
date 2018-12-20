@@ -31,6 +31,22 @@ public class PageUtils {
         return result;
     }
 
+    public static List<String> convertElementsCollectionToStringList(ElementsCollection elementsCollection, boolean removeTrailingComma,boolean removemptystring) {
+        List<String> result = new ArrayList<>();
+        for (SelenideElement element : elementsCollection) {
+            String textToAdd = element.getText().trim();
+            if((textToAdd.length()>0)) {
+                if (removeTrailingComma && textToAdd.endsWith(",")) {
+                    textToAdd = textToAdd.substring(0, textToAdd.length() - 1);
+
+                }
+                result.add(textToAdd);
+            }
+
+        }
+        return result;
+    }
+
     public static String bindXPaths(String firstXPath, String secondXPath, String... additionalXPaths) {
         String resultXPath = firstXPath + " | " + secondXPath;
         for (String xPath : additionalXPaths) {

@@ -4,18 +4,13 @@ import com.codeborne.selenide.SelenideElement;
 import ae.pegasus.framework.constants.controls.ControlType;
 import ae.pegasus.framework.constants.special.reports_requests.ReportAndRequestAction;
 import ae.pegasus.framework.constants.special.reports_requests.ReportAndRequestField;
-import ae.pegasus.framework.elements.controls.dropdown.DropDown;
-import ae.pegasus.framework.elements.controls.dropdown.FileSelector;
-import ae.pegasus.framework.pages.basic_pages.api.BasePage;
 import ae.pegasus.framework.utils.PageUtils;
 
 import java.util.List;
 
 import static com.codeborne.selenide.Selenide.$$x;
-import static com.codeborne.selenide.Selenide.$x;
-import static ae.pegasus.framework.constants.CommonXPaths.INTERNAL_LOADING_XPATH;
 
-public abstract class BaseVerifyReportOrRequestPage extends BaseReportOrRequestPage {
+public abstract class BaseVerifyIMPage extends BaseIMPage {
 
     protected String getSingleValue(SelenideElement fieldElement, ControlType controlType) {
         switch (controlType) {

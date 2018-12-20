@@ -44,6 +44,13 @@
     <bean id="updateOperatorReportSteps" class="ae.pegasus.framework.steps.special.reports_requests.operator_report.UIUpdateOperatorReportSteps" />
     <bean id="verifyOperatorReportFieldsSteps" class="ae.pegasus.framework.steps.special.reports_requests.operator_report.UIVerifyOperatorReportFieldsSteps" />
     <bean id="verifyOperatorReportButtonsSteps" class="ae.pegasus.framework.steps.special.reports_requests.operator_report.UIVerifyOperatorReportButtonsSteps" />
+
+
+    <!--Operator report steps-->
+    <bean id="updateMasterReportSteps" class="ae.pegasus.framework.steps.special.reports_requests.master_report.UIUpdateMasterReportSteps" />
+    <bean id="verifyMasterReportFieldsSteps" class="ae.pegasus.framework.steps.special.reports_requests.master_report.UIVerifyMasterReportFieldsSteps" />
+    <bean id="verifyMasterReportButtonsSteps" class="ae.pegasus.framework.steps.special.reports_requests.master_report.UIVerifyMasterReportButtonsSteps" />
+
     <!--Request for information (RFI) steps-->
     <bean id="requestForInformationActionsSteps" class="ae.pegasus.framework.steps.special.reports_requests.request_for_information.UIRequestForInformationActionsSteps" />
     <bean id="updateRequestForInformationSteps" class="ae.pegasus.framework.steps.special.reports_requests.request_for_information.UIUpdateRequestForInformationSteps" />

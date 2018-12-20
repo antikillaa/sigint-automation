@@ -1,10 +1,10 @@
-package ae.pegasus.framework.pages.special.reports_requests.operator_report;
+package ae.pegasus.framework.pages.special.reports_requests.master_report;
 
-import com.codeborne.selenide.SelenideElement;
 import ae.pegasus.framework.constants.special.reports_requests.operator_report.OperatorMasterReportField;
-import ae.pegasus.framework.pages.special.reports_requests.BaseUpdateIMPage;
+import ae.pegasus.framework.pages.special.reports_requests.operator_report.UpdateOperatorReportPage;
+import com.codeborne.selenide.SelenideElement;
 
-public class UpdateOperatorReportPage extends BaseUpdateIMPage {
+public class UpdateMasterReportPage extends UpdateOperatorReportPage {
     private SelenideElement getBasicDataElement(OperatorMasterReportField field) {
         return getBasicDataElement(field.getControlType(), getFieldByLabel(field.getFieldName()));
     }

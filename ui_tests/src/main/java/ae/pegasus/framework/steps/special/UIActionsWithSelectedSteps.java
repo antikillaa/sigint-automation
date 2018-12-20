@@ -11,6 +11,12 @@ public class UIActionsWithSelectedSteps {
     }
 
 
+    @When("I create new master report for selected items")
+    public void iCreateNewMasterReport() {
+        Pages.actionsWithSelected().addSelectedToMasterReport();
+        Pages.attachToReportPage().createNewMasterReport();
+    }
+
     @When("I add selected items to the existing report ($reportName)")
     public void iAddSelectedToExistingReport(String reportName) {
         Pages.actionsWithSelected().addSelectedToReport();

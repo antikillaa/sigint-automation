@@ -3,12 +3,12 @@ package ae.pegasus.framework.pages.special.reports_requests.request_for_informat
 import com.codeborne.selenide.SelenideElement;
 import ae.pegasus.framework.constants.controls.ControlType;
 import ae.pegasus.framework.constants.special.reports_requests.request_for_information.RequestForInformationField;
-import ae.pegasus.framework.pages.special.reports_requests.BaseVerifyReportOrRequestPage;
+import ae.pegasus.framework.pages.special.reports_requests.BaseVerifyIMPage;
 import ae.pegasus.framework.utils.PageUtils;
 
 import java.util.List;
 
-public class VerifyRequestForInformationPage extends BaseVerifyReportOrRequestPage {
+public class VerifyRequestForInformationPage extends BaseVerifyIMPage {
 
     public String getSingleValue(RequestForInformationField field) {
         return getSingleValue(getFieldByLabel(field.getFieldName()), field.getControlType());

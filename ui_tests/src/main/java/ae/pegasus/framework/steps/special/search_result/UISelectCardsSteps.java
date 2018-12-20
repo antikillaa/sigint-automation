@@ -1,12 +1,12 @@
 package ae.pegasus.framework.steps.special.search_result;
 
-import ae.pegasus.framework.utils.ParametersHelper;
 import ae.pegasus.framework.constants.special.search_results.SearchResultsEntity;
 import ae.pegasus.framework.constants.special.search_results.SearchResultsEvent;
+import ae.pegasus.framework.pages.Pages;
+import ae.pegasus.framework.utils.ParametersHelper;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.When;
 import org.jbehave.core.model.ExamplesTable;
-import ae.pegasus.framework.pages.Pages;
 
 public class UISelectCardsSteps {
 
@@ -87,4 +87,10 @@ public class UISelectCardsSteps {
     public void iSelectAllCIOEntities(ExamplesTable identifiers) {
         selectAllCards(SearchResultsEntity.CIO, identifiers);
     }
+
+    @Given("I select all cards on the Search page")
+    public void iSelectAllCards() {
+        Pages.searchResultsAsCardsPage().selectAllCardsOnSearchPage();
+    }
+
 }

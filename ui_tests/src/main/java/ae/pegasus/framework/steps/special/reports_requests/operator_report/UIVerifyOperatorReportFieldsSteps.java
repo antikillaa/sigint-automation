@@ -4,7 +4,7 @@ import ae.pegasus.framework.assertion.Asserter;
 import ae.pegasus.framework.utils.ParametersHelper;
 import ae.pegasus.framework.constants.profiler.ProfilerWidget;
 import ae.pegasus.framework.constants.special.reports_requests.ReportAndRequestField;
-import ae.pegasus.framework.constants.special.reports_requests.operator_report.OperatorReportField;
+import ae.pegasus.framework.constants.special.reports_requests.operator_report.OperatorMasterReportField;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.model.ExamplesTable;
 import ae.pegasus.framework.pages.Pages;
@@ -16,14 +16,14 @@ import java.util.List;
 import static ae.pegasus.framework.constants.profiler.ProfilerWidget.*;
 
 public class UIVerifyOperatorReportFieldsSteps {
-    private void checkListValue(OperatorReportField field, List<String> expectedValues, String verifiedParameter) {
+    private void checkListValue(OperatorMasterReportField field, List<String> expectedValues, String verifiedParameter) {
         AssertUtils.checkLists(
                 Pages.verifyOperatorReportPage().getListOfValues(field),
                 expectedValues,
                 verifiedParameter);
     }
 
-    private void checkSingleValue(OperatorReportField field, String expectedValue, String verifiedParameter) {
+    private void checkSingleValue(OperatorMasterReportField field, String expectedValue, String verifiedParameter) {
         Asserter.getAsserter().softAssertEquals(
                 Pages.verifyOperatorReportPage().getSingleValue(field),
                 expectedValue,
@@ -74,24 +74,24 @@ public class UIVerifyOperatorReportFieldsSteps {
 
     @Then("I should see Request Number ($requestNumber) in operator report")
     public void iShouldSeeRequestNumber(String requestNumber) {
-        checkSingleValue(OperatorReportField.REQUEST_NUMBER, requestNumber, "Request Number in operator report");
+        checkSingleValue(OperatorMasterReportField.REQUEST_NUMBER, requestNumber, "Request Number in operator report");
     }
 
     @Then("I should see Created For ($createdFor) in operator report")
     public void iShouldSeeCreatedFor(String createdFor) {
-        checkSingleValue(OperatorReportField.CREATED_FOR, createdFor, "Created For in operator report");
+        checkSingleValue(OperatorMasterReportField.CREATED_FOR, createdFor, "Created For in operator report");
     }
 
     @Then("I should see File Name/Case Name(s) ($fileOrCaseNames) in operator report")
     public void iShouldSeeFileOrCaseNames(ExamplesTable fileOrCaseNames) {
-        checkListValue(OperatorReportField.FILE_OR_CASE_NAME,
+        checkListValue(OperatorMasterReportField.FILE_OR_CASE_NAME,
                 Arrays.asList(ParametersHelper.processExampleTable(fileOrCaseNames)),
                 "File Name/Case Name(s) in operator report");
     }
 
     @Then("I should see Organization Units ($orgUnits) in operator report")
     public void iShouldSeeOrgUnits(ExamplesTable orgUnits) {
-        checkListValue(OperatorReportField.ORGANIZATION_UNITS,
+        checkListValue(OperatorMasterReportField.ORGANIZATION_UNITS,
                 Arrays.asList(ParametersHelper.processExampleTable(orgUnits)),
                 "Organization Units in operator report");
     }
@@ -107,17 +107,17 @@ public class UIVerifyOperatorReportFieldsSteps {
 
     @Then("I should see Description ($descriptionLines) in operator report")
     public void iShouldSeeDescription(ExamplesTable descriptionLines) {
-        checkSingleValue(OperatorReportField.DESCRIPTION, convertToString(descriptionLines), "Description in operator report");
+        checkSingleValue(OperatorMasterReportField.DESCRIPTION, convertToString(descriptionLines), "Description in operator report");
     }
 
     @Then("I should see Considerations ($considerationsLines) in operator report")
     public void iShouldSeeConsiderations(ExamplesTable considerationsLines) {
-        checkSingleValue(OperatorReportField.CONSIDERATIONS, convertToString(considerationsLines), "Considerations in operator report");
+        checkSingleValue(OperatorMasterReportField.CONSIDERATIONS, convertToString(considerationsLines), "Considerations in operator report");
     }
 
     @Then("I should see Recommendations ($recommendationsLines) in operator report")
     public void iShouldSeeRecommendations(ExamplesTable recommendationsLines) {
-        checkSingleValue(OperatorReportField.RECOMMENDATIONS, convertToString(recommendationsLines), "Recommendations in operator report");
+        checkSingleValue(OperatorMasterReportField.RECOMMENDATIONS, convertToString(recommendationsLines), "Recommendations in operator report");
     }
 
     @Then("I should see Notes ($notesLines) in operator report")

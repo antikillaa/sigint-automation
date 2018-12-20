@@ -2,20 +2,12 @@ package ae.pegasus.framework.pages.special.reports_requests;
 
 import com.codeborne.selenide.SelenideElement;
 import ae.pegasus.framework.constants.controls.ControlType;
-import ae.pegasus.framework.constants.special.reports_requests.ReportAndRequestAction;
 import ae.pegasus.framework.constants.special.reports_requests.ReportAndRequestField;
 import ae.pegasus.framework.elements.controls.dropdown.DropDown;
 import ae.pegasus.framework.elements.controls.dropdown.FileSelector;
-import ae.pegasus.framework.pages.basic_pages.api.BasePage;
 import ae.pegasus.framework.utils.PageUtils;
 
-import java.util.List;
-
-import static com.codeborne.selenide.Selenide.$$x;
-import static com.codeborne.selenide.Selenide.$x;
-import static ae.pegasus.framework.constants.CommonXPaths.INTERNAL_LOADING_XPATH;
-
-public abstract class BaseUpdateReportOrRequestPage extends BaseReportOrRequestPage {
+public abstract class BaseUpdateIMPage extends BaseIMPage {
 
     private SelenideElement getBasicDataElement(ReportAndRequestField field) {
         return getBasicDataElement(field.getControlType(), getFieldByLabel(field.getFieldName()));

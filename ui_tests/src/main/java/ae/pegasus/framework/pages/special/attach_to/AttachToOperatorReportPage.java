@@ -14,7 +14,9 @@ public class AttachToOperatorReportPage extends BaseModalDialogPage {
     private SelenideElement getCreateNewReportButton() {
         return getDialogBody().$x(".//pg-btn[@label='Create New Report']");
     }
-
+    private SelenideElement getCreateNewMasterReportButton() {
+        return getDialogBody().$x(".//pg-btn[@label='Create New Master Report']");
+    }
     private DropDown getAttachToExistingReportDropDown() {
         return new DropDown(getDialogBody().$x(".//attach-to-report//pg-select"), false);
     }
@@ -26,6 +28,11 @@ public class AttachToOperatorReportPage extends BaseModalDialogPage {
 
     public void createNewReport() {
         getCreateNewReportButton().click();
+        waitDialogLoading();
+    }
+
+    public void createNewMasterReport() {
+        getCreateNewMasterReportButton().click();
         waitDialogLoading();
     }
 }

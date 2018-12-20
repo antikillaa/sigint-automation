@@ -1,21 +1,13 @@
 package ae.pegasus.framework.pages.special.reports_requests;
 
-import com.codeborne.selenide.SelenideElement;
-import ae.pegasus.framework.constants.controls.ControlType;
 import ae.pegasus.framework.constants.special.reports_requests.ReportAndRequestAction;
-import ae.pegasus.framework.constants.special.reports_requests.ReportAndRequestField;
-import ae.pegasus.framework.elements.controls.dropdown.DropDown;
-import ae.pegasus.framework.elements.controls.dropdown.FileSelector;
 import ae.pegasus.framework.pages.basic_pages.api.BasePage;
-import ae.pegasus.framework.utils.PageUtils;
+import com.codeborne.selenide.SelenideElement;
 
-import java.util.List;
-
-import static com.codeborne.selenide.Selenide.$$x;
-import static com.codeborne.selenide.Selenide.$x;
 import static ae.pegasus.framework.constants.CommonXPaths.INTERNAL_LOADING_XPATH;
+import static com.codeborne.selenide.Selenide.$x;
 
-public abstract class BaseReportOrRequestPage extends BasePage {
+public abstract class BaseIMPage extends BasePage {
 
     @Override
     public boolean isPageDisplayed() {
@@ -39,6 +31,12 @@ public abstract class BaseReportOrRequestPage extends BasePage {
     protected SelenideElement getReportOrRequestHeader() {
         return getReportOrRequestBase().$x(".//div[@class='im-document__header']");
     }
+
+    protected SelenideElement getMasterReportOriginatingReportsBlock() {
+        return getReportOrRequestBase().$x(".//div[@slot ='document-records']");
+    }
+
+
 
     protected SelenideElement getReportOrRequestStaticInformationBlock() {
         return getReportOrRequestHeader().$x(".//div[contains(@class,'media-body')]");

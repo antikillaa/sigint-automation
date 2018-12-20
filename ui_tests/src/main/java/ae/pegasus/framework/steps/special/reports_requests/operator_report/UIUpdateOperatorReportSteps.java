@@ -4,7 +4,7 @@ import ae.pegasus.framework.utils.ParametersHelper;
 import ae.pegasus.framework.constants.special.modal_dialog.ModalDialogButton;
 import ae.pegasus.framework.constants.special.reports_requests.ReportAndRequestAction;
 import ae.pegasus.framework.constants.special.reports_requests.ReportAndRequestField;
-import ae.pegasus.framework.constants.special.reports_requests.operator_report.OperatorReportField;
+import ae.pegasus.framework.constants.special.reports_requests.operator_report.OperatorMasterReportField;
 import ae.pegasus.framework.context.Context;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -29,22 +29,22 @@ public class UIUpdateOperatorReportSteps {
 
     @When("I set Request Number ($requestNumber) in operator report")
     public void iSetRequestNumber(String requestNumber) {
-        Pages.updateOperatorReportPage().setSingleValueData(OperatorReportField.REQUEST_NUMBER, requestNumber);
+        Pages.updateOperatorReportPage().setSingleValueData(OperatorMasterReportField.REQUEST_NUMBER, requestNumber);
     }
 
     @When("I set Created For ($createdFor) in operator report")
     public void iSetCreatedFor(String createdFor) {
-        Pages.updateOperatorReportPage().setSingleValueData(OperatorReportField.CREATED_FOR, createdFor);
+        Pages.updateOperatorReportPage().setSingleValueData(OperatorMasterReportField.CREATED_FOR, createdFor);
     }
 
     @When("I set File Name/Case Name ($fileOrCaseNames) in operator report")
     public void iSetFileOrCaseName(ExamplesTable fileOrCaseNames) {
-        Pages.updateOperatorReportPage().setMultiValueData(OperatorReportField.FILE_OR_CASE_NAME, ParametersHelper.processExampleTable(fileOrCaseNames));
+        Pages.updateOperatorReportPage().setMultiValueData(OperatorMasterReportField.FILE_OR_CASE_NAME, ParametersHelper.processExampleTable(fileOrCaseNames));
     }
 
     @When("I set Organization Units ($orgUnits) in operator report")
     public void iSetOrgUnits(ExamplesTable orgUnits) {
-        Pages.updateOperatorReportPage().setMultiValueData(OperatorReportField.ORGANIZATION_UNITS, ParametersHelper.processExampleTable(orgUnits));
+        Pages.updateOperatorReportPage().setMultiValueData(OperatorMasterReportField.ORGANIZATION_UNITS, ParametersHelper.processExampleTable(orgUnits));
     }
 
     @When("I set Subject ($subject) in operator report")
@@ -54,17 +54,17 @@ public class UIUpdateOperatorReportSteps {
 
     @When("I set Description ($descriptionLines) in operator report")
     public void iSetDescription(ExamplesTable descriptionLines) {
-        Pages.updateOperatorReportPage().setMultiValueData(OperatorReportField.DESCRIPTION, ParametersHelper.processExampleTable(descriptionLines));
+        Pages.updateOperatorReportPage().setMultiValueData(OperatorMasterReportField.DESCRIPTION, ParametersHelper.processExampleTable(descriptionLines));
     }
 
     @When("I set Considerations ($considerationLines) in operator report")
     public void iSetConsiderations(ExamplesTable considerationLines) {
-        Pages.updateOperatorReportPage().setMultiValueData(OperatorReportField.CONSIDERATIONS, ParametersHelper.processExampleTable(considerationLines));
+        Pages.updateOperatorReportPage().setMultiValueData(OperatorMasterReportField.CONSIDERATIONS, ParametersHelper.processExampleTable(considerationLines));
     }
 
     @When("I set Recommendations ($recommendationLines) in operator report")
     public void iSetRecommendations(ExamplesTable recommendationLines) {
-        Pages.updateOperatorReportPage().setMultiValueData(OperatorReportField.RECOMMENDATIONS, ParametersHelper.processExampleTable(recommendationLines));
+        Pages.updateOperatorReportPage().setMultiValueData(OperatorMasterReportField.RECOMMENDATIONS, ParametersHelper.processExampleTable(recommendationLines));
     }
 
     @When("I set Notes ($notesLines) in operator report")

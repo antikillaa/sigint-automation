@@ -16,6 +16,7 @@ public abstract class BasePageWithSearch extends BasePage {
     private final String SEARCH_RELOAD_BUTTON = "Reload";
     private final String SEARCH_RESET_BUTTON = "Reset";
 
+
     private static ThreadLocal<SearchStates> searchStates = ThreadLocal.withInitial(SearchStates::new);
 
     @Override
@@ -106,6 +107,8 @@ public abstract class BasePageWithSearch extends BasePage {
     public void resetSearch() {
         getSearchActionButton(SEARCH_RESET_BUTTON).shouldBe(enabledFor(100)).click();
     }
+
+
 
     protected SelenideElement getSortByBlock() {
         return $x("//span[contains(., 'Sort by')]/..");

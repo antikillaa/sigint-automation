@@ -19,6 +19,16 @@ public class UISearchFilterSetupSteps {
         Pages.searchFilterPage().setMultiValueSetting(RECORD_TYPE, ParametersHelper.processExampleTable(settingsValues));
     }
 
+    @Given("I set Status Type to ($settingsValues) on the Search Filter page")
+    public void iSetStatusType(ExamplesTable settingsValues) {
+        Pages.searchFilterPage().setMultiValueSetting(STATUS, ParametersHelper.processExampleTable(settingsValues));
+    }
+
+    @Given("I set File or Case Type to ($settingsValues) on the Search Filter page")
+    public void iSetFileCaseName(ExamplesTable settingsValues) {
+        Pages.searchFilterPage().setMultiValueSetting(FILECASE, ParametersHelper.processExampleTable(settingsValues));
+    }
+
     @Given("I set Data Sub-Source to ($settingsValues) on the Search Filter page")
     public void iSetDataSubSource(ExamplesTable settingsValues) {
         Pages.searchFilterPage().setMultiValueSetting(DATA_SUB_SOURCE, ParametersHelper.processExampleTable(settingsValues));

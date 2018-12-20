@@ -15,6 +15,7 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$x;
 import static ae.pegasus.framework.constants.search.search.SearchActionButton.DELETE;
+import static com.codeborne.selenide.Selenide.$x;
 
 public class SearchResultsAsCardsPage extends SearchResultsPage {
 
@@ -26,6 +27,7 @@ public class SearchResultsAsCardsPage extends SearchResultsPage {
     private ElementsCollection getListOfCards() {
         return $$x(CARD_XPATH);
     }
+    private final String SEARCH_SELECT_ALL = " Select All ";
 
     private List<SelenideElement> getAllCardsWithIdentifiers(List<String> xPathsToIdentifiers, String...identifiersValues) {
         if (identifiersValues.length < 1) {
@@ -165,6 +167,11 @@ public class SearchResultsAsCardsPage extends SearchResultsPage {
         openSearchResultsForCategory(entity);
         selectAllCards(getAllCardsWithIdentifiers(getXPathsToIdentifiers(entity), identifiersValues));
     }
+
+    public void selectAllCardsOnSearchPage() {
+        $x("//pg-btn//span[text()='" + SEARCH_SELECT_ALL + "']").click();
+    }
+
 
     public void deleteAllCardsWithIdentifiers(SearchResultsEntity entity, String...identifiersValues) {
         openSearchResultsForCategory(entity);

@@ -6,11 +6,11 @@ import ae.pegasus.framework.constants.special.modal_dialog.ModalDialogField;
 import ae.pegasus.framework.constants.special.reports_requests.ReportAndRequestAction;
 import ae.pegasus.framework.constants.special.reports_requests.request_for_information.RequestForInformationField;
 import ae.pegasus.framework.pages.Pages;
-import ae.pegasus.framework.pages.special.reports_requests.BaseUpdateReportOrRequestPage;
+import ae.pegasus.framework.pages.special.reports_requests.BaseUpdateIMPage;
 
 import static com.codeborne.selenide.Condition.visible;
 
-public class UpdateRequestForInformationPage extends BaseUpdateReportOrRequestPage {
+public class UpdateRequestForInformationPage extends BaseUpdateIMPage {
     private SelenideElement getBasicDataElement(RequestForInformationField field) {
         return getBasicDataElement(field.getControlType(), getFieldByLabel(field.getFieldName()));
     }

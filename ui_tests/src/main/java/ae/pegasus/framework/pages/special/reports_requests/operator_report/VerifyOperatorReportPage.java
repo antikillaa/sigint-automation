@@ -3,9 +3,8 @@ package ae.pegasus.framework.pages.special.reports_requests.operator_report;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import ae.pegasus.framework.constants.profiler.ProfilerWidget;
-import ae.pegasus.framework.constants.special.reports_requests.operator_report.OperatorReportField;
-import ae.pegasus.framework.pages.special.reports_requests.BaseUpdateReportOrRequestPage;
-import ae.pegasus.framework.pages.special.reports_requests.BaseVerifyReportOrRequestPage;
+import ae.pegasus.framework.constants.special.reports_requests.operator_report.OperatorMasterReportField;
+import ae.pegasus.framework.pages.special.reports_requests.BaseVerifyIMPage;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.Map;
 
 import static com.codeborne.selenide.Condition.text;
 
-public class VerifyOperatorReportPage extends BaseVerifyReportOrRequestPage {
+public class VerifyOperatorReportPage extends BaseVerifyIMPage {
 
     private ElementsCollection getAllCardsAttached() {
         return getReportOrRequestBase().$$x(".//report-record");
@@ -83,11 +82,11 @@ public class VerifyOperatorReportPage extends BaseVerifyReportOrRequestPage {
         return result;
     }
 
-    public String getSingleValue(OperatorReportField field) {
+    public String getSingleValue(OperatorMasterReportField field) {
         return getSingleValue(getFieldByLabel(field.getFieldName()), field.getControlType());
     }
 
-    public List<String> getListOfValues(OperatorReportField field) {
+    public List<String> getListOfValues(OperatorMasterReportField field) {
         return getListOfValues(getFieldByLabel(field.getFieldName()), field.getControlType());
     }
 }

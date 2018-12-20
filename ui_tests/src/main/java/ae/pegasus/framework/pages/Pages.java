@@ -3,7 +3,9 @@ package ae.pegasus.framework.pages;
 import ae.pegasus.framework.pages.basic_pages.AppMainPage;
 import ae.pegasus.framework.pages.basic_pages.AppNavigation;
 import ae.pegasus.framework.pages.basic_pages.ModalDialogPage;
-import ae.pegasus.framework.pages.cbfinder.*;
+import ae.pegasus.framework.pages.cbfinder.CBFinderBasePage;
+import ae.pegasus.framework.pages.cbfinder.CBFinderExistEntityPage;
+import ae.pegasus.framework.pages.cbfinder.CBFinderTargetPage;
 import ae.pegasus.framework.pages.cbfinder.new_entity.CBFinderNewCasePage;
 import ae.pegasus.framework.pages.cbfinder.new_entity.CBFinderNewFilePage;
 import ae.pegasus.framework.pages.profiler.CreateTargetPage;
@@ -20,10 +22,12 @@ import ae.pegasus.framework.pages.special.attach_to.AssignRecordsPage;
 import ae.pegasus.framework.pages.special.attach_to.AttachToOperatorReportPage;
 import ae.pegasus.framework.pages.special.attach_to.AttachToTargetPage;
 import ae.pegasus.framework.pages.special.create_event_record.ManualRecordPage;
-import ae.pegasus.framework.pages.special.reports_requests.operator_report.UpdateOperatorReportPage;
-import ae.pegasus.framework.pages.special.reports_requests.operator_report.VerifyOperatorReportPage;
 import ae.pegasus.framework.pages.special.queues.QueuesBasePage;
 import ae.pegasus.framework.pages.special.queues.SearchQueuesTab;
+import ae.pegasus.framework.pages.special.reports_requests.master_report.UpdateMasterReportPage;
+import ae.pegasus.framework.pages.special.reports_requests.master_report.VerifyMasterReportPage;
+import ae.pegasus.framework.pages.special.reports_requests.operator_report.UpdateOperatorReportPage;
+import ae.pegasus.framework.pages.special.reports_requests.operator_report.VerifyOperatorReportPage;
 import ae.pegasus.framework.pages.special.reports_requests.request_for_information.RequestForInformationSendingDialog;
 import ae.pegasus.framework.pages.special.reports_requests.request_for_information.UpdateRequestForInformationPage;
 import ae.pegasus.framework.pages.special.reports_requests.request_for_information.VerifyRequestForInformationPage;
@@ -63,6 +67,15 @@ public class Pages {
     public static VerifyOperatorReportPage verifyOperatorReportPage() {
         return page(VerifyOperatorReportPage.class);
     }
+
+    public static UpdateMasterReportPage updateMasterrReportPage() {
+        return page(UpdateMasterReportPage.class);
+    }
+
+    public static VerifyMasterReportPage verifyMasterReportPage() {
+        return page(VerifyMasterReportPage.class);
+    }
+
 
     public static UpdateRequestForInformationPage updateRequestForInformationPage() {
         return page(UpdateRequestForInformationPage.class);
