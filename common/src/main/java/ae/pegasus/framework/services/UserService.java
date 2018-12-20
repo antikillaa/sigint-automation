@@ -19,7 +19,6 @@ import java.util.stream.Stream;
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class UserService implements EntityService<User> {
 
@@ -227,41 +226,76 @@ public class UserService implements EntityService<User> {
         }
     }
 
-    public User createUserWithPermissions(String permString) {
+    public User getOrCreateUserWithAllPermissions() {
         User user = User.newBuilder()
-                .randomUser()
+                .newUser()
+                .withAllPermission()
+                .withAllClassification()
+                .withAllSources()
+                .build();
+
+        return getOrCreateUserWithPermissions(user, null);
+    }
+
+    public User getOrCreateUserWithAllPermissionsExcept(String permString) {
+        User user = User.newBuilder()
+                .newUser()
+                .withAllPermission()
+                .exceptPermissions(StringUtils.splitToArray(permString))
+                .withAllClassification()
+                .withAllSources()
+                .build();
+
+        return getOrCreateUserWithPermissions(user, null);
+    }
+
+    public User getOrCreateUserWithPermissions(String permString) {
+        User user = User.newBuilder()
+                .newUser()
                 .withPermission(StringUtils.splitToArray(permString))
                 .withAllClassification()
                 .withAllSources()
                 .build();
 
-        return createUserWithPermissions(user, null);
+        return getOrCreateUserWithPermissions(user, null);
     }
 
-    public User createUserWithPermissions(User user) {
-        return createUserWithPermissions(user, null);
+    public User getOrCreateUserWithPermissions(User user) {
+        return getOrCreateUserWithPermissions(user, null);
     }
 
-    public User createUserWithPermissions(User user, String orgUnitID) {
+    public User getOrCreateUserWithPermissions(User entity, String orgUnitID) {
+        String permissions = entity.getDefaultPermission().getActions()
+                .toString().replace("[", "").replace("]", "");
+
+        User userWithPermissions = getUserWithPermissions(permissions);
+        if (userWithPermissions != null)
+            return userWithPermissions;
+
         // update orgUnits
-        user = (orgUnitID == null || orgUnitID.isEmpty()) ?
-                addOrgUnit(user, getOrCreateDefaultTeamId()) :
-                addOrgUnit(user, orgUnitID);
+        entity = (orgUnitID == null || orgUnitID.isEmpty()) ?
+                addOrgUnit(entity, getOrCreateDefaultTeamId()) :
+                addOrgUnit(entity, orgUnitID);
 
         // create user
-        OperationResult<User> userOperationResult = add(user);
-        assertTrue("Unable create User: " + toJsonString(user), userOperationResult.isSuccess());
-        user = userOperationResult.getEntity();
+        OperationResult<User> userOperationResult = add(entity);
+        if (userOperationResult.isSuccess()) {
+            userWithPermissions = userOperationResult.getEntity();
 
-        // update password
-        user.setNewPassword(new UserPasswordProvider().generate(PASSWORD_LENGTH));
-        OperationResult<AuthResponseResult> firstPasswordChangeResult = changeTempPassword(user);
-        if (!firstPasswordChangeResult.isSuccess()) {
-            log.error(firstPasswordChangeResult.getMessage());
-            throw new AssertionError("Unable change password for new User: " + toJsonString(user));
+            // update user password
+            userWithPermissions.setNewPassword(new UserPasswordProvider().generate(PASSWORD_LENGTH));
+            OperationResult<AuthResponseResult> firstPasswordChangeResult = changeTempPassword(userWithPermissions);
+            if (!firstPasswordChangeResult.isSuccess()) {
+                log.error(firstPasswordChangeResult.getMessage());
+                throw new AssertionError("Unable change password for new User: " + toJsonString(userWithPermissions));
+            }
+
+            // update user storage
+            permissionsUsersMap.put(permissions, Stream.of(userWithPermissions).collect(Collectors.toList()));
+        } else {
+            throw new AssertionError("Unable create User: " + toJsonString(entity));
         }
-
-        return user;
+        return userWithPermissions;
     }
 
     public void setPermissions(User user, List<String> permissions) {
@@ -292,18 +326,16 @@ public class UserService implements EntityService<User> {
         return operationResults;
     }
 
-    public User getOrCreateUserWithPermissions(String permString) {
-        log.info("Get Or Create User With Permissions: " + permString);
+    public User getUserWithPermissions(String permissions) {
+        log.info("Find user with Permissions: " + permissions);
 
-        User user;
-        List<User> users = permissionsUsersMap.get(permString);
+        User user = null;
+        List<User> users = permissionsUsersMap.get(permissions);
         if (users == null || users.isEmpty()) {
-            log.info("Users with permissions: " + permString + " not found!\n" + "Create new user with permissions");
-            user = createUserWithPermissions(permString);
-            permissionsUsersMap.put(permString, Stream.of(user).collect(Collectors.toList()));
+            log.info("Users with permissions: " + permissions + " not found!");
         } else {
-            log.info("With permissions: " + permString + " users found: " + users.size());
             user = getRandomItemFromList(users);
+            log.info("User already exist:" + user.getName());
         }
         return user;
     }

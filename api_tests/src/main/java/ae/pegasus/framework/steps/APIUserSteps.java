@@ -46,7 +46,7 @@ public class APIUserSteps extends APISteps {
     }
 
     static User getRandomUser() {
-        return User.newBuilder().randomUser().build();
+        return User.newBuilder().newUser().build();
     }
 
     @When("I send delete user request")
