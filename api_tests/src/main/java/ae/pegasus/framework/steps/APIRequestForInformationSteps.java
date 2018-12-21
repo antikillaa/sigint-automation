@@ -73,6 +73,8 @@ public class APIRequestForInformationSteps extends APISteps {
                 break;
             case "Endorse":
                 endorseRFI(state);
+            case "Unassign":
+                unassignRFI(state);
             default:
                 log.error("State not found");
                 break;
@@ -173,11 +175,14 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.takeOwnership(report, actionId);
     }
 
-    @When("I send unassign a RFI request")
-    public void sendUnassignRFIRequest() {
+    public void unassignRFI(String state) {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
+        String actionId = getRequestAdress(state);
+
+        List<NextOwners> nextOwners = context.get("nextOwner", List.class);
+        lastRFI.setNextOwners(nextOwners);
         lastRFI.setComment("QE_auto " + RandomStringUtils.randomAlphabetic(5));
-        serviceRequestForInformation.unassign(lastRFI);
+        serviceRequestForInformation.unassign(lastRFI, actionId);
     }
 
     @When("I send edit a RFI request")

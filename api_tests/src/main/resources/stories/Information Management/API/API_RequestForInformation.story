@@ -283,37 +283,54 @@ Scenario: Unassign a RFI
 When I send generate RFI number request
 Then Request is successful
 
-When I send get owner teams a <type> RFI request
+When I get allowed RFI actions
 Then Request is successful
 
-When I send send a RFI request
+When I send Save as Draft a <type> RFI request
 Then Request is successful
 
-When I send view a RFI request
+When I get allowed RFI actions
 Then Request is successful
 
-When I send take ownership a RFI request
+When I send Send a <type> RFI request
+Then Request is successful
+Then RFI is sent
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send get owner a RFI in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a <type> RFI request
 Then Request is successful
 Then RFI is ownershipped
 
-When I send unassign a RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send get owner a RFI in Unassign request
+Then Request is successful
+
+When I send Unassign a <type> RFI request
 Then Request is successful
 Then RFI is unassigned
 
 Examples:
 |type|
 |EXTERNAL|
-|INTERNAL|
 
 Scenario: Edit a RFI
 When I send generate RFI number request
 Then Request is successful
 
-When I send create a <type> RFI request
+When I get allowed RFI actions
 Then Request is successful
-And RFI is correct
 
-When I send view a RFI request
+When I send Save as Draft a <type> RFI request
+Then Request is successful
+
+When I get allowed RFI actions
 Then Request is successful
 
 When I send edit a RFI request
