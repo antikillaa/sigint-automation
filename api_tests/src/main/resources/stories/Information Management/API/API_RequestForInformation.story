@@ -76,7 +76,7 @@ Then Request is successful
 When I get allowed RFI actions
 Then Request is successful
 
-When I send get owner members for Submit for Approval a RFI request
+When I send get owner a RFI in Submit for Approval request
 Then Request is successful
 
 When I send Submit for Approval a <type> RFI request
@@ -105,7 +105,7 @@ Then Request is successful
 When I get allowed RFI actions
 Then Request is successful
 
-When I send get owner members for Submit for Approval a RFI request
+When I send get owner a RFI in Submit for Approval request
 Then Request is successful
 
 When I send Submit for Approval a <type> RFI request
@@ -141,7 +141,7 @@ Then Request is successful
 When I get allowed RFI actions
 Then Request is successful
 
-When I send get owner members for Submit for Approval a RFI request
+When I send get owner a RFI in Submit for Approval request
 Then Request is successful
 
 When I send Submit for Approval a <type> RFI request
@@ -196,13 +196,10 @@ When I send Save as Draft a <type> RFI request
 Then Request is successful
 And RFI is correct
 
-When I send view a RFI request
-Then Request is successful
-
 When I get allowed RFI actions
 Then Request is successful
 
-When I send get owner members for Submit for Approval a RFI request
+When I send get owner a RFI in Submit for Approval request
 Then Request is successful
 
 When I send Submit for Approval a <type> RFI request
@@ -246,7 +243,7 @@ Examples:
 |EXTERNAL|
 |INTERNAL|
 
-Scenario: Complete a RFI via send button
+Scenario: Approve a RFI
 When I send generate RFI number request
 Then Request is successful
 
@@ -256,9 +253,6 @@ Then Request is successful
 When I send Save as Draft a <type> RFI request
 Then Request is successful
 And RFI is correct
-
-When I send view a RFI request
-Then Request is successful
 
 When I get allowed RFI actions
 Then Request is successful
@@ -273,13 +267,17 @@ Then RFI is submitted
 When I get allowed RFI actions
 Then Request is successful
 
+When I send get owner a RFI in Approve request
+Then Request is successful
+
 When I send Approve a <type> RFI request
 Then Request is successful
-Then RFI is completed
+Then RFI is Awaiting Assignment
 
 Examples:
 |type|
 |EXTERNAL|
+|INTERNAL|
 
 Scenario: Unassign a RFI
 When I send generate RFI number request

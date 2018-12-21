@@ -176,6 +176,20 @@ public class RequestForInformationService implements EntityService<RequestForInf
         return operationResult;
     }
 
+    public OperationResult<RequestForInformation> endorse(RequestForInformation entity, String actionId) {
+        log.info("Sending take ownership RFI request... :" + JsonConverter.toJsonString(entity));
+
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.takeOwnership(entity, actionId));
+
+        OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForInformations().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
     public OperationResult<List<NextOwners>> possibleOwner(RequestForInformation entity, String actionId) {
         log.info("Sending possible owners request...");
 

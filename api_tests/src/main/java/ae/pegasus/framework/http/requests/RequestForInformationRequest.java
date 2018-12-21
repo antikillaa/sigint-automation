@@ -113,6 +113,16 @@ public class RequestForInformationRequest extends HttpRequest {
         return this;
     }
 
+    public RequestForInformationRequest endorse(RequestForInformation requestForInformation, String actionId) {
+        RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
+        requestForInformationPayload.setData(requestForInformation);
+        this
+                .setURI(URI + "2/perform-action/" + actionId)
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForInformationPayload);
+        return this;
+    }
+
     public RequestForInformationRequest possibleOwner(RequestForInformation requestForInformationPayload, String actionId) {
         this
                 .setURI(URI + "2/possible-owners/" + actionId)

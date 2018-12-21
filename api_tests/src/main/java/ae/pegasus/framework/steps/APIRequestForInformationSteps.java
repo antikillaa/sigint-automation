@@ -1,7 +1,6 @@
 package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.model.CurrentOwner;
 import ae.pegasus.framework.model.OrgUnit;
 import ae.pegasus.framework.model.Result;
 import ae.pegasus.framework.model.entities.Entities;
@@ -70,8 +69,10 @@ public class APIRequestForInformationSteps extends APISteps {
                 sendRFI(state);
                 break;
             case "Approve":
-                approveRFIRequest(state);
+                compliteRFI(state);
                 break;
+            case "Endorse":
+                endorseRFI(state);
             default:
                 log.error("State not found");
                 break;
@@ -123,11 +124,9 @@ public class APIRequestForInformationSteps extends APISteps {
 
     public void submitRFI(String state) {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
-        List<CurrentOwner> currentOwners = context.get("currentOwner", List.class);
-        List<NextOwners> allOwners = new ArrayList<>();
+        List<NextOwners> nextOwners = context.get("nextOwner", List.class);
+        lastRFI.setNextOwners(nextOwners);
 
-        serviceRequestForInformation.setNextOwnersMember(currentOwners, allOwners);
-        lastRFI.setNextOwners(allOwners);
         String actionId = getRequestAdress(state);
         lastRFI.setComment("QE_auto " + RandomStringUtils.randomAlphabetic(5));
         serviceRequestForInformation.submit(lastRFI, actionId);
@@ -140,13 +139,12 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.submitTookOwnership(lastRFI);
     }
 
-    public void approveRFIRequest(String state) {
+    public void compliteRFI(String state) {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
-        List<OrgUnit> currentOrgUnits = lastRFI.getOrgUnits();
-        List<NextOwners> nextOwners = new ArrayList<>();
-        String actionId = getRequestAdress(state);
-        serviceRequestForInformation.setNextOwnersTeam(currentOrgUnits, nextOwners);
+        List<NextOwners> nextOwners = context.get("nextOwner", List.class);
         lastRFI.setNextOwners(nextOwners);
+
+        String actionId = getRequestAdress(state);
         serviceRequestForInformation.approve(lastRFI, actionId);
     }
 
@@ -192,8 +190,12 @@ public class APIRequestForInformationSteps extends APISteps {
         checkRFI(createdRFI);
     }
 
-    @When("I send Endorse and send for approval request")
-    public void sendEndorseAndSendForApprovalRequest() {
+    public void endorseRFI(String state) {
+        RequestForInformation report = Entities.getRequestForInformations().getLatest();
+        List<NextOwners> nextOwners = context.get("nextOwner", List.class);
+        report.setNextOwners(nextOwners);
+        String actionId = getRequestAdress(state);
+        serviceRequestForInformation.endorse(report, actionId);
     }
 
     @Then("RFI is correct")
