@@ -75,9 +75,8 @@ public class APIRequestForInformationSteps extends APISteps {
                 endorseRFI(state);
             case "Unassign":
                 unassignRFI(state);
-            default:
-                log.error("State not found");
-                break;
+            case "Save":
+                editRFI(state);
         }
     }
 
@@ -167,7 +166,7 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.send(RFI, actionId);
     }
 
-    public void takeOwnershipRFI(String state) {
+    private void takeOwnershipRFI(String state) {
         RequestForInformation report = Entities.getRequestForInformations().getLatest();
         List<NextOwners> nextOwners = context.get("nextOwner", List.class);
         report.setNextOwners(nextOwners);
@@ -175,27 +174,28 @@ public class APIRequestForInformationSteps extends APISteps {
         serviceRequestForInformation.takeOwnership(report, actionId);
     }
 
-    public void unassignRFI(String state) {
+    private void unassignRFI(String state) {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
         String actionId = getRequestAdress(state);
 
         List<NextOwners> nextOwners = context.get("nextOwner", List.class);
         lastRFI.setNextOwners(nextOwners);
-        lastRFI.setComment("QE_auto " + RandomStringUtils.randomAlphabetic(5));
+        lastRFI.setComment("QE_auto " + RandomStringUtils.randomAlphabetic(10));
         serviceRequestForInformation.unassign(lastRFI, actionId);
     }
 
-    @When("I send edit a RFI request")
-    public void sendEditRFIRequest() {
+    private void editRFI(String state) {
         RequestForInformation createdRFI = Entities.getRequestForInformations().getLatest();
-        createdRFI.setSubject("QE_auto " + RandomStringUtils.randomAlphabetic(5));
-        createdRFI.setRequired("QE_auto " + RandomStringUtils.randomAlphabetic(5));
+        String actionId = getRequestAdress(state);
+//        createdRFI.setSubject("QE_auto " + RandomStringUtils.randomAlphabetic(5));
+//        createdRFI.setRequired("QE_auto " + RandomStringUtils.randomAlphabetic(5));
+        createdRFI.setSubject("1");
+        createdRFI.setRequired("1");
         context.put("requestForInformation", createdRFI);
-        serviceRequestForInformation.update(createdRFI);
-        checkRFI(createdRFI);
+        serviceRequestForInformation.update(createdRFI, actionId);
     }
 
-    public void endorseRFI(String state) {
+    private void endorseRFI(String state) {
         RequestForInformation report = Entities.getRequestForInformations().getLatest();
         List<NextOwners> nextOwners = context.get("nextOwner", List.class);
         report.setNextOwners(nextOwners);
@@ -273,7 +273,7 @@ public class APIRequestForInformationSteps extends APISteps {
     public void rfiIsApproved() {
         RequestForInformation lastRFI = Entities.getRequestForInformations().getLatest();
         checkRFI(lastRFI);
-        checkAwaitingApproval(lastRFI);
+        checkAwaitingAssignment(lastRFI);
     }
 
     private void checkAwaitingAssignment(RequestForInformation lastRFI) {

@@ -115,6 +115,9 @@ Then RFI is submitted
 When I get allowed RFI actions
 Then Request is successful
 
+When I send get owner a RFI in Approve request
+Then Request is successful
+
 When I send Approve a <type> RFI request
 Then Request is successful
 Then RFI is approved
@@ -280,6 +283,7 @@ Examples:
 |INTERNAL|
 
 Scenario: Unassign a RFI
+Meta:@skip
 When I send generate RFI number request
 Then Request is successful
 
@@ -319,8 +323,10 @@ Then RFI is unassigned
 Examples:
 |type|
 |EXTERNAL|
+|INTERNAL|
 
 Scenario: Edit a RFI
+Meta:@skip
 When I send generate RFI number request
 Then Request is successful
 
@@ -333,12 +339,11 @@ Then Request is successful
 When I get allowed RFI actions
 Then Request is successful
 
-When I send edit a RFI request
+When I send Save a <type> RFI request
 Then Request is successful
 And RFI is correct
 
 Examples:
 |type|
 |EXTERNAL|
-|INTERNAL|
 

@@ -131,9 +131,13 @@ public class RequestForInformationService implements EntityService<RequestForInf
         return null;
     }
 
+    public OperationResult<RequestForInformation> update(RequestForInformation entity, String actionId) {
+        return (OperationResult<RequestForInformation>) add(entity, actionId);
+    }
+
     @Override
     public OperationResult<RequestForInformation> update(RequestForInformation entity) {
-        return (OperationResult<RequestForInformation>) add(entity);
+        throw new NotImplementedException("");
     }
 
     @Override
