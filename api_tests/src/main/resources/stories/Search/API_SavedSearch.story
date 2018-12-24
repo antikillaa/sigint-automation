@@ -2,6 +2,7 @@ Meta:
 @API
 @component Saved Search
 @story savedSearch
+@stage
 
 Lifecycle:
 Before:

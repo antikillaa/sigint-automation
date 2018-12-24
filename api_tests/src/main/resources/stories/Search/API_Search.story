@@ -7,6 +7,7 @@ Meta:
 @API
 @component Search
 @story search
+@stage
 
 Lifecycle:
 Before:

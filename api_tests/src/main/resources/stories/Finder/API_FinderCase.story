@@ -2,7 +2,7 @@ Meta:
 @API
 @component Finder
 @story FinderCase
-
+@stage
 
 Narrative:
 CB-11288 Cases CRUD

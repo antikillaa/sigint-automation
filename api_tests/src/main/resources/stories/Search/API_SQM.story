@@ -3,6 +3,7 @@ Meta:
 @component Search
 @story search
 @devsmoke
+@stage
 
 
 Narrative:

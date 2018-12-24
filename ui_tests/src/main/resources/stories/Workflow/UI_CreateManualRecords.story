@@ -2,7 +2,7 @@ Meta:
 @UI
 @component Records workflow
 @manualrecord
-
+@stage
 Lifecycle:
 After:
 Scope: SCENARIO
