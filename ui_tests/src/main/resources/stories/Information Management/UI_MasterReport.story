@@ -11,9 +11,6 @@ Scope: SCENARIO
 Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_manager.table
 
-
-
-
 Scenario: User is able to create master report from search page
 Given I navigate to Search
 Given I open Search Filter on the Search page
@@ -53,6 +50,7 @@ Given I navigate to Search
 
 
 Given I open Search Filter on the Search page
+
 Given I set Source Type to Documents on the Search Filter page
 Given I set Record Type to (|<RecordType>|) on the Search Filter page
 Given I set Status Type to (|<StatusType>|) on the Search Filter page
@@ -90,7 +88,30 @@ Then I should see Originating Reports column header as (<ColReportHeaders>) in m
 Then I should see Originating Reports values as (<ReportValues>) in master report
 Then I should see Organization Units (|<ReportOrgUnitInit>|) in master report
 Then I should see File Name/Case Name(s) (|<FileName> |) in master report
+Then I should see Related Files/Cases (|<RelatedFileName> |) in master report
 
+
+When I start edit of master report which is currently opened
+When I set Classification (<ReportClassifUpd>) in master report
+When I set Created For (<ReportCreatedForUpd>) in master report
+When I set Subject (<ReportSubjUpd>) in master report
+When I set Overview (|<ReportOverviewUpd>|) in master report
+When I set Result (|<ReportResultUpd>|) in master report
+When I set Related Files/Cases (|<RelatedFileNameUpd>|) in master report
+When I set File Name/Case Name (|<FileNameUpd>|) in master report
+When I save currently opened master report as draft
+Then I should see Submit for Review button
+Then I should see Edit button in master report
+Then I should see Classification (<ReportClassifUpd>) in master report
+Then I should see Created For (<ReportCreatedForUpd>) in master report
+Then I should see Subject (<ReportSubjUpd>) in master report
+Then I should see Overview (<ReportOverviewUpd>) in master report
+Then I should see Results (<ReportResultUpd>) in master report
+Then I should see Originating Reports section heading as (<OrgRepHeading>) in master report
+Then I should see Originating Reports column header as (<ColReportHeaders>) in master report
+Then I should see Originating Reports values as (<ReportValues>) in master report
+Then I should see File Name/Case Name(s) (|<FileName> |<FileNameUpd>|) in master report
+Then I should see Related Files/Cases (|<RelatedFileName> |<RelatedFileNameUpd>|) in master report
 
 
 Examples:
