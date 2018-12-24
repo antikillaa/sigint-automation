@@ -84,6 +84,7 @@ public abstract class BasePage {
             case SIMPLE_DROPDOWN:
             case DROPDOWN_WITH_SEARCH:
                 return baseElement.$x(".//pg-select");
+
             case FILE_SELECTOR:
                 return baseElement.$x(".//cb-file-tree-input");
             case RADIO_BUTTON_GROUP:

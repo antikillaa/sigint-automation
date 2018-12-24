@@ -15,7 +15,6 @@ data/QE_login_manager.table
 
 
 Scenario: User is able to create master report from search page
-Meta:@master
 Given I navigate to Search
 Given I open Search Filter on the Search page
 Given I set Source Type to Documents on the Search Filter page
@@ -44,6 +43,60 @@ When I save currently opened master report as draft
 
 Examples:
 data/MasterReport.table
+
+
+
+Scenario: Verify the cotent of created master report
+Meta:@master
+
+Given I navigate to Search
+
+
+Given I open Search Filter on the Search page
+Given I set Source Type to Documents on the Search Filter page
+Given I set Record Type to (|<RecordType>|) on the Search Filter page
+Given I set Status Type to (|<StatusType>|) on the Search Filter page
+Given I set File or Case Type to (|<MasterReportFile>|) on the Search Filter page
+Given I Apply Search using Search Filter on the Search page
+Given I setup Search Authorization
+Given I select all cards on the Search page
+When I create new master report for selected items
+Then I should see Submit for Review button
+Then I should see Originating Reports column header as (<ColReportHeaders>) in master report
+Then I should see Originating Reports section heading as (<OrgRepHeading>) in master report
+Then I should see Originating Reports values as (<ReportValues>) in master report
+When I set Classification (<ReportClassifInit>) in master report
+When I set Created For (<ReportCreatedForInit>) in master report
+When I set File Name/Case Name (|<FileName>|) in master report
+When I set Organization Units (|<ReportOrgUnitInit>|) in master report
+When I set Subject (<ReportSubject>) in master report
+When I set Overview (|<ReportOverview>|) in master report
+When I set Result (|<ReportResult>|) in master report
+When I set Related Files/Cases (|<RelatedFileName>|) in master report
+When I save currently opened master report as draft
+Given I navigate to CB Finder
+When I select file with Name (<FileName>) in the CB Finder
+When I open operator report with Subject (<ReportSubject>) in file/case which is currently selected in the CB Finder
+Given I Collapse the CB Finder view
+Then I should see Submit for Review button
+Then I should see Edit button in master report
+Then I should see Classification (<ReportClassifInit>) in master report
+Then I should see Created For (<ReportCreatedForInit>) in master report
+Then I should see Subject (<ReportSubject>) in master report
+Then I should see Overview (<ReportOverview>) in master report
+Then I should see Results (<ReportResult>) in master report
+Then I should see Originating Reports section heading as (<OrgRepHeading>) in master report
+Then I should see Originating Reports column header as (<ColReportHeaders>) in master report
+Then I should see Originating Reports values as (<ReportValues>) in master report
+Then I should see Organization Units (|<ReportOrgUnitInit>|) in master report
+Then I should see File Name/Case Name(s) (|<FileName> |) in master report
+
+
+
+Examples:
+data/MasterReport.table
+
+
 
 
 Scenario: Add to type of source to report

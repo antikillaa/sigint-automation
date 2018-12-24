@@ -1,6 +1,6 @@
 Meta:
 @UI
-@component Saved search
+@component Saved Search
 @savesearch
 
 Lifecycle:
