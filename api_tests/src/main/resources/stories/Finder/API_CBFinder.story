@@ -4,15 +4,6 @@ Meta:
 @story CBFinder
 @stage
 
-Narrative:
-As a user
-I want to perform an action
-So that I can achieve a business goal
-
-Lifecycle:
-Before:
-Given I sign in as admin user
-
 
 Scenario: CB Finder classification permissions
 Given I sign in as user with classifications: <classifications>
@@ -23,6 +14,7 @@ Then CBFinder return items only for classifications: <classifications>
 Examples:
 | classifications |
 | S |
+| TS |
 
 
 Scenario: CB Finder orgUnits permissions
