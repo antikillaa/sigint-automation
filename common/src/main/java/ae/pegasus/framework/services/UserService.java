@@ -2,6 +2,7 @@ package ae.pegasus.framework.services;
 
 import ae.pegasus.framework.data_for_entity.data_providers.user.UserPasswordProvider;
 import ae.pegasus.framework.error_reporter.ErrorReporter;
+import ae.pegasus.framework.errors.OperationResultError;
 import ae.pegasus.framework.http.G4Response;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.http.requests.ChangePasswordRequest;
@@ -19,6 +20,7 @@ import java.util.stream.Stream;
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class UserService implements EntityService<User> {
 
@@ -265,17 +267,18 @@ public class UserService implements EntityService<User> {
     }
 
     public User getOrCreateUserWithPermissions(User entity, String orgUnitID) {
-        String permissions = entity.getDefaultPermission().getActions()
-                .toString().replace("[", "").replace("]", "");
+        String permissions = entity.getDefaultPermission().getActions().toString();
+        if (orgUnitID == null || orgUnitID.isEmpty()) {
+            orgUnitID = getOrCreateDefaultTeamId();
+        }
 
-        User userWithPermissions = getUserWithPermissions(permissions);
+        // find in user storage
+        User userWithPermissions = getUserWithPermissions(entity, orgUnitID);
         if (userWithPermissions != null)
             return userWithPermissions;
 
-        // update orgUnits
-        entity = (orgUnitID == null || orgUnitID.isEmpty()) ?
-                addOrgUnit(entity, getOrCreateDefaultTeamId()) :
-                addOrgUnit(entity, orgUnitID);
+        // add orgUnits with permissions
+        addOrgUnit(entity, orgUnitID);
 
         // create user
         OperationResult<User> userOperationResult = add(entity);
@@ -287,13 +290,20 @@ public class UserService implements EntityService<User> {
             OperationResult<AuthResponseResult> firstPasswordChangeResult = changeTempPassword(userWithPermissions);
             if (!firstPasswordChangeResult.isSuccess()) {
                 log.error(firstPasswordChangeResult.getMessage());
-                throw new AssertionError("Unable change password for new User: " + toJsonString(userWithPermissions));
+                throw new AssertionError("Unable change password for new user: " + toJsonString(userWithPermissions));
             }
 
-            // update user storage
-            permissionsUsersMap.put(permissions, Stream.of(userWithPermissions).collect(Collectors.toList()));
+            // add user to storage
+            List<User> users = permissionsUsersMap.get(permissions);
+            if (users != null) {
+                assertTrue("Unable add created user to user storage!", users.add(userWithPermissions));
+            } else {
+                users = Stream.of(userWithPermissions).collect(Collectors.toList());
+            }
+            permissionsUsersMap.put(permissions, users);
         } else {
-            throw new AssertionError("Unable create User: " + toJsonString(entity));
+            log.error("Unable create User: " + toJsonString(entity));
+            throw new OperationResultError(userOperationResult);
         }
         return userWithPermissions;
     }
@@ -326,18 +336,24 @@ public class UserService implements EntityService<User> {
         return operationResults;
     }
 
-    public User getUserWithPermissions(String permissions) {
-        log.info("Find user with Permissions: " + permissions);
-
-        User user = null;
+    public User getUserWithPermissions(User entity, String orgUnitID) {
+        String permissions = entity.getDefaultPermission().getActions().toString();
         List<User> users = permissionsUsersMap.get(permissions);
-        if (users == null || users.isEmpty()) {
-            log.info("Users with permissions: " + permissions + " not found!");
-        } else {
-            user = getRandomItemFromList(users);
-            log.info("User already exist:" + user.getName());
+
+        User createdUser = null;
+        if (users != null && !users.isEmpty()) {
+            users = users.stream()
+                    .filter(user -> user.getDefaultPermission().getRecord().getClearances()
+                            .containsAll(entity.getDefaultPermission().getRecord().getClearances()))
+                    .filter(user -> user.getDefaultPermission().getTeamTitles().get(0).getOrgUnitId()
+                            .equals(orgUnitID))
+                    .collect(Collectors.toList());
+            if (!users.isEmpty()) {
+                createdUser = getRandomItemFromList(users);
+                log.info("User already exist:" + createdUser.getName());
+            }
         }
-        return user;
+        return createdUser;
     }
 
     public User addOrgUnitWithTitles(User user, String orgUnitId, List<String> titleIDs) {
@@ -358,5 +374,37 @@ public class UserService implements EntityService<User> {
         Title title = titleService.createWithResponsibility(responsibility);
 
         return addOrgUnitWithTitles(user, orgUnitId, Collections.singletonList(title.getId()));
+    }
+
+    public User getOrCreateUserWithClassification(String classificationsString) {
+        String[] classifications = StringUtils.splitToArray(classificationsString);
+
+        User user = User.newBuilder()
+                .newUser()
+                .withClassification(classifications)
+                .withAllPermission()
+                .withAllSources()
+                .build();
+
+        return getOrCreateUserWithPermissions(user);
+    }
+
+    public User getOrCreateUserWithOrgUnits(String orgUnitsString) {
+        String[] orgUnits = StringUtils.splitToArray(orgUnitsString);
+
+        User user = User.newBuilder()
+                .newUser()
+                .withAllClassification()
+                .withAllPermission()
+                .withAllSources()
+                .build();
+
+        OrganizationService organizationService = new OrganizationService();
+        for (String orgUnit : orgUnits) {
+            Team team = organizationService.getOrCreateTeamByName(orgUnit);
+            addOrgUnit(user, team.getId());
+        }
+
+        return getOrCreateUserWithPermissions(user);
     }
 }

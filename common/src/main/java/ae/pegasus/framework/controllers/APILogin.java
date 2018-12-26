@@ -1,13 +1,16 @@
 package ae.pegasus.framework.controllers;
 
 import ae.pegasus.framework.app_context.AppContext;
-import ae.pegasus.framework.errors.OperationResultError;
 import ae.pegasus.framework.http.G4HttpClient;
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.json.JsonConverter;
-import ae.pegasus.framework.model.*;
+import ae.pegasus.framework.model.LoggedUser;
+import ae.pegasus.framework.model.RequestResult;
+import ae.pegasus.framework.model.Token;
+import ae.pegasus.framework.model.User;
 import ae.pegasus.framework.model.entities.Entities;
-import ae.pegasus.framework.services.*;
+import ae.pegasus.framework.services.ResponsibilityService;
+import ae.pegasus.framework.services.TitleService;
+import ae.pegasus.framework.services.UserService;
 import ae.pegasus.framework.utils.StringUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStories;
@@ -67,9 +70,6 @@ public class APILogin {
             me.setPassword(user.getPassword());
 
             context.setLoggedUser(new LoggedUser(me));
-        } else {
-            log.error("Unable signIn as user:" + JsonConverter.toJsonString(user));
-            throw new OperationResultError(operationResult);
         }
         return operationResult;
     }
@@ -151,38 +151,15 @@ public class APILogin {
 
     @Given("I sign in as user with classifications: $value")
     public void singinAsUserWithClassification(String value) {
-        String[] classifications = StringUtils.splitToArray(value);
-
-        User user = User.newBuilder()
-                .newUser()
-                .withClassification(classifications)
-                .withAllPermission()
-                .withAllSources()
-                .build();
-
-        User createdUser = userService.getOrCreateUserWithPermissions(user);
+        signInAsUser(ADMIN_ROLE);
+        User createdUser = userService.getOrCreateUserWithClassification(value);
         signInAsUser(createdUser);
     }
 
-
     @Given("I sign in as user with orgUnits: $orgUnitsString")
     public void signInAsUserWithOrgUnits(String orgUnitsString) {
-        String[] orgUnits = StringUtils.splitToArray(orgUnitsString);
-
-        User user = User.newBuilder()
-                .newUser()
-                .withAllClassification()
-                .withAllPermission()
-                .withAllSources()
-                .build();
-
-        OrganizationService organizationService = new OrganizationService();
-        for (String orgUnit : orgUnits) {
-            Team team = organizationService.getOrCreateTeamByName(orgUnit);
-            userService.addOrgUnit(user, team.getId());
-        }
-
-        User createdUser = userService.getOrCreateUserWithPermissions(user);
+        signInAsUser(ADMIN_ROLE);
+        User createdUser = userService.getOrCreateUserWithOrgUnits(orgUnitsString);
         signInAsUser(createdUser);
     }
 
