@@ -112,10 +112,10 @@ public class ReportService implements EntityService<Report> {
         }
     }
 
-    public OperationResult<Report> submit(Report entity) {
+    public OperationResult<Report> submit(Report entity, String actionId) {
         log.info("Sending submit a new report request...");
 
-        G4Response response = g4HttpClient.sendRequest(reportRequest.submit(entity));
+        G4Response response = g4HttpClient.sendRequest(reportRequest.submit(entity, actionId));
 
         OperationResult<Report> operationResult = new OperationResult<>(response, Report.class, "result");
         if (operationResult.isSuccess()) {

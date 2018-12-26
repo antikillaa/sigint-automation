@@ -18,7 +18,6 @@ import org.junit.Assert;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -114,11 +113,10 @@ public class APIReportSteps extends APISteps {
 
     private void submitForReview(String state) {
         Report lastreport = Entities.getReports().getLatest();
-        List<CurrentOwner> currentOwner = context.get("currentOwner", List.class);
-        List<NextOwners> allOwners = new ArrayList<>();
-        serviceReport.setNextOwnersTeams(currentOwner, allOwners);
-        lastreport.setNextOwners(allOwners);
-        serviceReport.submit(lastreport);
+        String actionId = getRequestAdress(state);
+        List<NextOwners> nextOwners = context.get("nextOwner", List.class);
+        lastreport.setNextOwners(nextOwners);
+        serviceReport.submit(lastreport, actionId);
     }
 
     private void returnToAuthor(String state) {
