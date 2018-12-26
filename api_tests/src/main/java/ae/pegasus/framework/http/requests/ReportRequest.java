@@ -1,10 +1,10 @@
 package ae.pegasus.framework.http.requests;
 
 import ae.pegasus.framework.http.HttpMethod;
-import ae.pegasus.framework.model.information_managment.report.Report;
-import ae.pegasus.framework.model.information_managment.report.ReportPayload;
 import ae.pegasus.framework.model.ReportsExportModel;
 import ae.pegasus.framework.model.ReportsExportPayload;
+import ae.pegasus.framework.model.information_managment.report.Report;
+import ae.pegasus.framework.model.information_managment.report.ReportPayload;
 
 import javax.ws.rs.core.MediaType;
 
@@ -83,11 +83,11 @@ public class ReportRequest extends HttpRequest {
         return this;
     }
 
-    public ReportRequest submit(Report report) {
+    public ReportRequest submit(Report report, String actionId) {
         ReportPayload reportPayload = new ReportPayload();
         reportPayload.setData(report);
         this
-                .setURI(URI + "perform-action/1-2")
+                .setURI(URI + "perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(reportPayload);
         return this;

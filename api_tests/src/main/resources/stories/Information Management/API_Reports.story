@@ -190,10 +190,10 @@ When I send Save as Draft a report request
 Then Request is successful
 And Report is created
 
-When I send view a report request
+When I get allowed actions
 Then Request is successful
 
-When I send get owners a report request
+When I send get owner a report in Submit for Review request
 Then Request is successful
 
 When I send Submit for Review a report request
@@ -223,7 +223,10 @@ And Report is created
 When I send view a report request
 Then Request is successful
 
-When I send get owners a report request
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a report in Submit for Review request
 Then Request is successful
 
 When I send Submit for Review a report request
@@ -263,7 +266,10 @@ And Report is created
 When I send view a report request
 Then Request is successful
 
-When I send get owners a report request
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a report in Submit for Review request
 Then Request is successful
 
 When I send Submit for Review a report request
@@ -310,7 +316,10 @@ And Report is created
 When I send view a report request
 Then Request is successful
 
-When I send get owners a report request
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a report in Submit for Review request
 Then Request is successful
 
 When I send Submit for Review a report request
@@ -359,7 +368,10 @@ And Report is created
 When I send view a report request
 Then Request is successful
 
-When I send get owners a report request
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a report in Submit for Review request
 Then Request is successful
 
 When I send Submit for Review a report request
@@ -406,7 +418,10 @@ And Report is created
 When I send view a report request
 Then Request is successful
 
-When I send get owners a report request
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a report in Submit for Review request
 Then Request is successful
 
 When I send Submit for Review a report request
@@ -456,7 +471,10 @@ And Report is created
 When I send view a report request
 Then Request is successful
 
-When I send get owners a report request
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a report in Submit for Review request
 Then Request is successful
 
 When I send Submit for Review a report request
@@ -496,7 +514,10 @@ And Report is created
 When I send view a report request
 Then Request is successful
 
-When I send get owners a report request
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a report in Submit for Review request
 Then Request is successful
 
 When I send Submit for Review a report request
