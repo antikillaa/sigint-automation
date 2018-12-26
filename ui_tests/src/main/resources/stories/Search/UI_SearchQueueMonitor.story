@@ -1,7 +1,6 @@
 Meta:
 @UI
 @component Search
-@stage
 @queueMonitor
 
 Lifecycle:

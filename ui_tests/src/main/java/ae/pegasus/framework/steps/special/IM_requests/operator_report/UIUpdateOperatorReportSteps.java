@@ -124,6 +124,11 @@ public class UIUpdateOperatorReportSteps {
         Pages.updateOperatorReportPage().performAction(IMAction.UNASSIGN);
     }
 
+    @When("I Assign the operator report which is currently opened")
+    public void iAssignTheReport() {
+        Pages.updateOperatorReportPage().performAction(IMAction.ASSIGN);
+    }
+
     @When("I Return to Author the operator report which is currently opened")
     public void iReturnReport() {
         Pages.updateOperatorReportPage().performAction(IMAction.RETURN_TO_AUTHOR);

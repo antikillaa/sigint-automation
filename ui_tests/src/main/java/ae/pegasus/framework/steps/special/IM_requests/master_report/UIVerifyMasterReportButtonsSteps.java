@@ -53,10 +53,16 @@ public class UIVerifyMasterReportButtonsSteps {
         checkReportActionButtonVisibleAndEnable(IMAction.APPROVE);
     }
 
+    @Then("I should see Assign button in master report")
+    public void iShouldSeeAssignButton() {
+        checkReportActionButtonVisibleAndEnable(IMAction.ASSIGN);
+    }
+
     @Then("I should see Unassign button in master report")
     public void iShouldSeeUnassignButton() {
         checkReportActionButtonVisibleAndEnable(IMAction.UNASSIGN);
     }
+
 
     @Then("I should see Edit button in master report")
     public void iShouldSeeEditButton() {

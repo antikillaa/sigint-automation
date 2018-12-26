@@ -118,10 +118,17 @@ public class UIUpdateMasterReportSteps {
         Pages.updateMasterrReportPage().waitForPageLoading();
     }
 
+    @When("I Assign the master report which is currently opened")
+    public void iAssignTheReport() {
+        Pages.updateMasterrReportPage().performAction(IMAction.ASSIGN);
+    }
+
     @When("I Unassign the master report which is currently opened")
     public void iUnassignTheReport() {
         Pages.updateMasterrReportPage().performAction(IMAction.UNASSIGN);
     }
+
+
 
     @When("I Return to Author the master report which is currently opened")
     public void iReturnReport() {

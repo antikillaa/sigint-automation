@@ -57,6 +57,11 @@ public class UIVerifyOperatorReportButtonsSteps {
         checkReportActionButtonVisibleAndEnable(IMAction.UNASSIGN);
     }
 
+    @Then("I should see Assign button in operator report")
+    public void iShouldSeeAssignButton() {
+        checkReportActionButtonVisibleAndEnable(IMAction.ASSIGN);
+    }
+
     @Then("I should see Edit button in operator report")
     public void iShouldSeeEditButton() {
         checkReportActionButtonVisibleAndEnable(IMAction.EDIT);

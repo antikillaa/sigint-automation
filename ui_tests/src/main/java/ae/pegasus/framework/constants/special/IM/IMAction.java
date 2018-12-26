@@ -5,6 +5,7 @@ public enum IMAction {
     DISCARD_CHANGES("Discard changes"),
     TAKE_OWNERSHIP("Take Ownership"),
     UNASSIGN("Unassign"),
+    ASSIGN("Assign"),
     REJECT("Reject"),
     RETURN_TO_AUTHOR("Return to Author"),
     APPROVE("Approve"),
@@ -19,7 +20,7 @@ public enum IMAction {
     REPORT_WITHOUT_STAFF_ID(EXPORT, "Without Staff Id", true),
     REPORT_WITHOUT_SOURCES(EXPORT, "Without Sources", true),
     ADD_TO_SANDBOX("Add to Sandbox", true),
-    DELETE_REPORT("Delete Report", true),
+    DELETE_REPORT("Delete Document", true),
     DELETE_RFI("Delete RFI", true);
 
     private final IMAction parentAction;

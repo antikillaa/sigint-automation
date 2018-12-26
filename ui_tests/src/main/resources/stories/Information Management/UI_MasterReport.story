@@ -43,14 +43,14 @@ data/MasterReport.table
 
 
 
-Scenario: Verify the cotent of created master report
+Scenario: User is able create delete and edit master report
 Meta:@master
 
+
+Given load story ../aux-before-stories/auxCreateFile.story with example table:
+data/MasterReport.table
 Given I navigate to Search
-
-
 Given I open Search Filter on the Search page
-
 Given I set Source Type to Documents on the Search Filter page
 Given I set Record Type to (|<RecordType>|) on the Search Filter page
 Given I set Status Type to (|<StatusType>|) on the Search Filter page
@@ -112,10 +112,74 @@ Then I should see Originating Reports column header as (<ColReportHeaders>) in m
 Then I should see Originating Reports values as (<ReportValues>) in master report
 Then I should see File Name/Case Name(s) (|<FileName> |<FileNameUpd>|) in master report
 Then I should see Related Files/Cases (|<RelatedFileName> |<RelatedFileNameUpd>|) in master report
+When I delete operator report which is currently opened
+Given I navigate to CB Finder
+Given I Expand the CB Finder view
+
+When I select file with Name (<FileName>) in the CB Finder
+When I delete file which is currently selected in the CB Finder
+
+Examples:
+data/MasterReport.table
+
+
+
+
+
+
+
+Scenario: Verify approval workflow for master report
+Meta:@master123
+
+Given I navigate to Search
+Given I open Search Filter on the Search page
+Given I set Source Type to Documents on the Search Filter page
+Given I set Record Type to (|<RecordType>|) on the Search Filter page
+Given I set Status Type to (|<StatusType>|) on the Search Filter page
+Given I set File or Case Type to (|<MasterReportFile>|) on the Search Filter page
+Given I Apply Search using Search Filter on the Search page
+Given I setup Search Authorization
+Given I select all cards on the Search page
+When I create new master report for selected items
+Then I should see Submit for Review button
+Then I should see Originating Reports column header as (<ColReportHeaders>) in master report
+Then I should see Originating Reports section heading as (<OrgRepHeading>) in master report
+Then I should see Originating Reports values as (<ReportValues>) in master report
+When I set Classification (<ReportClassifInit>) in master report
+When I set Created For (<ReportCreatedForInit>) in master report
+When I set File Name/Case Name (|<FileName_master>|) in master report
+When I set Organization Units (|<ReportOrgUnitInit>|) in master report
+When I set Subject (<ReportSubject>) in master report
+When I set Overview (|<ReportOverview>|) in master report
+When I set Result (|<ReportResult>|) in master report
+When I set Related Files/Cases (|<RelatedFileName>|) in master report
+When I save currently opened master report as draft
+Given I navigate to CB Finder
+When I select file with Name (<FileName_master>) in the CB Finder
+When I open operator report with Subject (<ReportSubject>) in file/case which is currently selected in the CB Finder
+Given I Collapse the CB Finder view
+Then I should see Submit for Review button
+When I Submit For Review the master report which is currently opened
+When I enter routing (Submitting the report ) for the master report
+When I route the master report
+Then I should see that currently opened master report has status (Awaiting Review)
+Then I should see Cancel button in master report
+Then I should see Edit button in master report
+Then I should see Assign button in master report
+When I Take Ownership of the master report which is currently opened
 
 
 Examples:
 data/MasterReport.table
+
+
+
+
+
+
+
+
+
 
 
 
