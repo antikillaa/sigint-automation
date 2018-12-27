@@ -13,39 +13,74 @@ Scenario: Create/Delete a RFI
 When I send generate RFI number request
 Then Request is successful
 
-When I send create a <type> RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Save as Draft a <type> RFI request
 Then Request is successful
 And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
 
-When I send delete a RFI request
+When I get allowed RFI actions
 Then Request is successful
 
-When I send view a RFI request
-Then Request is unsuccessful
+When I send Delete a <type> RFI request
+Then Request is successful
 
 Examples:
 |type|
 |EXTERNAL|
 |INTERNAL|
 
-Scenario: Submit for Approval a RFI
+Scenario: Create/Delete a RFI
 When I send generate RFI number request
 Then Request is successful
 
-When I send create a <type> RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Save as Draft a <type> RFI request
 Then Request is successful
 And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
 
-When I send get owner members a RFI request
+When I get allowed RFI actions
 Then Request is successful
 
-When I send submit a RFI request
+When I send Delete a <type> RFI request
+Then Request is successful
+
+Examples:
+|type|
+|EXTERNAL|
+|INTERNAL|
+
+
+Scenario: Submit for Approval a RFI
+When I send generate RFI number request
+Then Request is successful
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Save as Draft a <type> RFI request
+Then Request is successful
+And RFI is correct
+
+When I send view a RFI request
+Then Request is successful
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send get owner a RFI in Submit for Approval request
+Then Request is successful
+
+When I send Submit for Approval a <type> RFI request
 Then Request is successful
 Then RFI is submitted
 
@@ -58,21 +93,33 @@ Scenario: Approve a RFI via submit button
 When I send generate RFI number request
 Then Request is successful
 
-When I send create a <type> RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Save as Draft a <type> RFI request
 Then Request is successful
 And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
 
-When I send get owner members a RFI request
+When I get allowed RFI actions
 Then Request is successful
 
-When I send submit a RFI request
+When I send get owner a RFI in Submit for Approval request
+Then Request is successful
+
+When I send Submit for Approval a <type> RFI request
 Then Request is successful
 Then RFI is submitted
 
-When I send Approve a RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send get owner a RFI in Approve request
+Then Request is successful
+
+When I send Approve a <type> RFI request
 Then Request is successful
 Then RFI is approved
 
@@ -85,45 +132,32 @@ Scenario: Cancel a RFI
 When I send generate RFI number request
 Then Request is successful
 
-When I send create a <type> RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Save as Draft a <type> RFI request
 Then Request is successful
 And RFI is correct
 
 When I send view a RFI request
 Then Request is successful
 
-When I send get owner members a RFI request
+When I get allowed RFI actions
 Then Request is successful
 
-When I send submit a RFI request
+When I send get owner a RFI in Submit for Approval request
+Then Request is successful
+
+When I send Submit for Approval a <type> RFI request
 Then Request is successful
 Then RFI is submitted
 
-When I send cancel a RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Cancel a <type> RFI request
 Then Request is successful
 Then RFI is cancelled
-
-Examples:
-|type|
-|EXTERNAL|
-|INTERNAL|
-
-Scenario: Take ownership a RFI
-When I send generate RFI number request
-Then Request is successful
-
-When I send get owner teams a <type> RFI request
-Then Request is successful
-
-When I send send a RFI request
-Then Request is successful
-
-When I send view a RFI request
-Then Request is successful
-
-When I send take ownership a RFI request
-Then Request is successful
-Then RFI is ownershipped
 
 Examples:
 |type|
@@ -134,10 +168,16 @@ Scenario: Send a RFI
 When I send generate RFI number request
 Then Request is successful
 
-When I send get owner teams a <type> RFI request
+When I get allowed RFI actions
 Then Request is successful
 
-When I send send a RFI request
+When I send Save as Draft a <type> RFI request
+Then Request is successful
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Send a <type> RFI request
 Then Request is successful
 Then RFI is sent
 
@@ -149,26 +189,94 @@ Examples:
 |EXTERNAL|
 |INTERNAL|
 
-Scenario: Complete a RFI via send button
+Scenario: Submit for Approval a RFI
 When I send generate RFI number request
 Then Request is successful
 
-When I send get owner teams a <type> RFI request
+When I get allowed RFI actions
 Then Request is successful
 
-When I send send a RFI request
+When I send Save as Draft a <type> RFI request
+Then Request is successful
+And RFI is correct
+
+When I get allowed RFI actions
 Then Request is successful
 
-When I send view a RFI request
+When I send get owner a RFI in Submit for Approval request
 Then Request is successful
 
-When I send take ownership a RFI request
+When I send Submit for Approval a <type> RFI request
+Then Request is successful
+Then RFI is submitted
+
+Examples:
+|type|
+|EXTERNAL|
+|INTERNAL|
+
+Scenario: Take ownership a RFI via send button
+When I send generate RFI number request
+Then Request is successful
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Save as Draft a <type> RFI request
+Then Request is successful
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Send a <type> RFI request
+Then Request is successful
+Then RFI is sent
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send get owner a RFI in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a <type> RFI request
 Then Request is successful
 Then RFI is ownershipped
 
-When I send complete took ownership a RFI request
+Examples:
+|type|
+|EXTERNAL|
+|INTERNAL|
+
+Scenario: Approve a RFI
+When I send generate RFI number request
 Then Request is successful
-Then RFI is completed
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Save as Draft a <type> RFI request
+Then Request is successful
+And RFI is correct
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send get owner a RFI in Submit for Approval request
+Then Request is successful
+
+When I send Submit for Approval a <type> RFI request
+Then Request is successful
+Then RFI is submitted
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send get owner a RFI in Approve request
+Then Request is successful
+
+When I send Approve a <type> RFI request
+Then Request is successful
+Then RFI is Awaiting Assignment
 
 Examples:
 |type|
@@ -176,23 +284,40 @@ Examples:
 |INTERNAL|
 
 Scenario: Unassign a RFI
+Meta:@skip
 When I send generate RFI number request
 Then Request is successful
 
-When I send get owner teams a <type> RFI request
+When I get allowed RFI actions
 Then Request is successful
 
-When I send send a RFI request
+When I send Save as Draft a <type> RFI request
 Then Request is successful
 
-When I send view a RFI request
+When I get allowed RFI actions
 Then Request is successful
 
-When I send take ownership a RFI request
+When I send Send a <type> RFI request
+Then Request is successful
+Then RFI is sent
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send get owner a RFI in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a <type> RFI request
 Then Request is successful
 Then RFI is ownershipped
 
-When I send unassign a RFI request
+When I get allowed RFI actions
+Then Request is successful
+
+When I send get owner a RFI in Unassign request
+Then Request is successful
+
+When I send Unassign a <type> RFI request
 Then Request is successful
 Then RFI is unassigned
 
@@ -202,22 +327,24 @@ Examples:
 |INTERNAL|
 
 Scenario: Edit a RFI
+Meta:@skip
 When I send generate RFI number request
 Then Request is successful
 
-When I send create a <type> RFI request
-Then Request is successful
-And RFI is correct
-
-When I send view a RFI request
+When I get allowed RFI actions
 Then Request is successful
 
-When I send edit a RFI request
+When I send Save as Draft a <type> RFI request
+Then Request is successful
+
+When I get allowed RFI actions
+Then Request is successful
+
+When I send Save a <type> RFI request
 Then Request is successful
 And RFI is correct
 
 Examples:
 |type|
 |EXTERNAL|
-|INTERNAL|
 

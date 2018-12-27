@@ -7,9 +7,10 @@ import ae.pegasus.framework.http.requests.RequestForInformationRequest;
 import ae.pegasus.framework.json.JsonConverter;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
-import ae.pegasus.framework.model.information_managment.CurrentOwner;
 import ae.pegasus.framework.model.information_managment.NextOwners;
+import ae.pegasus.framework.model.information_managment.PossibleActions;
 import ae.pegasus.framework.model.information_managment.rfi.RequestForInformation;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 
@@ -26,11 +27,10 @@ public class RequestForInformationService implements EntityService<RequestForInf
     private static RequestForInformationRequest requestForInformationRequest = new RequestForInformationRequest();
 
 
-    @Override
-    public OperationResult<RequestForInformation> add(RequestForInformation entity) {
+    public OperationResult<RequestForInformation> add(RequestForInformation entity, String actionId) {
         log.info("Sending create new RFI request... :" + JsonConverter.toJsonString(entity));
 
-        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.add(entity));
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.add(entity, actionId));
 
         OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
         if (operationResult.isSuccess()) {
@@ -42,24 +42,33 @@ public class RequestForInformationService implements EntityService<RequestForInf
     }
 
     @Override
-    public OperationResult<RequestForInformation> remove(RequestForInformation entity) {
+    public OperationResult<?> add(RequestForInformation entity) {
+        throw new NotImplementedException("");
+    }
+
+    @Override
+    public OperationResult<?> remove(RequestForInformation entity) {
+        throw new NotImplementedException("");
+    }
+
+    public OperationResult<RequestForInformation> remove(RequestForInformation entity, String actionId) {
         log.info("Sending delete a RFI request... :" + JsonConverter.toJsonString(entity));
 
-        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.remove(entity));
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.remove(entity, actionId));
 
         OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
         if (operationResult.isSuccess()) {
-            Entities.getRequestForInformations().addOrUpdateEntity(operationResult.getEntity());
+            Entities.getRequestForInformations().removeEntity(operationResult.getEntity());
         } else {
             throw new OperationResultError(operationResult);
         }
         return operationResult;
     }
 
-    public OperationResult<RequestForInformation> submit(RequestForInformation entity) {
+    public OperationResult<RequestForInformation> submit(RequestForInformation entity, String actionId) {
         log.info("Sending submit RFI request... :" + JsonConverter.toJsonString(entity));
 
-        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.submit(entity));
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.submit(entity, actionId));
 
         OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
         if (operationResult.isSuccess()) {
@@ -84,10 +93,10 @@ public class RequestForInformationService implements EntityService<RequestForInf
         return operationResult;
     }
 
-    public OperationResult<RequestForInformation> approve(RequestForInformation entity) {
+    public OperationResult<RequestForInformation> approve(RequestForInformation entity, String actionId) {
         log.info("Sending submit RFI request... :" + JsonConverter.toJsonString(entity));
 
-        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.approve(entity));
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.approve(entity, actionId));
 
         OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
         if (operationResult.isSuccess()) {
@@ -98,10 +107,10 @@ public class RequestForInformationService implements EntityService<RequestForInf
         return operationResult;
     }
 
-    public OperationResult<RequestForInformation> cancel(RequestForInformation entity) {
+    public OperationResult<RequestForInformation> cancel(RequestForInformation entity, String actionId) {
         log.info("Sending cancel RFI request... :" + JsonConverter.toJsonString(entity));
 
-        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.cancel(entity));
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.cancel(entity, actionId));
 
         OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
         if (operationResult.isSuccess()) {
@@ -122,9 +131,13 @@ public class RequestForInformationService implements EntityService<RequestForInf
         return null;
     }
 
+    public OperationResult<RequestForInformation> update(RequestForInformation entity, String actionId) {
+        return (OperationResult<RequestForInformation>) add(entity, actionId);
+    }
+
     @Override
     public OperationResult<RequestForInformation> update(RequestForInformation entity) {
-        return add(entity);
+        throw new NotImplementedException("");
     }
 
     @Override
@@ -139,10 +152,10 @@ public class RequestForInformationService implements EntityService<RequestForInf
         return operationResult;
     }
 
-    public OperationResult<RequestForInformation> send(RequestForInformation entity) {
+    public OperationResult<RequestForInformation> send(RequestForInformation entity, String actionId) {
         log.info("Sending submit RFI request... :" + JsonConverter.toJsonString(entity));
 
-        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.send(entity));
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.send(entity, actionId));
 
         OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
         if (operationResult.isSuccess()) {
@@ -153,10 +166,10 @@ public class RequestForInformationService implements EntityService<RequestForInf
         return operationResult;
     }
 
-    public OperationResult<RequestForInformation> takeOwnership(RequestForInformation entity) {
+    public OperationResult<RequestForInformation> takeOwnership(RequestForInformation entity, String actionId) {
         log.info("Sending take ownership RFI request... :" + JsonConverter.toJsonString(entity));
 
-        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.takeOwnership(entity));
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.takeOwnership(entity, actionId));
 
         OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
         if (operationResult.isSuccess()) {
@@ -165,6 +178,33 @@ public class RequestForInformationService implements EntityService<RequestForInf
             throw new OperationResultError(operationResult);
         }
         return operationResult;
+    }
+
+    public OperationResult<RequestForInformation> endorse(RequestForInformation entity, String actionId) {
+        log.info("Sending take ownership RFI request... :" + JsonConverter.toJsonString(entity));
+
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.takeOwnership(entity, actionId));
+
+        OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForInformations().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
+    public OperationResult<List<NextOwners>> possibleOwner(RequestForInformation entity, String actionId) {
+        log.info("Sending possible owners request...");
+
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.possibleOwner(entity, actionId));
+
+        OperationResult<NextOwners[]> operationResult = new OperationResult<>(response, NextOwners[].class);
+        if (operationResult.isSuccess()) {
+            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
+        } else {
+            return new OperationResult<>(response);
+        }
     }
 
     public OperationResult<RequestForInformation> endorseAndSendForApprovalRequest(RequestForInformation entity) {
@@ -194,10 +234,10 @@ public class RequestForInformationService implements EntityService<RequestForInf
         }
     }
 
-    public OperationResult<List<CurrentOwner>> possibleOwnersMembers(RequestForInformation entity) {
+    public OperationResult<List<CurrentOwner>> possibleOwnersMembers(RequestForInformation entity, String actionId) {
         log.info("Sending possible owners request...");
 
-        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.possibleOwnersMembers(entity));
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.possibleOwnersMembers(entity, actionId));
 
         OperationResult<CurrentOwner[]> operationResult = new OperationResult<>(response, CurrentOwner[].class);
         if (operationResult.isSuccess()) {
@@ -220,10 +260,10 @@ public class RequestForInformationService implements EntityService<RequestForInf
         }
     }
 
-    public OperationResult<RequestForInformation> unassign(RequestForInformation entity) {
+    public OperationResult<RequestForInformation> unassign(RequestForInformation entity, String actionId) {
         log.info("Sending unassign RFI request... :" + JsonConverter.toJsonString(entity));
 
-        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.unassign(entity));
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.unassign(entity, actionId));
 
         OperationResult<RequestForInformation> operationResult = new OperationResult<>(response, RequestForInformation.class, "result");
         if (operationResult.isSuccess()) {
@@ -232,6 +272,19 @@ public class RequestForInformationService implements EntityService<RequestForInf
             throw new OperationResultError(operationResult);
         }
         return operationResult;
+    }
+
+    public OperationResult<List<PossibleActions>> allowedactions(String id) {
+        log.info("Sending submit a new report request...");
+
+        G4Response response = g4HttpClient.sendRequest(requestForInformationRequest.allowedactions(id));
+
+        OperationResult<PossibleActions[]> operationResult = new OperationResult<>(response, PossibleActions[].class);
+        if (operationResult.isSuccess()) {
+            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
+        } else {
+            return new OperationResult<>(response);
+        }
     }
 
     public void buildRFI(RequestForInformation requestForInformation, Result rfiNo, String type) {
@@ -283,13 +336,13 @@ public class RequestForInformationService implements EntityService<RequestForInf
     }
 
     public void setNextOwnersMember(List<CurrentOwner> currentOwner, List<NextOwners> allOwners) {
-        for (CurrentOwner owner : currentOwner) {
+        CurrentOwner currentOwner1 = currentOwner.stream().findAny().orElse(null);
             NextOwners nextOwner = new NextOwners();
-            nextOwner.setOwnerId(owner.getOwnerId());
-            nextOwner.setOwnerName(owner.getOwnerName());
-            nextOwner.setType(owner.getType());
+        nextOwner.setOwnerId(currentOwner1.getOwnerId());
+        nextOwner.setOwnerName(currentOwner1.getOwnerName());
+        nextOwner.setType(currentOwner1.getType());
+        nextOwner.setOwnerFullName(currentOwner1.getOwnerFullName());
             allOwners.add(nextOwner);
-        }
     }
 
     public void setRandomNextOwner(List<CurrentOwner> currentOwner, List<NextOwners> allOwners) {

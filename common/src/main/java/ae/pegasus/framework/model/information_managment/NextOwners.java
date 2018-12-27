@@ -3,6 +3,8 @@ package ae.pegasus.framework.model.information_managment;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.util.Map;
+
 @JsonPropertyOrder({
         "orgUnitId",
         "orgUnitName",
@@ -19,6 +21,8 @@ public class NextOwners {
     private String type;
     @JsonProperty("ownerFullName")
     private String ownerFullName;
+    @JsonProperty("attributes")
+    private Map<String, Object> attributes;
 
     @JsonProperty("ownerId")
     public String getOwnerId() {
@@ -50,13 +54,19 @@ public class NextOwners {
         this.type = type;
     }
 
-    @JsonProperty("ownerFullName")
     public String getOwnerFullName() {
         return ownerFullName;
     }
 
-    @JsonProperty("ownerFullName")
     public void setOwnerFullName(String ownerFullName) {
         this.ownerFullName = ownerFullName;
+    }
+
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, Object> attributes) {
+        this.attributes = attributes;
     }
 }

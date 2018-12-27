@@ -20,11 +20,11 @@ public class RequestForInformationRequest extends HttpRequest {
         return this;
     }
 
-    public RequestForInformationRequest add(RequestForInformation requestForInformation) {
+    public RequestForInformationRequest add(RequestForInformation requestForInformation, String actionId) {
         RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
         requestForInformationPayload.setData(requestForInformation);
         this
-                .setURI(URI + "2/perform-action/1/")
+                .setURI(URI + "2/perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformationPayload);
         return this;
@@ -37,59 +37,59 @@ public class RequestForInformationRequest extends HttpRequest {
         return this;
     }
 
-    public RequestForInformationRequest submit(RequestForInformation requestForInformation) {
+    public RequestForInformationRequest submit(RequestForInformation requestForInformation, String actionId) {
         RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
         requestForInformationPayload.setData(requestForInformation);
         this
-                .setURI(URI + "2/perform-action/2/")
+                .setURI(URI + "2/perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformationPayload);
         return this;
     }
 
-    public RequestForInformationRequest remove(RequestForInformation requestForInformation) {
+    public RequestForInformationRequest remove(RequestForInformation requestForInformation, String actionId) {
         RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
         requestForInformationPayload.setData(requestForInformation);
         this
-                .setURI(URI + "1/perform-action/3")
+                .setURI(URI + "1/perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformationPayload);
         return this;
     }
 
-    public RequestForInformationRequest cancel(RequestForInformation requestForInformation) {
+    public RequestForInformationRequest cancel(RequestForInformation requestForInformation, String actionId) {
         RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
         requestForInformationPayload.setData(requestForInformation);
         this
-                .setURI(URI + "2/perform-action/8")
+                .setURI(URI + "2/perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformationPayload);
         return this;
     }
 
-    public RequestForInformationRequest approve(RequestForInformation requestForInformation) {
+    public RequestForInformationRequest approve(RequestForInformation requestForInformation, String actionId) {
         RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
         requestForInformationPayload.setData(requestForInformation);
         this
-                .setURI(URI + "2/perform-action/5/")
+                .setURI(URI + "2/perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformationPayload);
         return this;
     }
 
-    public RequestForInformationRequest send(RequestForInformation requestForInformation) {
+    public RequestForInformationRequest send(RequestForInformation requestForInformation, String actionId) {
         RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
         requestForInformationPayload.setData(requestForInformation);
         this
-                .setURI(URI + "2/perform-action/3")
+                .setURI(URI + "2/perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformationPayload);
         return this;
     }
 
-    public RequestForInformationRequest possibleOwnersMembers(RequestForInformation requestForInformation) {
+    public RequestForInformationRequest possibleOwnersMembers(RequestForInformation requestForInformation, String actionId) {
         this
-                .setURI(URI + "2/possible-owners/2")
+                .setURI(URI + "2/possible-owners/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformation);
         return this;
@@ -97,17 +97,35 @@ public class RequestForInformationRequest extends HttpRequest {
 
     public RequestForInformationRequest possibleOwnersTeams(RequestForInformation requestForInformation) {
         this
-                .setURI(URI + "2/possible-owners/3")
+                .setURI(URI + "2/possible-owners/1-3")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformation);
         return this;
     }
 
-    public RequestForInformationRequest takeOwnership(RequestForInformation requestForInformation) {
+    public RequestForInformationRequest takeOwnership(RequestForInformation requestForInformation, String actionId) {
         RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
         requestForInformationPayload.setData(requestForInformation);
         this
-                .setURI(URI + "2/perform-action/9")
+                .setURI(URI + "2/perform-action/" + actionId)
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForInformationPayload);
+        return this;
+    }
+
+    public RequestForInformationRequest endorse(RequestForInformation requestForInformation, String actionId) {
+        RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
+        requestForInformationPayload.setData(requestForInformation);
+        this
+                .setURI(URI + "2/perform-action/" + actionId)
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForInformationPayload);
+        return this;
+    }
+
+    public RequestForInformationRequest possibleOwner(RequestForInformation requestForInformationPayload, String actionId) {
+        this
+                .setURI(URI + "2/possible-owners/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformationPayload);
         return this;
@@ -123,11 +141,11 @@ public class RequestForInformationRequest extends HttpRequest {
         return this;
     }
 
-    public RequestForInformationRequest unassign(RequestForInformation requestForInformation) {
+    public RequestForInformationRequest unassign(RequestForInformation requestForInformation, String actionId) {
         RequestForInformationPayload requestForInformationPayload = new RequestForInformationPayload();
         requestForInformationPayload.setData(requestForInformation);
         this
-                .setURI(URI + "2/perform-action/14")
+                .setURI(URI + "2/perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformationPayload);
         return this;
@@ -140,6 +158,13 @@ public class RequestForInformationRequest extends HttpRequest {
                 .setURI(URI + "2/perform-action/6")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForInformationPayload);
+        return this;
+    }
+
+    public RequestForInformationRequest allowedactions(String id) {
+        this
+                .setURI(URI + "2/allowed-actions/" + id)
+                .setHttpMethod(HttpMethod.GET);
         return this;
     }
 }

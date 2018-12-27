@@ -3,7 +3,6 @@ package ae.pegasus.framework.model.information_managment.report;
 
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.information_managment.AllOwner;
-import ae.pegasus.framework.model.information_managment.CurrentOwner;
 import ae.pegasus.framework.model.information_managment.ModelSource;
 import ae.pegasus.framework.model.information_managment.NextOwners;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
