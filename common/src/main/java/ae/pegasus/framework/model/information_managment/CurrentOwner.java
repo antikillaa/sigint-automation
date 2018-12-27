@@ -27,11 +27,10 @@ public class CurrentOwner {
     @JsonProperty("attributes")
     private Map<String, Object> attributes;
 
-
+    @JsonProperty("ownerId")
     public String getOwnerId() {
         return ownerId;
     }
-
 
     @JsonProperty("ownerId")
     public void setOwnerId(String ownerId) {
@@ -58,24 +57,19 @@ public class CurrentOwner {
         this.type = type;
     }
 
-    @JsonProperty("ownerFullName")
     public String getOwnerFullName() {
         return ownerFullName;
     }
 
-    @JsonProperty("ownerFullName")
     public void setOwnerFullName(String ownerFullName) {
         this.ownerFullName = ownerFullName;
     }
 
-    @JsonProperty("attributes")
     public Map<String, Object> getAttributes() {
         return attributes;
     }
 
-    @JsonProperty("attributes")
     public void setAttributes(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 }
-

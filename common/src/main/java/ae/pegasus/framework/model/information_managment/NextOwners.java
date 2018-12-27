@@ -54,12 +54,10 @@ public class NextOwners {
         this.type = type;
     }
 
-    @JsonProperty("ownerFullName")
     public String getOwnerFullName() {
         return ownerFullName;
     }
 
-    @JsonProperty("ownerFullName")
     public void setOwnerFullName(String ownerFullName) {
         this.ownerFullName = ownerFullName;
     }
