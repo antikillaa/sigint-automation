@@ -63,7 +63,7 @@ And Imported 5 whitelists, modified 5
 And I delete whitelists
 
 Scenario: API. Import whitelists with errors in file
-Meta: skip
+Meta: @skip
 Given I generate 1 random whitelists
 And I write whitelists to CSV with header
 When I send import whitelists request
