@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
@@ -13,7 +13,7 @@ public class SearchEntity extends AbstractEntity {
     @JsonProperty("@type")
     private String type;
     private DataSourceCategory eventFeed;
-    private List<String> sources;
+    private ArrayList<DataSourceType> sources;
     private String sourceType;
     private String recordType;
     private String subSourceType;
@@ -34,11 +34,11 @@ public class SearchEntity extends AbstractEntity {
         this.eventFeed = eventFeed;
     }
 
-    public List<String> getSources() {
+    public ArrayList<DataSourceType> getSources() {
         return sources;
     }
 
-    public void setSources(List<String> sources) {
+    public void setSources(ArrayList<DataSourceType> sources) {
         this.sources = sources;
     }
 
