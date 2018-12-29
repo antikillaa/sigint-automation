@@ -55,7 +55,7 @@ public class SearchFiltersVerification {
                                         // sourceType, sources
                                         assertEquals(dataSourceType, DataSourceType.valueOf(entity.getSourceType()));
                                         entity.getSources().forEach(source ->
-                                                assertEquals(errorMessage, dataSourceType, DataSourceType.valueOf(source)));
+                                                assertEquals(errorMessage, dataSourceType, source));
                                     }
                             );
 

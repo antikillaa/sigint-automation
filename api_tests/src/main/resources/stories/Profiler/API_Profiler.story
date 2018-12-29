@@ -129,7 +129,7 @@ Then Request is successful
 
 
 Scenario: VoicePrint from manual audio
-Meta: @nightly
+Meta: @skip @nightly
 When I send create finder file request
 Then Request is successful
 When I send create profile request
@@ -145,3 +145,24 @@ When create voiceID for profile
 Then Request is successful
 When I send get profile details request
 Then profile contain created voiceID
+
+
+Scenario: VoicePrint from call record
+When I send create finder file request
+Then Request is successful
+When I send create profile request
+Then Request is successful
+
+When I send CB search request - query:type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND HAS_VPRINT:"true", eventFeed:SIGINT, objectType:event, pageNumber:0, pageSize:1
+Then CB search result list size > 0
+
+When Get participants from random record in search results
+And Add PHONE_NUMBER identifier to profile request
+And Get random voice event from profile
+And create voiceID for profile
+Then Request is successful
+When I send get profile details request
+Then profile contain created voiceID
+
+When Remove Voice ID request
+Then Request is successful

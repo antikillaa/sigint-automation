@@ -12,6 +12,7 @@ import ae.pegasus.framework.verification.SearchFiltersVerification;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 import org.jbehave.core.model.ExamplesTable;
+import org.junit.Assert;
 
 import java.io.IOException;
 import java.util.*;
@@ -22,6 +23,7 @@ import static ae.pegasus.framework.error_reporter.ErrorReporter.raiseError;
 import static ae.pegasus.framework.json.JsonConverter.jsonToObject;
 import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 import static ae.pegasus.framework.utils.DateHelper.*;
+import static ae.pegasus.framework.utils.RandomGenerator.getRandomItemFromList;
 import static ae.pegasus.framework.utils.SearchQueryBuilder.recordStatusToQuery;
 import static ae.pegasus.framework.utils.SearchQueryBuilder.timeRangeToQuery;
 import static ae.pegasus.framework.utils.StepHelper.compareByCriteria;
@@ -439,7 +441,7 @@ public class APISearchSteps extends APISteps {
         List<SearchRecord> entities = context.get("searchEntities", List.class);
 
         SearchRecord wrongEntity = entities.stream()
-                .filter(cbEntity -> !cbEntity.getSources().contains(dataSourceType))
+                .filter(cbEntity -> !cbEntity.getSources().contains(DataSourceType.valueOf(dataSourceType)))
                 .findAny().orElse(null);
 
         assertNull("Search by:" + query + " return:" + toJsonString(wrongEntity), wrongEntity);
@@ -622,5 +624,21 @@ public class APISearchSteps extends APISteps {
             assertTrue(INTERCEPT_REF + " value is empty",
                     !value.isEmpty());
         }
+    }
+
+    @When("Get participants from random record in search results")
+    public void addPhoneNumberFromRandomRecordToProfile() {
+        List<SearchRecord> searchEntities = context.get("searchEntities", List.class);
+        SearchRecord searchRecord = getRandomItemFromList(searchEntities);
+
+        List<SearchRecord> participants = new ArrayList<>();
+        Assert.assertTrue(
+                "Can't get FROM:" + JsonConverter.toJsonString(searchRecord),
+                participants.addAll(searchRecord.getEntities().getFrom()));
+        Assert.assertTrue(
+                "Can't get TO:" + JsonConverter.toJsonString(searchRecord),
+                participants.addAll(searchRecord.getEntities().getTo()));
+
+        context.put("participants", participants);
     }
 }

@@ -58,7 +58,16 @@ public class ProfileService implements EntityService<Profile> {
 
     @Override
     public OperationResult<Profile> update(Profile entity) {
-        throw new NotImplementedException("");
+        log.info("Update Profile: " + toJsonString(entity));
+        G4Response response = g4HttpClient.sendRequest(request.update(entity));
+
+        OperationResult<Profile> operationResult = new OperationResult<>(response, Profile.class, "data");
+        if (operationResult.isSuccess()) {
+            Entities.getProfiles().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
     }
 
     @Override
@@ -178,9 +187,9 @@ public class ProfileService implements EntityService<Profile> {
         }
     }
 
-    public OperationResult<Voice> createVoiceModel(Profile profile, Voice voice) {
+    public OperationResult<Voice> createVoiceID(Profile profile, Voice voice) {
         log.info("Create VoiceID for profile id:" + profile.getId() + " name: " + profile.getName() + ", payload:" + toJsonString(voice));
-        G4Response response = g4HttpClient.sendRequest(request.createVoice(profile.getId(), voice));
+        G4Response response = g4HttpClient.sendRequest(request.createVoiceID(profile.getId(), voice));
 
         OperationResult<Voice> result = new OperationResult<>(response, Voice.class, "data");
         if (result.isSuccess()) {
@@ -189,6 +198,12 @@ public class ProfileService implements EntityService<Profile> {
         } else {
             throw new OperationResultError(result);
         }
+    }
+
+    public OperationResult removeVoiceID(Profile profile) {
+        log.info("Remove VoiceID for profile id:" + profile.getId() + " name: " + profile.getName());
+        G4Response response = g4HttpClient.sendRequest(request.removeVoiceID(profile));
+        return new OperationResult<>(response);
     }
 
     public OperationResult<VoiceFile> uploadAudioFile(Profile profile, File file) {

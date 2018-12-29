@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -412,7 +413,7 @@ public class APIProfileSteps extends APISteps {
         Voice voice = new Voice();
         voice.getRecords().add(record);
 
-        OperationResult<Voice> result = service.createVoiceModel(profile, voice);
+        OperationResult<Voice> result = service.createVoiceID(profile, voice);
         context.put("voice", result.getEntity());
         context.put("profile", profile);
     }
@@ -423,5 +424,44 @@ public class APIProfileSteps extends APISteps {
         Profile profile = context.get("profile", Profile.class);
 
         assertEquals(voice.getId(), profile.getVoiceModelId());
+    }
+
+    @When("Add $identifierType identifier to profile request")
+    public void addIdentifierToProfile(String identifierType) {
+        Profile profile = Entities.getProfiles().getLatest();
+        List<SearchRecord> participants = context.get("participants", List.class);
+
+        SearchRecord participant = getRandomItemFromList(participants);
+        if (participant.getIdentifiers().containsKey(identifierType)) {
+            Object o = participant.getIdentifiers().get(identifierType);
+            String json = toJsonString(o);
+            Identifier[] identifiers = jsonToObject(json, Identifier[].class);
+            Identifier identifier = identifiers[0];
+            identifier.setSources(participant.getSources());
+
+            profile.getIdentifiers().add(identifier);
+        } else {
+            throw new AssertionError("Event participant has no " + identifierType + ":\n" + toJsonString(participant));
+        }
+
+        service.update(profile);
+        context.put("profile", profile);
+    }
+
+    @When("Get random voice event from profile")
+    public void getRandomVoiceEventFromProfile() {
+        Profile profile = Entities.getProfiles().getLatest();
+
+        OperationResult<List<SearchRecord>> result = service.getVoiceEvents(profile);
+        List<SearchRecord> voiceEvents = result.getEntity();
+        SearchRecord voiceEvent = Objects.requireNonNull(getRandomItemFromList(voiceEvents));
+
+        context.put("voiceEvent", voiceEvent);
+    }
+
+    @When("Remove Voice ID request")
+    public void removeVoiceID() {
+        Profile profile = Entities.getProfiles().getLatest();
+        service.removeVoiceID(profile);
     }
 }

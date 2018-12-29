@@ -8,9 +8,7 @@ import javax.ws.rs.core.MediaType;
 import java.io.File;
 import java.util.ArrayList;
 
-import static ae.pegasus.framework.http.HttpMethod.DELETE;
-import static ae.pegasus.framework.http.HttpMethod.GET;
-import static ae.pegasus.framework.http.HttpMethod.POST;
+import static ae.pegasus.framework.http.HttpMethod.*;
 
 public class ProfileRequest extends HttpRequest {
 
@@ -131,11 +129,18 @@ public class ProfileRequest extends HttpRequest {
         return this;
     }
 
-    public ProfileRequest createVoice(String profileID, Voice voice) {
+    public ProfileRequest createVoiceID(String profileID, Voice voice) {
         this
                 .setURI(URI + "/" + profileID + "/voice")
                 .setHttpMethod(POST)
                 .setPayload(voice);
+        return this;
+    }
+
+    public ProfileRequest removeVoiceID(Profile profile) {
+        this
+                .setURI(URI + "/" + profile.getId() + "/voice")
+                .setHttpMethod(DELETE);
         return this;
     }
 
@@ -144,6 +149,14 @@ public class ProfileRequest extends HttpRequest {
         this
                 .setURI(URI + "/" + profileID + "/voice/upload")
                 .setHttpMethod(POST);
+        return this;
+    }
+
+    public ProfileRequest update(Profile profile) {
+        this
+                .setURI(URI + "/" + profile.getId())
+                .setHttpMethod(PUT)
+                .setPayload(profile);
         return this;
     }
 }
