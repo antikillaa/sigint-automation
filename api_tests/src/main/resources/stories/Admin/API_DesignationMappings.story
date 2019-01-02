@@ -40,6 +40,8 @@ Then Request is successful
 And Designation-mappings list size is more than 0
 
 Scenario: API.Search designation-mappings by filters
+Meta:
+@issue CB-22787
 When I send search designation-mappings by <criteria> with <value> request
 Then Request is successful
 And Designation-mappings list size  is more than 0
@@ -47,8 +49,8 @@ And Designation-mappings search result is correct
 
 Examples:
 | criteria      | value  |
-| identifier    | random |
 | type          | random |
+| identifier    | random |
 | spam          | random |
 | designation   | random |
 | updatedAfter  | random |
