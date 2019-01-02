@@ -7,8 +7,12 @@ import java.util.Random;
 
 public enum DataSourceType {
 
+    PROFILER,
     // SIGINT
     DU, E, F, S, T, O, PHONEBOOK, J1, J2, H,
+    // INFORMATION_MANAGEMENT
+    INFORMATION_MANAGEMENT,
+    IM, // FIXME search result sourceType != EventFeed type
     // FININT
     CentralBank,
     // EID
