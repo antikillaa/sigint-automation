@@ -98,6 +98,8 @@ Examples:
 
 
 Scenario: User is able to create nested team
+Meta:
+@issue CB-22814
 When I send create a new team
 Then Request is successful
 
