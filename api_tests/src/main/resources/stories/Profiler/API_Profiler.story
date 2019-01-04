@@ -82,7 +82,7 @@ Then Request is successful
 
 
 Scenario: Add hit(s) for existing targets
-Meta: @nightly
+Meta: @skip @nightly
 Given I clean up ingestion directory
 !-- find first profiler
 When I search finder file members by query:<target>

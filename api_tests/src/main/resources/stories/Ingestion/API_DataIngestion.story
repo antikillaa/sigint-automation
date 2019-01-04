@@ -2,6 +2,7 @@ Meta:
 @API
 @component Ingestion
 @story ingestion
+@skip
 
 Scenario: API.Ingestion with the wrong source type
 Meta: @nightly @Wrong-source-ingestion
