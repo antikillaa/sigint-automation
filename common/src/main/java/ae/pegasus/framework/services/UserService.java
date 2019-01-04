@@ -74,9 +74,11 @@ public class UserService implements EntityService<User> {
 
     @Override
     public OperationResult<RequestResult> remove(User entity) {
-        log.info("Deleting user, id:" + entity.getId() + " name:" + entity.getName());
+        String name = entity.getName() != null ? entity.getName() : entity.getFullName();
+        log.info("Deleting user id:" + entity.getId() + " name:" + name);
+
         if (entity.getCreatedBy() == null) {
-            ErrorReporter.raiseError("You are trying to delete system user " + entity.getName());
+            ErrorReporter.raiseError("You are trying to delete system user: " + name);
         }
 
         G4Response response = g4HttpClient.sendRequest(request.delete(entity.getId()));
@@ -88,7 +90,7 @@ public class UserService implements EntityService<User> {
 
             permissionsUsersMap.values()
                     .forEach(users -> users
-                            .removeIf(user -> Objects.equals(user.getName(), entity.getName())));
+                            .removeIf(user -> Objects.equals(user.getName(), name)));
         }
         return operationResult;
     }

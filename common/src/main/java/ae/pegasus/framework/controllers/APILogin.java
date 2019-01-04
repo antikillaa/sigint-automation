@@ -3,11 +3,10 @@ package ae.pegasus.framework.controllers;
 import ae.pegasus.framework.app_context.AppContext;
 import ae.pegasus.framework.http.G4HttpClient;
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.model.LoggedUser;
-import ae.pegasus.framework.model.RequestResult;
-import ae.pegasus.framework.model.Token;
-import ae.pegasus.framework.model.User;
+import ae.pegasus.framework.http.OperationsResults;
+import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
+import ae.pegasus.framework.services.OrganizationService;
 import ae.pegasus.framework.services.ResponsibilityService;
 import ae.pegasus.framework.services.TitleService;
 import ae.pegasus.framework.services.UserService;
@@ -15,16 +14,21 @@ import ae.pegasus.framework.utils.StringUtils;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.AfterStories;
 import org.jbehave.core.annotations.Given;
+import org.jbehave.core.annotations.When;
 import org.junit.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static ae.pegasus.framework.json.JsonConverter.jsonToObjectsList;
+import static ae.pegasus.framework.json.JsonConverter.toJsonString;
 import static org.junit.Assert.assertTrue;
 
 public class APILogin {
 
     private static AuthService signService = new AuthService();
     private static UserService userService = new UserService();
+    private static OrganizationService organizationService = new OrganizationService();
     private static AppContext context = AppContext.get();
     private static Logger log = Logger.getLogger(APILogin.class);
     private static final String ADMIN_ROLE = "admin";
@@ -161,6 +165,32 @@ public class APILogin {
         signInAsUser(ADMIN_ROLE);
         User createdUser = userService.getOrCreateUserWithOrgUnits(orgUnitsString);
         signInAsUser(createdUser);
+    }
+
+
+    @When("CleanUp users")
+    public void searchUsersAndTeamsInDefaultOrgUnit() {
+        String defaultTeamId = UserService.getOrCreateDefaultTeamId();
+
+        OrganizationFilter filter = new OrganizationFilter().filterBy("parentorgid", defaultTeamId);
+        OperationResult<List<Organization>> operationResult = organizationService.search(filter);
+        List<Organization> organizationList = operationResult.getEntity();
+
+        List<User> users = new ArrayList<>(
+                jsonToObjectsList(
+                        toJsonString(organizationList),
+                        User[].class
+                )
+        );
+
+        List<OperationResult> operationResults = new ArrayList<>();
+        users.stream()
+                .filter(user -> user.getFullName().contains("qe_"))
+                .forEach(organization -> operationResults.add(userService.remove(organization)));
+        // log errors
+        operationResults.stream()
+                .filter(result -> !result.isSuccess())
+                .forEach(OperationsResults::logError);
     }
 
 
