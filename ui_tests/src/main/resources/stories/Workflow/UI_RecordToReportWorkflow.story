@@ -1,6 +1,7 @@
 Meta:
 @UI
 @component Records workflow
+@skip
 
 Lifecycle:
 

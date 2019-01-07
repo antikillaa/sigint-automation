@@ -70,7 +70,7 @@ When I take ownership on selected items
 Given I navigate to My Records
 When I enter search criteria (<SIGINTEventPhone>) on the My Records page
 When I open Card View
-Then I should see 1 SIGINT event(s) on current view
+Then I should see at least 1 of SIGINT events on current view
 When I open details of 1-st displayed SIGINT Event
 Then I should see Owner field's value (<ManagerLogin>) on the search result Details page
 Given I close search result Details page

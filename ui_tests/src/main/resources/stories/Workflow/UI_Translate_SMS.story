@@ -2,6 +2,7 @@ Meta:
 @UI
 @component Records workflow
 @translate
+@skip
 
 Lifecycle:
 Before:
