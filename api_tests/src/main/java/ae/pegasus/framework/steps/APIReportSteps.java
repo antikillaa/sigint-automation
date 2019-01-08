@@ -351,6 +351,9 @@ public class APIReportSteps extends APISteps {
                 .filter(w -> state.equals(w.getActionName()))
                 .findAny()
                 .orElse(null);
+        if (possibleAction == null) {
+            log.error("Permission for action " + state + " is missed");
+        }
         return possibleAction.getId();
     }
 
