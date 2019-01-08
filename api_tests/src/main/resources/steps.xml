@@ -59,4 +59,6 @@
     </bean>
     <bean id="RequestForApproveSteps" class="ae.pegasus.framework.steps.APIRequestForApproveSteps">
     </bean>
+    <bean id="MasterReportSteps" class="ae.pegasus.framework.steps.APIMasterReportSteps">
+    </bean>
 </beans>
