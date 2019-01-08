@@ -345,7 +345,7 @@ public class APIReportSteps extends APISteps {
         assertEquals(updatedReport.getDescription(), contextReport.getDescription());
     }
 
-    private String getRequestAdress(String state) {
+    public String getRequestAdress(String state) {
         List<PossibleActions> possibleActions = context.get("possibleActions", List.class);
         PossibleActions possibleAction = possibleActions.stream()
                 .filter(w -> state.equals(w.getActionName()))
