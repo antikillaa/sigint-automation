@@ -15,6 +15,11 @@ public class UISelectCardsSteps {
         Pages.searchResultsAsCardsPage().select1stDisplayedCard(SearchResultsEvent.SIGINT);
     }
 
+    @When("I select 1-st displayed card")
+    public void iSelect1stDisplauedCard() {
+        Pages.searchResultsAsCardsPage().select1stDisplayedCard();
+    }
+
     private void selectAllCards(SearchResultsEvent event, ExamplesTable identifiers) {
         Pages.searchResultsAsCardsPage().selectAllCardsWithIdentifiers(event, ParametersHelper.processExampleTable(identifiers));
     }

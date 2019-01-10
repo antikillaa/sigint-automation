@@ -41,6 +41,10 @@ public class ActionsWithSelected extends BasePage {
         getButtonWithTitle(ADD_TO_REPORT_BTN_TITLE).click();
     }
 
+    public void exportSelectedRecord() {
+        getButtonWithTitle(EXPORT_RECORDS_BTN_TITLE).click();
+    }
+
     public void addSelectedToMasterReport() {
         getButtonWithTitle(ADD_TO_MASTER_REPORT_BTN_TITLE).click();
     }

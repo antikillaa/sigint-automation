@@ -9,10 +9,103 @@ Scope: SCENARIO
 Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_analyst.table
 
+
+Scenario: Report: user is able to create and delete new operator report from CB Search
+Meta: @L0  @test  C83415
+Given I navigate to Search
+When I enter search criteria (<SIGINTEventIMSI>) on the Search page
+Given I open Search Filter on the Search page
+Given I set Source Type to SIGINT on the Search Filter page
+Given load story ../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given I set Data Source to (|Manual|) on the Search Filter page
+Given I Apply Search using Search Filter on the Search page
+Given I setup Search Authorization
+When I open Card View
+
+Given I select all cards on the Search page
+When I create new report for selected items
+Given I save Report number for the operator report in the context
+When I set Classification (<ReportClassifInit>) in operator report
+When I set Created For (<ReportCreatedForInit>) in operator report
+When I set File Name/Case Name (|<FileNameDefault>|) in operator report
+When I set Organization Units (|<ReportOrgUnitInit>|) in operator report
+When I set Subject (<ReportSubject>) in operator report
+When I set Description (|<ReportDescrInit>|) in operator report
+When I set Considerations (|<ReportConsidInit>|) in operator report
+When I set Recommendations (|<ReportRecommInit>|) in operator report
+When I set Notes (|<ReportNotesInit>|) in operator report
+When I save currently opened operator report as draft
+
+Given I navigate to CB Finder
+When I select file with Name (<FileNameDefault>) in the CB Finder
+When I open operator report with Subject (<ReportSubject>) in file/case which is currently selected in the CB Finder
+Given I Collapse the CB Finder view
+Then I should see that currently opened operator report has status (Initial Draft)
+Then I should see Edit button in operator report
+Then I should see Submit for Review button
+Given load story ../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
+|ExpectedClassification|ExpectedCreatedFor    |ExpectedSubject |ExpectedDescription|ExpectedConsiderations|ExpectedRecommendations|ExpectedNotes    |
+|<ReportClassifInit>   |<ReportCreatedForInit>|<ReportSubject>|<ReportDescrInit>  |<ReportConsidInit>    |<ReportRecommInit>     |<ReportNotesInit>|
+
+Then I should see card attached to currently opened operator report with all following label/value pair(s): |From Phone Number|<SIGINTEventPhone>|From IMSI|<SIGINTEventIMSI>|
+
+When I delete operator report which is currently opened
+
+Given I Sign Out
+
+
+Examples:
+data/ReportL0.table
+
+
+
+Scenario: Report - User is able to attach record to existing report
+Meta: @L0  @test  C83410
+Given I navigate to Search
+When I enter search criteria (<SIGINTEventIMSI>) on the Search page
+Given I open Search Filter on the Search page
+Given I set Source Type to SIGINT on the Search Filter page
+Given load story ../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
+Given I set Data Source to (|Manual|) on the Search Filter page
+Given I Apply Search using Search Filter on the Search page
+Given I setup Search Authorization
+When I open Card View
+
+Given I select all cards on the Search page
+
+When I add selected items to the existing report (<ExtReportSubj>)
+When I save currently opened operator report as draft
+
+
+
+
+Given I navigate to CB Finder
+When I select file with Name (<FileNameDefault>) in the CB Finder
+When I open operator report with Subject (<ExtReportSubj>) in file/case which is currently selected in the CB Finder
+Given I Collapse the CB Finder view
+Then I should see that currently opened operator report has status (Initial Draft)
+Then I should see Edit button in operator report
+Then I should see Submit for Review button
+Given load story ../aux-report-and-request-stories/auxCheckSingleValueReportFields.story with example table:
+|ExpectedClassification|ExpectedCreatedFor    |ExpectedSubject |ExpectedDescription|ExpectedConsiderations|ExpectedRecommendations|ExpectedNotes    |
+|<ReportClassifInit>   |<ReportCreatedForInit>|<ReportSubject>|<ReportDescrInit>  |<ReportConsidInit>    |<ReportRecommInit>     |<ReportNotesInit>|
+
+Then I should see card attached to currently opened operator report with all following label/value pair(s): |From Phone Number|<SIGINTEventPhone>|From IMSI|<SIGINTEventIMSI>|
+
+
+Given I Sign Out
+
+
+Examples:
+data/ReportL0.table
+
+
+
+
+
+
+
 Scenario: User is able to create and edit a report
-
-
-
 Given I navigate to Search
 When I enter search criteria (<GOVINTEventBookRef>) on the Search page
 Given I open Search Filter on the Search page

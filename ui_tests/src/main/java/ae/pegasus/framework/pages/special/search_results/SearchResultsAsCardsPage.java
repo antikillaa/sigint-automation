@@ -187,6 +187,10 @@ public class SearchResultsAsCardsPage extends SearchResultsPage {
         openSearchResultsForCategory(event);
         selectCard(getListOfCards().first());
     }
+    public void select1stDisplayedCard() {
+
+        selectCard(getListOfCards().first());
+    }
 
     public void select1stDisplayedCard(SearchResultsEntity entity) {
         openSearchResultsForCategory(entity);

@@ -58,6 +58,8 @@ public class SearchAuthorizationPage extends BasePageWithSearch {
         return getDialogFooter().$x(".//pg-btn[2]");
     }
 
+
+
     public void enterDataForSearchAuthorization() {
         if (isPageDisplayed()) {
             waitForDialogLoading();
@@ -69,5 +71,9 @@ public class SearchAuthorizationPage extends BasePageWithSearch {
 
             waitForPageLoading();
         }
+    }
+    public boolean isCancelButtonDisplayed()
+    {
+       return getCancelButton().isDisplayed();
     }
 }

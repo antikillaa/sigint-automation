@@ -54,4 +54,10 @@ public class UIActionsWithSelectedSteps {
     public void iUnassignSelected() {
         Pages.actionsWithSelected().unassignSelected();
     }
+
+
+    @When("I export selected items")
+    public void iExportSelected() {
+        Pages.actionsWithSelected().exportSelectedRecord();
+    }
 }
