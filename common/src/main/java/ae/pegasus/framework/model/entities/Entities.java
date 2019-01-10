@@ -17,6 +17,7 @@ public class Entities {
     private static GroupList groups;
     private static RecordList records;
     private static ReportList reports;
+    private static MasterReportList masterReports;
     private static RequestForInformationList requestForInformations;
     private static RequestForApproveList requestForApproves;
     private static SourceList sources;
@@ -200,4 +201,12 @@ public class Entities {
         }
         return requestForApproves;
     }
+
+    public static MasterReportList getMasterReports() {
+        if (masterReports == null) {
+            masterReports = new MasterReportList();
+        }
+        return masterReports;
+    }
+
 }
