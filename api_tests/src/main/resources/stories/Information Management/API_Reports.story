@@ -1,7 +1,7 @@
 Meta:
 @API
 @component Information Management
-@story reports
+@story operator report
 
 Lifecycle:
 Before:
@@ -105,8 +105,6 @@ Examples:
 | OSINT | entity | dataSource:"TUMBLR" | 0 | 100 |
 | GOVINT | entity | dataSource:"SITA" | 0 | 100 |
 | GOVINT | entity | dataSource:"UDB" | 0 | 100 |
-| CIO | entity | dataSource:"ZELZAL" | 0 | 100 |
-| CIO | entity | dataSource:"KARMA" | 0 | 100 |
 
 Scenario: Create a report. [SIGINT] Data Subsource filters
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
@@ -592,5 +590,5 @@ Then Delete exported reports
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize | sources | creator |
-| INFORMATION_MANAGEMENT    | entity     | EntityVO   |        | 0      | 10      | true    | false   |
-| INFORMATION_MANAGEMENT    | entity     | EntityVO   |        | 0      | 10      | false    | false   |
+| INFORMATION_MANAGEMENT    | entity     | EntityVO   |       | 0      | 10      | true    | false   |
+| INFORMATION_MANAGEMENT    | entity     | EntityVO   |       | 0      | 10      | false    | false   |
