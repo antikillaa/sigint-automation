@@ -170,7 +170,6 @@ Examples:
 | INFORMATION_MANAGEMENT | entity | EventVO |   eventFeed:"INFORMATION_MANAGEMENT" AND type:"OperatorReport" AND includeSpam:"false" AND state:"Approved"   | 0 | 10 |
 
 Scenario: Awaiting Review: Take ownership Master Report
-Meta:@wip
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -374,10 +373,10 @@ And Master report is Awaiting Review and INITIAL
 When I get allowed master report actions
 Then Request is successful
 
-When I send get owner a master report in Assign request
+When I send get owner a master report in Take Ownership request
 Then Request is successful
 
-When I send Assign a master report request
+When I send Take Ownership a master report request
 Then Request is successful
 And Master report is Under Review and IN_PROGRESS
 
@@ -672,10 +671,10 @@ And Master report is Awaiting Review and INITIAL
 When I get allowed master report actions
 Then Request is successful
 
-When I send get owner a master report in Assign request
+When I send get owner a master report in Take Ownership request
 Then Request is successful
 
-When I send Assign a master report request
+When I send Take Ownership a master report request
 Then Request is successful
 And Master report is Under Review and IN_PROGRESS
 
@@ -731,10 +730,10 @@ And Master report is Awaiting Review and INITIAL
 When I get allowed master report actions
 Then Request is successful
 
-When I send get owner a master report in Assign request
+When I send get owner a master report in Take Ownership request
 Then Request is successful
 
-When I send Assign a master report request
+When I send Take Ownership a master report request
 Then Request is successful
 And Master report is Under Review and IN_PROGRESS
 

@@ -352,7 +352,7 @@ public class APIReportSteps extends APISteps {
                 .findAny()
                 .orElse(null);
         if (possibleAction == null) {
-            log.error("Permission for action " + state + " is missed");
+            log.error("Permission for " + state + " action is missed");
         }
         return possibleAction.getId();
     }
