@@ -373,10 +373,10 @@ And Master report is Awaiting Review and INITIAL
 When I get allowed master report actions
 Then Request is successful
 
-When I send get owner a master report in Assign request
+When I send get owner a master report in Take Ownership request
 Then Request is successful
 
-When I send Assign a master report request
+When I send Take Ownership a master report request
 Then Request is successful
 And Master report is Under Review and IN_PROGRESS
 
@@ -671,10 +671,10 @@ And Master report is Awaiting Review and INITIAL
 When I get allowed master report actions
 Then Request is successful
 
-When I send get owner a master report in Assign request
+When I send get owner a master report in Take Ownership request
 Then Request is successful
 
-When I send Assign a master report request
+When I send Take Ownership a master report request
 Then Request is successful
 And Master report is Under Review and IN_PROGRESS
 
@@ -730,10 +730,10 @@ And Master report is Awaiting Review and INITIAL
 When I get allowed master report actions
 Then Request is successful
 
-When I send get owner a master report in Assign request
+When I send get owner a master report in Take Ownership request
 Then Request is successful
 
-When I send Assign a master report request
+When I send Take Ownership a master report request
 Then Request is successful
 And Master report is Under Review and IN_PROGRESS
 
