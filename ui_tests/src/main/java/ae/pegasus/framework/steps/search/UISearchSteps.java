@@ -82,6 +82,7 @@ public class UISearchSteps {
     @Given("I open Search Filter on the Search page")
     public void iOpenSearchFilter() {
         Pages.searchPage().openSearchFilter();
+
     }
 
     @Given("I Apply Search using Search Filter on the Search page")
