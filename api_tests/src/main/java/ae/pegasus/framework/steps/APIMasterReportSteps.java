@@ -194,7 +194,15 @@ public class APIMasterReportSteps extends APISteps {
                 }
             }
         }
-        masterReport.setOrgUnits(orgUnits);
+
+        OrgUnit orgUnit = orgUnits
+                .stream()
+                .filter(w -> w.getOrgUnitName().equals("QE auto team")).findAny().orElse(null);
+
+        ArrayList<OrgUnit> orgUnitsSet = new ArrayList<>();
+        orgUnitsSet.add(orgUnit);
+
+        masterReport.setOrgUnits(orgUnitsSet);
 
     }
 
