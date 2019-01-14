@@ -55,9 +55,34 @@ public class UIActionsWithSelectedSteps {
         Pages.actionsWithSelected().unassignSelected();
     }
 
+    @When("I unassign selected items on OrgUnit Records page")
+    public void iUnassignSelectedOnOrgUnit() {
+        Pages.actionsWithSelected().unassignSelectedOrgPage();
+    }
+
 
     @When("I export selected items")
     public void iExportSelected() {
         Pages.actionsWithSelected().exportSelectedRecord();
     }
+
+
+    @When("I reassign selected items to ($userName)")
+    public void iReassignSelectedOther(String userName) {
+        Pages.actionsWithSelected().reassignSelectedToOther();
+        Pages.assignRecordsPage().waitDialogLoading();
+        Pages.assignRecordsPage().assignRecordToUser(userName);
+    }
+
+    @When("I mark selected items on OrgUnit Records page as reviewed")
+    public void imarkSelectedAsReivewed() {
+        Pages.actionsWithSelected().markReivewedSelected();
+    }
+
+    @When("I mark selected items on OrgUnit Records page as unreviewed")
+    public void imarkSelectedAsUnReivewed() {
+        Pages.actionsWithSelected().unMarkReivewedSelected();
+    }
+
+
 }

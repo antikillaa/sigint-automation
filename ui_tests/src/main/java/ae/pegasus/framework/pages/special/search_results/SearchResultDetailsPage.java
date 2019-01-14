@@ -34,7 +34,7 @@ public class SearchResultDetailsPage extends BaseModalDialogPage {
     }
 
     private SelenideElement getContentBase() {
-        return getDialogBody().$x(".//div[@slot='content']");
+        return getDialogBody().$x(".//div[@ref='contentSectionElement']");
     }
 
     private SelenideElement getRecordDetailsBase(String ref) {
@@ -99,7 +99,7 @@ public class SearchResultDetailsPage extends BaseModalDialogPage {
     }
 
     private SelenideElement getTranslationBase(SearchResultsTranslationType translationType) {
-        return getContentBase().$x(".//h6[text()='" + translationType.getTranslationType() + "']/..");
+        return getContentBase().$x(".//pg-textarea");
     }
 
     private SelenideElement getTranslationTextArea(SearchResultsTranslationType translationType) {
@@ -118,7 +118,7 @@ public class SearchResultDetailsPage extends BaseModalDialogPage {
         String result = "";
         if (isTranslationDisplayed(translationType)) {
             if (getTranslationButton(translationType, EDIT_BUTTON_LABEL).isDisplayed()) {
-               result = getTranslationBase(translationType).$x("./div/div").getText().trim();
+               result = getTranslationBase(translationType).getValue().trim();
             } else {
                 result = getTranslationTextArea(translationType).getValue().trim();
             }

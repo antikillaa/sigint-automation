@@ -16,6 +16,10 @@ public class ActionsWithSelected extends BasePage {
     private final String ASSIGN_TO_OTHER_BTN_TITLE = "Assign...";
     private final String ASSIGN_TO_ME_BTN_TITLE = "Take Ownership (Assign to me)";
     private final String UNASSIGN_BTN_TITLE = "Remove Ownership (Unassign from me)";
+    private final String REASSIGN_TO_OTHER_BTN_TITLE = "Reassign...";
+    private final String UNASSIGN_BTN_TITLE_ORGPAGE = "Unassign";
+    private final String MARKREVIEWED_BTN_TITLE = "Mark Reviewed";
+    private final String UNMARKREVIEWED_BTN_TITLE = "Unmark Reviewed";
 
     @Override
     public String getPageTitle() {
@@ -57,6 +61,10 @@ public class ActionsWithSelected extends BasePage {
         getButtonWithTitle(ASSIGN_TO_OTHER_BTN_TITLE).click();
     }
 
+    public void reassignSelectedToOther() {
+        getButtonWithTitle(REASSIGN_TO_OTHER_BTN_TITLE).click();
+    }
+
     public void assignSelectedToMe() {
         closeAllPopUps();
         getButtonWithTitle(ASSIGN_TO_ME_BTN_TITLE).click();
@@ -68,6 +76,23 @@ public class ActionsWithSelected extends BasePage {
         closeAllPopUps();
         getButtonWithTitle(UNASSIGN_BTN_TITLE).click();
         Pages.modalDialogPage().clickButton(YES);
+        getSuccessPopUp().shouldBe(visible);
+    }
+
+    public void unassignSelectedOrgPage() {
+        closeAllPopUps();
+        getButtonWithTitle(UNASSIGN_BTN_TITLE_ORGPAGE).click();
+        Pages.modalDialogPage().clickButton(YES);
+        getSuccessPopUp().shouldBe(visible);
+    }
+
+    public void markReivewedSelected() {
+        getButtonWithTitle(MARKREVIEWED_BTN_TITLE).click();
+        getSuccessPopUp().shouldBe(visible);
+    }
+
+    public void unMarkReivewedSelected() {
+        getButtonWithTitle(UNMARKREVIEWED_BTN_TITLE).click();
         getSuccessPopUp().shouldBe(visible);
     }
  }

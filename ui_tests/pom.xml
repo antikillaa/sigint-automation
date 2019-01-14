@@ -21,6 +21,18 @@
             <artifactId>api-tests</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>1.20</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-langdetect</artifactId>
+            <version>1.13</version>
+        </dependency>
+
         <!--Selenium tool-->
         <dependency>
             <groupId>com.codeborne</groupId>
