@@ -6,7 +6,7 @@ Meta:
 
 
 Scenario: Verify that a manager can assign records to another user using ad-hoc assignment
-Meta: @L10  @test  C83424
+Meta: @L0  @test  C83424
 Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_manager.table
 
@@ -49,7 +49,7 @@ Examples:
 
 
 Scenario: Verify that a manager can assign records to another user using ad-hoc assignment
-Meta: @L10  @test  C83425
+Meta: @L0  @test  C83425
 Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login.table
 
@@ -84,7 +84,7 @@ Examples:
 
 
 Scenario: Record - Under My/OrgUnit Records, team manager can reassign records to another user
-Meta: @L10  @test  C83427
+Meta: @L0  @test  C83427
 Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_manager.table
 
@@ -145,7 +145,7 @@ Examples:
 
 
 Scenario: Record - Under My/OrgUnit Records, team manager can un-assign records
-Meta: @L10  @test  C83471
+Meta: @L0  @test  C83471
 Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_manager.table
 
@@ -175,7 +175,7 @@ Examples:
 
 
 Scenario: Record - Under My/OrgUnit Records, team manager can mark records as reviewed
-Meta: @L100  @test  C83472
+Meta: @L0  @test  C83472
 Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_manager.table
 
