@@ -3,6 +3,8 @@ package ae.pegasus.framework.steps.special;
 import org.jbehave.core.annotations.When;
 import ae.pegasus.framework.pages.Pages;
 
+import static com.codeborne.selenide.Selenide.sleep;
+
 public class UIActionsWithSelectedSteps {
     @When("I create new report for selected items")
     public void iCreateNewReport() {
@@ -65,6 +67,15 @@ public class UIActionsWithSelectedSteps {
     public void iExportSelected() {
         Pages.actionsWithSelected().exportSelectedRecord();
     }
+
+
+    @When("I export selected Document")
+    public void iExportSelectedReports() {
+        Pages.actionsWithSelected().exportSelectedDocumnet();
+        //FIXME Seems there is no loading when details opened but such loading is required
+        sleep(7000);
+    }
+
 
 
     @When("I reassign selected items to ($userName)")

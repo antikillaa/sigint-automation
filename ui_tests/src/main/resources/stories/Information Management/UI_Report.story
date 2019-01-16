@@ -100,10 +100,30 @@ Examples:
 data/ReportL0.table
 
 
+Scenario:Report - User is able to export report
+Meta: @L10  @test  C83470
+Given I navigate to Search
+When I enter search criteria (<ReportSubjectSearch>) on the Search page
+Given I open Search Filter on the Search page
+Given I set Source Type to Documents on the Search Filter page
+Given I set Record Type to (|<RecordType>|) on the Search Filter page
+Given I set Status Type to (|<StatusType>|) on the Search Filter page
+Given I set File or Case Type to (|<MasterReportFile>|) on the Search Filter page
+Given I Apply Search using Search Filter on the Search page
+Given I setup Search Authorization
+Given I select all cards on the Search page
+When I export selected Document
+Then I verify the downloaded operator report for (<PDFValues>)
 
 
 
 
+
+
+
+
+Examples:
+data/MasterReport.table
 
 Scenario: User is able to create and edit a report
 Given I navigate to Search

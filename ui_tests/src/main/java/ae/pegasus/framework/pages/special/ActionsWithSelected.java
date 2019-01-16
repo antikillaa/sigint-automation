@@ -13,6 +13,7 @@ public class ActionsWithSelected extends BasePage {
     private final String ADD_TO_REPORT_BTN_TITLE = "Add to Report";
     private final String ADD_TO_MASTER_REPORT_BTN_TITLE = "Add to Master Report";
     private final String EXPORT_RECORDS_BTN_TITLE = "Export Record(s)";
+    private final String EXPORT_DOCUMENT_BTN_TITLE = "Export Document(s)";
     private final String ASSIGN_TO_OTHER_BTN_TITLE = "Assign...";
     private final String ASSIGN_TO_ME_BTN_TITLE = "Take Ownership (Assign to me)";
     private final String UNASSIGN_BTN_TITLE = "Remove Ownership (Unassign from me)";
@@ -49,6 +50,10 @@ public class ActionsWithSelected extends BasePage {
         getButtonWithTitle(EXPORT_RECORDS_BTN_TITLE).click();
     }
 
+    public void exportSelectedDocumnet() {
+        getButtonWithTitle(EXPORT_DOCUMENT_BTN_TITLE).click();
+        $x("//pg-btn[@label ='Download Archive']").click();
+    }
     public void addSelectedToMasterReport() {
         getButtonWithTitle(ADD_TO_MASTER_REPORT_BTN_TITLE).click();
     }

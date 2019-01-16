@@ -1,10 +1,13 @@
 package ae.pegasus.framework.steps.special.IM_requests.operator_report;
 
 import ae.pegasus.framework.assertion.Asserter;
+import ae.pegasus.framework.context.Context;
+import ae.pegasus.framework.utils.PDFReader;
 import ae.pegasus.framework.utils.ParametersHelper;
 import ae.pegasus.framework.constants.profiler.ProfilerWidget;
 
 import ae.pegasus.framework.constants.special.IM.IMField;
+import ae.pegasus.framework.utils.UnzipFolder;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.model.ExamplesTable;
 import ae.pegasus.framework.pages.Pages;
@@ -148,4 +151,13 @@ public class UIVerifyOperatorReportFieldsSteps {
     public void iShouldSeeRFIsSnapshots(int numberOfSnapshots) {
         checkNumberOfSnapshots(RFIS, numberOfSnapshots);
     }
+
+    @Then("I verify the downloaded operator report for ($values)")
+    public void iShouldVerifyOperatorReport(String values) {
+
+        UnzipFolder.startUnzip(PDFReader.getDownloadedReportPath() , Context.getContext().getReportNumber());
+
+        PDFReader.validatePDF((UnzipFolder.getFileNameStartingWith((PDFReader.getDownloadedReportPath() +"/Output"), "Operator")), values);
+    }
+
 }
