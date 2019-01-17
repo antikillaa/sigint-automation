@@ -51,7 +51,7 @@ public class UISteps {
         loggingPreferences.enable(LogType.BROWSER, Level.ALL);
         capabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
         capabilities.setBrowserName(browser);
-        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+
 
 
         if (remoteRun) {
@@ -60,6 +60,7 @@ public class UISteps {
             webDriver.manage().window().setSize(new Dimension(1920, 1080));
             WebDriverRunner.setWebDriver(webDriver);
         } else {
+            capabilities.setCapability(ChromeOptions.CAPABILITY, options);
             System.setProperty("chromeoptions.args", "--no-proxy-server");
             // Stage
             String workingDir = System.getProperty("user.dir") + "/Data/chromedriver";
