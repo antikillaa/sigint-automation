@@ -7,12 +7,15 @@ import ae.pegasus.framework.data_generators.TextLinesGenerator;
 import ae.pegasus.framework.utils.FileHelper;
 import ae.pegasus.framework.utils.PageUtils;
 import ae.pegasus.framework.utils.TimeUtils;
+import ae.pegasus.framework.utils.UnzipFolder;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import org.apache.log4j.Logger;
 import org.jbehave.core.annotations.*;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
@@ -21,6 +24,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 
@@ -31,14 +35,24 @@ public class UISteps {
 
     @BeforeStory
     public void initWebDriver() throws IOException {
+        String ouputPath = System.getProperty("user.dir")+ "/PDF" ;
+        String ouputUnzipPath = System.getProperty("user.dir")+ "/PDF/Output" ;
         boolean remoteRun = G4Properties.getRunProperties().isRemoteRun();
         String browser = G4Properties.getRunProperties().getWebBrowser();
+        ChromeOptions options = new ChromeOptions();
+        HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
+        chromePrefs.put("profile.default_content_settings.popups", 0);
+        chromePrefs.put("download.default_directory", ouputPath);
+        options.setExperimentalOption("prefs", chromePrefs);
+
 
         DesiredCapabilities capabilities = DesiredCapabilities.chrome();
         LoggingPreferences loggingPreferences = new LoggingPreferences();
         loggingPreferences.enable(LogType.BROWSER, Level.ALL);
         capabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
         capabilities.setBrowserName(browser);
+        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+
 
         if (remoteRun) {
             String seleniumHub = G4Properties.getRunProperties().getSeleniumHub();
@@ -48,8 +62,11 @@ public class UISteps {
         } else {
             System.setProperty("chromeoptions.args", "--no-proxy-server");
             // Stage
-            // String workingDir = System.getProperty("user.dir") + "/chromedriver.exe";
-           // System.setProperty("webdriver.chrome.driver", workingDir);
+            String workingDir = System.getProperty("user.dir") + "/Data/chromedriver";
+            System.setProperty("webdriver.chrome.driver", workingDir);
+            WebDriver webDriver = new ChromeDriver(options);
+            WebDriverRunner.setWebDriver(webDriver);
+
         }
 
         Configuration.browser = browser;
@@ -91,6 +108,7 @@ public class UISteps {
     @BeforeStory
     public void onStoryStart() {
         skipReloading = true;
+        UnzipFolder.clearDownloadFolder(System.getProperty("user.dir") + "/PDF");
     }
 
     private static final String CHECK_JS_ERRORS_STEP_DEFINITION = "Check JS errors";

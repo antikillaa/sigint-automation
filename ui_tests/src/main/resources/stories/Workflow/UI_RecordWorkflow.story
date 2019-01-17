@@ -6,7 +6,7 @@ Meta:
 
 
 Scenario: Verify that a manager can assign records to another user using ad-hoc assignment
-Meta: @L110  @test  C83424
+Meta: @L0  @test  C83424
 Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_manager.table
 

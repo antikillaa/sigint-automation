@@ -7,6 +7,7 @@ import com.codeborne.selenide.SelenideElement;
 import static ae.pegasus.framework.constants.special.modal_dialog.ModalDialogButton.YES;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.Selenide.sleep;
 
 public class ActionsWithSelected extends BasePage {
     private final String ADD_TO_TARGET_BTN_TITLE = "Add to Target";
@@ -52,6 +53,7 @@ public class ActionsWithSelected extends BasePage {
 
     public void exportSelectedDocumnet() {
         getButtonWithTitle(EXPORT_DOCUMENT_BTN_TITLE).click();
+        sleep(3000);
         $x("//pg-btn[@label ='Download Archive']").click();
     }
     public void addSelectedToMasterReport() {
