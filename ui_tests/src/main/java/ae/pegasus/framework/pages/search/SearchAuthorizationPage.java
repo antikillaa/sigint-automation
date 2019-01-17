@@ -9,6 +9,7 @@ import ae.pegasus.framework.pages.basic_pages.api.BasePageWithSearch;
 import static com.codeborne.selenide.Selenide.$x;
 import static ae.pegasus.framework.constants.CommonXPaths.INTERNAL_LOADING_XPATH;
 import static ae.pegasus.framework.constants.search.search.SearchAuthorizationField.JUSTIFICATION;
+import static com.codeborne.selenide.Selenide.sleep;
 
 public class SearchAuthorizationPage extends BasePageWithSearch {
 
@@ -68,6 +69,7 @@ public class SearchAuthorizationPage extends BasePageWithSearch {
             getDialogFieldRootByName(JUSTIFICATION).$x(".//textarea").sendKeys("For test");
 
             getContinueButton().click();
+            sleep(2000);
 
             waitForPageLoading();
         }
