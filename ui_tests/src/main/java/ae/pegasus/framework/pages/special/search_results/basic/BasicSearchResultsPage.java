@@ -26,7 +26,7 @@ public abstract class BasicSearchResultsPage extends BasePage {
     }
 
     protected SelenideElement getSearchResultsViewSwitcher() {
-        return getSearchResultsSetupContainer().$x(".//pg-radio-btn-group[@options.bind='viewOptions']");
+        return getSearchResultsSetupContainer().$x(".//pg-radio-btn-group[@options.one-way='viewOptions']");
     }
 
     protected SelenideElement getSearchResultsRepresentationSwitcher() {
