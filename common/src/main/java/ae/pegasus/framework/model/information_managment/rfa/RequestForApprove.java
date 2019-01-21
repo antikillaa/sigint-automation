@@ -1,11 +1,7 @@
 package ae.pegasus.framework.model.information_managment.rfa;
 
-import ae.pegasus.framework.model.DirectCaseFile;
 import ae.pegasus.framework.model.G4Entity;
-import ae.pegasus.framework.model.Link;
-import ae.pegasus.framework.model.OrgUnit;
-import ae.pegasus.framework.model.information_managment.AllOwner;
-import ae.pegasus.framework.model.information_managment.NextOwners;
+import ae.pegasus.framework.model.information_managment.*;
 import com.fasterxml.jackson.annotation.*;
 
 import java.util.HashMap;
@@ -55,6 +51,7 @@ public class RequestForApprove extends G4Entity {
     private List<NextOwners> nextOwners = null;
     @JsonProperty("allOwners")
     private List<AllOwner> allOwners = null;
+
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 

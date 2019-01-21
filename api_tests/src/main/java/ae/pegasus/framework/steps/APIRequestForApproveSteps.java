@@ -6,7 +6,9 @@ import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.model.information_managment.CurrentOwner;
+import ae.pegasus.framework.model.information_managment.Link;
 import ae.pegasus.framework.model.information_managment.NextOwners;
+import ae.pegasus.framework.model.information_managment.PossibleActions;
 import ae.pegasus.framework.model.information_managment.rfa.RequestForApprove;
 import ae.pegasus.framework.services.RequestForApproveService;
 import ae.pegasus.framework.services.SearchService;
@@ -23,6 +25,7 @@ import static org.junit.Assert.assertNotNull;
 public class APIRequestForApproveSteps extends APISteps {
 
     public static RequestForApproveService serviceRequestForApprove = new RequestForApproveService();
+    private static APIReportSteps serviceReport = new APIReportSteps();
 
     @When("I send generate RFA number request")
     public void sendGenerateRFANumberRequest() {
@@ -38,15 +41,73 @@ public class APIRequestForApproveSteps extends APISteps {
         context.put("loggedUser", loggedUser);
     }
 
-    @When("I send create a RFA request")
-    public void sendCreateRFARequest() {
+    @When("I get allowed RFA actions")
+    public void sendGetAllowedMRActions() {
+        String imId = Entities.getMasterReports().getLatest() == null ? "" : Entities.getRequestForApproves().getLatest().getId();
+        OperationResult<List<PossibleActions>> operationResult = serviceRequestForApprove.possibleaction(imId);
+        List<PossibleActions> possibleActions = operationResult.getEntity();
+        context.put("possibleActions", possibleActions);
+    }
+
+    @When("I send $state a RFA request")
+    public void sendMoveToStateRequest(String state) {
+        switch (state) {
+            case "Save as Draft":
+                saveAsDraft(state);
+                break;
+            case "View":
+                break;
+            case "Delete":
+                break;
+            case "Save":
+                break;
+            case "Submit for Review":
+                break;
+            case "Cancel":
+                break;
+            case "Take Ownership":
+                break;
+            case "Assign":
+                break;
+            case "Unassign":
+                break;
+            case "Re-assign":
+                break;
+            case "Return to Author":
+                break;
+            case "Approve":
+                break;
+            case "Reject":
+                break;
+            default:
+                log.error("State is not found");
+        }
+    }
+
+    public void saveAsDraft(String state) {
         RequestForApprove requestForApprove = new RequestForApprove();
         Result rfaNo = context.get("rfaNo", Result.class);
         List<SearchRecord> entities = context.get("searchEntities", List.class);
-        serviceRequestForApprove.buildRFA(requestForApprove, rfaNo, entities);
-        context.put("requestForApprove", requestForApprove);
-        sleep(60000); //FIXME
-        serviceRequestForApprove.add(requestForApprove);
+
+        RequestForApprove rfi = new RequestForApprove();
+
+        if (state.equals("Save as Draft")) {
+            serviceRequestForApprove.buildRFA(requestForApprove, rfaNo, entities);
+            String actionId = serviceReport.getRequestAdress(state);
+            context.put("requestForApprove", rfi);
+            sleep(60000); //FIXME
+            OperationResult<RequestForApprove> operationResult = serviceRequestForApprove.add(requestForApprove, actionId);
+            RequestForApprove reportResult = operationResult.getEntity();
+            context.put("reportID", reportResult.getId());
+
+        } else if (state.equals("Save")) {
+            RequestForApprove report = Entities.getRequestForApproves().getLatest();
+            String actionId = serviceReport.getRequestAdress(state);
+            report.setSubject("qe_" + RandomStringUtils.randomAlphabetic(10));
+            OperationResult<RequestForApprove> operationResult = serviceRequestForApprove.add(report, actionId);
+            RequestForApprove reportResult = operationResult.getEntity();
+            context.put("expectedReport", reportResult);
+        }
     }
 
     @When("I send get owner teams a RFA request")

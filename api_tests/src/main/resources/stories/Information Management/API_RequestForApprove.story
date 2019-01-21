@@ -2,7 +2,6 @@ Meta:
 @API
 @component Information Management
 @story rfa
-@nightly
 
 Lifecycle:
 Before:
@@ -12,6 +11,7 @@ Then Request is successful
 When I save logged user
 
 Scenario: Create/Delete a RFA
+Meta:@wip
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -19,7 +19,10 @@ And CB search result list size > 0
 When I send generate RFA number request
 Then Request is successful
 
-When I send create a RFA request
+When I get allowed RFA actions
+Then Request is successful
+
+When I send Save as Draft a RFA request
 Then Request is successful
 Then RFA is created
 

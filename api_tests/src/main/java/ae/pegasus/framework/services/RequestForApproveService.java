@@ -9,7 +9,9 @@ import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
 import ae.pegasus.framework.model.information_managment.CurrentOwner;
 import ae.pegasus.framework.model.information_managment.NextOwners;
+import ae.pegasus.framework.model.information_managment.PossibleActions;
 import ae.pegasus.framework.model.information_managment.rfa.RequestForApprove;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 
@@ -25,18 +27,8 @@ public class RequestForApproveService implements EntityService<RequestForApprove
     private static RequestForApproveRequest requestForApproveRequest = new RequestForApproveRequest();
 
     @Override
-    public OperationResult<RequestForApprove> add(RequestForApprove entity) {
-        log.info("Sending create new RFI request... :" + JsonConverter.toJsonString(entity));
-
-        G4Response response = g4HttpClient.sendRequest(requestForApproveRequest.add(entity));
-
-        OperationResult<RequestForApprove> operationResult = new OperationResult<>(response, RequestForApprove.class, "result");
-        if (operationResult.isSuccess()) {
-            Entities.getRequestForApproves().addOrUpdateEntity(operationResult.getEntity());
-        } else {
-            throw new OperationResultError(operationResult);
-        }
-        return operationResult;
+    public OperationResult<?> add(RequestForApprove entity) {
+        throw new NotImplementedException("");
     }
 
     @Override
@@ -66,8 +58,7 @@ public class RequestForApproveService implements EntityService<RequestForApprove
 
     @Override
     public OperationResult<RequestForApprove> update(RequestForApprove entity) {
-        log.info("Sending update RFA request...");
-        return add(entity);
+        throw new NotImplementedException("");
     }
 
     @Override
@@ -80,6 +71,33 @@ public class RequestForApproveService implements EntityService<RequestForApprove
             Entities.getRequestForApproves().addOrUpdateEntity(operationResult.getEntity());
         }
         return operationResult;
+    }
+
+    public OperationResult<RequestForApprove> add(RequestForApprove entity, String actionId) {
+        log.info("Sending create new report request...");
+
+        G4Response response = g4HttpClient.sendRequest(requestForApproveRequest.add(entity, actionId));
+
+        OperationResult<RequestForApprove> operationResult = new OperationResult<>(response, RequestForApprove.class, "result");
+        if (operationResult.isSuccess()) {
+            Entities.getRequestForApproves().addOrUpdateEntity(operationResult.getEntity());
+        } else {
+            throw new OperationResultError(operationResult);
+        }
+        return operationResult;
+    }
+
+    public OperationResult<List<PossibleActions>> possibleaction(String id) {
+        log.info("Sending submit a possible actions request...");
+
+        G4Response response = g4HttpClient.sendRequest(requestForApproveRequest.allowedactions(id));
+
+        OperationResult<PossibleActions[]> operationResult = new OperationResult<>(response, PossibleActions[].class);
+        if (operationResult.isSuccess()) {
+            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
+        } else {
+            return new OperationResult<>(response);
+        }
     }
 
     public OperationResult<Result> generateNumber() {
