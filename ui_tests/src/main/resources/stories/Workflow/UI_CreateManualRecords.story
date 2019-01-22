@@ -36,7 +36,6 @@ Given I save record created in the Manual Event Record dialog
 Given I navigate to My Records
 When I use IMSI from manually created record identified as (<RecordID>) as search criteria on the Record page
 Given I open Search Filter on the Team Records page
-Given I set date (01/01/2016) as Earliest Event Time on the Search Filter page
 Given I Apply Search using Search Filter on the Team Records page
 Given I setup Search Authorization
 
@@ -95,7 +94,6 @@ Given I navigate to My Records
 
 When I use IMSI from manually created record identified as (<RecordID>) as search criteria on the Record page
 Given I open Search Filter on the Team Records page
-Given I set date (01/01/2016) as Earliest Event Time on the Search Filter page
 Given I Apply Search using Search Filter on the Team Records page
 Given I setup Search Authorization
 
@@ -148,7 +146,6 @@ Given I save record created in the Manual Event Record dialog
 Given I navigate to My Records
 When I use IMSI from manually created record identified as (<RecordID>) as search criteria on the Record page
 Given I open Search Filter on the Team Records page
-Given I set date (01/01/2016) as Earliest Event Time on the Search Filter page
 Given I Apply Search using Search Filter on the Team Records page
 Given I setup Search Authorization
 
@@ -202,7 +199,6 @@ Given I save record created in the Manual Event Record dialog
 Given I navigate to My Records
 When I use From Number from manually created record identified as (<RecordID>) as search criteria on the Record page
 Given I open Search Filter on the Team Records page
-Given I set date (01/01/2016) as Earliest Event Time on the Search Filter page
 Given I Apply Search using Search Filter on the Team Records page
 Given I setup Search Authorization
 Then I should see 1 SIGINT event(s) on current view
@@ -250,7 +246,6 @@ Given I save record created in the Manual Event Record dialog
 Given I navigate to My Records
 When I use To E-mail from manually created record identified as (<RecordID>) as search criteria on the Record page
 Given I open Search Filter on the Team Records page
-Given I set date (01/01/2016) as Earliest Event Time on the Search Filter page
 Given I Apply Search using Search Filter on the Team Records page
 Given I setup Search Authorization
 

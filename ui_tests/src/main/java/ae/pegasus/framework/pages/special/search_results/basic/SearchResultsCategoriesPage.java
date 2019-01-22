@@ -41,10 +41,7 @@ public class SearchResultsCategoriesPage extends SearchResultsRepresentationsPag
         SelenideElement searchResults = getSearchResultWithoutCategory();
         if (searchResults.isDisplayed()) {
             String result = searchResults.getText();
-            String numberStartIndent = "of";
-            int startIndex = result.indexOf(numberStartIndent) + numberStartIndent.length();
-            int endIndex = result.indexOf("results");
-            return result.substring(startIndex, endIndex).trim();
+            return result;
         }
         return "";
     }

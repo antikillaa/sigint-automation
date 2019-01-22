@@ -89,10 +89,10 @@ public abstract class BasePageWithSearch extends BasePage {
 
     public void openSearchFilter() {
         getSearchFilterButton().click();
-        if (!Pages.searchFilterPage().isPageDisplayed()) {
+        /*if (!Pages.searchFilterPage().isPageDisplayed()) {
             Asserter.getAsserter().softAssertTrue(false, "", "Applied patch for open search filter page");
             getSearchFilterButton().click();
-        }
+        }*/
     }
 
     protected SelenideElement getSearchActionButton(String actionButton) {

@@ -41,7 +41,7 @@ public class SearchAuthorizationPage extends BasePageWithSearch {
 
     protected void waitForDialogLoading() {
         try {
-            getDialogLoading().waitUntil(Condition.visible, 100, 10);
+            getDialogLoading().waitUntil(Condition.visible, 500, 10);
             System.out.println("Dialog's loading appears");
         } catch (UIAssertionError e) {
             System.out.println("Dialog's loading does not appear");

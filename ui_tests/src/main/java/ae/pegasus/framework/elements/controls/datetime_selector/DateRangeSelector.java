@@ -82,7 +82,7 @@ public class DateRangeSelector extends CommonDateSelector {
         //selectDateRangePeriod(CUSTOM);
         setDateViaCalendarSelection(getCalendarInput(FROM), prepareDate(FROM, dateFrom));
         setDateViaCalendarSelectionto(getCalendarInput(TO), prepareDate(TO, dateTo));
-        applyDate();
-        collapse();
+      //  applyDate();
+       // collapse();
     }
 }

@@ -101,7 +101,7 @@ data/ReportL0.table
 
 
 Scenario:Report - User is able to export report
-Meta: @L10  @test  C83470
+Meta: @L100  @test  C83470
 Given I navigate to Search
 When I enter search criteria (<ReportSubjectSearch>) on the Search page
 Given I open Search Filter on the Search page
