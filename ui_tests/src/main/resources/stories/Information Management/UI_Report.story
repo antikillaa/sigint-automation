@@ -424,7 +424,7 @@ When I route the operator report
 
 Given I Sign Out
 
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_manager.table
 
 Given I navigate to CB Finder
@@ -451,7 +451,7 @@ When I route the operator report
 Then I should see that currently opened operator report has status (Approved)
 
 Given I Sign Out
-Given load story ../../aux-main-stories/auxSignIn.story with example table:
+Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_analyst.table
 
 
