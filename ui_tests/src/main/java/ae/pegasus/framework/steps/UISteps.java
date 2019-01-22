@@ -53,6 +53,7 @@ public class UISteps {
         capabilities.setBrowserName(browser);
 
 
+
         if (remoteRun) {
             String seleniumHub = G4Properties.getRunProperties().getSeleniumHub();
             RemoteWebDriver webDriver = new RemoteWebDriver(new URL(String.format("http://%s:4444/wd/hub", seleniumHub)), capabilities);
@@ -68,14 +69,13 @@ public class UISteps {
             WebDriverRunner.setWebDriver(webDriver);
 
         }
+
         Configuration.browser = browser;
         Configuration.startMaximized = true;
         Configuration.openBrowserTimeoutMs = Long.parseLong(System.getProperty("selenide.openBrowserTimeout", "600000"));
         Configuration.browserCapabilities = capabilities;
         Configuration.timeout = Long.parseLong(System.getProperties().getProperty("selenide.timeout", "40000"));
         Configuration.collectionsTimeout = Long.parseLong(System.getProperties().getProperty("selenide.collectionsTimeout", "40000"));
-
-
     }
 
     @BeforeScenario(uponType = ScenarioType.ANY)
