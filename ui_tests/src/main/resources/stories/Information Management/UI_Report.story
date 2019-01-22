@@ -387,7 +387,7 @@ data/Report.table
 
 
 Scenario: Report approval workflow
-Meta:@stage
+Meta:@devsmoke
 Given I navigate to Search
 When I enter search criteria (<SIGINTEventIMSI>) on the Search page
 Given I open Search Filter on the Search page
@@ -424,7 +424,7 @@ When I route the operator report
 
 Given I Sign Out
 
-Given load story ../aux-main-stories/auxSignIn.story with example table:
+Given load story ../../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_manager.table
 
 Given I navigate to CB Finder
@@ -451,7 +451,7 @@ When I route the operator report
 Then I should see that currently opened operator report has status (Approved)
 
 Given I Sign Out
-Given load story ../aux-main-stories/auxSignIn.story with example table:
+Given load story ../../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_analyst.table
 
 
@@ -464,7 +464,6 @@ Then I should see that currently opened operator report has status (Approved)
 
 Examples:
 data/Report.table
-
 
 
 
