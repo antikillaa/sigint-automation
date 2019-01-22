@@ -53,6 +53,8 @@ Given I setup Search Authorization
 When I enter search criteria (<SIGNINTEventText>) on the Team Records page
 Given I open Search Filter on the Team Records page
 Given I set date (01/01/2016) as Earliest Event Time on the Search Filter page
+Given I open Search Filter on the Team Records page
+Given I open Search Filter on the Team Records page
 Given I Apply Search using Search Filter on the Team Records page
 
 When I open Card View

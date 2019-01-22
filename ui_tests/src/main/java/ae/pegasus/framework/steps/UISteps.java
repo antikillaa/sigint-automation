@@ -51,7 +51,12 @@ public class UISteps {
         loggingPreferences.enable(LogType.BROWSER, Level.ALL);
         capabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
         capabilities.setBrowserName(browser);
-
+        Configuration.browser = browser;
+        Configuration.startMaximized = true;
+        Configuration.openBrowserTimeoutMs = Long.parseLong(System.getProperty("selenide.openBrowserTimeout", "600000"));
+        Configuration.browserCapabilities = capabilities;
+        Configuration.timeout = Long.parseLong(System.getProperties().getProperty("selenide.timeout", "40000"));
+        Configuration.collectionsTimeout = Long.parseLong(System.getProperties().getProperty("selenide.collectionsTimeout", "40000"));
 
 
         if (remoteRun) {
@@ -70,12 +75,7 @@ public class UISteps {
 
         }
 
-        Configuration.browser = browser;
-        Configuration.startMaximized = true;
-        Configuration.openBrowserTimeoutMs = Long.parseLong(System.getProperty("selenide.openBrowserTimeout", "600000"));
-        Configuration.browserCapabilities = capabilities;
-        Configuration.timeout = Long.parseLong(System.getProperties().getProperty("selenide.timeout", "40000"));
-        Configuration.collectionsTimeout = Long.parseLong(System.getProperties().getProperty("selenide.collectionsTimeout", "40000"));
+
     }
 
     @BeforeScenario(uponType = ScenarioType.ANY)

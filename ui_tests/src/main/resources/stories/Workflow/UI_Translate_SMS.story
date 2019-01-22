@@ -21,6 +21,8 @@ Given I navigate to My Records
 When I enter search criteria (<SIGNTIMSI>) on the My Records page
 Given I open Search Filter on the My Records page
 Given I set date (01/01/2014) as Earliest Event Time on the Search Filter page
+Given I open Search Filter on the My Records page
+Given I open Search Filter on the My Records page
 Given I Apply Search using Search Filter on the My Records page
 Given I setup Search Authorization
 
@@ -43,6 +45,8 @@ Given I navigate to My Records
 When I enter search criteria (<SIGINTEMAIL>) on the My Records page
 Given I open Search Filter on the My Records page
 Given I set date (01/01/2014) as Earliest Event Time on the Search Filter page
+Given I open Search Filter on the My Records page
+Given I open Search Filter on the My Records page
 Given I Apply Search using Search Filter on the My Records page
 Given I setup Search Authorization
 

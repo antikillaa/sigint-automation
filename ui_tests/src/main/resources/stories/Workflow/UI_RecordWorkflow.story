@@ -48,7 +48,7 @@ Examples:
 
 
 
-Scenario: Verify that a manager can assign records to another user using ad-hoc assignment
+Scenario: Record - Record is searchable within CB Search
 Meta: @L0  @test  C83425
 Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login.table
@@ -68,6 +68,8 @@ Then I should see My Records page
 When I enter search criteria (<SIGNTIMSI>) on the My Records page
 Given I open Search Filter on the My Records page
 Given I set date (01/01/2014) as Earliest Event Time on the Search Filter page
+Given I open Search Filter on the My Records page
+Given I open Search Filter on the My Records page
 Given I Apply Search using Search Filter on the My Records page
 Given I setup Search Authorization
 Then I should see 1 SIGINT event(s) on current view
@@ -94,6 +96,8 @@ Then I should see OrgUnit Records page
 When I enter search criteria (<SIGINTEventIMSI>) on the My Records page
 Given I open Search Filter on the My Records page
 Given I set date (01/01/2014) as Earliest Event Time on the Search Filter page
+Given I open Search Filter on the My Records page
+Given I open Search Filter on the My Records page
 Given I Apply Search using Search Filter on the My Records page
 Given I setup Search Authorization
 Then I should see 1 SIGINT event(s) on current view
@@ -122,6 +126,8 @@ Then I sleep for 5 second
 When I enter search criteria (<SIGINTEventIMSI>) on the My Records page
 Given I open Search Filter on the My Records page
 Given I set date (01/01/2014) as Earliest Event Time on the Search Filter page
+Given I open Search Filter on the My Records page
+Given I open Search Filter on the My Records page
 Given I Apply Search using Search Filter on the My Records page
 Given I setup Search Authorization
 Then I should see 1 SIGINT event(s) on current view
@@ -156,6 +162,8 @@ Then I sleep for 5 second
 When I enter search criteria (<SIGINTEventIMSI>) on the My Records page
 Given I open Search Filter on the My Records page
 Given I set date (01/01/2014) as Earliest Event Time on the Search Filter page
+Given I open Search Filter on the My Records page
+Given I open Search Filter on the My Records page
 Given I Apply Search using Search Filter on the My Records page
 Given I setup Search Authorization
 Then I should see 1 SIGINT event(s) on current view
@@ -175,7 +183,7 @@ Examples:
 
 
 Scenario: Record - Under My/OrgUnit Records, team manager can mark records as reviewed
-Meta: @L0  @test  C83472
+Meta: @L10  @test  C83472
 Given load story ../aux-main-stories/auxSignIn.story with example table:
 data/QE_login_manager.table
 
@@ -186,6 +194,9 @@ Then I sleep for 5 second
 When I enter search criteria (<SIGINTEventIMSI>) on the My Records page
 Given I open Search Filter on the My Records page
 Given I set date (01/01/2014) as Earliest Event Time on the Search Filter page
+Given I open Search Filter on the My Records page
+Given I open Search Filter on the My Records page
+
 Given I Apply Search using Search Filter on the My Records page
 Given I setup Search Authorization
 Then I should see 1 SIGINT event(s) on current view
