@@ -177,7 +177,7 @@ Examples:
 |Default	|Target for LO GOVINT profile test|TOP SECRET    |QE_UIAuto_Team  |POI              |High            |Active          |{current_day}+1/{current_month}/{current_year}|Medium 30 |TOP SECRET|UI Test Team  |QE_UIAuto_Team |For test purpose|Testing description|Consideration for test|Testing recommendations|Initial test notes|6766WGD6ANXCZORU1K7M|8237695|+994 26 929 25 66|This for L0 test|No|None|50|
 
 Scenario: Create and delete a profile smoke test
-Meta: @devsmoke
+Meta: @1devsmoke
 
 Given I navigate to Search
 

@@ -391,7 +391,7 @@ Meta:@devsmoke
 Given I navigate to Search
 When I enter search criteria (<SIGINTEventIMSI>) on the Search page
 Given I open Search Filter on the Search page
-Given I set period range Last 90 days as Event Time Period on the Search Filter page
+Given load story ../aux-search-filter-stories/auxSearchFilterShowAllEvents.story
 Given I Apply Search using Search Filter on the Search page
 Given I setup Search Authorization
 When I open Card View
