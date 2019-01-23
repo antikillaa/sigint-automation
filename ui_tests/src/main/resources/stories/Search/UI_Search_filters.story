@@ -20,7 +20,7 @@ Given I Sign Out
 
 
 Scenario: All the data sources are working in card view
-Meta:@devsmoke
+Meta:@devsmoke11
 Given I navigate to Search
 Then I should see Search page
 When I enter search criteria (*) on the Search page

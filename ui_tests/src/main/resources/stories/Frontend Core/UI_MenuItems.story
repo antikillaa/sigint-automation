@@ -1,9 +1,6 @@
 Meta:
 @UI
-@component Frontend Core
 @devsmoke
-@smoke test
-@all menu items
 @stage
 
 
