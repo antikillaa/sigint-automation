@@ -222,7 +222,7 @@ Given I navigate to CB Finder
 When I select file with Name (<FileName>) in the CB Finder
 Then I check if target by name (<TargetName>) is present under case/file which is currently selected in the CB Finder
 When I open target by name (<TargetName>) is present under case/file which is currently selected in the CB Finder
-Given load story ../../aux-after-stories/auxDeleteTarget.story with example table:
+Given load story ../aux-after-stories/auxDeleteTarget.story with example table:
 data/BasicProfile.data
 
 Examples:
