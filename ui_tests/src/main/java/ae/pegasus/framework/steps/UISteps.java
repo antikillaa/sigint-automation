@@ -32,7 +32,7 @@ public class UISteps {
     @BeforeStory
     public void initWebDriver() throws IOException {
         boolean remoteRun = G4Properties.getRunProperties().isRemoteRun();
-        String browser = G4Properties.getRunProperties().getWebBrowser();
+        String browser = G4Properties.getRunProperties().getBrowser();
 
         DesiredCapabilities capabilities = DesiredCapabilities.chrome();
         LoggingPreferences loggingPreferences = new LoggingPreferences();
