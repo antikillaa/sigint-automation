@@ -44,6 +44,7 @@ public class UIReporter extends AllureReporter {
             stepResult.setStatus(Status.FAILED);
         });
         super.makeStepFailedAttachment();
+        super.getLifecycle().stopStep();
 
         if (!stepsFailedDueToSoftAsserts.contains(step)) {
             stepsFailedDueToSoftAsserts.add(step);
@@ -61,7 +62,7 @@ public class UIReporter extends AllureReporter {
                         testResult
                                 .setStatus(Status.FAILED)
                                 .setDescription(message);
-            });
+                    });
             super.updateScenarioStatus(Status.FAILED);
             stepsFailedDueToSoftAsserts.clear();
         }
