@@ -35,24 +35,21 @@ public class UISteps {
 
     @BeforeStory
     public void initWebDriver() throws IOException {
-        String ouputPath = System.getProperty("user.dir")+ "/PDF" ;
-        String ouputUnzipPath = System.getProperty("user.dir")+ "/PDF/Output" ;
+        String ouputPath = System.getProperty("user.dir") + "/PDF";
+        String ouputUnzipPath = System.getProperty("user.dir") + "/PDF/Output";
         boolean remoteRun = G4Properties.getRunProperties().isRemoteRun();
-        String browser = G4Properties.getRunProperties().getWebBrowser();
+        String browser = G4Properties.getRunProperties().getBrowser();
         ChromeOptions options = new ChromeOptions();
         HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
         chromePrefs.put("profile.default_content_settings.popups", 0);
         chromePrefs.put("download.default_directory", ouputPath);
         options.setExperimentalOption("prefs", chromePrefs);
 
-
         DesiredCapabilities capabilities = DesiredCapabilities.chrome();
         LoggingPreferences loggingPreferences = new LoggingPreferences();
         loggingPreferences.enable(LogType.BROWSER, Level.ALL);
         capabilities.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
         capabilities.setBrowserName(browser);
-
-
 
         if (remoteRun) {
             String seleniumHub = G4Properties.getRunProperties().getSeleniumHub();
@@ -67,7 +64,6 @@ public class UISteps {
             System.setProperty("webdriver.chrome.driver", workingDir);
             WebDriver webDriver = new ChromeDriver(options);
             WebDriverRunner.setWebDriver(webDriver);
-
         }
 
         Configuration.browser = browser;

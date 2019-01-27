@@ -2,58 +2,31 @@ package ae.pegasus.framework.model;
 
 public class Sort {
 
-    private SortDirection direction;
-    private String property;
-    private boolean ignoreCase;
-    private String nullHandling;
-    private boolean ascending;
-    private boolean descending;
+    private Boolean sorted;
+    private Boolean unsorted;
+    private Boolean empty;
 
-    public SortDirection getDirection() {
-        return direction;
+    public Boolean getSorted() {
+        return sorted;
     }
 
-    public void setDirection(SortDirection direction) {
-        this.direction = direction;
+    public void setSorted(Boolean sorted) {
+        this.sorted = sorted;
     }
 
-    public String getProperty() {
-        return property;
+    public Boolean getUnsorted() {
+        return unsorted;
     }
 
-    public void setProperty(String property) {
-        this.property = property;
+    public void setUnsorted(Boolean unsorted) {
+        this.unsorted = unsorted;
     }
 
-    public boolean isIgnoreCase() {
-        return ignoreCase;
+    public Boolean getEmpty() {
+        return empty;
     }
 
-    public void setIgnoreCase(boolean ignoreCase) {
-        this.ignoreCase = ignoreCase;
-    }
-
-    public String getNullHandling() {
-        return nullHandling;
-    }
-
-    public void setNullHandling(String nullHandling) {
-        this.nullHandling = nullHandling;
-    }
-
-    public boolean isAscending() {
-        return ascending;
-    }
-
-    public void setAscending(boolean ascending) {
-        this.ascending = ascending;
-    }
-
-    public boolean isDescending() {
-        return descending;
-    }
-
-    public void setDescending(boolean descending) {
-        this.descending = descending;
+    public void setEmpty(Boolean empty) {
+        this.empty = empty;
     }
 }
