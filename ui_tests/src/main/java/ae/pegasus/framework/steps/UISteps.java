@@ -38,7 +38,7 @@ public class UISteps {
         String ouputPath = System.getProperty("user.dir") + "/PDF";
         String ouputUnzipPath = System.getProperty("user.dir") + "/PDF/Output";
         boolean remoteRun = G4Properties.getRunProperties().isRemoteRun();
-        String browser = G4Properties.getRunProperties().getBrowser();
+        String browser = G4Properties.getRunProperties().getWebBrowser();
         ChromeOptions options = new ChromeOptions();
         HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
         chromePrefs.put("profile.default_content_settings.popups", 0);
