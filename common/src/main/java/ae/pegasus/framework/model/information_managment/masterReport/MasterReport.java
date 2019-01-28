@@ -1,10 +1,10 @@
 
 package ae.pegasus.framework.model.information_managment.masterReport;
 
-import ae.pegasus.framework.model.DirectCaseFile;
 import ae.pegasus.framework.model.G4Entity;
-import ae.pegasus.framework.model.OrgUnit;
+import ae.pegasus.framework.model.information_managment.DirectCaseFile;
 import ae.pegasus.framework.model.information_managment.NextOwners;
+import ae.pegasus.framework.model.information_managment.OrgUnit;
 import ae.pegasus.framework.model.information_managment.report.Report;
 import com.fasterxml.jackson.annotation.*;
 

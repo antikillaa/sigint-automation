@@ -1,11 +1,10 @@
 package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.model.OrgUnit;
 import ae.pegasus.framework.model.Result;
 import ae.pegasus.framework.model.entities.Entities;
-import ae.pegasus.framework.model.information_managment.CurrentOwner;
 import ae.pegasus.framework.model.information_managment.NextOwners;
+import ae.pegasus.framework.model.information_managment.OrgUnit;
 import ae.pegasus.framework.model.information_managment.PossibleActions;
 import ae.pegasus.framework.model.information_managment.rfi.RequestForInformation;
 import ae.pegasus.framework.services.RequestForInformationService;
@@ -162,7 +161,7 @@ public class APIRequestForInformationSteps extends APISteps {
         List<OrgUnit> currentOrgUnits = RFI.getOrgUnits();
         List<NextOwners> nextOwners = new ArrayList<>();
         String actionId = getRequestAdress(state);
-        serviceRequestForInformation.setNextOwnersTeam(currentOrgUnits, nextOwners);
+//        serviceRequestForInformation.setNextOwnersTeam(currentOrgUnits, nextOwners);
         RFI.setNextOwners(nextOwners);
         serviceRequestForInformation.send(RFI, actionId);
     }

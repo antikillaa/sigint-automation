@@ -5,10 +5,7 @@ import ae.pegasus.framework.controllers.APILogin;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
-import ae.pegasus.framework.model.information_managment.CurrentOwner;
-import ae.pegasus.framework.model.information_managment.Link;
-import ae.pegasus.framework.model.information_managment.NextOwners;
-import ae.pegasus.framework.model.information_managment.PossibleActions;
+import ae.pegasus.framework.model.information_managment.*;
 import ae.pegasus.framework.model.information_managment.rfa.RequestForApprove;
 import ae.pegasus.framework.services.RequestForApproveService;
 import ae.pegasus.framework.services.SearchService;
@@ -126,7 +123,7 @@ public class APIRequestForApproveSteps extends APISteps {
         RequestForApprove RFA = context.get("requestForApprove", RequestForApprove.class);
         List<OrgUnit> currentOrgUnits = RFA.getOrgUnits();
         List<NextOwners> nextOwners = new ArrayList<>();
-        serviceRequestForApprove.setNextOwnersTeam(currentOrgUnits, nextOwners);
+//        serviceRequestForApprove.setNextOwnersTeam(currentOrgUnits, nextOwners);
         RFA.setNextOwners(nextOwners);
         sleep(60000); //FIXME
         serviceRequestForApprove.sendForApprove(RFA);

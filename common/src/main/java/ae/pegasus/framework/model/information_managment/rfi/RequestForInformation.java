@@ -1,13 +1,8 @@
 package ae.pegasus.framework.model.information_managment.rfi;
 
-import ae.pegasus.framework.model.DirectCaseFile;
 import ae.pegasus.framework.model.G4Entity;
-import ae.pegasus.framework.model.OrgUnit;
 import ae.pegasus.framework.model.RequiredPermission;
-import ae.pegasus.framework.model.information_managment.AllOwner;
-import ae.pegasus.framework.model.information_managment.CurrentOwner;
-import ae.pegasus.framework.model.information_managment.ModelSource;
-import ae.pegasus.framework.model.information_managment.NextOwners;
+import ae.pegasus.framework.model.information_managment.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
