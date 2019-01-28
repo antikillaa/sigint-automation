@@ -18,7 +18,7 @@ public abstract class EntityListResult<T extends AbstractEntity> {
     private Integer size;
     private Integer number;
     private Boolean empty;
-    private Sort sort;
+    private Object sort;
 
     public List<T> getResult() {
         return result;
@@ -84,11 +84,11 @@ public abstract class EntityListResult<T extends AbstractEntity> {
         this.number = number;
     }
 
-    public Sort getSort() {
+    public Object getSort() {
         return sort;
     }
 
-    public void setSort(Sort sort) {
+    public void setSort(Object sort) {
         this.sort = sort;
     }
 
