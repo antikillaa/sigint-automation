@@ -133,9 +133,9 @@ public class APIUploadFilesSteps extends APISteps {
         FileMeta fileMeta = fileMetaOperationResult.getEntity();
 
         if (fileMeta != null && fileMeta.getMeta() != null) {
-            String error = fileMeta.getMeta().getProperties().getError();
-            if (error != null) {
-                ErrorReporter.reportAndRaiseError(error);
+            MetaProperties properties = fileMeta.getMeta().getProperties();
+            if (properties.getError() != null && !properties.getError().isEmpty()) {
+                ErrorReporter.reportAndRaiseError("Uploaded file MetaProperties: " + JsonConverter.toJsonString(properties));
             }
             // FileMeta.etag == Process.md5
             String filename = fileMeta.getFile() + fileMeta.getExtension();
