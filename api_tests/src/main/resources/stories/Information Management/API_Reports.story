@@ -415,14 +415,236 @@ Examples:
 | SIGINT | event | EventVO |      | 0 | 150 |
 | SIGINT | entity| EntityVO|      | 0 | 150 |
 
+Scenario: Under Review: Edit
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
 
+When I send generate report number request
+Then Request is successful
 
+When I get allowed actions
+Then Request is successful
 
+When I send get owner a operator report in Submit for Review request
+Then Request is successful
 
+When I send Submit for Review a report request
+Then Request is successful
+Then Operator report is Awaiting Review and INITIAL
 
+When I get allowed actions
+Then Request is successful
 
+When I send get owner a operator report in Take Ownership request
+Then Request is successful
 
+When I send Take Ownership a report request
+Then Request is successful
+Then Operator report is Under Review and IN_PROGRESS
 
+When I get allowed actions
+Then Request is successful
+
+When I send Edit a report request
+Then Request is successful
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event | EventVO |      | 0 | 150 |
+| SIGINT | entity| EntityVO|      | 0 | 150 |
+
+Scenario: Under Review: Cancel
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+
+When I send generate report number request
+Then Request is successful
+
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a operator report in Submit for Review request
+Then Request is successful
+
+When I send Submit for Review a report request
+Then Request is successful
+Then Operator report is Awaiting Review and INITIAL
+
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a operator report in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a report request
+Then Request is successful
+Then Operator report is Under Review and IN_PROGRESS
+
+When I get allowed actions
+Then Request is successful
+
+When I send Cancel a report request
+Then Request is successful
+Then Operator report is Cancelled and FINAL
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event | EventVO |      | 0 | 150 |
+| SIGINT | entity| EntityVO|      | 0 | 150 |
+
+Scenario: Returned to Author: Submit
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+
+When I send generate report number request
+Then Request is successful
+
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a operator report in Submit for Review request
+Then Request is successful
+
+When I send Submit for Review a report request
+Then Request is successful
+Then Operator report is Awaiting Review and INITIAL
+
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a operator report in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a report request
+Then Request is successful
+Then Operator report is Under Review and IN_PROGRESS
+
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a operator report in Return to Author request
+Then Request is successful
+
+When I send Return to Author a report request
+Then Request is successful
+Then Operator report is Returned for Revision and IN_PROGRESS
+
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a operator report in Submit for Review request
+Then Request is successful
+
+When I send Submit for Review a report request
+Then Request is successful
+Then Operator report is Awaiting Review and INITIAL
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event | EventVO |      | 0 | 150 |
+| SIGINT | entity| EntityVO|      | 0 | 150 |
+
+Scenario: Returned to Author: Edit
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+
+When I send generate report number request
+Then Request is successful
+
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a operator report in Submit for Review request
+Then Request is successful
+
+When I send Submit for Review a report request
+Then Request is successful
+Then Operator report is Awaiting Review and INITIAL
+
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a operator report in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a report request
+Then Request is successful
+Then Operator report is Under Review and IN_PROGRESS
+
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a operator report in Return to Author request
+Then Request is successful
+
+When I send Return to Author a report request
+Then Request is successful
+Then Operator report is Returned for Revision and IN_PROGRESS
+
+When I get allowed actions
+Then Request is successful
+
+When I send Edit a report request
+Then Request is successful
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event | EventVO |      | 0 | 150 |
+| SIGINT | entity| EntityVO|      | 0 | 150 |
+
+Scenario: Returned to Author: Edit
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+
+When I send generate report number request
+Then Request is successful
+
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a operator report in Submit for Review request
+Then Request is successful
+
+When I send Submit for Review a report request
+Then Request is successful
+Then Operator report is Awaiting Review and INITIAL
+
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a operator report in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a report request
+Then Request is successful
+Then Operator report is Under Review and IN_PROGRESS
+
+When I get allowed actions
+Then Request is successful
+
+When I send get owner a operator report in Return to Author request
+Then Request is successful
+
+When I send Return to Author a report request
+Then Request is successful
+Then Operator report is Returned for Revision and IN_PROGRESS
+
+When I get allowed actions
+Then Request is successful
+
+When I send Cancel a report request
+Then Request is successful
+Then Operator report is Cancelled and FINAL
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event | EventVO |      | 0 | 150 |
+| SIGINT | entity| EntityVO|      | 0 | 150 |
 
 Scenario: Create a report. [SIGINT] Data Source filters.
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
