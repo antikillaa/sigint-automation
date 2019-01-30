@@ -103,13 +103,19 @@ public class APIReportSteps extends APISteps {
                 submit(state);
                 break;
             case "Return to Author":
-                returnToAuthor(state);
+                submit(state);
                 break;
             case "Submit for Review":
                 submit(state);
                 break;
+            case "Unassign":
+                submit(state);
+                break;
+            case "Re-assign":
+                submit(state);
+                break;
             case "Reject":
-                rejectReport(state);
+                submit(state);
                 break;
             case "Cancel":
                 submit(state);
