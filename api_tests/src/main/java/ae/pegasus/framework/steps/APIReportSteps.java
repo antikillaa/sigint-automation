@@ -117,6 +117,9 @@ public class APIReportSteps extends APISteps {
             case "Reject":
                 submit(state);
                 break;
+            case "Assign":
+                submit(state);
+                break;
             case "Cancel":
                 submit(state);
                 break;
