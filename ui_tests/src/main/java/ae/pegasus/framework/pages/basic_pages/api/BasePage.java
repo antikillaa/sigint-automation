@@ -98,7 +98,7 @@ public abstract class BasePage {
                         ".//pg-radio-btn-group",
                         ".//pg-radio-group"));
             case DATE_TIME_SELECTOR:
-                return baseElement.$x(".//date");
+                return baseElement.$x(".//pg-date");
             case DATE_TIME_RANGE_SELECTOR:
                 return baseElement.$x(".//pg-date-range");
             case CHECKBOX:
