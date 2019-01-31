@@ -7,11 +7,11 @@ import org.jbehave.core.annotations.When;
 import ae.pegasus.framework.pages.Pages;
 
 public class UITeamRecordsSteps {
-    @Then("I should see Team Records page")
-    public void iShouldSeeSearchPage() {
-        Asserter.getAsserter().softAssertTrue(Pages.teamRecordsPage().isPageDisplayed(),
-                "Team Records page is displayed",
-                "Team Records page is NOT displayed");
+    @Then("I should see OrgUnit Records page")
+    public void iShouldSeeOrgUnitRecordsPage() {
+        Asserter.getAsserter().softAssertTrue(Pages.orgUnitRecords().isPageDisplayed(),
+                "OrgUnit Records page is displayed",
+                "OrgUnit Records page is NOT displayed");
     }
 
     @When("I enter search criteria ($searchCriteria) on the Team Records page")
@@ -21,24 +21,24 @@ public class UITeamRecordsSteps {
 
     @When("I start search on Team Records page")
     public void iStartSearch() {
-        Pages.teamRecordsPage().startSearch();
+        Pages.orgUnitRecords().startSearch();
     }
 
     @Then("I should see search criteria ($expectedSearchCriteria) on the Team Records page")
     public void iShouldSeeSearchCriteria(String expectedSearchCriteria) {
-        Asserter.getAsserter().softAssertEquals(Pages.teamRecordsPage().getCurrentSearchCriteria(),
+        Asserter.getAsserter().softAssertEquals(Pages.orgUnitRecords().getCurrentSearchCriteria(),
                 expectedSearchCriteria,
                 "Search criteria on the My Records page");
     }
 
     @Given("I open Search Filter on the Team Records page")
     public void iOpenSearchFilter() {
-        Pages.teamRecordsPage().openSearchFilter();
+        Pages.orgUnitRecords().openSearchFilter();
     }
 
     @Given("I Apply Search using Search Filter on the Team Records page")
     public void iApplySearch() {
         Pages.searchFilterPage().applySearch();
-        Pages.teamRecordsPage().waitForPageLoading();
+        Pages.orgUnitRecords().waitForPageLoading();
     }
 }

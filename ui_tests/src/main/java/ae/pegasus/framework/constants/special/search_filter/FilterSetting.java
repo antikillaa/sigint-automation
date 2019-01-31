@@ -33,7 +33,11 @@ public enum FilterSetting {
     TEAM("Team", DROPDOWN_WITH_SEARCH, RECORD_ASSESSMENT, true),
     PRIORITY("Priority", RADIO_BUTTON_GROUP, RECORD_ASSESSMENT),
     DESIGNATION("Designation", DROPDOWN_WITH_SEARCH, RECORD_ASSESSMENT, true),
-    TAGS("Tags", DROPDOWN_WITH_SEARCH, RECORD_ASSESSMENT, true);
+    TAGS("Tags", DROPDOWN_WITH_SEARCH, RECORD_ASSESSMENT, true),
+    STATUS("Status",DROPDOWN_WITH_SEARCH, GENERAL),
+    FILECASE("File / Case",DROPDOWN_WITH_SEARCH, GENERAL);
+
+
 
     private final String settingName;
     private final ControlType controlType;

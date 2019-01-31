@@ -22,7 +22,8 @@ Given I setup Search Authorization
 When I open Card View
 
 When I select all SIGINT event cards having identifiers: |<SIGINTEventPhone>|
-When I create new report for selected items
+When I add selected items to the existing report (<ReportSubj>)
+When I save currently opened operator report as draft
 When I set Classification (<ReportClassif>) in operator report
 When I set File Name/Case Name (|<FileName>|) in operator report
 When I set Organization Units (|<ReportOrgUnit>|) in operator report

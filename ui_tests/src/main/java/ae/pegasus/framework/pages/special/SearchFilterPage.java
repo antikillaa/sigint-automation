@@ -130,6 +130,13 @@ public class SearchFilterPage extends BaseSpecialPage {
         getDateRangeSelector(filterSetting).setOneDate(calendar, dateTime);
     }
 
+    public void setDateInPeriod(FilterSetting filterSetting, DateRangeCalendar calendar, LocalDateTime dateTime) {
+        if (dateTime == null) {
+            throw new IllegalArgumentException("Date should be provided");
+        }
+        getDateRangeSelector(filterSetting).setOneDate(calendar, dateTime);
+    }
+
     public void clearSetting(FilterSetting filterSetting) {
         SelenideElement settingItem = getBasicDataElement(filterSetting);
         switch (filterSetting.getControlType()) {

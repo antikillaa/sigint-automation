@@ -5,7 +5,7 @@ public class CommonXPaths {
 
     //Loadings
     public static final String LOADING_BASE_XPATH = String.format(INFINITE_WAIT_XPATH, "Loading...");
-    public static final String PAGE_LOADING_XPATH = "//pg-loader" + LOADING_BASE_XPATH;
+    public static final String PAGE_LOADING_XPATH =  LOADING_BASE_XPATH;
     public static final String INTERNAL_LOADING_XPATH = "." + LOADING_BASE_XPATH;
 
     //Saving

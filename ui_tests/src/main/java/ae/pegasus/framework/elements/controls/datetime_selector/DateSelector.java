@@ -51,8 +51,8 @@ public class DateSelector extends CommonDateSelector {
         setMonth(date.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH));
         setDay(date.getDayOfMonth());
         if (applyRequired) {
-            applyDate();
-            collapse();
+           // applyDate();
+           // collapse();
         }
     }
 }

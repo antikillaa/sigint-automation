@@ -41,13 +41,20 @@
     <bean id="searchQueuesSteps" class="ae.pegasus.framework.steps.special.queues.UISearchQueuesSteps" />
     <bean id="alertHistorySteps" class="ae.pegasus.framework.steps.special.alert_history.UIAlertHistorySteps" />
     <!--Operator report steps-->
-    <bean id="updateOperatorReportSteps" class="ae.pegasus.framework.steps.special.reports_requests.operator_report.UIUpdateOperatorReportSteps" />
-    <bean id="verifyOperatorReportFieldsSteps" class="ae.pegasus.framework.steps.special.reports_requests.operator_report.UIVerifyOperatorReportFieldsSteps" />
-    <bean id="verifyOperatorReportButtonsSteps" class="ae.pegasus.framework.steps.special.reports_requests.operator_report.UIVerifyOperatorReportButtonsSteps" />
+    <bean id="updateOperatorReportSteps" class="ae.pegasus.framework.steps.special.IM_requests.operator_report.UIUpdateOperatorReportSteps" />
+    <bean id="verifyOperatorReportFieldsSteps" class="ae.pegasus.framework.steps.special.IM_requests.operator_report.UIVerifyOperatorReportFieldsSteps" />
+    <bean id="verifyOperatorReportButtonsSteps" class="ae.pegasus.framework.steps.special.IM_requests.operator_report.UIVerifyOperatorReportButtonsSteps" />
+
+
+    <!--Operator report steps-->
+    <bean id="updateMasterReportSteps" class="ae.pegasus.framework.steps.special.IM_requests.master_report.UIUpdateMasterReportSteps" />
+    <bean id="verifyMasterReportFieldsSteps" class="ae.pegasus.framework.steps.special.IM_requests.master_report.UIVerifyMasterReportFieldsSteps" />
+    <bean id="verifyMasterReportButtonsSteps" class="ae.pegasus.framework.steps.special.IM_requests.master_report.UIVerifyMasterReportButtonsSteps" />
+
     <!--Request for information (RFI) steps-->
-    <bean id="requestForInformationActionsSteps" class="ae.pegasus.framework.steps.special.reports_requests.request_for_information.UIRequestForInformationActionsSteps" />
-    <bean id="updateRequestForInformationSteps" class="ae.pegasus.framework.steps.special.reports_requests.request_for_information.UIUpdateRequestForInformationSteps" />
-    <bean id="verifyRequestForInformationFieldsSteps" class="ae.pegasus.framework.steps.special.reports_requests.request_for_information.UIVerifyRequestForInformationFieldsSteps" />
+    <bean id="requestForInformationActionsSteps" class="ae.pegasus.framework.steps.special.IM_requests.request_for_information.UIRequestForInformationActionsSteps" />
+    <bean id="updateRequestForInformationSteps" class="ae.pegasus.framework.steps.special.IM_requests.request_for_information.UIUpdateRequestForInformationSteps" />
+    <bean id="verifyRequestForInformationFieldsSteps" class="ae.pegasus.framework.steps.special.IM_requests.request_for_information.UIVerifyRequestForInformationFieldsSteps" />
     <!--Search filter set-up steps-->
     <bean id="searchFilterSetupSteps" class="ae.pegasus.framework.steps.special.search_filter.UISearchFilterSetupSteps" />
     <bean id="searchFilterAdditionalSetupSteps" class="ae.pegasus.framework.steps.special.search_filter.UISearchFilterAdditionalSetupSteps" />

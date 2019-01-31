@@ -16,7 +16,7 @@ public class MyRecordsPage extends BasePageWithSearch {
     }
 
     private SelenideElement getButton(String buttonTitle) {
-        return $x("//pg-btn[@data-original-title='" + buttonTitle + "']");
+        return $x("//pg-btn[@pg-tooltip='" + buttonTitle + "']");
     }
 
     public void startNewRecordCreation() {

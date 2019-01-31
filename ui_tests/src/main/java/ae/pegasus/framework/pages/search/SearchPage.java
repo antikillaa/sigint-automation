@@ -10,6 +10,7 @@ public class SearchPage extends BasePageWithSearch {
     private final String SAVE_SEARCH_BUTTON_LABEL = "Save Search";
     private final String UPDATE_SAVED_SEARCH_BUTTON_LABEL = "Update Saved Search";
 
+
     @Override
     public boolean isPageDisplayed() {
         return getPageTitle().equalsIgnoreCase("Search")

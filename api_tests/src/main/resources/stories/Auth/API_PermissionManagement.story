@@ -2,6 +2,7 @@ Meta:
 @API
 @component Auth
 @story permissionManagement
+@stage
 
 
 Lifecycle:

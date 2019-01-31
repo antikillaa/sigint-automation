@@ -31,6 +31,8 @@ public class UISavedSearchesSteps {
                 "Search criteria on the Saved Searches page");
     }
 
+
+
     @Then("I should see $number card(s) on the Saved Searches page")
     public void iShouldSeeNumberOfCards(int number) {
         Asserter.getAsserter().softAssertEquals(
@@ -38,6 +40,16 @@ public class UISavedSearchesSteps {
                 number,
                 "Number of cards displayed on the Saved Searches page");
     }
+
+
+    @Then("I should see at least $number save search search result(s) on the Saved Searches page")
+    public void iShouldSeeAtleastNumberOfCards(int number) {
+
+        Asserter.getAsserter().softAssertTrue(Pages.savedSearchesPage().getCardsNumber() >= number,
+                "Number of save search results at least " + number + " on save search screen",
+                "Actual number of search results " + Pages.savedSearchesPage().getCardsNumber() + " which is less than expected " + number + "on save search screen");
+    }
+
 
     @Given("I open for edit 1-st card displayed on the Saved Searches page")
     public void iOpen1stCardForEdit() {

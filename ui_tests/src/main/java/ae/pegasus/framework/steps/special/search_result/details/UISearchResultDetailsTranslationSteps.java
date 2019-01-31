@@ -1,11 +1,12 @@
 package ae.pegasus.framework.steps.special.search_result.details;
 
 import ae.pegasus.framework.assertion.Asserter;
+import ae.pegasus.framework.pages.Pages;
+import org.apache.tika.langdetect.OptimaizeLangDetector;
+import org.apache.tika.language.detect.LanguageDetector;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import ae.pegasus.framework.pages.Pages;
-import ae.pegasus.framework.utils.LanguageUtils;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -23,11 +24,15 @@ public class UISearchResultDetailsTranslationSteps {
     @Then("I should see unofficial translation in English on the search result Details page")
     public void iShouldSeeUnofficialTranslationInEnglish() throws IOException {
         String translation = Pages.searchResultDetailsPage().getTranslation(UNOFFICIAL_TRANSLATION);
+
+
+            LanguageDetector detector = new OptimaizeLangDetector().loadModels();
+
         if (translation == null || translation.isEmpty()) {
             Asserter.getAsserter().softAssertTrue(false, "", UNOFFICIAL_TRANSLATION.getTranslationType() + " is NOT displayed");
         } else {
             Asserter.getAsserter().softAssertEquals(
-                    LanguageUtils.detectLanguage(translation).getLanguage(),
+                    detector.detect(translation).getLanguage(),
                     Locale.ENGLISH.getLanguage(),
                     UNOFFICIAL_TRANSLATION.getTranslationType() + " Language");
         }

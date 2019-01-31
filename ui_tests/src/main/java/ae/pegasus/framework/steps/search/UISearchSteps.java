@@ -70,6 +70,8 @@ public class UISearchSteps {
         Pages.searchPage().resetSearch();
     }
 
+
+
     @Then("I should see search criteria ($expectedSearchCriteria) on the Search page")
     public void iShouldSeeSearchCriteria(String expectedSearchCriteria) {
         Asserter.getAsserter().softAssertEquals(Pages.searchPage().getCurrentSearchCriteria(),
@@ -80,6 +82,7 @@ public class UISearchSteps {
     @Given("I open Search Filter on the Search page")
     public void iOpenSearchFilter() {
         Pages.searchPage().openSearchFilter();
+
     }
 
     @Given("I Apply Search using Search Filter on the Search page")

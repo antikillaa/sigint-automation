@@ -16,7 +16,7 @@ public class CBFinderExistEntityPage extends CBFinderBasePage {
 
     @Override
     public void performAction(CreateAction action) {
-        getRightHalfOfHeader().$x(".//pg-dropdown[@actions.bind='createActions']").click();
+        getRightHalfOfHeader().$x(".//pg-dropdown[@actions.bind='addActions']").click();
         switch (action) {
             case CREATE_FILE:
             case CREATE_CASE:

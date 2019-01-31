@@ -16,7 +16,7 @@ public enum MainMenuChildItem {
 
     //RECORD ASSESSMENT
     MY_RECORDS("My Records", MainMenuRootItem.RECORD_ASSESSMENT),
-    TEAM_RECORDS("Team Records", MainMenuRootItem.RECORD_ASSESSMENT),
+    OrgUnit_RECORDS("OrgUnit Records", MainMenuRootItem.RECORD_ASSESSMENT),
     WORKLOADS("Workloads", MainMenuRootItem.RECORD_ASSESSMENT),
 
     //DASHBOARDS
@@ -33,7 +33,7 @@ public enum MainMenuChildItem {
     MONITORING_DECK("Monitoring Deck", MainMenuRootItem.OSINT_ANALYTICS),
 
     //ADMIN_SUITE
-    TEAMS_AND_USERS("Teams And Users", MainMenuRootItem.ADMIN_SUITE),
+    ORG_UNIT_AND_USER("Org Units And Users", MainMenuRootItem.ADMIN_SUITE),
 
     PERMISSION_MANAGEMENT("Permission Management", MainMenuRootItem.ADMIN_SUITE),
     TITLE_MANAGEMENT("Title Management", PERMISSION_MANAGEMENT),
