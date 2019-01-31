@@ -18,6 +18,7 @@ import org.junit.Assert;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -68,12 +69,23 @@ public class APIReportSteps extends APISteps {
         context.put("currentOwner", currentOwner.getEntity());
     }
 
-    @When("I send get owner a report in $state request")
-    public void sendGetOwnerReportRequest(String state) {
+    @When("I send get owner a operator report in $state request")
+    public void sendGetOwnerOperatorReportRequest(String state) {
         Report lastreport = Entities.getReports().getLatest();
+        Report report = new Report();
         String actionId = getRequestAdress(state);
-
-        OperationResult<List<NextOwners>> nextOwner = serviceReport.possibleOwner(lastreport, actionId);
+        OperationResult<List<NextOwners>> nextOwner;
+        if (lastreport == null) {
+            Result reportNo = context.get("reportNo", Result.class);
+            List<SearchRecord> entities = context.get("searchEntities", List.class);
+            serviceReport.buildReport(report, reportNo, entities);
+            context.put("report", report);
+        }
+        if (lastreport != null) {
+            nextOwner = serviceReport.possibleOwner(lastreport, actionId);
+        } else {
+            nextOwner = serviceReport.possibleOwner(report, actionId);
+        }
         context.put("nextOwner", nextOwner.getEntity());
     }
 
@@ -88,19 +100,25 @@ public class APIReportSteps extends APISteps {
                 approveReport(state);
                 break;
             case "Take Ownership":
-                takeOwnership(state);
+                submit(state);
                 break;
             case "Return to Author":
-                returnToAuthor(state);
+                submit(state);
                 break;
             case "Submit for Review":
-                submitForReview(state);
+                submit(state);
+                break;
+            case "Unassign":
+                submit(state);
+                break;
+            case "Re-assign":
+                submit(state);
                 break;
             case "Reject":
-                rejectReport(state);
+                submit(state);
                 break;
             case "Cancel":
-                cancelReportWithOwner(state);
+                submit(state);
                 break;
             case "Save":
                 editReport(state);
@@ -111,12 +129,25 @@ public class APIReportSteps extends APISteps {
 
     }
 
-    private void submitForReview(String state) {
+    private void submit(String state) {
         Report lastreport = Entities.getReports().getLatest();
+        Report report = context.get("report", Report.class);
         String actionId = getRequestAdress(state);
-        List<NextOwners> nextOwners = context.get("nextOwner", List.class);
-        lastreport.setNextOwners(nextOwners);
-        serviceReport.submit(lastreport, actionId);
+        List<NextOwners> nextOwnersList = context.get("nextOwner", List.class);
+
+        NextOwners nextOwner = nextOwnersList.get(0);
+        List<NextOwners> nextOwners = new ArrayList<>();
+        nextOwners.add(nextOwner);
+
+        if (lastreport == null) {
+            report.setNextOwners(nextOwners);
+            report.setComment("comment");
+            serviceReport.add(report, actionId);
+        } else {
+            lastreport.setNextOwners(nextOwners);
+            lastreport.setComment("comment");
+            serviceReport.add(lastreport, actionId);
+        }
     }
 
     private void returnToAuthor(String state) {
@@ -130,23 +161,25 @@ public class APIReportSteps extends APISteps {
 
     private void saveAsDraft(String state) {
         Report report = new Report();
-        Result reportNo = context.get("reportNo", Result.class);
-        List<SearchRecord> entities = context.get("searchEntities", List.class);
-        serviceReport.buildReport(report, reportNo, entities);
-        context.put("report", report);
-        String actionId = getRequestAdress(state);
-        OperationResult<Report> operationResult = serviceReport.add(report, actionId);
-        Report reportResult = operationResult.getEntity();
-        context.put("reportID", reportResult.getId());
-    }
 
+        if (state.equals("Save as Draft")) {
+            Result reportNo = context.get("reportNo", Result.class);
+            List<SearchRecord> entities = context.get("searchEntities", List.class);
+            serviceReport.buildReport(report, reportNo, entities);
+            context.put("report", report);
+            String actionId = getRequestAdress(state);
+            OperationResult<Report> operationResult = serviceReport.add(report, actionId);
+            Report reportResult = operationResult.getEntity();
+            context.put("reportID", reportResult.getId());
 
-    private void takeOwnership(String state) {
-        Report report = Entities.getReports().getLatest();
-        List<NextOwners> nextOwners = context.get("nextOwner", List.class);
-        report.setNextOwners(nextOwners);
-        String actionId = getRequestAdress(state);
-        serviceReport.takeOwnership(report, actionId);
+        } else if (state.equals("Save")) {
+            report = Entities.getReports().getLatest();
+            String actionId = getRequestAdress(state);
+//            report.setSubject("qe_" + RandomStringUtils.randomAlphabetic(10));
+            OperationResult<Report> operationResult = serviceReport.add(report, actionId);
+            Report reportResult = operationResult.getEntity();
+            context.put("reportID", reportResult.getId());
+        }
     }
 
     private void approveReport(String state) {
@@ -278,53 +311,16 @@ public class APIReportSteps extends APISteps {
         assertEquals(lastreport.getStateType(), "INITIAL");
     }
 
-    @Then("Report is submitted")
-    public void reportIsSubmitted() {
+    @Then("Operator report is $state and $stateType")
+    public void masterReportIsReturned(String state, String stateType) {
         Report lastreport = Entities.getReports().getLatest();
-        assertEquals(lastreport.getState(), "Awaiting Review");
-        assertEquals(lastreport.getStateId(), "2");
-        assertEquals(lastreport.getStateType(), "INITIAL");
+        Report createdReport = context.get("report", Report.class);
+        assertEquals(lastreport.getClassification(), createdReport.getClassification());
+        assertEquals(lastreport.getReportNo(), createdReport.getReportNo());
+        assertEquals(lastreport.getState(), state);
+        assertEquals(lastreport.getStateType(), stateType);
     }
 
-    @Then("Report is took ownership")
-    public void reportIsTookOwnerShip() {
-        Report lastreport = Entities.getReports().getLatest();
-        assertEquals(lastreport.getState(), "Under Review");
-        assertEquals(lastreport.getStateId(), "3");
-        assertEquals(lastreport.getStateType(), "IN_PROGRESS");
-    }
-
-    @Then("Report is approved")
-    public void reportIsApproved() {
-        Report lastreport = Entities.getReports().getLatest();
-        assertEquals(lastreport.getState(), "Approved");
-        assertEquals(lastreport.getStateId(), "5");
-        assertEquals(lastreport.getStateType(), "FINAL");
-    }
-
-    @Then("Report is returned to author")
-    public void reportIsReturned() {
-        Report lastreport = Entities.getReports().getLatest();
-        assertEquals(lastreport.getState(), "Returned for Revision");
-        assertEquals(lastreport.getStateId(), "4");
-        assertEquals(lastreport.getStateType(), "IN_PROGRESS");
-    }
-
-    @Then("Report is rejected")
-    public void reportIsRejected() {
-        Report lastreport = Entities.getReports().getLatest();
-        assertEquals(lastreport.getState(), "Rejected");
-        assertEquals(lastreport.getStateId(), "7");
-        assertEquals(lastreport.getStateType(), "FINAL");
-    }
-
-    @Then("Report is canceled")
-    public void reportIsCanceled() {
-        Report lastreport = Entities.getReports().getLatest();
-        assertEquals(lastreport.getState(), "Cancelled");
-        assertEquals(lastreport.getStateId(), "6");
-        assertEquals(lastreport.getStateType(), "FINAL");
-    }
 
     @Then("Report is updated")
     public void reportIsUpdated() {
