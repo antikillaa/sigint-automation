@@ -2,6 +2,7 @@ Meta:
 @API
 @component Finder
 @story CBFinder
+@stage
 
 
 Scenario: CB Finder classification permissions

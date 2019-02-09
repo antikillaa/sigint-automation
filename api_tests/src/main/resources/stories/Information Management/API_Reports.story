@@ -1,7 +1,7 @@
 Meta:
 @API
 @component Information Management
-@story operator report
+@story reports
 
 Lifecycle:
 Before:

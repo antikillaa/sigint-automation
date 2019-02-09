@@ -2,6 +2,7 @@ Meta:
 @UI
 @component Information Management
 @RFI
+@wip
 
 Scenario: Create an internal RFI
 

@@ -25,7 +25,7 @@ public class SearchResultViewsPage extends BasicSearchResultsPage {
     }
 
     private String getSearchResultsViewName(SelenideElement view) {
-        return view.getAttribute("data-original-title").trim();
+        return view.$("input").getAttribute("model").trim();
     }
 
     private ElementsCollection getSearchResultsViews() {

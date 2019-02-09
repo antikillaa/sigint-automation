@@ -1,9 +1,10 @@
 package ae.pegasus.framework.constants.special.search_results;
 
 public enum SearchResultsView {
-    CARD_VIEW("Card View"),
-    GRID_VIEW("Grid View"),
-    MAP_VIEW("Map View");
+    CARD_VIEW("CARD"),
+    GRID_VIEW("GRID"),
+    MAP_VIEW("MAP"),
+    GRAPH_VIEW("GRAPH");
 
     private final String displayName;
 

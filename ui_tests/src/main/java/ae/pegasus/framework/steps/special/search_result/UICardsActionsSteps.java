@@ -33,6 +33,14 @@ public class UICardsActionsSteps {
         sleep(1200);
     }
 
+    @When("I open details of 1-st displayed report card")
+    public void iOpenDetailsOf1stReportCard() {
+        Pages.searchResultsAsCardsPage().applyActionTo1stDisplayedCard(SearchActionButton.VIEW_REPORT);
+      //  Pages.searchResultDetailsPage().waitDialogLoading();
+        //FIXME Seems there is no loading when details opened but such loading is required
+        sleep(1200);
+    }
+
     @Given("I view 1-st displayed Profiler entity in Profiler")
     public void iView1stProfilerEntityInProfiler() {
         Pages.searchResultsAsCardsPage().applyActionTo1stDisplayedCard(SearchResultsEntity.PROFILER, SearchActionButton.VIEW_IN_PROFILER);

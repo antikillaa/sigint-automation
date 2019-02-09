@@ -62,7 +62,7 @@ public class UIReporter extends AllureReporter {
                         testResult
                                 .setStatus(Status.FAILED)
                                 .setDescription(message);
-            });
+                    });
             super.updateScenarioStatus(Status.FAILED);
             stepsFailedDueToSoftAsserts.clear();
         }

@@ -1,18 +1,23 @@
 package ae.pegasus.framework.steps.special.search_result;
 
-import ae.pegasus.framework.utils.ParametersHelper;
 import ae.pegasus.framework.constants.special.search_results.SearchResultsEntity;
 import ae.pegasus.framework.constants.special.search_results.SearchResultsEvent;
+import ae.pegasus.framework.pages.Pages;
+import ae.pegasus.framework.utils.ParametersHelper;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.When;
 import org.jbehave.core.model.ExamplesTable;
-import ae.pegasus.framework.pages.Pages;
 
 public class UISelectCardsSteps {
 
     @When("I select 1-st displayed SIGINT event card")
     public void iSelect1stSIGINTEvent() {
         Pages.searchResultsAsCardsPage().select1stDisplayedCard(SearchResultsEvent.SIGINT);
+    }
+
+    @When("I select 1-st displayed card")
+    public void iSelect1stDisplauedCard() {
+        Pages.searchResultsAsCardsPage().select1stDisplayedCard();
     }
 
     private void selectAllCards(SearchResultsEvent event, ExamplesTable identifiers) {
@@ -87,4 +92,10 @@ public class UISelectCardsSteps {
     public void iSelectAllCIOEntities(ExamplesTable identifiers) {
         selectAllCards(SearchResultsEntity.CIO, identifiers);
     }
+
+    @Given("I select all cards on the Search page")
+    public void iSelectAllCards() {
+        Pages.searchResultsAsCardsPage().selectAllCardsOnSearchPage();
+    }
+
 }

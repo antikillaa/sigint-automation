@@ -1,15 +1,15 @@
 package ae.pegasus.framework.steps.special.search_result.details;
 
 import ae.pegasus.framework.assertion.Asserter;
-import ae.pegasus.framework.utils.TimeUtils;
 import ae.pegasus.framework.constants.special.create_event_record.CreatedRecordField;
 import ae.pegasus.framework.constants.special.results_details.SearchResultsDetailsField;
 import ae.pegasus.framework.constants.special.results_details.SearchResultsDetailsSection;
 import ae.pegasus.framework.context.Context;
 import ae.pegasus.framework.context.CreatedRecord;
+import ae.pegasus.framework.pages.Pages;
+import ae.pegasus.framework.utils.TimeUtils;
 import org.apache.commons.lang.NotImplementedException;
 import org.jbehave.core.annotations.Then;
-import ae.pegasus.framework.pages.Pages;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -36,6 +36,8 @@ public class UISearchResultsDetailsCheckFieldsSteps {
                 "Owner field is displayed");
     }
 
+
+
     private void checkStringValueField(SearchResultsDetailsSection section, SearchResultsDetailsField mainField, SearchResultsDetailsField alternateField, String expectedValue, CreatedRecordField verifiedField, boolean removeSpaces) {
         SearchResultsDetailsField fieldToCheck = mainField;
         while (true) {
@@ -52,6 +54,7 @@ if (mainField.getFieldName().equalsIgnoreCase("Language") & expectedValue.equals
 */
 
                 expectedValue = expectedValue.replace("Voice", "Call");
+                expectedValue = expectedValue.replace("SMS", "Texting Event");
 
                 String actualValue = Pages.searchResultDetailsPage().getFieldValue(section, fieldToCheck);
                 actualValue = actualValue.replace("E-mail", "Email");
@@ -93,6 +96,17 @@ if (mainField.getFieldName().equalsIgnoreCase("Language") & expectedValue.equals
                 field.getFieldName() + " field is not displayed on the search result Details page");
     }
 
+
+    @Then("I should not see From Phone Number field and value")
+    public void isFromNumberDisplayed() {
+        checkStringValueField(FROM, FROM_PHONE_NUMBER, null, "23156403410", CreatedRecordField.FROM_NUMBER, true);
+    }
+
+    @Then("I should not see To Phone Number field and value")
+    public void isToNumberDisplayed() {
+        checkStringValueField(TO, TO_PHONE_NUMBER, null, "994269292566", CreatedRecordField.TO_NUMBER, true);
+    }
+
     @Then("I should see fields from manually created record identified as ($recordID) on the search result Details page")
     public void iShouldSeeFieldsFromRecord(String recordID) {
         CreatedRecord record = Context.getContext().getCreatedRecord(recordID);
@@ -103,13 +117,13 @@ if (mainField.getFieldName().equalsIgnoreCase("Language") & expectedValue.equals
             for (CreatedRecordField recordField : record.getRecordFields()) {
                 switch (recordField) {
                     case FROM_NUMBER:
-                        checkStringValueField(FROM, PHONE_NUMBER, null, (String) record.getRecordFieldValue(recordField), recordField, true);
+                        checkStringValueField(FROM, FROM_PHONE_NUMBER, null, (String) record.getRecordFieldValue(recordField), recordField, true);
                         break;
                     case FROM_COUNTRY:
-                        checkStringValueField(FROM, COUNTRY, null, (String) record.getRecordFieldValue(recordField), recordField, false);
+                        checkStringValueField(FROM, FROM_COUNTRY, null, (String) record.getRecordFieldValue(recordField), recordField, false);
                         break;
                     case FROM_EMAIL:
-                        checkStringValueField(FROM, EMAIL, null, (String) record.getRecordFieldValue(recordField), recordField, false);
+                        checkStringValueField(FROM, FROM_EMAIL, null, (String) record.getRecordFieldValue(recordField), recordField, false);
                         break;
                     case IMSI:
                         checkStringValueField(FROM, IMSI, null, (String) record.getRecordFieldValue(recordField), recordField, false);
@@ -118,13 +132,13 @@ if (mainField.getFieldName().equalsIgnoreCase("Language") & expectedValue.equals
                         checkStringValueField(FROM, TMSI, null, (String) record.getRecordFieldValue(recordField), recordField, false);
                         break;
                     case TO_NUMBER:
-                        checkStringValueField(TO, PHONE_NUMBER, null, (String) record.getRecordFieldValue(recordField), recordField, true);
+                        checkStringValueField(TO, TO_PHONE_NUMBER, null, (String) record.getRecordFieldValue(recordField), recordField, true);
                         break;
                     case TO_COUNTRY:
-                        checkStringValueField(TO, COUNTRY, null, (String) record.getRecordFieldValue(recordField), recordField, false);
+                        checkStringValueField(TO, TO_COUNTRY, null, (String) record.getRecordFieldValue(recordField), recordField, false);
                         break;
                     case TO_EMAIL:
-                        checkStringValueField(TO, EMAIL, null, (String) record.getRecordFieldValue(recordField), recordField, false);
+                        checkStringValueField(TO, TO_EMAIL, null, (String) record.getRecordFieldValue(recordField), recordField, false);
                         break;
                     case SOURCE_TYPE:
                         checkStringValueField(RECORD_METADATA, SOURCE, null, (String) record.getRecordFieldValue(recordField), recordField, false);
@@ -153,7 +167,7 @@ if (mainField.getFieldName().equalsIgnoreCase("Language") & expectedValue.equals
                             patternOfDuration = "HH:" + patternOfDuration;
                         }
 
-                        checkStringValueField(NONE, DURATION, null,
+                        checkStringValueField(ATTRIBUTES, DURATION, null,
                                 TimeUtils.convertDurationToStringWithPattern(expectedDuration,
                                         patternOfDuration),
                                 recordField, false);

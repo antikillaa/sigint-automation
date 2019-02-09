@@ -61,10 +61,10 @@ public class UINavigationSteps {
         Pages.myRecordsPage().waitForPageLoading();
     }
 
-    @Given("I navigate to Team Records")
+    @Given("I navigate to OrgUnit Records")
     public void navigateToTeamRecords() {
-        navigateTo(MainMenuChildItem.TEAM_RECORDS);
-        Pages.teamRecordsPage().waitForPageLoading();
+        navigateTo(MainMenuChildItem.OrgUnit_RECORDS);
+        Pages.orgUnitRecords().waitForPageLoading();
     }
 
     @Given("I navigate to Workloads")
@@ -117,9 +117,9 @@ public class UINavigationSteps {
         navigateTo(MainMenuChildItem.MONITORING_DECK);
     }
 
-    @Given("I navigate to Teams And Users")
+    @Given("I navigate to Org Units And Users")
     public void navigateToTeamsAndUsers() {
-        navigateTo(MainMenuChildItem.TEAMS_AND_USERS);
+        navigateTo(MainMenuChildItem.ORG_UNIT_AND_USER);
     }
 
     @Given("I navigate to Title Management")

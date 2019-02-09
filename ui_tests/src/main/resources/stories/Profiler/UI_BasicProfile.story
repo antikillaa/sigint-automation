@@ -13,11 +13,9 @@ After:
 Scope: STORY
 Outcome: ANY
 
-Given load story ../aux-after-stories/auxDeleteReport.story with example table:
-data/BasicProfile.data
 
-Given load story ../aux-after-stories/auxDeleteTarget.story with example table:
-data/BasicProfile.data
+
+
 
 Given load story ../aux-after-stories/auxDeleteCase.story with example table:
 data/BasicProfile.data
@@ -26,7 +24,7 @@ Given load story ../aux-after-stories/auxDeleteFile.story with example table:
 data/BasicProfile.data
 
 Scenario: Create and delete a profile
-Meta:@fix
+Meta:@stage
 Given I navigate to CB Finder
 Given I start creation of new file in the CB Finder
 Given I set Name (<FileName>) for new file in the CB Finder
@@ -72,6 +70,8 @@ When I select case with Name (<CaseName>) in the CB Finder
 Then I check if target by name (<TargetName>) is present under case/file which is currently selected in the CB Finder
 When I open target by name (<TargetName>) is present under case/file which is currently selected in the CB Finder
 
+Given load story ../aux-after-stories/auxDeleteTarget.story with example table:
+data/BasicProfile.data
 Examples:
 data/BasicProfile.data
 
@@ -98,6 +98,8 @@ Given I navigate to CB Finder
 When I select file with Name (<FileName>) in the CB Finder
 When I open operator report with Subject (<ReportSubject>) in file/case which is currently selected in the CB Finder
 Then I should see card attached to currently opened operator report with all following label/value pair(s): |Name|<TargetName>|Category|<TargetCategory>|Status|<ProfilerEntityTS>|
+Given load story ../aux-after-stories/auxDeleteReport.story with example table:
+data/BasicProfile.data
 
 Examples:
 data/BasicProfile.data

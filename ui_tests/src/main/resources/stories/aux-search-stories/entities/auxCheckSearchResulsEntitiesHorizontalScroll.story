@@ -1,4 +1,4 @@
-Meta:
+ Meta:
 
 Scenario: Check if horizontal scrolling is performed on current view
 Then I should not be able to scroll Profiler entities horizontally on current view
