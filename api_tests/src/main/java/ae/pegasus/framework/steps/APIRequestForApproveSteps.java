@@ -5,7 +5,10 @@ import ae.pegasus.framework.controllers.APILogin;
 import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.model.*;
 import ae.pegasus.framework.model.entities.Entities;
-import ae.pegasus.framework.model.information_managment.*;
+import ae.pegasus.framework.model.information_managment.Link;
+import ae.pegasus.framework.model.information_managment.NextOwners;
+import ae.pegasus.framework.model.information_managment.OrgUnit;
+import ae.pegasus.framework.model.information_managment.PossibleActions;
 import ae.pegasus.framework.model.information_managment.rfa.RequestForApprove;
 import ae.pegasus.framework.services.RequestForApproveService;
 import ae.pegasus.framework.services.SearchService;
@@ -53,12 +56,15 @@ public class APIRequestForApproveSteps extends APISteps {
                 saveAsDraft(state);
                 break;
             case "View":
+                view();
                 break;
             case "Delete":
+                delete();
                 break;
             case "Save":
                 break;
-            case "Submit for Review":
+            case "Send for Approval":
+                submit(state);
                 break;
             case "Cancel":
                 break;
@@ -86,13 +92,11 @@ public class APIRequestForApproveSteps extends APISteps {
         Result rfaNo = context.get("rfaNo", Result.class);
         List<SearchRecord> entities = context.get("searchEntities", List.class);
 
-        RequestForApprove rfi = new RequestForApprove();
-
         if (state.equals("Save as Draft")) {
             serviceRequestForApprove.buildRFA(requestForApprove, rfaNo, entities);
             String actionId = serviceReport.getRequestAdress(state);
-            context.put("requestForApprove", rfi);
-            sleep(60000); //FIXME
+            context.put("requestForApprove", requestForApprove);
+            sleep(120000); //FIXME
             OperationResult<RequestForApprove> operationResult = serviceRequestForApprove.add(requestForApprove, actionId);
             RequestForApprove reportResult = operationResult.getEntity();
             context.put("reportID", reportResult.getId());
@@ -107,16 +111,48 @@ public class APIRequestForApproveSteps extends APISteps {
         }
     }
 
-    @When("I send get owner teams a RFA request")
-    public void sendGetOwnerRFARequest() {
-        RequestForApprove requestForApprove = new RequestForApprove();
-        Result rfaNo = context.get("rfaNo", Result.class);
-        List<SearchRecord> entities = context.get("searchEntities", List.class);
-        serviceRequestForApprove.buildRFA(requestForApprove, rfaNo, entities);
-        OperationResult<List<CurrentOwner>> currentOwnersTeams = serviceRequestForApprove.possibleOwnersTeams(requestForApprove);
-        context.put("currentOwner", currentOwnersTeams.getEntity());
-        context.put("requestForApprove", requestForApprove);
+    private void submit(String state) {
+        RequestForApprove lastreport = Entities.getRequestForApproves().getLatest();
+        RequestForApprove requestForApprove = context.get("requestForApprove", RequestForApprove.class);
+        String actionId = serviceReport.getRequestAdress(state);
+        List<NextOwners> nextOwnersList = context.get("nextOwner", List.class);
+
+        NextOwners nextOwner = nextOwnersList.get(0);
+        List<NextOwners> nextOwners = new ArrayList<>();
+        nextOwners.add(nextOwner);
+
+        if (lastreport == null) {
+            sleep(120000); //FIXME
+            requestForApprove.setNextOwners(nextOwners);
+            requestForApprove.setComment("comment");
+            serviceRequestForApprove.add(requestForApprove, actionId);
+        } else {
+            lastreport.setNextOwners(nextOwners);
+            lastreport.setComment("comment");
+            serviceRequestForApprove.add(lastreport, actionId);
+        }
     }
+
+    @When("I send get owner a RFA in $state request")
+    public void sendGetOwnerReportRequest(String state) {
+        RequestForApprove lastreport = Entities.getRequestForApproves().getLatest();
+        RequestForApprove requestForApprove = new RequestForApprove();
+        String actionId = serviceReport.getRequestAdress(state);
+        OperationResult<List<NextOwners>> nextOwner;
+        if (lastreport == null) {
+            List<SearchRecord> entities = context.get("searchEntities", List.class);
+            Result rfaNo = context.get("rfaNo", Result.class);
+            serviceRequestForApprove.buildRFA(requestForApprove, rfaNo, entities);
+            context.put("requestForApprove", requestForApprove);
+        }
+        if (lastreport != null) {
+            nextOwner = serviceRequestForApprove.possibleOwner(lastreport, actionId);
+        } else {
+            nextOwner = serviceRequestForApprove.possibleOwner(requestForApprove, actionId);
+        }
+        context.put("nextOwner", nextOwner.getEntity());
+    }
+
 
     @When("I send Send for approval a RFA request")
     public void sendSendRFIRequest() {
@@ -129,15 +165,13 @@ public class APIRequestForApproveSteps extends APISteps {
         serviceRequestForApprove.sendForApprove(RFA);
     }
 
-    @When("I send view a RFA request")
-    public void sendViewRFARequest() {
+    public void view() {
         RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
         String id = lastRFA.getId();
         serviceRequestForApprove.view(id);
     }
 
-    @When("I send delete a RFA request")
-    public void sendDeleteRFARequest() {
+    public void delete() {
         RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
         serviceRequestForApprove.remove(lastRFA);
     }
@@ -251,6 +285,16 @@ public class APIRequestForApproveSteps extends APISteps {
         checkRFA(lastRFA);
     }
 
+    @Then("RFA is $state and $stateType")
+    public void checkRFAState(String state, String stateType) {
+        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
+        RequestForApprove createdRFA = context.get("requestForApprove", RequestForApprove.class);
+        checkRFA(lastRFA);
+        assertEquals(lastRFA.getClassification(), createdRFA.getClassification());
+        assertEquals(lastRFA.getState(), state);
+        assertEquals(lastRFA.getStateType(), stateType);
+    }
+
     private void checkRFA(RequestForApprove lastRFA) {
         RequestForApprove createdRFA = context.get("requestForApprove", RequestForApprove.class);
         assertEquals(lastRFA.getClassification(), createdRFA.getClassification());
@@ -260,67 +304,4 @@ public class APIRequestForApproveSteps extends APISteps {
         assertEquals(lastRFA.getObjectType(), "RFA");
     }
 
-    @Then("RFA is deleted")
-    public void rfaIsDeleted() {
-        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
-        assertEquals(lastRFA.getState(), "Deleted");
-        assertEquals(lastRFA.getStateId(), "0");
-        assertEquals(lastRFA.getStateType(), "DELETED");
-        assertEquals(lastRFA.getWfId(), "4");
-    }
-
-    @Then("RFA is Sent for Approval")
-    public void rfaIsSentForApproval() {
-        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
-        checkRFA(lastRFA);
-        assertEquals(lastRFA.getState(), "Awaiting Approval");
-        assertEquals(lastRFA.getStateId(), "2");
-        assertEquals(lastRFA.getStateType(), "INITIAL");
-        assertEquals(lastRFA.getWfId(), "4");
-    }
-
-    @Then("RFA is cancelled")
-    public void rfaIsCancelled() {
-        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
-        checkRFA(lastRFA);
-        assertEquals(lastRFA.getState(), "Cancelled");
-        assertEquals(lastRFA.getStateId(), "6");
-        assertEquals(lastRFA.getStateType(), "FINAL");
-        assertEquals(lastRFA.getWfId(), "4");
-    }
-
-    @Then("RFA is ownershipped")
-    public void rfaIsOwnershipped() {
-        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
-        checkRFA(lastRFA);
-        assertEquals(lastRFA.getState(), "Under Approval");
-        assertEquals(lastRFA.getStateId(), "3");
-        assertEquals(lastRFA.getStateType(), "IN_PROGRESS");
-        assertEquals(lastRFA.getWfId(), "4");
-    }
-
-    @Then("RFA is rejected")
-    public void rfaIsRejected() {
-        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
-        checkRFA(lastRFA);
-        assertEquals(lastRFA.getState(), "Rejected");
-        assertEquals(lastRFA.getStateId(), "5");
-        assertEquals(lastRFA.getStateType(), "FINAL");
-        assertEquals(lastRFA.getWfId(), "4");
-    }
-
-    @Then("RFA is unownershipped")
-    public void rfaIsUnownershipped() {
-        rfaIsSentForApproval();
-    }
-
-    @Then("RFA is approved")
-    public void rfaIsApproved() {
-        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
-        checkRFA(lastRFA);
-        assertEquals(lastRFA.getState(), "Approved");
-        assertEquals(lastRFA.getStateId(), "4");
-        assertEquals(lastRFA.getStateType(), "FINAL");
-        assertEquals(lastRFA.getWfId(), "4");
-    }
 }

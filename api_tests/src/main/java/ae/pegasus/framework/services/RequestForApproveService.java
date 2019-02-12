@@ -220,6 +220,19 @@ public class RequestForApproveService implements EntityService<RequestForApprove
         }
     }
 
+    public OperationResult<List<NextOwners>> possibleOwner(RequestForApprove entity, String actionId) {
+        log.info("Sending possible owners request...");
+
+        G4Response response = g4HttpClient.sendRequest(requestForApproveRequest.possibleOwners(entity, actionId));
+
+        OperationResult<NextOwners[]> operationResult = new OperationResult<>(response, NextOwners[].class);
+        if (operationResult.isSuccess()) {
+            return new OperationResult<>(response, Arrays.asList(operationResult.getEntity()));
+        } else {
+            return new OperationResult<>(response);
+        }
+    }
+
     public void buildRFA(RequestForApprove requestForApprove, Result rfaNo, List<SearchRecord> entities) {
         fillRFIStaticData(requestForApprove);
         requestForApprove.setInternalRequestNo(rfaNo.getResult());

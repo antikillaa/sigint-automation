@@ -40,7 +40,7 @@ public class RequestForApproveRequest extends HttpRequest {
         RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
         requestForApprovePayload.setData(requestForApprove);
         this
-                .setURI(URI + "perform-action/3/")
+                .setURI(URI + "perform-action/1-0")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForApprovePayload);
         return this;
@@ -125,6 +125,14 @@ public class RequestForApproveRequest extends HttpRequest {
         this
                 .setURI("/api/upload-sigint/files/" + id + "/content")
                 .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
+    public RequestForApproveRequest possibleOwners(RequestForApprove requestForApprove, String actionId) {
+        this
+                .setURI(URI + "possible-owners/" + actionId)
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForApprove);
         return this;
     }
 }
