@@ -7,7 +7,7 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public abstract class EntityListResult <T extends AbstractEntity> {
+public abstract class EntityListResult<T extends AbstractEntity> {
 
     private List<T> result;
     private Integer totalPages;
@@ -17,7 +17,8 @@ public abstract class EntityListResult <T extends AbstractEntity> {
     private Boolean first;
     private Integer size;
     private Integer number;
-    private List<Sort> sort;
+    private Boolean empty;
+    private Object sort;
 
     public List<T> getResult() {
         return result;
@@ -83,12 +84,19 @@ public abstract class EntityListResult <T extends AbstractEntity> {
         this.number = number;
     }
 
-    public List<Sort> getSort() {
+    public Object getSort() {
         return sort;
     }
 
-    public void setSort(List<Sort> sort) {
+    public void setSort(Object sort) {
         this.sort = sort;
     }
 
+    public Boolean getEmpty() {
+        return empty;
+    }
+
+    public void setEmpty(Boolean empty) {
+        this.empty = empty;
+    }
 }

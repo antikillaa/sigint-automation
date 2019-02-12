@@ -15,7 +15,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <framework.version>1.5.2</framework.version>
+        <framework.version>1.5.4</framework.version>
         <jbehave.core.version>4.3.5</jbehave.core.version>
         <jersey.version>2.25</jersey.version>
         <log4j.version>1.2.17</log4j.version>
@@ -29,7 +29,7 @@
         <metaFilters>-deprecated -skip -wip -nightly -notstage</metaFilters>
         <!--Framework set-up-->
         <remoteRun>false</remoteRun>
-        <webBrowser>chrome</webBrowser>
+        <browser>chrome</browser>
         <appURL>http://cb-test2.pegasus.ae</appURL>
         <seleniumHub>0.0.0.0</seleniumHub>
         <searchIndex.updatePeriod.ms>15000</searchIndex.updatePeriod.ms>
@@ -106,6 +106,7 @@
                 <version>2.9</version>
                 <configuration>
                     <resultsDirectory>../allure-results</resultsDirectory>
+                    <reportVersion>2.7.0</reportVersion>
                 </configuration>
             </plugin>
         </plugins>

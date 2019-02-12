@@ -112,7 +112,7 @@ To start tests execution maven task 'run-stories-as-embeddables' is used. It sea
     mvn clean install -Pui (to start ui tests) -Papi (to start api tests) {run options}
 
 Run options:
-- webBrowser = String value. Applicable for ui module only. Defines browser to run tests within. Default value: chrome
+- browser = String value. Applicable for ui module only. Defines browser to run tests within. Default value: chrome
 - remoteRun - boolean. Applicable for ui tests only. Defines if ui tests should be run on either remote selenium hub or locally. 
 - seleniumHub - String value. Applicable for ui tests only. In case option remoteRun is set to true, dockerized environment( selenium hub + chrome node + firefox node)  can be deployed from project root directory to localhost. Call 'docker-compose up -d' for deployment ( in this case pass seleniumHub=localhost).
 - metaFilters - String value. Used to control scope of tests execution. default meta matcher :== ([+|-] [name] [value pattern])+

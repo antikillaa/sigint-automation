@@ -21,7 +21,7 @@ public class CBFinderNewEntityBasePage extends CBFinderBasePage {
     }
 
     protected SelenideElement getNewEntityCreationDialog() {
-        return $x("//router-view/pg-view");
+        return $x("//router-view//compose");
     }
 
     protected SelenideElement getContainer(CBFinderEntityField field) {

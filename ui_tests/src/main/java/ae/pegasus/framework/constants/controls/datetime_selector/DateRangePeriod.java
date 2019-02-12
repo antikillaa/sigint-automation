@@ -7,8 +7,8 @@ public enum DateRangePeriod {
     LAST_24_HOURS("Last 24 hours"),
     LAST_7_DAYS("Last 7 days"),
     LAST_30_DAYS("Last 30 days"),
-    LAST_90_DAYS("Last 90 days"),
-    CUSTOM("Custom");
+    LAST_90_DAYS("Last 90 days");
+
 
     private final String periodName;
 

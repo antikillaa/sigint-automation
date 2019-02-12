@@ -2,6 +2,7 @@ Meta:
 @API
 @component Finder
 @story FinderFile
+@stage
 
 Narrative:
 CB-12319 File Permissions integration

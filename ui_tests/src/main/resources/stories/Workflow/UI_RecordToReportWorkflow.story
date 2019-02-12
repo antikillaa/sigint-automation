@@ -1,6 +1,7 @@
 Meta:
 @UI
 @component Records workflow
+@skip
 
 Lifecycle:
 
@@ -47,11 +48,13 @@ Given I set Classification (<FileCalssif>) for new file in the CB Finder
 Given I set Organization Units (|<FileOrgUnit>|) for new file in the CB Finder
 Given I save new file created in the CB Finder
 
-Given I navigate to Team Records
+Given I navigate to OrgUnit Records
 Given I setup Search Authorization
 When I enter search criteria (<SIGNINTEventText>) on the Team Records page
 Given I open Search Filter on the Team Records page
 Given I set date (01/01/2016) as Earliest Event Time on the Search Filter page
+Given I open Search Filter on the Team Records page
+Given I open Search Filter on the Team Records page
 Given I Apply Search using Search Filter on the Team Records page
 
 When I open Card View

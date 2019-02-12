@@ -32,5 +32,5 @@ Given load story ../aux-search-stories/auxCheckSearchResultsNumbers.story
 
 
 Examples:
-|SIGINT_events|EID_events|GOVINT_events|OSINT_events|CIO_events|Profiler_entities|Documents_entities|SIGINT_entities|EID_entities|GOVINT_entities|OSINT_entities|CIO_entities|
-|1000         |1         |400          |1000        |0          |1               |1                 |100            |100         |100            |100           |0       |
+|SIGINT_events|EID_events|GOVINT_events|FININT_events|TRAFFIC_events|OSINT_events|CIO_events|Profiler_entities|Documents_entities|SIGINT_entities|EID_entities|GOVINT_entities|OSINT_entities|CIO_entities|
+|1000         |1         |400          |1|1|1000        |0          |1               |1                 |100            |100         |100            |100           |0       |

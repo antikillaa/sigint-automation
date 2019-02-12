@@ -38,7 +38,12 @@ public abstract class BasePage {
     abstract public boolean isPageDisplayed();
 
     protected SelenideElement getPageLoading() {
-        return $x(PAGE_LOADING_XPATH);
+        if($$x(PAGE_LOADING_XPATH).size()==1)
+            return $x(PAGE_LOADING_XPATH);
+        else
+            return $$x(PAGE_LOADING_XPATH).get(1);
+
+
     }
 
     public void waitUntilPageAppeared() {
@@ -66,12 +71,13 @@ public abstract class BasePage {
 
     public void waitForPageLoading(long delayForLoadingAppearInMS) {
         try {
-            getPageLoading().waitUntil(visible, 100 + delayForLoadingAppearInMS, 10);
+            getPageLoading().waitUntil(visible, 1000 + delayForLoadingAppearInMS, 10);
             System.out.println("Page's loading appears");
         } catch (UIAssertionError e) {
             System.out.println("Page's loading does not appear");
             //Do nothing since element can be absent
         }
+
         getPageLoading().shouldBe(hidden);
     }
 
@@ -84,6 +90,7 @@ public abstract class BasePage {
             case SIMPLE_DROPDOWN:
             case DROPDOWN_WITH_SEARCH:
                 return baseElement.$x(".//pg-select");
+
             case FILE_SELECTOR:
                 return baseElement.$x(".//cb-file-tree-input");
             case RADIO_BUTTON_GROUP:
@@ -91,7 +98,7 @@ public abstract class BasePage {
                         ".//pg-radio-btn-group",
                         ".//pg-radio-group"));
             case DATE_TIME_SELECTOR:
-                return baseElement.$x(".//date");
+                return baseElement.$x(".//pg-date");
             case DATE_TIME_RANGE_SELECTOR:
                 return baseElement.$x(".//pg-date-range");
             case CHECKBOX:

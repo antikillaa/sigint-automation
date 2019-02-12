@@ -4,6 +4,6 @@ public class CreateSavedSearchPage extends BaseSavedSearchPage {
 
     @Override
     public boolean isPageDisplayed() {
-        return getPageTitle().equalsIgnoreCase("Create Saved Search");
+        return getPageTitle().equalsIgnoreCase("x\nCreate Saved Search");
     }
 }

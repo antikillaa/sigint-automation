@@ -32,7 +32,7 @@ public abstract class CommonDateSelector extends ExpandableElement {
     }
 
     protected final SelenideElement getDateManipulationButton(String buttonName) {
-        return getDatePickerBase().$x(".//div[@class='ranges']//button[text()='" + buttonName + "']");
+        return getDatePickerBase().$x(".//div[@class ='drp-buttons']//button[text()='" + buttonName + "']");
     }
 
     protected final void applyDate() {

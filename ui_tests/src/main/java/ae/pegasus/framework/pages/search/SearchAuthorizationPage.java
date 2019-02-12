@@ -9,6 +9,7 @@ import ae.pegasus.framework.pages.basic_pages.api.BasePageWithSearch;
 import static com.codeborne.selenide.Selenide.$x;
 import static ae.pegasus.framework.constants.CommonXPaths.INTERNAL_LOADING_XPATH;
 import static ae.pegasus.framework.constants.search.search.SearchAuthorizationField.JUSTIFICATION;
+import static com.codeborne.selenide.Selenide.sleep;
 
 public class SearchAuthorizationPage extends BasePageWithSearch {
 
@@ -40,7 +41,7 @@ public class SearchAuthorizationPage extends BasePageWithSearch {
 
     protected void waitForDialogLoading() {
         try {
-            getDialogLoading().waitUntil(Condition.visible, 100, 10);
+            getDialogLoading().waitUntil(Condition.visible, 500, 10);
             System.out.println("Dialog's loading appears");
         } catch (UIAssertionError e) {
             System.out.println("Dialog's loading does not appear");
@@ -58,6 +59,8 @@ public class SearchAuthorizationPage extends BasePageWithSearch {
         return getDialogFooter().$x(".//pg-btn[2]");
     }
 
+
+
     public void enterDataForSearchAuthorization() {
         if (isPageDisplayed()) {
             waitForDialogLoading();
@@ -66,8 +69,13 @@ public class SearchAuthorizationPage extends BasePageWithSearch {
             getDialogFieldRootByName(JUSTIFICATION).$x(".//textarea").sendKeys("For test");
 
             getContinueButton().click();
+            sleep(2000);
 
             waitForPageLoading();
         }
+    }
+    public boolean isCancelButtonDisplayed()
+    {
+       return getCancelButton().isDisplayed();
     }
 }

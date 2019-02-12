@@ -46,7 +46,7 @@ public class AppMainPage extends BasePage {
     }
 
     private SelenideElement getTopMenuButton(String buttonName) {
-        return $x("//pg-btn[@data-original-title='" + buttonName + "']");
+        return $x("//pg-btn[@pg-tooltip='" + buttonName + "']");
     }
 
     public void openQueuesPage() {

@@ -2,6 +2,7 @@ Meta:
 @API
 @component Search
 @story search
+@stage
 
 Narrative:
 CB-19135 Track Intercept Origin for all SIGINT records (events)

@@ -3,6 +3,7 @@ package ae.pegasus.framework.constants.controls;
 public enum ControlType {
     SIMPLE_DROPDOWN,
     DROPDOWN_WITH_SEARCH,
+    ORG_UNIT,
     INPUT,
     TEXT_AREA,
     FILE_SELECTOR,
