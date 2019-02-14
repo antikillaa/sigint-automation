@@ -44,6 +44,11 @@ public class APIRequestForApproveSteps extends APISteps {
     @When("I get allowed RFA actions")
     public void sendGetAllowedMRActions() {
         String imId = Entities.getMasterReports().getLatest() == null ? "" : Entities.getRequestForApproves().getLatest().getId();
+
+        if (imId.equals("") && context.get("reportID", String.class) != null) {
+            imId = context.get("reportID", String.class);
+        }
+        
         OperationResult<List<PossibleActions>> operationResult = serviceRequestForApprove.possibleaction(imId);
         List<PossibleActions> possibleActions = operationResult.getEntity();
         context.put("possibleActions", possibleActions);
@@ -62,6 +67,7 @@ public class APIRequestForApproveSteps extends APISteps {
                 delete();
                 break;
             case "Save":
+                edit(state);
                 break;
             case "Send for Approval":
                 submit(state);
@@ -69,8 +75,10 @@ public class APIRequestForApproveSteps extends APISteps {
             case "Cancel":
                 break;
             case "Take Ownership":
+                submit(state);
                 break;
             case "Assign":
+                submit(state);
                 break;
             case "Unassign":
                 break;
@@ -125,7 +133,9 @@ public class APIRequestForApproveSteps extends APISteps {
             sleep(120000); //FIXME
             requestForApprove.setNextOwners(nextOwners);
             requestForApprove.setComment("comment");
-            serviceRequestForApprove.add(requestForApprove, actionId);
+            OperationResult<RequestForApprove> operationResult = serviceRequestForApprove.add(requestForApprove, actionId);
+            context.put("reportID", operationResult.getEntity().getId());
+
         } else {
             lastreport.setNextOwners(nextOwners);
             lastreport.setComment("comment");
@@ -176,22 +186,14 @@ public class APIRequestForApproveSteps extends APISteps {
         serviceRequestForApprove.remove(lastRFA);
     }
 
-    @When("I send cancel a RFA request")
-    public void sendCancelRFARequest() {
-        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
-        lastRFA.setComment("Auto QE " + RandomStringUtils.random(5));
-        sleep(50000); //FIXME
-        serviceRequestForApprove.cancel(lastRFA);
-    }
-
-    @When("I send update a RFA request")
-    public void sendUpdateRFARequest() {
+    public void edit(String state) {
         RequestForApprove requestForApprove = new RequestForApprove();
         RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
+        String actionId = serviceReport.getRequestAdress(state);
         lastRFA.setDescription("QE Auto" + RandomStringUtils.randomAlphabetic(5));
         lastRFA.setSubject("QE Auto" + RandomStringUtils.randomAlphabetic(5));
         context.put("requestForApprove", requestForApprove);
-        serviceRequestForApprove.update(lastRFA);
+        serviceRequestForApprove.add(lastRFA, actionId);
     }
 
     @When("I send take ownership a RFA request")
@@ -289,6 +291,7 @@ public class APIRequestForApproveSteps extends APISteps {
     public void checkRFAState(String state, String stateType) {
         RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
         RequestForApprove createdRFA = context.get("requestForApprove", RequestForApprove.class);
+        String reportId = lastRFA.getId();
         checkRFA(lastRFA);
         assertEquals(lastRFA.getClassification(), createdRFA.getClassification());
         assertEquals(lastRFA.getState(), state);
