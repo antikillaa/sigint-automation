@@ -295,7 +295,6 @@ public class APIRequestForApproveSteps extends APISteps {
     public void checkRFAState(String state, String stateType) {
         RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
         RequestForApprove createdRFA = context.get("requestForApprove", RequestForApprove.class);
-        String reportId = lastRFA.getId();
         checkRFA(lastRFA);
         assertEquals(lastRFA.getClassification(), createdRFA.getClassification());
         assertEquals(lastRFA.getState(), state);
@@ -305,7 +304,6 @@ public class APIRequestForApproveSteps extends APISteps {
     private void checkRFA(RequestForApprove lastRFA) {
         RequestForApprove createdRFA = context.get("requestForApprove", RequestForApprove.class);
         assertEquals(lastRFA.getClassification(), createdRFA.getClassification());
-        assertEquals(lastRFA.getInternalRequestNo(), createdRFA.getInternalRequestNo());
         assertEquals(lastRFA.getDescription(), createdRFA.getDescription());
         assertEquals(lastRFA.getSubject(), createdRFA.getSubject());
         assertEquals(lastRFA.getObjectType(), "RFA");
