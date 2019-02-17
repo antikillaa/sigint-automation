@@ -179,6 +179,13 @@ Then Request is successful
 When I get allowed RFA actions
 Then Request is successful
 
+When I send Save as Draft a RFA request
+Then Request is successful
+And RFA is Initial Draft and INITIAL
+
+When I get allowed RFA actions
+Then Request is successful
+
 When I send get owner a RFA in Send for Approval request
 Then Request is successful
 
@@ -210,6 +217,13 @@ And CB search result list size > 0
 
 When I send generate RFA number request
 Then Request is successful
+
+When I get allowed RFA actions
+Then Request is successful
+
+When I send Save as Draft a RFA request
+Then Request is successful
+And RFA is Initial Draft and INITIAL
 
 When I get allowed RFA actions
 Then Request is successful
@@ -259,6 +273,13 @@ Then Request is successful
 When I get allowed RFA actions
 Then Request is successful
 
+When I send Save as Draft a RFA request
+Then Request is successful
+And RFA is Initial Draft and INITIAL
+
+When I get allowed RFA actions
+Then Request is successful
+
 When I send get owner a RFA in Send for Approval request
 Then Request is successful
 
@@ -300,6 +321,13 @@ And CB search result list size > 0
 
 When I send generate RFA number request
 Then Request is successful
+
+When I get allowed RFA actions
+Then Request is successful
+
+When I send Save as Draft a RFA request
+Then Request is successful
+And RFA is Initial Draft and INITIAL
 
 When I get allowed RFA actions
 Then Request is successful
@@ -349,6 +377,13 @@ Then Request is successful
 When I get allowed RFA actions
 Then Request is successful
 
+When I send Save as Draft a RFA request
+Then Request is successful
+And RFA is Initial Draft and INITIAL
+
+When I get allowed RFA actions
+Then Request is successful
+
 When I send get owner a RFA in Send for Approval request
 Then Request is successful
 
@@ -387,6 +422,13 @@ And CB search result list size > 0
 
 When I send generate RFA number request
 Then Request is successful
+
+When I get allowed RFA actions
+Then Request is successful
+
+When I send Save as Draft a RFA request
+Then Request is successful
+And RFA is Initial Draft and INITIAL
 
 When I get allowed RFA actions
 Then Request is successful
@@ -433,6 +475,13 @@ And CB search result list size > 0
 
 When I send generate RFA number request
 Then Request is successful
+
+When I get allowed RFA actions
+Then Request is successful
+
+When I send Save as Draft a RFA request
+Then Request is successful
+And RFA is Initial Draft and INITIAL
 
 When I get allowed RFA actions
 Then Request is successful
