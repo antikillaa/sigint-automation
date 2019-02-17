@@ -57,6 +57,17 @@ public class APIRequestForApproveSteps extends APISteps {
     @When("I send $state a RFA request")
     public void sendMoveToStateRequest(String state) {
         switch (state) {
+            case "Take Ownership":
+            case "Assign":
+            case "Send for Approval":
+            case "Re-assign":
+            case "Unassign":
+                submit(state);
+                break;
+            case "Approve":
+            case "Reject":
+                approve(state);
+                break;
             case "Save as Draft":
                 saveAsDraft(state);
                 break;
@@ -69,26 +80,9 @@ public class APIRequestForApproveSteps extends APISteps {
             case "Save":
                 edit(state);
                 break;
-            case "Send for Approval":
-                submit(state);
-                break;
             case "Cancel":
                 break;
-            case "Take Ownership":
-                submit(state);
-                break;
-            case "Assign":
-                submit(state);
-                break;
-            case "Unassign":
-                break;
-            case "Re-assign":
-                break;
             case "Return to Author":
-                break;
-            case "Approve":
-                break;
-            case "Reject":
                 break;
             default:
                 log.error("State is not found");
@@ -124,7 +118,6 @@ public class APIRequestForApproveSteps extends APISteps {
         RequestForApprove requestForApprove = context.get("requestForApprove", RequestForApprove.class);
         String actionId = serviceReport.getRequestAdress(state);
         List<NextOwners> nextOwnersList = context.get("nextOwner", List.class);
-
         NextOwners nextOwner = nextOwnersList.get(0);
         List<NextOwners> nextOwners = new ArrayList<>();
         nextOwners.add(nextOwner);
@@ -141,6 +134,13 @@ public class APIRequestForApproveSteps extends APISteps {
             lastreport.setComment("comment");
             serviceRequestForApprove.add(lastreport, actionId);
         }
+    }
+
+    private void approve(String state) {
+        RequestForApprove lastreport = Entities.getRequestForApproves().getLatest();
+        String actionId = serviceReport.getRequestAdress(state);
+        lastreport.setComment("comment");
+        serviceRequestForApprove.add(lastreport, actionId);
     }
 
     @When("I send get owner a RFA in $state request")

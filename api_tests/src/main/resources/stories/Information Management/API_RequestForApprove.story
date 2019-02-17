@@ -178,24 +178,7 @@ Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Scenario: Remove Ownership from assigned RFA
+Scenario: Awaiting Approval: Approve
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -203,29 +186,43 @@ And CB search result list size > 0
 When I send generate RFA number request
 Then Request is successful
 
-When I send get owner teams a RFA request
+When I get allowed RFA actions
 Then Request is successful
 
-When I send Send for approval a RFA request
+When I send get owner a RFA in Send for Approval request
 Then Request is successful
-Then RFA is created
+
+When I send Send for Approval a RFA request
+Then Request is successful
+And RFA is Awaiting Approval and INITIAL
 
 Given I sign in as admin user
 
-When I send take ownership a RFA request
+When I get allowed RFA actions
 Then Request is successful
-Then RFA is ownershipped
+
+When I send get owner a RFA in Take Ownership request
+Then Request is successful
 
 When I send Take Ownership a RFA request
 Then Request is successful
-Then RFA is unownershipped
+And RFA is Under Approval and IN_PROGRESS
+
+When I get allowed RFA actions
+Then Request is successful
+
+When I send get owner a RFA in Approve request
+Then Request is successful
+
+When I send Approve a RFA request
+Then Request is successful
+And RFA is Approved and FINAL
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
 
-
-Scenario: Reject a assigned RFA
+Scenario: Awaiting Approval: Re-assign
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -233,28 +230,43 @@ And CB search result list size > 0
 When I send generate RFA number request
 Then Request is successful
 
-When I send get owner teams a RFA request
+When I get allowed RFA actions
 Then Request is successful
 
-When I send Send for approval a RFA request
+When I send get owner a RFA in Send for Approval request
 Then Request is successful
-Then RFA is created
+
+When I send Send for Approval a RFA request
+Then Request is successful
+And RFA is Awaiting Approval and INITIAL
 
 Given I sign in as admin user
 
-When I send take ownership a RFA request
+When I get allowed RFA actions
 Then Request is successful
-Then RFA is ownershipped
 
-When I send reject a RFA request
+When I send get owner a RFA in Take Ownership request
 Then Request is successful
-Then RFA is rejected
+
+When I send Take Ownership a RFA request
+Then Request is successful
+And RFA is Under Approval and IN_PROGRESS
+
+When I get allowed RFA actions
+Then Request is successful
+
+When I send get owner a RFA in Re-assign request
+Then Request is successful
+
+When I send Re-assign a RFA request
+Then Request is successful
+And RFA is Under Approval and IN_PROGRESS
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
 
-Scenario: Approve a assigned RFA
+Scenario: Awaiting Approval: Reject
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -262,28 +274,130 @@ And CB search result list size > 0
 When I send generate RFA number request
 Then Request is successful
 
-When I send get owner teams a RFA request
+When I get allowed RFA actions
 Then Request is successful
 
-When I send Send for approval a RFA request
+When I send get owner a RFA in Send for Approval request
 Then Request is successful
-Then RFA is created
+
+When I send Send for Approval a RFA request
+Then Request is successful
+And RFA is Awaiting Approval and INITIAL
 
 Given I sign in as admin user
 
-When I send take ownership a RFA request
+When I get allowed RFA actions
 Then Request is successful
-Then RFA is ownershipped
 
-When I send approve a RFA request
+When I send get owner a RFA in Take Ownership request
 Then Request is successful
-Then RFA is approved
+
+When I send Take Ownership a RFA request
+Then Request is successful
+And RFA is Under Approval and IN_PROGRESS
+
+When I get allowed RFA actions
+Then Request is successful
+
+When I send get owner a RFA in Reject request
+Then Request is successful
+
+When I send Reject a RFA request
+Then Request is successful
+And RFA is Rejected and FINAL
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
+
+Scenario: Awaiting Approval: Edit
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+
+When I send generate RFA number request
+Then Request is successful
+
+When I get allowed RFA actions
+Then Request is successful
+
+When I send get owner a RFA in Send for Approval request
+Then Request is successful
+
+When I send Send for Approval a RFA request
+Then Request is successful
+And RFA is Awaiting Approval and INITIAL
+
+Given I sign in as admin user
+
+When I get allowed RFA actions
+Then Request is successful
+
+When I send get owner a RFA in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a RFA request
+Then Request is successful
+And RFA is Under Approval and IN_PROGRESS
+
+When I get allowed RFA actions
+Then Request is successful
+
+When I send Save a RFA request
+Then Request is successful
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
+
+
+Scenario: Awaiting Approval: Unassign
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+
+When I send generate RFA number request
+Then Request is successful
+
+When I get allowed RFA actions
+Then Request is successful
+
+When I send get owner a RFA in Send for Approval request
+Then Request is successful
+
+When I send Send for Approval a RFA request
+Then Request is successful
+And RFA is Awaiting Approval and INITIAL
+
+Given I sign in as admin user
+
+When I get allowed RFA actions
+Then Request is successful
+
+When I send get owner a RFA in Take Ownership request
+Then Request is successful
+
+When I send Take Ownership a RFA request
+Then Request is successful
+And RFA is Under Approval and IN_PROGRESS
+
+When I get allowed RFA actions
+Then Request is successful
+
+When I send get owner a RFA in Unassign request
+Then Request is successful
+
+When I send Unassign a RFA request
+Then Request is successful
+And RFA is Awaiting Approval and INITIAL
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
+
 
 Scenario: User able get access to audio after approve RFA
+Meta:@wip
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -291,22 +405,37 @@ And CB search result list size > 0
 When I send generate RFA number request
 Then Request is successful
 
-When I send get owner teams a RFA request
+When I get allowed RFA actions
 Then Request is successful
 
-When I send Send for approval a RFA request
+When I send get owner a RFA in Send for Approval request
 Then Request is successful
-Then RFA is created
+
+When I send Send for Approval a RFA request
+Then Request is successful
+And RFA is Awaiting Approval and INITIAL
 
 Given I sign in as admin user
 
-When I send take ownership a RFA request
+When I get allowed RFA actions
 Then Request is successful
-Then RFA is ownershipped
 
-When I send approve a RFA request
+When I send get owner a RFA in Take Ownership request
 Then Request is successful
-Then RFA is approved
+
+When I send Take Ownership a RFA request
+Then Request is successful
+And RFA is Under Approval and IN_PROGRESS
+
+When I get allowed RFA actions
+Then Request is successful
+
+When I send get owner a RFA in Approve request
+Then Request is successful
+
+When I send Approve a RFA request
+Then Request is successful
+And RFA is Approved and FINAL
 
 When I as login first user
 Then Request is successful
