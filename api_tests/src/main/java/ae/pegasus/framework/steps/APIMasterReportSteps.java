@@ -1,12 +1,11 @@
 package ae.pegasus.framework.steps;
 
 import ae.pegasus.framework.http.OperationResult;
-import ae.pegasus.framework.model.*;
+import ae.pegasus.framework.model.FinderFile;
+import ae.pegasus.framework.model.Result;
+import ae.pegasus.framework.model.SearchRecord;
 import ae.pegasus.framework.model.entities.Entities;
-import ae.pegasus.framework.model.information_managment.Entries;
-import ae.pegasus.framework.model.information_managment.Lookup;
-import ae.pegasus.framework.model.information_managment.NextOwners;
-import ae.pegasus.framework.model.information_managment.PossibleActions;
+import ae.pegasus.framework.model.information_managment.*;
 import ae.pegasus.framework.model.information_managment.masterReport.MasterReport;
 import ae.pegasus.framework.services.MasterReportService;
 import org.apache.commons.lang3.RandomStringUtils;

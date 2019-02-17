@@ -1,6 +1,5 @@
 package ae.pegasus.framework.model.information_managment.rfa;
 
-import ae.pegasus.framework.model.information_managment.rfi.RequestForInformation;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -12,18 +11,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 public class RequestForApprovePayload {
     @JsonProperty("data")
-    private RequestForInformation data;
+    private RequestForApprove data;
 
     @JsonProperty("data")
-    public RequestForInformation getData() {
+    public RequestForApprove getData() {
         return data;
     }
 
-    @JsonProperty("data")
-    public void setData(RequestForInformation data) {
-        this.data = data;
-    }
 
-    public void setData(RequestForApprove requestForApprove) {
+    public void setData(RequestForApprove data) {
+        this.data = data;
     }
 }

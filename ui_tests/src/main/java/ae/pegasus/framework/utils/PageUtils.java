@@ -56,6 +56,7 @@ public class PageUtils {
     }
 
     public static boolean checkJsErrors(Logger log) {
+        WebDriverRunner.getWebDriver().manage().logs().get(LogType.BROWSER);
         List<LogEntry> listErrors = WebDriverRunner.getWebDriver().manage().logs().get(LogType.BROWSER).filter(Level.SEVERE);
 
         if (G4Properties.getRunProperties().isSuppressKnownIssues())

@@ -1,6 +1,7 @@
 
-package ae.pegasus.framework.model;
+package ae.pegasus.framework.model.information_managment;
 
+import ae.pegasus.framework.model.CBEntities;
 import com.fasterxml.jackson.annotation.*;
 
 import java.util.HashMap;

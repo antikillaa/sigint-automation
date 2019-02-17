@@ -93,36 +93,21 @@ public class APIReportSteps extends APISteps {
     @When("I send $state a report request")
     public void sendMoveToStateRequest(String state) {
         switch (state) {
+            case "Take Ownership":
+            case "Return to Author":
+            case "Submit for Review":
+            case "Re-assign":
+            case "Unassign":
+            case "Reject":
+            case "Assign":
+            case "Cancel":
+                submit(state);
+                break;
             case "Save as Draft":
                 saveAsDraft(state);
                 break;
             case "Approve":
                 approveReport(state);
-                break;
-            case "Take Ownership":
-                submit(state);
-                break;
-            case "Return to Author":
-                submit(state);
-                break;
-            case "Submit for Review":
-                submit(state);
-                break;
-            case "Unassign":
-                submit(state);
-                break;
-            case "Re-assign":
-                submit(state);
-                break;
-            case "Reject":
-                submit(state);
-                break;
-            case "Assign":
-                submit(state);
-                break;
-            case "Cancel":
-                submit(state);
-                break;
             case "Save":
                 editReport(state);
                 break;

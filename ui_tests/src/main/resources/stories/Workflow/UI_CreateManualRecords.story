@@ -21,6 +21,7 @@ data/QE_login_operator.table
 Given I navigate to My Records
 Given I start creation of new record identified as (<RecordID>) on the My Records page
 Given I set Record Type to (SMS) in the Manual Event Record dialog
+Given I set Date and Time to (<RecordDate>) in the Manual Event Record dialog
 Given I set Language to (Esperanto) in the Manual Event Record dialog
 Given I generate and set random From Number in the Manual Event Record dialog
 Given I generate and set random To Number in the Manual Event Record dialog
@@ -30,7 +31,6 @@ Given I generate and set random TMSI in the Manual Event Record dialog
 Given I generate and set random IMSI in the Manual Event Record dialog
 Given I generate and set random Record ID in the Manual Event Record dialog
 Given I generate and set random SMS Text in the Manual Event Record dialog
-Given I set Date and Time to (<RecordDate>) in the Manual Event Record dialog
 Given I save record created in the Manual Event Record dialog
 
 Given I navigate to My Records
@@ -79,7 +79,6 @@ Given I navigate to My Records
 Given I start creation of new record identified as (<RecordID>) on the My Records page
 Given I set Record Type to (Voice) in the Manual Event Record dialog
 Given I set Language to (Bambara) in the Manual Event Record dialog
-
 Given I generate and set random From Number in the Manual Event Record dialog
 Given I generate and set random To Number in the Manual Event Record dialog
 Given I set From Country to (British Indian Ocean Territory) in the Manual Event Record dialog
@@ -132,7 +131,7 @@ data/QE_login_operator.table
 Given I navigate to My Records
 Given I start creation of new record identified as (<RecordID>) on the My Records page
 Given I set Record Type to (SMS) in the Manual Event Record dialog
-
+Given I set Date and Time to (<RecordDate>) in the Manual Event Record dialog
 Given I set Language to (Esperanto) in the Manual Event Record dialog
 Given I generate and set random From Number in the Manual Event Record dialog
 Given I generate and set random To Number in the Manual Event Record dialog
@@ -142,7 +141,6 @@ Given I generate and set random TMSI in the Manual Event Record dialog
 Given I generate and set random IMSI in the Manual Event Record dialog
 Given I generate and set random Record ID in the Manual Event Record dialog
 Given I generate and set random SMS Text in the Manual Event Record dialog
-Given I set Date and Time to (<RecordDate>) in the Manual Event Record dialog
 Given I save record created in the Manual Event Record dialog
 
 Given I navigate to My Records
@@ -186,14 +184,13 @@ data/QE_login_operator.table
 Given I navigate to My Records
 Given I start creation of new record identified as (<RecordID>) on the My Records page
 Given I set Record Type to (Fax) in the Manual Event Record dialog
-
+Given I set Date and Time to (<RecordDate>) in the Manual Event Record dialog
 Given I generate and set random Record ID in the Manual Event Record dialog
 Given I generate and set random From Number in the Manual Event Record dialog
 Given I generate and set random To Number in the Manual Event Record dialog
 Given I set From Country to (Caribbean Netherlands) in the Manual Event Record dialog
 Given I set To Country to (Christmas Island) in the Manual Event Record dialog
 Given I generate and set random Attachment Details in the Manual Event Record dialog
-Given I set Date and Time to (<RecordDate>) in the Manual Event Record dialog
 Given I save record created in the Manual Event Record dialog
 
 
@@ -237,12 +234,11 @@ Given I navigate to My Records
 Given I start creation of new record identified as (<RecordID>) on the My Records page
 Given I set Record Type to (Email) in the Manual Event Record dialog
 Given I set Language to (Inuktitut) in the Manual Event Record dialog
-
+Given I set Date and Time to (<RecordDate>) in the Manual Event Record dialog
 Given I generate and set random Record ID in the Manual Event Record dialog
 Given I generate and set random From E-mail in the Manual Event Record dialog
 Given I generate and set random To E-mail in the Manual Event Record dialog
 Given I generate and set random Attachment Details in the Manual Event Record dialog
-Given I set Date and Time to (<RecordDate>) in the Manual Event Record dialog
 Given I save record created in the Manual Event Record dialog
 
 
