@@ -92,7 +92,7 @@ public class ReportService implements EntityService<Report> {
 
         OperationResult<File> operationResult = new OperationResult<>(response, File.class);
         if (operationResult.isSuccess()) {
-                return operationResult;
+            return operationResult;
         } else {
             throw new OperationResultError(operationResult);
         }
