@@ -176,8 +176,7 @@ public class APIRequestForApproveSteps extends APISteps {
     }
 
     public void view() {
-        RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
-        String id = lastRFA.getId();
+        String id = context.get("reportID", String.class);
         serviceRequestForApprove.view(id);
     }
 

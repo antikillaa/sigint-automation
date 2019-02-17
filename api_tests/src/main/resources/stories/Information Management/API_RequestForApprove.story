@@ -33,6 +33,7 @@ Examples:
 | SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
 
 Scenario: Initial Draft: Delete a RFA
+Meta:@wip
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -55,12 +56,14 @@ Then Request is successful
 
 When I send View a RFA request
 Then Request is unsuccessful
+And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
 
 Scenario: Initial Draft: Send for Approval
+Meta:@wip
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -77,6 +80,7 @@ Then Request is successful
 When I send Send for Approval a RFA request
 Then Request is successful
 And RFA is Awaiting Approval and INITIAL
+And Clean context
 
 
 Examples:
@@ -112,6 +116,8 @@ Then Request is successful
 When I send Take Ownership a RFA request
 Then Request is successful
 And RFA is Under Approval and IN_PROGRESS
+And Clean context
+
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -140,6 +146,8 @@ Then Request is successful
 
 When I send Save a RFA request
 Then Request is successful
+And Clean context
+
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -174,6 +182,7 @@ Then Request is successful
 When I send Assign a RFA request
 Then Request is successful
 And RFA is Under Approval and IN_PROGRESS
+And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -218,6 +227,7 @@ Then Request is successful
 When I send Approve a RFA request
 Then Request is successful
 And RFA is Approved and FINAL
+And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -262,6 +272,7 @@ Then Request is successful
 When I send Re-assign a RFA request
 Then Request is successful
 And RFA is Under Approval and IN_PROGRESS
+And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -306,6 +317,7 @@ Then Request is successful
 When I send Reject a RFA request
 Then Request is successful
 And RFA is Rejected and FINAL
+And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -346,6 +358,7 @@ Then Request is successful
 
 When I send Save a RFA request
 Then Request is successful
+And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -391,6 +404,7 @@ Then Request is successful
 When I send Unassign a RFA request
 Then Request is successful
 And RFA is Awaiting Approval and INITIAL
+And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -444,6 +458,7 @@ When I send search for accessed audio request
 Then Request is successful
 Then Audio content is available
 Then User able access to audio
+And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
