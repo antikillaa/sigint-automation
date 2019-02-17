@@ -2,6 +2,7 @@ Meta:
 @API
 @component Information Management
 @story rfa
+@nightly
 
 Lifecycle:
 Before:
