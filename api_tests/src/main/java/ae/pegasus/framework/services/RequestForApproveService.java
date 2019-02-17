@@ -37,7 +37,7 @@ public class RequestForApproveService implements EntityService<RequestForApprove
 
         OperationResult<RequestForApprove> operationResult = new OperationResult<>(response, RequestForApprove.class, "result");
         if (operationResult.isSuccess()) {
-            Entities.getRequestForApproves().addOrUpdateEntity(operationResult.getEntity());
+            Entities.getRequestForApproves().removeEntity(operationResult.getEntity());
         } else {
             throw new OperationResultError(operationResult);
         }

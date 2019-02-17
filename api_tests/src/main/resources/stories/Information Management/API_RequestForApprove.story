@@ -78,6 +78,7 @@ When I send Send for Approval a RFA request
 Then Request is successful
 And RFA is Awaiting Approval and INITIAL
 
+
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |

@@ -287,6 +287,11 @@ public class APIRequestForApproveSteps extends APISteps {
         checkRFA(lastRFA);
     }
 
+    @Then("Clean context")
+    public void cleanContext() {
+        context.put("reportID", null);
+    }
+
     @Then("RFA is $state and $stateType")
     public void checkRFAState(String state, String stateType) {
         RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
