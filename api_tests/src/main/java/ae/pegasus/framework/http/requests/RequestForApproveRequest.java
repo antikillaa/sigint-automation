@@ -5,7 +5,7 @@ import ae.pegasus.framework.model.information_managment.rfa.RequestForApprove;
 import ae.pegasus.framework.model.information_managment.rfa.RequestForApprovePayload;
 
 public class RequestForApproveRequest extends HttpRequest {
-    private final static String URI = "/api/reports/workflows/";
+    private final static String URI = "/api/reports/workflows/4/";
 
     public RequestForApproveRequest() {
         super(URI);
@@ -13,17 +13,17 @@ public class RequestForApproveRequest extends HttpRequest {
 
     public RequestForApproveRequest generateNumber() {
         this
-                .setURI(URI + "4/generate-number/")
+                .setURI(URI + "generate-number/")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(null);
         return this;
     }
 
-    public RequestForApproveRequest add(RequestForApprove requestForApprove) {
+    public RequestForApproveRequest add(RequestForApprove requestForApprove, String actionId) {
         RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
         requestForApprovePayload.setData(requestForApprove);
         this
-                .setURI(URI + "4/perform-action/1/")
+                .setURI(URI + "perform-action/" + actionId)
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForApprovePayload);
         return this;
@@ -31,7 +31,7 @@ public class RequestForApproveRequest extends HttpRequest {
 
     public RequestForApproveRequest view(String id) {
         this
-                .setURI(URI + "4/model/" + id + "?userAction=true")
+                .setURI(URI + "model/" + id + "?userAction=true")
                 .setHttpMethod(HttpMethod.GET);
         return this;
     }
@@ -40,15 +40,22 @@ public class RequestForApproveRequest extends HttpRequest {
         RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
         requestForApprovePayload.setData(requestForApprove);
         this
-                .setURI(URI + "4/perform-action/3/")
+                .setURI(URI + "perform-action/1-0")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForApprovePayload);
         return this;
     }
 
+    public RequestForApproveRequest allowedactions(String id) {
+        this
+                .setURI(URI + "allowed-actions/" + id)
+                .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
     public RequestForApproveRequest possibleOwnersTeams(RequestForApprove requestForApprove) {
         this
-                .setURI(URI + "4/possible-owners/2/")
+                .setURI(URI + "possible-owners/2/")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForApprove);
         return this;
@@ -58,7 +65,7 @@ public class RequestForApproveRequest extends HttpRequest {
         RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
         requestForApprovePayload.setData(requestForApprove);
         this
-                .setURI(URI + "4/perform-action/2/")
+                .setURI(URI + "perform-action/2/")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForApprovePayload);
         return this;
@@ -68,7 +75,7 @@ public class RequestForApproveRequest extends HttpRequest {
         RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
         requestForApprovePayload.setData(requestForApprove);
         this
-                .setURI(URI + "4/perform-action/4/")
+                .setURI(URI + "perform-action/4/")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForApprovePayload);
         return this;
@@ -78,7 +85,7 @@ public class RequestForApproveRequest extends HttpRequest {
         RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
         requestForApprovePayload.setData(requestForApprove);
         this
-                .setURI(URI + "4/perform-action/5/")
+                .setURI(URI + "perform-action/5/")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForApprovePayload);
         return this;
@@ -88,7 +95,7 @@ public class RequestForApproveRequest extends HttpRequest {
         RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
         requestForApprovePayload.setData(requestForApprove);
         this
-                .setURI(URI + "4/perform-action/9/")
+                .setURI(URI + "perform-action/9/")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForApprovePayload);
         return this;
@@ -98,7 +105,7 @@ public class RequestForApproveRequest extends HttpRequest {
         RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
         requestForApprovePayload.setData(requestForApprove);
         this
-                .setURI(URI + "4/perform-action/7/")
+                .setURI(URI + "perform-action/7/")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForApprovePayload);
         return this;
@@ -108,7 +115,7 @@ public class RequestForApproveRequest extends HttpRequest {
         RequestForApprovePayload requestForApprovePayload = new RequestForApprovePayload();
         requestForApprovePayload.setData(requestForApprove);
         this
-                .setURI(URI + "4/perform-action/6/")
+                .setURI(URI + "perform-action/6/")
                 .setHttpMethod(HttpMethod.POST)
                 .setPayload(requestForApprovePayload);
         return this;
@@ -118,6 +125,14 @@ public class RequestForApproveRequest extends HttpRequest {
         this
                 .setURI("/api/upload-sigint/files/" + id + "/content")
                 .setHttpMethod(HttpMethod.GET);
+        return this;
+    }
+
+    public RequestForApproveRequest possibleOwners(RequestForApprove requestForApprove, String actionId) {
+        this
+                .setURI(URI + "possible-owners/" + actionId)
+                .setHttpMethod(HttpMethod.POST)
+                .setPayload(requestForApprove);
         return this;
     }
 }

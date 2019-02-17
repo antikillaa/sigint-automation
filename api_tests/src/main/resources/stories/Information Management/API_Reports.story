@@ -99,7 +99,7 @@ And Report is created
 When I get allowed actions
 Then Request is successful
 
-When I send Edit a report request
+When I send Save a report request
 Then Request is successful
 
 Examples:
