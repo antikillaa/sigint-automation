@@ -397,7 +397,6 @@ Examples:
 
 
 Scenario: User able get access to audio after approve RFA
-Meta:@wip
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
