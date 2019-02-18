@@ -56,7 +56,6 @@ Then Request is successful
 
 When I send View a RFA request
 Then Request is unsuccessful
-And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
