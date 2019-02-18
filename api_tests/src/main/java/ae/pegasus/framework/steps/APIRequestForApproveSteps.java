@@ -44,11 +44,11 @@ public class APIRequestForApproveSteps extends APISteps {
     @When("I get allowed RFA actions")
     public void sendGetAllowedMRActions() {
         String imId = Entities.getMasterReports().getLatest() == null ? "" : Entities.getRequestForApproves().getLatest().getId();
-
+/*
         if (imId.equals("") && context.get("reportID", String.class) != null) {
             imId = context.get("reportID", String.class);
         }
-        
+*/
         OperationResult<List<PossibleActions>> operationResult = serviceRequestForApprove.possibleaction(imId);
         List<PossibleActions> possibleActions = operationResult.getEntity();
         context.put("possibleActions", possibleActions);
@@ -128,7 +128,7 @@ public class APIRequestForApproveSteps extends APISteps {
             requestForApprove.setComment("comment");
             OperationResult<RequestForApprove> operationResult = serviceRequestForApprove.add(requestForApprove, actionId);
             context.put("reportID", operationResult.getEntity().getId());
-
+            context.put("requestForApprove", requestForApprove);
         } else {
             lastreport.setNextOwners(nextOwners);
             lastreport.setComment("comment");
@@ -289,13 +289,13 @@ public class APIRequestForApproveSteps extends APISteps {
     @Then("Clean context")
     public void cleanContext() {
         context.put("reportID", null);
+        context.put("requestForApprove", null);
     }
 
     @Then("RFA is $state and $stateType")
     public void checkRFAState(String state, String stateType) {
         RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
         RequestForApprove createdRFA = context.get("requestForApprove", RequestForApprove.class);
-        String reportId = lastRFA.getId();
         checkRFA(lastRFA);
         assertEquals(lastRFA.getClassification(), createdRFA.getClassification());
         assertEquals(lastRFA.getState(), state);
