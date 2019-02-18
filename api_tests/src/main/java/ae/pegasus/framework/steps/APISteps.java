@@ -8,6 +8,7 @@ import ae.pegasus.framework.http.OperationResult;
 import ae.pegasus.framework.http.OperationsResults;
 import ae.pegasus.framework.utils.DateHelper;
 import org.apache.log4j.Logger;
+import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
@@ -73,5 +74,10 @@ public abstract class APISteps {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Given("Clear context")
+    public void cleanUpContext() {
+        context.clear();
     }
 }
