@@ -10,9 +10,29 @@ Scope: SCENARIO
 Given I sign in as user with all permissions except: DATA_AUDIO_CONTENT_ACCESS
 When I send create finder file request
 Then Request is successful
-When I save logged user
 Given Clear context
 
+Scenario: Initial Draft: Send for Approval
+When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
+Then Request is successful
+And CB search result list size > 0
+
+When I send generate RFA number request
+Then Request is successful
+
+When I get allowed RFA actions
+Then Request is successful
+
+When I send get owner a RFA in Send for Approval request
+Then Request is successful
+
+When I send Send for Approval a RFA request
+Then Request is successful
+And RFA is Awaiting Approval and INITIAL
+
+Examples:
+| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
+| SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
 
 Scenario: Initial Draft: Save as Draft a RFA
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
@@ -64,30 +84,6 @@ Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
 | SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
 
-Scenario: Initial Draft: Send for Approval
-When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
-Then Request is successful
-And CB search result list size > 0
-
-When I send generate RFA number request
-Then Request is successful
-
-When I get allowed RFA actions
-Then Request is successful
-
-When I send get owner a RFA in Send for Approval request
-Then Request is successful
-
-When I send Send for Approval a RFA request
-Then Request is successful
-And RFA is Awaiting Approval and INITIAL
-And Clean context
-
-
-Examples:
-| eventFeed | objectType | resultType | query  | pageNumber | pageSize |
-| SIGINT | event |  |   type:"CALL" AND eventTime:[$NOW-90d..$NOW] AND senderCountry:"AE" AND receiverCountry:"AE" AND HAS_VPRINT:"true"   | 0 | 1000 |
-
 Scenario: Awaiting Approval: Take ownership
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
@@ -124,8 +120,6 @@ Then Request is successful
 When I send Take Ownership a RFA request
 Then Request is successful
 And RFA is Under Approval and IN_PROGRESS
-And Clean context
-
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -161,7 +155,6 @@ Then Request is successful
 
 When I send Save a RFA request
 Then Request is successful
-And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -203,7 +196,6 @@ Then Request is successful
 When I send Assign a RFA request
 Then Request is successful
 And RFA is Under Approval and IN_PROGRESS
-And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -255,7 +247,6 @@ Then Request is successful
 When I send Approve a RFA request
 Then Request is successful
 And RFA is Approved and FINAL
-And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -307,7 +298,6 @@ Then Request is successful
 When I send Re-assign a RFA request
 Then Request is successful
 And RFA is Under Approval and IN_PROGRESS
-And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -359,7 +349,6 @@ Then Request is successful
 When I send Reject a RFA request
 Then Request is successful
 And RFA is Rejected and FINAL
-And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -407,7 +396,6 @@ Then Request is successful
 
 When I send Save a RFA request
 Then Request is successful
-And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -460,7 +448,6 @@ Then Request is successful
 When I send Unassign a RFA request
 Then Request is successful
 And RFA is Awaiting Approval and INITIAL
-And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |
@@ -468,6 +455,8 @@ Examples:
 
 
 Scenario: User able get access to audio after approve RFA
+When I save logged user
+
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
 Then Request is successful
 And CB search result list size > 0
@@ -521,7 +510,6 @@ When I send search for accessed audio request
 Then Request is successful
 Then Audio content is available
 Then User able access to audio
-And Clean context
 
 Examples:
 | eventFeed | objectType | resultType | query  | pageNumber | pageSize |

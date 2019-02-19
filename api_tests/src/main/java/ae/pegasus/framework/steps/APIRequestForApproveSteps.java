@@ -122,7 +122,7 @@ public class APIRequestForApproveSteps extends APISteps {
         List<NextOwners> nextOwners = new ArrayList<>();
         nextOwners.add(nextOwner);
 
-        if (lastreport == null) {
+        if (requestForApprove == null || lastreport == null) {
             sleep(120000); //FIXME
             requestForApprove.setNextOwners(nextOwners);
             requestForApprove.setComment("comment");
