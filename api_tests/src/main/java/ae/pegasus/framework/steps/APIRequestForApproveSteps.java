@@ -122,7 +122,7 @@ public class APIRequestForApproveSteps extends APISteps {
         List<NextOwners> nextOwners = new ArrayList<>();
         nextOwners.add(nextOwner);
 
-        if (lastreport == null) {
+        if (requestForApprove == null || lastreport == null) {
             sleep(120000); //FIXME
             requestForApprove.setNextOwners(nextOwners);
             requestForApprove.setComment("comment");
@@ -299,7 +299,6 @@ public class APIRequestForApproveSteps extends APISteps {
     private void checkRFA(RequestForApprove lastRFA) {
         RequestForApprove createdRFA = context.get("requestForApprove", RequestForApprove.class);
         assertEquals(lastRFA.getClassification(), createdRFA.getClassification());
-        assertEquals(lastRFA.getInternalRequestNo(), createdRFA.getInternalRequestNo());
         assertEquals(lastRFA.getDescription(), createdRFA.getDescription());
         assertEquals(lastRFA.getSubject(), createdRFA.getSubject());
         assertEquals(lastRFA.getObjectType(), "RFA");
