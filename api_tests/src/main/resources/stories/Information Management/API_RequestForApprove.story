@@ -6,10 +6,13 @@ Meta:
 
 Lifecycle:
 Before:
+Scope: SCENARIO
 Given I sign in as user with all permissions except: DATA_AUDIO_CONTENT_ACCESS
 When I send create finder file request
 Then Request is successful
 When I save logged user
+Given Clear context
+
 
 Scenario: Initial Draft: Save as Draft a RFA
 When I send CB search request - query:<query>, eventFeed:<eventFeed>, objectType:<objectType>, pageNumber:<pageNumber>, pageSize:<pageSize>
