@@ -85,7 +85,7 @@ And Message contains "already exists"
 
 
 Scenario: Import non .csv file for whitelist records
-Meta: @nightly @notstage
+Meta: @nightly @notstage @docker
 Given S - Fax files with 1 records are generated
 And I pick random file from ingestion files list
 When I send import whitelists request
@@ -94,7 +94,7 @@ And Message contains "Unable to import non csv files"
 
 
 Scenario: Filtering off whitelisted data during ingestion (SIGINT, T-Source)
-Meta: @nightly @wl_enrichment @whitelist-t
+Meta: @nightly @wl_enrichment @whitelist-t @docker
 Given I clean up ingestion directory
 When I send search whitelists by type with PHONE_NUMBER request
 Then Request is successful
@@ -115,7 +115,7 @@ Examples:
 | T          | SMS        | 25           |
 
 Scenario: Filtering off whitelisted data during ingestion (SIGINT, Phonebook)
-Meta: @nightly @wl_enrichment @whitelist-phonebook
+Meta: @nightly @wl_enrichment @whitelist-phonebook @docker
 Given I clean up ingestion directory
 When I send search whitelists by type with PHONE_NUMBER request
 Then Request is successful
@@ -135,7 +135,7 @@ Examples:
 | PHONEBOOK  | PHONEBOOK  | 25           |
 
 Scenario: Filtering off whitelisted data during ingestion (SIGINT, F-Source)
-Meta: @nightly @wl_enrichment @whitelist-f
+Meta: @nightly @wl_enrichment @whitelist-f @docker
 Given I clean up ingestion directory
 When I send search whitelists by type with PHONE_NUMBER request
 Then Request is successful
@@ -155,7 +155,7 @@ Examples:
 | F          | SMS        | 25           |
 
 Scenario: Filtering off whitelisted data during ingestion (SIGINT, S-Source)
-Meta: @nightly @wl_enrichment @whitelist-s
+Meta: @nightly @wl_enrichment @whitelist-s @docker
 Given I clean up ingestion directory
 When I send search whitelists by type with PHONE_NUMBER request
 Then Request is successful
@@ -180,7 +180,7 @@ Examples:
 | S          | SMS        | 25           |
 
 Scenario: Filtering off whitelisted data during ingestion (SIGINT, Etisalat-Source)
-Meta: @nightly @wl_enrichment @whitelist-e
+Meta: @nightly @wl_enrichment @whitelist-e @docker
 Given I clean up ingestion directory
 When I send search whitelists by type with PHONE_NUMBER request
 Then Request is successful

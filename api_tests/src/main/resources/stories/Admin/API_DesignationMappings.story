@@ -65,7 +65,7 @@ And Imported 5 designation-mappings, modified 5
 And I delete designation-mappings
 
 Scenario: Import non .csv file for designation-mapping records
-Meta: @notstage
+Meta: @notstage @docker
 Given S - Fax files with 1 records are generated
 And I pick random file from ingestion files list
 When I send import designation-mappings request
@@ -117,7 +117,7 @@ And Designations list size is more than 0
 And Designations search result is correct
 
 Scenario: CB Search filters designated spam records by default (SIGINT, S-Source)
-Meta: @nightly @dm_enrichment
+Meta: @nightly @dm_enrichment @docker
 Given I clean up ingestion directory
 When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: true
 Then Request is successful
@@ -143,7 +143,7 @@ Examples:
 | S          | SMS        | 25           |
 
 Scenario: CB Search filters designated spam records by default (SIGINT, T-Source)
-Meta: @nightly @dm_enrichment
+Meta: @nightly @dm_enrichment @docker
 Given I clean up ingestion directory
 When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: true
 Then Request is successful
@@ -165,7 +165,7 @@ Examples:
 | T          | SMS        | 25           |
 
 Scenario: CB Search filters designated spam records by default (SIGINT, F-Source)
-Meta: @nightly @dm_enrichment
+Meta: @nightly @dm_enrichment @docker
 Given I clean up ingestion directory
 When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: true
 Then Request is successful
@@ -186,7 +186,7 @@ Examples:
 | F          | SMS        | 25           |
 
 Scenario: CB Search filters designated spam records by default (SIGINT, E-Source)
-Meta: @nightly @dm_enrichment
+Meta: @nightly @dm_enrichment @docker
 Given I clean up ingestion directory
 When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: true
 Then Request is successful
@@ -211,7 +211,7 @@ Examples:
 
 
 Scenario: CB Search doesn't filter designated not-spam records (SIGINT, S-Source)
-Meta: @nightly @dm_enrichment
+Meta: @nightly @dm_enrichment @docker
 Given I clean up ingestion directory
 When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: false
 Then Request is successful
@@ -236,7 +236,7 @@ Examples:
 | S          | SMS        | 25           |
 
 Scenario: CB Search doesn't filter designated not-spam records (SIGINT, T-Source)
-Meta: @nightly @dm_enrichment
+Meta: @nightly @dm_enrichment @docker
 Given I clean up ingestion directory
 When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: false
 Then Request is successful
@@ -257,7 +257,7 @@ Examples:
 | T          | SMS        | 25           |
 
 Scenario: CB Search doesn't filter designated not-spam records (SIGINT, F-Source)
-Meta: @nightly @dm_enrichment
+Meta: @nightly @dm_enrichment @docker
 Given I clean up ingestion directory
 When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: false
 Then Request is successful
@@ -277,7 +277,7 @@ Examples:
 | F          | SMS        | 25           |
 
 Scenario: CB Search doesn't filter designated not-spam records (SIGINT, E-Source)
-Meta: @nightly @dm_enrichment
+Meta: @nightly @dm_enrichment @docker
 Given I clean up ingestion directory
 When I send search designation-mappings by type with PHONE_NUMBER request, with spam flag: false
 Then Request is successful
@@ -301,7 +301,7 @@ Examples:
 
 
 Scenario: Undesignated records are marked with default designation 'Undesignated'
-Meta: @nightly @dm_enrichment
+Meta: @nightly @dm_enrichment @docker
 Given Data source with <sourceType> and <recordType> exists
 And <sourceType> - <recordType> files with <recordsCount> records are generated
 And I create remote path for ingestion
