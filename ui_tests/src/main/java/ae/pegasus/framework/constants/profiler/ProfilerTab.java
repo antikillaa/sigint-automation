@@ -13,7 +13,7 @@ public enum ProfilerTab {
     MENTIONS("Mentions"),
     NETWORK("Network"),
     ATTACHMENTS("Attachments"),
-    TARGET_ACTIVITY("Target Activity"),
+    AUDIT_TRAIL("Audit Trail"),
     INSIGHTS("Insights Beta");
 
     private final String tabName;
