@@ -81,9 +81,9 @@ public class UIProfilerBasicSteps {
         checkTabDisplayed(ProfilerTab.ATTACHMENTS);
     }
 
-    @Then("I should see Target Activity tab on the Profiled page")
+    @Then("I should see Audit Trail tab on the Profiled page")
     public void targetActivityTabDisplayed(){
-        checkTabDisplayed(ProfilerTab.TARGET_ACTIVITY);
+        checkTabDisplayed(ProfilerTab.AUDIT_TRAIL);
     }
 
     @Then("I should see Insights tab on the Profiled page")
@@ -184,9 +184,9 @@ public class UIProfilerBasicSteps {
         Pages.profilerBasePage().openTab(ProfilerTab.ATTACHMENTS);
     }
 
-    @When("I click on Target Activity tab on the Profiled page")
+    @When("I click on Audit Trail tab on the Profiled page")
     public void iClickOnTargetActivityTab(){
-        Pages.profilerBasePage().openTab(ProfilerTab.TARGET_ACTIVITY);
+        Pages.profilerBasePage().openTab(ProfilerTab.AUDIT_TRAIL);
     }
 
     @When("I click on Insights tab on the Profiled page")

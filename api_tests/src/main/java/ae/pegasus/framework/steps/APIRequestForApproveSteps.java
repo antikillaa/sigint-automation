@@ -163,7 +163,6 @@ public class APIRequestForApproveSteps extends APISteps {
         context.put("nextOwner", nextOwner.getEntity());
     }
 
-
     @When("I send Send for approval a RFA request")
     public void sendSendRFIRequest() {
         RequestForApprove RFA = context.get("requestForApprove", RequestForApprove.class);
@@ -284,12 +283,6 @@ public class APIRequestForApproveSteps extends APISteps {
     public void rfaIsCreated() {
         RequestForApprove lastRFA = Entities.getRequestForApproves().getLatest();
         checkRFA(lastRFA);
-    }
-
-    @Then("Clean context")
-    public void cleanContext() {
-        context.put("reportID", null);
-        context.put("requestForApprove", null);
     }
 
     @Then("RFA is $state and $stateType")

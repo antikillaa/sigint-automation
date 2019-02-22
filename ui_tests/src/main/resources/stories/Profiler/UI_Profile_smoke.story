@@ -11,7 +11,6 @@ data/QE_login_manager.table
 
 Scenario: Profiler - Create Target - add SIGINT event
 Meta: @L0  @test  C83380
-
 Given I navigate to Search
 When I enter search criteria (<SIGINTEventIMSI>) on the Search page
 Given I open Search Filter on the Search page
@@ -51,7 +50,7 @@ Then I should see Travel and Movement tab on the Profiled page
 Then I should see Mentions tab on the Profiled page
 Then I should see Network tab on the Profiled page
 Then I should see Attachments tab on the Profiled page
-Then I should see Target Activity tab on the Profiled page
+Then I should see Audit Trail tab on the Profiled page
 Then I should see Insights tab on the Profiled page
 Then I should see identifier having value (<SIGINTEventIMSI>), type (IMSI), hits (0) and mentions (0) on the Summary tab of Profiled page
 Then I should see identifier having value (<SIGINTEventToPhone>), type (Phone Number), hits (0) and mentions (0) on the Summary tab of Profiled page
@@ -178,7 +177,6 @@ Examples:
 
 Scenario: Create and delete a profile smoke test
 Meta: @devsmoke
-
 Given I navigate to Search
 
 When I enter search criteria (<EIDEntityUIDNumber>) on the Search page
@@ -214,7 +212,7 @@ Then I should see Travel and Movement tab on the Profiled page
 Then I should see Mentions tab on the Profiled page
 Then I should see Network tab on the Profiled page
 Then I should see Attachments tab on the Profiled page
-Then I should see Target Activity tab on the Profiled page
+Then I should see Audit Trail tab on the Profiled page
 Then I should see Insights tab on the Profiled page
 
 
