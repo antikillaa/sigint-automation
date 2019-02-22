@@ -34,7 +34,7 @@ public class SearchQueryBuilder {
             default:
                 throw new AssertionError("Unknown recordStatus filter value: " + recordStatus);
         }
-        return query + "AND eventTime:[$NOW-90d..$NOW]";
+        return query + " AND eventTime:[$NOW-90d..$NOW]";
     }
 
     public static String timeRangeToQuery(TimeRange timeRange) {
