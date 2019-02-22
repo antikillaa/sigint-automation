@@ -98,7 +98,8 @@ public class ResponsibilityService implements EntityService<Responsibility> {
         if (operationResult.isSuccess()) {
             return operationResult.getEntity();
         } else {
-            throw new AssertionError("Unable create Responsibility: " + toJsonString(responsibility));
+            log.error("Unable create Responsibility: " + toJsonString(responsibility));
+            throw new OperationResultError(operationResult);
         }
     }
 

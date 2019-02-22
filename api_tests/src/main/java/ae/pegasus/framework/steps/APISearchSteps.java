@@ -527,9 +527,9 @@ public class APISearchSteps extends APISteps {
                 .collect(Collectors.toList());
 
         if (!wrongResults.isEmpty()) {
-            wrongResults.forEach(searchResult -> log.error("Expected search results count " + criteria + " " + size +
+            wrongResults.forEach(searchResult -> log.error(searchResult.getEventFeed() + " Expected search results count " + criteria + " " + size +
                     ", but was: " + toJsonString(searchResult.getTotalCount())));
-            throw new AssertionError("Expected search results count " + criteria + " " + size +
+            throw new AssertionError(wrongResults.get(0).getEventFeed() + " Expected search results count " + criteria + " " + size +
                     ", but was: " + toJsonString(wrongResults.get(0).getData().size()));
         }
     }
