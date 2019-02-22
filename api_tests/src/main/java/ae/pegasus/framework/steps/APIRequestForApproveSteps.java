@@ -43,7 +43,7 @@ public class APIRequestForApproveSteps extends APISteps {
 
     @When("I get allowed RFA actions")
     public void sendGetAllowedMRActions() {
-        String imId = Entities.getMasterReports().getLatest() == null ? "" : Entities.getRequestForApproves().getLatest().getId();
+        String imId = Entities.getRequestForApproves().getLatest() == null ? "" : Entities.getRequestForApproves().getLatest().getId();
 
         if (imId.equals("") && context.get("reportID", String.class) != null) {
             imId = context.get("reportID", String.class);
